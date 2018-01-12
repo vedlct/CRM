@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Bootstrap Dashboard by Bootstrapious.com</title>
+    <title>Customer relationship management</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -38,9 +38,9 @@
                     <div class="info d-flex align-items-center">
                         <div class="content">
                             <div class="logo">
-                                <h1>Dashboard</h1>
+                                <h1>Customer relationship management</h1>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            <p>Tech Cloud Limited</p>
                         </div>
                     </div>
                 </div>
@@ -48,17 +48,43 @@
                 <div class="col-lg-6 bg-white">
                     <div class="form d-flex align-items-center">
                         <div class="content">
-                            <form id="login-form" method="post">
+                            <form id="login-form"  method="POST" action="{{ route('login') }}">
+
+                                    {{ csrf_field() }}
+
+                                    <div class="form-group{{ $errors->has('userId') ? ' has-error' : '' }}">
+
+                                        <label for="login-username" class="label-material">User Name</label>
+                                    <input id="text" type="text" class="form-control" name="userId"  required autofocus>
+
+                                        @if ($errors->has('userId'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('userId') }}</strong>
+                                    </span>
+                                        @endif
+                                    </div>
+
                                 <div class="form-group">
-                                    <input id="login-username" type="text" name="loginUsername" required="" class="input-material">
-                                    <label for="login-username" class="label-material">User Name</label>
+                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}"></div>
+                                        <label for="password" class="label-material">Password</label>
+                                        <input id="password" type="password" class="form-control" name="password" required>
+
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                        @endif
                                 </div>
-                                <div class="form-group">
-                                    <input id="login-password" type="password" name="loginPassword" required="" class="input-material">
-                                    <label for="login-password" class="label-material">Password</label>
-                                </div><a id="login" href="/main" class="btn btn-primary">Login</a>
+
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
+                                            </label>
+                                        </div>
+
+                                     <button type="submit" class="btn btn-primary">Login</button>
                                 <!-- This should be submit button but I replaced it with <a> for demo purposes-->
-                            </form><a href="#" class="forgot-pass">Forgot Password?</a><br><small>Do not have an account? </small><a href="register.html" class="signup">Signup</a>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -70,40 +96,11 @@
         <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
     </div>
 </div>
-<button type="button" data-toggle="collapse" data-target="#style-switch" id="style-switch-button" class="btn btn-primary btn-sm hidden-xs hidden-sm"><i class="fa fa-cog fa-2x"></i></button>
-<div id="style-switch" class="collapse">
-    <h4 class="mb-3">Select theme colour</h4>
-    <form class="mb-3">
-        <select name="colour" id="colour" class="form-control">
-            <option value="">select colour variant</option>
-            <option value="default">violet</option>
-            <option value="pink">pink</option>
-            <option value="red">red</option>
-            <option value="green">green</option>
-            <option value="sea">sea</option>
-            <option value="blue">blue</option>
-        </select>
-    </form>
-    <p><img src="img/template-mac.png" alt="" class="img-fluid"></p>
-    <p class="text-muted text-small"> <small>Stylesheet switching is done via JavaScript and can cause a blink while page loads. This will not happen in your production code.</small></p>
-</div>
 <!-- Javascript files-->
-<script src="../../ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="js/tether.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.cookie.js"> </script>
-<script src="js/jquery.validate.min.js"></script>
-<script src="js/front.js"></script>
+
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
 <!---->
-<script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='../../www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-XXXXX-X');ga('send','pageview');
-</script>
+
 </body>
 
 <!-- Mirrored from demo.bootstrapious.com/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jan 2018 07:53:09 GMT -->

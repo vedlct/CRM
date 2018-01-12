@@ -11,12 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::view('/main', 'layouts.index');
-Route::view('/login', 'layouts.login');
+Route::view('/', 'layouts.login');
 Route::view('/mylist', 'layouts.myList');
 Route::view('/testlist', 'layouts.testList');
 Route::view('/clients', 'layouts.clients');
@@ -37,4 +34,8 @@ Route::get('/user','UserController@index');
 Route::view('/test', 'test');
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('home');
+
+Route::get('/home',function (){
+    return redirect('/dashboard');
+});

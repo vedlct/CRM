@@ -38,6 +38,12 @@
 
 
 
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 
     @yield('header')
 
@@ -117,13 +123,26 @@
                                 <li><a rel="nofollow" href="#" class="dropdown-item all-notifications text-center"> <strong>Read all messages    </strong></a></li>
                             </ul>
                         </li>
+
+
                         <!-- Logout    -->
-                        <li class="nav-item"><a href="/login" class="nav-link logout">Logout<i class="fa fa-sign-out"></i></a></li>
+
+                        <li class="nav-item"><a class="nav-link logout" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    Logout
+
+
+                                <i class="fa fa-sign-out"></i></a></li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="">
+                            {{ csrf_field() }}
+                        </form>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
 
 
 
@@ -150,14 +169,7 @@
             <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
             <ul class="list-unstyled">
                 <li   class="{{ Request::is('main') ? 'active' : '' }} "><a href="/main"><span class="fa fa-calendar-check-o" aria-hidden="true"></span>Today's Follow Up</a></li>
-                <li><a href="#dashvariants" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>List </a>
-                    <ul id="dashvariants" class="collapse list-unstyled">
-                        <li><a href="#">My List</a></li>
-                        <li><a href="#">Test List</a></li>
-                        <li><a href="#">Page</a></li>
-                        <li><a href="#">Page</a></li>
-                    </ul>
-                </li>
+
 
 
 
@@ -195,7 +207,7 @@
 
 
             <!-- Page Footer-->
-            <footer class="main-footer" style="position: fixed; bottom: 0; width: 100%;">
+            <footer class="main-footer" style="position: relative; bottom: 0; width: 100%">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
@@ -219,14 +231,20 @@
 
 
 
+<!-- Javascript files-->
 
-<script src=" {{ asset('js/tether.min.js') }}"></script>
-<script src="{{asset('js/bootstrap.min.js')}}"></script>
-<script src="{{asset('js/jquery.cookie.js')}}"> </script>
-<script src="{{asset('js/jquery.validate.min.js')}}"></script>
-<script src="{{asset('cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js')}}"></script>
-<script src="{{asset('js/charts-home.js')}}"></script>
-<script src="{{asset('js/front.js')}}"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="js/tether.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.cookie.js"> </script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/front.js"></script>
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+<!---->
+
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
 <!---->
 

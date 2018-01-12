@@ -3,10 +3,7 @@
 
 @section('header')
 
-      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     <script>
   $( function() {
@@ -167,15 +164,75 @@
   </div>
 
 
-
+<div style="padding: 20px">
   <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Nunc tincidunt</a></li>
-    <li><a href="#tabs-2">Proin dolor</a></li>
+    <li><a href="#tabs-1">Users</a></li>
+    <li><a href="#tabs-2">Categories</a></li>
     <li><a href="#tabs-3">Aenean lacinia</a></li>
   </ul>
   <div id="tabs-1">
-    <p>Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci. Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.</p>
+
+      <table class="table table-hover" style="background-color:white; ">
+          <thead>
+          <tr>
+              <th>Company Name</th>
+              <th>Web Address</th>
+              <th>Category</th>
+              <th>Contact Person</th>
+              <th>Designation</th>
+              <th>Contact Number</th>
+              <th>Email</th>
+              <th>Country</th>
+              <th>Status</th>
+              <th>Details</th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+              <td>Triple Aught</td>
+              <td>http://tripleaught.com</td>
+              <td>Brand</td>
+              <td>Skylar Flax-Davidson</td>
+              <td>Director of Sales</td>
+              <td>0123554864</td>
+              <td>gmail.com</td>
+              <td>USA PST</td>
+              <td>Client</td>
+              <td><a href=""><i class="fa fa-plus-square-o" aria-hidden="true"></i></a></td>
+
+          </tr>
+          <tr>
+              <td>Triple Aught</td>
+              <td>http://tripleaught.com</td>
+              <td>Brand</td>
+              <td>Skylar Flax-Davidson</td>
+              <td>Director of Sales</td>
+              <td>0123554864</td>
+              <td>gmail.com</td>
+              <td>USA PST</td>
+              <td>Client</td>
+              <td><a href=""><i class="fa fa-plus-square-o" aria-hidden="true"></i></a></td>
+          </tr>
+          <tr>
+              <td>Triple Aught</td>
+              <td>http://tripleaught.com</td>
+              <td>Brand</td>
+              <td>Skylar Flax-Davidson</td>
+              <td>Director of Sales</td>
+              <td>0123554864</td>
+              <td>gmail.com</td>
+              <td>USA PST</td>
+              <td>Client</td>
+              <td><a href=""><i class="fa fa-plus-square-o" aria-hidden="true"></i></a></td>
+          </tr>
+          </tbody>
+      </table>
+
+
+
+
   </div>
   <div id="tabs-2">
     <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
@@ -187,7 +244,7 @@
 </div>
 
 
-
+</div>
 
 
 
