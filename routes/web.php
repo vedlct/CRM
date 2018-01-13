@@ -20,7 +20,7 @@ Route::view('/clients', 'layouts.clients');
 Route::view('/leads', 'layouts.leads');
 Route::view('/starleads', 'layouts.starLeads');
 Route::view('/newinfo', 'layouts.newInfo');
-Route::view('/assignreport', 'layouts.assignreport');
+
 Route::view('/reports', 'layouts.reports');
 Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
@@ -39,3 +39,9 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::get('/home',function (){
     return redirect('/dashboard');
 });
+
+
+Route::view('/lead', 'layouts.lead.add');
+Route::get('/assignreport', 'UserController@test');
+
+
