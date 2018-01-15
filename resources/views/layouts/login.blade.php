@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Customer relationship management</title>
+    <title>Bootstrap Dashboard by Bootstrapious.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -38,9 +38,9 @@
                     <div class="info d-flex align-items-center">
                         <div class="content">
                             <div class="logo">
-                                <h1>Customer relationship management</h1>
+                                <h1>Dashboard</h1>
                             </div>
-                            <p>Tech Cloud Limited</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                         </div>
                     </div>
                 </div>
@@ -48,43 +48,17 @@
                 <div class="col-lg-6 bg-white">
                     <div class="form d-flex align-items-center">
                         <div class="content">
-                            <form id="login-form"  method="POST" action="{{ route('login') }}">
-
-                                    {{ csrf_field() }}
-
-                                    <div class="form-group{{ $errors->has('userId') ? ' has-error' : '' }}">
-
-                                        <label for="login-username" class="label-material">User Name</label>
-                                    <input id="text" type="text" class="form-control" name="userId"  required autofocus>
-
-                                        @if ($errors->has('userId'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('userId') }}</strong>
-                                    </span>
-                                        @endif
-                                    </div>
-
+                            <form id="login-form" method="post">
                                 <div class="form-group">
-                                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}"></div>
-                                        <label for="password" class="label-material">Password</label>
-                                        <input id="password" type="password" class="form-control" name="password" required>
-
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                        @endif
+                                    <input id="login-username" type="text" name="loginUsername" required="" class="input-material">
+                                    <label for="login-username" class="label-material">User Name</label>
                                 </div>
-
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                            </label>
-                                        </div>
-
-                                     <button type="submit" class="btn btn-primary">Login</button>
+                                <div class="form-group">
+                                    <input id="login-password" type="password" name="password" required="" class="input-material">
+                                    <label for="login-password" class="label-material">Password</label>
+                                </div><a id="login" href="/main" class="btn btn-primary">Login</a>
                                 <!-- This should be submit button but I replaced it with <a> for demo purposes-->
-                            </form>
+                            </form><a href="#" class="forgot-pass">Forgot Password?</a><br>
                         </div>
                     </div>
                 </div>
@@ -96,8 +70,13 @@
         <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
     </div>
 </div>
-<!-- Javascript files-->
 
+<!-- Javascript files-->
+<script src="../../ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.cookie.js"> </script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/front.js"></script>
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
 <!---->
 

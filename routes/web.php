@@ -32,6 +32,7 @@ Route::get('/user','UserController@index');
 
 
 Route::view('/test', 'test');
+
 Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('home');
