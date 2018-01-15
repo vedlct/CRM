@@ -35,6 +35,8 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    @yield('header')
+
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -120,7 +122,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer">
-            © 2017 Monster Admin by wrappixel.com
+            © 2018 CRM By TECH CLOUD LTD
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->

@@ -22,61 +22,61 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
                 <li>
-                    <a href=""><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
+                    <a href="main"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
 
                 </li>
                 <li>
-                    <a ><i class="fa fa-list"></i>My List</a>
-
-                </li>
-
-
-                <li>
-                    <a ><i class="fa fa-list-alt"></i>Test List</a>
-
-                </li>
-
-                <li>
-                    <a ><i class="fa fa-user-circle-o"></i>Clients</a>
-
-                </li>
-
-                <li>
-                    <a ><i class="fa fa-briefcase"></i>Leads</a>
+                    <a href="mylist" ><i class="fa fa-list"></i>My List</a>
 
                 </li>
 
 
                 <li>
-                    <a ><i class="fa fa-star"></i>Star Leads</a>
+                    <a href="testlist"><i class="fa fa-list-alt"></i>Test List</a>
 
                 </li>
 
                 <li>
-                    <a ><i class="fa fa-plus-square"></i>Add Info</a>
-
-                </li>
-
-
-                <li>
-                    <a ><i class="mdi mdi-bullseye"></i>Assign Report</a>
-
-                </li>
-
-
-                <li>
-                    <a ><i class="fa fa-bell"></i>Notice Board</a>
+                    <a href="clients"><i class="fa fa-user-circle-o"></i>Clients</a>
 
                 </li>
 
                 <li>
-                    <a ><i class="mdi mdi-bullseye"></i>Leave Show</a>
+                    <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
 
                 </li>
 
 
                 <li>
-                    <a ><i class="fa fa-users"></i>My Team</a>
+                    <a href="starleads"><i class="fa fa-star"></i>Star Leads</a>
+
+                </li>
+
+                <li>
+                    <a href="newinfo"><i class="fa fa-plus-square"></i>Add Info</a>
+
+                </li>
+
+
+                <li>
+                    <a href="assignreport"><i class="fa fa-flag"></i>Assign Report</a>
+
+                </li>
+
+
+                <li>
+                    <a href="notices"><i class="fa fa-bell"></i>Notice Board</a>
+
+                </li>
+
+                <li>
+                    <a href="leaves"><i class="mdi mdi-bullseye"></i>Leave Show</a>
+
+                </li>
+
+
+                <li>
+                    <a href="myteam"><i class="fa fa-users"></i>My Team</a>
 
                 </li>
 
