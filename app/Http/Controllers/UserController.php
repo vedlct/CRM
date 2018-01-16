@@ -22,7 +22,8 @@ class UserController extends Controller
 
     public function test(){
 
-        $table=Test::get();
+      $table=Test::get();
+
 
 
         return view('layouts.assignreport')->with('table',$table);

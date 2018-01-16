@@ -37,12 +37,16 @@ Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('home');
 
-Route::get('/home',function (){
+/*Route::get('/home',function (){
     return redirect('/dashboard');
-});
+});*/
 
 
 Route::view('/lead', 'layouts.lead.add');
 Route::get('/assignreport', 'UserController@test');
 
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

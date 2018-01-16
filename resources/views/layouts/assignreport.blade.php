@@ -6,7 +6,7 @@
     @section('content')
 
 
-    <div class="card">
+    <div class="card" style="padding: 30px;">
         <div class="card-body">
             <h4 class="card-title">Data Table</h4>
             <h6 class="card-subtitle">Data table example</h6>
@@ -15,7 +15,9 @@
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Name</th>
                         <th>MSG</th>
+                        <th>Edit</th>
                        
                     </tr>
                     </thead>
@@ -25,7 +27,11 @@
                     @foreach($table as $data)
                         <tr>
                             <td>{{$data->id}}</td>
+                            <td>{{$data->name}}</td>
                             <td>{{$data->msg}}</td>
+                            <td><button class="btn btn-success">Edit</button>
+                                <button class="btn btn-danger">Edit</button>
+                            </td>
                         </tr>
                         @endforeach
 
@@ -60,7 +66,7 @@
         $(document).ready(function() {
             $('#myTable').DataTable(
                 {
-                    "order": [[ 0, "desc" ]]
+//                    "order": [[ 0, "desc" ]]
                 }
             );
 

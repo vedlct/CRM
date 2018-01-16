@@ -16,9 +16,10 @@ class TestTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        foreach (range(1,390) as $index) {
+        foreach (range(1,1000) as $index) {
             DB::table('tests')->insert([
-                'msg' => $faker->name,
+                'name' => $faker->name,
+                'msg'=>$faker->title
 
 
             ]);

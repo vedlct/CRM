@@ -1,86 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
-<!-- Mirrored from demo.bootstrapious.com/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jan 2018 07:53:08 GMT -->
+
+<!-- Mirrored from wrappixel.com/demos/admin-templates/monster-admin/main/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 13 Jan 2018 12:29:41 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Bootstrap Dashboard by Bootstrapious.com</title>
-    <meta name="description" content="">
+    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="all,follow">
-    <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Google fonts - Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
-    <!-- theme stylesheet-->
-    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/custom.css">
-    <!-- Favicon-->
-    <link rel="shortcut icon" href="img/favicon.ico">
-    <!-- Font Awesome CDN-->
-    <!-- you can replace it by local Font Awesome-->
-    <script src="../../use.fontawesome.com/99347ac47f.js"></script>
-    <!-- Font Icons CSS-->
-    <link rel="stylesheet" href="../../file.myfontastic.com/da58YPMQ7U5HY8Rb6UxkNf/icons.css">
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+    <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
+
 <body>
-<div class="page login-page">
-    <div class="container d-flex align-items-center">
-        <div class="form-holder has-shadow">
-            <div class="row">
-                <!-- Logo & Information Panel-->
-                <div class="col-lg-6">
-                    <div class="info d-flex align-items-center">
-                        <div class="content">
-                            <div class="logo">
-                                <h1>Dashboard</h1>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<section id="wrapper">
+    <div class="login-register" style="background-image:url(img/background.jpg);  background-color: black;
+  background-blend-mode: screen;">
+        <div class="login-box card" style="width: 30%; height:60%;" >
+            <div class="card-body" >
+
+
+
+
+                <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
+                    {{ csrf_field() }}
+                    <h3 class="box-title m-b-20">Sign In</h3>
+                    <div class="form-group{{ $errors->has('userId') ? ' has-error' : '' }} " >
+                        <div class="col-xs-12">
+                            <input class="form-control" id="text" type="text" name="userId"  placeholder="Username" required> </div>
+
+                        @if ($errors->has('userId'))
+                            <span class="help-block">
+                                        <strong>{{ $errors->first('userId') }}</strong>
+                                    </span>
+                        @endif
+                    </div>
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="password" required="" placeholder="Password" id="password" name="password"> </div>
+                        @if ($errors->has('password'))
+                            <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                        @endif
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="checkbox checkbox-primary pull-left p-t-0">
+                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                <label for="checkbox-signup"> Remember me </label>
+                            </div> <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i class="fa fa-lock m-r-5"></i> Forgot pwd?</a> </div>
+                    </div>
+                    <div class="form-group text-center m-t-20">
+                        <div class="col-xs-12">
+                            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Log In</button>
                         </div>
                     </div>
-                </div>
-                <!-- Form Panel    -->
-                <div class="col-lg-6 bg-white">
-                    <div class="form d-flex align-items-center">
-                        <div class="content">
-                            <form id="login-form" method="post">
-                                <div class="form-group">
-                                    <input id="login-username" type="text" name="loginUsername" required="" class="input-material">
-                                    <label for="login-username" class="label-material">User Name</label>
-                                </div>
-                                <div class="form-group">
-                                    <input id="login-password" type="password" name="password" required="" class="input-material">
-                                    <label for="login-password" class="label-material">Password</label>
-                                </div><a id="login" href="/main" class="btn btn-primary">Login</a>
-                                <!-- This should be submit button but I replaced it with <a> for demo purposes-->
-                            </form><a href="#" class="forgot-pass">Forgot Password?</a><br>
-                        </div>
-                    </div>
-                </div>
+
+
+
+                </form>
+
+
+
             </div>
         </div>
     </div>
-    <div class="copyrights text-center">
-        <p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Bootstrapious</a></p>
-        <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
-    </div>
-</div>
 
-<!-- Javascript files-->
-<script src="../../ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.cookie.js"> </script>
-<script src="js/jquery.validate.min.js"></script>
-<script src="js/front.js"></script>
-<!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-<!---->
-
+</section>
+<!-- ============================================================== -->
+<!-- End Wrapper -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- All Jquery -->
+<!-- ============================================================== -->
+<script src="../assets/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script src="../assets/plugins/bootstrap/js/popper.min.js"></script>
+<script src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="js/jquery.slimscroll.js"></script>
+<!--Wave Effects -->
+<script src="js/waves.js"></script>
+<!--Menu sidebar -->
+<script src="js/sidebarmenu.js"></script>
+<!--stickey kit -->
+<script src="../assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+<!--Custom JavaScript -->
+<script src="js/custom.min.js"></script>
+<!-- ============================================================== -->
+<!-- Style switcher -->
+<!-- ============================================================== -->
+<script src="../assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
 </body>
 
-<!-- Mirrored from demo.bootstrapious.com/admin/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Jan 2018 07:53:09 GMT -->
+
+<!-- Mirrored from wrappixel.com/demos/admin-templates/monster-admin/main/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 13 Jan 2018 12:29:43 GMT -->
 </html>

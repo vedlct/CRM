@@ -93,15 +93,15 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Welcome<b> Admin <i class="fa fa-sort-desc" aria-hidden="true"></i></b></a>
+                        Welcome<b> {{Auth::user()->firstName}} <i class="fa fa-sort-desc" aria-hidden="true"></i></b></a>
                     <div class="dropdown-menu dropdown-menu-right animated flipInY">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
                                     <div class="u-img"><img src="../assets/images/users/1.jpg" alt="user"></div>
                                     <div class="u-text">
-                                        <h4>Steave Jobs</h4>
-                                        <p class="text-muted">varun@gmail.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                        <h4>{{Auth::user()->firstName}} {{Auth::user()->lastName}} </h4>
+                                        <p class="text-muted">{{Auth::user()->userEmail}} </p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
                                 </div>
                             </li>
                             <li role="separator" class="divider"></li>
