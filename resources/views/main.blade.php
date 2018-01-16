@@ -35,6 +35,13 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <style>
+        .help-block{
+            color: red;
+        }
+
+    </style>
+
     @yield('header')
 
 </head>
@@ -70,6 +77,10 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
+
+            @if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @endif
          @yield('content')
 
 
@@ -163,7 +174,7 @@
 <!-- This page plugins -->
 <!-- ============================================================== -->
 <!-- chartist chart -->
-
+@yield('bottom')
 
 <!-- Bootstrap tether Core JavaScript -->
 

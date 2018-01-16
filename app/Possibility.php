@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Lead extends Model
+class Possibility extends Model
 {
-    public $timestamps = false;
+    //
 }

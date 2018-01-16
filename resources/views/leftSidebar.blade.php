@@ -42,6 +42,12 @@
                 </li>
 
                 <li>
+                    <a href="{{route('addLead')}}">Add Lead</a>
+
+                </li>
+
+
+                <li>
                     <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
 
                 </li>

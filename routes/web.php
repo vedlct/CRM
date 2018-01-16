@@ -50,3 +50,10 @@ Route::get('/assignreport', 'UserController@test');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+//Lead
+
+Route::get('/lead/add', 'LeadController@add')->name('addLead');
+Route::post('lead/add', 'LeadController@store')->name('storeLead');
+
