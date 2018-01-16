@@ -41,7 +41,8 @@
 <section id="wrapper">
     <div class="login-register" style="background-image:url(img/background.jpg);  background-color: black;
   background-blend-mode: screen;">
-        <div class="login-box card" style="width: 30%; height:60%;" >
+
+        <div class="login-box card"  >
             <div class="card-body" >
 
 
