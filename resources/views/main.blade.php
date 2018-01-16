@@ -13,6 +13,9 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}">
     <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+
+    @yield('header')
+
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
@@ -42,7 +45,7 @@
 
     </style>
 
-    @yield('header')
+
 
 </head>
 

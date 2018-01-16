@@ -14,6 +14,11 @@ use App\Lead;
 
 class LeadController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function add(){
 
         $cats=Category::where('type', 1)->get();
@@ -38,7 +43,7 @@ class LeadController extends Controller
             'category' => 'required',
             'possibility' => 'required',
             'personName' => 'required:max:100',
-            'personNumber' => 'required|max:15',
+            'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
 

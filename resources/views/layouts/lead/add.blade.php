@@ -1,6 +1,9 @@
 @extends('main')
 
+@section('header')
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    @endsection
 
 @section('content')
 
@@ -9,7 +12,7 @@
         <h3>Insert Lead</h3>
 
 
-        <form class="form-horizontal" action="{{route('storeLead')}}" method="POST">
+        <form class="form-horizontal" action="{{route('storeLead')}}" method="POST" onsubmit="return chkValidate()">
 
 
             {{csrf_field()}}
@@ -19,7 +22,7 @@
 
                 {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
 
-                    <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" >
+                    <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" required>
 
             </div>
 
@@ -27,7 +30,7 @@
             <div class="form-group">
                 <label class="control-label" ><b>Website</b></label>
                 {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                    <input type="text" class="form-control" name="website" placeholder="Enter url" >
+                    <input type="text" class="form-control" name="website" placeholder="Enter url" required>
 
             </div>
 
@@ -35,7 +38,7 @@
             <div class="form-group">
                 <label class="control-label" ><b>Company Email:</b></label>
                 {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
-                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" >
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
 
             </div>
 
@@ -80,7 +83,7 @@
             <div class="form-group" style="margin-top: 10%;">
                 <label class="control-label" ><b>Contact Person</b></label>
                 {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
-                    <input type="text" class="form-control" id="" name="personName" placeholder="name" >
+                    <input type="text" class="form-control" id="" name="personName" placeholder="name" required>
 
             </div>
 
@@ -92,17 +95,16 @@
             <div class="form-group">
                 <label class="control-label" ><b>Contact Person Number</b></label>
                 {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
-                    <input type="text" class="form-control" id="" name="personNumber" placeholder="Enter Phone Number" >
-
+                    <input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
             </div>
 
 
 
 
 
-            <div class="form-group" style="width: 40%">
+            <div class="form-group" style="width: 50%;height: auto;">
                 <label for="sel1"><b>Country:</b></label>
-                <select class="form-control select" id="" name="country">
+                <select class="select form-control" id="" name="country">
                    @foreach($countries as $country)
 
                         <option value="{{$country->countryId}}">{{$country->countryName}}</option>
@@ -120,7 +122,7 @@
 
                 {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
 
-                    <input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" >
+                    <input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>
 
             </div>
 
@@ -143,7 +145,7 @@
 
     {{--Using from https://select2.org/getting-started/basic-usage--}}
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
     <script>
@@ -152,6 +154,27 @@
             $('.select').select2();
         });
 
+        function chkValidate() {
+
+
+            var phone= document.getElementById('personNumber').value;
+            var phoneReg = /^[\+0-9\-\(\)\s]*$/;
+
+            if (!phone.match(phoneReg)){
+                alert(" please validate phone number");
+                return false;
+            }
+            return true;
+
+
+
+
+
+        }
+
+
 
     </script>
+
+
 @endsection
