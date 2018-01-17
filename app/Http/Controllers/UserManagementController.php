@@ -55,8 +55,9 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
-		$this->validateInput($request);
+		//$this->validateInput($request);
         User::create([
+          //  DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
             'userEmail' => $request['userEmail'],
@@ -67,7 +68,7 @@ class UserManagementController extends Controller
             'designationId' => $request['designationId'],
             'phoneNumber' => $request['phoneNumber'],
             'picture' => $request['picture'],
-            'dob' => $request['dob'],
+            'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
         ]);

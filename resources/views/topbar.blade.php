@@ -7,7 +7,7 @@
             <a class="navbar-brand" href="index.html">
                 <!-- Logo icon -->
 
-                <img src="img/logo/TCL_logo.png" alt="homepage" class="dark-logo" width="40px"/>
+                <img src="{{asset('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" width="40px"/>
                 <b>
                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                     <!-- Dark Logo icon -->

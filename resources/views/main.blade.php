@@ -13,6 +13,9 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}">
     <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+
+    @yield('header')
+
     <!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
@@ -35,7 +38,14 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    @yield('header')
+    <style>
+        .help-block{
+            color: red;
+        }
+
+    </style>
+
+
 
 </head>
 
@@ -70,6 +80,10 @@
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
+
+            @if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+            @endif
          @yield('content')
 
 
@@ -163,7 +177,7 @@
 <!-- This page plugins -->
 <!-- ============================================================== -->
 <!-- chartist chart -->
-
+@yield('bottom')
 
 <!-- Bootstrap tether Core JavaScript -->
 

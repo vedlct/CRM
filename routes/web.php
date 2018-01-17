@@ -52,8 +52,16 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
 /**/
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 Route::resource('user-management', 'UserManagementController');
 
 //Route::view('/user-management', 'user-management.index');
+
+
+//Lead
+
+Route::get('/lead/add', 'LeadController@add')->name('addLead');
+Route::post('lead/add', 'LeadController@store')->name('storeLead');
+
