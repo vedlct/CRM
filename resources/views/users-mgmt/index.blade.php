@@ -26,10 +26,6 @@
           @component('layouts.two-cols-search-row', ['items' => ['User Name', 'First Name'], 
           'oldVals' => [isset($searchingVals) ? $searchingVals['userId'] : '', isset($searchingVals) ? $searchingVals['firstName'] : '']])
           @endcomponent
-          </br>
-          @component('layouts.two-cols-search-row', ['items' => ['Last Name', 'Department'],
-          'oldVals' => [isset($searchingVals) ? $searchingVals['lastName'] : '', isset($searchingVals) ? $searchingVals['designationId'] : '']])
-          @endcomponent
         @endcomponent
       </form>
     <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">

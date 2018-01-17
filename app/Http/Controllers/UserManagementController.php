@@ -56,8 +56,8 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
 		//$this->validateInput($request);
-        User::create([
-          //  DB::table('users')->insert([
+        //User::create([
+            DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
             'userEmail' => $request['userEmail'],
@@ -65,7 +65,6 @@ class UserManagementController extends Controller
             'rfID' => $request['rfID'],
             'firstName' => $request['firstName'],
             'lastName' => $request['lastName'],
-            'designationId' => $request['designationId'],
             'phoneNumber' => $request['phoneNumber'],
             'picture' => $request['picture'],
             'dob' => date('Y-m-d',strtotime($request['dob'])),
@@ -158,8 +157,6 @@ class UserManagementController extends Controller
         $constraints = [
             'userId' => $request['userId'],
             'firstName' => $request['firstName'],
-            'lastName' => $request['lastName'],
-			'designationId' => $request['designationId']
             ];
 
        $users = $this->doSearchingQuery($constraints);

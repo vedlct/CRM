@@ -48,6 +48,12 @@
 
 
                 <li>
+                    <a href="{{route('assignShow')}}">Assign Lead</a>
+
+                </li>
+
+
+                <li>
                     <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
 
                 </li>

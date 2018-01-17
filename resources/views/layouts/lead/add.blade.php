@@ -122,7 +122,12 @@
 
                 {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
 
-                    <input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>
+                    {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
+
+                <textarea name="comment" rows="5" cols="10" class="form-control">
+
+
+                </textarea>
 
             </div>
 

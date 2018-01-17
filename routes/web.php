@@ -64,4 +64,5 @@ Route::resource('user-management', 'UserManagementController');
 
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
+Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 

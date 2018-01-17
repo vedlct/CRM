@@ -96,20 +96,6 @@
                                 @endif
                             </div>
                         </div>
-
-						<div class="form-group row row">
-							<label class="col-sm-3 form-control-label">Designation</label>
-							<div class="col-sm-9">
-
-								<select name="designation" class="form-control form-control-warning">
-									<option value="1">Admin</option>
-									<option value="2">Manager</option>
-									<option value="3">Supervisor</option>
-									<option value="4">Reference Author</option>
-								</select>
-
-							</div>
-						</div>
 					
                         <div class="form-group row{{ $errors->has('phoneNumber') ? ' has-error' : '' }}">
                             <label for="phoneNumber" class="col-sm-3 control-label">Phone Number</label>

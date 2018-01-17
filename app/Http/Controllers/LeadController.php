@@ -33,6 +33,15 @@ class LeadController extends Controller
     }
 
 
+
+    public function assignShow(){
+        $leads=Lead::where('statusId', 1)->get();
+
+
+        return view('layouts.lead.assignLead')
+                ->with('leads',$leads);
+    }
+
     public function store(Request $r){
 
         $this->validate($r,[
@@ -60,6 +69,7 @@ class LeadController extends Controller
         $l->email= $r->email;
         $l->contactNumber = $r->personNumber;
         $l->countryId = $r->country;
+        $l->comments=$r->comment;
 
         $l->minedBy = Auth::user()->id;
         $l->save();
