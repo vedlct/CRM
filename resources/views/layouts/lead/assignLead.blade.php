@@ -42,7 +42,14 @@
                             <td>{{$lead->created_at}}</td>
                             <td><a href="#myModal" data-toggle="modal"  data-target="#edit-modal" class="btn btn-success" name="{{$lead->companyName}}" id="{{$lead->leadId}}">
                                     <i class="fa fa-share-square-o"></i></a></td>
-                            <td><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </button></td>
+                            <td>
+                                <form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">
+                                    {{csrf_field()}}
+                                    {{ method_field('DELETE') }}
+
+                                <button type="submit" class="btn btn-danger btn-sm">
+
+                                    <i class="fa fa-trash"></i></button></form></td>
                         </tr>
                     @endforeach
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+
 use Illuminate\Http\Request;
 
 use Auth;
@@ -12,7 +12,7 @@ use App\Category;
 use App\Possibility;
 use App\Country;
 use App\Lead;
-use App\DB;
+use App\User;
 
 class LeadController extends Controller
 {
@@ -101,21 +101,24 @@ class LeadController extends Controller
     public function assignStore(Request $r){
 
         $this->validate($r,[
-
             'userName' => 'required',
             'leadId' => 'required',
-
-
         ]);
 
       //  $lead=Lead::findOrFail($r->leadId);
+            return $r;
+        }
 
 
 
+        public function destroy($id){
 
-        return $r;
+            $lead=Lead::findOrFail($id);
+            $lead->delete();
+            Session::flash('message', 'Lead deleted successfully');
+            return back();
 
-    }
+        }
 
 
 

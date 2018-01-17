@@ -56,38 +56,39 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
 		$this->validateInput($request);
-        //User::create([
-//            DB::table('users')->insert([
-//            'userId' => $request['userId'],
-//            'typeId' => $request['typeId'],
-//            'userEmail' => $request['userEmail'],
-//            'password' => bcrypt($request['password']),
-//            'rfID' => $request['rfID'],
-//            'firstName' => $request['firstName'],
-//            'lastName' => $request['lastName'],
-//            'phoneNumber' => $request['phoneNumber'],
-//            'picture' => $request['picture'],
-//            'dob' => date('Y-m-d',strtotime($request['dob'])),
-//            'gender' => $request['gender'],
-//            'active' => $request['active'],
-//        ]);
 
-            $user=new User;
+       // User::create([
+            DB::table('users')->insert([
+            'userId' => $request['userId'],
+            'typeId' => $request['typeId'],
+            'userEmail' => $request['userEmail'],
+            'password' => bcrypt($request['password']),
+            'rfID' => $request['rfID'],
+            'firstName' => $request['firstName'],
+            'lastName' => $request['lastName'],
+            'phoneNumber' => $request['phoneNumber'],
+            'picture' => $request['picture'],
+            'dob' => date('Y-m-d',strtotime($request['dob'])),
+            'gender' => $request['gender'],
+            'active' => $request['active'],
+        ]);
 
-            $user->userId=$request->userId;
-            $user->typeId=$request->typeId;
-            $user->userEmail=$request->userEmail;
-            $user->password= bcrypt($request->password);
-            $user->rfId=$request->rfId;
-            $user->firstName=$request->firstName;
-            $user->lastName=$request->lastName;
-            $user->phoneNumber=$request->phoneNumber;
-            $user->picture=$request->picture;
-            $user->dob =date('Y-m-d',strtotime($request['dob']));
-            $user->gender=$request->gender;
-
-
-            $user->save();
+//            $user=new User;
+//
+//            $user->userId=$request->userId;
+//            $user->typeId=$request->typeId;
+//            $user->userEmail=$request->userEmail;
+//            $user->password= bcrypt($request->password);
+//            $user->rfId=$request->rfId;
+//            $user->firstName=$request->firstName;
+//            $user->lastName=$request->lastName;
+//            $user->phoneNumber=$request->phoneNumber;
+//            $user->picture=$request->picture;
+//            $user->dob =date('Y-m-d',strtotime($request['dob']));
+//            $user->gender=$request->gender;
+//
+//
+//            $user->save();
 
 
 

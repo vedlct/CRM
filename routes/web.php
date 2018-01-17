@@ -13,7 +13,7 @@
 
 
 Route::view('/main', 'layouts.index')->name('main');
-Route::view('/', 'layouts.login');
+Route::get('/', 'Auth\LoginController@mainLogin');
 Route::view('/mylist', 'layouts.myList')->name('mylist');
 Route::view('/testlist', 'layouts.testList')->name('testlist');
 Route::view('/clients', 'layouts.clients')->name('clients');
@@ -69,4 +69,6 @@ Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
+
+Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 
