@@ -177,7 +177,7 @@
 <!-- This page plugins -->
 <!-- ============================================================== -->
 <!-- chartist chart -->
-@yield('bottom')
+
 
 <!-- Bootstrap tether Core JavaScript -->
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lead extends Model
 {
     public $timestamps = false;
+    protected $primaryKey = 'leadId';
 
     public function category(){
 
@@ -27,5 +28,16 @@ class Lead extends Model
 
         return $this->belongsTo(User::class,'minedBy','id');
     }
+
+
+    public function getTempLead(){
+
+        $lead=Lead::where('statusId', 1)
+                    ->get();
+
+        return $lead;
+
+    }
+
 
 }

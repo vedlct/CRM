@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 
 use Auth;
@@ -11,6 +12,7 @@ use App\Category;
 use App\Possibility;
 use App\Country;
 use App\Lead;
+use App\DB;
 
 class LeadController extends Controller
 {
@@ -34,16 +36,11 @@ class LeadController extends Controller
 
 
 
-    public function assignShow(){
-        $leads=Lead::where('statusId', 1)->get();
 
-
-        return view('layouts.lead.assignLead')
-                ->with('leads',$leads);
-    }
 
     public function store(Request $r){
 
+        //Validating The input Filed
         $this->validate($r,[
 
             'companyName' => 'required|max:100',
@@ -58,6 +55,7 @@ class LeadController extends Controller
 
         ]);
 
+        //Inserting Data To Leads TAble
 
         $l=new Lead;
         $l->statusId = 1;
@@ -71,16 +69,51 @@ class LeadController extends Controller
         $l->countryId = $r->country;
         $l->comments=$r->comment;
 
+        //getting Loggedin User id
         $l->minedBy = Auth::user()->id;
         $l->save();
 
 
 
-
+        //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
 
+
+    }
+
+
+    public function assignShow(){
+        //$leads=Lead::where('statusId', 1)->get();
+        $leads=(new Lead())->getTempLead();
+
+        $users=User::select('id','firstName')->where('id','!=',Auth::user()->id)->get();
+
+
+        return view('layouts.lead.assignLead')
+            ->with('leads',$leads)
+            ->with('users',$users);
+    }
+
+
+
+    public function assignStore(Request $r){
+
+        $this->validate($r,[
+
+            'userName' => 'required',
+            'leadId' => 'required',
+
+
+        ]);
+
+      //  $lead=Lead::findOrFail($r->leadId);
+
+
+
+
+        return $r;
 
     }
 
