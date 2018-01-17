@@ -56,4 +56,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
+Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 
