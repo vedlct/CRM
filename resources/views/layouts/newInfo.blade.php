@@ -68,6 +68,13 @@
 
 
 
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">RF_ID</label>
+                        <div class="col-sm-9">
+                            <input id="inputHorizontalWarning" type="text" placeholder="RF_ID" class="form-control form-control-warning">
+                        </div>
+                    </div>
+
 
                     <div class="form-group row">
                         <div class="col-sm-9 offset-sm-3">

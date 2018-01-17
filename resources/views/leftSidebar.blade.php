@@ -57,6 +57,11 @@
 
                 </li>
 
+                <li>
+                    <a href="user-management"><i class="fa fa-plus-square"></i>User Management</a>
+
+                </li>
+
 
                 <li>
                     <a href="assignreport"><i class="fa fa-flag"></i>Assign Report</a>

@@ -19,6 +19,7 @@ Route::view('/testlist', 'layouts.testList');
 Route::view('/clients', 'layouts.clients');
 Route::view('/leads', 'layouts.leads');
 Route::view('/starleads', 'layouts.starLeads');
+//Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
 Route::view('/reports', 'layouts.reports');
@@ -50,3 +51,9 @@ Route::get('/assignreport', 'UserController@test');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/**/
+Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+Route::resource('user-management', 'UserManagementController');
+
+//Route::view('/user-management', 'user-management.index');
