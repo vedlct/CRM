@@ -12,13 +12,14 @@
 */
 
 
-Route::view('/main', 'layouts.index');
+Route::view('/main', 'layouts.index')->name('main');
 Route::view('/', 'layouts.login');
-Route::view('/mylist', 'layouts.myList');
-Route::view('/testlist', 'layouts.testList');
-Route::view('/clients', 'layouts.clients');
+Route::view('/mylist', 'layouts.myList')->name('mylist');
+Route::view('/testlist', 'layouts.testList')->name('testlist');
+Route::view('/clients', 'layouts.clients')->name('clients');
 Route::view('/leads', 'layouts.leads');
 Route::view('/starleads', 'layouts.starLeads');
+//Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
 Route::view('/reports', 'layouts.reports');
@@ -51,6 +52,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+
+/**/
+Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+Route::resource('user-management', 'UserManagementController');
+
+//Route::view('/user-management', 'user-management.index');
 
 
 

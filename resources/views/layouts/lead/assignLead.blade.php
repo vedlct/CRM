@@ -6,7 +6,7 @@
 @section('content')
 
 
-    <div class="card" style="padding: 30px;">
+    <div class="card" style="padding:10px;">
         <div class="card-body">
             <h4 class="card-title">Assign Lead To User</h4>
 
@@ -21,7 +21,9 @@
                         <th>Country</th>
                         <th>Comments</th>
                         <th>Mined By</th>
+                        <th>Created At</th>
                         <th>Assign To</th>
+                        <th>Delete</th>
 
                     </tr>
                     </thead>
@@ -37,8 +39,10 @@
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->comments}}</td>
                             <td>{{$lead->mined->firstName}}</td>
-                            <td><a href="#myModal" data-toggle="modal"  data-target="#edit-modal" class="btn btn-success" name="{{$lead->companyName}}" id="{{$lead->leadId}}">Assign</a></td>
-
+                            <td>{{$lead->created_at}}</td>
+                            <td><a href="#myModal" data-toggle="modal"  data-target="#edit-modal" class="btn btn-success" name="{{$lead->companyName}}" id="{{$lead->leadId}}">
+                                    <i class="fa fa-share-square-o"></i></a></td>
+                            <td><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </button></td>
                         </tr>
                     @endforeach
 

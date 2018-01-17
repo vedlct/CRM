@@ -22,33 +22,33 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
                 <li>
-                    <a href="main"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
+                    <a href="{{route('main')}}"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
 
                 </li>
                 <li>
-                    <a href="mylist" ><i class="fa fa-list"></i>My List</a>
-
-                </li>
-
-
-                <li>
-                    <a href="testlist"><i class="fa fa-list-alt"></i>Test List</a>
-
-                </li>
-
-                <li>
-                    <a href="clients"><i class="fa fa-user-circle-o"></i>Clients</a>
-
-                </li>
-
-                <li>
-                    <a href="{{route('addLead')}}">Add Lead</a>
+                    <a href="{{route('mylist')}}" ><i class="fa fa-list"></i>My List</a>
 
                 </li>
 
 
                 <li>
-                    <a href="{{route('assignShow')}}">Assign Lead</a>
+                    <a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i>Test List</a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('clients')}}"><i class="fa fa-user-circle-o"></i>Clients</a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i>Add Lead</a>
+
+                </li>
+
+
+                <li>
+                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i> Assign Lead</a>
 
                 </li>
 
@@ -66,6 +66,11 @@
 
                 <li>
                     <a href="newinfo"><i class="fa fa-plus-square"></i>Add Info</a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('user-management.index')}}"><i class="fa fa-plus-square"></i>User Management</a>
 
                 </li>
 
