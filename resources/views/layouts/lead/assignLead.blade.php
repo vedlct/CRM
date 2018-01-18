@@ -17,10 +17,10 @@
                 {{csrf_field()}}
 
                 <div class="form-group">
-                    <label>Name</label>
+
 
                     <div class="form-group">
-                        <label for="sel1">Select Name:</label>
+                        <label >Select Name:</label>
                         <select class="form-control"  name="assignTo" id="otherCatches">
                             <option value="">select</option>
                             @foreach($users as $user)
@@ -46,6 +46,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>SL</th>
                         <th>Select</th>
                         <th>Company Name</th>
                         <th>Category</th>
@@ -63,7 +64,7 @@
 
 
                     @foreach($leads as $lead)
-                        <tr>
+                        <tr><td></td>
                             <td><input type='checkbox' class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
                             <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
@@ -117,54 +118,28 @@
 
 
         $(document).ready(function() {
-            $('#myTable').DataTable(
+            var t= $('#myTable').DataTable(
                 {
                     "order": [[ 7, "desc" ]]
                 }
             );
-
+            t.on( 'order.dt search.dt', function () {
+                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                    cell.innerHTML = i+1;
+                } );
+            } ).draw();
         });
 
 
 
-//        $('#edit-modal').on('show.bs.modal', function(e) {
-//
-//            var $modal = $(this),
-//                esseyId = e.relatedTarget.id;
-//                esseyName = e.relatedTarget.name;
-//
-//                var chkArray = [];
-//
-//            $('.checkboxvar:checked').each(function (i) {
-//                   // chkArray.push($(this).val());
-//                chkArray[i] = $(this).val();
-//                });
-//
-//           alert(chkArray[0]);
-//            $.each( chkArray, function( key, value ) {
-//                alert( key + ": " + value );
-//            });
-//            $modal.find('#modalTitle').html(chkArray);
-//            $modal.find('#inp').val(chkArray);
-//
-//        })
-
         $("#otherCatches").change(function() {
             var chkArray = [];
             $('.checkboxvar:checked').each(function (i) {
-                // chkArray.push($(this).val());
+
                 chkArray[i] = $(this).val();
-               // $("#inp").eq(i).val($(this).val());
-
-
             });
-          //  alert($(this).val()+chkArray); // how to get the value of the selected item if you need it
-           // $("input[name='leadId']").val(chkArray);
-           //  $("#inp").eq(0).val('1');
+
             $("#inp").val(JSON.stringify(chkArray));
-
-
-
             $( "#assign-form" ).submit();
         });
 
