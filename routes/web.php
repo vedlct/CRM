@@ -71,4 +71,9 @@ Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
+Route::get('lead/filter','LeadController@filter')->name('filterLeads');
+Route::get('lead/temper','LeadController@temperLeads')->name('temperLeads');
+Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 
+
+Route::post('lead/testPost','LeadController@testPost')->name('testPost');

@@ -9,6 +9,7 @@ class Lead extends Model
 {
     public $timestamps = false;
     protected $primaryKey = 'leadId';
+    protected $table = 'leads';
 
     public function category(){
 
@@ -34,9 +35,20 @@ class Lead extends Model
 
         $lead=Lead::where('statusId', 1)
                     ->get();
+        return $lead;
+    }
 
+    public function getFilteredLead(){
+
+        $lead=Lead::where('statusId', 2)
+            ->get();
         return $lead;
 
+    }
+
+    public function assigned(){
+
+        return $this->hasOne(Leadassigned::class,'leadId','leadId');
     }
 
 

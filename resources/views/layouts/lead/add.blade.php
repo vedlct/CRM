@@ -9,15 +9,16 @@
 
     <div class="card" style="padding-left: 10%;padding-right: 10%;padding-top: 2%;padding-bottom: 2%;">
 
-        <h3>Insert Lead</h3>
+        <h2 align="center">Insert Lead</h2><hr>
 
 
         <form class="form-horizontal" action="{{route('storeLead')}}" method="POST" onsubmit="return chkValidate()">
 
 
             {{csrf_field()}}
+            <div class="row">
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label class="control-label " ><b>Company Name</b></label>
 
                 {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
@@ -27,7 +28,7 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label class="control-label" ><b>Website</b></label>
                 {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
                     <input type="text" class="form-control" name="website" placeholder="Enter url" required>
@@ -35,7 +36,7 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label class="control-label" ><b>Company Email:</b></label>
                 {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
                 <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
@@ -45,9 +46,9 @@
 
 
 
-            <div class="form-group" style="">
+            <div class="form-group col-md-6" style="">
 
-                <div style="width: 50%; float: left; padding-right: 10px;">
+
                 <label ><b>Category:</b></label>
                 <select class="form-control" id="" name="category">
                     @foreach($cats as $cat)
@@ -57,10 +58,11 @@
 
 
                 </select>
+            </div>
 
-                </div>
 
-                <div style="width: 50%; float:right; padding-left: 10px;">
+
+                <div class="form-group col-md-6" style="">
                 <label ><b>Possibility:</b></label>
                 <select class="form-control" id="" name="possibility">
                    @foreach($pos as $p)
@@ -68,7 +70,7 @@
 
                        @endforeach
                 </select>
-                </div>
+
 
             </div>
 
@@ -80,7 +82,7 @@
 
 
 
-            <div class="form-group" style="margin-top: 10%;">
+                <div class="form-group col-md-6" style="">
                 <label class="control-label" ><b>Contact Person</b></label>
                 {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
                     <input type="text" class="form-control" id="" name="personName" placeholder="name" required>
@@ -92,7 +94,7 @@
 
 
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label class="control-label" ><b>Contact Person Number</b></label>
                 {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
                     <input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
@@ -102,7 +104,7 @@
 
 
 
-            <div class="form-group" style="width: 50%;height: auto;">
+            <div class="form-group col-md-6">
                 <label for="sel1"><b>Country:</b></label>
                 <select class="select form-control" id="" name="country">
                    @foreach($countries as $country)
@@ -117,7 +119,7 @@
 
 
 
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label class="control-label " ><b>Comments</b></label>
 
                 {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
@@ -129,6 +131,7 @@
 
                 </textarea>
 
+            </div>
             </div>
 
             <button type="submit" class="btn btn-success">Insert</button>

@@ -13,6 +13,8 @@ use App\Possibility;
 use App\Country;
 use App\Lead;
 use App\User;
+use App\Leadassigned;
+use DB;
 
 class LeadController extends Controller
 {
@@ -85,9 +87,24 @@ class LeadController extends Controller
 
 
     public function assignShow(){
-        //$leads=Lead::where('statusId', 1)->get();
-        $leads=(new Lead())->getTempLead();
 
+        //$leads=(new Lead())->getFilteredLead();
+        $leads=Lead::select('leads.*')
+            ->where('leads.statusId','2')
+            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+            ->where('leadassigneds.leadId',null)
+            ->orWhere('leadassigneds.leadAssignStatus','0')
+            ->where('leadAssignStatus','0')
+            ->orderBy('leads.leadId','asc')
+            ->get();
+
+//        $leads = DB::select
+//        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
+//        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
+
+
+
+        //return $leads;
         $users=User::select('id','firstName')->where('id','!=',Auth::user()->id)->get();
 
 
@@ -101,23 +118,69 @@ class LeadController extends Controller
     public function assignStore(Request $r){
 
         $this->validate($r,[
-            'userName' => 'required',
+            'assignTo' => 'required',
             'leadId' => 'required',
         ]);
 
-      //  $lead=Lead::findOrFail($r->leadId);
-            return $r;
+        $leadAssigned=new Leadassigned;
+        $leadAssigned->assignBy=Auth::user()->id;
+        $leadAssigned->assignTo=$r->assignTo;
+        $leadAssigned->leadId=$r->leadId;
+        $leadAssigned->save();
+
+        $lead=Lead::findOrFail($r->leadId);
+        $lead->statusId=2;
+        $lead->save();
+        Session::flash('message', 'Lead assigned successfully');
+            return back();
         }
 
 
 
-        public function destroy($id){
+        public function filter(){
+            $leads=Lead::with('assigned')->where('statusId', 2)->get();
+            //$leads=Lead::where('statusId', 2)->get();
 
+            return view('layouts.lead.filterLead')->with('leads',$leads);
+        }
+
+
+        public function destroy($id){
             $lead=Lead::findOrFail($id);
             $lead->delete();
             Session::flash('message', 'Lead deleted successfully');
             return back();
+        }
 
+
+        public function temperLeads(){
+            $leads=(new Lead())->getTempLead();
+
+           $possibilities=Possibility::get();
+
+
+            return view('layouts.lead.temper')
+                ->with('leads',$leads)
+                ->with('possibilities',$possibilities);
+
+        }
+
+        public function changePossibility(Request $r){
+            $lead=Lead::findOrFail($r->leadId);
+            $lead->possibiliyId=$r->possibility;
+            $lead->statusId=2;
+            $lead->save();
+
+            Session::flash('message', 'Possibility Added successfully');
+            return back();
+        }
+
+
+        public function testPost(Request $r){
+
+
+
+            return $r;
         }
 
 

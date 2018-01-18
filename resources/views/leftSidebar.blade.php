@@ -57,7 +57,14 @@
                     <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
 
                 </li>
+                <li>
+                    <a href="{{route('temperLeads')}}"><i class="fa fa-text-width"></i>Temper Leads</a>
 
+                </li>
+                <li>
+                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i>Filtered Leads</a>
+
+                </li>
 
                 <li>
                     <a href="starleads"><i class="fa fa-star"></i>Star Leads</a>
