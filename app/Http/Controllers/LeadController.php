@@ -117,20 +117,38 @@ class LeadController extends Controller
 
     public function assignStore(Request $r){
 
-        $this->validate($r,[
-            'assignTo' => 'required',
-            'leadId' => 'required',
-        ]);
+        $jsonText = $r->leadId;
+        $decodedText = html_entity_decode($jsonText);
+        $leadIds = json_decode($decodedText, true);
 
-        $leadAssigned=new Leadassigned;
-        $leadAssigned->assignBy=Auth::user()->id;
-        $leadAssigned->assignTo=$r->assignTo;
-        $leadAssigned->leadId=$r->leadId;
-        $leadAssigned->save();
+        foreach ($leadIds as $leadId){
+            $leadAssigned=new Leadassigned;
+            $leadAssigned->assignBy=Auth::user()->id;
+            $leadAssigned->assignTo=$r->assignTo;
+            $leadAssigned->leadId=$leadId;
+            $leadAssigned->save();
 
-        $lead=Lead::findOrFail($r->leadId);
-        $lead->statusId=2;
-        $lead->save();
+//            $lead=Lead::findOrFail($r->leadId);
+//            $lead->statusId=2;
+//            $lead->save();
+
+
+        }
+        //return $leadIds;
+//        $this->validate($r,[
+//            'assignTo' => 'required',
+//            'leadId' => 'required',
+//        ]);
+//
+//        $leadAssigned=new Leadassigned;
+//        $leadAssigned->assignBy=Auth::user()->id;
+//        $leadAssigned->assignTo=$r->assignTo;
+//        $leadAssigned->leadId=$r->leadId;
+//        $leadAssigned->save();
+//
+//        $lead=Lead::findOrFail($r->leadId);
+//        $lead->statusId=2;
+//        $lead->save();
         Session::flash('message', 'Lead assigned successfully');
             return back();
         }

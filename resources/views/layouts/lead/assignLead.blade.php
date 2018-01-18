@@ -32,14 +32,15 @@
                         </select>
                     </div>
 
-                    <input type="text" class="form-control" id="inp" name="leadId">
+                    <input type="hidden" class="form-control" id="inp" name="leadId">
+
 
                 </div>
 
             </form>
 
 
-            <button onclick="test()" >test</button>
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -124,11 +125,7 @@
 
         });
 
-        $('input[name="checkboxvar"]').click(function () {
 
-            alert("Thanks for checking me");
-
-        });
 
 //        $('#edit-modal').on('show.bs.modal', function(e) {
 //
@@ -153,18 +150,26 @@
 //        })
 
         $("#otherCatches").change(function() {
-            $(this).val() // how to get the value of the selected item if you need it
-        });
-
-
-        function test() {
             var chkArray = [];
             $('.checkboxvar:checked').each(function (i) {
                 // chkArray.push($(this).val());
                 chkArray[i] = $(this).val();
+               // $("#inp").eq(i).val($(this).val());
+
+
             });
-            alert(chkArray);
-        }
+          //  alert($(this).val()+chkArray); // how to get the value of the selected item if you need it
+           // $("input[name='leadId']").val(chkArray);
+           //  $("#inp").eq(0).val('1');
+            $("#inp").val(JSON.stringify(chkArray));
+
+
+
+            $( "#assign-form" ).submit();
+        });
+
+
+
 
     </script>
 
