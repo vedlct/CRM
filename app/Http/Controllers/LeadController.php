@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
-use Psy\Util\Json;
 use Session;
 
 use App\Category;
@@ -25,7 +24,6 @@ class LeadController extends Controller
     }
 
     public function add(){
-
         $cats=Category::where('type', 1)->get();
         $pos=Possibility::get();
 
@@ -37,15 +35,9 @@ class LeadController extends Controller
             ->with('countries',$countries);
     }
 
-
-
-
-
     public function store(Request $r){
-
         //Validating The input Filed
         $this->validate($r,[
-
             'companyName' => 'required|max:100',
             'website' => 'required|max:100',
             'email' => 'required|max:100',
@@ -55,11 +47,9 @@ class LeadController extends Controller
             'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
-
         ]);
 
         //Inserting Data To Leads TAble
-
         $l=new Lead;
         $l->statusId = 1;
         $l->possibiliyId = $r->possibility;
@@ -82,30 +72,14 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
-
-
-    }
+        }
 
 
     public function assignShow(){
 
-        //$leads=(new Lead())->getFilteredLead();
-        $leads=Lead::select('leads.*')
-            ->where('leads.statusId','2')
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->where('leadassigneds.leadId',null)
-            ->orWhere('leadassigneds.leadAssignStatus','0')
-            ->where('leadAssignStatus','0')
-            ->orderBy('leads.leadId','asc')
-            ->get();
+        $leads=(new Lead())->showAssignedLeads();
 
-//        $leads = DB::select
-//        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
-//        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
-
-
-
-        //return $leads;
+        //getting only first name of users
         $users=User::select('id','firstName')->where('id','!=',Auth::user()->id)->get();
 
 
@@ -113,7 +87,6 @@ class LeadController extends Controller
             ->with('leads',$leads)
             ->with('users',$users);
     }
-
 
 
     public function assignStore(Request $r){
@@ -129,19 +102,14 @@ class LeadController extends Controller
             $leadAssigned->leadId=$leadId;
             $leadAssigned->save();
 
-
-
-        }
-
+            }
         Session::flash('message', 'Lead assigned successfully');
             return back();
         }
 
 
-
         public function filter(){
             $leads=Lead::with('assigned')->where('statusId', 2)->get();
-            //$leads=Lead::where('statusId', 2)->get();
 
             return view('layouts.lead.filterLead')->with('leads',$leads);
         }
