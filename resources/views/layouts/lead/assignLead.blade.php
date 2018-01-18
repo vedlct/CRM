@@ -2,7 +2,9 @@
 
 @extends('main')
 
-
+@section('header')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    @endsection
 @section('content')
 
 
@@ -46,7 +48,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>SL</th>
+
                         <th>Select</th>
                         <th>Company Name</th>
                         <th>Category</th>
@@ -64,7 +66,7 @@
 
 
                     @foreach($leads as $lead)
-                        <tr><td></td>
+                        <tr>
                             <td><input type='checkbox' class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
                             <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
@@ -113,24 +115,22 @@
 
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script>
 
-
+        var datatable;
 
 
         $(document).ready(function() {
-            var t= $('#myTable').DataTable(
+             datatable= $('#myTable').DataTable(
                 {
                     "order": [[ 7, "desc" ]]
                 }
             );
-            t.on( 'order.dt search.dt', function () {
-                t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-                    cell.innerHTML = i+1;
-                } );
-            } ).draw();
+
         });
 
 
@@ -148,6 +148,7 @@
             // $("#inp").val(JSON.stringify(chkArray));
             // $( "#assign-form" ).submit();
              jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
 
             $.ajax({
                 type : 'post' ,
@@ -156,7 +157,11 @@
                 success : function(data){
                    console.log(data);
                    if(data == 'true'){
-                       alert('successfully assigned');
+                       $.alert({
+                           title: 'Success!',
+                           content: 'successfully assigned!',
+                       });
+                     //  alert('successfully assigned');
                    }
                 }
             });
