@@ -101,6 +101,7 @@
 
 @section('foot-js')
 
+
     <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
 
@@ -113,8 +114,10 @@
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
 
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script>
+
+
 
 
         $(document).ready(function() {
@@ -132,15 +135,31 @@
 
 
 
+
+
         $("#otherCatches").change(function() {
             var chkArray = [];
+            var userId=$(this).val();
             $('.checkboxvar:checked').each(function (i) {
 
                 chkArray[i] = $(this).val();
             });
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+             jQuery('input:checkbox:checked').parents("tr").remove();
 
-            $("#inp").val(JSON.stringify(chkArray));
-            $( "#assign-form" ).submit();
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('ajax')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+                success : function(data){
+                   console.log(data);
+                   if(data == 'true'){
+                       alert('successfully assigned');
+                   }
+                }
+            });
         });
 
 

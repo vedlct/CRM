@@ -77,3 +77,5 @@ Route::post('lead/changepossibility','LeadController@changePossibility')->name('
 
 
 Route::post('lead/testPost','LeadController@testPost')->name('testPost');
+Route::post('lead/ajax','LeadController@ajax')->name('ajax');
+

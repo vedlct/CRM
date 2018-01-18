@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Auth;
+use Psy\Util\Json;
 use Session;
 
 use App\Category;
@@ -177,11 +178,23 @@ class LeadController extends Controller
         }
 
 
-        public function testPost(Request $r){
+        public function ajax(Request $r){
+
+            if($r->ajax()){
+                foreach ($r->leadId as $lead){
+                    $leadAssigned=new Leadassigned;
+                    $leadAssigned->assignBy=Auth::user()->id;
+                    $leadAssigned->assignTo=$r->userId;
+                    $leadAssigned->leadId=$lead;
+                    $leadAssigned->save();
 
 
 
-            return $r;
+                }
+                return Response('true');
+               // return Response($r->leadId);
+            }
+
         }
 
 
