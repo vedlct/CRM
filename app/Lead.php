@@ -17,6 +17,21 @@ class Lead extends Model
         return $this->belongsTo(Category::class,'categoryId','categoryId');
     }
 
+    public function showAssignedLeads(){
+       // $leads = DB::select
+//        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
+//        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
+        $leads=Lead::select('leads.*')
+            ->where('leads.statusId','2')
+            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+            ->where('leadassigneds.leadId',null)
+            ->orWhere('leadassigneds.leadAssignStatus','0')
+            ->where('leadAssignStatus','0')
+            ->orderBy('leads.leadId','asc')
+            ->get();
+        return $leads;
+    }
+
 
     public function country(){
 

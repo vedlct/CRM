@@ -24,44 +24,32 @@ class LeadController extends Controller
     }
 
     public function add(){
-
         $cats=Category::where('type', 1)->get();
-        $pos=Possibility::get();
+
 
         $countries=Country::get();
 
         return view('layouts.lead.add')
             ->with('cats',$cats)
-            ->with('pos',$pos)
             ->with('countries',$countries);
     }
 
-
-
-
-
     public function store(Request $r){
-
         //Validating The input Filed
         $this->validate($r,[
-
             'companyName' => 'required|max:100',
             'website' => 'required|max:100',
             'email' => 'required|max:100',
             'category' => 'required',
-            'possibility' => 'required',
             'personName' => 'required:max:100',
             'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
-
         ]);
 
         //Inserting Data To Leads TAble
-
         $l=new Lead;
         $l->statusId = 1;
-        $l->possibiliyId = $r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -81,31 +69,15 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
-
-
-    }
+        }
 
 
     public function assignShow(){
 
-        //$leads=(new Lead())->getFilteredLead();
-        $leads=Lead::select('leads.*')
-            ->where('leads.statusId','2')
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->where('leadassigneds.leadId',null)
-            ->orWhere('leadassigneds.leadAssignStatus','0')
-            ->where('leadAssignStatus','0')
-            ->orderBy('leads.leadId','asc')
-            ->get();
+        $leads=(new Lead())->showAssignedLeads();
 
-//        $leads = DB::select
-//        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
-//        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
-
-
-
-        //return $leads;
-        $users=User::select('id','firstName')->where('id','!=',Auth::user()->id)->get();
+        //getting only first name of users
+        $users=User::select('id','firstName','lastName')->where('id','!=',Auth::user()->id)->get();
 
 
         return view('layouts.lead.assignLead')
@@ -113,33 +85,34 @@ class LeadController extends Controller
             ->with('users',$users);
     }
 
+    public function update(Request $r){
+
+
+        return $r;
+    }
 
 
     public function assignStore(Request $r){
 
-        $this->validate($r,[
-            'assignTo' => 'required',
-            'leadId' => 'required',
-        ]);
+        $jsonText = $r->leadId;
+        $decodedText = html_entity_decode($jsonText);
+        $leadIds = json_decode($decodedText, true);
 
-        $leadAssigned=new Leadassigned;
-        $leadAssigned->assignBy=Auth::user()->id;
-        $leadAssigned->assignTo=$r->assignTo;
-        $leadAssigned->leadId=$r->leadId;
-        $leadAssigned->save();
+        foreach ($leadIds as $leadId){
+            $leadAssigned=new Leadassigned;
+            $leadAssigned->assignBy=Auth::user()->id;
+            $leadAssigned->assignTo=$r->assignTo;
+            $leadAssigned->leadId=$leadId;
+            $leadAssigned->save();
 
-        $lead=Lead::findOrFail($r->leadId);
-        $lead->statusId=2;
-        $lead->save();
+            }
         Session::flash('message', 'Lead assigned successfully');
             return back();
         }
 
 
-
         public function filter(){
             $leads=Lead::with('assigned')->where('statusId', 2)->get();
-            //$leads=Lead::where('statusId', 2)->get();
 
             return view('layouts.lead.filterLead')->with('leads',$leads);
         }
@@ -176,11 +149,23 @@ class LeadController extends Controller
         }
 
 
-        public function testPost(Request $r){
+        public function ajax(Request $r){
+
+            if($r->ajax()){
+                foreach ($r->leadId as $lead){
+                    $leadAssigned=new Leadassigned;
+                    $leadAssigned->assignBy=Auth::user()->id;
+                    $leadAssigned->assignTo=$r->userId;
+                    $leadAssigned->leadId=$lead;
+                    $leadAssigned->save();
 
 
 
-            return $r;
+                }
+                return Response('true');
+               // return Response($r->leadId);
+            }
+
         }
 
 

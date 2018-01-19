@@ -10,9 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+
+
+
+
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}">
-    <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/logo/TCL_logo.png')}}">
+    <title>Customer relationship management</title>
 
     @yield('header')
 
@@ -99,7 +103,7 @@
             <!-- ============================================================== -->
 
             @if(Session::has('message'))
-                <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
+                <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
          @yield('content')
             <!-- ============================================================== -->

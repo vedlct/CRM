@@ -2,7 +2,9 @@
 
 @extends('main')
 
-
+@section('header')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    @endsection
 @section('content')
 
 
@@ -17,14 +19,14 @@
                 {{csrf_field()}}
 
                 <div class="form-group">
-                    <label>Name</label>
 
-                    <div class="form-group">
-                        <label for="sel1">Select Name:</label>
-                        <select class="form-control"  name="assignTo" id="otherCatches">
+
+                    {{--<div class="form-group col-md-5">--}}
+                        <label >Select Name:</label>
+                        <select class="form-control"  name="assignTo" id="otherCatches" >
                             <option value="">select</option>
                             @foreach($users as $user)
-                                <option value="{{$user->id}}">{{$user->firstName}}</option>
+                                <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
 
                             @endforeach
 
@@ -32,19 +34,21 @@
                         </select>
                     </div>
 
-                    <input type="text" class="form-control" id="inp" name="leadId">
+                    <input type="hidden" class="form-control" id="inp" name="leadId">
+
 
                 </div>
 
             </form>
 
 
-            <button onclick="test()" >test</button>
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+
                         <th>Select</th>
                         <th>Company Name</th>
                         <th>Category</th>
@@ -99,6 +103,7 @@
 
 @section('foot-js')
 
+
     <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
 
@@ -110,13 +115,17 @@
 
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
 
 
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script>
+
+        var datatable;
 
 
         $(document).ready(function() {
-            $('#myTable').DataTable(
+             datatable= $('#myTable').DataTable(
                 {
                     "order": [[ 7, "desc" ]]
                 }
@@ -124,47 +133,49 @@
 
         });
 
-        $('input[name="checkboxvar"]').click(function () {
 
-            alert("Thanks for checking me");
 
-        });
 
-//        $('#edit-modal').on('show.bs.modal', function(e) {
-//
-//            var $modal = $(this),
-//                esseyId = e.relatedTarget.id;
-//                esseyName = e.relatedTarget.name;
-//
-//                var chkArray = [];
-//
-//            $('.checkboxvar:checked').each(function (i) {
-//                   // chkArray.push($(this).val());
-//                chkArray[i] = $(this).val();
-//                });
-//
-//           alert(chkArray[0]);
-//            $.each( chkArray, function( key, value ) {
-//                alert( key + ": " + value );
-//            });
-//            $modal.find('#modalTitle').html(chkArray);
-//            $modal.find('#inp').val(chkArray);
-//
-//        })
 
         $("#otherCatches").change(function() {
-            alert($(this).val()); // how to get the value of the selected item if you need it
+
+            var chkArray = [];
+            var userId=$(this).val();
+            $('.checkboxvar:checked').each(function (i) {
+
+                chkArray[i] = $(this).val();
+            });
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('ajax')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        $('#myTable').load(document.URL +  ' #myTable');
+                        $.alert({
+                            title: 'Success!',
+                            content: 'successfully assigned!',
+                        });
+                        //  alert('successfully assigned');
+                    }
+                }
+            });
+
+
+
         });
 
 
-        function test() {
-            var chkArray = [];
-            $('.checkboxvar:checked').each(function (i) {
-                // chkArray.push($(this).val());
-                chkArray[i] = $(this).val();
-            });
-            alert(chkArray);
-        }
+
+
+
 
     </script>
 
