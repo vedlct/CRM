@@ -2,6 +2,9 @@
 
 @extends('main')
 
+@section('header')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+@endsection
 
 @section('content')
 
@@ -162,6 +165,9 @@
 
 
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
 
@@ -173,8 +179,29 @@
         // }
         $("[id*=drop]").change(function(e) {
             var leadId = $(e.currentTarget).data('lead-id');
+            var possibility=$(this).val();
+            // alert($(this).val());
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             jQuery(this).parents("tr").remove();
-            alert($(this).val());
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('changePossibility')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+
+
+                        $('#myTable').load(document.URL +  ' #myTable');
+                        $.alert({
+                            title: 'Success!',
+                            content: 'successfully Changed!',
+                        });
+                        //  alert('successfully assigned');
+                    }
+                }
+            });
 
         });
 

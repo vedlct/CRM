@@ -152,13 +152,23 @@ class LeadController extends Controller
         }
 
         public function changePossibility(Request $r){
-            $lead=Lead::findOrFail($r->leadId);
-            $lead->possibiliyId=$r->possibility;
-            $lead->statusId=2;
-            $lead->save();
+//            $lead=Lead::findOrFail($r->leadId);
+//            $lead->possibiliyId=$r->possibility;
+//            $lead->statusId=2;
+//            $lead->save();
+//
+//            Session::flash('message', 'Possibility Added successfully');
+//            return back();
+            if($r->ajax()){
+                $lead=Lead::findOrFail($r->leadId);
+                $lead->possibiliyId=$r->possibility;
+                $lead->statusId=2;
+                $lead->save();
 
-            Session::flash('message', 'Possibility Added successfully');
-            return back();
+                return Response('true');
+            }
+
+
         }
 
 
