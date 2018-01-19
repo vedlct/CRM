@@ -8,7 +8,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h4 class="card-title">Assign Lead To User</h4>
+            <h2 class="card-title" align="center">Temp Leads</h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -17,6 +17,8 @@
                         <th>Company Name</th>
                         <th>Category</th>
                         <th>Website</th>
+                        <th>Contact Person</th>
+                        <th>Contact Number</th>
                         <th>Email</th>
                         <th>Country</th>
                         <th>Comments</th>
@@ -35,6 +37,8 @@
                             <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
                             <td>{{$lead->website}}</td>
+                            <td>{{$lead->personName}}</td>
+                            <td>{{$lead->contactNumber}}</td>
                             <td>{{$lead->email}}</td>
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->comments}}</td>

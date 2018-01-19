@@ -15,8 +15,8 @@
 
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}">
-    <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/logo/TCL_logo.png')}}">
+    <title>Customer relationship management</title>
 
     @yield('header')
 
