@@ -25,13 +25,12 @@ class LeadController extends Controller
 
     public function add(){
         $cats=Category::where('type', 1)->get();
-        $pos=Possibility::get();
+
 
         $countries=Country::get();
 
         return view('layouts.lead.add')
             ->with('cats',$cats)
-            ->with('pos',$pos)
             ->with('countries',$countries);
     }
 
@@ -42,7 +41,6 @@ class LeadController extends Controller
             'website' => 'required|max:100',
             'email' => 'required|max:100',
             'category' => 'required',
-            'possibility' => 'required',
             'personName' => 'required:max:100',
             'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
             'country' => 'required',
@@ -52,7 +50,6 @@ class LeadController extends Controller
         //Inserting Data To Leads TAble
         $l=new Lead;
         $l->statusId = 1;
-        $l->possibiliyId = $r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -80,7 +77,7 @@ class LeadController extends Controller
         $leads=(new Lead())->showAssignedLeads();
 
         //getting only first name of users
-        $users=User::select('id','firstName')->where('id','!=',Auth::user()->id)->get();
+        $users=User::select('id','firstName','lastName')->where('id','!=',Auth::user()->id)->get();
 
 
         return view('layouts.lead.assignLead')
@@ -89,23 +86,42 @@ class LeadController extends Controller
     }
 
 
+
+
     public function assignStore(Request $r){
 
-        $jsonText = $r->leadId;
-        $decodedText = html_entity_decode($jsonText);
-        $leadIds = json_decode($decodedText, true);
+        if($r->ajax()){
+            foreach ($r->leadId as $lead){
+                $leadAssigned=new Leadassigned;
+                $leadAssigned->assignBy=Auth::user()->id;
+                $leadAssigned->assignTo=$r->userId;
+                $leadAssigned->leadId=$lead;
+                $leadAssigned->save();
 
-        foreach ($leadIds as $leadId){
-            $leadAssigned=new Leadassigned;
-            $leadAssigned->assignBy=Auth::user()->id;
-            $leadAssigned->assignTo=$r->assignTo;
-            $leadAssigned->leadId=$leadId;
-            $leadAssigned->save();
+
 
             }
-        Session::flash('message', 'Lead assigned successfully');
-            return back();
+            return Response('true');
+            // return Response($r->leadId);
         }
+    }
+
+
+    public function update(Request $r){
+        $lead=Lead::findOrFail($r->leadId);
+
+        $lead->companyName=$r->companyName;
+        $lead->email=$r->email;
+        $lead->personName=$r->personName;
+        $lead->contactNumber=$r->number;
+        $lead->save();
+        Session::flash('message', 'Lead Edited successfully');
+
+        return back();
+    }
+
+
+
 
 
         public function filter(){

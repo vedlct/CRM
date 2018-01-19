@@ -15,18 +15,16 @@
         <div class="card-body">
             <h4 class="card-title">Assign Lead To User</h4>
 
-            <form action="{{route('assignStore')}}" method="post" id="assign-form">
-                {{csrf_field()}}
 
                 <div class="form-group">
 
 
-                    <div class="form-group">
+                    {{--<div class="form-group col-md-5">--}}
                         <label >Select Name:</label>
-                        <select class="form-control"  name="assignTo" id="otherCatches">
+                        <select class="form-control"  name="assignTo" id="otherCatches" >
                             <option value="">select</option>
                             @foreach($users as $user)
-                                <option value="{{$user->id}}">{{$user->firstName}}</option>
+                                <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
 
                             @endforeach
 
@@ -39,7 +37,7 @@
 
                 </div>
 
-            </form>
+
 
 
 
@@ -138,6 +136,7 @@
 
 
         $("#otherCatches").change(function() {
+
             var chkArray = [];
             var userId=$(this).val();
             $('.checkboxvar:checked').each(function (i) {
@@ -147,26 +146,31 @@
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             // $("#inp").val(JSON.stringify(chkArray));
             // $( "#assign-form" ).submit();
-             jQuery('input:checkbox:checked').parents("tr").remove();
+            jQuery('input:checkbox:checked').parents("tr").remove();
             $(this).prop('selectedIndex',0);
 
             $.ajax({
                 type : 'post' ,
-                url : '{{route('ajax')}}',
+                url : '{{route('assignStore')}}',
                 data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
                 success : function(data){
-                   console.log(data);
-                   if(data == 'true'){
-                       $('#myTable').load(document.URL +  ' #myTable');
-                       $.alert({
-                           title: 'Success!',
-                           content: 'successfully assigned!',
-                       });
-                     //  alert('successfully assigned');
-                   }
+                    console.log(data);
+                    if(data == 'true'){
+                        $('#myTable').load(document.URL +  ' #myTable');
+                        $.alert({
+                            title: 'Success!',
+                            content: 'successfully assigned!',
+                        });
+                        //  alert('successfully assigned');
+                    }
                 }
             });
+
+
+
         });
+
+
 
 
 

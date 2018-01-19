@@ -75,7 +75,7 @@ Route::get('lead/filter','LeadController@filter')->name('filterLeads');
 Route::get('lead/temper','LeadController@temperLeads')->name('temperLeads');
 Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 
-
+Route::post('lead/update','LeadController@update')->name('leadUpdate');
 Route::post('lead/testPost','LeadController@testPost')->name('testPost');
 Route::post('lead/ajax','LeadController@ajax')->name('ajax');
 

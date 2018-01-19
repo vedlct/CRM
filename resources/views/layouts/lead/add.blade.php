@@ -56,6 +56,23 @@
                     <input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                 </div>
 
+                <div class="form-group col-md-5">
+                    <label class="control-label " ><b>Designation</b></label>
+                    <input type="text" class="form-control" name="designation" placeholder="Enter Person Dasignation" required>
+
+                </div>
+
+
+
+                <div class="form-group col-md-5" style="">
+                <label ><b>Category:</b></label>
+                <select class="form-control" id="" name="category">
+                    @foreach($cats as $cat)
+                        <option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
+
+                    @endforeach
+                </select>
+            </div>
 
                 <div class="form-group col-md-5">
                     <label for="sel1"><b>Country:</b></label>
@@ -69,48 +86,18 @@
                 </div>
 
 
-            <div class="form-group col-md-5" style="">
-
-
-                <label ><b>Category:</b></label>
-                <select class="form-control" id="" name="category">
-                    @foreach($cats as $cat)
-                        <option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
-
-                    @endforeach
-
-
-                </select>
-            </div>
-
-
-
-                <div class="form-group col-md-5" style="">
-                <label ><b>Possibility:</b></label>
-                <select class="form-control" id="" name="possibility">
-                   @foreach($pos as $p)
-                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-
-                       @endforeach
-                </select>
-
-
-            </div>
 
 
 
 
-
-
-
-            <div class="form-group col-md-5">
+            <div class="form-group col-md-10">
                 <label class="control-label " ><b>Comments</b></label>
 
                 {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
 
                     {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
 
-                <textarea name="comment" rows="3"  class="form-control">
+                <textarea name="comment" rows="4"  class="form-control">
 
 
                 </textarea>
