@@ -153,7 +153,7 @@
 //        })
 
         $("#otherCatches").change(function() {
-            $(this).val() // how to get the value of the selected item if you need it
+            alert($(this).val()); // how to get the value of the selected item if you need it
         });
 
 
