@@ -104,11 +104,8 @@
 
                         {{csrf_field()}}
 
-
-
-
-
                     <div class="form-group">
+                        <input type="hidden" name="leadId">
                         <label>Company Name:</label>
                         <input type="text" class="form-control" name="companyName" value="">
                     </div>
@@ -162,12 +159,14 @@
         $('#my_modal').on('show.bs.modal', function(e) {
 
             //get data-id attribute of the clicked element
+            var leadId = $(e.relatedTarget).data('lead-id');
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
 
             //populate the textbox
+            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
