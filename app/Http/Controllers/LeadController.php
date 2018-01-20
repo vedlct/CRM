@@ -158,9 +158,16 @@ class LeadController extends Controller
         public function getComments(Request $r){
             if($r->ajax()){
                 $comments=Workprogress::select(['comments'])->where('leadId',$r->leadId)->get();
+                $text='';
+                foreach ($comments as $comment){
+
+                    $text.='<li>'.$comment->comments.'</li>';
+
+                }
+
 
               // echo $comments;
-                return Response($comments);
+                return Response($text);
 
             }
 

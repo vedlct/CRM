@@ -108,10 +108,12 @@
                         </select>
 
                     </div>
+                        <ul>
+                       <div class="" style=" height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
-                       <div class="" style=" height: 10%; width: 30%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                       </div>
 
-                           </div>
+                        </ul>
 
                     <div class="form-group">
                         <label class="col-md-6"><b>Comment : </b></label>
