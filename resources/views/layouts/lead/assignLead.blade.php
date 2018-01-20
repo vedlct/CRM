@@ -20,8 +20,8 @@
 
 
                     {{--<div class="form-group col-md-5">--}}
-                        <label >Select Name:</label>
-                        <select class="form-control"  name="assignTo" id="otherCatches" >
+                    <label ><b>Select Name:</b></label>
+                        <select class="form-control"  name="assignTo" id="otherCatches" style="width: 40%">
                             <option value="">select</option>
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>

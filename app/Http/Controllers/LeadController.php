@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 
 use Auth;
+use League\Flysystem\Exception;
 use Session;
 
 use App\Category;
@@ -14,6 +16,9 @@ use App\Country;
 use App\Lead;
 use App\User;
 use App\Leadassigned;
+use App\Possibilitychange;
+use App\Callingreport;
+use App\Workprogress;
 use DB;
 
 class LeadController extends Controller
@@ -25,8 +30,6 @@ class LeadController extends Controller
 
     public function add(){
         $cats=Category::where('type', 1)->get();
-
-
         $countries=Country::get();
 
         return view('layouts.lead.add')
@@ -41,10 +44,11 @@ class LeadController extends Controller
             'website' => 'required|max:100',
             'email' => 'required|max:100',
             'category' => 'required',
-            'personName' => 'required:max:100',
+            'personName' => 'required|max:100',
             'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
+            'designation'=>'required|max:100'
         ]);
 
         //Inserting Data To Leads TAble
@@ -53,6 +57,7 @@ class LeadController extends Controller
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
+        $l->designation=$r->designation;
         $l->website = $r->website;
         $l->email= $r->email;
         $l->contactNumber = $r->personNumber;
@@ -97,10 +102,8 @@ class LeadController extends Controller
                 $leadAssigned->assignTo=$r->userId;
                 $leadAssigned->leadId=$lead;
                 $leadAssigned->save();
-
-
-
             }
+
             return Response('true');
             // return Response($r->leadId);
         }
@@ -108,12 +111,23 @@ class LeadController extends Controller
 
 
     public function update(Request $r){
-        $lead=Lead::findOrFail($r->leadId);
+        $this->validate($r,[
+            'companyName' => 'required|max:100',
+            'website' => 'required|max:100',
+            'email' => 'required|max:100',
+            'personName' => 'required|max:100',
+            'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
 
+        ]);
+
+
+
+        $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
         $lead->personName=$r->personName;
         $lead->contactNumber=$r->number;
+        $lead->website=$r->website;
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
 
@@ -131,12 +145,29 @@ class LeadController extends Controller
         }
 
 
-        public function destroy($id){
-            $lead=Lead::findOrFail($id);
-            $lead->delete();
-            Session::flash('message', 'Lead deleted successfully');
-            return back();
+        public function assignedLeads(){
+            $leads=Lead::where('statusId', 2)->get();
+            $callReports=Callingreport::get();
+
+            return view('layouts.lead.myLead')
+                ->with('leads',$leads)
+                ->with('callReports',$callReports);
         }
+
+
+        public function getComments(Request $r){
+            if($r->ajax()){
+                $comments=Workprogress::select(['comments'])->where('leadId',$r->leadId)->get();
+
+              // echo $comments;
+                return Response($comments);
+
+            }
+
+
+
+        }
+
 
 
         public function temperLeads(){
@@ -152,23 +183,74 @@ class LeadController extends Controller
         }
 
         public function changePossibility(Request $r){
-//            $lead=Lead::findOrFail($r->leadId);
-//            $lead->possibiliyId=$r->possibility;
-//            $lead->statusId=2;
-//            $lead->save();
-//
-//            Session::flash('message', 'Possibility Added successfully');
-//            return back();
+
             if($r->ajax()){
                 $lead=Lead::findOrFail($r->leadId);
-                $lead->possibiliyId=$r->possibility;
+                $lead->possibilityId=$r->possibility;
                 $lead->statusId=2;
                 $lead->save();
+
+                $log=new Possibilitychange;
+                $log->leadId=$r->leadId;
+                $log->possibilityId=$r->possibility;
+                $log->userId=Auth::user()->id;
+                $log->save();
+
+
 
                 return Response('true');
             }
 
 
+        }
+
+        public function report($id){
+            //check security issue
+            $lead=Lead::findOrFail($id);
+            $callReports=Callingreport::get();
+
+            try{
+                $comments=Workprogress::select(['comments'])->where('leadId',$id)->get();
+
+            }
+            catch (Exception $e){
+                return view('layouts.lead.leadReport')
+                    ->with('lead',$lead)
+                    ->with('callReports',$callReports);
+
+            }
+
+
+
+
+            return view('layouts.lead.leadReport')
+                ->with('lead',$lead)
+                ->with('callReports',$callReports)
+                ->with('comments',$comments);
+
+        }
+
+
+        public function storeReport(Request $r){
+            $this->validate($r,[
+                'leadId'=>'required',
+                'report' => 'required',
+                'response' => 'required|max:45',
+                'comment' => 'required|max:300',
+                'progress' => 'required|max:100',
+            ]);
+
+            $progress=New Workprogress;
+            $progress->callingReport=$r->report;
+            $progress->response=$r->response;
+            $progress->leadId=$r->leadId;
+            $progress->progress=$r->progress;
+            $progress->userId=Auth::user()->id;
+            $progress->comments=$r->comment;
+            $progress->save();
+
+            Session::flash('message', 'Report Updated Successfully');
+            return back();
         }
 
 
@@ -190,6 +272,13 @@ class LeadController extends Controller
             }
 
         }
+
+    public function destroy($id){
+        $lead=Lead::findOrFail($id);
+        $lead->delete();
+        Session::flash('message', 'Lead deleted successfully');
+        return back();
+    }
 
 
 

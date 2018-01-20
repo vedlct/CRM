@@ -9,7 +9,7 @@
 @section('content')
 
 
-    <div class="card" style="padding: 4px;">
+    <div class="card" style="padding: 2px;">
         <div class="card-body">
             <h2 class="card-title" align="center">Temp Leads</h2>
 
@@ -28,7 +28,7 @@
                         {{--<th>Mined By</th>--}}
                         <th>Created At</th>
                         <th>Set Possibility</th>
-                        <th>Delete</th>
+                        <th>Action</th>
 
                     </tr>
                     </thead>
@@ -65,7 +65,6 @@
                                     <select class="form-control" id="drop" data-lead-id="{{$lead->leadId}}" name="possibility" >
                                         <option value="">Select</option>
                                         @foreach($possibilities as $p)
-
                                             <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
                                         @endforeach
                                     </select>
@@ -78,19 +77,21 @@
                                     {{csrf_field()}}
                                     {{ method_field('DELETE') }}
 
+                                    <!-- Trigger the modal with a button -->
+                                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="{{$lead->leadId}}"
+                                                data-lead-name="{{$lead->companyName}}"
+                                                data-lead-email="{{$lead->email}}"
+                                                data-lead-number="{{$lead->contactNumber}}"
+                                                data-lead-person="{{$lead->personName}}"
+                                                data-lead-website="{{$lead->website}}">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
                                     <button type="submit" class="btn btn-danger btn-sm">
                                         <i class="fa fa-trash"></i></button></form>
 
 
-                                <!-- Trigger the modal with a button -->
-                                <button href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                        data-lead-id="{{$lead->leadId}}"
-                                        data-lead-name="{{$lead->companyName}}"
-                                        data-lead-email="{{$lead->email}}"
-                                        data-lead-number="{{$lead->contactNumber}}"
-                                        data-lead-person="{{$lead->personName}}">
 
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 
 
                             </td>
@@ -138,6 +139,12 @@
                         <label>Number:</label>
                         <input type="text" class="form-control" name="number" value="">
                     </div>
+
+                    <div class="form-group">
+                        <label>Website:</label>
+                        <input type="text" class="form-control" name="website" value="">
+                    </div>
+
                     <button class="btn btn-success" type="submit">Update</button>
 
                 </div>
@@ -214,6 +221,7 @@
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
+            var website = $(e.relatedTarget).data('lead-website');
 
             //populate the textbox
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
@@ -221,6 +229,7 @@
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
+            $(e.currentTarget).find('input[name="website"]').val(website);
 
         });
 

@@ -32,6 +32,9 @@ class Lead extends Model
         return $leads;
     }
 
+    public function possibility(){
+        return $this->belongsTo(Possibility::class,'possibilityId','possibilityId');
+    }
 
     public function country(){
 
