@@ -161,7 +161,7 @@ class LeadController extends Controller
                 $text='';
                 foreach ($comments as $comment){
 
-                    $text.='<li>'.$comment->comments.'</li>';
+                    $text.='<li>#'.$comment->comments.'</li>';
 
                 }
 
@@ -177,13 +177,11 @@ class LeadController extends Controller
 
 
 
-        public function temperLeads(){
+        public function tempLeads(){
             $leads=(new Lead())->getTempLead();
 
            $possibilities=Possibility::get();
-
-
-            return view('layouts.lead.temper')
+           return view('layouts.lead.temp')
                 ->with('leads',$leads)
                 ->with('possibilities',$possibilities);
 
@@ -202,8 +200,6 @@ class LeadController extends Controller
                 $log->possibilityId=$r->possibility;
                 $log->userId=Auth::user()->id;
                 $log->save();
-
-
 
                 return Response('true');
             }
