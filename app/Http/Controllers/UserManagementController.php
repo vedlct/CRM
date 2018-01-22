@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Response;
 use App\User;
+use App\Usertype;
+use Image;
+use Auth;
+
 
 class UserManagementController extends Controller
 {
@@ -44,7 +49,10 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-        return view('users-mgmt/create');
+        $userTypes=Usertype::get();
+//        return $Types;
+        return view('users-mgmt/create')
+            ->with('userTypes', $userTypes);
     }
 
     /**
@@ -56,6 +64,18 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
 		//$this->validateInput($request);
+//        // Upload image
+        if ($request->file('picture')) {
+           // $path = $request->file('picture')->store('trty');
+           // $input['picture'] = $path;
+            $img = $request->file('picture');
+            $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
+            $location = public_path('img/'.$filename);
+            Image::make($img)->resize(300,200)->save($location);
+
+        }else{
+            $filename = '';
+        }
         //User::create([
             DB::table('users')->insert([
             'userId' => $request['userId'],
@@ -66,13 +86,13 @@ class UserManagementController extends Controller
             'firstName' => $request['firstName'],
             'lastName' => $request['lastName'],
             'phoneNumber' => $request['phoneNumber'],
-            'picture' => $request['picture'],
+            'picture' =>  $filename,
+			//$request['picture'],
             'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
         ]);
-	//return $request;
-	//return	dd($ttt->toSql());
+
        return redirect()->intended('/user-management');
     }
 
@@ -101,7 +121,8 @@ class UserManagementController extends Controller
             return redirect()->intended('/user-management');
         }
 
-        return view('users-mgmt/edit', ['user' => $user]);
+       $userTypes = Usertype::get();
+        return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);
     }
 
     /**
@@ -111,29 +132,75 @@ class UserManagementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+//    public function update(Request $request, $id)
+//    {
+//        $user = User::findOrFail($id);
+//        $constraints = [
+//            'userId' => 'required|max:20',
+//            'firstName'=> 'required|max:60',
+//            'lastName' => 'required|max:60'
+//            ];
+//        $input = [
+//            'userId' => $request['userId'],
+//            'typeId' => $request['typeId'],
+//            'userEmail' => $request['userEmail'],
+//         //   'password' => bcrypt($request['password']),
+//            'rfID' => $request['rfID'],
+//            'firstName' => $request['firstName'],
+//            'lastName' => $request['lastName'],
+//            'phoneNumber' => $request['phoneNumber'],
+//           // 'picture' => $request['picture'],
+//            'dob' => date('Y-m-d',strtotime($request['dob'])),
+//            'gender' => $request['gender'],
+//            'active' => $request['active'],
+//        ];
+//        if ($request['password'] != null && strlen($request['password']) > 0) {
+//            $constraints['password'] = 'required|min:6|confirmed';
+//            $input['password'] =  bcrypt($request['password']);
+//        }
+//        if ($request->file('picture')) {
+//            $path = $request->file('picture')->store('avatars');
+//            $input['picture'] = $path;
+//        }
+//        $this->validate($request, $constraints);
+//        User::where('id', $id)
+//            ->update($input);
+//
+//        return redirect()->intended('/user-management');
+//    }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $constraints = [
-            'userId' => 'required|max:20',
-            'firstName'=> 'required|max:60',
-            'lastName' => 'required|max:60'
-            ];
-        $input = [
-            'userId' => $request['userId'],
-            'firstName' => $request['firstName'],
-            'lastName' => $request['lastName']
-        ];
+      //  $this->validateInput($request);
+        // Upload image
+        $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
+            'phoneNumber', 'dob', 'gender', 'active'];
+        $input = $this->createQueryInput($keys, $request);
+
         if ($request['password'] != null && strlen($request['password']) > 0) {
             $constraints['password'] = 'required|min:6|confirmed';
             $input['password'] =  bcrypt($request['password']);
         }
-        $this->validate($request, $constraints);
+//        if ($request->file('picture')) {
+//            $path = $request->file('picture')->store('img');
+//            $input['picture'] = $path;
+//        }
+        if ($request->file('picture')) {
+            $img = $request->file('picture');
+            $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
+            $location = public_path('img/'.$filename);
+            Image::make($img)->resize(300,200)->save($location);
+            $input['picture'] = $filename;
+
+        }
+
         User::where('id', $id)
             ->update($input);
-        
+
         return redirect()->intended('/user-management');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -176,6 +243,20 @@ class UserManagementController extends Controller
         }
         return $query->paginate(5);
     }
+
+    /**
+     * Load image resource.
+     *
+     * @param  string  $name
+     * @return \Illuminate\Http\Response
+     */
+    public function load($name) {
+        $path = storage_path().'/app/avatars/'.$name;
+        if (file_exists($path)) {
+            return Response::download($path);
+        }
+    }
+
     private function validateInput($request) {
         $this->validate($request, [
 		'userId' => 'required|max:20',
@@ -184,5 +265,15 @@ class UserManagementController extends Controller
         'firstName' => 'required|max:60',
         'lastName' => 'required|max:60'
     ]);
+    }
+
+    private function createQueryInput($keys, $request) {
+        $queryInput = [];
+        for($i = 0; $i < sizeof($keys); $i++) {
+            $key = $keys[$i];
+            $queryInput[$key] = $request[$key];
+        }
+
+        return $queryInput;
     }
 }

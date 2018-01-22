@@ -23,7 +23,7 @@ Route::view('/starleads', 'layouts.starLeads');
 Route::view('/newinfo', 'layouts.newInfo');
 
 Route::view('/reports', 'layouts.reports');
-Route::view('/notices', 'layouts.notices');
+//Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
 Route::view('/myteam', 'layouts.myTeam');
 Route::view('/profile', 'layouts.profile');
@@ -54,9 +54,15 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 /**/
-Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
-Route::resource('user-management', 'UserManagementController');
 
+Route::resource('notice', 'NoticeController');
+Route::post('notice/search', 'NoticeController@search')->name('notice.search');
+
+Route::resource('user-management', 'UserManagementController');
+Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+
+//Route::resource('system-management/userType', 'UserTypeController');
+//Route::post('system-management/userType/search', 'UserTypeController@search')->name('userType.search');
 //Route::view('/user-management', 'user-management.index');
 
 

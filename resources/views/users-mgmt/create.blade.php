@@ -7,8 +7,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Add new user</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.store') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
+					
 
                         <div class="form-group row{{ $errors->has('userId') ? ' has-error' : '' }}">
                             <label for="userId" class="col-sm-3 control-label">User Name</label>
@@ -29,10 +30,10 @@
 							<div class="col-sm-9">
 
 								<select name="typeId" class="form-control form-control-warning">
-									<option value="1">Admin</option>
-									<option value="2">Manager</option>
-									<option value="3">Supervisor</option>
-									<option value="4">Reference Author</option>
+									
+                                   @foreach ($userTypes as $userType)
+                                        <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                    @endforeach
 								</select>
 
                                 @if ($errors->has('typeId'))
@@ -47,7 +48,7 @@
                             <label for="rfID" class="col-sm-3 control-label">RF ID</label>
 
                             <div class="col-sm-9">
-                                <input id="rfID" type="text" class="form-control" name="rfID" value="{{ old('rfID') }}" required autofocus>
+                                <input id="rfID" type="number" class="form-control" name="rfID" value="{{ old('rfID') }}" required autofocus>
 
                                 @if ($errors->has('rfID'))
                                     <span class="help-block">
@@ -70,28 +71,28 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group row{{ $errors->has('firstname') ? ' has-error' : '' }}">
-                            <label for="firstname" class="col-sm-3 control-label">First Name</label>
+                        <div class="form-group row{{ $errors->has('firstName') ? ' has-error' : '' }}">
+                            <label for="firstName" class="col-sm-3 control-label">First Name</label>
 
                             <div class="col-sm-9">
-                                <input id="firstname" type="text" class="form-control" name="firstname" value="{{ old('firstname') }}" required>
+                                <input id="firstName" type="text" class="form-control" name="firstName" value="{{ old('firstName') }}" required>
 
-                                @if ($errors->has('firstname'))
+                                @if ($errors->has('firstName'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('firstname') }}</strong>
+                                        <strong>{{ $errors->first('firstName') }}</strong>
                                     </span>
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group row{{ $errors->has('lastname') ? ' has-error' : '' }}">
-                            <label for="lastname" class="col-sm-3 control-label">Last Name</label>
+                        <div class="form-group row{{ $errors->has('lastName') ? ' has-error' : '' }}">
+                            <label for="lastName" class="col-sm-3 control-label">Last Name</label>
 
                             <div class="col-sm-9">
-                                <input id="lastname" type="text" class="form-control" name="lastname" value="{{ old('lastname') }}" required>
+                                <input id="lastName" type="text" class="form-control" name="lastName" value="{{ old('lastName') }}" required>
 
-                                @if ($errors->has('lastname'))
+                                @if ($errors->has('lastName'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('lastname') }}</strong>
+                                        <strong>{{ $errors->first('lastName') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -112,7 +113,7 @@
                         </div>
 
                         <div class="form-group row{{ $errors->has('picture') ? ' has-error' : '' }}">
-                            <label for="picture" class="col-sm-3 control-label">Picture</label>
+                            <label for="avatar" class="col-sm-3 control-label">Picture</label>
 
                             <div class="col-sm-9">
                                 <input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}" autofocus>
@@ -143,9 +144,9 @@
                             <label for="gender	" class="col-sm-3 control-label">Gender</label>
 
                             <div class="col-sm-9">
-								<select id="gender name="gender" class="form-control form-control-warning" required autofocus>
-									<option value="1">Male</option>
-									<option value="2">Female</option>
+								<select id="gender" name="gender" class="form-control form-control-warning" required autofocus>
+									<option value="M">Male</option>
+									<option value="F">Female</option>
 								</select>
                                 @if ($errors->has('gender	'))
                                     <span class="help-block">
@@ -159,9 +160,9 @@
 							<label class="col-sm-3 form-control-label">Status</label>
 							<div class="col-sm-9">
 
-								<select name="status" class="form-control form-control-warning">
-									<option value="">Active</option>
-									<option value="">Inactive</option>
+								<select name="active" class="form-control form-control-warning">
+									<option value="1">Active</option>
+									<option value="0">Inactive</option>
 								</select>
 							</div>
 						</div>
