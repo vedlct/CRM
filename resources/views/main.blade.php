@@ -108,7 +108,7 @@
                 <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
             @endif
 
-            <div class="alert alert-warning" style="display: none ">
+            <div class="alert alert-success" id="alert" style="display: none ">
                 <strong>Success!</strong> Indicates a successful or positive action.
             </div>
          @yield('content')

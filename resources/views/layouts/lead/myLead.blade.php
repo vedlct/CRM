@@ -121,10 +121,15 @@
                         <input type="text" class="form-control" name="website" value=""> <br><br><br>
                     </div>
 
-                        <div class="col-md-8">
-                            <button class="btn btn-success" type="submit">Update</button></div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </div>
 
-                </div>
+
+                        <div class="col-md-6" style="">
+                        <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -133,6 +138,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div></form>
+            {{--<button>Leave</button>--}}
         </div>
     </div>
     </div>
@@ -241,6 +247,7 @@
     <script>
 
 
+
         $('#edit_modal').on('show.bs.modal', function(e) {
 
             //get data-id attribute of the clicked element
@@ -251,6 +258,7 @@
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
 
+
             //populate the textbox
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
@@ -258,6 +266,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('#leave').attr('href', 'leave/'+leadId);
 
         });
 

@@ -8,6 +8,7 @@ class Leadassigned extends Model
 {
     public $timestamps = false;
     protected $table = 'leadassigneds';
+    protected $primaryKey = 'assignId';
 
 
     public function userBy(){

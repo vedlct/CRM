@@ -87,8 +87,10 @@ Route::post('lead/ajax','LeadController@ajax')->name('ajax');
 
 //My List Lead
 Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assignedLeads');
-
 Route::get('lead/report/{id}', 'LeadController@report')->name('report');
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
-
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
+
+
+//Leave Lead
+Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
