@@ -158,25 +158,27 @@ class LeadController extends Controller
         public function getComments(Request $r){
             if($r->ajax()){
                 $comments=Workprogress::select(['comments'])->where('leadId',$r->leadId)->get();
+                $text='';
+                foreach ($comments as $comment){
 
-               echo $comments;
-              //  return Response($comments);
+                    $text.='<li>#'.$comment->comments.'</li>';
+
+                }
+
+
+                return Response($text);
 
             }
-
-
 
         }
 
 
 
-        public function temperLeads(){
+        public function tempLeads(){
             $leads=(new Lead())->getTempLead();
 
            $possibilities=Possibility::get();
-
-
-            return view('layouts.lead.temper')
+           return view('layouts.lead.temp')
                 ->with('leads',$leads)
                 ->with('possibilities',$possibilities);
 
@@ -195,8 +197,6 @@ class LeadController extends Controller
                 $log->possibilityId=$r->possibility;
                 $log->userId=Auth::user()->id;
                 $log->save();
-
-
 
                 return Response('true');
             }

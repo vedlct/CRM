@@ -58,7 +58,7 @@
 
                 </li>
                 <li>
-                    <a href="{{route('temperLeads')}}"><i class="fa fa-text-width"></i>Temper Leads</a>
+                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i>Temp Leads</a>
 
                 </li>
                 <li>
@@ -77,7 +77,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route('user-management.index')}}"><i class="fa fa-plus-square"></i>User Management</a>
+                    <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
 
                 </li>
 
