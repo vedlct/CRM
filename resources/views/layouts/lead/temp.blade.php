@@ -37,7 +37,7 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td>{{$lead->companyName}}</td>
+                           <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
                             <td>{{$lead->website}}</td>
                             <td>{{$lead->personName}}</td>
