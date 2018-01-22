@@ -196,11 +196,12 @@
 
 
                         $('#myTable').load(document.URL +  ' #myTable');
-                        $.alert({
-                            title: 'Success!',
-                            content: 'successfully Changed!',
-                        });
-                        //  alert('successfully assigned');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully Changed!',
+//                        });
+                        $('#alert').html(' <strong>Success!</strong> Possibility Changed');
+                        $('#alert').show();
                     }
                 }
             });

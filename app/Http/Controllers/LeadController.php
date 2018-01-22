@@ -134,7 +134,6 @@ class LeadController extends Controller
         $lead->website=$r->website;
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
-
         return back();
     }
 
@@ -144,7 +143,6 @@ class LeadController extends Controller
 
         public function filter(){
             $leads=Lead::with('assigned')->where('statusId', 2)->get();
-
             return view('layouts.lead.filterLead')->with('leads',$leads);
         }
 
@@ -158,6 +156,7 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
                 ->where('leadassigneds.assignTo',Auth::user()->id)
+                ->Where('leadassigneds.leadAssignStatus',1)
                 ->get();
 
 //            $leads=Lead::where('statusId', 2)->get();
@@ -182,9 +181,7 @@ class LeadController extends Controller
                     $text.='<li>#'.$comment->comments.'</li>';
 
                 }
-
                 return Response($text);
-
             }
 
         }
@@ -214,36 +211,35 @@ class LeadController extends Controller
                 $log->possibilityId=$r->possibility;
                 $log->userId=Auth::user()->id;
                 $log->save();
-
                 return Response('true');
             }
 
 
         }
 
-        public function report($id){
-            //check security issue
-            $lead=Lead::findOrFail($id);
-            $callReports=Callingreport::get();
-
-            try{
-                $comments=Workprogress::select(['comments'])->where('leadId',$id)->get();
-
-            }
-            catch (Exception $e){
-                return view('layouts.lead.leadReport')
-                    ->with('lead',$lead)
-                    ->with('callReports',$callReports);
-
-            }
-
-
-            return view('layouts.lead.leadReport')
-                ->with('lead',$lead)
-                ->with('callReports',$callReports)
-                ->with('comments',$comments);
-
-        }
+//        public function report($id){
+//            //check security issue
+//            $lead=Lead::findOrFail($id);
+//            $callReports=Callingreport::get();
+//
+//            try{
+//                $comments=Workprogress::select(['comments'])->where('leadId',$id)->get();
+//
+//            }
+//            catch (Exception $e){
+//                return view('layouts.lead.leadReport')
+//                    ->with('lead',$lead)
+//                    ->with('callReports',$callReports);
+//
+//            }
+//
+//
+//            return view('layouts.lead.leadReport')
+//                ->with('lead',$lead)
+//                ->with('callReports',$callReports)
+//                ->with('comments',$comments);
+//
+//        }
 
 
         public function storeReport(Request $r){
@@ -301,11 +297,28 @@ class LeadController extends Controller
 
         }
 
-    public function destroy($id){
-        $lead=Lead::findOrFail($id);
-        $lead->delete();
-        Session::flash('message', 'Lead deleted successfully');
-        return back();
+        public function leaveLead($id){
+            $assignId=Leadassigned::select('assignId')
+                ->where('leadId',$id)
+                ->where('assignTo',Auth::user()->id)
+                ->where('leadAssignStatus',1)
+                ->limit(1)->get();
+
+            $leave=Leadassigned::findOrFail($assignId[0]->assignId);
+            $leave->leadAssignStatus=0;
+            $leave->save();
+
+
+
+            Session::flash('message', 'You have Leave The Lead successfully');
+            return back();
+        }
+
+        public function destroy($id){
+            $lead=Lead::findOrFail($id);
+            $lead->delete();
+            Session::flash('message', 'Lead deleted successfully');
+            return back();
     }
 
 
