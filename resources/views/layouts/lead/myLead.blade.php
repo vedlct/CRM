@@ -3,6 +3,7 @@
 @extends('main')
 
 
+
 @section('content')
 
 
@@ -21,7 +22,6 @@
                         <th>Contact Person</th>
                         <th>Contact Number</th>
                         <th>Action</th>
-
 
                     </tr>
                     </thead>
@@ -189,6 +189,13 @@
                         </select>
                             <br><br>
                     </div>
+
+
+                        <div class="col-md-4">
+                            <label class=""><b>Follow Up Date : </b></label>
+                            <input class="form-control" id="datepicker" rows="3" name="followup" >
+                        </div>
+
                     <div class="col-md-6">
                         <label class=""><b>Comment : </b></label>
                         <textarea class="form-control" rows="3" name="comment" required></textarea>
@@ -254,7 +261,9 @@
 
         });
 
-
+        $( function() {
+            $( "#datepicker" ).datepicker();
+        } );
 
 
 
@@ -285,7 +294,9 @@
 
 
         $(document).ready(function() {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "processing": true
+            });
 
         });
 

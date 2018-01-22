@@ -21,10 +21,17 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
+
+                <li>
+				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>Todays Follow-up</a>
+
+                </li>
+				<!--
                 <li>
                     <a href="{{route('main')}}"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
 
                 </li>
+				-->
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i>Assigned Leads</a>
 

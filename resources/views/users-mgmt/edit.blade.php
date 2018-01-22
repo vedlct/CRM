@@ -134,7 +134,7 @@
                             <label for="dob" class="col-sm-3 control-label">Date of Birth</label>
 
                             <div class="col-sm-9">
-                                <input id="dob" type="date" class="form-control" name="dob" value="{{ $user->dob }}" required autofocus>
+                                <input id="dob" type="text" class="form-control" name="dob" value="{{ $user->dob }}" required autofocus>
 
                                 @if ($errors->has('dob'))
                                     <span class="help-block">
@@ -216,4 +216,15 @@
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('foot-js')
+
+    <script>
+
+        $( function() {
+            $( "#dob" ).datepicker();
+        } );
+    </script>
 @endsection

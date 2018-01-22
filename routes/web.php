@@ -62,6 +62,9 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
+Route::resource('follow-up', 'FollowupController');
+Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
+
 //Route::resource('system-management/userType', 'UserTypeController');
 //Route::post('system-management/userType/search', 'UserTypeController@search')->name('userType.search');
 //Route::view('/user-management', 'user-management.index');

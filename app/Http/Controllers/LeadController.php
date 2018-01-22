@@ -19,6 +19,7 @@ use App\Leadassigned;
 use App\Possibilitychange;
 use App\Callingreport;
 use App\Workprogress;
+use App\Followup;
 use DB;
 
 class LeadController extends Controller
@@ -237,8 +238,6 @@ class LeadController extends Controller
             }
 
 
-
-
             return view('layouts.lead.leadReport')
                 ->with('lead',$lead)
                 ->with('callReports',$callReports)
@@ -255,7 +254,14 @@ class LeadController extends Controller
                 'comment' => 'required|max:300',
                 'progress' => 'required|max:100',
             ]);
+            if($r->followup !=null){
+                $followUp=New Followup;
+                $followUp->leadId=$r->leadId;
+                $followUp->userId=Auth::user()->id;
+                $followUp->followUpDate=$r->followup;
+                $followUp->save();
 
+            }
             $progress=New Workprogress;
             $progress->callingReport=$r->report;
             $progress->response=$r->response;
@@ -267,6 +273,12 @@ class LeadController extends Controller
 
             Session::flash('message', 'Report Updated Successfully');
             return back();
+
+
+
+
+
+
         }
 
 
