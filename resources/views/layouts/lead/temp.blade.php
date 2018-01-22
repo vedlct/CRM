@@ -48,17 +48,7 @@
                             {{--<td>{{$lead->mined->firstName}}</td>--}}
                             <td>{{$lead->created_at}}</td>
                             <td>
-                                {{--<form method="post" action="{{route('changePossibility')}}">--}}
-                                    {{--{{csrf_field()}}--}}
-                                    {{--<input type="hidden" value="{{$lead->leadId}}" name="leadId">--}}
-                                    {{--<select class="form-control" id="" name="possibility" onchange="this.form.submit()">--}}
-                                        {{--<option value="">Select</option>--}}
-                                {{--@foreach($possibilities as $p)--}}
 
-                                        {{--<option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>--}}
-                                {{--@endforeach--}}
-                                {{--</select>--}}
-                                {{--</form>--}}
 
 
 
@@ -107,7 +97,7 @@
 
     <!-- Modal -->
     <div class="modal" id="my_modal" style="">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width: 60%">
 
             <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
                 <div class="modal-header">
@@ -118,36 +108,41 @@
 
 
                         {{csrf_field()}}
+                    <div class="row">
 
-                    <div class="form-group">
+                    <div class="col-md-4">
                         <input type="hidden" name="leadId">
                         <label>Company Name:</label>
                         <input type="text" class="form-control" name="companyName" value="">
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-md-4">
                         <label>Email:</label>
                         <input type="email" class="form-control" name="email" value="">
                     </div>
 
-                    <div class="form-group">
+
+                    <div class="col-md-4">
                         <label>Contact Person:</label>
-                        <input type="text" class="form-control" name="personName" value="">
+                        <input type="text" class="form-control" name="personName" value=""> <br><br><br>
                     </div>
 
-                    <div class="form-group">
+
+                    <div class="col-md-4">
                         <label>Number:</label>
                         <input type="text" class="form-control" name="number" value="">
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-md-4">
                         <label>Website:</label>
-                        <input type="text" class="form-control" name="website" value="">
+                        <input type="text" class="form-control" name="website" value=""> <br><br><br>
                     </div>
 
-                    <button class="btn btn-success" type="submit">Update</button>
+                    <div class="col-md-8">
+                        <button class="btn btn-success" type="submit">Update</button></div>
 
-                </div>
+                </div></div>
+
 
 
 
