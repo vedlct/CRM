@@ -82,7 +82,10 @@ class LeadController extends Controller
         $leads=(new Lead())->showAssignedLeads();
 
         //getting only first name of users
-        $users=User::select('id','firstName','lastName')->where('id','!=',Auth::user()->id)->get();
+        $users=User::select('id','firstName','lastName')
+//            ->where('id','!=',Auth::user()->id)
+            ->Where('typeId','!=',1)
+            ->get();
 
 
         return view('layouts.lead.assignLead')
@@ -145,14 +148,28 @@ class LeadController extends Controller
         }
 
 
+
+
+
         public function assignedLeads(){
-            $leads=Lead::where('statusId', 2)->get();
+//            select * from leads where leadId in(select leadId from leadassigneds where assignTo=1)
+
+            $leads=Lead::select('leads.*')
+                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+                ->where('leadassigneds.assignTo',Auth::user()->id)
+                ->get();
+
+//            $leads=Lead::where('statusId', 2)->get();
             $callReports=Callingreport::get();
 
             return view('layouts.lead.myLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports);
         }
+
+
+
+
 
 
         public function getComments(Request $r){
@@ -164,7 +181,6 @@ class LeadController extends Controller
                     $text.='<li>#'.$comment->comments.'</li>';
 
                 }
-
 
                 return Response($text);
 

@@ -20,7 +20,7 @@
                         <th>Country</th>
                         <th>Contact Person</th>
                         <th>Contact Number</th>
-                        <th>Call</th>
+                        <th>Action</th>
 
 
                     </tr>
@@ -53,11 +53,7 @@
                                    data-lead-website="{{$lead->website}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-
-
                             </td>
-
-
                         </tr>
 
                     @endforeach
@@ -82,7 +78,7 @@
 
     <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width: 60%;">
 
             <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
                 <div class="modal-header">
@@ -94,33 +90,41 @@
 
                     {{csrf_field()}}
 
-                    <div class="form-group">
+
+                    <div class="row">
+
+                    <div class="col-md-4">
                         <input type="hidden" name="leadId">
                         <label>Company Name:</label>
                         <input type="text" class="form-control" name="companyName" value="">
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-md-4">
                         <label>Email:</label>
                         <input type="email" class="form-control" name="email" value="">
                     </div>
 
-                    <div class="form-group">
+
+                    <div class="col-md-4">
                         <label>Contact Person:</label>
-                        <input type="text" class="form-control" name="personName" value="">
+                        <input type="text" class="form-control" name="personName" value=""> <br><br><br>
                     </div>
 
-                    <div class="form-group">
+
+                    <div class="col-md-4">
                         <label>Number:</label>
                         <input type="text" class="form-control" name="number" value="">
                     </div>
 
-                    <div class="form-group">
+                    <div class="col-md-4">
                         <label>Website:</label>
-                        <input type="text" class="form-control" name="website" value="">
+                        <input type="text" class="form-control" name="website" value=""> <br><br><br>
                     </div>
 
-                    <button class="btn btn-success" type="submit">Update</button>
+                        <div class="col-md-8">
+                            <button class="btn btn-success" type="submit">Update</button></div>
+
+                </div>
 
                 </div>
 
@@ -147,20 +151,21 @@
 
     <!-- Call Modal -->
     <div class="modal" id="my_modal" style="">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="max-width: 60%;">
 
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Calling Report</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" >
                     {{csrf_field()}}
                     <input type="hidden" name="leadId">
+                    <div class="row" >
 
-                    <div class="form-group">
-                        <label class="col-md-4"><b>Calling Report : </b></label>
-                        <select class="form-control col-md-8" name="report" required>
+                    <div class="col-md-4">
+                        <label ><b>Calling Report : </b></label>
+                        <select class="form-control" name="report" required>
                             <option value=""><b>(select one)</b></option>
 
                             @foreach($callReports as $report)
@@ -170,38 +175,37 @@
 
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-md-4"><b>Response : </b></label>
-                        <input class="form-control col-md-8" placeholder="insert the response" name="response" required>
+                    <div class="col-md-4">
+                        <label ><b>Response : </b></label>
+                        <input class="form-control" placeholder="insert the response" name="response" required>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-md-4"><b>Progress : </b></label>
-                        <select class="form-control col-md-8" name="progress" required>
+                    <div class=" col-md-4">
+                        <label ><b>Progress : </b></label>
+                        <select class="form-control" name="progress" required>
                             <option value=""><b>(select one)</b></option>
                             <option value="Test job">Test job</option>
                             <option value="Closing">Closing</option>
                         </select>
-
+                            <br><br>
+                    </div>
+                    <div class="col-md-6">
+                        <label class=""><b>Comment : </b></label>
+                        <textarea class="form-control" rows="3" name="comment" required></textarea>
                     </div>
 
                         <ul>
-                       <div  style="   height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                            <div  style="height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px; display: none" id="comment">
 
-                       </div>
+                            </div>
                         </ul>
 
-                    <div class="form-group">
-                        <label class="col-md-6"><b>Comment : </b></label>
-
-
-                        <textarea class="col-md-8" rows="3" name="comment" required>
-
-                    </textarea>
+                    <div class="col-md-12">
+                            <button class="btn btn-success">Submit</button>
                     </div>
-                               <button class="btn btn-success">Submit</button>
 
-                   </div>
+
+                    </div></div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

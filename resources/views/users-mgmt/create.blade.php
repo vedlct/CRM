@@ -48,11 +48,10 @@
                             <label for="rfId" class="col-sm-3 control-label">RF ID</label>
 
                             <div class="col-sm-9">
-<<<<<<< HEAD
-                                <input id="rfID" type="number" class="form-control" name="rfID" value="{{ old('rfID') }}" required autofocus>
-=======
+
+
                                 <input id="rfId" type="text" class="form-control" name="rfId" value="{{ old('rfId') }}" required autofocus>
->>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
+
 
                                 @if ($errors->has('rfId'))
                                     <span class="help-block">
@@ -149,14 +148,12 @@
 
                             <div class="col-sm-9">
 								<select id="gender" name="gender" class="form-control form-control-warning" required autofocus>
-<<<<<<< HEAD
+
 									<option value="M">Male</option>
 									<option value="F">Female</option>
-=======
-									<option value="m">Male</option>
-									<option value="f">Female</option>
->>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
-								</select>
+
+
+                                </select>
                                 @if ($errors->has('gender'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('gender') }}</strong>
@@ -169,11 +166,9 @@
 							<label class="col-sm-3 form-control-label">Status</label>
 							<div class="col-sm-9">
 
-<<<<<<< HEAD
+
 								<select name="active" class="form-control form-control-warning">
-=======
-								<select name="status" class="form-control form-control-warning" name="active">
->>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
+
 									<option value="1">Active</option>
 									<option value="0">Inactive</option>
 								</select>
