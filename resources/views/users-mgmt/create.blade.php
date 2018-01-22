@@ -7,8 +7,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Add new user</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.store') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.store') }}" enctype="multipart/form-data">
                         {{ csrf_field() }}
+					
 
                         <div class="form-group row{{ $errors->has('userId') ? ' has-error' : '' }}">
                             <label for="userId" class="col-sm-3 control-label">User ID</label>
@@ -29,10 +30,10 @@
 							<div class="col-sm-9">
 
 								<select name="typeId" class="form-control form-control-warning">
-									<option value="1">Admin</option>
-									<option value="2">Manager</option>
-									<option value="3">Supervisor</option>
-									<option value="4">Reference Author</option>
+									
+                                   @foreach ($userTypes as $userType)
+                                        <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                    @endforeach
 								</select>
 
                                 @if ($errors->has('typeId'))
@@ -47,7 +48,11 @@
                             <label for="rfId" class="col-sm-3 control-label">RF ID</label>
 
                             <div class="col-sm-9">
+<<<<<<< HEAD
+                                <input id="rfID" type="number" class="form-control" name="rfID" value="{{ old('rfID') }}" required autofocus>
+=======
                                 <input id="rfId" type="text" class="form-control" name="rfId" value="{{ old('rfId') }}" required autofocus>
+>>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
 
                                 @if ($errors->has('rfId'))
                                     <span class="help-block">
@@ -112,7 +117,7 @@
                         </div>
 
                         <div class="form-group row{{ $errors->has('picture') ? ' has-error' : '' }}">
-                            <label for="picture" class="col-sm-3 control-label">Picture</label>
+                            <label for="avatar" class="col-sm-3 control-label">Picture</label>
 
                             <div class="col-sm-9">
                                 <input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}" autofocus>
@@ -144,8 +149,13 @@
 
                             <div class="col-sm-9">
 								<select id="gender" name="gender" class="form-control form-control-warning" required autofocus>
+<<<<<<< HEAD
+									<option value="M">Male</option>
+									<option value="F">Female</option>
+=======
 									<option value="m">Male</option>
 									<option value="f">Female</option>
+>>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
 								</select>
                                 @if ($errors->has('gender'))
                                     <span class="help-block">
@@ -159,7 +169,11 @@
 							<label class="col-sm-3 form-control-label">Status</label>
 							<div class="col-sm-9">
 
+<<<<<<< HEAD
+								<select name="active" class="form-control form-control-warning">
+=======
 								<select name="status" class="form-control form-control-warning" name="active">
+>>>>>>> 9daf4d1395cd4e8f2f24e916259bd365cf62029e
 									<option value="1">Active</option>
 									<option value="0">Inactive</option>
 								</select>

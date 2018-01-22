@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Usertype extends Model
+class UserType extends Model
 {
+     protected $table = 'usertypes';
      protected $primaryKey = 'typeId';
 }

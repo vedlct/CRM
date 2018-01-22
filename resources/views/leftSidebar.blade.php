@@ -77,7 +77,15 @@
                 </li>
 
                 <li>
-                    <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
+				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
+
+                </li>
+
+                <li>
+                    <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>Notice</a>
+
+                   
+
 
                 </li>
 
@@ -87,11 +95,11 @@
 
                 </li>
 
-
+<!--
                 <li>
                     <a href="notices"><i class="fa fa-bell"></i>Notice Board</a>
 
-                </li>
+                </li>-->
 
                 <li>
                     <a href="leaves"><i class="mdi mdi-bullseye"></i>Leave Show</a>
