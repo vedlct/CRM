@@ -63,6 +63,7 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
+
 		//$this->validateInput($request);
 //        // Upload image
         if ($request->file('picture')) {
@@ -77,6 +78,11 @@ class UserManagementController extends Controller
             $filename = '';
         }
         //User::create([
+
+		$this->validateInput($request);
+
+       // User::create([
+
             DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
@@ -93,6 +99,28 @@ class UserManagementController extends Controller
             'active' => $request['active'],
         ]);
 
+//            $user=new User;
+//
+//            $user->userId=$request->userId;
+//            $user->typeId=$request->typeId;
+//            $user->userEmail=$request->userEmail;
+//            $user->password= bcrypt($request->password);
+//            $user->rfId=$request->rfId;
+//            $user->firstName=$request->firstName;
+//            $user->lastName=$request->lastName;
+//            $user->phoneNumber=$request->phoneNumber;
+//            $user->picture=$request->picture;
+//            $user->dob =date('Y-m-d',strtotime($request['dob']));
+//            $user->gender=$request->gender;
+//
+//
+//            $user->save();
+
+
+
+
+	//return $request;
+	//return	dd($ttt->toSql());
        return redirect()->intended('/user-management');
     }
 

@@ -13,7 +13,7 @@
                     <!-- Dark Logo icon -->
 
                     <!-- Light Logo icon -->
-                    <img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                    {{--<img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />--}}
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
@@ -22,7 +22,7 @@
                          {{--<img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" />--}}
                     <b>CRM</b>
                     <!-- Light Logo text -->
-                         <img src="images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>
+                         {{--<img src="images/logo-light-text.png" class="light-logo" alt="homepage" /></span> </a>--}}
         </div>
         <!-- ============================================================== -->
         <!-- End Logo -->

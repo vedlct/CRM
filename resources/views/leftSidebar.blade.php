@@ -4,7 +4,7 @@
         <!-- User profile -->
         <div class="user-profile">
             <!-- User profile image -->
-            <div class="profile-img"> <img src="../assets/images/users/1.jpg" alt="user" /> </div>
+            <div class="profile-img"> <img src="{{asset('assets/images/users/1.jpg')}}" alt="user" /> </div>
             <!-- User profile text-->
             <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><b>ID :</b> {{Auth::user()->userId}}  <span class="caret"></span></a>
                 <div class="dropdown-menu animated flipInY">
@@ -22,33 +22,33 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
                 <li>
-                    <a href="main"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
+                    <a href="{{route('main')}}"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
 
                 </li>
                 <li>
-                    <a href="mylist" ><i class="fa fa-list"></i>My List</a>
-
-                </li>
-
-
-                <li>
-                    <a href="testlist"><i class="fa fa-list-alt"></i>Test List</a>
-
-                </li>
-
-                <li>
-                    <a href="clients"><i class="fa fa-user-circle-o"></i>Clients</a>
-
-                </li>
-
-                <li>
-                    <a href="{{route('addLead')}}">Add Lead</a>
+                    <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i>Assigned Leads</a>
 
                 </li>
 
 
                 <li>
-                    <a href="{{route('assignShow')}}">Assign Lead</a>
+                    <a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i>Test List</a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('clients')}}"><i class="fa fa-user-circle-o"></i>Clients</a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i>Add Lead</a>
+
+                </li>
+
+
+                <li>
+                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i> Assign Lead</a>
 
                 </li>
 
@@ -57,7 +57,14 @@
                     <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
 
                 </li>
+                <li>
+                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i>Temp Leads</a>
 
+                </li>
+                <li>
+                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i>Filtered Leads</a>
+
+                </li>
 
                 <li>
                     <a href="starleads"><i class="fa fa-star"></i>Star Leads</a>
@@ -70,12 +77,15 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('user-management.index') }}"><i class="fa fa-plus-square"></i>User Management</a>
+				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
 
                 </li>
 
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>Notice</a>
+
+                   
+
 
                 </li>
 
