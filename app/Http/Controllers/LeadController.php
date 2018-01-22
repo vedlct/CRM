@@ -159,8 +159,8 @@ class LeadController extends Controller
             if($r->ajax()){
                 $comments=Workprogress::select(['comments'])->where('leadId',$r->leadId)->get();
 
-              // echo $comments;
-                return Response($comments);
+               echo $comments;
+              //  return Response($comments);
 
             }
 
