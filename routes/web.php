@@ -22,7 +22,7 @@ Route::view('/starleads', 'layouts.starLeads');
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
-Route::view('/reports', 'layouts.reports');
+//Route::view('/reports', 'layouts.reports');
 //Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
 Route::view('/myteam', 'layouts.myTeam');
@@ -44,7 +44,7 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 
 
 Route::view('/lead', 'layouts.lead.add');
-Route::get('/assignreport', 'UserController@test');
+//Route::get('/assignreport', 'UserController@test');
 
 
 
@@ -90,7 +90,7 @@ Route::post('lead/ajax','LeadController@ajax')->name('ajax');
 
 //My List Lead
 Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assignedLeads');
-Route::get('lead/report/{id}', 'LeadController@report')->name('report');
+//Route::get('lead/report/{id}', 'LeadController@report')->name('report');
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 
