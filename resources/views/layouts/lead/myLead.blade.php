@@ -36,11 +36,13 @@
                             <td>{{$lead->personName}}</td>
                             <td>{{$lead->contactNumber}}</td>
 
+
                             {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
                             <td>
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
-                                   data-lead-id="{{$lead->leadId}}">
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-possibility="{{$lead->possibilityId}}">
                                 <i class="fa fa-phone" aria-hidden="true"></i></a>
 
                                 <!-- Trigger the Edit modal with a button -->
@@ -202,18 +204,30 @@
                             <input class="form-control" id="datepicker" rows="3" name="followup" >
                         </div>
 
+
+                        <div class="col-md-4">
+                            <label class=""><b>Possibility : </b></label>
+                            <select class="form-control"  name="possibility" id="possibility">
+                                @foreach($possibilities as $p)
+                                    <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
                     <div class="col-md-6">
                         <label class=""><b>Comment : </b></label>
                         <textarea class="form-control" rows="3" name="comment" required></textarea>
+                        <br>
                     </div>
 
-                        <ul>
-                            <div  style="height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px; display: none" id="comment">
+                        <ul class="col-md-6"><br>
+                            <div  style="height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
                             </div>
                         </ul>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12"><br>
                             <button class="btn btn-success">Submit</button>
                     </div>
 
@@ -246,7 +260,7 @@
 
     <script>
 
-
+        //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function(e) {
 
@@ -278,15 +292,22 @@
 
 
 
-
+        //for Call Modal
 
         $('#my_modal').on('show.bs.modal', function(e) {
 
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
+            var possibility=$(e.relatedTarget).data('lead-possibility');
+
 
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+
+
+
+            $('#possibility').val(possibility);
+           //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({
                 type : 'post' ,

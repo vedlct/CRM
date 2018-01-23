@@ -52,8 +52,9 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        $categories=Category::get();
-        return view('notice/create')
+        $categories=Category:: where('type', 2)
+            ->get();
+            return view('notice/create')
             ->with('categories', $categories);
     }
 

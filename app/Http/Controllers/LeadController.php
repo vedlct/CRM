@@ -151,20 +151,16 @@ class LeadController extends Controller
 
 
         public function assignedLeads(){
-//            select * from leads where leadId in(select leadId from leadassigneds where assignTo=1)
+            //will return the leads assigned to you
+            $leads=(new Lead())->myLeads();
 
-            $leads=Lead::select('leads.*')
-                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-                ->where('leadassigneds.assignTo',Auth::user()->id)
-                ->Where('leadassigneds.leadAssignStatus',1)
-                ->get();
-
-//            $leads=Lead::where('statusId', 2)->get();
             $callReports=Callingreport::get();
+            $possibilities=Possibility::get();
 
             return view('layouts.lead.myLead')
                 ->with('leads',$leads)
-                ->with('callReports',$callReports);
+                ->with('callReports',$callReports)
+                ->with('possibilities',$possibilities);
         }
 
 
@@ -174,11 +170,11 @@ class LeadController extends Controller
 
         public function getComments(Request $r){
             if($r->ajax()){
-                $comments=Workprogress::select(['comments'])->where('leadId',$r->leadId)->get();
+                $comments=Workprogress::select(['comments','created_at'])->where('leadId',$r->leadId)->get();
                 $text='';
                 foreach ($comments as $comment){
 
-                    $text.='<li>#'.$comment->comments.'</li>';
+                    $text.='<li>#'.$comment->comments.' -('.$comment->created_at.')'.'</li>';
 
                 }
                 return Response($text);
@@ -258,6 +254,24 @@ class LeadController extends Controller
                 $followUp->save();
 
             }
+
+            //posssibility Change
+            $lead=Lead::findOrFail($r->leadId);
+            $currentPossibility=$lead->possibilityId;
+            $lead->possibilityId=$r->possibility;
+            $lead->save();
+
+            if($currentPossibility !=$r->possibility){
+                $log=new Possibilitychange;
+                $log->leadId=$r->leadId;
+                $log->possibilityId=$r->possibility;
+                $log->userId=Auth::user()->id;
+                $log->save();
+            }
+
+
+
+
             $progress=New Workprogress;
             $progress->callingReport=$r->report;
             $progress->response=$r->response;
@@ -269,6 +283,8 @@ class LeadController extends Controller
 
             Session::flash('message', 'Report Updated Successfully');
             return back();
+
+
 
 
 

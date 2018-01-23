@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
 
 
 class Lead extends Model
@@ -12,9 +13,20 @@ class Lead extends Model
     protected $table = 'leads';
 
     public function category(){
-
-
         return $this->belongsTo(Category::class,'categoryId','categoryId');
+    }
+
+
+    public function myLeads(){
+
+        $leads=Lead::select('leads.*')
+            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+            ->where('leadassigneds.assignTo',Auth::user()->id)
+            ->Where('leadassigneds.leadAssignStatus',1)
+            ->get();
+
+        return $leads;
+
     }
 
     public function showAssignedLeads(){
@@ -37,35 +49,30 @@ class Lead extends Model
     }
 
     public function country(){
-
-
         return $this->belongsTo(Country::class,'countryId','countryId');
     }
 
 
     public function mined(){
-
         return $this->belongsTo(User::class,'minedBy','id');
     }
 
 
     public function getTempLead(){
-
         $lead=Lead::where('statusId', 1)
                     ->get();
         return $lead;
     }
 
-    public function getFilteredLead(){
 
+    public function getFilteredLead(){
         $lead=Lead::where('statusId', 2)
             ->get();
         return $lead;
-
     }
 
-    public function assigned(){
 
+    public function assigned(){
         return $this->hasOne(Leadassigned::class,'leadId','leadId');
     }
 

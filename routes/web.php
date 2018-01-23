@@ -22,7 +22,7 @@ Route::view('/starleads', 'layouts.starLeads');
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
-Route::view('/reports', 'layouts.reports');
+//Route::view('/reports', 'layouts.reports');
 //Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
 Route::view('/myteam', 'layouts.myTeam');
@@ -44,7 +44,7 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 
 
 Route::view('/lead', 'layouts.lead.add');
-Route::get('/assignreport', 'UserController@test');
+//Route::get('/assignreport', 'UserController@test');
 
 
 
@@ -61,6 +61,9 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+
+Route::resource('follow-up', 'FollowupController');
+Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 //Route::resource('system-management/userType', 'UserTypeController');
 //Route::post('system-management/userType/search', 'UserTypeController@search')->name('userType.search');
@@ -87,7 +90,7 @@ Route::post('lead/ajax','LeadController@ajax')->name('ajax');
 
 //My List Lead
 Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assignedLeads');
-Route::get('lead/report/{id}', 'LeadController@report')->name('report');
+//Route::get('lead/report/{id}', 'LeadController@report')->name('report');
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 

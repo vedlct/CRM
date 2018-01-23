@@ -4,7 +4,7 @@
         <!-- Logo -->
         <!-- ============================================================== -->
         <div class="navbar-header">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="{{route('home')}}">
                 <!-- Logo icon -->
 
                 <img src="{{asset('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" width="40px"/>
