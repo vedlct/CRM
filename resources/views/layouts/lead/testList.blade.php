@@ -67,23 +67,53 @@
     </div>
 
 
+    <!-- Button to Open the Modal -->
+    <a href="{{route('modal')}}" rel="modal" class="btn btn-success">Hello!</a>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    <div id="modal" class="modal fade"
+         tabindex="-1" role="dialog" aria-labelledby="plan-info" aria-hidden="true">
+        <div class="modal-dialog modal-full-screen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- /# content goes here -->
+                    Loading...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
 
 @endsection
+@section('foot-js')
+<script>
+
+    $('a[rel=modal]').on('click', function(evt) {
+        evt.preventDefault();
+        var modal = $('#modal').modal();
+        modal
+            .find('.modal-body')
+            .load($(this).attr('href'), function (responseText, textStatus) {
+                if ( textStatus === 'success' ||
+                    textStatus === 'notmodified')
+                {
+                    modal.show();
+                }
+            });
+    });
+
+</script>
+
+    @endsection

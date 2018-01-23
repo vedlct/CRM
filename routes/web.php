@@ -15,7 +15,7 @@
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
-Route::view('/testlist', 'layouts.testList')->name('testlist');
+
 Route::view('/clients', 'layouts.clients')->name('clients');
 Route::view('/leads', 'layouts.leads');
 Route::view('/starleads', 'layouts.starLeads');
@@ -94,3 +94,8 @@ Route::post('lead/comments','LeadController@getComments')->name('getComments');
 
 //Leave Lead
 Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+
+
+//testList
+Route::get('/testlist', 'TestController@index')->name('testlist');
+Route::get('/modal', 'TestController@modal')->name('modal');
