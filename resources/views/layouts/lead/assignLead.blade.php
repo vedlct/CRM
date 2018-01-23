@@ -16,31 +16,6 @@
             <h4 class="card-title">Assign Lead To User</h4>
 
 
-                <div class="form-group">
-
-
-                    {{--<div class="form-group col-md-5">--}}
-                    <label ><b>Select Name:</b></label>
-                        <select class="form-control"  name="assignTo" id="otherCatches" style="width: 40%">
-                            <option value="">select</option>
-                            @foreach($users as $user)
-                                <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
-
-                            @endforeach
-
-
-                        </select>
-                    </div>
-
-                    <input type="hidden" class="form-control" id="inp" name="leadId">
-
-
-                </div>
-
-
-
-
-
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -91,6 +66,30 @@
                     </tbody>
                 </table>
             </div>
+
+
+            <div class="form-group">
+
+
+                {{--<div class="form-group col-md-5">--}}
+                <label ><b>Select Name:</b></label>
+                <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
+                    <option value="">select</option>
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+
+                    @endforeach
+
+
+                </select>
+            </div>
+
+            <input type="hidden" class="form-control" id="inp" name="leadId">
+
+
+        </div>
+
+
         </div>
     </div>
 

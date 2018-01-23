@@ -201,7 +201,7 @@
 
                         <div class="col-md-4">
                             <label class=""><b>Follow Up Date : </b></label>
-                            <input class="form-control" id="datepicker" rows="3" name="followup" >
+                            <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
                         </div>
 
 
@@ -221,8 +221,8 @@
                         <br>
                     </div>
 
-                        <ul class="col-md-6"><br>
-                            <div  style="height: 100px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                        <ul class="col-md-6 list-group"><br>
+                            <div  style="height: 120px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
                             </div>
                         </ul>

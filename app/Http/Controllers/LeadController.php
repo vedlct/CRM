@@ -174,7 +174,7 @@ class LeadController extends Controller
                 $text='';
                 foreach ($comments as $comment){
 
-                    $text.='<li>#'.$comment->comments.' -('.$comment->created_at.')'.'</li>';
+                    $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> -('.$comment->created_at.')'.'</li>';
 
                 }
                 return Response($text);
