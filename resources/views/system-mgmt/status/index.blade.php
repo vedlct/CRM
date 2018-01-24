@@ -45,12 +45,6 @@
               </tr>
             @endforeach
             </tbody>
-            <tfoot>
-              <tr>
-                <th width="20%" rowspan="1" colspan="1">Possibility Name</th>
-                <th rowspan="1" colspan="2">Action</th>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </div>

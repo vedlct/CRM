@@ -3,13 +3,7 @@
 @section('content')
     <section class="content">
       <div class="box">
-  <div class="box-header">
-    <div class="row">
-        <div class="col-sm-8">
           <h3 class="box-title">List of Todays Follow-up</h3>
-        </div>
-    </div>
-  </div>
   <!-- /.box-header -->
   <div class="box-body">
       <form method="POST" action="{{ route('follow-up.search') }}">
@@ -23,10 +17,10 @@
 		
   <!-- /.box-header -->
   <div class="box-body">
-    <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-      <div class="row">
-        <div class="col-sm-12">
-          <table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
+    <div class="card" style="padding: 2px;">
+        <div class="card-body">
+            <div class="table-responsive m-t-40" >
+            <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
             <thead>
               <tr role="row">
                 <th width="" class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" aria-sort="ascending">GM</th>
@@ -59,17 +53,6 @@
               </tr>
             @endforeach
             </tbody>
-            <tfoot>
-              <tr>
-                <th width="" class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" aria-sort="ascending">GM</th>
-                <th width="" class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Company Name</th>
-                <th width="" class="sorting hidden-xs" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Category</th>
-                <th width="" class="sorting hidden-xs" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Country</th>
-                <th width="" class="sorting hidden-xs" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Contact Person</th>
-                <th width="" class="sorting hidden-xs" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Email: activate to sort column ascending">Web Address</th>
-                <th tabindex="0" aria-controls="example2" rowspan="1" colspan="2" aria-label="Action: activate to sort column ascending">Action</th>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </div>

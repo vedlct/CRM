@@ -8,8 +8,7 @@
           @php
             $stringFormat =  strtolower(str_replace(' ', '', $item));
           @endphp
-        <label class="col-md-3 control-label">{{$item}}</label>
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="input-group date">
                 <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
