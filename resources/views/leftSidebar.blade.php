@@ -96,10 +96,15 @@
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>My Team</a>
+                </li>
 
+                <li>
+                    <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>Team Management</a>
                 </li>
 				
-				<li class="treeview">
+
+
+                <li class="treeview">
 				  <a href="#"><i class="fa fa-link"></i> <span>System Manage</span>
 					<span class="pull-right-container">
 					  <i class="fa fa-angle-left pull-right"></i>

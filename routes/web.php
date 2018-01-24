@@ -127,4 +127,6 @@ Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 
 //Assign Team
+Route::get('/teammanagement','TeamController@teamManagement')->name('teamManagement');
+Route::post('/teammanagement','TeamController@teamAssign')->name('teamAssign');
 

@@ -111,6 +111,8 @@
             <div class="alert alert-success" id="alert" style="display: none ">
                 <strong>Success!</strong> Indicates a successful or positive action.
             </div>
+
+           
          @yield('content')
             <!-- ============================================================== -->
             <!-- End Right sidebar -->
