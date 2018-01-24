@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Notice;
-use Auth;
-use App\Category;
+use App\Status;
 
-class NoticeController extends Controller
+class StatusController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -25,24 +23,11 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-  /*  public function index()
-    {
-        $notices = Notice::paginate(5);
-        ->leftJoin('city', 'notices.city_id', '=', 'city.id')
-
-        return view('notice/index', ['notices' => $notices]);
-    }*/
-	
-	
     public function index()
     {
-        $notices = DB::table('notices')
-        ->leftJoin('users', 'notices.userId', '=', 'users.id')
-        ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
-        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName')
-        ->paginate(5);
+        $statuses = Status::paginate(5);
 
-        return view('notice/index', ['notices' => $notices]);
+        return view('system-mgmt/status/index', ['statuses' => $statuses]);
     }
 
     /**
@@ -52,10 +37,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        $categories=Category:: where('type', 2)
-            ->get();
-            return view('notice/create')
-            ->with('categories', $categories);
+        return view('system-mgmt/status/create');
     }
 
     /**
@@ -66,15 +48,13 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validateInput($request);
-            DB::table('notices')->insert([
-       //  Notice::create([
-                'msg' => $request['msg'],
-                'categoryId' => $request['categoryId'],
-                'userId' => Auth::user()->id
+        $this->validateInput($request);
+        // Status::create([
+        DB::table('leadstatus')->insert([
+            'statusName' => $request['statusName']
         ]);
 
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/status');
     }
 
     /**
@@ -96,15 +76,13 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        $notice = Notice::find($id);
-        // Redirect to notice list if updating notice wasn't existed
-        if ($notice == null || count($notice) == 0) {
-            return redirect()->intended('/notice');
+        $status = Status::find($id);
+        // Redirect to status list if updating status wasn't existed
+        if ($status == null || count($status) == 0) {
+            return redirect()->intended('/system-management/status');
         }
 
-       $categories = Category:: where('type', 2)
-            ->get();
-        return view('notice/edit', ['notice' => $notice, 'categories' => $categories]);
+        return view('system-mgmt/status/edit', ['status' => $status]);
     }
 
     /**
@@ -116,17 +94,17 @@ class NoticeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $notice = Notice::findOrFail($id);
-    //    $this->validateInput($request);
+        $status = Status::findOrFail($id);
         $input = [
-            'msg' => $request['msg'],
-            'categoryId' => $request['categoryId'],
-            'userId' => Auth::user()->id
+            'statusName' => $request['statusName']
         ];
-        Notice::where('noticeId', $id)
+        $this->validate($request, [
+        'statusName' => 'required|max:60'
+        ]);
+        Status::where('statusId', $id)
             ->update($input);
         
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/status');
     }
 
     /**
@@ -137,27 +115,27 @@ class NoticeController extends Controller
      */
     public function destroy($id)
     {
-        Notice::where('noticeId', $id)->delete();
-         return redirect()->intended('notice');
+        Status::where('statusId', $id)->delete();
+         return redirect()->intended('system-management/status');
     }
 
     /**
-     * Search notice from database base on some specific constraints
+     * Search status from database base on some specific constraints
      *
      * @param  \Illuminate\Http\Request  $request
      *  @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
         $constraints = [
-            'msg' => $request['msg']
+            'statusName' => $request['statusName']
             ];
 
-       $notices = $this->doSearchingQuery($constraints);
-       return view('notice/index', ['notices' => $notices, 'searchingVals' => $constraints]);
+       $statuses = $this->doSearchingQuery($constraints);
+       return view('system-mgmt/status/index', ['statuses' => $statuses, 'searchingVals' => $constraints]);
     }
 
     private function doSearchingQuery($constraints) {
-        $query = notice::query();
+        $query = status::query();
         $fields = array_keys($constraints);
         $index = 0;
         foreach ($constraints as $constraint) {
@@ -171,7 +149,7 @@ class NoticeController extends Controller
     }
     private function validateInput($request) {
         $this->validate($request, [
-        'msg' => 'required|max:60|unique:notice'
+        'statusName' => 'required|max:60|unique:leadstatus'
     ]);
     }
 }

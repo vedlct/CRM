@@ -16,7 +16,7 @@
   </div>
   <!-- /.box-header -->
   <div class="box-body">
-      <div class="row">
+   <?php /*   <div class="row">
         <div class="col-sm-6"></div>
         <div class="col-sm-6"></div>
       </div>
@@ -27,7 +27,7 @@
           'oldVals' => [isset($searchingVals) ? $searchingVals['userId'] : '', isset($searchingVals) ? $searchingVals['firstName'] : '']])
           @endcomponent
         @endcomponent
-      </form>
+      </form> */ ?>
     <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
       <div class="row">
         <div class="col-sm-12">
@@ -48,8 +48,12 @@
                   <td class="sorting_1">{{ $user->userId }}</td>
                   <td>{{ $user->userEmail }}</td>
                   <td class="hidden-xs">{{ $user->firstName }}</td>
-                    <td class="hidden-xs">{{ $user->lastName }}</td>
-                    <td class="hidden-xs">{{ $user->active }}</td>
+                  <td class="hidden-xs">{{ $user->lastName }}</td>
+                  <td class="hidden-xs">
+					@if ($user->active == 1)Active
+					@elseif ($user->active == 0)Inactive
+					@endif
+				</td>
                   <td>
                     <form class="row" method="POST" action="{{ route('user-management.destroy', ['id' => $user->id]) }}" onsubmit = "return confirm('Are you sure?')">
                         <input type="hidden" name="_method" value="DELETE">

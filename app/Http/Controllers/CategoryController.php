@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Notice;
-use Auth;
 use App\Category;
 
-class NoticeController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -25,24 +23,11 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-  /*  public function index()
-    {
-        $notices = Notice::paginate(5);
-        ->leftJoin('city', 'notices.city_id', '=', 'city.id')
-
-        return view('notice/index', ['notices' => $notices]);
-    }*/
-	
-	
     public function index()
     {
-        $notices = DB::table('notices')
-        ->leftJoin('users', 'notices.userId', '=', 'users.id')
-        ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
-        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName')
-        ->paginate(5);
+        $categories = Category::paginate(5);
 
-        return view('notice/index', ['notices' => $notices]);
+        return view('system-mgmt/category/index', ['categories' => $categories]);
     }
 
     /**
@@ -52,10 +37,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        $categories=Category:: where('type', 2)
-            ->get();
-            return view('notice/create')
-            ->with('categories', $categories);
+        return view('system-mgmt/category/create');
     }
 
     /**
@@ -66,15 +48,14 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validateInput($request);
-            DB::table('notices')->insert([
-       //  Notice::create([
-                'msg' => $request['msg'],
-                'categoryId' => $request['categoryId'],
-                'userId' => Auth::user()->id
+        $this->validateInput($request);
+        // Category::create([
+        DB::table('categories')->insert([
+            'categoryName' => $request['categoryName'],
+            'type' => $request['type']
         ]);
 
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/category');
     }
 
     /**
@@ -96,15 +77,13 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        $notice = Notice::find($id);
-        // Redirect to notice list if updating notice wasn't existed
-        if ($notice == null || count($notice) == 0) {
-            return redirect()->intended('/notice');
+        $category = Category::find($id);
+        // Redirect to category list if updating category wasn't existed
+        if ($category == null || count($category) == 0) {
+            return redirect()->intended('/system-management/category');
         }
 
-       $categories = Category:: where('type', 2)
-            ->get();
-        return view('notice/edit', ['notice' => $notice, 'categories' => $categories]);
+        return view('system-mgmt/category/edit', ['category' => $category]);
     }
 
     /**
@@ -116,17 +95,18 @@ class NoticeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $notice = Notice::findOrFail($id);
-    //    $this->validateInput($request);
+        $category = Category::findOrFail($id);
         $input = [
-            'msg' => $request['msg'],
-            'categoryId' => $request['categoryId'],
-            'userId' => Auth::user()->id
+            'categoryName' => $request['categoryName'],
+            'type' => $request['type']
         ];
-        Notice::where('noticeId', $id)
+        $this->validate($request, [
+        'categoryName' => 'required|max:60'
+        ]);
+        Category::where('categoryId', $id)
             ->update($input);
         
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/category');
     }
 
     /**
@@ -137,27 +117,28 @@ class NoticeController extends Controller
      */
     public function destroy($id)
     {
-        Notice::where('noticeId', $id)->delete();
-         return redirect()->intended('notice');
+        Category::where('categoryId', $id)->delete();
+         return redirect()->intended('system-management/category');
     }
 
     /**
-     * Search notice from database base on some specific constraints
+     * Search category from database base on some specific constraints
      *
      * @param  \Illuminate\Http\Request  $request
      *  @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
         $constraints = [
-            'msg' => $request['msg']
+            'categoryName' => $request['categoryName'],
+            'type' => $request['type']
             ];
 
-       $notices = $this->doSearchingQuery($constraints);
-       return view('notice/index', ['notices' => $notices, 'searchingVals' => $constraints]);
+       $categories = $this->doSearchingQuery($constraints);
+       return view('system-mgmt/category/index', ['categories' => $categories, 'searchingVals' => $constraints]);
     }
 
     private function doSearchingQuery($constraints) {
-        $query = notice::query();
+        $query = category::query();
         $fields = array_keys($constraints);
         $index = 0;
         foreach ($constraints as $constraint) {
@@ -171,7 +152,8 @@ class NoticeController extends Controller
     }
     private function validateInput($request) {
         $this->validate($request, [
-        'msg' => 'required|max:60|unique:notice'
+        'categoryName' => 'required|max:60|unique:categories',
+        'type' => 'required|max:3'
     ]);
     }
 }

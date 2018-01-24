@@ -48,10 +48,7 @@
                             <label for="rfId" class="col-sm-3 control-label">RF ID</label>
 
                             <div class="col-sm-9">
-
-
                                 <input id="rfId" type="text" class="form-control" name="rfId" value="{{ old('rfId') }}" required autofocus>
-
 
                                 @if ($errors->has('rfId'))
                                     <span class="help-block">
@@ -152,7 +149,6 @@
 									<option value="M">Male</option>
 									<option value="F">Female</option>
 
-
                                 </select>
                                 @if ($errors->has('gender'))
                                     <span class="help-block">
@@ -165,7 +161,6 @@
 						<div class="form-group row">
 							<label class="col-sm-3 form-control-label">Status</label>
 							<div class="col-sm-9">
-
 
 								<select name="active" class="form-control form-control-warning">
 

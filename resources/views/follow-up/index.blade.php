@@ -12,15 +12,11 @@
   </div>
   <!-- /.box-header -->
   <div class="box-body">
-      <div class="row">
-        <div class="col-sm-6"></div>
-        <div class="col-sm-6"></div>
-      </div>
       <form method="POST" action="{{ route('follow-up.search') }}">
          {{ csrf_field() }}
          @component('layouts.search', ['title' => 'Search'])
-          @component('layouts.two-cols-date-search-row', ['items' => ['Form Date', 'To Date'], 
-          'oldVals' => [isset($searchingVals) ? $searchingVals['formDate'] : '', isset($searchingVals) ? $searchingVals['toDate'] : '']])
+          @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'], 
+          'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
           @endcomponent
         @endcomponent
       </form>
@@ -48,7 +44,7 @@
                   <td class="sorting_1">{{ $followup->userId }}</td>
                   <td class="sorting_1">{{ $followup->companyName }}</td>
                   <td class="sorting_1">{{ $followup->categoryName }}</td>
-                  <td class="sorting_1">{{ $followup->countryName}}</td><?php /* */?>
+                  <td class="sorting_1">{{ $followup->countryName}}</td>
                   <td class="sorting_1">{{ $followup->personName }}</td>
                   <td class="sorting_1">{{ $followup->website }}</td>
                   <td> <form method="post" action="{{ URL::to('follow-up/' . $followup->followId) }}" onsubmit="return confirm('Do you really want to Delete?');">
@@ -94,4 +90,16 @@
     </section>
     <!-- /.content -->
   </div>
+@endsection
+
+
+@section('foot-js')
+
+    <script>
+
+        $( function() {
+            $( "#fromdate" ).datepicker();
+            $( "#todate" ).datepicker();
+        } );
+    </script>
 @endsection

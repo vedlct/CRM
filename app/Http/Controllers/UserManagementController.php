@@ -67,8 +67,6 @@ class UserManagementController extends Controller
 		//$this->validateInput($request);
 //        // Upload image
         if ($request->file('picture')) {
-           // $path = $request->file('picture')->store('trty');
-           // $input['picture'] = $path;
             $img = $request->file('picture');
             $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
             $location = public_path('img/'.$filename);
@@ -98,29 +96,6 @@ class UserManagementController extends Controller
             'gender' => $request['gender'],
             'active' => $request['active'],
         ]);
-
-//            $user=new User;
-//
-//            $user->userId=$request->userId;
-//            $user->typeId=$request->typeId;
-//            $user->userEmail=$request->userEmail;
-//            $user->password= bcrypt($request->password);
-//            $user->rfId=$request->rfId;
-//            $user->firstName=$request->firstName;
-//            $user->lastName=$request->lastName;
-//            $user->phoneNumber=$request->phoneNumber;
-//            $user->picture=$request->picture;
-//            $user->dob =date('Y-m-d',strtotime($request['dob']));
-//            $user->gender=$request->gender;
-//
-//
-//            $user->save();
-
-
-
-
-	//return $request;
-	//return	dd($ttt->toSql());
        return redirect()->intended('/user-management');
     }
 

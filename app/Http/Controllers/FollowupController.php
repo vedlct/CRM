@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Response;
 use App\User;
 use App\Usertype;
+use App\Followup;
 use Image;
 use Auth;
 
@@ -36,13 +37,14 @@ class FollowupController extends Controller
      */
     public function index()
     {
-        $followups = DB::where('type', 2)table('followup')
+        $followups = DB::table('followup')
+		->where('followUpDate', date('Y-m-d'))
         ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
         ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
         ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
         ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
         ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-        ->select('followup.*', 'users.userId as userId',  'leads.website as website', 'leads.companyName as companyName', 'leads.personName as personName', 'countries.countryName as countryName', 'categories.categoryName as categoryName')
+        ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
         ->paginate(5);
 
         return view('follow-up/index', ['followups' => $followups]);
@@ -57,5 +59,27 @@ class FollowupController extends Controller
     }
 
 
+    /**
+     * Search user from database base on some specific constraints
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *  @return \Illuminate\Http\Response
+     */
+    public function search(Request $request) {
+        $constraints = [
+            'fromdate' => $request['fromdate'],
+            'todate' => $request['todate'],
+            ];
 
+        $followups = DB::table('followup')
+			->whereBetween( 'followUpDate', array($constraints['fromdate'],$constraints['todate']))
+			->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
+			->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+			->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+			->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+			->leftJoin('users', 'users.id', '=', 'leads.minedBy')
+			->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
+			->paginate(5);
+       return view('follow-up/index', ['followups' => $followups, 'searchingVals' => $constraints]);
+    }
 }

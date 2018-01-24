@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Followup extends Model
 {
-    protected $table = 'followup';
     public $timestamps = false;
+    protected $table = 'followup';
+    protected $primaryKey = 'followId';
 }

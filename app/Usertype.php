@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserType extends Model
 {
-     protected $table = 'usertypes';
-     protected $primaryKey = 'typeId';
+    public $timestamps = false;
+    protected $table = 'usertypes';
+    protected $primaryKey = 'typeId';
 }

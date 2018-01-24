@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Notice;
-use Auth;
-use App\Category;
+use App\Usertype;
 
-class NoticeController extends Controller
+class UsertypeController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -25,24 +23,11 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-  /*  public function index()
-    {
-        $notices = Notice::paginate(5);
-        ->leftJoin('city', 'notices.city_id', '=', 'city.id')
-
-        return view('notice/index', ['notices' => $notices]);
-    }*/
-	
-	
     public function index()
     {
-        $notices = DB::table('notices')
-        ->leftJoin('users', 'notices.userId', '=', 'users.id')
-        ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
-        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName')
-        ->paginate(5);
+        $usertypes = Usertype::paginate(5);
 
-        return view('notice/index', ['notices' => $notices]);
+        return view('system-mgmt/usertype/index', ['usertypes' => $usertypes]);
     }
 
     /**
@@ -52,10 +37,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        $categories=Category:: where('type', 2)
-            ->get();
-            return view('notice/create')
-            ->with('categories', $categories);
+        return view('system-mgmt/usertype/create');
     }
 
     /**
@@ -66,15 +48,13 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validateInput($request);
-            DB::table('notices')->insert([
-       //  Notice::create([
-                'msg' => $request['msg'],
-                'categoryId' => $request['categoryId'],
-                'userId' => Auth::user()->id
+        $this->validateInput($request);
+        // Usertype::create([
+        DB::table('usertypes')->insert([
+            'typeName' => $request['typeName'],
         ]);
 
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/usertype');
     }
 
     /**
@@ -96,15 +76,13 @@ class NoticeController extends Controller
      */
     public function edit($id)
     {
-        $notice = Notice::find($id);
-        // Redirect to notice list if updating notice wasn't existed
-        if ($notice == null || count($notice) == 0) {
-            return redirect()->intended('/notice');
+        $usertype = Usertype::find($id);
+        // Redirect to usertype list if updating usertype wasn't existed
+        if ($usertype == null || count($usertype) == 0) {
+            return redirect()->intended('/system-management/usertype');
         }
 
-       $categories = Category:: where('type', 2)
-            ->get();
-        return view('notice/edit', ['notice' => $notice, 'categories' => $categories]);
+        return view('system-mgmt/usertype/edit', ['usertype' => $usertype]);
     }
 
     /**
@@ -116,17 +94,17 @@ class NoticeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $notice = Notice::findOrFail($id);
-    //    $this->validateInput($request);
+        $usertype = Usertype::findOrFail($id);
         $input = [
-            'msg' => $request['msg'],
-            'categoryId' => $request['categoryId'],
-            'userId' => Auth::user()->id
+            'typeName' => $request['typeName']
         ];
-        Notice::where('noticeId', $id)
+        $this->validate($request, [
+        'typeName' => 'required|max:60'
+        ]);
+        Usertype::where('typeId', $id)
             ->update($input);
         
-        return redirect()->intended('notice');
+        return redirect()->intended('system-management/usertype');
     }
 
     /**
@@ -137,27 +115,27 @@ class NoticeController extends Controller
      */
     public function destroy($id)
     {
-        Notice::where('noticeId', $id)->delete();
-         return redirect()->intended('notice');
+        Usertype::where('typeId', $id)->delete();
+         return redirect()->intended('system-management/usertype');
     }
 
     /**
-     * Search notice from database base on some specific constraints
+     * Search usertype from database base on some specific constraints
      *
      * @param  \Illuminate\Http\Request  $request
      *  @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
         $constraints = [
-            'msg' => $request['msg']
+            'typeName' => $request['typeName']
             ];
 
-       $notices = $this->doSearchingQuery($constraints);
-       return view('notice/index', ['notices' => $notices, 'searchingVals' => $constraints]);
+       $usertypes = $this->doSearchingQuery($constraints);
+       return view('system-mgmt/usertype/index', ['usertypes' => $usertypes, 'searchingVals' => $constraints]);
     }
 
     private function doSearchingQuery($constraints) {
-        $query = notice::query();
+        $query = usertype::query();
         $fields = array_keys($constraints);
         $index = 0;
         foreach ($constraints as $constraint) {
@@ -171,7 +149,7 @@ class NoticeController extends Controller
     }
     private function validateInput($request) {
         $this->validate($request, [
-        'msg' => 'required|max:60|unique:notice'
+        'typeName' => 'required|max:60|unique:usertypes'
     ]);
     }
 }

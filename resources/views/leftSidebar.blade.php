@@ -78,10 +78,10 @@
 
                 </li>
 
-                <li>
+               <!-- <li>
                     <a href="newinfo"><i class="fa fa-plus-square"></i>Add Info</a>
 
-                </li>
+                </li>-->
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
@@ -118,6 +118,21 @@
                     <a href="myteam"><i class="fa fa-users"></i>My Team</a>
 
                 </li>
+				
+				<li class="treeview">
+				  <a href="#"><i class="fa fa-link"></i> <span>System Manage</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+				  </a>
+				  <ul class="treeview-menu">
+					<li><a href="{{ url('system-management/country') }}">Country</a></li>
+					<li><a href="{{ url('system-management/category') }}">Category</a></li>
+					<li><a href="{{ url('system-management/usertype') }}">User Type</a></li>
+					<li><a href="{{ url('system-management/possibility') }}">Possibility</a></li>
+					<li><a href="{{ url('system-management/status') }}">Lead Status</a></li>
+				  </ul>
+				</li>
 
 
 

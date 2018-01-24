@@ -65,8 +65,21 @@ Route::post('user-management/search', 'UserManagementController@search')->name('
 Route::resource('follow-up', 'FollowupController');
 Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
-//Route::resource('system-management/userType', 'UserTypeController');
-//Route::post('system-management/userType/search', 'UserTypeController@search')->name('userType.search');
+Route::resource('system-management/country', 'CountryController');
+Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
+
+Route::resource('system-management/category', 'CategoryController');
+Route::post('system-management/category/search', 'CategoryController@search')->name('category.search');
+
+Route::resource('system-management/usertype', 'UsertypeController');
+Route::post('system-management/usertype/search', 'UsertypeController@search')->name('usertype.search');
+
+Route::resource('system-management/possibility', 'PossibilityController');
+Route::post('system-management/possibility/search', 'PossibilityController@search')->name('possibility.search');
+
+Route::resource('system-management/status', 'statusController');
+Route::post('system-management/status/search', 'statusController@search')->name('status.search');
+
 //Route::view('/user-management', 'user-management.index');
 
 
