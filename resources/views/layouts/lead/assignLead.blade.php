@@ -13,10 +13,10 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h4 class="card-title">Assign Lead To User</h4>
+            <h2 class="card-title" align="center">Assign Lead To User</h2>
 
 
-
+            <input type="checkbox" id="selectall" onClick="selectAll(this)" />Select All
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -130,6 +130,11 @@
 
         });
 
+        function selectAll(source) {
+            checkboxes = document.getElementsByName('checkboxvar[]');
+            for(var i in checkboxes)
+                checkboxes[i].checked = source.checked;
+        }
 
 
 

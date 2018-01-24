@@ -32,6 +32,10 @@
 
                 </li>
 
+                <li>
+                    <a href="{{route('starLeads')}}"><i class="fa fa-star"></i>Star Leads</a>
+                </li>
+
 
                 <li>
                     <a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i>Test List</a>
@@ -68,10 +72,6 @@
 
                 </li>
 
-                <li>
-                    <a href="starleads"><i class="fa fa-star"></i>Star Leads</a>
-
-                </li>
 
                 <li>
                     <a href="newinfo"><i class="fa fa-plus-square"></i>Add Info</a>
@@ -86,13 +86,7 @@
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>Notice</a>
 
-                   
-
-
                 </li>
-
-
-
 
                 <li>
                     <a href="leaves"><i class="mdi mdi-bullseye"></i>Leave Show</a>
@@ -101,7 +95,7 @@
 
 
                 <li>
-                    <a href="myteam"><i class="fa fa-users"></i>My Team</a>
+                    <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>My Team</a>
 
                 </li>
 

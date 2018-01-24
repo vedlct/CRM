@@ -9,7 +9,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center">My List</h2>
+            <h2 class="card-title" align="center">Star Leads</h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -43,7 +43,7 @@
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}">
-                                <i class="fa fa-phone" aria-hidden="true"></i></a>
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
 
                                 <!-- Trigger the Edit modal with a button -->
                                 <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -95,33 +95,33 @@
 
                     <div class="row">
 
-                    <div class="col-md-4">
-                        <input type="hidden" name="leadId">
-                        <label>Company Name:</label>
-                        <input type="text" class="form-control" name="companyName" value="">
-                    </div>
+                        <div class="col-md-4">
+                            <input type="hidden" name="leadId">
+                            <label>Company Name:</label>
+                            <input type="text" class="form-control" name="companyName" value="">
+                        </div>
 
-                    <div class="col-md-4">
-                        <label>Email:</label>
-                        <input type="email" class="form-control" name="email" value="">
-                    </div>
-
-
-                    <div class="col-md-4">
-                        <label>Contact Person:</label>
-                        <input type="text" class="form-control" name="personName" value=""> <br><br><br>
-                    </div>
+                        <div class="col-md-4">
+                            <label>Email:</label>
+                            <input type="email" class="form-control" name="email" value="">
+                        </div>
 
 
-                    <div class="col-md-4">
-                        <label>Number:</label>
-                        <input type="text" class="form-control" name="number" value="">
-                    </div>
+                        <div class="col-md-4">
+                            <label>Contact Person:</label>
+                            <input type="text" class="form-control" name="personName" value=""> <br><br><br>
+                        </div>
 
-                    <div class="col-md-4">
-                        <label>Website:</label>
-                        <input type="text" class="form-control" name="website" value=""> <br><br><br>
-                    </div>
+
+                        <div class="col-md-4">
+                            <label>Number:</label>
+                            <input type="text" class="form-control" name="number" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Website:</label>
+                            <input type="text" class="form-control" name="website" value=""> <br><br><br>
+                        </div>
 
                         <div class="col-md-6">
                             <button class="btn btn-success" type="submit">Update</button>
@@ -129,7 +129,7 @@
 
 
                         <div class="col-md-6" style="">
-                        <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
+                            <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
                         </div>
                     </div>
 
@@ -171,32 +171,32 @@
                     <input type="hidden" name="leadId">
                     <div class="row" >
 
-                    <div class="col-md-4">
-                        <label ><b>Calling Report : </b></label>
-                        <select class="form-control" name="report" required>
-                            <option value=""><b>(select one)</b></option>
+                        <div class="col-md-4">
+                            <label ><b>Calling Report : </b></label>
+                            <select class="form-control" name="report" required>
+                                <option value=""><b>(select one)</b></option>
 
-                            @foreach($callReports as $report)
-                                <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-                            @endforeach
-                        </select>
+                                @foreach($callReports as $report)
+                                    <option value="{{$report->callingReportId}}">{{$report->report}}</option>
+                                @endforeach
+                            </select>
 
-                    </div>
+                        </div>
 
-                    <div class="col-md-4">
-                        <label ><b>Response : </b></label>
-                        <input class="form-control" placeholder="insert the response" name="response" required>
-                    </div>
+                        <div class="col-md-4">
+                            <label ><b>Response : </b></label>
+                            <input class="form-control" placeholder="insert the response" name="response" required>
+                        </div>
 
-                    <div class=" col-md-4">
-                        <label ><b>Progress : </b></label>
-                        <select class="form-control" name="progress" required>
-                            <option value=""><b>(select one)</b></option>
-                            <option value="Test job">Test job</option>
-                            <option value="Closing">Closing</option>
-                        </select>
+                        <div class=" col-md-4">
+                            <label ><b>Progress : </b></label>
+                            <select class="form-control" name="progress" required>
+                                <option value=""><b>(select one)</b></option>
+                                <option value="Test job">Test job</option>
+                                <option value="Closing">Closing</option>
+                            </select>
                             <br><br>
-                    </div>
+                        </div>
 
 
                         <div class="col-md-4">
@@ -215,21 +215,21 @@
                             </select>
                         </div>
 
-                    <div class="col-md-6">
-                        <label class=""><b>Comment : </b></label>
-                        <textarea class="form-control" rows="3" name="comment" required></textarea>
-                        <br>
-                    </div>
+                        <div class="col-md-6">
+                            <label class=""><b>Comment : </b></label>
+                            <textarea class="form-control" rows="3" name="comment" required></textarea>
+                            <br>
+                        </div>
 
                         <ul class="col-md-6 list-group"><br>
-                            <div  style="height: 140px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                            <div  style="height: 120px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
                             </div>
                         </ul>
 
-                    <div class="col-md-12"><br>
+                        <div class="col-md-12"><br>
                             <button class="btn btn-success">Submit</button>
-                    </div>
+                        </div>
 
 
                     </div></div>
@@ -237,7 +237,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-                </form>
+            </form>
         </div>
     </div>
 
@@ -307,7 +307,7 @@
 
 
             $('#possibility').val(possibility);
-           //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
+            //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({
                 type : 'post' ,

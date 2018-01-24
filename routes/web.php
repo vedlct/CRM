@@ -18,14 +18,14 @@ Route::get('/', 'Auth\LoginController@mainLogin');
 
 Route::view('/clients', 'layouts.clients')->name('clients');
 Route::view('/leads', 'layouts.leads');
-Route::view('/starleads', 'layouts.starLeads');
+
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
 //Route::view('/reports', 'layouts.reports');
 //Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
-Route::view('/myteam', 'layouts.myTeam');
+
 Route::view('/profile', 'layouts.profile');
 
 
@@ -71,8 +71,9 @@ Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.se
 
 
 
-//Lead
 
+
+//Lead
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
@@ -100,5 +101,17 @@ Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
 
 
 //testList
-Route::get('/testlist', 'TestController@index')->name('testlist');
+Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
 Route::get('/modal', 'TestController@modal')->name('modal');
+
+
+//Star Lead
+Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
+
+
+
+//My Team
+Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
+
+//Assign Team
+
