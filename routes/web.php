@@ -15,17 +15,17 @@
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
-Route::view('/testlist', 'layouts.testList')->name('testlist');
+
 Route::view('/clients', 'layouts.clients')->name('clients');
 Route::view('/leads', 'layouts.leads');
-Route::view('/starleads', 'layouts.starLeads');
+
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
 
-Route::view('/reports', 'layouts.reports');
+//Route::view('/reports', 'layouts.reports');
 //Route::view('/notices', 'layouts.notices');
 Route::view('/leaves', 'layouts.leaves');
-Route::view('/myteam', 'layouts.myTeam');
+
 Route::view('/profile', 'layouts.profile');
 
 
@@ -44,7 +44,7 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 
 
 Route::view('/lead', 'layouts.lead.add');
-Route::get('/assignreport', 'UserController@test');
+//Route::get('/assignreport', 'UserController@test');
 
 
 
@@ -84,8 +84,9 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 
 
 
-//Lead
 
+
+//Lead
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
@@ -103,10 +104,27 @@ Route::post('lead/ajax','LeadController@ajax')->name('ajax');
 
 //My List Lead
 Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assignedLeads');
-Route::get('lead/report/{id}', 'LeadController@report')->name('report');
+//Route::get('lead/report/{id}', 'LeadController@report')->name('report');
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 
 
 //Leave Lead
 Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+
+
+//testList
+Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
+Route::get('/modal', 'TestController@modal')->name('modal');
+
+
+//Star Lead
+Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
+
+
+
+//My Team
+Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
+
+//Assign Team
+

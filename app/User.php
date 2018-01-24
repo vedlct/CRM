@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+
 
 class User extends Authenticatable
 {
@@ -30,8 +32,12 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function usertype(){
+    public function userType(){
+        return $this->belongsTo(Usertype::class,'typeId','typeId');
+    }
 
-       return $this->belongsTo(Usertype::class,'typeId','typeId');
+    public function team(){
+     return $this->belongsTo(Team::class,'teamId','teamId');
+
     }
 }
