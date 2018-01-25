@@ -4,7 +4,7 @@
 
 @section('header')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
-    @endsection
+@endsection
 @section('content')
 
 
@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
+            <h2 class="card-title" align="center"><b>Assign team To User</b></h2>
 
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" />Select All
@@ -23,43 +23,28 @@
                     <tr>
 
                         <th>Select</th>
-                        <th>Company Name</th>
-                        <th>Category</th>
-                        <th>Website</th>
+                        <th>User Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Gender</th>
+                        <th>Phone Number</th>
                         <th>Email</th>
-                        <th>Country</th>
-                        <th>Comments</th>
-                        <th>Mined By</th>
-                        <th>Created At</th>
-                        <th>Delete</th>
 
                     </tr>
                     </thead>
                     <tbody>
 
 
-                    @foreach($leads as $lead)
+                    @foreach($users as $user)
                         <tr>
-                            <td><input type='checkbox' class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
-                            <td>{{$lead->companyName}}</td>
-                            <td>{{$lead->category->categoryName}}</td>
-                            <td>{{$lead->website}}</td>
-                            <td>{{$lead->email}}</td>
-                            <td>{{$lead->country->countryName}}</td>
-                            <td>{{$lead->comments}}</td>
-                            <td>{{$lead->mined->firstName}}</td>
-                            <td>{{$lead->created_at}}</td>
+                            <td><input type='checkbox' class="checkboxvar" name="checkboxvar[]" value="{{$user->id}}"></td>
+                            <td>{{$user->userId}}</td>
+                            <td>{{$user->firstName}}</td>
+                            <td>{{$user->lastName}}</td>
+                            <td>{{$user->gender}}</td>
+                            <td>{{$user->phoneNumber}}</td>
+                            <td>{{$user->userEmail}}</td>
 
-
-
-                            <td>
-                                <form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">
-                                    {{csrf_field()}}
-                                    {{ method_field('DELETE') }}
-
-                                <button type="submit" class="btn btn-danger btn-sm">
-
-                                    <i class="fa fa-trash"></i></button></form></td>
                         </tr>
                     @endforeach
 
@@ -72,11 +57,11 @@
 
 
                 {{--<div class="form-group col-md-5">--}}
-                <label ><b>Select Name:</b></label>
+                <label style="color:green;"><b>Select Team :</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
-                    @foreach($users as $user)
-                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+                    @foreach($teams as $team)
+                        <option value="{{$team->teamId}}">{{$team->teamName}}</option>
 
                     @endforeach
 
@@ -84,17 +69,62 @@
                 </select>
             </div>
 
-            <input type="hidden" class="form-control" id="inp" name="leadId">
+            <input type="hidden" class="form-control" id="inp" name="teamId">
 
 
         </div>
 
 
-        </div>
     </div>
 
 
 
+
+    <div class="card" style="padding:10px;">
+        <div class="card-body">
+            <h2 class="card-title" align="center"><b>Assigned Team Members</b></h2>
+
+            <div class="table-responsive m-t-40">
+                <table id="myTable2" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+
+                        <th>User Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Team Name</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    @foreach($userAssigneds as $user)
+                        <tr>
+                            <td>{{$user->userId}}</td>
+                            <td>{{$user->firstName}}</td>
+                            <td>{{$user->lastName}}</td>
+                            <td>{{$user->phoneNumber}}</td>
+                            <td>{{$user->userEmail}}</td>
+                            <td> {{$user->teamName}}</td>
+
+
+                        </tr>
+
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    {{--@foreach($userAssigneds as $user)--}}
+        {{--{{$user->teamName}}--}}
+
+    {{--@endforeach--}}
 
 @endsection
 
@@ -122,11 +152,8 @@
 
 
         $(document).ready(function() {
-             datatable= $('#myTable').DataTable(
-                {
-                    "order": [[ 7, "desc" ]]
-                }
-            );
+            datatable= $('#myTable').DataTable();
+            datatable= $('#myTable2').DataTable();
 
         });
 
@@ -142,7 +169,7 @@
         $("#otherCatches").change(function() {
 
             var chkArray = [];
-            var userId=$(this).val();
+            var teamId=$(this).val();
             $('.checkboxvar:checked').each(function (i) {
 
                 chkArray[i] = $(this).val();
@@ -155,16 +182,14 @@
 
             $.ajax({
                 type : 'post' ,
-                url : '{{route('assignStore')}}',
-                data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+                url : '{{route('teamAssign')}}',
+                data : {_token: CSRF_TOKEN,'userId':chkArray,'teamId':teamId} ,
                 success : function(data){
                     console.log(data);
                     if(data == 'true'){
+                        alert(' Successfully! Assigned');
+                        location.reload();
                         $('#myTable').load(document.URL +  ' #myTable');
-//                        $.alert({
-//                            title: 'Success!',
-//                            content: 'successfully assigned!',
-//                        });
                         $('#alert').html(' <strong>Success!</strong> Assigned');
                         $('#alert').show();
                     }

@@ -5,11 +5,14 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use App\Team;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 
-class User extends Authenticatable
+class User extends Model
 {
     use Notifiable;
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -36,8 +39,9 @@ class User extends Authenticatable
         return $this->belongsTo(Usertype::class,'typeId','typeId');
     }
 
-    public function team(){
-     return $this->belongsTo(Team::class,'teamId','teamId');
+
+    public function teams(){
+      return $this->belongsTo(Team::class,'teamId','teamId');
 
     }
 }

@@ -9,6 +9,8 @@ use App\Usertype;
 use App\Followup;
 use Image;
 use Auth;
+use App\Callingreport;
+use App\Possibility;
 
 
 class FollowupController extends Controller
@@ -45,9 +47,13 @@ class FollowupController extends Controller
         ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
         ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
         ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-        ->paginate(5);
+        ->get();
+		
+		  $callReports=Callingreport::get();
+		 /// return $callReports;
+            $possibilities=Possibility::get();
 
-        return view('follow-up/index', ['followups' => $followups]);
+        return view('follow-up/index', ['followups' => $followups, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
 
 

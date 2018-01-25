@@ -135,42 +135,6 @@ class UserManagementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-//    public function update(Request $request, $id)
-//    {
-//        $user = User::findOrFail($id);
-//        $constraints = [
-//            'userId' => 'required|max:20',
-//            'firstName'=> 'required|max:60',
-//            'lastName' => 'required|max:60'
-//            ];
-//        $input = [
-//            'userId' => $request['userId'],
-//            'typeId' => $request['typeId'],
-//            'userEmail' => $request['userEmail'],
-//         //   'password' => bcrypt($request['password']),
-//            'rfID' => $request['rfID'],
-//            'firstName' => $request['firstName'],
-//            'lastName' => $request['lastName'],
-//            'phoneNumber' => $request['phoneNumber'],
-//           // 'picture' => $request['picture'],
-//            'dob' => date('Y-m-d',strtotime($request['dob'])),
-//            'gender' => $request['gender'],
-//            'active' => $request['active'],
-//        ];
-//        if ($request['password'] != null && strlen($request['password']) > 0) {
-//            $constraints['password'] = 'required|min:6|confirmed';
-//            $input['password'] =  bcrypt($request['password']);
-//        }
-//        if ($request->file('picture')) {
-//            $path = $request->file('picture')->store('avatars');
-//            $input['picture'] = $path;
-//        }
-//        $this->validate($request, $constraints);
-//        User::where('id', $id)
-//            ->update($input);
-//
-//        return redirect()->intended('/user-management');
-//    }
 
     public function update(Request $request, $id)
     {
@@ -185,10 +149,6 @@ class UserManagementController extends Controller
             $constraints['password'] = 'required|min:6|confirmed';
             $input['password'] =  bcrypt($request['password']);
         }
-//        if ($request->file('picture')) {
-//            $path = $request->file('picture')->store('img');
-//            $input['picture'] = $path;
-//        }
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
