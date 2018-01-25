@@ -239,4 +239,21 @@ class UserManagementController extends Controller
 
         return $queryInput;
     }
+
+
+
+
+    public function settings(){
+
+        return view('users-mgmt.accountSetting');
+    }
+
+
+    public function changePass(Request $r){
+
+
+        return Response($r);
+    }
+
+
 }

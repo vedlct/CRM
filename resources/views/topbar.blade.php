@@ -109,7 +109,7 @@
 
 
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li><a href="{{route('accountSetting')}}"><i class="ti-settings"></i> Account Setting</a></li>
                             <li role="separator" class="divider"></li>
                             <li>
 
@@ -127,8 +127,7 @@
 
 
 
-
-                                </li>
+                            </li>
                         </ul>
                     </div>
                 </li>

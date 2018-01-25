@@ -130,3 +130,11 @@ Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 Route::get('/teammanagement','TeamController@teamManagement')->name('teamManagement');
 Route::post('/teammanagement','TeamController@teamAssign')->name('teamAssign');
 
+
+
+
+
+
+//Account Setting
+Route::get('/settings','UserManagementController@settings')->name('accountSetting');
+Route::post('/settings','UserManagementController@changePass')->name('changePass');
