@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Psr7\Response;
+
 use Illuminate\Http\Request;
 use App\Team;
 use App\User;
 use Auth;
-use Mockery\Exception;
+use App\DB;
 
 class TeamController extends Controller
 {
@@ -28,12 +28,19 @@ class TeamController extends Controller
 
     public function teamManagement()
     {
-        $users = User::where('teamId', null)->get();
-        $teams = Team::get();
+                $users = User::where('teamId', null)->get();
+                $teams = Team::with('user')->get();
+                $userAssigneds=User::where('users.teamId','!=',null)
+                    ->leftJoin('teams','users.teamId','=','teams.teamId')->get();
 
-        return view('layouts.Team.teamManagement')
-            ->with('users', $users)
-            ->with('teams', $teams);
+                return view('layouts.Team.teamManagement')
+                    ->with('users', $users)
+                    ->with('teams', $teams)
+                    ->with('userAssigneds',$userAssigneds);
+
+
+
+
     }
 
     public function teamAssign(Request $r)

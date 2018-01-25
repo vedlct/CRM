@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center">Assign Lead To User</h2>
+            <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
 
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" />Select All

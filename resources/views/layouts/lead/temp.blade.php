@@ -11,7 +11,7 @@
 
     <div class="card" style="padding: 2px;">
         <div class="card-body">
-            <h2 class="card-title" align="center">Temp Leads</h2>
+            <h2 class="card-title" align="center"><b>Temp Leads</b></h2>
 
             <div class="table-responsive m-t-40" >
                 <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">

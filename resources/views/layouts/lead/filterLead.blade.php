@@ -8,7 +8,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center">Filtered Lead</h2>
+            <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

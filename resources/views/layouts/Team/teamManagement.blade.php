@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center">Assign Lead To User</h2>
+            <h2 class="card-title" align="center"><b>Assign team To User</b></h2>
 
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" />Select All
@@ -57,7 +57,7 @@
 
 
                 {{--<div class="form-group col-md-5">--}}
-                <label ><b>Select Team :</b></label>
+                <label style="color:green;"><b>Select Team :</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
                     @foreach($teams as $team)
@@ -69,17 +69,62 @@
                 </select>
             </div>
 
-            <input type="hidden" class="form-control" id="inp" name="leadId">
+            <input type="hidden" class="form-control" id="inp" name="teamId">
 
 
         </div>
 
 
     </div>
+
+
+
+
+    <div class="card" style="padding:10px;">
+        <div class="card-body">
+            <h2 class="card-title" align="center"><b>Assigned Team Members</b></h2>
+
+            <div class="table-responsive m-t-40">
+                <table id="myTable2" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+
+                        <th>User Id</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Team Name</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    @foreach($userAssigneds as $user)
+                        <tr>
+                            <td>{{$user->userId}}</td>
+                            <td>{{$user->firstName}}</td>
+                            <td>{{$user->lastName}}</td>
+                            <td>{{$user->phoneNumber}}</td>
+                            <td>{{$user->userEmail}}</td>
+                            <td> {{$user->teamName}}</td>
+
+
+                        </tr>
+
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
+    </div>
+    {{--@foreach($userAssigneds as $user)--}}
+        {{--{{$user->teamName}}--}}
 
-
+    {{--@endforeach--}}
 
 @endsection
 
@@ -108,6 +153,7 @@
 
         $(document).ready(function() {
             datatable= $('#myTable').DataTable();
+            datatable= $('#myTable2').DataTable();
 
         });
 
@@ -141,6 +187,8 @@
                 success : function(data){
                     console.log(data);
                     if(data == 'true'){
+                        alert(' Successfully! Assigned');
+                        location.reload();
                         $('#myTable').load(document.URL +  ' #myTable');
                         $('#alert').html(' <strong>Success!</strong> Assigned');
                         $('#alert').show();
