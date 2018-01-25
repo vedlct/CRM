@@ -1,10 +1,6 @@
-
-
 @extends('main')
 
-
 @section('content')
-
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
@@ -20,7 +16,6 @@
                         <th>Contact Person</th>
                         <th>AssignBy</th>
                         <th>AssignTo</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -44,38 +39,19 @@
             </div>
         </div>
     </div>
-
-
-
-
 @endsection
 
 @section('foot-js')
-
     <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-
-
-
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-
-
-
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-
-
     <script>
-
-
         $(document).ready(function() {
             $('#myTable').DataTable();
 
         });
-
-
-
-
     </script>
 
 

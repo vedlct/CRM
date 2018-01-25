@@ -25,7 +25,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $countries = Country::paginate(5);
+        $countries = Country::get();
 
         return view('system-mgmt/country/index', ['countries' => $countries]);
     }
@@ -146,7 +146,7 @@ class CountryController extends Controller
 
             $index++;
         }
-        return $query->paginate(5);
+        return $query;//->paginate(5);
     }
     private function validateInput($request) {
         $this->validate($request, [

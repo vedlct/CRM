@@ -22,14 +22,14 @@
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
             <thead>
               <tr role="row">
-                <th width="70%" class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Notice: activate to sort column ascending">Notice Name</th>
-                <th width="10%" class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Notice: activate to sort column ascending">Category</th>
-				<th tabindex="0" aria-controls="example2" rowspan="1" colspan="2" aria-label="Action: activate to sort column ascending">Action</th>
+                <th>Notice Name</th>
+                <th>Category</th>
+				<th>Action</th>
               </tr>
             </thead>
             <tbody>
             @foreach ($notices as $notice)
-                <tr role="row" class="odd">
+                <tr>
                   <td>{{ $notice->msg }} </br><small><font color="blue">Uploaded By: {{ $notice->userId }} &nbsp; &nbsp; &nbsp; Uploaded Time: {{ $notice->created_at }}</font></small></td>
                   <td>{{ $notice->categoryName }}</td>
                   <td>
@@ -50,16 +50,22 @@
           </table>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-5">
-          <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to {{count($notices)}} of {{count($notices)}} entries</div>
-        </div>
-        <div class="col-sm-7">
-          <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-            {{ $notices->links() }}
-          </div>
-        </div>
-      </div>
+
+		@section('foot-js')
+			<script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+			<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+			<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+
+			<script>
+				$(document).ready(function() {
+					$('#myTable').DataTable();
+
+				});
+			</script>
+
+
+		@endsection
     </div>
   </div>
   <!-- /.box-body -->
