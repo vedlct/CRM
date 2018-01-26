@@ -220,7 +220,7 @@ class LeadController extends Controller
                 'leadId'=>'required',
                 'report' => 'required',
                 'comment' => 'required|max:300',
-                
+
             ]);
             if($r->followup !=null){
                 $followUp=New Followup;

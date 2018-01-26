@@ -9,6 +9,7 @@ use App\User;
 use App\Usertype;
 use Image;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserManagementController extends Controller
@@ -250,9 +251,17 @@ class UserManagementController extends Controller
 
 
     public function changePass(Request $r){
+        $user=User::findOrFail(Auth::user()->id);
+        $currentPass= Hash::make($r->currentPassword);
+        $newPass=Hash::make($r->password);
+        if(Hash::check($r->currentPassword, $user->password)){
+            return "true";
+        }
 
 
-        return Response($r);
+
+
+         return "not matched";
     }
 
 
