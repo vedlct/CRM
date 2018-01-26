@@ -126,13 +126,19 @@ Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 
-//Assign Team
+//Add and edit team
+Route::get('/team/add', 'TeamController@addTeam')->name('addTeam');
+Route::post('/team/add', 'TeamController@insertTeam')->name('insertTeam');
+Route::delete('/team/delete/{id}', 'TeamController@deleteTeam')->name('deleteTeam');
+
+
+
+//Assign member to the Team
 Route::get('/teammanagement','TeamController@teamManagement')->name('teamManagement');
 Route::post('/teammanagement','TeamController@teamAssign')->name('teamAssign');
 
-
-
-
+//Remove From Team
+Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('removeUser');
 
 
 //Account Setting

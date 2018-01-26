@@ -11,7 +11,11 @@
 
 
 
-    <div class="card" style="padding:10px;">
+    <div class="card" style="padding:5%;">
+        <div style="max-width: 50px; ">
+        <a href="{{route('addTeam')}}" class="btn btn-info btn-sm">Add Team</a>
+        </div>
+
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Assign team To User</b></h2>
 
@@ -80,7 +84,7 @@
 
 
 
-    <div class="card" style="padding:10px;">
+    <div class="card" style="padding:5%;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Assigned Team Members</b></h2>
 
@@ -95,6 +99,7 @@
                         <th>Phone Number</th>
                         <th>Email</th>
                         <th>Team Name</th>
+                        <th>Remove</th>
 
                     </tr>
                     </thead>
@@ -108,6 +113,11 @@
                             <td>{{$user->phoneNumber}}</td>
                             <td>{{$user->userEmail}}</td>
                             <td> {{$user->teamName}}</td>
+                            <td><form method="post" action="{{route('removeUser')}}">
+                                    {{@csrf_field()}}
+                                    <input type="hidden" value="{{$user->id}}" name="id">
+                                <button style="border-radius: 50%;" type="submit" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></button>
+                                </form></td>
 
 
                         </tr>
