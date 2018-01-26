@@ -9,6 +9,7 @@
 			  @endcomponent
 			@endcomponent
 		  </form>
+
   <div class="box-body">
     <div class="card" style="padding: 2px;">
         <div class="card-body">

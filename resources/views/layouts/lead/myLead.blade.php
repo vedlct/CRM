@@ -183,14 +183,11 @@
 
                     </div>
 
-                    <div class="col-md-4">
-                        <label ><b>Response : </b></label>
-                        <input class="form-control" placeholder="insert the response" name="response" required>
-                    </div>
+
 
                     <div class=" col-md-4">
                         <label ><b>Progress : </b></label>
-                        <select class="form-control" name="progress" required>
+                        <select class="form-control" name="progress" >
                             <option value=""><b>(select one)</b></option>
                             <option value="Test job">Test job</option>
                             <option value="Closing">Closing</option>

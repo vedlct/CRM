@@ -86,17 +86,34 @@ class TeamController extends Controller
     public function insertTeam(Request $r){
         $this->validate($r,[
             'teamName'=>'required|max:50|unique:teams,teamName'
-
         ]);
-
-        return $r;
+        $team=new Team;
+        $team->teamName=$r->teamName;
+        $team->save();
+        Session::flash('message', 'Team Added successfully');
+        return back();
     }
 
 
     public function deleteTeam($id){
+        $team=Team::findOrFail($id);
+        $team->delete();
+        Session::flash('message', 'Team Deleted successfully');
+        return back();
+    }
 
+    public function teamUpdate(Request $r){
+        $this->validate($r,[
+            'teamName'=>'required|max:50|unique:teams,teamName',
+            'teamId'=>'required'
+        ]);
 
-        return $id;
+        $team=Team::findOrFail($r->teamId);
+        $team->teamName=$r->teamName;
+        $team->save();
+        Session::flash('message', 'Team Updated successfully');
+        return back();
+
     }
 
 }

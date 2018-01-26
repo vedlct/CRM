@@ -63,7 +63,7 @@ Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
 Route::resource('follow-up', 'FollowupController');
-Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
+
 
 Route::resource('system-management/country', 'CountryController');
 Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
@@ -82,7 +82,8 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 
 //Route::view('/user-management', 'user-management.index');
 
-
+//Search bettween dates
+Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 
 
@@ -130,6 +131,7 @@ Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 Route::get('/team/add', 'TeamController@addTeam')->name('addTeam');
 Route::post('/team/add', 'TeamController@insertTeam')->name('insertTeam');
 Route::delete('/team/delete/{id}', 'TeamController@deleteTeam')->name('deleteTeam');
+Route::put('/team/update','TeamController@teamUpdate')->name('teamUpdate');
 
 
 

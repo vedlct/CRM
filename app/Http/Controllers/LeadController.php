@@ -142,7 +142,8 @@ class LeadController extends Controller
 
 
         public function filter(){
-            $leads=Lead::with('assigned')->where('statusId', 2)->get();
+//            $leads=Lead::with('assigned')->where('statusId', 2)->get();
+            $leads=(new Lead())->showAssignedLeads();
             return view('layouts.lead.filterLead')->with('leads',$leads);
         }
 
@@ -218,9 +219,8 @@ class LeadController extends Controller
             $this->validate($r,[
                 'leadId'=>'required',
                 'report' => 'required',
-                'response' => 'required|max:45',
                 'comment' => 'required|max:300',
-                'progress' => 'required|max:100',
+                
             ]);
             if($r->followup !=null){
                 $followUp=New Followup;
@@ -248,7 +248,7 @@ class LeadController extends Controller
 
             $progress=New Workprogress;
             $progress->callingReport=$r->report;
-            $progress->response=$r->response;
+//            $progress->response=$r->response;
             $progress->leadId=$r->leadId;
             $progress->progress=$r->progress;
             $progress->userId=Auth::user()->id;
