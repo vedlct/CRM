@@ -364,6 +364,8 @@ class LeadController extends Controller
 
         public function leaveLead($id){
 
+
+
                 $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)
