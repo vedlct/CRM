@@ -98,7 +98,7 @@ class FollowupController extends Controller
         /// return $callReports;
         $possibilities=Possibility::get();
 
-        Session::flash('message', 'From '.$request->fromdate.' to '.$request->todate);
+        Session::flash('message', '=============From '.$request->fromdate.' To '.$request->todate.'============');
 
         return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
