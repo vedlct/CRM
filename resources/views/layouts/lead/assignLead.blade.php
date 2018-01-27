@@ -16,7 +16,7 @@
             <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
 
 
-            <input type="checkbox" id="selectall" onClick="selectAll(this)" />Select All
+
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -67,7 +67,7 @@
                 </table>
             </div>
 
-
+            <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
             <div class="form-group">
 
 

@@ -246,8 +246,10 @@ class UserManagementController extends Controller
 
 
     public function settings(){
+        $user=User::findOrFail(Auth::user()->id);
 
-        return view('users-mgmt.accountSetting');
+        return view('users-mgmt.accountSetting')
+                ->with('user',$user);
     }
 
 
