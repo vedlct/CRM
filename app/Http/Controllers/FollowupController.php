@@ -11,6 +11,7 @@ use Image;
 use Auth;
 use App\Callingreport;
 use App\Possibility;
+use Session;
 
 
 class FollowupController extends Controller
@@ -72,20 +73,28 @@ class FollowupController extends Controller
      *  @return \Illuminate\Http\Response
      */
     public function search(Request $request) {
-        $constraints = [
-            'fromdate' => $request['fromdate'],
-            'todate' => $request['todate'],
-            ];
 
         $followups = DB::table('followup')
-			->whereBetween( 'followUpDate', array($constraints['fromdate'],$constraints['todate']))
-			->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
-			->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
-			->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
-			->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-			->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-			->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-			->paginate(5);
-       return view('follow-up/index', ['followups' => $followups, 'searchingVals' => $constraints]);
+            ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
+            ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+            ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+            ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
+            ->where('followup.userId',Auth::user()->id)
+            ->whereBetween('followup.followUpDate', [$request->fromdate, $request->todate])
+            ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
+            ->get();
+
+
+//        $followups= Followup::where('userId',Auth::user()->id)
+//                ->whereBetween('followUpDate', [$request->fromdate, $request->todate])->get();
+
+        $callReports=Callingreport::get();
+        /// return $callReports;
+        $possibilities=Possibility::get();
+
+        Session::flash('message', 'From '.$request->fromdate.' to '.$request->todate);
+
+        return view('follow-up/index', ['followups' => $followups, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
 }

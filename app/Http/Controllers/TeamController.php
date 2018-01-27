@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Session;
 use App\Team;
 use App\User;
 use Auth;
@@ -62,5 +63,57 @@ class TeamController extends Controller
             }
 
         }
+
+
+
+    public function removeUser(Request $r){
+        $user= User::findOrFail($r->id);
+        $user->teamId=null;
+        $user->save();
+        Session::flash('message', 'User Removed successfully');
+        return back();
+    }
+
+
+    public function addTeam(){
+        $teams=Team::get();
+
+        return view('layouts.team.addTeam')
+                ->with('teams',$teams);
+    }
+
+
+    public function insertTeam(Request $r){
+        $this->validate($r,[
+            'teamName'=>'required|max:50|unique:teams,teamName'
+        ]);
+        $team=new Team;
+        $team->teamName=$r->teamName;
+        $team->save();
+        Session::flash('message', 'Team Added successfully');
+        return back();
+    }
+
+
+    public function deleteTeam($id){
+        $team=Team::findOrFail($id);
+        $team->delete();
+        Session::flash('message', 'Team Deleted successfully');
+        return back();
+    }
+
+    public function teamUpdate(Request $r){
+        $this->validate($r,[
+            'teamName'=>'required|max:50|unique:teams,teamName',
+            'teamId'=>'required'
+        ]);
+
+        $team=Team::findOrFail($r->teamId);
+        $team->teamName=$r->teamName;
+        $team->save();
+        Session::flash('message', 'Team Updated successfully');
+        return back();
+
+    }
 
 }

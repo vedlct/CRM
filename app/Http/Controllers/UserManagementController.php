@@ -9,6 +9,8 @@ use App\User;
 use App\Usertype;
 use Image;
 use Auth;
+use Session;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserManagementController extends Controller
@@ -251,8 +253,26 @@ class UserManagementController extends Controller
 
     public function changePass(Request $r){
 
+        $this->validate($r,[
+            'currentPassword' => 'required|min:6',
+            'password' => 'required|min:6',
 
-        return Response($r);
+        ]);
+        $user=User::findOrFail(Auth::user()->id);
+        $currentPass= Hash::make($r->currentPassword);
+        $newPass=Hash::make($r->password);
+        if(Hash::check($r->currentPassword, $user->password)){
+            $user->password= $newPass;
+            $user->save();
+            Session::flash('message', 'Password Changed successfully');
+            return back();
+        }
+
+
+
+
+        Session::flash('message', 'Password did not match');
+        return back();
     }
 
 

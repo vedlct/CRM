@@ -43,7 +43,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route('clients')}}"><i class="fa fa-user-circle-o"></i>Clients</a>
+                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i>Contacted</a>
 
                 </li>
 
@@ -60,10 +60,6 @@
 
 
                 <li>
-                    <a href="leads"><i class="fa fa-briefcase"></i>Leads</a>
-
-                </li>
-                <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i>Temp Leads</a>
 
                 </li>
@@ -73,10 +69,10 @@
                 </li>
 
 
-               <!-- <li>
-                    <a href="newinfo"><i class="fa fa-plus-square"></i>Add Info</a>
+                <li>
+                    <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>Rejected Leads</a>
 
-                </li>-->
+                </li>
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>

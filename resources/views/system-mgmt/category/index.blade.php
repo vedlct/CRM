@@ -2,7 +2,9 @@
 
 @section('content')
   <div class="box-body">
+
     <div class="card" style="padding: 2px; max-width:50%; ">
+
         <div class="card-body">
 			<h2 style="display: inline-block; margin: 0px 50px;">List of category</h2>
 			<button class="btn btn-success" onclick="#edit_modal"><i class="glyphicon glyphicon-plus"></i> Add Category</button>

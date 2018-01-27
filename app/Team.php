@@ -8,6 +8,7 @@ class Team extends Model
 {
     protected $table = 'teams';
    protected $primaryKey = 'teamId';
+    public $timestamps = false;
 
 
     public function user()

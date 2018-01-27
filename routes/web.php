@@ -16,8 +16,7 @@ Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
 
-Route::view('/clients', 'layouts.clients')->name('clients');
-Route::view('/leads', 'layouts.leads');
+
 
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
@@ -36,7 +35,7 @@ Route::view('/test', 'test');
 
 Auth::routes();
 
-Route::get('/dashboard', 'HomeController@index')->name('home');
+
 
 /*Route::get('/home',function (){
     return redirect('/dashboard');
@@ -51,6 +50,8 @@ Route::view('/lead', 'layouts.lead.add');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('home');
+
 
 
 
@@ -63,7 +64,7 @@ Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
 Route::resource('follow-up', 'FollowupController');
-Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
+
 
 Route::resource('system-management/country', 'CountryController');
 Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
@@ -83,7 +84,8 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 
 //Route::view('/user-management', 'user-management.index');
 
-
+//Search bettween dates
+Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 
 
@@ -122,18 +124,31 @@ Route::get('/modal', 'TestController@modal')->name('modal');
 //Star Lead
 Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 
+//Contacted Lead
+Route::get('/contacted', 'LeadController@contacted')->name('contacted');
+Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 
+//Reject Leads rejectedLeads
+Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
+Route::get('rejectlead','LeadController@rejectData')->name('rejectData');
 
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 
-//Assign Team
+//Add and edit team
+Route::get('/team/add', 'TeamController@addTeam')->name('addTeam');
+Route::post('/team/add', 'TeamController@insertTeam')->name('insertTeam');
+Route::delete('/team/delete/{id}', 'TeamController@deleteTeam')->name('deleteTeam');
+Route::put('/team/update','TeamController@teamUpdate')->name('teamUpdate');
+
+
+
+//Assign member to the Team
 Route::get('/teammanagement','TeamController@teamManagement')->name('teamManagement');
 Route::post('/teammanagement','TeamController@teamAssign')->name('teamAssign');
 
-
-
-
+//Remove From Team
+Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('removeUser');
 
 
 //Account Setting

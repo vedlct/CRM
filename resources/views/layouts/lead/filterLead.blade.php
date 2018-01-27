@@ -14,8 +14,7 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Contact Person</th>
-                        <th>AssignBy</th>
-                        <th>AssignTo</th>
+                        <th>Contacted</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -26,10 +25,14 @@
                             <td>{{$lead->category->categoryName}}</td>
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->personName}}</td>
-                            <td>{{$lead->assigned['userBy']['firstName']}}</td>
-                            <td>{{$lead->assigned['userTo']['firstName']}}</td>
+                            <th>
+                                <form method="post" action="{{route('addContacted')}}">
+                                    {{@csrf_field()}}
+                                    <input type="hidden" value="{{$lead->leadId}}" name="leadId">
+                                    <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                </form>
 
-
+                            </th>
                         </tr>
 
                     @endforeach

@@ -98,14 +98,12 @@
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
-                                    <div class="u-img"><img src="../assets/images/users/1.jpg" alt="user"></div>
                                     <div class="u-text">
                                         <h4>{{Auth::user()->firstName}} {{Auth::user()->lastName}} </h4>
-                                        <p class="text-muted">{{Auth::user()->userEmail}} </p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                        <p class="text-muted">{{Auth::user()->userEmail}} </p>
+                                      </div>
                                 </div>
                             </li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="ti-user"></i> My Profile</a></li>
 
 
                             <li role="separator" class="divider"></li>
