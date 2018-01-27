@@ -7,7 +7,7 @@
 
         <div class="card-body">
 			<h2 style="display: inline-block; margin: 0px 50px;">List of category</h2>
-			<button class="btn btn-success" onclick="#edit_modal"><i class="glyphicon glyphicon-plus"></i> Add Category</button>
+			<button class="btn btn-success" onclick="#create_modal"><i class="glyphicon glyphicon-plus"></i> Add Category</button>
             <div class="table-responsive m-t-40" >
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
             <thead>
@@ -58,11 +58,11 @@
 	  
 	  
 	  
-	  
+	 <?php/* 
 	  
 	  
 	  <!--create category-->
-			<div class="modal" id="edit_modal" style="">
+			<div class="modal" id="create_modal" style="">
 				<div class="modal-dialog" style="max-width: 40%;">
 	  
 					<form class="form-horizontal" role="form" method="POST" action="{{ route('category.store') }}">
@@ -110,7 +110,7 @@
 			</div>
 	  
 	  
-	  
+	  */?>
 	  
 	  
 	  
@@ -231,6 +231,22 @@
 
 				});
 				
+				
+        //for Create modal
+
+        $('#create_modal').on('show.bs.modal', function(e) {
+
+            //get data-id attribute of the clicked element
+            var categoryId = $(e.relatedTarget).data('category-id');
+            var categoryName = $(e.relatedTarget).data('category-name');
+            var type = $(e.relatedTarget).data('category-type');
+			
+            //populate the textbox
+            $(e.currentTarget).find('input[name="categoryId"]').val(categoryId);
+            $(e.currentTarget).find('input[name="categoryName"]').val(categoryName);
+            $(e.currentTarget).find('input[name="type"]').val(type);
+
+        });
 				
         //for Edit modal
 
