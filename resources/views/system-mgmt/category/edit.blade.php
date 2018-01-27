@@ -5,20 +5,20 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Update country</div>
+                <div class="panel-heading">Update category</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('country.update', ['id' => $country->countryId]) }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('category.update', ['id' => $category->categoryId]) }}">
                         <input type="hidden" name="_method" value="PATCH">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <div class="form-group row{{ $errors->has('countryName') ? ' has-error' : '' }}">
-                            <label for="countryName" class="col-sm-3 control-label">Country Name</label>
+                        <div class="form-group row{{ $errors->has('categoryName') ? ' has-error' : '' }}">
+                            <label for="categoryName" class="col-sm-3 control-label">Category Name</label>
 
                             <div class="col-sm-9">
-                                <input id="countryName" type="text" class="form-control" name="countryName" value="{{ $country->countryName }}" required autofocus>
+                                <input id="categoryName" type="text" class="form-control" name="categoryName" value="{{ $category->categoryName }}" required autofocus>
 
-                                @if ($errors->has('countryName'))
+                                @if ($errors->has('categoryName'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('countryName') }}</strong>
+                                        <strong>{{ $errors->first('categoryName') }}</strong>
                                     </span>
                                 @endif
                             </div>

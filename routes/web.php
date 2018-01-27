@@ -69,6 +69,7 @@ Route::resource('follow-up', 'FollowupController');
 Route::resource('system-management/country', 'CountryController');
 Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
 
+
 Route::resource('system-management/category', 'CategoryController');
 Route::post('system-management/category/search', 'CategoryController@search')->name('category.search');
 

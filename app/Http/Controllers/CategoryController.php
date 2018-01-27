@@ -25,7 +25,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::paginate(5);
+        $categories = Category::get();
 
         return view('system-mgmt/category/index', ['categories' => $categories]);
     }
@@ -80,10 +80,11 @@ class CategoryController extends Controller
         $category = Category::find($id);
         // Redirect to category list if updating category wasn't existed
         if ($category == null || count($category) == 0) {
+			//return $category;
             return redirect()->intended('/system-management/category');
         }
 
-        return view('system-mgmt/category/edit', ['category' => $category]);
+        return view('system-mgmt/category', ['category' => $category]);
     }
 
     /**
@@ -93,9 +94,10 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $category = Category::findOrFail($id);
+		//return $request->categoryId;
+        $category = Category::findOrFail($request->categoryId);
         $input = [
             'categoryName' => $request['categoryName'],
             'type' => $request['type']
@@ -103,7 +105,7 @@ class CategoryController extends Controller
         $this->validate($request, [
         'categoryName' => 'required|max:60'
         ]);
-        Category::where('categoryId', $id)
+        Category::where('categoryId', $request->categoryId)
             ->update($input);
         
         return redirect()->intended('system-management/category');
