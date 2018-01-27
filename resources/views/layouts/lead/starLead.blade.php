@@ -157,6 +157,7 @@
 
 
 
+ 
     <!-- Call Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
@@ -183,14 +184,11 @@
 
                         </div>
 
-                        <div class="col-md-4">
-                            <label ><b>Response : </b></label>
-                            <input class="form-control" placeholder="insert the response" name="response" required>
-                        </div>
+
 
                         <div class=" col-md-4">
                             <label ><b>Progress : </b></label>
-                            <select class="form-control" name="progress" required>
+                            <select class="form-control" name="progress" >
                                 <option value=""><b>(select one)</b></option>
                                 <option value="Test job">Test job</option>
                                 <option value="Closing">Closing</option>
@@ -221,8 +219,8 @@
                             <br>
                         </div>
 
-                        <ul class="col-md-6 list-group"><br>
-                            <div  style="height: 120px; width: 80%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                        <ul class="col-md-6 list-group" style="margin: 10px;"><br>
+                            <div  style="height: 140px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
                             </div>
                         </ul>
