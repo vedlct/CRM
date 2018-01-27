@@ -15,21 +15,36 @@
 
         <form action="{{route('changePass')}}" method="post" style="width: 40%;" id="myform">
             {{@csrf_field()}}
+
             <div class="form-group">
                 <label for="pwd">Current Password:</label>
                 <input type="password" class="form-control" id="pwd" name="currentPassword">
+                <div class="form-group{{ $errors->has('currentPassword') ? ' has-error' : '' }} " >
+                    @if ($errors->has('currentPassword'))
+                        <span class="help-block">
+                                        <strong>{{ $errors->first('currentPassword') }}</strong>
+                                    </span>
+                    @endif
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="pwd">New Password:</label>
                 <input type="password" class="form-control" id="password" name="password">
+                <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} " >
+                    @if ($errors->has('password'))
+                        <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+
             </div>
 
             <div class="form-group">
                 <label for="pwd">Confirm New Password:</label>
                 <input type="password" class="form-control" id="password_again" name="password_again">
             </div>
-
 
             <button type="submit" class="btn btn-primary" >Submit</button>
         </form>

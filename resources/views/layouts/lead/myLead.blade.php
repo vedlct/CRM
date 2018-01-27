@@ -9,8 +9,13 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>My List</b></h2>
+            @if(Request::path() == 'contacted')
 
+                <h2 class="card-title" align="center"><b>My Contacted List</b></h2>
+
+            @else
+            <h2 class="card-title" align="center"><b>My List</b></h2>
+            @endif
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -128,9 +133,12 @@
                         </div>
 
 
-                        <div class="col-md-6" style="">
-                        <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
-                        </div>
+
+                            <div class="col-md-6" style="">
+                                <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
+                            </div>
+
+
                     </div>
 
                 </div>
@@ -277,7 +285,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#leave').attr('href', 'leave/'+leadId);
+            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
         });
 

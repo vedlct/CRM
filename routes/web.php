@@ -17,7 +17,6 @@ Route::get('/', 'Auth\LoginController@mainLogin');
 
 
 
-Route::view('/leads', 'layouts.leads');
 
 //Route::view('/newinfo', 'layouts.newInfo');
 Route::view('/newinfo', 'layouts.newInfo');
@@ -126,7 +125,9 @@ Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 
-
+//Reject Leads rejectedLeads
+Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
+Route::get('rejectlead','LeadController@rejectData')->name('rejectData');
 
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');

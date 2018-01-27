@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Auth;
 use League\Flysystem\Exception;
 use Session;
-
+use Psy\Exception\ErrorException;
 use App\Category;
 use App\Possibility;
 use App\Country;
@@ -22,6 +22,7 @@ use App\Workprogress;
 use App\Followup;
 use DB;
 
+use Yajra\Datatables\Datatables;
 class LeadController extends Controller
 {
     public function __construct()
@@ -341,29 +342,54 @@ class LeadController extends Controller
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities);
 
-          
         }
 
+        public function rejectedLeads(){
+//            $leads=Lead::where('possibilityId',5)->get();
+
+            return view('layouts.lead.rejectedLead');
+        }
+
+    public function rejectData()
+    {
+        $leads = Lead::with('category')->where('possibilityId',5)->get();
+
+        return Datatables::of($leads)->make();
+    }
 
 
 
 
 
         public function leaveLead($id){
-            $assignId=Leadassigned::select('assignId')
-                ->where('leadId',$id)
-                ->where('assignTo',Auth::user()->id)
-                ->where('leadAssignStatus',1)
-                ->limit(1)->get();
 
-            $leave=Leadassigned::findOrFail($assignId[0]->assignId);
-            $leave->leadAssignStatus=0;
-            $leave->save();
+                $assignId=Leadassigned::select('assignId')
+                    ->where('leadId',$id)
+                    ->where('assignTo',Auth::user()->id)
+                    ->where('leadAssignStatus',1)
+                    ->limit(1)->first();
 
 
+                if ($assignId){
+                    $leave=Leadassigned::find($assignId->assignId);
+                    $leave->leadAssignStatus=0;
+                    $leave->save();
 
-            Session::flash('message', 'You have Leave The Lead successfully');
-            return back();
+                    Session::flash('message', 'You have Leave The Lead successfully');
+                    return back();
+                }
+
+                else{
+                    $lead=Lead::findOrFail($id);
+                    if($lead->contactedUserId == Auth::user()->id){
+                        $lead->contactedUserId =null;
+                        $lead->save();
+                        Session::flash('message', 'You have Leave The Lead successfully');
+                        return back();
+                    }
+
+                }
+
         }
 
         public function destroy($id){
