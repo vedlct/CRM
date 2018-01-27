@@ -10,7 +10,8 @@
         "intervention/image": "^2.4",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "yajra/laravel-datatables-oracle": "^8.3"
+        "yajra/laravel-datatables-oracle": "^8.3",
+        "khill/lavacharts" : "3.0.*"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

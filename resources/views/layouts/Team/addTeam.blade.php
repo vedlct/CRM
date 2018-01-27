@@ -20,7 +20,7 @@
             <br><br>
 
 
-            <div class="container">
+            <div style="max-width: 400px;">
                 <h2 align="center"><b>Teams</b></h2>
 
                 <table class="table table-hover">
@@ -40,7 +40,7 @@
                             <!-- Trigger the Edit modal with a button -->
                             <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                data-team-id="{{$team->teamId}}"
-                               data-team-name="{{$team->teamName}}">
+                               data-team-name="{{$team->teamName}}" style="float: left;">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 
@@ -85,6 +85,7 @@
 
                             <label>Team Name:</label>
                             <input type="text" class="form-control" name="teamName" value="">
+                            <br>
                         </div>
 
 

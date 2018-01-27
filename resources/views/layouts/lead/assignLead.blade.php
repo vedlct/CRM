@@ -31,7 +31,7 @@
                         <th>Comments</th>
                         <th>Mined By</th>
                         <th>Created At</th>
-                        <th>Delete</th>
+                        {{--<th>Delete</th>--}}
 
                     </tr>
                     </thead>
@@ -52,14 +52,14 @@
 
 
 
-                            <td>
-                                <form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">
-                                    {{csrf_field()}}
-                                    {{ method_field('DELETE') }}
+                            {{--<td>--}}
+                                {{--<form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">--}}
+                                    {{--{{csrf_field()}}--}}
+                                    {{--{{ method_field('DELETE') }}--}}
 
-                                <button type="submit" class="btn btn-danger btn-sm">
+                                {{--<button type="submit" class="btn btn-danger btn-sm">--}}
 
-                                    <i class="fa fa-trash"></i></button></form></td>
+                                    {{--<i class="fa fa-trash"></i></button></form></td>--}}
                         </tr>
                     @endforeach
 

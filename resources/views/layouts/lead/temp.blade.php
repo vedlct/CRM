@@ -63,9 +63,9 @@
                             </td>
 
                             <td>
-                                <form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">
-                                    {{csrf_field()}}
-                                    {{ method_field('DELETE') }}
+                                {{--<form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">--}}
+                                    {{--{{csrf_field()}}--}}
+                                    {{--{{ method_field('DELETE') }}--}}
 
                                     <!-- Trigger the modal with a button -->
                                         <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -77,8 +77,8 @@
                                                 data-lead-website="{{$lead->website}}">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                                    <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash"></i></button></form>
+                                    {{--<button type="submit" class="btn btn-danger btn-sm">--}}
+                                        {{--<i class="fa fa-trash"></i></button></form>--}}
 
 
 

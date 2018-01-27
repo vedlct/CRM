@@ -35,7 +35,7 @@ Route::view('/test', 'test');
 
 Auth::routes();
 
-Route::get('/dashboard', 'HomeController@index')->name('home');
+
 
 /*Route::get('/home',function (){
     return redirect('/dashboard');
@@ -50,6 +50,8 @@ Route::view('/lead', 'layouts.lead.add');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('home');
+
 
 
 

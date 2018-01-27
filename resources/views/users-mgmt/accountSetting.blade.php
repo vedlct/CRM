@@ -8,12 +8,19 @@
 
 @section('content')
 
-    <div class="card" style="padding-left: 10%;padding-right: 10%;padding-top: 2%;padding-bottom: 2%;">
+
+    <div class="card" style="max-width: 40%; padding: 10px; float: right;">
+        User Details
+    </div>
+
+
+
+
+    <div class="card" style="max-width: 40%; padding: 10px;">
 
         <h2 align="center"><b>Account Settings</b></h2><hr>
 
-
-        <form action="{{route('changePass')}}" method="post" style="width: 40%;" id="myform">
+        <form action="{{route('changePass')}}" method="post" id="myform">
             {{@csrf_field()}}
 
             <div class="form-group">

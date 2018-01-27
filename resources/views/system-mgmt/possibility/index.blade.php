@@ -2,9 +2,9 @@
 
 @section('content')
   <div class="box-body">
-    <div class="card" style="padding: 2px;">
+    <div class="card" style="max-width: 45%;">
         <div class="card-body">
-			<h2 style="display: inline-block; margin: 0px 200px;">List of possibility</h2>
+			<h2 align="center">List of possibility</h2>
 			<a class="btn btn-primary" href="{{ route('possibility.create') }}">Add new possibility</a>
             <div class="table-responsive m-t-40" >
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">

@@ -2,7 +2,7 @@
 
 @section('content')
   <div class="box-body">
-    <div class="card" style="padding: 2px;">
+    <div class="card" style="max-width: 300px;">
         <div class="card-body">
 			<h2 style="display: inline-block; margin: 0px 200px;">List of category</h2>
 			<a class="btn btn-primary" href="{{ route('category.create') }}">Add new category</a>
