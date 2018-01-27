@@ -345,7 +345,8 @@ class LeadController extends Controller
         }
 
         public function rejectedLeads(){
-//            $leads=Lead::where('possibilityId',5)->get();
+           $leads=Lead::where('possibilityId',5)->get();
+
 
             return view('layouts.lead.rejectedLead');
         }
@@ -354,7 +355,7 @@ class LeadController extends Controller
     {
         $leads = Lead::with('category')->where('possibilityId',5)->get();
 
-        return Datatables::of($leads)->make();
+        return Datatables::of($leads)->make(true);
     }
 
 

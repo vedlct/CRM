@@ -24,13 +24,20 @@
 
 @section('foot-js')
 
-    <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    {{--<script src="{{asset('datatables\js\jquery.dataTables.min.js')}}"></script>--}}
+    {{--<script src="{{asset('datatables\js\dataTables.bootstrap.min.js')}}"></script>--}}
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- DataTables -->
+    <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+
+    {{--<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>--}}
+    {{--<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>--}}
 
 
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    {{--<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>--}}
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
@@ -38,6 +45,7 @@
     <script>
 
         $(function() {
+
             $('#users-table').DataTable({
                 processing: true,
                 serverSide: true,
