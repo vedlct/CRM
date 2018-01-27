@@ -4,7 +4,7 @@
 		  <form method="POST" action="{{ route('follow-up.search') }}">
 			 {{ csrf_field() }}
 			 @component('layouts.search', ['title' => 'Search'])
-			  @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'], 
+			  @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
 			  'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
 			  @endcomponent
 			@endcomponent
@@ -64,6 +64,12 @@
       </div>
 	  </div>
 
+  </div>
+		  </div>
+		  <!-- /.box-body -->
+		  </div>
+@endsection
+
 		@section('foot-js')
 			<script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 			<script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
@@ -85,11 +91,7 @@
 
 
 		@endsection
-    </div>
-  </div>
-  <!-- /.box-body -->
-</div>
-@endsection
+
 
 
 
