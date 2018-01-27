@@ -80,7 +80,7 @@ class LeadController extends Controller
 
     public function assignShow(){
 
-        $leads=(new Lead())->showAssignedLeads();
+        $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
         $users=User::select('id','firstName','lastName')
@@ -143,7 +143,7 @@ class LeadController extends Controller
 
         public function filter(){
 //            $leads=Lead::with('assigned')->where('statusId', 2)->get();
-            $leads=(new Lead())->showAssignedLeads();
+            $leads=(new Lead())->showNotAssignedLeads();
             return view('layouts.lead.filterLead')->with('leads',$leads);
         }
 
@@ -320,6 +320,33 @@ class LeadController extends Controller
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities);
         }
+
+
+        public function addContacted(Request $r){
+            $lead=Lead::findOrFail($r->leadId);
+            $lead->contactedUserId=Auth::user()->id;
+            $lead->save();
+            Session::flash('message', 'Lead Added To Contacted List');
+            return back();
+        }
+
+        public function contacted(){
+            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
+
+            $callReports=Callingreport::get();
+            $possibilities=Possibility::get();
+
+            return view('layouts.lead.myLead')
+                ->with('leads',$leads)
+                ->with('callReports',$callReports)
+                ->with('possibilities',$possibilities);
+
+          
+        }
+
+
+
+
 
 
         public function leaveLead($id){

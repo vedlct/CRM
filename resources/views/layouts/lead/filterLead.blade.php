@@ -26,7 +26,12 @@
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->personName}}</td>
                             <th>
-                                <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                <form method="post" action="{{route('addContacted')}}">
+                                    {{@csrf_field()}}
+                                    <input type="hidden" value="{{$lead->leadId}}" name="leadId">
+                                    <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                </form>
+
                             </th>
                         </tr>
 

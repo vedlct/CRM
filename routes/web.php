@@ -16,7 +16,7 @@ Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
 
-Route::view('/clients', 'layouts.clients')->name('clients');
+
 Route::view('/leads', 'layouts.leads');
 
 //Route::view('/newinfo', 'layouts.newInfo');
@@ -121,6 +121,10 @@ Route::get('/modal', 'TestController@modal')->name('modal');
 
 //Star Lead
 Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
+
+//Contacted Lead
+Route::get('/contacted', 'LeadController@contacted')->name('contacted');
+Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 
 
 

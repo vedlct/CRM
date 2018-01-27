@@ -43,7 +43,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route('clients')}}"><i class="fa fa-user-circle-o"></i>Clients</a>
+                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i>Contacted</a>
 
                 </li>
 
