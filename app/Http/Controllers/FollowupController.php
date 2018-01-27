@@ -12,6 +12,7 @@ use Auth;
 use App\Callingreport;
 use App\Possibility;
 use Session;
+use App\Lead;
 
 
 class FollowupController extends Controller
@@ -40,21 +41,26 @@ class FollowupController extends Controller
      */
     public function index()
     {
-        $followups = DB::table('followup')
-		->where('followUpDate', date('Y-m-d'))
-        ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
-        ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
-        ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
-        ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-        ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-        ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-        ->get();
-		
+//        $followups = DB::table('followup')
+//		->where('followUpDate', date('Y-m-d'))
+//        ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
+//        ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+//        ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+//        ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+//        ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
+//        ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
+//        ->get();
+        $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+            ->where('followUpDate', date('Y-m-d'))
+            ->where('followup.userId',Auth::user()->id)->get();
+
+
+
 		  $callReports=Callingreport::get();
 		 /// return $callReports;
             $possibilities=Possibility::get();
 
-        return view('follow-up/index', ['followups' => $followups, 'callReports' => $callReports, 'possibilities' => $possibilities]);
+        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
 
 
@@ -66,28 +72,27 @@ class FollowupController extends Controller
     }
 
 
-    /**
-     * Search user from database base on some specific constraints
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *  @return \Illuminate\Http\Response
-     */
+
     public function search(Request $request) {
 
-        $followups = DB::table('followup')
-            ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
-            ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
-            ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-            ->where('followup.userId',Auth::user()->id)
-            ->whereBetween('followup.followUpDate', [$request->fromdate, $request->todate])
-            ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-            ->get();
+//        $followups = DB::table('followup')
+//            ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
+//            ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+//            ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+//            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+//            ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
+//            ->where('followup.userId',Auth::user()->id)
+//            ->whereBetween('followup.followUpDate', [$request->fromdate, $request->todate])
+//            ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
+//            ->get();
 
 
 //        $followups= Followup::where('userId',Auth::user()->id)
 //                ->whereBetween('followUpDate', [$request->fromdate, $request->todate])->get();
+
+        $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+            ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
+            ->where('followup.userId',Auth::user()->id)->get();
 
         $callReports=Callingreport::get();
         /// return $callReports;
@@ -95,6 +100,6 @@ class FollowupController extends Controller
 
         Session::flash('message', 'From '.$request->fromdate.' to '.$request->todate);
 
-        return view('follow-up/index', ['followups' => $followups, 'callReports' => $callReports, 'possibilities' => $possibilities]);
+        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
 }
