@@ -20,6 +20,7 @@ class ReportController extends Controller
         $users= User::select('users.*',
             DB::raw('count(workprogress.userId) as total'))
             ->leftJoin('workprogress','users.id','workprogress.userId')
+//            ->where(DB::raw('DATE(workprogress.created_at)'),'2018-01-25')
             ->groupBy('workprogress.userId')->get();
 
 //        return $users;
