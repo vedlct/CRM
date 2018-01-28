@@ -51,7 +51,15 @@ return [
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => true,
+
+
+
+        'modes' => [
+            'NO_ZERO_DATE',
+            'ONLY_FULL_GROUP_BY',
+        ],
             'engine' => null,
+
         ],
 
         'pgsql' => [
@@ -116,5 +124,6 @@ return [
         ],
 
     ],
+
 
 ];

@@ -12,14 +12,14 @@ class ReportController extends Controller
 {
     public function index(){
 
-        //select users.firstName,count(*) from users,workprogress where users.id=workprogress.userId GROUP BY workprogress.userId
+//        select users.firstName,count(*) from users,workprogress where users.id=workprogress.userId GROUP BY workprogress.userId
 //        $user=User::leftJoin('workprogress', 'users.id', '=', 'workprogress.userId')
 //            ->select('users.firstName',DB::raw('count(*) as total'))
 //            ->groupBy('workprogress.userId')->get();
 
         $user = User::with('work')
-            ->groupBy('userId')
             ->select('firstName','userId')
+            ->groupBy('userId')
             ->get();
         return $user;
 
