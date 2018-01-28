@@ -9,9 +9,7 @@
         </div>
     </header>
 
-
     <div style="padding: 10px;">
-
 
         <table class="table table-hover" style="background-color:white; ">
             <thead>
@@ -69,30 +67,6 @@
             </tr>
             </tbody>
         </table>
-
-
-
-
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @endsection
