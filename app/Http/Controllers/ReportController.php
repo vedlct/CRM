@@ -17,13 +17,13 @@ class ReportController extends Controller
     //select users.firstName,count(workprogress.userId)
     // from users LEFT JOIN workprogress on users.id=workprogress.userId GROUP BY workprogress.userId
 
-        $users= User::select('users.*',
-            DB::raw('count(workprogress.userId) as total'))
+        $users= User::select('users.firstName',DB::raw('count(workprogress.userId) as total'))
             ->leftJoin('workprogress','users.id','workprogress.userId')
-//            ->where(DB::raw('DATE(workprogress.created_at)'),'2018-01-25')
-            ->groupBy('workprogress.userId')->get();
+            ->where(DB::raw('DATE(workprogress.created_at)'),'2018-01-28')
+            ->groupBy('workprogress.userId')
+            ->get();
 
-//        return $users;
+        return $users;
 
 
         return view('report.index')->with('users',$users);
