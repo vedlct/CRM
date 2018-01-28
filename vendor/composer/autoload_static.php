@@ -394,7 +394,7 @@ class ComposerStaticInit29553d3de4a5092cb755d57b4a5f8245
         'App\\Status' => __DIR__ . '/../..' . '/app/Status.php',
         'App\\Team' => __DIR__ . '/../..' . '/app/Team.php',
         'App\\Test' => __DIR__ . '/../..' . '/app/Test.php',
-        'App\\User' => __DIR__ . '/../..' . '/app/Http/Controllers/User.php',
+        'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\UserType' => __DIR__ . '/../..' . '/app/Usertype.php',
         'App\\Workprogress' => __DIR__ . '/../..' . '/app/Workprogress.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',

@@ -53,7 +53,7 @@ return array(
     'App\\Status' => $baseDir . '/app/Status.php',
     'App\\Team' => $baseDir . '/app/Team.php',
     'App\\Test' => $baseDir . '/app/Test.php',
-    'App\\User' => $baseDir . '/app/Http/Controllers/User.php',
+    'App\\User' => $baseDir . '/app/User.php',
     'App\\UserType' => $baseDir . '/app/Usertype.php',
     'App\\Workprogress' => $baseDir . '/app/Workprogress.php',
     'ArithmeticError' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',

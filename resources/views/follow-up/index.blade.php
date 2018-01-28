@@ -1,20 +1,24 @@
 @extends('main')
 
 @section('content')
-		  <form method="POST" action="{{ route('follow-up.search') }}">
-			 {{ csrf_field() }}
-			 @component('layouts.search', ['title' => 'Search'])
-			  @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
-			  'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
-			  @endcomponent
-			@endcomponent
-		  </form>
+
 
 
 
 		  <div class="card" style="padding:10px;">
+
 			  <div class="card-body">
 				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
+
+                  <form method="POST" action="{{ route('follow-up.search') }}">
+                      {{ csrf_field() }}
+                      @component('layouts.search', ['title' => 'Search'])
+                          @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
+                          'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
+                          @endcomponent
+                      @endcomponent
+                  </form>
+
 
 				  <div class="table-responsive m-t-40">
 					  <table id="myTable" class="table table-bordered table-striped">

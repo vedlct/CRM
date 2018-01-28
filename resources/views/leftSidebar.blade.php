@@ -20,13 +20,16 @@
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
+                </li>
 
+                <li>
+                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                        <span class="hide-menu">Report</span></a>
                 </li>
 
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
                             Assigned Leads</span></a>
-
                 </li>
 
                 <li>

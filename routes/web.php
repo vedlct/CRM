@@ -154,3 +154,7 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 //Account Setting
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
+
+//Report
+Route::get('/report','ReportController@index')->name('report');
+Route::get('report/user/{id}','ReportController@individualCall');
