@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
+use App\Workprogress;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -25,6 +27,7 @@ class HomeController extends Controller
     public function index()
     {
        // return view('home');
+
         $lava = new Lavacharts; // See note below for Laravel
 
         $reasons = $lava->DataTable();

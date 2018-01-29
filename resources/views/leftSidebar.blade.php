@@ -18,90 +18,148 @@
                 <li class="nav-small-cap">PERSONAL</li>
 
                 <li>
-				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>Todays Follow-up</a>
-
-                </li>
-				<!--
-                <li>
-                    <a href="{{route('main')}}"><i class="mdi mdi-gauge"></i>Todays Follow Up </a>
-
-                </li>
-				-->
-                <li>
-                    <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i>Assigned Leads</a>
-
+                    <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+                        <span class="hide-menu">Dashboard</span></a>
                 </li>
 
                 <li>
-                    <a href="{{route('starLeads')}}"><i class="fa fa-star"></i>Star Leads</a>
+                    <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
+                            Assigned Leads</span></a>
+                </li>
+
+                <li>
+				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+                     <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
 
 
                 <li>
-                    <a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i>Test List</a>
+                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
 
                 </li>
 
                 <li>
-                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i>Contacted</a>
+                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
+
+                </li>
+                <li>
+                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
+
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
+                        <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('starLeads')}}"><i class="fa fa-star"></i><span class="hide-menu">Star Leads</span></a>
+                        </li>
+                        <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
+                        <li><a href="#"><span class="hide-menu">Leave</span></a></li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
 
                 </li>
 
                 <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i>Add Lead</a>
-
+                    <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
+                        <span class="hide-menu">My Team</span></a>
                 </li>
 
 
                 <li>
-                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i> Assign Lead</a>
-
+                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                        <span class="hide-menu">Report</span></a>
                 </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">Settings</span>
+                        <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>
+                                <span class="hide-menu">Team Management</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>
+                                <span class="hide-menu">Rejected Leads</span></a>
+
+                        </li>
+
+
+
+
+
+                    </ul>
+                </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 <li>
-                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i>Temp Leads</a>
-
-                </li>
-                <li>
-                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i>Filtered Leads</a>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">Add Lead</span></a>
 
                 </li>
 
 
-                <li>
-                    <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>Rejected Leads</a>
 
-                </li>
+
+
 
                 <li>
-				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>User Management</a>
+				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
+                     <span class="hide-menu">User Management</span></a>
 
                 </li>
 
                 <li>
-                    <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>Notice</a>
+                    <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
+                        <span class="hide-menu">Notice</span></a>
 
                 </li>
 
                 <li>
-                    <a href="leaves"><i class="mdi mdi-bullseye"></i>Leave Show</a>
+                    <a href="leaves"><i class="mdi mdi-bullseye"></i>
+                        <span class="hide-menu">Leave Show</span></a>
 
                 </li>
 
 
-                <li>
-                    <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>My Team</a>
-                </li>
 
-                <li>
-                    <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>Team Management</a>
-                </li>
-				
+
 
 
                 <li class="treeview">
-				  <a href="#"><i class="fa fa-link"></i> <span>System Manage</span>
+				  <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>
 					<span class="pull-right-container">
 					  <i class="fa fa-angle-left pull-right"></i>
 					</span>
@@ -119,15 +177,6 @@
 
 
                 <li class="nav-devider"></li>
-
-
-
-
-
-
-
-
-
 
             </ul>
         </nav>

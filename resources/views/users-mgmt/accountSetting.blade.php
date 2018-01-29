@@ -9,14 +9,52 @@
 @section('content')
 
 
-    <div class="card" style="max-width: 40%; padding: 10px; float: right;">
-        User Details
+    <div class="card" style="width: 40%; padding: 10px; float: left;">
+        <div class="row">
+            <div class="col-md-3">
+                <b>Name :</b>
+            </div>
+
+            <div class="col-md-9">
+                {{$user->firstName}} {{$user->lastName}}
+            </div>
+
+
+            <div class="col-md-3">
+                <b>Email :</b>
+            </div>
+
+
+            <div class="col-md-9">
+                {{$user->userEmail}}
+            </div>
+
+
+            <div class="col-md-3">
+                <b>Gender :</b>
+            </div>
+
+
+            <div class="col-md-9">
+                {{$user->gender}}
+            </div>
+            <div class="col-md-3">
+                <b>Date of Birth :</b>
+            </div>
+            <div class="col-md-9">
+                {{$user->dob}}
+            </div>
+
+
+        </div>
+
+
     </div>
 
 
 
 
-    <div class="card" style="max-width: 40%; padding: 10px;">
+    <div class="card" style="max-width: 40%; padding: 10px; float: right; margin-right: 20%;">
 
         <h2 align="center"><b>Account Settings</b></h2><hr>
 

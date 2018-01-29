@@ -2,12 +2,11 @@
 
 @section('content')
   <div class="box-body">
-
     <div class="card" style="padding: 2px; max-width:50%; ">
-
         <div class="card-body">
 			<h2 style="display: inline-block; margin: 0px 50px;">List of Country</h2>
 			<a href="#create_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i>Add Country</i></a>
+
             <div class="table-responsive m-t-40" >
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
             <thead>
@@ -164,11 +163,6 @@
 	 
 	 
 	 
-	 
-	 
-	 
-	 
-	 
 	</div><!-- /.box-body -->
 @endsection
 	  
@@ -215,4 +209,4 @@
 
 		});
 	</script>
-@endsection
+	@endsection
