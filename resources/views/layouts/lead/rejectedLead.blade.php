@@ -26,7 +26,7 @@
 
     {{--<script src="{{asset('datatables\js\jquery.dataTables.min.js')}}"></script>--}}
     {{--<script src="{{asset('datatables\js\dataTables.bootstrap.min.js')}}"></script>--}}
-    <script src="//code.jquery.com/jquery.js"></script>
+    {{--<script src="//code.jquery.com/jquery.js"></script>--}}
     <!-- DataTables -->
     <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
     <!-- Bootstrap JavaScript -->
