@@ -310,14 +310,20 @@ class LeadController extends Controller
 
 
         public function starLeads(){
-
-//            $leads=(new Lead())->myLeads();
             $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
                 ->where('leadassigneds.assignTo',Auth::user()->id)
-                ->Where('leadassigneds.leadAssignStatus',1)
+                ->where('leadassigneds.leaveDate',null)
                 ->get();
+
+////            $leads=(new Lead())->myLeads();
+//            $leads=Lead::select('leads.*')
+//                ->where('possibilityId',4)
+//                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+//                ->where('leadassigneds.assignTo',Auth::user()->id)
+//                ->Where('leadassigneds.leadAssignStatus',1)
+//                ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
