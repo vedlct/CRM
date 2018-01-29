@@ -235,7 +235,8 @@
 
             $('#myTable').DataTable(
                 {    responsive: true,
-                    "order": [[ 7, "desc" ]]
+                    "order": [[ 7, "desc" ]],
+                    stateSave: true
                 }
             );
 
