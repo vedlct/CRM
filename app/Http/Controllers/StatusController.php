@@ -92,16 +92,16 @@ class StatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $status = Status::findOrFail($id);
+        $status = Status::findOrFail($request->statusId);
         $input = [
             'statusName' => $request['statusName']
         ];
         $this->validate($request, [
         'statusName' => 'required|max:60'
         ]);
-        Status::where('statusId', $id)
+        Status::where('statusId', $request->statusId)
             ->update($input);
         
         return redirect()->intended('system-management/status');

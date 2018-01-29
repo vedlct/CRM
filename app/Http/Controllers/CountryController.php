@@ -97,14 +97,14 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $country = Country::findOrFail($id);
+        $country = Country::findOrFail($request->countryId);
         $input = [
             'countryName' => $request['countryName']
         ];
         $this->validate($request, [
-        'countryName' => 'required|max:60'
+        'countryName' => 'required|max:60|unique:countries'
         ]);
-        Country::where('countryId', $id)
+        Country::where('countryId', $request->countryId)
             ->update($input);
         
         return redirect()->intended('system-management/country');
@@ -132,8 +132,7 @@ class CountryController extends Controller
      */
     public function search(Request $request) {
         $constraints = [
-            'countryName' => $request['countryName'],
-            'countryId' => $request['countryId']
+            'countryName' => $request['countryName']
             ];
 
        $countries = $this->doSearchingQuery($constraints);

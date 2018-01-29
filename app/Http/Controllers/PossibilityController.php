@@ -92,16 +92,16 @@ class PossibilityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $possibility = Possibility::findOrFail($id);
+        $possibility = Possibility::findOrFail($request->possibilityId);
         $input = [
             'possibilityName' => $request['possibilityName'],
         ];
         $this->validate($request, [
         'possibilityName' => 'required|max:60'
         ]);
-        Possibility::where('possibilityId', $id)
+        Possibility::where('possibilityId', $request->possibilityId)
             ->update($input);
         
         return redirect()->intended('system-management/possibility');
