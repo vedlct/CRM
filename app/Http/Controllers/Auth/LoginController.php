@@ -52,11 +52,11 @@ class LoginController extends Controller
     return 'userId';
     }
 
-    public function logout(Request $request)
-    {
-        $this->performLogout($request);
-        return redirect()->route('/');
-    }
+//    public function logout(Request $request)
+//    {
+//        $this->performLogout($request);
+//        return redirect()->route('/');
+//    }
 
 
 }

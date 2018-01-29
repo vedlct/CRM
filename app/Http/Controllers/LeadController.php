@@ -22,7 +22,7 @@ use App\Workprogress;
 use App\Followup;
 use DB;
 
-use Yajra\Datatables\Datatables;
+
 class LeadController extends Controller
 {
     public function __construct()
@@ -193,14 +193,79 @@ class LeadController extends Controller
 
 
         public function tempLeads(){
-            $leads=(new Lead())->getTempLead();
-
-           $possibilities=Possibility::get();
-           return view('layouts.lead.temp')
-                ->with('leads',$leads)
-                ->with('possibilities',$possibilities);
+//            $leads=(new Lead())->getTempLead();
+//
+//           $possibilities=Possibility::get();
+           return view('layouts.lead.temp');
+//                ->with('leads',$leads)
+//                ->with('possibilities',$possibilities);
 
         }
+
+
+        public function tempData(Request $request){
+
+            if(empty($request->input('search.value')))
+            { $leads=(new Lead())->getTempLead();}
+            else{
+
+                $search = $request->input('search.value');
+                $leads=Lead::where('statusId', 1)
+                    ->where('companyName','LIKE',"%{$search}%")
+                    ->get();
+                }
+
+
+            $totalData =count($leads);
+            $totalFiltered = $totalData;
+
+            $possibility=Possibility::get();
+
+            $pBefore='<select class="form-control" id="drop" ';
+
+            $pAfter=' name="possibility" ><option value="">Select</option>';
+            foreach ($possibility as $pos){
+                $pAfter.='<option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
+            }
+            $pAfter.='</select>';
+
+
+            $data = array();
+            foreach ($leads as $lead){
+                $nestedData['name'] = $lead->companyName;
+                $nestedData['email'] = $lead->email;
+                $nestedData['website'] = $lead->website;
+                $nestedData['category'] = $lead->category->categoryName;
+                $nestedData['person'] = $lead->personName;
+                $nestedData['number'] = $lead->contactNumber;
+                $nestedData['country'] = $lead->country->countryName;
+                $nestedData['minedBy']=$lead->mined->firstName;
+                $nestedData['createdAt']=$lead->created_at;
+                $nestedData['edit']='<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                      data-lead-id="'.$lead->leadId.
+                                    '"data-lead-name="'.$lead->companyName.'"
+                                    data-lead-email="'.$lead->email.'"
+                                    data-lead-number="'.$lead->contactNumber.'"
+                                    data-lead-person="'.$lead->personName.'"
+                                    data-lead-website="'.$lead->website.'">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                $nestedData['possibility']=$pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
+                $data[]=$nestedData;
+            }
+            $json_data = array(
+                "draw"            => intval($request->input('draw')),
+                "recordsTotal"    => intval($totalData),
+                "recordsFiltered" => intval($totalFiltered),
+                "data"            => $data
+            );
+
+
+            return json_encode($json_data);
+
+
+        }
+
+
 
         public function changePossibility(Request $r){
 
@@ -361,28 +426,63 @@ class LeadController extends Controller
         }
 
         public function rejectedLeads(){
-           $leads=Lead::where('possibilityId',5)->get();
-
-
-            return view('layouts.lead.rejectedLead');
+        return view('layouts.lead.rejectedLead');
         }
 
-    public function rejectData()
-    {
-        $leads = Lead::with('category')->where('possibilityId',5)->get();
 
-        return Datatables::of($leads)->make(true);
+        public function rejectData(Request $request)
+    {
+        $totalData = Lead::with('category')->where('possibilityId',5)->count();
+        $totalFiltered = $totalData;
+
+        if(empty($request->input('search.value')))
+        {
+            $leads = Lead::with('category')->where('possibilityId',5)->get();
+
+        }
+
+        else{
+            $search = $request->input('search.value');
+            $leads = Lead::with('category')
+                ->where('companyName','LIKE',"%{$search}%")
+                ->where('possibilityId',5)->get();
+        }
+
+        $possibility=Possibility::get();
+
+        $p='<select class="form-control" id="drop"  name="possibility" ><option value="">Select</option>';
+
+        foreach ($possibility as $pos){
+            $p.=' <option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
+            }
+            $p.='</select>';
+
+        $data = array();
+        foreach ($leads as $lead){
+            $nestedData['name'] = $lead->companyName;
+            $nestedData['email'] = $lead->email;
+            $nestedData['minedBy']=$lead->mined->firstName;
+            $nestedData['drop']=$p;
+            $data[]=$nestedData;
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
+        );
+
+
+        return json_encode($json_data);
     }
 
 
 
 
-
-        public function leaveLead($id){
-
+    public function leaveLead($id){
 
 
-                $assignId=Leadassigned::select('assignId')
+        $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)
                     ->where('leaveDate',null)
