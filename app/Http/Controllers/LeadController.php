@@ -289,13 +289,6 @@ class LeadController extends Controller
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
 
-//        $leads=Lead::select('leads.*')
-//            ->where('possibilityId',4)
-//            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//            ->where('leadassigneds.assignTo',Auth::user()->id)
-//            ->where('leadassigneds.leaveDate',null)
-//            ->get();
-//
 
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
