@@ -18,7 +18,7 @@
                 <li class="nav-small-cap">PERSONAL</li>
 
                 <li>
-                    <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+                    <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
                         <span class="hide-menu">Dashboard</span></a>
                 </li>
 
