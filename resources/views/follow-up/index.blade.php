@@ -167,6 +167,10 @@
 
 
 		  <!-- Call Modal -->
+
+
+
+		  <!-- Call Modal -->
 		  <div class="modal" id="my_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
 
@@ -175,77 +179,77 @@
 						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 						  <h4 class="modal-title" name="modal-title">Calling Report</h4>
 					  </div>
-					  <div class="modal-body" >
+					  <div class="modal-body" style="padding: 20px;">
 						  {{csrf_field()}}
 						  <input type="hidden" name="leadId">
-						  <div class="row" >
 
-							  <div class="col-md-4">
-								  <label ><b>Calling Report : </b></label>
-								  <select class="form-control" name="report" required>
-									  <option value=""><b>(select one)</b></option>
-
-									  @foreach($callReports as $report)
-										  <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-									  @endforeach
-								  </select>
-
-							  </div>
-
-
-
-							  <div class=" col-md-4">
-								  <label ><b>Progress : </b></label>
-								  <select class="form-control" name="progress" >
-									  <option value=""><b>(select one)</b></option>
-									  <option value="Test job">Test job</option>
-									  <option value="Closing">Closing</option>
-								  </select>
-								  <br><br>
-							  </div>
-
-
-							  <div class="col-md-4">
-								  <label class=""><b>Follow Up Date : </b></label>
-								  <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
-							  </div>
-
-
-							  <div class="col-md-4">
-								  <label class=""><b>Possibility : </b></label>
-								  <select class="form-control"  name="possibility" id="possibility">
-									  @foreach($possibilities as $p)
-										  <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-									  @endforeach
-
-								  </select>
-							  </div>
-
+						  <div class="row">
 							  <div class="col-md-6">
-								  <label class=""><b>Comment : </b></label>
-								  <textarea class="form-control" rows="3" name="comment" required></textarea>
-								  <br>
-							  </div>
+								  <div class="form-group" style=" margin-bottom: 5px;">
+									  <label ><b>Calling Report : </b></label>
+									  <select class="form-control" name="report" required>
+										  <option value=""><b>(select one)</b></option>
 
-							  <ul class="col-md-6 list-group" style="margin: 10px;"><br>
-								  <div  style="height: 140px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
-
+										  @foreach($callReports as $report)
+											  <option value="{{$report->callingReportId}}">{{$report->report}}</option>
+										  @endforeach
+									  </select>
 								  </div>
-							  </ul>
+
+								  <div class="form-group" style=" margin-bottom: 5px;">
+									  <label ><b>Progress : </b></label>
+									  <select class="form-control" name="progress" >
+										  <option value=""><b>(select one)</b></option>
+										  <option value="Test job">Test job</option>
+										  <option value="Closing">Closing</option>
+									  </select>
+									  <br>
+								  </div>
+
+								  <div class="form-group" style=" margin-bottom: 5px;">
+									  <label class=""><b>Follow Up Date : </b></label>
+									  <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
+								  </div>
+
+
+								  <div class="form-group" style=" margin-bottom: 5px;">
+									  <label class=""><b>Possibility : </b></label>
+									  <select class="form-control"  name="possibility" id="possibility">
+										  @foreach($possibilities as $p)
+											  <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+										  @endforeach
+
+									  </select>
+								  </div>
+
+
+								  <div class="form-group" style=" margin-bottom: 5px;">
+									  <label class=""><b>Comment : </b></label>
+									  <textarea class="form-control" rows="3" name="comment" required></textarea>
+								  </div>
+							  </div>
+							  <div class="col-md-6">
+								  <ul class="list-group" style="margin: 10px; "><br>
+									  <div  style="height: 360px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+									  </div>
+								  </ul>
+							  </div>
 
 							  <div class="col-md-12"><br>
 								  <button class="btn btn-success">Submit</button>
 							  </div>
+						  </div>
 
 
-						  </div></div>
-
+					  </div>
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					  </div>
 				  </form>
 			  </div>
 		  </div>
+
 
 
 

@@ -375,6 +375,7 @@ class LeadController extends Controller
                 $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)
+                    ->where('leaveDate',null)
                     ->limit(1)->first();
 
 
