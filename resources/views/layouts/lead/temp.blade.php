@@ -117,40 +117,7 @@
 
 
     <script>
-        // function jsFunction(value)
-        // {
-        //     alert(value);
-        // }
 
-        $('.drop').click(function (e){
-            alert('clicked');
-        });
-        $("[id*=drop]").change(function(e) {
-            var leadId = $(e.currentTarget).data('lead-id');
-            var possibility=$(this).val();
-            // alert($(this).val());
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            jQuery(this).parents("tr").remove();
-            alert('clicked');
-            {{--$.ajax({--}}
-                {{--type : 'post',--}}
-                {{--url : '{{route('changePossibility')}}',--}}
-                {{--data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},--}}
-                {{--success : function(data){--}}
-                    {{--console.log(data);--}}
-                    {{--// $('#myTable').load(document.URL +  ' #myTable');--}}
-
-                    {{--if(data == 'true'){--}}
-                        {{--// $('#myTable').load(document.URL+'#myTable');--}}
-                        {{--$('#alert').html(' <strong>Success!</strong> Possibility Changed');--}}
-                        {{--$('#alert').show();--}}
-
-                        {{--// alert('Lead possibility changed');--}}
-                        {{--// location.reload();--}}
-                    {{--}--}}
-                {{--}--}}
-            {{--});--}}
-        });
 
 
         $('#my_modal').on('show.bs.modal', function(e) {
@@ -174,6 +141,7 @@
 
 
         $(document).ready(function () {
+
             $('#myTable').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -198,6 +166,29 @@
                     { "data": "edit" }
                 ]
 
+            });
+            $('#myTable tbody').on('change', '[id=drop]', function (e){
+                var leadId = $(e.currentTarget).data('lead-id');
+                var possibility=$(this).val();
+                // alert($(this).val());
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                jQuery(this).parents("tr").remove();
+                $.ajax({
+                    type : 'post',
+                    url : '{{route('changePossibility')}}',
+                    data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},
+                    success : function(data){
+                        console.log(data);
+
+
+                        if(data == 'true'){
+
+                            $('#alert').html(' <strong>Success!</strong> Possibility Changed');
+                            $('#alert').show();
+
+                        }
+                    }
+                });
             });
         });
 
