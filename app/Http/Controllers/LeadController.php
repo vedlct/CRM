@@ -198,6 +198,8 @@ class LeadController extends Controller
 
         public function changePossibility(Request $r){
 
+            //return Response($r);
+
             if($r->ajax()){
                 $lead=Lead::findOrFail($r->leadId);
                 $lead->possibilityId=$r->possibility;
