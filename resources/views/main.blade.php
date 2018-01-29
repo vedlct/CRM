@@ -96,9 +96,9 @@
 
 
 <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
+<script src="{{asset('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
 <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{asset('js/jquery.slimscroll.js')}}"></script>
+<script src="{{asset('js/jquery.slimscroll.js')}}"></script>
 <!--Wave Effects -->
 {{--<script src="{{asset('js/waves.js')}}"></script>--}}
 <!--Menu sidebar -->

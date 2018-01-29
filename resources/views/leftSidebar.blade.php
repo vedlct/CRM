@@ -137,7 +137,7 @@
         <!-- item-->
         <a href="{{ route('logout') }}"
            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
+            document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
 
             <i class="mdi mdi-power"></i></a>
 
