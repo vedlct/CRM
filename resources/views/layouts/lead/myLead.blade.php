@@ -169,7 +169,7 @@
                     <input type="hidden" name="leadId">
                     <div class="row" >
 
-                        <div class="col-md-4">
+
                             <label ><b>Calling Report : </b></label>
                             <select class="form-control" name="report" required>
                                 <option value=""><b>(select one)</b></option>
@@ -179,11 +179,11 @@
                                 @endforeach
                             </select>
 
-                        </div>
 
 
 
-                        <div class=" col-md-4">
+
+
                             <label ><b>Progress : </b></label>
                             <select class="form-control" name="progress" >
                                 <option value=""><b>(select one)</b></option>
@@ -191,16 +191,16 @@
                                 <option value="Closing">Closing</option>
                             </select>
                             <br><br>
-                        </div>
 
 
-                        <div class="col-md-4">
+
+
                             <label class=""><b>Follow Up Date : </b></label>
                             <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
-                        </div>
 
 
-                        <div class="col-md-4">
+
+
                             <label class=""><b>Possibility : </b></label>
                             <select class="form-control"  name="possibility" id="possibility">
                                 @foreach($possibilities as $p)
@@ -208,13 +208,13 @@
                                 @endforeach
 
                             </select>
-                        </div>
 
-                        <div class="col-md-6">
+
+
                             <label class=""><b>Comment : </b></label>
                             <textarea class="form-control" rows="3" name="comment" required></textarea>
                             <br>
-                        </div>
+
 
                         <ul class="col-md-6 list-group" style="margin: 10px;"><br>
                             <div  style="height: 140px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">

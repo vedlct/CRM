@@ -379,8 +379,6 @@ class LeadController extends Controller
 
 
                 if ($assignId){
-
-
                     $leave=Leadassigned::find($assignId->assignId);
                     $leave->leaveDate=date('Y-m-d');
                     $leave->save();
