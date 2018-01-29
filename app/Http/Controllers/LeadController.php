@@ -93,6 +93,8 @@ class LeadController extends Controller
         return view('layouts.lead.assignLead')
             ->with('leads',$leads)
             ->with('users',$users);
+
+
     }
 
 
@@ -102,6 +104,10 @@ class LeadController extends Controller
 
         if($r->ajax()){
             foreach ($r->leadId as $lead){
+                $l=Lead::findOrFail($lead);
+                $l->leadAssignStatus=1;
+                $l->save();
+
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
                 $leadAssigned->assignTo=$r->userId;
@@ -369,14 +375,19 @@ class LeadController extends Controller
                 $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)
-                    ->where('leadAssignStatus',1)
                     ->limit(1)->first();
 
 
                 if ($assignId){
+
+
                     $leave=Leadassigned::find($assignId->assignId);
-                    $leave->leadAssignStatus=0;
+                    $leave->leaveDate=date('Y-m-d');
                     $leave->save();
+
+                    $l=Lead::findOrFail($leave->leadId);
+                    $l->leadAssignStatus=null;
+                    $l->save();
 
                     Session::flash('message', 'You have Leave The Lead successfully');
                     return back();
