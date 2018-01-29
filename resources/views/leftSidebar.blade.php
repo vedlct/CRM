@@ -18,13 +18,8 @@
                 <li class="nav-small-cap">PERSONAL</li>
 
                 <li>
-				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
-                     <span class="hide-menu">Todays Follow-up</span></a>
-                </li>
-
-                <li>
-                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                        <span class="hide-menu">Report</span></a>
+                    <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+                        <span class="hide-menu">Dashboard</span></a>
                 </li>
 
                 <li>
@@ -33,19 +28,102 @@
                 </li>
 
                 <li>
-                    <a href="{{route('starLeads')}}"><i class="fa fa-star"></i><span class="hide-menu">Star Leads</span></a>
+				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+                     <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
 
 
                 <li>
-                    <a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a>
+                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
 
                 </li>
 
                 <li>
-                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacted</span></a>
+                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                 </li>
+                <li>
+                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
+
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
+                        <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('starLeads')}}"><i class="fa fa-star"></i><span class="hide-menu">Star Leads</span></a>
+                        </li>
+                        <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
+                        <li><a href="#"><span class="hide-menu">Leave</span></a></li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
+
+                </li>
+
+                <li>
+                    <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
+                        <span class="hide-menu">My Team</span></a>
+                </li>
+
+
+                <li>
+                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                        <span class="hide-menu">Report</span></a>
+                </li>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">Settings</span>
+                        <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>
+                                <span class="hide-menu">Team Management</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>
+                                <span class="hide-menu">Rejected Leads</span></a>
+
+                        </li>
+
+
+
+
+
+                    </ul>
+                </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 <li>
                     <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">Add Lead</span></a>
@@ -53,27 +131,9 @@
                 </li>
 
 
-                <li>
-                    <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
-
-                </li>
 
 
-                <li>
-                    <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
 
-                </li>
-                <li>
-                    <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
-
-                </li>
-
-
-                <li>
-                    <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>
-                        <span class="hide-menu">Rejected Leads</span></a>
-
-                </li>
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
@@ -94,16 +154,8 @@
                 </li>
 
 
-                <li>
-                    <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
-                        <span class="hide-menu">My Team</span></a>
-                </li>
 
-                <li>
-                    <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>
-                        <span class="hide-menu">Team Management</span></a>
-                </li>
-				
+
 
 
                 <li class="treeview">
@@ -137,7 +189,7 @@
         <!-- item-->
         <a href="{{ route('logout') }}"
            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
+            document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
 
             <i class="mdi mdi-power"></i></a>
 

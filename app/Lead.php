@@ -22,7 +22,7 @@ class Lead extends Model
         $leads=Lead::select('leads.*')
             ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
             ->where('leadassigneds.assignTo',Auth::user()->id)
-            ->Where('leadassigneds.leadAssignStatus',1)
+            ->where('leadassigneds.leaveDate',null)
             ->get();
 
         return $leads;
@@ -35,14 +35,13 @@ class Lead extends Model
 //        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
         $leads=Lead::select('leads.*')
             ->where('leads.statusId','2')
-            ->where('leads.contactedUserId',null)
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->where('leadassigneds.leadId',null)
-            ->orWhere('leadassigneds.leadAssignStatus','0')
-            ->where('leadAssignStatus','0')
-            ->orderBy('leads.leadId','asc')
+            ->where('contactedUserId',null)
+            ->where('leadAssignStatus',null)
             ->get();
         return $leads;
+
+
+
     }
 
     public function possibility(){

@@ -93,6 +93,8 @@ class LeadController extends Controller
         return view('layouts.lead.assignLead')
             ->with('leads',$leads)
             ->with('users',$users);
+
+
     }
 
 
@@ -102,6 +104,10 @@ class LeadController extends Controller
 
         if($r->ajax()){
             foreach ($r->leadId as $lead){
+                $l=Lead::findOrFail($lead);
+                $l->leadAssignStatus=1;
+                $l->save();
+
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
                 $leadAssigned->assignTo=$r->userId;
@@ -284,12 +290,14 @@ class LeadController extends Controller
 
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
+
+
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
             ->where('workprogress.progress','Test job')
             ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
             ->where('leadassigneds.assignTo',Auth::user()->id)
-            ->Where('leadassigneds.leadAssignStatus',1)
+            ->where('leadassigneds.leaveDate',null)
             ->get();
 
 
@@ -306,14 +314,20 @@ class LeadController extends Controller
 
 
         public function starLeads(){
-
-//            $leads=(new Lead())->myLeads();
             $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
                 ->where('leadassigneds.assignTo',Auth::user()->id)
-                ->Where('leadassigneds.leadAssignStatus',1)
+                ->where('leadassigneds.leaveDate',null)
                 ->get();
+
+////            $leads=(new Lead())->myLeads();
+//            $leads=Lead::select('leads.*')
+//                ->where('possibilityId',4)
+//                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+//                ->where('leadassigneds.assignTo',Auth::user()->id)
+//                ->Where('leadassigneds.leadAssignStatus',1)
+//                ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
@@ -371,14 +385,18 @@ class LeadController extends Controller
                 $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)
-                    ->where('leadAssignStatus',1)
+                    ->where('leaveDate',null)
                     ->limit(1)->first();
 
 
                 if ($assignId){
                     $leave=Leadassigned::find($assignId->assignId);
-                    $leave->leadAssignStatus=0;
+                    $leave->leaveDate=date('Y-m-d');
                     $leave->save();
+
+                    $l=Lead::findOrFail($leave->leadId);
+                    $l->leadAssignStatus=null;
+                    $l->save();
 
                     Session::flash('message', 'You have Leave The Lead successfully');
                     return back();

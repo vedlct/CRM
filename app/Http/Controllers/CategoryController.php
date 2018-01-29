@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Category;
+use Session;
 
 class CategoryController extends Controller
 {
@@ -55,6 +56,7 @@ class CategoryController extends Controller
             'type' => $request['type']
         ]);
 
+        Session::flash('message', 'Category successfully created');
         return redirect()->intended('system-management/category');
     }
 
@@ -108,6 +110,7 @@ class CategoryController extends Controller
         Category::where('categoryId', $request->categoryId)
             ->update($input);
         
+        Session::flash('message', 'Category successfully updated');
         return redirect()->intended('system-management/category');
     }
 
@@ -120,6 +123,8 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         Category::where('categoryId', $id)->delete();
+        Session::flash('message', 'Category successfully deleted');
+
          return redirect()->intended('system-management/category');
     }
 
