@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Country;
+use Session;
 
 class CountryController extends Controller
 {
@@ -53,8 +54,10 @@ class CountryController extends Controller
         DB::table('countries')->insert([
             'countryName' => $request['countryName']
         ]);
+        Session::flash('message', 'Country successfully');
 
-        return redirect()->intended('system-management/country');
+
+        return back();
     }
 
     /**
@@ -116,7 +119,9 @@ class CountryController extends Controller
     public function destroy($id)
     {
         Country::where('countryId', $id)->delete();
-         return redirect()->intended('system-management/country');
+
+        Session::flash('message', 'Country deleted');
+        return back();
     }
 
     /**
