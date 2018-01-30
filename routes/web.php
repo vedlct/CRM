@@ -54,7 +54,7 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 
 
 Route::get('/test', 'TestController@test');
-Route::get('/tests', 'TestController@anyData')->name('test');
+Route::post('/tests', 'TestController@anyData')->name('test');
 
 /**/
 

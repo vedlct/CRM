@@ -19,7 +19,7 @@ class TestController extends Controller
     public function test(){
         return view('test');
     }
-    public function anyData()
+    public function anyData(Request $r)
     {
         $leads=Lead::select('companyName','personName','email','contactNumber','created_at')->get();
         return DataTables::of($leads)->make(true);

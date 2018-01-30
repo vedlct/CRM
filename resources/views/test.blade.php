@@ -50,7 +50,12 @@
                 processing: true,
                 serverSide: true,
                 type:"POST",
-                ajax: '{!! route('test') !!}',
+                "ajax":{
+                    "url": "{!! route('test') !!}",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+                {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'companyName', name: 'companyName' },
                     { data: 'personName', name: 'personName' },
