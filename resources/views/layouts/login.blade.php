@@ -49,7 +49,7 @@
 
 
                 <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
-                    {{ csrf_field() }}
+                    {!! csrf_field() !!}
                     <h3 class="box-title m-b-20">Sign In</h3>
                     <div class="form-group{{ $errors->has('userId') ? ' has-error' : '' }} " >
                         <div class="col-xs-12">
