@@ -52,10 +52,12 @@ class NoticeController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->typeId ==2){
         $categories=Category:: where('type', 2)
             ->get();
             return view('notice/create')
-            ->with('categories', $categories);
+            ->with('categories', $categories);}
+        return Redirect()->route('home');
     }
 
     /**
