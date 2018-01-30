@@ -21,7 +21,11 @@ class TestController extends Controller
     }
     public function anyData(Request $r)
     {
-        $leads=Lead::select('companyName','personName','email','contactNumber','created_at')->get();
-        return DataTables::of($leads)->make(true);
+        $leads=Lead::select('leadId','companyName','personName','email','contactNumber','created_at');
+        return DataTables::of($leads)
+            ->addColumn('action', function ($lead) {
+                return '<a href="'.$lead->leadId.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            })
+            ->make(true);
     }
 }

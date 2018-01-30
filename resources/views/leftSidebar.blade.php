@@ -74,10 +74,12 @@
                 </li>
                 @endif
 
+
+                @if(Auth::user()->typeId ==4 || Auth::user()->typeId ==2)
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
-
                 </li>
+                @endif
 
                 @if(Auth::user()->typeId ==5 || Auth::user()->typeId ==4 )
 
@@ -93,6 +95,8 @@
                     <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
                         <span class="hide-menu">Report</span></a>
                 </li>
+
+                @if(Auth::user()->typeId ==1)
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
@@ -111,12 +115,9 @@
 
                         </li>
 
-
-
-
-
                     </ul>
                 </li>
+                @endif
 
 
 
@@ -124,26 +125,12 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                @if(Auth::user()->typeId ==4 )
                 <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">Add Lead</span></a>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
 
                 </li>
+                @endif
 
 
 
