@@ -4,7 +4,8 @@
 @section('content')
 
 
-
+    <div class="card" style="padding:10px;">
+        <div class="card-body">
     <table class="table table-bordered" id="users-table">
         <thead>
         <tr>
@@ -21,7 +22,7 @@
         </tbody>
     </table>
 
-
+        </div></div>
 
 
 
