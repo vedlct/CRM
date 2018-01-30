@@ -217,13 +217,18 @@ class LeadController extends Controller
         public function tempLeads(){
 
             //For Ra
-            if(Auth::user()->typeId==4){
+//            if(Auth::user()->typeId==4){
+//
+//                return view('layouts.lead.temp');
+//                }
+//
+//                return Redirect()->route('home');
+            $leads=Lead::where('statusId',1)->get();
 
-                return view('layouts.lead.temp');
-                }
-
-                return Redirect()->route('home');
-
+            $possibilities=Possibility::get();
+            return view('layouts.lead.temp')
+                ->with('leads',$leads)
+                ->with('possibilities',$possibilities);
 
             }
 

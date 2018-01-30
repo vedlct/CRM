@@ -9,7 +9,7 @@
 @section('content')
 
 
-    <div class="card" style="padding: 2px;" id="card">
+    <div class="card" style="padding: 2px;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Temp Leads</b></h2>
 
@@ -24,18 +24,75 @@
                         <th>Contact Number</th>
                         <th>Email</th>
                         <th>Country</th>
-                        <th>Mined By</th>
+                        {{--<th>Comments</th>--}}
+                        {{--<th>Mined By</th>--}}
                         <th>Created At</th>
                         <th>Set Possibility</th>
                         <th>Action</th>
 
                     </tr>
                     </thead>
+                    <tbody>
+
+
+                    @foreach($leads as $lead)
+                        <tr>
+                            <td>{{$lead->companyName}}</td>
+                            <td>{{$lead->category->categoryName}}</td>
+                            <td>{{$lead->website}}</td>
+                            <td>{{$lead->personName}}</td>
+                            <td>{{$lead->contactNumber}}</td>
+                            <td>{{$lead->email}}</td>
+                            <td>{{$lead->country->countryName}}</td>
+                            {{--<td>{{$lead->comments}}</td>--}}
+                            {{--<td>{{$lead->mined->firstName}}</td>--}}
+                            <td>{{$lead->created_at}}</td>
+                            <td>
+
+
+
+
+                                <select class="form-control" id="drop" data-lead-id="{{$lead->leadId}}" name="possibility" >
+                                    <option value="">Select</option>
+                                    @foreach($possibilities as $p)
+                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                    @endforeach
+                                </select>
+
+
+                            </td>
+
+                            <td>
+                            {{--<form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">--}}
+                            {{--{{csrf_field()}}--}}
+                            {{--{{ method_field('DELETE') }}--}}
+
+                            <!-- Trigger the modal with a button -->
+                                <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-name="{{$lead->companyName}}"
+                                   data-lead-email="{{$lead->email}}"
+                                   data-lead-number="{{$lead->contactNumber}}"
+                                   data-lead-person="{{$lead->personName}}"
+                                   data-lead-website="{{$lead->website}}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                                {{--<button type="submit" class="btn btn-danger btn-sm">--}}
+                                {{--<i class="fa fa-trash"></i></button></form>--}}
+
+
+
+
+
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
-
 
 
     <!-- Modal -->
@@ -118,9 +175,42 @@
 
     <script>
 
+        // function drop(selectObject) {
+        //     var value = selectObject.id;
+        //     alert(value);
+        // }
+        $("[id*=drop]").change(function(e) {
+            var leadId = $(e.currentTarget).data('lead-id');
+            var possibility=$(this).val();
+            // alert($(this).val());
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            jQuery(this).parents("tr").remove();
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('changePossibility')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+
+
+                        $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully Changed!',
+//                        });
+                        $('#alert').html(' <strong>Success!</strong> Possibility Changed');
+                        $('#alert').show();
+                    }
+                }
+            });
+
+        });
 
 
         $('#my_modal').on('show.bs.modal', function(e) {
+
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var leadName = $(e.relatedTarget).data('lead-name');
@@ -128,6 +218,7 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+
             //populate the textbox
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
@@ -135,58 +226,25 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+
+        });
+
+
+        $(document).ready(function() {
+
+
+            $('#myTable').DataTable(
+                {    responsive: true,
+                    "order": [[ 7, "desc" ]]
+                }
+            );
+
         });
 
 
 
 
-        $(document).ready(function () {
 
-            $('#myTable').DataTable({
-                "processing": true,
-                "serverSide": true,
-                stateSave: true,
-                "ajax":{
-                    "url": "{{ route('tempData')}}",
-                    "dataType": "json",
-                    "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
-                },
-                "columns": [
-                    { "data": "name" },
-                    { "data": "website" },
-                    { "data": "category" },
-                    { "data": "person" },
-                    { "data": "number" },
-                    { "data": "email" },
-                    { "data": "country" },
-                    { "data": "minedBy" },
-                    { "data": "createdAt" },
-                    { "data": "possibility" },
-                    { "data": "edit" }
-                ]
-
-            });
-            $('#myTable tbody').on('change', '[id=drop]', function (e){
-                var leadId = $(e.currentTarget).data('lead-id');
-                var possibility=$(this).val();
-                // alert($(this).val());
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                jQuery(this).parents("tr").remove();
-                $.ajax({
-                    type : 'post',
-                    url : '{{route('changePossibility')}}',
-                    data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},
-                    success : function(data){
-                        console.log(data);
-                        if(data == 'true'){
-                            $('#alert').html(' <strong>Success!</strong> Possibility Changed');
-                            $('#alert').show();
-                        }
-                    }
-                });
-            });
-        });
 
 
     </script>
