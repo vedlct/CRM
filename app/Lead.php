@@ -58,10 +58,23 @@ class Lead extends Model
     }
 
 
-    public function getTempLead(){
-        $lead=Lead::where('statusId', 1)
+    public function getTempLead($start,$limit,$search){
+        if($search==null){
+            $leads=Lead::where('statusId', 1)
+                ->offset($start)
+                ->limit($limit)
+                ->get();
+            }
+            else{
+                $leads=Lead::where('statusId', 1)
+                    ->where('companyName','LIKE',"%{$search}%")
+                    ->offset($start)
+                    ->limit($limit)
                     ->get();
-        return $lead;
+            }
+
+
+        return $leads;
     }
 
 

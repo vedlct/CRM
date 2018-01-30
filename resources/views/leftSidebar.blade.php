@@ -22,31 +22,38 @@
                         <span class="hide-menu">Dashboard</span></a>
                 </li>
 
+                {{--For user --}}
+                @if(Auth::user()->typeId ==5 )
+
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
                             Assigned Leads</span></a>
                 </li>
+                @endif
 
+                @if(Auth::user()->typeId ==5 )
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
-
-
-                <li>
+                    <li>
                     <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
-
-                </li>
+                    </li>
+                @endif
 
                 <li>
                     <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                 </li>
+
+                @if(Auth::user()->typeId ==4)
+
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
-
                 </li>
+                @endif
 
+                @if(Auth::user()->typeId ==5 )
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
                         <span class="pull-right-container">
@@ -62,22 +69,31 @@
 
                     </ul>
                 </li>
+                @endif
 
+
+                @if(Auth::user()->typeId ==4 || Auth::user()->typeId ==2)
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
-
                 </li>
+                @endif
+
+                @if(Auth::user()->typeId ==5)
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
                         <span class="hide-menu">My Team</span></a>
                 </li>
 
+                @endif
+
 
                 <li>
                     <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
                         <span class="hide-menu">Report</span></a>
                 </li>
+
+                @if(Auth::user()->typeId ==3)
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
@@ -96,12 +112,9 @@
 
                         </li>
 
-
-
-
-
                     </ul>
                 </li>
+                @endif
 
 
 
@@ -109,37 +122,21 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                @if(Auth::user()->typeId ==4 )
                 <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">Add Lead</span></a>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
 
                 </li>
+                @endif
 
 
-
-
-
-
+                @if(Auth::user()->typeId ==1 )
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>
 
                 </li>
+                @endif
 
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
@@ -156,7 +153,7 @@
 
 
 
-
+                @if(Auth::user()->typeId ==1 )
 
                 <li class="treeview">
 				  <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>
@@ -172,6 +169,8 @@
 					<li><a href="{{ url('system-management/status') }}">Lead Status</a></li>
 				  </ul>
 				</li>
+
+                @endif
 
 
 

@@ -8,7 +8,7 @@ use Session;
 use App\Team;
 use App\User;
 use Auth;
-use App\DB;
+use DB;
 
 class TeamController extends Controller
 {
@@ -19,30 +19,41 @@ class TeamController extends Controller
 
     public function myTeam()
     {
+        //for user and RA
+        $type=Auth::user()->typeId;
+        if($type==5 || $type==4){
+
         $users = User::where('teamId', Auth::user()->teamId)->get();
         $team = Team::findOrFail(Auth::user()->teamId);
 
         return view('layouts.Team.myTeam')
             ->with('users', $users)
             ->with('team', $team);
+        }
+
     }
 
     public function teamManagement()
     {
-                $users = User::where('teamId', null)->get();
+        //for SuperVisor
+        if(Auth::user()->typeId==3){
+        $users = User::where('typeId',2)
+                    ->orWhere('typeId',5)
+                    ->where('teamId',null)
+                    ->get();
                 $teams = Team::with('user')->get();
+
                 $userAssigneds=User::where('users.teamId','!=',null)
                     ->leftJoin('teams','users.teamId','=','teams.teamId')->get();
 
                 return view('layouts.Team.teamManagement')
                     ->with('users', $users)
                     ->with('teams', $teams)
-                    ->with('userAssigneds',$userAssigneds);
+                    ->with('userAssigneds',$userAssigneds);}
+        return Redirect()->route('home');
 
 
-
-
-    }
+                }
 
     public function teamAssign(Request $r)
     {

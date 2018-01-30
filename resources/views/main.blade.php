@@ -18,20 +18,20 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/logo/TCL_logo.png')}}">
     <title>Customer relationship management</title>
 
-    @yield('header')
+@yield('header')
 
-    <!-- Bootstrap Core CSS -->
+<!-- Bootstrap Core CSS -->
     <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- chartist CSS -->
-    {{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist.min.css')}}" rel="stylesheet">--}}
-    {{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist-init.css')}}" rel="stylesheet">--}}
-    {{--<link href="{{asset('')}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">--}}
-    {{--<link href="{{asset('')}}../assets/plugins/css-chart/css-chart.css" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist.min.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist-init.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('')}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">--}}
+{{--<link href="{{asset('')}}../assets/plugins/css-chart/css-chart.css" rel="stylesheet">--}}
 
-    <!-- toast CSS -->
-    {{--<link href="{{asset('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">--}}
-    <!-- Custom CSS -->
+<!-- toast CSS -->
+{{--<link href="{{asset('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">--}}
+<!-- Custom CSS -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{asset('css/colors/blue.css')}}" id="theme" rel="stylesheet">
@@ -49,7 +49,6 @@
         .help-block{
             color: red;
         }
-
     </style>
 
 
@@ -76,17 +75,17 @@
                 <strong>Success!</strong> Indicates a successful or positive action.
             </div>
 
-                @yield('content')
+            @yield('content')
 
 
 
-        <footer class="footer">
-            © 2018 CRM By TECH CLOUD LTD
-        </footer>
+            <footer class="footer">
+                © 2018 CRM By TECH CLOUD LTD
+            </footer>
+
+        </div>
 
     </div>
-
-</div>
 
 
 

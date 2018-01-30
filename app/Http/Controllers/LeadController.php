@@ -31,12 +31,15 @@ class LeadController extends Controller
     }
 
     public function add(){
-        $cats=Category::where('type', 1)->get();
+        //for RA
+        if(Auth::user()->typeId==4){
+            $cats=Category::where('type', 1)->get();
         $countries=Country::get();
 
         return view('layouts.lead.add')
             ->with('cats',$cats)
-            ->with('countries',$countries);
+            ->with('countries',$countries);}
+        return Redirect()->route('home');
     }
 
     public function store(Request $r){
@@ -76,24 +79,37 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
-        }
+    }
 
 
     public function assignShow(){
 
-        $leads=(new Lead())->showNotAssignedLeads();
+//        return Auth::user()->teamId;
+        if(Auth::user()->typeId == 4 || Auth::user()->typeId == 2){
+
+            $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
-        $users=User::select('id','firstName','lastName')
-//            ->where('id','!=',Auth::user()->id)
-            ->Where('typeId','!=',1)
-            ->get();
+         if(Auth::user()->typeId == 4 ){
+             $users=User::select('id','firstName','lastName')
+                 ->where('id','!=',Auth::user()->id)
+                 ->Where('typeId',5)
+                 ->get();
+         }
+
+         else{
+             $users=User::select('id','firstName','lastName')
+                 ->where('teamId',Auth::user()->teamId)
+                 ->Where('typeId',5)
+                 ->get();
+         }
 
 
         return view('layouts.lead.assignLead')
             ->with('leads',$leads)
-            ->with('users',$users);
+            ->with('users',$users);}
 
+        return Redirect()->route('home');
 
     }
 
@@ -160,15 +176,21 @@ class LeadController extends Controller
 
         public function assignedLeads(){
             //will return the leads assigned to you
-            $leads=(new Lead())->myLeads();
+            //for user
+            $type=Auth::user()->typeId;
+            if($type == 5) {
+                $leads = (new Lead())->myLeads();
+                $callReports = Callingreport::get();
+                $possibilities = Possibility::get();
 
-            $callReports=Callingreport::get();
-            $possibilities=Possibility::get();
+                return view('layouts.lead.myLead')
+                    ->with('leads', $leads)
+                    ->with('callReports', $callReports)
+                    ->with('possibilities', $possibilities);
+            }
 
-            return view('layouts.lead.myLead')
-                ->with('leads',$leads)
-                ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+            return Redirect()->route('home');
+
         }
 
 
@@ -194,14 +216,16 @@ class LeadController extends Controller
 
         public function tempLeads(){
 
+            //For Ra
+            if(Auth::user()->typeId==4){
+
+                return view('layouts.lead.temp');
+                }
+
+                return Redirect()->route('home');
 
 
-
-           return view('layouts.lead.temp');
-//                ->with('leads',$leads)
-//                ->with('possibilities',$possibilities);
-
-        }
+            }
 
 
         public function tempData(Request $request){
@@ -209,21 +233,19 @@ class LeadController extends Controller
             $start = $request->input('start');
             $limit = $request->input('length');
             if(empty($request->input('search.value')))
-            {  $leads=Lead::where('statusId', 1)
-                ->offset($start)
-                ->limit($limit)
-                ->get();
+            {
+                $leads=(new Lead())->getTempLead($start,$limit,null);
 
-
-            }
+                }
             else{
 
                 $search = $request->input('search.value');
-                $leads=Lead::where('statusId', 1)
-                    ->where('companyName','LIKE',"%{$search}%")
-                    ->offset($start)
-                    ->limit($limit)
-                    ->get();
+                $leads=(new Lead())->getTempLead($start,$limit,$search);
+//                $leads=Lead::where('statusId', 1)
+//                    ->where('companyName','LIKE',"%{$search}%")
+//                    ->offset($start)
+//                    ->limit($limit)
+//                    ->get();
                 }
 
 
@@ -367,7 +389,7 @@ class LeadController extends Controller
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
 
-
+        if(Auth::user()->typeId ==5){
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
             ->where('workprogress.progress','Test job')
@@ -383,27 +405,24 @@ class LeadController extends Controller
         return view('layouts.lead.testList')
             ->with('leads',$leads)
             ->with('callReports',$callReports)
-            ->with('possibilities',$possibilities);
+            ->with('possibilities',$possibilities);}
+
+        return Redirect()->route('home');
+
 
     }
 
 
 
         public function starLeads(){
-            $leads=Lead::select('leads.*')
+
+            if(Auth::user()->typeId ==5){
+        $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
                 ->where('leadassigneds.assignTo',Auth::user()->id)
                 ->where('leadassigneds.leaveDate',null)
                 ->get();
-
-////            $leads=(new Lead())->myLeads();
-//            $leads=Lead::select('leads.*')
-//                ->where('possibilityId',4)
-//                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//                ->where('leadassigneds.assignTo',Auth::user()->id)
-//                ->Where('leadassigneds.leadAssignStatus',1)
-//                ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
@@ -411,7 +430,9 @@ class LeadController extends Controller
             return view('layouts.lead.starLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+                ->with('possibilities',$possibilities);}
+            return Redirect()->route('home');
+
         }
 
 
@@ -424,16 +445,18 @@ class LeadController extends Controller
         }
 
         public function contacted(){
-            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
+            //For user
+        if(Auth::user()->typeId ==5){
 
+            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
-
             return view('layouts.lead.myLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+                ->with('possibilities',$possibilities);}
 
+                return Redirect()->route('home');
         }
 
         public function rejectedLeads(){
