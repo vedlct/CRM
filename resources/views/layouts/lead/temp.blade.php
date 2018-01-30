@@ -6,12 +6,16 @@
 
 @section('content')
 
+    <div id="test">
 
-    <div class="card" style="padding: 2px;" id="card">
+        sjdhfjkshdfj
+    </div>
+    <div class="card" style="padding: 2px;" id="card" >
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Temp Leads</b></h2>
 
-            <div class="table-responsive m-t-40" >
+            <div class="table-responsive m-t-40"  >
+                <span id="tableId">
                 <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
                     <thead>
                     <tr>
@@ -34,6 +38,7 @@
 
 
                     @foreach($leads as $lead)
+
                         <tr>
                             <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
@@ -42,30 +47,26 @@
                             <td>{{$lead->contactNumber}}</td>
                             <td>{{$lead->email}}</td>
                             <td>{{$lead->country->countryName}}</td>
-                            {{--<td>{{$lead->comments}}</td>--}}
-                            {{--<td>{{$lead->mined->firstName}}</td>--}}
+
                             <td>{{$lead->created_at}}</td>
                             <td>
-
-
-
-
-                                <select class="form-control" id="drop" data-lead-id="{{$lead->leadId}}" name="possibility" >
+                                    <select class="form-control" id="{{$lead->leadId}}" data-panel-id="{{$lead->leadId}}" name="possibility" onchange="myfunc(this)" >
                                     <option value="">Select</option>
-                                    @foreach($possibilities as $p)
-                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-                                    @endforeach
-                                </select>
+                                        @foreach($possibilities as $p)
+                                            <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                        @endforeach
+                                     </select>
 
+                                {{--<select class="form-control" id="drop" data-lead-id="{{$lead->leadId}}" name="possibility" >--}}
+                                    {{--<option value="">Select</option>--}}
+                                    {{--@foreach($possibilities as $p)--}}
+                                        {{--<option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>--}}
+                                    {{--@endforeach--}}
+                                {{--</select>--}}
 
                             </td>
 
                             <td>
-                            {{--<form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">--}}
-                            {{--{{csrf_field()}}--}}
-                            {{--{{ method_field('DELETE') }}--}}
-
-                            <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
@@ -75,11 +76,6 @@
                                    data-lead-website="{{$lead->website}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                                {{--<button type="submit" class="btn btn-danger btn-sm">--}}
-                                {{--<i class="fa fa-trash"></i></button></form>--}}
-
-
-
 
 
                             </td>
@@ -88,6 +84,7 @@
 
                     </tbody>
                 </table>
+                </span>
             </div>
         </div>
     </div>
@@ -172,21 +169,29 @@
 
 
     <script>
-        $("[id*=drop]").change(function(e) {
-            var leadId = $(e.currentTarget).data('lead-id');
-            var possibility=$(this).val();
-            // alert($(this).val());
+
+        function myfunc(x) {
+            leadId = $(x).data('panel-id');
+          //  var possibility=$(this).val();
+            var possibility = document.getElementById(leadId).value;
+           // var e = document.getElementById("drop");
+           // var strUser = e.options[e.selectedIndex].value;
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            jQuery(this).parents("tr").remove();
+
+           // alert(leadId);
+           // alert(possibility);
+          //  alert(CSRF_TOKEN);
             $.ajax({
                 type : 'post',
                 url : '{{route('changePossibility')}}',
                 data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},
                 success : function(data){
-                    console.log(data);
-                    // $('#myTable').load(document.URL +  ' #myTable');
+                    //console.log(data);
+                    $('#tableId').load(document.URL +  '#tableId');
                     if(data == 'true'){
-                        // $('#myTable').load(document.URL+'#myTable');
+                        //$('#myTable').load(document.URL+  '#myTable');
+
+                       // $('#myTable').DataTable().ajax.reload();
                         $('#alert').html(' <strong>Success!</strong> Possibility Changed');
                         $('#alert').show();
                         // alert('Lead possibility changed');
@@ -194,7 +199,34 @@
                     }
                 }
             });
-        });
+        }
+
+
+        {{--$("[id*=drop]").change(function(e) {--}}
+            {{--var leadId = $(e.currentTarget).data('lead-id');--}}
+            {{--var possibility=$(this).val();--}}
+            {{--// alert($(this).val());--}}
+            {{--var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
+            {{--jQuery(this).parents("tr").remove();--}}
+            {{--$.ajax({--}}
+                {{--type : 'post',--}}
+                {{--url : '{{route('changePossibility')}}',--}}
+                {{--data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},--}}
+                {{--success : function(data){--}}
+                    {{--//console.log(data);--}}
+                    {{--//$('#tableId').load(document.URL +  '#tableId');--}}
+                    {{--if(data == 'true'){--}}
+                        {{--// $('#myTable').load(document.URL+'#myTable');--}}
+                        {{--$('#alert').html(' <strong>Success!</strong> Possibility Changed');--}}
+                        {{--$('#alert').show();--}}
+                        {{--// alert('Lead possibility changed');--}}
+                        {{--// location.reload();--}}
+                    {{--}--}}
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
+
+
         $('#my_modal').on('show.bs.modal', function(e) {
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
@@ -215,10 +247,13 @@
             $('#myTable').DataTable(
                 {    responsive: true,
                     "order": [[ 7, "desc" ]],
-                    stateSave: true
+                    stateSave: true,
+
                 }
             );
+
         });
+
     </script>
 
 
