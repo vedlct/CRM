@@ -41,26 +41,19 @@ class FollowupController extends Controller
      */
     public function index()
     {
-//        $followups = DB::table('followup')
-//		->where('followUpDate', date('Y-m-d'))
-//        ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
-//        ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
-//        ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
-//        ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//        ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-//        ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-//        ->get();
+
+        if(!Auth::user()->typeId==5) {
+            return Redirect()->route('home');
+        }
         $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->where('followUpDate', date('Y-m-d'))
             ->where('followup.userId',Auth::user()->id)->get();
 
-
-
-		  $callReports=Callingreport::get();
+            $callReports=Callingreport::get();
 		 /// return $callReports;
             $possibilities=Possibility::get();
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
 
-        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
     }
 
 

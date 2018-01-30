@@ -160,15 +160,21 @@ class LeadController extends Controller
 
         public function assignedLeads(){
             //will return the leads assigned to you
-            $leads=(new Lead())->myLeads();
+            //for user and RA
+            $type=Auth::user()->typeId;
+            if($type ==4 || $type== 5){
+                $leads = (new Lead())->myLeads();
 
-            $callReports=Callingreport::get();
-            $possibilities=Possibility::get();
+                $callReports = Callingreport::get();
+                $possibilities = Possibility::get();
 
-            return view('layouts.lead.myLead')
-                ->with('leads',$leads)
-                ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+                return view('layouts.lead.myLead')
+                    ->with('leads', $leads)
+                    ->with('callReports', $callReports)
+                    ->with('possibilities', $possibilities);
+            }
+
+            return Redirect()->route('home');
         }
 
 
@@ -193,12 +199,12 @@ class LeadController extends Controller
 
 
         public function tempLeads(){
-//            $leads=(new Lead())->getTempLead();
-//
-//           $possibilities=Possibility::get();
+
+            if(!Auth::user()->typeId==4){
+                return Redirect()->route('home');
+            }
            return view('layouts.lead.temp');
-//                ->with('leads',$leads)
-//                ->with('possibilities',$possibilities);
+
 
         }
 
@@ -413,6 +419,9 @@ class LeadController extends Controller
         }
 
         public function contacted(){
+            if(!Auth::user()->typeId ==5){
+                return Redirect()->route('home');
+            }
             $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
 
             $callReports=Callingreport::get();

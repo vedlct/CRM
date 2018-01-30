@@ -19,6 +19,10 @@ class TeamController extends Controller
 
     public function myTeam()
     {
+        $type=Auth::user()->typeId;
+        if(!$type==5 || !$type==4){
+            return Redirect()->route('home');
+        }
         $users = User::where('teamId', Auth::user()->teamId)->get();
         $team = Team::findOrFail(Auth::user()->teamId);
 

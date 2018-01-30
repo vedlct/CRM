@@ -22,11 +22,16 @@
                         <span class="hide-menu">Dashboard</span></a>
                 </li>
 
+                {{--For user --}}
+                @if(Auth::user()->typeId ==5 || Auth::user()->typeId ==4 )
+
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
                             Assigned Leads</span></a>
                 </li>
+                @endif
 
+                @if(Auth::user()->typeId ==5 )
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
@@ -37,16 +42,21 @@
                     <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
 
                 </li>
+                @endif
 
                 <li>
                     <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                 </li>
+
+                @if(Auth::user()->typeId ==4)
+
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
-
                 </li>
+                @endif
 
+                @if(Auth::user()->typeId ==5 )
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
                         <span class="pull-right-container">
@@ -62,16 +72,21 @@
 
                     </ul>
                 </li>
+                @endif
 
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
 
                 </li>
 
+                @if(Auth::user()->typeId ==5 || Auth::user()->typeId ==4 )
+
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
                         <span class="hide-menu">My Team</span></a>
                 </li>
+
+                @endif
 
 
                 <li>
