@@ -14,6 +14,7 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Contact Person</th>
+                        <th>Mined By</th>
                         <th>Contacted</th>
                     </tr>
                     </thead>
@@ -25,6 +26,7 @@
                             <td>{{$lead->category->categoryName}}</td>
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->personName}}</td>
+                            <td>{{$lead->mined->firstName}}</td>
                             <th>
                                 <form method="post" action="{{route('addContacted')}}">
                                     {{@csrf_field()}}

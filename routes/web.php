@@ -99,6 +99,9 @@ Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
+
+Route::post('lead/temp','LeadController@tempData')->name('tempData');
+
 Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 
 Route::post('lead/update','LeadController@update')->name('leadUpdate');
@@ -130,7 +133,8 @@ Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 
 //Reject Leads rejectedLeads
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
-Route::get('rejectlead','LeadController@rejectData')->name('rejectData');
+Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
+
 
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');

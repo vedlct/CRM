@@ -92,16 +92,16 @@ class UsertypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $usertype = Usertype::findOrFail($id);
+        $usertype = Usertype::findOrFail($request->typeId);
         $input = [
             'typeName' => $request['typeName']
         ];
         $this->validate($request, [
         'typeName' => 'required|max:60'
         ]);
-        Usertype::where('typeId', $id)
+        Usertype::where('typeId', $request->typeId)
             ->update($input);
         
         return redirect()->intended('system-management/usertype');

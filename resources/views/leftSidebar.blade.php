@@ -28,7 +28,7 @@
                 </li>
 
                 <li>
-				 <a href="{{route('follow-up.index')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
+				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
 
@@ -80,7 +80,7 @@
                 </li>
 
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">Settings</span>
+                    <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
                         <span class="pull-right-container">
 					  <i class="fa fa-angle-left pull-right"></i>
 					</span>
@@ -189,7 +189,7 @@
         <!-- item-->
         <a href="{{ route('logout') }}"
            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
+            document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
 
             <i class="mdi mdi-power"></i></a>
 

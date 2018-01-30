@@ -6,16 +6,17 @@
     <div class="card" style="padding:10px;">
         <h2 align="center">Rejected Leads</h2>
         <div class="card-body">
-    <table class="table table-bordered table-striped" id="users-table">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>website</th>
-            <th>Category</th>
-        </tr>
-        </thead>
-    </table>
+
+            <table class="table table-bordered" id="posts">
+                <thead>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mined By</th>
+                <th>Drop</th>
+
+                </thead>
+            </table>
+
         </div></div>
 
 
@@ -24,13 +25,7 @@
 
 @section('foot-js')
 
-    {{--<script src="{{asset('datatables\js\jquery.dataTables.min.js')}}"></script>--}}
-    {{--<script src="{{asset('datatables\js\dataTables.bootstrap.min.js')}}"></script>--}}
-    {{--<script src="//code.jquery.com/jquery.js"></script>--}}
-    <!-- DataTables -->
-    {{--<script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>--}}
-    <!-- Bootstrap JavaScript -->
-    {{--<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>--}}
+
 
 
     <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -42,21 +37,24 @@
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
 
-
     <script>
-
-        $(function() {
-
-            $('#users-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('rejectData') !!}',
-                columns: [
-                    { data: 'leadId', name: 'leadId' },
-                    { data: 'companyName', name: 'companyName' },
-                    { data: 'website', name: 'website' },
-                    { data: 'category.categoryName', name: 'category.categoryName' }
+        $(document).ready(function () {
+            $('#posts').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax":{
+                    "url": "{{ route('rejectData')}}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+                "columns": [
+                    { "data": "name" },
+                    { "data": "email" },
+                    { "data": "minedBy" },
+                    { "data": "drop" }
                 ]
+
             });
         });
     </script>
