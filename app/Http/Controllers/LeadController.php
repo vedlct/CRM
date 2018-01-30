@@ -31,12 +31,17 @@ class LeadController extends Controller
     }
 
     public function add(){
+        if(Auth::user()->typeId==4){
+
+
+
         $cats=Category::where('type', 1)->get();
         $countries=Country::get();
 
         return view('layouts.lead.add')
             ->with('cats',$cats)
-            ->with('countries',$countries);
+            ->with('countries',$countries);}
+        return Redirect()->route('home');
     }
 
     public function store(Request $r){
@@ -76,24 +81,30 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
-        }
+    }
 
 
     public function assignShow(){
+
+//        return Auth::user()->typeId;
+        if(Auth::user()->typeId == 4 || Auth::user()->typeId == 2){
+
+
 
         $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
         $users=User::select('id','firstName','lastName')
-//            ->where('id','!=',Auth::user()->id)
+           ->where('id','!=',Auth::user()->id)
             ->Where('typeId','!=',1)
             ->get();
 
 
         return view('layouts.lead.assignLead')
             ->with('leads',$leads)
-            ->with('users',$users);
+            ->with('users',$users);}
 
+        return Redirect()->route('home');
 
     }
 
@@ -162,9 +173,10 @@ class LeadController extends Controller
             //will return the leads assigned to you
             //for user and RA
             $type=Auth::user()->typeId;
-            if($type ==4 || $type== 5){
-                $leads = (new Lead())->myLeads();
+            if($type == 5 || $type==4) {
 
+
+                $leads = (new Lead())->myLeads();
                 $callReports = Callingreport::get();
                 $possibilities = Possibility::get();
 
@@ -175,6 +187,7 @@ class LeadController extends Controller
             }
 
             return Redirect()->route('home');
+
         }
 
 
@@ -203,7 +216,13 @@ class LeadController extends Controller
             if(!Auth::user()->typeId==4){
                 return Redirect()->route('home');
             }
-           return view('layouts.lead.temp');
+            $leads=(new Lead())->getTempLead();
+            $possibilities=Possibility::get();
+            return view('layouts.lead.temp')
+                ->with('leads',$leads)
+                ->with('possibilities',$possibilities);
+
+//           return view('layouts.lead.temp');
 
 
         }
