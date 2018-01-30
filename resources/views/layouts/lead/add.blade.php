@@ -59,7 +59,7 @@
                 <div class="form-group col-md-5">
                     <label class="control-label " ><b>Designation</b></label>
                     {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
-                    <input type="text" class="form-control" name="designation" placeholder="Enter Person Dasignation" required>
+                    <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" required>
 
                 </div>
 
