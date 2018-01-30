@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2018 at 07:58 AM
+-- Generation Time: Jan 30, 2018 at 07:49 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 7.0.13
 
@@ -144,18 +144,6 @@ CREATE TABLE `leadassigneds` (
   `leaveDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `leadassigneds`
---
-
-INSERT INTO `leadassigneds` (`assignId`, `assignBy`, `assignTo`, `leadId`, `created_at`, `leaveDate`) VALUES
-(68, 2, 2, 8, '2018-01-29 06:57:03', NULL),
-(69, 2, 2, 10, '2018-01-29 06:57:03', NULL),
-(70, 2, 2, 11, '2018-01-29 06:57:04', NULL),
-(71, 2, 2, 12, '2018-01-29 06:57:04', NULL),
-(72, 2, 2, 13, '2018-01-29 06:57:04', '2018-01-29'),
-(73, 2, 2, 13, '2018-01-29 06:57:23', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -186,14 +174,17 @@ CREATE TABLE `leads` (
 --
 
 INSERT INTO `leads` (`leadId`, `statusId`, `possibilityId`, `categoryId`, `companyName`, `personName`, `designation`, `website`, `email`, `contactNumber`, `countryId`, `comments`, `contactedUserId`, `minedBy`, `leadAssignStatus`, `created_at`) VALUES
-(4, 1, 3, 1, 'test Company', 'contact', NULL, 'Test URl', 'test@tr.sdsd', '0123459', 1, NULL, NULL, 1, NULL, '2018-01-16 10:33:24'),
-(5, 1, 1, 1, 'testing by Farzad', 'testing by Farzad', NULL, 'testing by Farzad', 'testing@by.Farzad', '123456789', 1, 'lol', NULL, 1, NULL, '2018-01-16 10:37:18'),
-(7, 1, 1, 1, 'asd', 'sdsds', NULL, 'dasddded', 'gk@kjk.dsd', '01324729264', 1, NULL, NULL, 1, NULL, '2018-01-16 11:24:53'),
-(8, 2, 3, 2, 'today company', 'test', NULL, 'today company', 'today@company.com', '01264978', 2, 'commmm', NULL, 1, 1, '2018-01-17 07:48:49'),
-(10, 2, 2, 1, 'This lead is From Today', 'Group', NULL, 'www.ascb.com', 'farzad@yahoo.com', '0165989484', 2, 'testing 123', NULL, 1, 1, '2018-01-18 10:29:16'),
-(11, 2, 2, 1, 'Lead By Farzad', 'Friday', NULL, 'www.friday.com', 'friday@gmail', '+12234564642', 1, 'sdsdsd', NULL, 1, 1, '2018-01-19 12:33:02'),
-(12, 2, 5, 1, 'Saturday Lead', 'Mr. Sat', 'Manager', 'done.com', 'saturday@yahoo.com', '00000', 1, 'Done', NULL, 1, 1, '2018-01-20 04:34:25'),
-(13, 2, 4, 2, 'Updated', 'Masud Rana', 'Project Manager', 'www.abcd.com.bd', 'masudrana@gmail.com', '01718447860', 2, 'higher priority', NULL, 1, NULL, '2018-01-22 08:11:48');
+(4, 2, 1, 1, 'test Company', 'contact', NULL, 'Test URl', 'test@tr.sdsd', '0123459', 1, NULL, NULL, 1, NULL, '2018-01-16 10:33:24'),
+(5, 2, 1, 1, 'testing by Farzad', 'testing by Farzad', NULL, 'testing by Farzad', 'testing@by.Farzad', '123456789', 1, 'lol', NULL, 1, NULL, '2018-01-16 10:37:18'),
+(7, 2, 1, 1, 'asd', 'sdsds', NULL, 'dasddded', 'gk@kjk.dsd', '01324729264', 1, NULL, NULL, 1, NULL, '2018-01-16 11:24:53'),
+(8, 2, 3, 2, 'today company', 'test', NULL, 'today company', 'today@company.com', '01264978', 2, 'commmm', NULL, 1, NULL, '2018-01-17 07:48:49'),
+(10, 2, 1, 1, 'This lead is From Today', 'Group', NULL, 'www.ascb.com', 'farzad@yahoo.com', '0165989484', 2, 'testing 123', NULL, 1, NULL, '2018-01-18 10:29:16'),
+(11, 2, 2, 1, 'Lead By Farzad', 'Friday', NULL, 'www.friday.com', 'friday@gmail', '+12234564642', 1, 'sdsdsd', NULL, 1, NULL, '2018-01-19 12:33:02'),
+(12, 2, 1, 1, 'Saturday Lead', 'Mr. Sat', 'Manager', 'done.com', 'saturday@yahoo.com', '00000', 1, 'Done', NULL, 1, NULL, '2018-01-20 04:34:25'),
+(13, 1, 1, 2, 'Updated', 'Masud Rana', 'Project Manager', 'www.abcd.com.bd', 'masudrana@gmail.com', '01718447860', 2, 'higher priority', NULL, 1, NULL, '2018-01-22 08:11:48'),
+(14, 1, NULL, 1, 'teadda', 'sdfadsf', 'sdfsdfds', 'asdfasdf', 'sdf@df.com', '0654654', 1, 'dfdfsfd', NULL, 2, NULL, '2018-01-30 05:46:07'),
+(15, 1, NULL, 1, 'asdfsdfasdf', 'sadfasdf', 'dsfdsfdf', 'sadfadsfasd', 'dsf@sdsd.com', '654654', 1, 'sdfsdfsdf', NULL, 2, NULL, '2018-01-30 05:46:28'),
+(16, 1, NULL, 1, 'sdhafsdaf', 'dasfsdf', 'sdafasf', 'sdafsadf', 'sonok.sarker06@gmail.com', '123435454', 1, 'asdfsadfsad', NULL, 2, NULL, '2018-01-30 05:46:53');
 
 -- --------------------------------------------------------
 
@@ -293,11 +284,22 @@ CREATE TABLE `possibilitychanges` (
 --
 
 INSERT INTO `possibilitychanges` (`changeId`, `leadId`, `userId`, `created_at`, `possibilityId`) VALUES
-(15, 11, 2, '2018-01-24 06:35:28', 2),
-(16, 11, 2, '2018-01-25 06:23:14', 1),
-(17, 8, 1, '2018-01-26 10:01:39', 3),
-(18, 12, 2, '2018-01-27 07:02:07', 5),
-(19, 11, 2, '2018-01-29 04:41:18', 2);
+(37, 8, 1, '2018-01-29 12:21:10', 3),
+(38, 7, 1, '2018-01-29 12:34:51', 3),
+(39, 5, 1, '2018-01-29 12:36:56', 1),
+(40, 8, 1, '2018-01-29 12:40:20', 3),
+(41, 7, 1, '2018-01-29 12:41:12', 3),
+(42, 5, 1, '2018-01-29 12:44:29', 3),
+(43, 5, 1, '2018-01-29 12:53:57', 1),
+(44, 4, 2, '2018-01-30 04:13:40', 1),
+(45, 7, 2, '2018-01-30 04:13:43', 1),
+(46, 4, 2, '2018-01-30 05:48:24', 1),
+(47, 5, 2, '2018-01-30 05:48:27', 1),
+(48, 7, 2, '2018-01-30 05:48:30', 1),
+(49, 8, 2, '2018-01-30 05:48:32', 3),
+(50, 10, 2, '2018-01-30 05:48:36', 1),
+(51, 11, 2, '2018-01-30 05:48:38', 2),
+(52, 12, 2, '2018-01-30 06:40:29', 1);
 
 -- --------------------------------------------------------
 
@@ -1369,8 +1371,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `userId`, `typeId`, `userEmail`, `password`, `rfID`, `firstName`, `lastName`, `designationId`, `phoneNumber`, `picture`, `dob`, `gender`, `active`, `teamId`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, '11-111-11', 1, 'admin@admin.com', '$2y$10$iZulWAQ1e/CVhqnnajUZS.GeoNAk2cb6UioJ0f9d1mTchtItfcYaW', 123455689, 'Admin', 'Rahman', NULL, '01624729264', '1.11-111-11.png', '1995-08-26', 'M', 1, NULL, '7pASATAmotZjHYV1lFYNdLVSPB4ayjllG0BHM2cbwSjeegej46wOfIugcua4', '2018-01-16 10:24:38', '2018-01-26 10:57:01'),
-(2, '22-222-22', 2, 'farzad@test.com', '$2y$10$XSW0IqbjcbC..A5fCVpm8eEVeiyJjT.0heIWYyly3CydW8hqNkWku', 134679797, 'Farzad', 'Rahman', NULL, '01624796565', '2.22-222-22.png', '2018-11-01', 'M', 1, 1, 'RfxFkktAjHic0lCzquazLU7CMWbY2C8h1JVnZzooaH2GWD6AHTBn4BfOZAVD', '2018-01-17 11:39:52', '2018-01-27 05:52:46'),
+(1, '11-111-11', 1, 'admin@admin.com', '$2y$10$iZulWAQ1e/CVhqnnajUZS.GeoNAk2cb6UioJ0f9d1mTchtItfcYaW', 123455689, 'Admin', 'Rahman', NULL, '01624729264', '1.11-111-11.png', '1995-08-26', 'M', 1, NULL, 'uoL3tnaXhrJxM6AOOe060akI9ifgmJtgbKLlbB9CQ7S0EUBJf2e90ZEJeoMo', '2018-01-16 10:24:38', '2018-01-26 10:57:01'),
+(2, '22-222-22', 4, 'farzad@test.com', '$2y$10$XSW0IqbjcbC..A5fCVpm8eEVeiyJjT.0heIWYyly3CydW8hqNkWku', 134679797, 'Farzad', 'Rahman', NULL, '01624796565', '2.22-222-22.png', '2018-11-01', 'M', 1, 1, 'MEBgZghIxHWpSoHAIOlNhGLt7reqeuQhI3wqhcuCnxTEyaGhqDK3ST5N8BfQ', '2018-01-17 11:39:52', '2018-01-27 05:52:46'),
 (3, '123456', 2, 'a1234@yahoo.com', '$2y$10$Op0O6XF/xxKn5bQXMK.9TePO9gGF8796BT0uVXAr4jjCDsSCGypU.', NULL, 'alamin', 'alamin', NULL, '01345987989', '', '2018-01-11', 'M', 1, NULL, NULL, '2018-01-22 06:33:03', '2018-01-26 10:04:15');
 
 -- --------------------------------------------------------
@@ -1391,7 +1393,9 @@ CREATE TABLE `usertypes` (
 INSERT INTO `usertypes` (`typeId`, `typeName`) VALUES
 (1, 'Admin'),
 (2, 'Manager'),
-(3, 'Supervisor');
+(4, 'RA'),
+(3, 'Supervisor'),
+(5, 'User');
 
 -- --------------------------------------------------------
 
@@ -1421,7 +1425,13 @@ INSERT INTO `workprogress` (`progressId`, `callingReport`, `leadId`, `progress`,
 (5, 6, 8, NULL, 2, 'dswdsdjsjd', '2018-01-27 11:38:27'),
 (6, 6, 8, 'Test job', 2, 'czxc', '2018-01-27 11:42:35'),
 (7, 1, 11, NULL, 2, 'called him', '2018-01-29 04:41:18'),
-(8, 1, 11, NULL, 2, 'qdsdads', '2018-01-29 05:46:01');
+(8, 1, 11, NULL, 2, 'qdsdads', '2018-01-29 05:46:01'),
+(9, 1, 11, NULL, 2, 'asdasd', '2018-01-29 07:11:26'),
+(10, 5, 11, NULL, 2, 'asdad', '2018-01-29 07:11:32'),
+(11, 5, 11, NULL, 2, 'asd', '2018-01-29 07:11:41'),
+(12, 5, 11, NULL, 2, 'asd afa f', '2018-01-29 07:11:51'),
+(13, 1, 11, NULL, 2, 'asdf dasfasdsaf \r\nasdf sa\r\nfas \r\nsdf\r\nsaf\r\nsaf\r\n sf', '2018-01-29 07:12:02'),
+(14, 1, 11, NULL, 2, 'scxzczxc', '2018-01-29 08:03:32');
 
 --
 -- Indexes for dumped tables
@@ -1573,7 +1583,7 @@ ALTER TABLE `workprogress`
 -- AUTO_INCREMENT for table `callingreports`
 --
 ALTER TABLE `callingreports`
-  MODIFY `callingReportId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `callingReportId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `categories`
 --
@@ -1603,12 +1613,12 @@ ALTER TABLE `followup`
 -- AUTO_INCREMENT for table `leadassigneds`
 --
 ALTER TABLE `leadassigneds`
-  MODIFY `assignId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `assignId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `leadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `leadId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `leadstatus`
 --
@@ -1633,7 +1643,7 @@ ALTER TABLE `possibilities`
 -- AUTO_INCREMENT for table `possibilitychanges`
 --
 ALTER TABLE `possibilitychanges`
-  MODIFY `changeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `changeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `teams`
 --
@@ -1653,12 +1663,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `usertypes`
 --
 ALTER TABLE `usertypes`
-  MODIFY `typeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `typeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `workprogress`
 --
 ALTER TABLE `workprogress`
-  MODIFY `progressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `progressId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- Constraints for dumped tables
 --
