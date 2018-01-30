@@ -193,9 +193,10 @@ class LeadController extends Controller
 
 
         public function tempLeads(){
-//            $leads=(new Lead())->getTempLead();
-//
-//           $possibilities=Possibility::get();
+
+
+
+
            return view('layouts.lead.temp');
 //                ->with('leads',$leads)
 //                ->with('possibilities',$possibilities);
@@ -205,18 +206,28 @@ class LeadController extends Controller
 
         public function tempData(Request $request){
 
+            $start = $request->input('start');
+            $limit = $request->input('length');
             if(empty($request->input('search.value')))
-            { $leads=(new Lead())->getTempLead();}
+            {  $leads=Lead::where('statusId', 1)
+                ->offset($start)
+                ->limit($limit)
+                ->get();
+
+
+            }
             else{
 
                 $search = $request->input('search.value');
                 $leads=Lead::where('statusId', 1)
                     ->where('companyName','LIKE',"%{$search}%")
+                    ->offset($start)
+                    ->limit($limit)
                     ->get();
                 }
 
 
-            $totalData =count($leads);
+            $totalData =Lead::where('statusId', 1)->count();
             $totalFiltered = $totalData;
 
             $possibility=Possibility::get();
@@ -434,10 +445,14 @@ class LeadController extends Controller
     {
         $totalData = Lead::with('category')->where('possibilityId',5)->count();
         $totalFiltered = $totalData;
-
+        $start = $request->input('start');
+        $limit = $request->input('length');
         if(empty($request->input('search.value')))
         {
-            $leads = Lead::with('category')->where('possibilityId',5)->get();
+            $leads = Lead::with('category')->where('possibilityId',5)
+                ->offset($start)
+                ->limit($limit)
+                ->get();
 
         }
 

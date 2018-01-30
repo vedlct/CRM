@@ -42,6 +42,7 @@
             $('#posts').DataTable({
                 "processing": true,
                 "serverSide": true,
+                "pagingType": "full_numbers",
                 "ajax":{
                     "url": "{{ route('rejectData')}}",
                     "dataType": "json",
