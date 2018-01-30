@@ -86,18 +86,25 @@ class LeadController extends Controller
 
     public function assignShow(){
 
-//        return Auth::user()->typeId;
+//        return Auth::user()->teamId;
         if(Auth::user()->typeId == 4 || Auth::user()->typeId == 2){
 
-
-
-        $leads=(new Lead())->showNotAssignedLeads();
+            $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
-        $users=User::select('id','firstName','lastName')
-           ->where('id','!=',Auth::user()->id)
-            ->Where('typeId','!=',1)
-            ->get();
+         if(Auth::user()->typeId == 4 ){
+             $users=User::select('id','firstName','lastName')
+//                 ->where('id','!=',Auth::user()->id)
+                 ->Where('typeId','!=',1)
+                 ->get();
+         }
+
+         else{
+             $users=User::select('id','firstName','lastName')
+                 ->where('teamId',Auth::user()->teamId)
+                 ->Where('typeId','!=',1)
+                 ->get();
+         }
 
 
         return view('layouts.lead.assignLead')
@@ -213,14 +220,16 @@ class LeadController extends Controller
 
         public function tempLeads(){
 
-            if(!Auth::user()->typeId==4){
-                return Redirect()->route('home');
-            }
+            if(Auth::user()->typeId==4){
+
+
             $leads=(new Lead())->getTempLead();
             $possibilities=Possibility::get();
             return view('layouts.lead.temp')
                 ->with('leads',$leads)
-                ->with('possibilities',$possibilities);
+                ->with('possibilities',$possibilities);}
+
+                return Redirect()->route('home');
 
 //           return view('layouts.lead.temp');
 
