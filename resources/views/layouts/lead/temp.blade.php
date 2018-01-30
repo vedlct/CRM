@@ -179,13 +179,9 @@
                     data : {_token: CSRF_TOKEN,'leadId':leadId,'possibility':possibility},
                     success : function(data){
                         console.log(data);
-
-
                         if(data == 'true'){
-
                             $('#alert').html(' <strong>Success!</strong> Possibility Changed');
                             $('#alert').show();
-
                         }
                     }
                 });
