@@ -153,21 +153,24 @@
 
                 @if(Auth::user()->typeId ==1 )
 
-                <li class="treeview">
-				  <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>
-					<span class="pull-right-container">
-					  <i class="fa fa-angle-left pull-right"></i>
-					</span>
-				  </a>
-				  <ul class="treeview-menu">
-                      <li><a href="{{route('system')}}">System</a></li>
-					<li><a href="{{ url('system-management/country') }}">Country</a></li>
-					<li><a href="{{ url('system-management/category') }}">Category</a></li>
-					<li><a href="{{ url('system-management/usertype') }}">User Type</a></li>
-					<li><a href="{{ url('system-management/possibility') }}">Possibility</a></li>
-					<li><a href="{{ url('system-management/status') }}">Lead Status</a></li>
-				  </ul>
-				</li>
+                    <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i>
+                            <span class="hide-menu">System</span></a></li>
+
+                {{--<li class="treeview">--}}
+				  {{--<a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>--}}
+					{{--<span class="pull-right-container">--}}
+					  {{--<i class="fa fa-angle-left pull-right"></i>--}}
+					{{--</span>--}}
+				  {{--</a>--}}
+				  {{--<ul class="treeview-menu">--}}
+
+					{{--<li><a href="{{ url('system-management/country') }}">Country</a></li>--}}
+					{{--<li><a href="{{ url('system-management/category') }}">Category</a></li>--}}
+					{{--<li><a href="{{ url('system-management/usertype') }}">User Type</a></li>--}}
+					{{--<li><a href="{{ url('system-management/possibility') }}">Possibility</a></li>--}}
+
+				  {{--</ul>--}}
+				{{--</li>--}}
 
                 @endif
 
