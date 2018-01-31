@@ -162,6 +162,12 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
 
+
+
+//Detached Lead From Team Member
+Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
+Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
+
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');

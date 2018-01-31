@@ -129,6 +129,13 @@
                 </li>
                 @endif
 
+                @if(Auth::user()->typeId ==2 )
+                <li>
+                    <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
+
+                </li>
+                @endif
+
 
                 @if(Auth::user()->typeId ==1 )
                 <li>
