@@ -33,6 +33,7 @@
                         <th>Gender</th>
                         <th>Phone Number</th>
                         <th>Email</th>
+                        <th>Type</th>
 
                     </tr>
                     </thead>
@@ -48,7 +49,7 @@
                             <td>{{$user->gender}}</td>
                             <td>{{$user->phoneNumber}}</td>
                             <td>{{$user->userEmail}}</td>
-
+                            <td>{{$user->userType->typeName}}</td>
                         </tr>
                     @endforeach
 

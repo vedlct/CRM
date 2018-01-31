@@ -57,26 +57,9 @@ class CategoryController extends Controller
         ]);
 
         Session::flash('message', 'Category successfully created');
-        return redirect()->intended('system-management/category');
+        return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $category = Category::find($id);
@@ -89,13 +72,7 @@ class CategoryController extends Controller
         return view('system-mgmt/category', ['category' => $category]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request)
     {
 		//return $request->categoryId;
@@ -114,49 +91,17 @@ class CategoryController extends Controller
         return redirect()->intended('system-management/category');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         Category::where('categoryId', $id)->delete();
         Session::flash('message', 'Category successfully deleted');
 
-         return redirect()->intended('system-management/category');
+         return back();
     }
 
-    /**
-     * Search category from database base on some specific constraints
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *  @return \Illuminate\Http\Response
-     */
-    public function search(Request $request) {
-        $constraints = [
-            'categoryName' => $request['categoryName'],
-            'type' => $request['type']
-            ];
 
-       $categories = $this->doSearchingQuery($constraints);
-       return view('system-mgmt/category/index', ['categories' => $categories, 'searchingVals' => $constraints]);
-    }
 
-    private function doSearchingQuery($constraints) {
-        $query = category::query();
-        $fields = array_keys($constraints);
-        $index = 0;
-        foreach ($constraints as $constraint) {
-            if ($constraint != null) {
-                $query = $query->where( $fields[$index], 'like', '%'.$constraint.'%');
-            }
-
-            $index++;
-        }
-        return $query->paginate(5);
-    }
     private function validateInput($request) {
         $this->validate($request, [
         'categoryName' => 'required|max:60|unique:categories',

@@ -35,6 +35,8 @@ Route::view('/test', 'test');
 
 Auth::routes();
 
+Route::get('/system','SystemManagementController@index');
+
 
 
 /*Route::get('/home',function (){

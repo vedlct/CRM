@@ -12,7 +12,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
-    <title>Monster Admin Template - The Most Complete & Trusted Bootstrap 4 Admin Template</title>
+    <title>CRM</title>
     <!-- Bootstrap Core CSS -->
     <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
@@ -49,7 +49,7 @@
 
 
                 <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
-                    {{ csrf_field() }}
+                    {!! csrf_field() !!}
                     <h3 class="box-title m-b-20">Sign In</h3>
                     <div class="form-group{{ $errors->has('userId') ? ' has-error' : '' }} " >
                         <div class="col-xs-12">

@@ -106,8 +106,11 @@ class CountryController extends Controller
         ]);
         Country::where('countryId', $request->countryId)
             ->update($input);
-        
-        return redirect()->intended('system-management/country');
+
+        Session::flash('message', 'Country Updated successfully');
+
+
+        return back();
     }
 
     /**

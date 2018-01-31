@@ -5,7 +5,7 @@
     <div class="card" style="padding: 2px; max-width:50%; ">
         <div class="card-body">
 			<h2 style="display: inline-block; margin: 0px 50px;">List of Country</h2>
-			<a href="#create_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i>Add Country</i></a>
+			<a href="#create_country_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i>Add Country</i></a>
 
             <div class="table-responsive m-t-40" >
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
@@ -26,7 +26,7 @@
 							
 
 							<!-- Trigger the Edit modal with a button -->
-							<a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+							<a href="#edit_country_modal" data-toggle="modal" class="btn btn-info btn-sm"
 							   data-country-id="{{$country->countryId}}"
 							   data-country-name="{{$country->countryName}}"
 							   data-country-type="{{$country->type}}"">
@@ -54,7 +54,7 @@
 			  
 			  
 		<!--Create Country-->
-		<div class="modal" id="create_modal" style="">
+		<div class="modal" id="create_country_modal" style="">
 			<div class="modal-dialog" style="max-width: 40%;">
 		  
 				<form class="modal-content" method="post" action="{{ route('country.store') }}">
@@ -117,7 +117,7 @@
 			  
 			  
 			  <!--edit country-->
-		<div class="modal" id="edit_modal" style="">
+		<div class="modal" id="edit_country_modal" style="">
 			<div class="modal-dialog" style="max-width: 40%;">
 					
 				<form class="modal-content" method="post" action="{{ route('country.update', ['id' => 1])}}">
@@ -158,12 +158,12 @@
 				</form>
 			</div>
 		</div>
-    
+
+
+
+  </div><!-- /.box-body -->
+
 	 
-	 
-	 
-	 
-	</div><!-- /.box-body -->
 @endsection
 	  
 	  
@@ -183,7 +183,7 @@
 			
 		//for Create modal
 
-		$('#create_modal').on('show.bs.modal', function(e) {
+		$('#create_country_modal').on('show.bs.modal', function(e) {
 
 			//get data-id attribute of the clicked element
 			var countryId = $(e.relatedTarget).data('country-id');
@@ -197,7 +197,7 @@
 				
 		//for Edit modal
 
-		$('#edit_modal').on('show.bs.modal', function(e) {
+		$('#edit_country_modal').on('show.bs.modal', function(e) {
 
 			//get data-id attribute of the clicked element
 			var countryId = $(e.relatedTarget).data('country-id');

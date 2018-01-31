@@ -23,7 +23,7 @@
                 </li>
 
                 {{--For user --}}
-                @if(Auth::user()->typeId ==5 || Auth::user()->typeId ==4 )
+                @if(Auth::user()->typeId ==5 )
 
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
@@ -36,12 +36,9 @@
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
-
-
-                <li>
+                    <li>
                     <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
-
-                </li>
+                    </li>
                 @endif
 
                 <li>
@@ -81,7 +78,7 @@
                 </li>
                 @endif
 
-                @if(Auth::user()->typeId ==5 || Auth::user()->typeId ==4 )
+                @if(Auth::user()->typeId ==5)
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
@@ -96,7 +93,7 @@
                         <span class="hide-menu">Report</span></a>
                 </li>
 
-                @if(Auth::user()->typeId ==1)
+                @if(Auth::user()->typeId ==3)
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
@@ -133,15 +130,13 @@
                 @endif
 
 
-
-
-
-
+                @if(Auth::user()->typeId ==1 )
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>
 
                 </li>
+                @endif
 
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
@@ -158,7 +153,7 @@
 
 
 
-
+                @if(Auth::user()->typeId ==1 )
 
                 <li class="treeview">
 				  <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>
@@ -174,6 +169,8 @@
 					<li><a href="{{ url('system-management/status') }}">Lead Status</a></li>
 				  </ul>
 				</li>
+
+                @endif
 
 
 
