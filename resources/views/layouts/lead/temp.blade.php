@@ -17,14 +17,10 @@
                 <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
                     <thead>
                     <tr>
+                        <th>Mined By</th>
                         <th>Company Name</th>
                         <th>Category</th>
                         <th>Website</th>
-                        <th>Contact Person</th>
-                        <th>Contact Number</th>
-                        <th>Email</th>
-                        <th>Country</th>
-                        <th>Mined By</th>
                         <th>Created At</th>
                         <th>Set Possibility</th>
                         <th>Action</th>
@@ -82,9 +78,21 @@
                         </div>
 
                         <div class="col-md-8">
-                            <button class="btn btn-success" type="submit">Update</button></div>
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </div>
 
-                    </div></div>
+                        <div class="col-md-4">
+                            <a id="reject" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this Lead?')">Reject</a>
+                        </div>
+
+
+
+                    </div>
+
+
+
+
+                </div>
 
 
 
@@ -135,6 +143,8 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+
         });
 
 
@@ -153,14 +163,10 @@
                     "data":{ _token: "{{csrf_token()}}"}
                 },
                 "columns": [
-                    { "data": "name" },
-                    { "data": "website" },
-                    { "data": "category" },
-                    { "data": "person" },
-                    { "data": "number" },
-                    { "data": "email" },
-                    { "data": "country" },
                     { "data": "minedBy" },
+                    { "data": "name" },
+                    { "data": "category" },
+                    { "data": "website" },
                     { "data": "createdAt" },
                     { "data": "possibility" },
                     { "data": "edit" }

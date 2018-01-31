@@ -50,7 +50,7 @@ class LeadController extends Controller
             'email' => 'required|max:100',
             'category' => 'required',
             'personName' => 'required|max:100',
-            'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
+            'personNumber' => 'required|max:15|regex:/^[\0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
             'designation'=>'required|max:100'
@@ -272,7 +272,7 @@ class LeadController extends Controller
             foreach ($leads as $lead){
                 $nestedData['name'] = $lead->companyName;
                 $nestedData['email'] = $lead->email;
-                $nestedData['website'] = $lead->website;
+                $nestedData['website'] = '<a href="http://'.$lead->website.'" target="_blank" >'.$lead->website.'</a>';
                 $nestedData['category'] = $lead->category->categoryName;
                 $nestedData['person'] = $lead->personName;
                 $nestedData['number'] = $lead->contactNumber;
@@ -471,13 +471,13 @@ class LeadController extends Controller
 
         public function rejectData(Request $request)
     {
-        $totalData = Lead::with('category')->where('possibilityId',5)->count();
+        $totalData = Lead::with('category')->where('statusId',3)->count();
         $totalFiltered = $totalData;
         $start = $request->input('start');
         $limit = $request->input('length');
         if(empty($request->input('search.value')))
         {
-            $leads = Lead::with('category')->where('possibilityId',5)
+            $leads = Lead::with('category')->where('statusId',3)
                 ->offset($start)
                 ->limit($limit)
                 ->get();
@@ -488,24 +488,16 @@ class LeadController extends Controller
             $search = $request->input('search.value');
             $leads = Lead::with('category')
                 ->where('companyName','LIKE',"%{$search}%")
-                ->where('possibilityId',5)->get();
+                ->where('statusId',3)->get();
         }
 
-        $possibility=Possibility::get();
 
-        $p='<select class="form-control" id="drop"  name="possibility" ><option value="">Select</option>';
-
-        foreach ($possibility as $pos){
-            $p.=' <option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
-            }
-            $p.='</select>';
 
         $data = array();
         foreach ($leads as $lead){
             $nestedData['name'] = $lead->companyName;
             $nestedData['email'] = $lead->email;
             $nestedData['minedBy']=$lead->mined->firstName;
-            $nestedData['drop']=$p;
             $data[]=$nestedData;
         }
         $json_data = array(
@@ -520,11 +512,20 @@ class LeadController extends Controller
     }
 
 
+    public function rejectStore($id){
 
+            $lead=Lead::findOrFail($id);
+            if($lead->statusId ==1){
+                $lead->statusId=3;
+                $lead->save();
+            }
+
+        Session::flash('message', 'Lead Rejected Successfully');
+        return back();
+
+    }
 
     public function leaveLead($id){
-
-
         $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)

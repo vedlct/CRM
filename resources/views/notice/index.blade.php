@@ -6,7 +6,7 @@
         <div class="card-body">
 			<h2 align="center"><b>Notices</b></h2>
 
-            @if(Auth::user()->typeId ==2)
+            @if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
 			<a class="btn btn-primary" href="{{ route('notice.create') }}">Add new notice</a>
             @endif
 

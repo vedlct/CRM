@@ -52,7 +52,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->typeId ==2){
+        if(Auth::user()->typeId ==2 || Auth::user()->typeId ==1 || Auth::user()->typeId ==3){
         $categories=Category:: where('type', 2)
             ->get();
             return view('notice/create')

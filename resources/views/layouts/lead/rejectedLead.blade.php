@@ -9,10 +9,9 @@
 
             <table class="table table-bordered" id="posts">
                 <thead>
-                <th>Name</th>
+                <th>Company Name</th>
                 <th>Email</th>
                 <th>Mined By</th>
-                <th>Drop</th>
 
                 </thead>
             </table>
@@ -52,8 +51,7 @@
                 "columns": [
                     { "data": "name" },
                     { "data": "email" },
-                    { "data": "minedBy" },
-                    { "data": "drop" }
+                    { "data": "minedBy" }
                 ]
 
             });

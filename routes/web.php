@@ -18,11 +18,10 @@ Route::get('/', 'Auth\LoginController@mainLogin');
 
 
 
-//Route::view('/newinfo', 'layouts.newInfo');
+
 Route::view('/newinfo', 'layouts.newInfo');
 
-//Route::view('/reports', 'layouts.reports');
-//Route::view('/notices', 'layouts.notices');
+
 Route::view('/leaves', 'layouts.leaves');
 
 Route::view('/profile', 'layouts.profile');
@@ -35,17 +34,13 @@ Route::view('/test', 'test');
 
 Auth::routes();
 
-Route::get('/system','SystemManagementController@index');
+Route::get('/system','SystemManagementController@index')->name('system');
 
 
-
-/*Route::get('/home',function (){
-    return redirect('/dashboard');
-});*/
 
 
 Route::view('/lead', 'layouts.lead.add');
-//Route::get('/assignreport', 'UserController@test');
+
 
 
 
@@ -89,7 +84,6 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 
 //Search bettween dates
 Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
-
 
 
 //Lead
@@ -137,6 +131,8 @@ Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 //Reject Leads rejectedLeads
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
 Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
+
+Route::get('/lead/reject/{id}','LeadController@rejectStore');
 
 
 //My Team

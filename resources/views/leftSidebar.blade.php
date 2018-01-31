@@ -148,16 +148,7 @@
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
                         <span class="hide-menu">Notice</span></a>
-
                 </li>
-
-                <li>
-                    <a href="leaves"><i class="mdi mdi-bullseye"></i>
-                        <span class="hide-menu">Leave Show</span></a>
-
-                </li>
-
-
 
 
                 @if(Auth::user()->typeId ==1 )
@@ -169,6 +160,7 @@
 					</span>
 				  </a>
 				  <ul class="treeview-menu">
+                      <li><a href="{{route('system')}}">System</a></li>
 					<li><a href="{{ url('system-management/country') }}">Country</a></li>
 					<li><a href="{{ url('system-management/category') }}">Category</a></li>
 					<li><a href="{{ url('system-management/usertype') }}">User Type</a></li>

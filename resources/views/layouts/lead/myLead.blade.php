@@ -86,11 +86,7 @@
                     <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
                 </div>
                 <div class="modal-body">
-
-
                     {{csrf_field()}}
-
-
                     <div class="row">
 
                         <div class="col-md-4">
@@ -127,8 +123,10 @@
 
 
                         <div class="col-md-6" style="">
-                            <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
+                            <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</a>
                         </div>
+
+
                     </div>
 
                 </div>
@@ -142,11 +140,6 @@
         </div>
     </div>
     </div>
-
-
-
-
-
 
 
 
@@ -275,6 +268,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+
 
         });
 
