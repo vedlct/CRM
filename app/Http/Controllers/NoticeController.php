@@ -42,7 +42,9 @@ class NoticeController extends Controller
         ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName')
         ->paginate(5);
 
-        return view('notice/index', ['notices' => $notices]);
+        $categories = Category:: where('type', 2)->get();
+		
+        return view('notice/index', ['notices' => $notices, 'categories' => $categories]);
     }
 
     /**
@@ -52,8 +54,7 @@ class NoticeController extends Controller
      */
     public function create()
     {
-        $categories=Category:: where('type', 2)
-            ->get();
+        $categories=Category:: where('type', 2)->get();
             return view('notice/create')
             ->with('categories', $categories);
     }

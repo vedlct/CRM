@@ -45,6 +45,9 @@
         <div class="login-box card"  >
             <div class="card-body" >
 
+		@if(Session::has('message'))
+                <p class="alert {{ Session::get('alert-class', 'alert-success') }}">{{ Session::get('message') }}</p>
+            @endif
 
 
 
