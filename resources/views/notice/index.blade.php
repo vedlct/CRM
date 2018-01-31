@@ -26,7 +26,7 @@
                   <td>
 					  @if ($notice->categoryName  == 'General')
 					   <font color="blue">General</font> 
-						@elseif ($notice->categoryName  == 'Importent')
+						@elseif ($notice->categoryName  == 'Important')
 						 <font color="pink">Important</font> 
 						@elseif ($notice->categoryName  == 'Urgent')
 						 <font color="red">Urgent</font> 
