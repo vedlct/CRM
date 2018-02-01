@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Notice;
 use Auth;
 use App\Category;
+use Session;
 
 class NoticeController extends Controller
 {
@@ -39,10 +40,13 @@ class NoticeController extends Controller
         $notices = DB::table('notices')
         ->leftJoin('users', 'notices.userId', '=', 'users.id')
         ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
-        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName')
-        ->paginate(5);
+        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName', 'categories.categoryId as categoryId')
+        ->get();
 
-        return view('notice/index', ['notices' => $notices]);
+        $categories = Category:: where('type', 2)->get();
+		
+        return view('notice/index', ['notices' => $notices])
+			->with('categories', $categories);
     }
 
     /**
@@ -52,6 +56,9 @@ class NoticeController extends Controller
      */
     public function create()
     {
+
+        $categories=Category:: where('type', 2)->get();
+
         if(Auth::user()->typeId ==2 || Auth::user()->typeId ==1 || Auth::user()->typeId ==3){
         $categories=Category:: where('type', 2)
             ->get();
@@ -76,6 +83,7 @@ class NoticeController extends Controller
                 'userId' => Auth::user()->id
         ]);
 
+        Session::flash('message', 'Successfully Notice Created');
         return redirect()->intended('notice');
     }
 
@@ -128,6 +136,8 @@ class NoticeController extends Controller
         Notice::where('noticeId', $id)
             ->update($input);
         
+
+        Session::flash('message', 'Successfully Notice Updated');
         return redirect()->intended('notice');
     }
 

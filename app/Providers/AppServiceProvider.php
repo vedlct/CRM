@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\View;
+use App\Notice;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $notice=Notice::orderBy('noticeId', 'desc')->first();
+
+        View::share('recentNotice', $notice);
+
     }
 
     /**
