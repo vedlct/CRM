@@ -140,7 +140,7 @@
 
 
             var phone= document.getElementById('personNumber').value;
-            var phoneReg = /^[\+0-9\-\(\)\s]*$/;
+            var phoneReg = /^[\0-9\-\(\)\s]*$/;
 
             if (!phone.match(phoneReg)){
                 alert(" please validate phone number");

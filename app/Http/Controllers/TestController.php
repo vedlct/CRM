@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Lead;
+use App\Possibility;
 class TestController extends Controller
 {
+//    protected $pAfter = '';
     public function index(){
         return view('layouts.lead.testList');
     }
@@ -21,7 +23,23 @@ class TestController extends Controller
     }
     public function anyData(Request $r)
     {
-        $leads=Lead::select('companyName','personName','email','contactNumber','created_at')->get();
-        return DataTables::of($leads)->make(true);
+        $possibility=Possibility::get();
+
+        $pBefore='<select class="form-control" id="drop" ';
+        $pAfter=' name="possibility" ><option value="">Select</option>';
+        foreach ($possibility as $pos){
+            $pAfter.='<option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
+        }
+        $pAfter.='</select>';
+
+        $leads=Lead::select('leadId','companyName','personName','email','contactNumber','created_at');
+        return DataTables::of($leads,$pBefore,$pAfter)
+            ->addColumn('action', function ($lead) {
+                return '<a href="'.$lead->leadId.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+            })
+            ->addColumn('drop', function ($lead,$pBefore,$pAfter) {
+                return $pBefore.$lead->leadId.' "'.$pAfter;
+            })
+            ->make(true);
     }
 }

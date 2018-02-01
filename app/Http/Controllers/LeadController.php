@@ -31,12 +31,15 @@ class LeadController extends Controller
     }
 
     public function add(){
-        $cats=Category::where('type', 1)->get();
+        //for RA
+        if(Auth::user()->typeId==4){
+            $cats=Category::where('type', 1)->get();
         $countries=Country::get();
 
         return view('layouts.lead.add')
             ->with('cats',$cats)
-            ->with('countries',$countries);
+            ->with('countries',$countries);}
+        return Redirect()->route('home');
     }
 
     public function store(Request $r){
@@ -47,7 +50,7 @@ class LeadController extends Controller
             'email' => 'required|max:100',
             'category' => 'required',
             'personName' => 'required|max:100',
-            'personNumber' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
+            'personNumber' => 'required|max:15|regex:/^[\0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
             'designation'=>'required|max:100'
@@ -76,24 +79,37 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return redirect()->route('addLead');
 
-        }
+    }
 
 
     public function assignShow(){
 
-        $leads=(new Lead())->showNotAssignedLeads();
+//        return Auth::user()->teamId;
+        if(Auth::user()->typeId == 4 || Auth::user()->typeId == 2){
+
+            $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
-        $users=User::select('id','firstName','lastName')
-//            ->where('id','!=',Auth::user()->id)
-            ->Where('typeId','!=',1)
-            ->get();
+         if(Auth::user()->typeId == 4 ){
+             $users=User::select('id','firstName','lastName')
+                 ->where('id','!=',Auth::user()->id)
+                 ->Where('typeId',5)
+                 ->get();
+         }
+
+         else{
+             $users=User::select('id','firstName','lastName')
+                 ->where('teamId',Auth::user()->teamId)
+                 ->Where('typeId',5)
+                 ->get();
+         }
 
 
         return view('layouts.lead.assignLead')
             ->with('leads',$leads)
-            ->with('users',$users);
+            ->with('users',$users);}
 
+        return Redirect()->route('home');
 
     }
 
@@ -160,11 +176,10 @@ class LeadController extends Controller
 
         public function assignedLeads(){
             //will return the leads assigned to you
-            //for user and RA
+            //for user
             $type=Auth::user()->typeId;
-            if($type ==4 || $type== 5){
+            if($type == 5) {
                 $leads = (new Lead())->myLeads();
-
                 $callReports = Callingreport::get();
                 $possibilities = Possibility::get();
 
@@ -175,6 +190,7 @@ class LeadController extends Controller
             }
 
             return Redirect()->route('home');
+
         }
 
 
@@ -200,29 +216,45 @@ class LeadController extends Controller
 
         public function tempLeads(){
 
-            if(!Auth::user()->typeId==4){
+            //For Ra
+            if(Auth::user()->typeId==4){
+
+                return view('layouts.lead.temp');
+                }
+
                 return Redirect()->route('home');
+//            $leads=Lead::where('statusId',1)->get();
+//
+//            $possibilities=Possibility::get();
+//            return view('layouts.lead.temp')
+//                ->with('leads',$leads)
+//                ->with('possibilities',$possibilities);
+
             }
-           return view('layouts.lead.temp');
-
-
-        }
 
 
         public function tempData(Request $request){
 
+            $start = $request->input('start');
+            $limit = $request->input('length');
             if(empty($request->input('search.value')))
-            { $leads=(new Lead())->getTempLead();}
+            {
+                $leads=(new Lead())->getTempLead($start,$limit,null);
+
+                }
             else{
 
                 $search = $request->input('search.value');
-                $leads=Lead::where('statusId', 1)
-                    ->where('companyName','LIKE',"%{$search}%")
-                    ->get();
+                $leads=(new Lead())->getTempLead($start,$limit,$search);
+//                $leads=Lead::where('statusId', 1)
+//                    ->where('companyName','LIKE',"%{$search}%")
+//                    ->offset($start)
+//                    ->limit($limit)
+//                    ->get();
                 }
 
 
-            $totalData =count($leads);
+            $totalData =Lead::where('statusId', 1)->count();
             $totalFiltered = $totalData;
 
             $possibility=Possibility::get();
@@ -240,7 +272,7 @@ class LeadController extends Controller
             foreach ($leads as $lead){
                 $nestedData['name'] = $lead->companyName;
                 $nestedData['email'] = $lead->email;
-                $nestedData['website'] = $lead->website;
+                $nestedData['website'] = '<a href="http://'.$lead->website.'" target="_blank" >'.$lead->website.'</a>';
                 $nestedData['category'] = $lead->category->categoryName;
                 $nestedData['person'] = $lead->personName;
                 $nestedData['number'] = $lead->contactNumber;
@@ -362,7 +394,7 @@ class LeadController extends Controller
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
 
-
+        if(Auth::user()->typeId ==5){
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
             ->where('workprogress.progress','Test job')
@@ -378,27 +410,24 @@ class LeadController extends Controller
         return view('layouts.lead.testList')
             ->with('leads',$leads)
             ->with('callReports',$callReports)
-            ->with('possibilities',$possibilities);
+            ->with('possibilities',$possibilities);}
+
+        return Redirect()->route('home');
+
 
     }
 
 
 
         public function starLeads(){
-            $leads=Lead::select('leads.*')
+
+            if(Auth::user()->typeId ==5){
+        $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
                 ->where('leadassigneds.assignTo',Auth::user()->id)
                 ->where('leadassigneds.leaveDate',null)
                 ->get();
-
-////            $leads=(new Lead())->myLeads();
-//            $leads=Lead::select('leads.*')
-//                ->where('possibilityId',4)
-//                ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//                ->where('leadassigneds.assignTo',Auth::user()->id)
-//                ->Where('leadassigneds.leadAssignStatus',1)
-//                ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
@@ -406,7 +435,9 @@ class LeadController extends Controller
             return view('layouts.lead.starLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+                ->with('possibilities',$possibilities);}
+            return Redirect()->route('home');
+
         }
 
 
@@ -419,19 +450,18 @@ class LeadController extends Controller
         }
 
         public function contacted(){
-            if(!Auth::user()->typeId ==5){
-                return Redirect()->route('home');
-            }
-            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
+            //For user
+        if(Auth::user()->typeId ==5){
 
+            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
-
             return view('layouts.lead.myLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);
+                ->with('possibilities',$possibilities);}
 
+                return Redirect()->route('home');
         }
 
         public function rejectedLeads(){
@@ -441,12 +471,16 @@ class LeadController extends Controller
 
         public function rejectData(Request $request)
     {
-        $totalData = Lead::with('category')->where('possibilityId',5)->count();
+        $totalData = Lead::with('category')->where('statusId',3)->count();
         $totalFiltered = $totalData;
-
+        $start = $request->input('start');
+        $limit = $request->input('length');
         if(empty($request->input('search.value')))
         {
-            $leads = Lead::with('category')->where('possibilityId',5)->get();
+            $leads = Lead::with('category')->where('statusId',3)
+                ->offset($start)
+                ->limit($limit)
+                ->get();
 
         }
 
@@ -454,24 +488,16 @@ class LeadController extends Controller
             $search = $request->input('search.value');
             $leads = Lead::with('category')
                 ->where('companyName','LIKE',"%{$search}%")
-                ->where('possibilityId',5)->get();
+                ->where('statusId',3)->get();
         }
 
-        $possibility=Possibility::get();
 
-        $p='<select class="form-control" id="drop"  name="possibility" ><option value="">Select</option>';
-
-        foreach ($possibility as $pos){
-            $p.=' <option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
-            }
-            $p.='</select>';
 
         $data = array();
         foreach ($leads as $lead){
             $nestedData['name'] = $lead->companyName;
             $nestedData['email'] = $lead->email;
             $nestedData['minedBy']=$lead->mined->firstName;
-            $nestedData['drop']=$p;
             $data[]=$nestedData;
         }
         $json_data = array(
@@ -486,11 +512,20 @@ class LeadController extends Controller
     }
 
 
+    public function rejectStore($id){
 
+            $lead=Lead::findOrFail($id);
+            if($lead->statusId ==1){
+                $lead->statusId=3;
+                $lead->save();
+            }
+
+        Session::flash('message', 'Lead Rejected Successfully');
+        return back();
+
+    }
 
     public function leaveLead($id){
-
-
         $assignId=Leadassigned::select('assignId')
                     ->where('leadId',$id)
                     ->where('assignTo',Auth::user()->id)

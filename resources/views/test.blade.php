@@ -14,6 +14,8 @@
             <th>Email</th>
             <th>Number</th>
             <th>Created At</th>
+            <th>Action</th>
+            <th>drop</th>
 
         </tr>
         </thead>
@@ -62,13 +64,12 @@
                     { data: 'personName', name: 'personName' },
                     { data: 'email', name: 'email' },
                     { data: 'contactNumber', name: 'contactNumber' },
-                    { data: 'created_at', name: 'created_at' }
+                    { data: 'created_at', name: 'created_at' },
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    {data: 'drop', name: 'drop', orderable: false, searchable: false}
                 ]
             });
         });
     </script>
-
-
-
 
 @endsection

@@ -18,11 +18,10 @@ Route::get('/', 'Auth\LoginController@mainLogin');
 
 
 
-//Route::view('/newinfo', 'layouts.newInfo');
+
 Route::view('/newinfo', 'layouts.newInfo');
 
-//Route::view('/reports', 'layouts.reports');
-//Route::view('/notices', 'layouts.notices');
+
 Route::view('/leaves', 'layouts.leaves');
 
 Route::view('/profile', 'layouts.profile');
@@ -35,15 +34,13 @@ Route::view('/test', 'test');
 
 Auth::routes();
 
+Route::get('/system','SystemManagementController@index')->name('system');
 
 
-/*Route::get('/home',function (){
-    return redirect('/dashboard');
-});*/
 
 
 Route::view('/lead', 'layouts.lead.add');
-//Route::get('/assignreport', 'UserController@test');
+
 
 
 
@@ -87,7 +84,6 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 
 //Search bettween dates
 Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
-
 
 
 //Lead
@@ -136,6 +132,8 @@ Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
 Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 
+Route::get('/lead/reject/{id}','LeadController@rejectStore');
+
 
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
@@ -159,6 +157,12 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 //Account Setting
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
+
+
+
+//Detached Lead From Team Member
+Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
+Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
 
 //Report
 Route::get('/report','ReportController@index')->name('report');

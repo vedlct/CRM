@@ -41,18 +41,17 @@ class FollowupController extends Controller
      */
     public function index()
     {
-
-        if(!Auth::user()->typeId==5) {
-            return Redirect()->route('home');
-        }
-        $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+        //access for user
+        if(Auth::user()->typeId==5) {
+            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->where('followUpDate', date('Y-m-d'))
             ->where('followup.userId',Auth::user()->id)->get();
 
             $callReports=Callingreport::get();
 		 /// return $callReports;
             $possibilities=Possibility::get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
+        return Redirect()->route('home');
 
     }
 
