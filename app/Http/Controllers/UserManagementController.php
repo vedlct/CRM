@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
 {
+	
+	
+	
        /**
      * Where to redirect users after registration.
      *
@@ -31,7 +34,6 @@ class UserManagementController extends Controller
     {
         $this->middleware('auth');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -39,9 +41,11 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(5);
-
-        return view('users-mgmt/index', ['users' => $users]);
+		if(Auth::user()->typeId != 1){
+			return Redirect()->route('home');
+		}
+		$users = User::get();
+		return view('users-mgmt/index', ['users' => $users]);
     }
 
     /**
@@ -51,6 +55,9 @@ class UserManagementController extends Controller
      */
     public function create()
     {
+		if(Auth::user()->typeId != 1){
+			return Redirect()->route('home');
+		}
         $userTypes=Usertype::get();
 //        return $Types;
         return view('users-mgmt/create')
@@ -66,7 +73,7 @@ class UserManagementController extends Controller
     public function store(Request $request)
     {
 
-		//$this->validateInput($request);
+		$this->validateInput($request);
 //        // Upload image
         if ($request->file('picture')) {
             $img = $request->file('picture');
@@ -78,10 +85,6 @@ class UserManagementController extends Controller
             $filename = '';
         }
         //User::create([
-
-		$this->validateInput($request);
-
-       // User::create([
 
             DB::table('users')->insert([
             'userId' => $request['userId'],
@@ -120,6 +123,9 @@ class UserManagementController extends Controller
      */
     public function edit($id)
     {
+		if(Auth::user()->typeId != 1){
+			return Redirect()->route('home');
+		}
         $user = User::find($id);
         // Redirect to user list if updating user wasn't existed
         if ($user == null || count($user) == 0) {
@@ -270,12 +276,8 @@ class UserManagementController extends Controller
             return back();
         }
 
-
-
-
         Session::flash('message', 'Password did not match');
         return back();
     }
-
 
 }
