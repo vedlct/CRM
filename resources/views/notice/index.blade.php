@@ -17,7 +17,9 @@
               <tr role="row">
                 <th>Notice Name</th>
                 <th>Notice</th>
+				  @if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
 				<th>Action</th>
+					  @endif
               </tr>
             </thead>
             <tbody>
@@ -33,11 +35,10 @@
 						 <font color="red">Urgent</font> 
 						@endif
 					</td>
+					@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
                   <td>
 					
-                    <form method="POST" action="{{ route('notice.destroy', ['id' => $notice->noticeId]) }}" onsubmit = "return confirm('Are you sure?')">
-                        <input type="hidden" name="_method" value="DELETE">
-							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
 							<!-- Trigger the Edit modal with a button -->
 							<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
 							   data-notice-id="{{$notice->noticeId}}"
@@ -45,11 +46,9 @@
 								<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 								
-							<button type="submit" class="btn btn-danger btn-sm">
-							  <i class="fa fa-trash"></i>
-							</button>
-					</form>
+						
                   </td>
+						@endif
               </tr>
             @endforeach
             </tbody>
