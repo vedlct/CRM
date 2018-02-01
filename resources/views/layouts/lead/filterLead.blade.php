@@ -2,6 +2,9 @@
 
 @section('content')
 
+    {{--get user type from session--}}
+    @php($userType = strtoupper(Auth::user()->userType->typeName))
+
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
@@ -15,7 +18,10 @@
                         <th>Country</th>
                         <th>Contact Person</th>
                         <th>Mined By</th>
+
+                        @if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')
                         <th>Contacted</th>
+                            @endif
                     </tr>
                     </thead>
                     <tbody>
@@ -27,14 +33,16 @@
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->personName}}</td>
                             <td>{{$lead->mined->firstName}}</td>
-                            <th>
+
+                            @if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')
+                                <th>
                                 <form method="post" action="{{route('addContacted')}}">
                                     {{@csrf_field()}}
                                     <input type="hidden" value="{{$lead->leadId}}" name="leadId">
                                     <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
                                 </form>
-
-                            </th>
+                                </th>
+                                    @endif
                         </tr>
 
                     @endforeach

@@ -20,8 +20,10 @@ class TeamController extends Controller
     public function myTeam()
     {
         //for user and RA
-        $type=Auth::user()->typeId;
-        if($type==5 || $type==4){
+//        $type=Auth::user()->typeId;
+        $User_Type=Session::get('userType');
+
+        if($User_Type=='USER'|| $User_Type=='RA'){
 
         $users = User::where('teamId', Auth::user()->teamId)->get();
         $team = Team::findOrFail(Auth::user()->teamId);
@@ -36,7 +38,9 @@ class TeamController extends Controller
     public function teamManagement()
     {
         //for SuperVisor
-        if(Auth::user()->typeId==3){
+        $User_Type=Session::get('userType');
+
+        if($User_Type=='SUPERVISOR'){
         $users = User::where('typeId',2)
                     ->orWhere('typeId',5)
                     ->where('teamId',null)

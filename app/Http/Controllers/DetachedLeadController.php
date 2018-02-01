@@ -18,7 +18,8 @@ class DetachedLeadController extends Controller
     }
 
     public function index(){
-        if(Auth::user()->typeId==2){
+        $User_Type=Session::get('userType');
+        if($User_Type=='MANAGER'){
             $users=User::where('teamId',Auth::user()->teamId)->get();
 
             $leads=Leadassigned::select('leads.*','leadassigneds.*')
