@@ -21,7 +21,7 @@
         <!-- ============================================================== -->
         <!-- End Logo -->
         <!-- ============================================================== -->
-        <div class="navbar-collapse">
+        <span class="navbar-collapse">
             <!-- ============================================================== -->
             <!-- toggle and nav items -->
             <!-- ============================================================== -->
@@ -83,6 +83,8 @@
             <!-- ============================================================== -->
             <!-- User profile and search -->
             <!-- ============================================================== -->
+            {{--For recent Notice--}}
+            <marquee width="70%" style="color: white;">{{$notice->msg}} <span style="color: green">-By {{$notice->user->firstName}} -{{$notice->created_at}}</span></marquee>
             <ul class="navbar-nav my-lg-0">
 
                 <li class="nav-item dropdown">

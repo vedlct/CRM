@@ -7,7 +7,7 @@
             <div class="profile-img"> <img src="{{asset('img/'.Auth::user()->picture)}}" alt="user" /> </div>
             <!-- User profile text-->
             <div class="profile-text">
-                <b>ID :</b><strong> {{strtoupper ( Auth::user()->userId )}} </strong> <span class="caret"></span><br>
+                <b>ID :</b><strong> {{strtoupper( Auth::user()->userId )}} </strong> <span class="caret"></span><br>
 
             </div>
         </div>
