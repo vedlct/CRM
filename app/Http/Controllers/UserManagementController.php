@@ -41,11 +41,16 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
-		$users = User::get();
-		return view('users-mgmt/index', ['users' => $users]);
+        $User_Type=Session::get('userType');
+		if($User_Type=='ADMIN') {
+
+            $users = User::get();
+            $userTypes = Usertype::get();
+            return view('users-mgmt/index')
+                ->with('users', $users)
+                ->with('userTypes', $userTypes);
+        }
+        return Redirect()->route('home');
     }
 
     /**
@@ -55,13 +60,15 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
+        $User_Type=Session::get('userType');
+		if($User_Type== 'ADMIN'){
+
+
         $userTypes=Usertype::get();
 //        return $Types;
         return view('users-mgmt/create')
-            ->with('userTypes', $userTypes);
+            ->with('userTypes', $userTypes);}
+        return Redirect()->route('home');
     }
 
     /**
@@ -112,8 +119,9 @@ class UserManagementController extends Controller
         // $input['company_id'] = 0;
 		//return $request;
         User::create($input);
-		
-       return redirect()->intended('/user-management');
+        ]);
+        Session::flash('message', 'User Added successfully');
+        return back();
     }
 
     /**
@@ -135,9 +143,10 @@ class UserManagementController extends Controller
      */
     public function edit($id)
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
+        $User_Type=Session::get('userType');
+		if( $User_Type== 'ADMIN'){
+
+
         $user = User::find($id);
         // Redirect to user list if updating user wasn't existed
         if ($user == null || count($user) == 0) {
@@ -145,7 +154,8 @@ class UserManagementController extends Controller
         }
 
        $userTypes = Usertype::get();
-        return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);
+        return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);}
+        return Redirect()->route('home');
     }
 
     /**

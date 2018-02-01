@@ -58,8 +58,9 @@ class NoticeController extends Controller
     {
 
         $categories=Category:: where('type', 2)->get();
+        $User_Type=Session::get('userType');
 
-        if(Auth::user()->typeId ==2 || Auth::user()->typeId ==1 || Auth::user()->typeId ==3){
+        if($User_Type =='MANAGER' || $User_Type =='ADMIN' || $User_Type =='SUPERVISOR'){
         $categories=Category:: where('type', 2)
             ->get();
             return view('notice/create')

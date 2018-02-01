@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Session;
-
+use Auth;
 
 class LoginController extends Controller
 {
@@ -78,10 +80,27 @@ class LoginController extends Controller
 		if ($this->guard()->validate($this->credentials($request))) {
 			$user = $this->guard()->getLastAttempted();
 
+
+
+
+
 			// Make sure the user is active
 			if ($user->active && $this->attemptLogin($request)) {
+
+//                return  $type=(new User)->getUserType($user->typeId);
+//                session(['userType' => $type]);
+
+
+
+               $type=strtoupper(Auth::user()->userType->typeName);
+
+
+
+                Session::put('userType',$type);
+
 				// Send the normal successful login response
 				return $this->sendLoginResponse($request);
+
 			} else {
 				// Increment the failed login attempts and redirect back to the
 				// login form with an error message.

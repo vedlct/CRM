@@ -1,3 +1,6 @@
+
+@php($userType = Session::get('userType'))
+
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -23,7 +26,7 @@
                 </li>
 
                 {{--For user --}}
-                @if(Auth::user()->typeId ==5 )
+                @if($userType =='USER' )
 
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
@@ -31,7 +34,7 @@
                 </li>
                 @endif
 
-                @if(Auth::user()->typeId ==5 )
+                @if($userType=='USER')
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
@@ -46,14 +49,14 @@
 
                 </li>
 
-                @if(Auth::user()->typeId ==4)
+                @if($userType =='MANAGER')
 
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
                 </li>
                 @endif
 
-                @if(Auth::user()->typeId ==5 )
+                @if($userType =='USER' )
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
                         <span class="pull-right-container">
@@ -72,13 +75,13 @@
                 @endif
 
 
-                @if(Auth::user()->typeId ==4 || Auth::user()->typeId ==2)
+                @if($userType =='RA' || $userType =='MANAGER')
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                 </li>
                 @endif
 
-                @if(Auth::user()->typeId ==5)
+                @if($userType =='USER')
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
@@ -93,7 +96,7 @@
                         <span class="hide-menu">Report</span></a>
                 </li>
 
-                @if(Auth::user()->typeId ==3)
+                @if($userType =='SUPERVISOR')
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
@@ -122,14 +125,14 @@
 
 
 
-                @if(Auth::user()->typeId ==4 )
+                @if($userType =='RA' )
                 <li>
                     <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
 
                 </li>
                 @endif
 
-                @if(Auth::user()->typeId ==2 )
+                @if($userType=='MANAGER' )
                 <li>
                     <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
 
@@ -137,7 +140,7 @@
                 @endif
 
 
-                @if(Auth::user()->typeId ==1 )
+                @if($userType=='USER' )
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>
@@ -151,7 +154,7 @@
                 </li>
 
 
-                @if(Auth::user()->typeId ==1 )
+                @if($userType =='ADMIN' )
 
                     <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i>
                             <span class="hide-menu">System</span></a></li>

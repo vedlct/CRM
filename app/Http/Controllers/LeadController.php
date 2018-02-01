@@ -25,6 +25,7 @@ use DB;
 
 class LeadController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -32,7 +33,9 @@ class LeadController extends Controller
 
     public function add(){
         //for RA
-        if(Auth::user()->typeId==4){
+       $User_Type=Session::get('userType');
+        if($User_Type=='RA'){
+
             $cats=Category::where('type', 1)->get();
         $countries=Country::get();
 
@@ -85,12 +88,13 @@ class LeadController extends Controller
     public function assignShow(){
 
 //        return Auth::user()->teamId;
-        if(Auth::user()->typeId == 4 || Auth::user()->typeId == 2){
+        $User_Type=Session::get('userType');
+        if($User_Type == 'RA' || $User_Type == 'MANAGER'){
 
             $leads=(new Lead())->showNotAssignedLeads();
 
         //getting only first name of users
-         if(Auth::user()->typeId == 4 ){
+         if($User_Type == 'RA'){
              $users=User::select('id','firstName','lastName')
                  ->where('id','!=',Auth::user()->id)
                  ->Where('typeId',5)
@@ -177,8 +181,9 @@ class LeadController extends Controller
         public function assignedLeads(){
             //will return the leads assigned to you
             //for user
-            $type=Auth::user()->typeId;
-            if($type == 5) {
+            $User_Type=Session::get('userType');
+
+            if($User_Type == 'USER') {
                 $leads = (new Lead())->myLeads();
                 $callReports = Callingreport::get();
                 $possibilities = Possibility::get();
@@ -217,7 +222,8 @@ class LeadController extends Controller
         public function tempLeads(){
 
             //For Ra
-            if(Auth::user()->typeId==4){
+            $User_Type=Session::get('userType');
+            if($User_Type=='RA'){
 
                 return view('layouts.lead.temp');
                 }
@@ -393,8 +399,8 @@ class LeadController extends Controller
 
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
-
-        if(Auth::user()->typeId ==5){
+        $User_Type=Session::get('userType');
+        if($User_Type =='USER'){
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
             ->where('workprogress.progress','Test job')
@@ -420,8 +426,8 @@ class LeadController extends Controller
 
 
         public function starLeads(){
-
-            if(Auth::user()->typeId ==5){
+            $User_Type=Session::get('userType');
+            if($User_Type=='USER'){
         $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
@@ -451,7 +457,8 @@ class LeadController extends Controller
 
         public function contacted(){
             //For user
-        if(Auth::user()->typeId ==5){
+            $User_Type=Session::get('userType');
+        if($User_Type =='USER'){
 
             $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();

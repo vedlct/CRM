@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
 use App\Workprogress;
 use Auth;
+use Session;
 
 class HomeController extends Controller
 {
@@ -48,6 +49,7 @@ class HomeController extends Controller
                 ['offset' => 0.3]
             ]
         ]);
+
 
 
         return view('dashboard')->with('lava',$lava);
