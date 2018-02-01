@@ -52,7 +52,7 @@
 					<label for="rfId" class="col-md-3 control-label">RF ID</label>
 
 					<div class="col-md-9">
-						<input id="rfId" type="text" class="form-control" name="rfId" value="{{ old('rfId') }}" required autofocus>
+						<input id="rfId" type="text" class="form-control" name="rfId" value="{{ old('rfId') }}">
 
 						@if ($errors->has('rfId'))
 							<span class="help-block">
@@ -122,7 +122,7 @@
 					<label for="phoneNumber" class="col-md-3 control-label">Phone Number</label>
 
 					<div class="col-md-9">
-						<input id="phoneNumber" type="text" class="form-control" name="phoneNumber" value="{{ old('phoneNumber') }}" required autofocus>
+						<input id="phoneNumber" type="text" class="form-control" name="phoneNumber" value="{{ old('phoneNumber') }}">
 
 						@if ($errors->has('phoneNumber'))
 							<span class="help-block">
@@ -140,7 +140,7 @@
 					<label for="avatar" class="col-md-3 control-label">Picture</label>
 
 					<div class="col-md-9">
-						<input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}" autofocus>
+						<input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}">
 
 						@if ($errors->has('picture'))
 							<span class="help-block">
@@ -158,7 +158,7 @@
 					<label for="dob" class="col-md-3 control-label">Date of Birth</label>
 
 					<div class="col-md-9">
-						<input id="dob" type="text" class="form-control" name="dob" value="{{ old('dob') }}" required autofocus>
+						<input id="dob" type="text" class="form-control" name="dob" value="{{ old('dob') }}">
 
 						@if ($errors->has('dob'))
 							<span class="help-block">
@@ -176,7 +176,7 @@
 					<label for="gender	" class="col-md-3 control-label">Gender</label>
 
 					<div class="col-md-9">
-						<select id="gender" name="gender" class="form-control form-control-warning" required autofocus>
+						<select id="gender" name="gender" class="form-control form-control-warning">
 
 							<option value="M">Male</option>
 							<option value="F">Female</option>

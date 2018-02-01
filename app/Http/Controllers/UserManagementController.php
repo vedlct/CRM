@@ -84,9 +84,9 @@ class UserManagementController extends Controller
         }else{
             $filename = '';
         }
-        //User::create([
+      /*  User::create([
 
-            DB::table('users')->insert([
+           // DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
             'userEmail' => $request['userEmail'],
@@ -100,7 +100,19 @@ class UserManagementController extends Controller
             'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
-        ]);
+			
+        ]);*/
+		
+		
+		$keys = ['userId', 'typeId', 'rfID', 'userEmail', 'password', 'firstName', 'lastName', 'phoneNumber',
+        'dob', 'gender', 'active'];
+        $input = $this->createQueryInput($keys, $request);
+        $input['picture'] = $filename;
+        // Not implement yet
+        // $input['company_id'] = 0;
+		//return $request;
+        User::create($input);
+		
        return redirect()->intended('/user-management');
     }
 
@@ -147,7 +159,7 @@ class UserManagementController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-      //  $this->validateInput($request);
+        $this->validateInput($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
             'phoneNumber', 'dob', 'gender', 'active'];
@@ -157,6 +169,7 @@ class UserManagementController extends Controller
             $constraints['password'] = 'required|min:6|confirmed';
             $input['password'] =  bcrypt($request['password']);
         }
+		
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
@@ -230,11 +243,18 @@ class UserManagementController extends Controller
 
     private function validateInput($request) {
         $this->validate($request, [
-		'userId' => 'required|max:20',
-		'userEmail' => 'required|email|max:255|unique:users',
-        'password' => 'required|min:6|confirmed',
-        'firstName' => 'required|max:60',
-        'lastName' => 'required|max:60'
+		'userId' => 'required|max:50|unique:users',
+		'typeId' => 'required|max:11|numeric',
+		'userEmail' => 'required|email|max:45|unique:users',
+        'password' => 'required|min:6|max:20|confirmed',
+        'firstName' => 'required|max:20',
+        'lastName' => 'required|max:20',
+        'rfID' => 'max:11|numeric',
+        'phoneNumber' => 'max:15',
+        'picture' => 'max:45',
+        'dob' => 'max:10',
+        'gender' => 'max:1',
+        'active' => 'required|max:1'
     ]);
     }
 
@@ -279,5 +299,6 @@ class UserManagementController extends Controller
         Session::flash('message', 'Password did not match');
         return back();
     }
-
+	
+	
 }

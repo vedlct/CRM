@@ -11,7 +11,14 @@
 
             @endif
 
-            <div class="table-responsive m-t-40" >
+			@if ($errors->has('msg'))
+				<span class="help-block">
+					<strong>{{ $errors->first('msg') }}</strong>
+				</span>
+			@endif
+			
+			
+            <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
             <thead>
               <tr role="row">
@@ -41,7 +48,8 @@
 							<!-- Trigger the Edit modal with a button -->
 							<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
 							   data-notice-id="{{$notice->noticeId}}"
-							   data-notice-msg="{{$notice->msg}}"">
+							   data-notice-msg="{{$notice->msg}}"
+							   data-category-id="{{$notice->categoryId}}"">
 								<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 								
@@ -86,7 +94,7 @@
 							<label for="msg" class="col-md-2 control-label">Message</label>
 
 							<div class="col-md-10">
-								 <textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required autofocus>{{ old('msg') }}</textarea>
+								 <textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required>{{ old('msg') }}</textarea>
 
 								@if ($errors->has('msg'))
 									<span class="help-block">
@@ -188,7 +196,7 @@
 
 							<div class="col-md-10">
 
-                                <select name="categoryId" class="form-control form-control-warning">
+                                <select name="categoryId" id="categoryId" class="form-control form-control-warning">
                                     @foreach ($categories as $category)
                                        <option {{$notice->categoryId == $category->categoryId ? 'selected' : ''}} value="{{$category->categoryId}}">{{$category->categoryName}}</option>
 
@@ -245,11 +253,13 @@
 			var noticeId = $(e.relatedTarget).data('notice-id');
 			var noticeMsg = $(e.relatedTarget).data('notice-msg');
 			var categoryId = $(e.relatedTarget).data('category-id');
-			//alert(noticeId);
+			//alert(categoryId);
 			//populate the textbox
 			$(e.currentTarget).find('input[name="noticeId"]').val(noticeId);
 			$(e.currentTarget).find('textarea[name="msg"]').val(noticeMsg);
-			$(e.currentTarget).find('input[name="categoryId"]').val(categoryId);
+			$(e.currentTarget).find('#categoryId').val(categoryId);
+			
+			
 
 		});
 				

@@ -54,7 +54,7 @@ class NoticeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+   /* public function create()
     {
 
         $categories=Category:: where('type', 2)->get();
@@ -75,7 +75,7 @@ class NoticeController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validateInput($request);
+        $this->validateInput($request);
             DB::table('notices')->insert([
        //  Notice::create([
                 'msg' => $request['msg'],
@@ -104,7 +104,7 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+  /*  public function edit($id)
     {
         $notice = Notice::find($id);
         // Redirect to notice list if updating notice wasn't existed
@@ -124,16 +124,16 @@ class NoticeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $notice = Notice::findOrFail($id);
-    //    $this->validateInput($request);
+        $notice = Notice::findOrFail($request->noticeId);
+        $this->validateInput($request);
         $input = [
             'msg' => $request['msg'],
             'categoryId' => $request['categoryId'],
             'userId' => Auth::user()->id
         ];
-        Notice::where('noticeId', $id)
+        Notice::where('noticeId', $request->noticeId)
             ->update($input);
         
 
@@ -158,7 +158,7 @@ class NoticeController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      *  @return \Illuminate\Http\Response
-     */
+     *//*
     public function search(Request $request) {
         $constraints = [
             'msg' => $request['msg']
@@ -181,9 +181,10 @@ class NoticeController extends Controller
         }
         return $query->paginate(5);
     }
+	*/
     private function validateInput($request) {
         $this->validate($request, [
-        'msg' => 'required|max:60|unique:notice'
+        'msg' => 'required|max:50'
     ]);
     }
 }
