@@ -171,13 +171,10 @@ class LeadController extends Controller
 
         public function filter(){
 
-            $leads=(new Lead())->showNotAssignedLeads();
+        $leads=(new Lead())->showNotAssignedLeads();
             return view('layouts.lead.filterLead')->with('leads',$leads);
 
-
-
-
-    }
+            }
 
     public function getFilterLeads(Request $request){
 
@@ -542,7 +539,8 @@ class LeadController extends Controller
         public function contacted(){
             //For user
             $User_Type=Session::get('userType');
-        if($User_Type!='RA' || $User_Type!='ADMIN' ){
+
+        if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
 
             $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
@@ -564,7 +562,7 @@ class LeadController extends Controller
     {
 
         $leads = Lead::with('mined')
-            ->where('statusId',5)->get();
+            ->where('statusId',5);
 
         return DataTables::of($leads)->make(true);
 

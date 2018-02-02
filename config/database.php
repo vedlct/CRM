@@ -36,7 +36,7 @@ return [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => 'crm2',
+            'database' => 'crm',
             'username' => 'root',
             'password' => '',
             'unix_socket' => env('DB_SOCKET', ''),
