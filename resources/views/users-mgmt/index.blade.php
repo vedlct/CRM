@@ -36,18 +36,22 @@
 					@endif
 				</td>
                   <td>
-                    {{--<form method="POST" action="{{ route('user-management.destroy', ['id' => $user->id]) }}" onsubmit = "return confirm('Are you sure?')">--}}
-                        {{--<input type="hidden" name="_method" value="DELETE">--}}
-                        {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
-                        <a href="{{ route('user-management.edit', ['id' => $user->id]) }}" class="btn btn-info btn-sm">
-							<i class="fa fa-pencil-square-o"></i>
-                        </a>
-						{{--@if ($user->userId != Auth::user()->userId)--}}
-                        {{--<button type="submit" class="btn btn-danger btn-sm">--}}
-							{{--<i class="fa fa-trash"></i>--}}
-                        {{--</button>--}}
-						{{--@endif--}}
-                    {{--</form>--}}
+						<!-- Trigger the Edit modal with a button -->
+						<a href="#edit_user_modal" data-toggle="modal" class="btn btn-info btn-sm"
+						   data-id="{{$user->id}}"
+						   data-user-id="{{$user->userId}}"
+						   data-type-id="{{$user->typeId}}"
+						   data-rf-id="{{$user->rfID}}"
+						   data-user-email="{{$user->userEmail}}"
+						   data-password="{{$user->password}}"
+						   data-first-name="{{$user->firstName}}"
+						   data-last-name="{{$user->lastName}}"
+						   data-phone-number="{{$user->phoneNumber}}"
+						   data-dob="{{$user->dob}}"
+						   data-gender="{{$user->gender}}"
+						   data-active="{{$user->active}}"">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+					
                   </td>
               </tr>
             @endforeach
@@ -57,9 +61,21 @@
       </div>
 
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
         <!-- The Modal -->
         <div class="modal fade" id="myModal" >
-            <div class="modal-dialog" style="max-width: 50%;">
+            <div class="modal-dialog" style="max-width: 60%;">
                 <div class="modal-content">
 
                     <!-- Modal Header -->
@@ -76,104 +92,106 @@
 
                             <div class="row">
 
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-6">
                                     <label for="userId">User Id:</label>
                                     @if ($errors->has('userId'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('userId') }}</strong>
-							</span>
+											<strong>{{ $errors->first('userId') }}</strong>
+										</span>
                                     @endif
-                                    <input id="userName" type="text" class="form-control" name="userId" value="{{ old('userId') }}" required>
+                                    <input id="userId" type="text" class="form-control" name="userId" value="{{ old('userId') }}" required>
                                 </div>
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">RF Id:</label>
-                                    <input id="rfId" type="text" class="form-control" name="rfID" value="{{ old('rfId') }}" required >
+                                <div class="form-group col-md-6">
+                                    <label for="rfID">RF Id:</label>
+                                    <input id="rfID" type="text" class="form-control" name="rfID" value="{{ old('rfID') }}">
 
-                                    @if ($errors->has('rfId'))
+                                    @if ($errors->has('rfID'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('rfId') }}</strong>
-							</span>
+											<strong>{{ $errors->first('rfID') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">First Name:</label>
+                                <div class="form-group col-md-6">
+                                    <label for="firstName">First Name:</label>
 
                                         <input id="firstName" type="text" class="form-control" name="firstName" value="{{ old('firstName') }}" required>
 
                                         @if ($errors->has('firstName'))
                                             <span class="help-block">
-								<strong>{{ $errors->first('firstName') }}</strong>
-							</span>
+												<strong>{{ $errors->first('firstName') }}</strong>
+											</span>
                                         @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Last Name:</label>
+                                <div class="form-group col-md-6">
+                                    <label for="lastName">Last Name:</label>
                                     <input id="lastName" type="text" class="form-control" name="lastName" value="{{ old('lastName') }}" required>
 
                                     @if ($errors->has('lastName'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('lastName') }}</strong>
-							</span>
+											<strong>{{ $errors->first('lastName') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Email:</label>
-                                    <input id="email" type="email" class="form-control" name="userEmail" value="{{ old('userEmail') }}" required>
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">Email:</label>
+                                    <input id="userEmail" type="email" class="form-control" name="userEmail" value="{{ old('userEmail') }}" required>
 
                                     @if ($errors->has('userEmail'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('userEmail') }}</strong>
-							</span>
+											<strong>{{ $errors->first('userEmail') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Phone Number:</label>
-                                    <input id="phoneNumber" type="text" class="form-control" name="phoneNumber" value="{{ old('phoneNumber') }}" required>
+                                <div class="form-group col-md-6">
+                                    <label for="phoneNumber">Phone Number:</label>
+                                    <input id="phoneNumber" type="text" class="form-control" name="phoneNumber" value="{{ old('phoneNumber') }}">
 
                                     @if ($errors->has('phoneNumber'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('phoneNumber') }}</strong>
-							</span>
+											<strong>{{ $errors->first('phoneNumber') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
+
+                                <div class="form-group col-md-6">
                                     <label>Date Of Birth:</label>
                                     {{--<input id="dob"  class="form-control" name="dob" placeholder="pick Date" rows="3" required >--}}
                                     <input class="form-control" id="datepicker" rows="3" name="dob" placeholder="pick Date" required>
+
                                     @if ($errors->has('dob'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('dob') }}</strong>
-							</span>
+											<strong>{{ $errors->first('dob') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Picture:</label>
-                                    <input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}" >
+                                <div class="form-group col-md-6">
+                                    <label for="picture">Picture:</label>
+                                    <input id="picture" type="file" class="form-control" name="picture" value="{{ old('picture') }}">
                                     @if ($errors->has('picture'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('picture') }}</strong>
-							</span>
+											<strong>{{ $errors->first('picture') }}</strong>
+										</span>
                                     @endif
 
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Gender:</label>
-                                    <select id="gender" name="gender" class="form-control form-control-warning" required>
+                                <div class="form-group col-md-6">
+                                    <label for="gender">Gender:</label>
+                                    <select id="gender" name="gender" class="form-control form-control-warning">
 
                                         <option value="M">Male</option>
                                         <option value="F">Female</option>
@@ -181,18 +199,18 @@
                                     </select>
                                     @if ($errors->has('gender'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('gender') }}</strong>
-							</span>
+											<strong>{{ $errors->first('gender') }}</strong>
+										</span>
                                     @endif
 
                                 </div>
 
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Status:</label>
+                                <div class="form-group col-md-6">
+                                    <label for="active">Status:</label>
 
-                                    <select name="active" class="form-control form-control-warning">
+                                    <select id="active" name="active" class="form-control form-control-warning">
 
                                         <option value="1">Active</option>
                                         <option value="0">Inactive</option>
@@ -201,28 +219,28 @@
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Password:</label>
-                                    <input id="password" type="password" class="form-control" name="password" required>
+                                <div class="form-group col-md-6">
+                                    <label for="Password">Password:</label>
+                                    <input id="password" type="password" class="form-control" name="password">
                                     @if ($errors->has('password'))
                                         <span class="help-block">
-								<strong>{{ $errors->first('password') }}</strong>
-							</span>
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
                                     @endif
                                 </div>
 
 
-                                <div class="form-group col-md-5">
-                                    <label for="userId">Confirm Password:</label>
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <div class="form-group col-md-6">
+                                    <label for="password-confirm">Confirm Password:</label>
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                 </div>
 
 
 
 
                                 <div class="form-group col-md-10">
-                                    <label for="userId">User Type:</label>
-                                    <select name="typeId" class="form-control form-control-warning">
+                                    <label for="typeId">User Type:</label>
+                                    <select id="typeId"  name="typeId" class="form-control form-control-warning" required>
 
                                         @foreach ($userTypes as $userType)
                                             <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
@@ -236,25 +254,225 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group col-md-5">
+                                <div class="form-group col-md-6">
                                 <button type="submit" class="btn btn-primary">
                                     Create
                                 </button>
+                                </div>
+                            </div>
+							
+						</form>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+        <!-- The Modal -->
+        <div class="modal fade" id="edit_user_modal" >
+            <div class="modal-dialog" style="max-width: 60%;">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Update User's Info</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.update', ['id' => 1]) }}" enctype="multipart/form-data">
+							<input type="hidden" name="_method" value="PUT">
+									{{ csrf_field() }}
+							<input id="id" type="hidden" class="form-control" name="id"  required>
+
+                            <div class="row">
+
+                                <div class="form-group col-md-6">
+                                    <label for="userId">User Id:</label>
+                                    <input id="userId" type="text" class="form-control" name="userId" required>
+                                    @if ($errors->has('userId'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('userId') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="rfID">RF Id:</label>
+                                    <input id="rfID" type="number" class="form-control" name="rfID">
+
+                                    @if ($errors->has('rfID'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('rfID') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="firstName">First Name:</label>
+
+                                        <input id="firstName" type="text" class="form-control" name="firstName" required>
+
+                                        @if ($errors->has('firstName'))
+                                            <span class="help-block">
+												<strong>{{ $errors->first('firstName') }}</strong>
+											</span>
+                                        @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="lastName">Last Name:</label>
+                                    <input id="lastName" type="text" class="form-control" name="lastName" required>
+
+                                    @if ($errors->has('lastName'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('lastName') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="userEmail">Email:</label>
+                                    <input id="userEmail" type="email" class="form-control" name="userEmail" required>
+
+                                    @if ($errors->has('userEmail'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('userEmail') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="phoneNumber">Phone Number:</label>
+                                    <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
+
+                                    @if ($errors->has('phoneNumber'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('phoneNumber') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="dob">Date Of Birth:</label>
+                                    <input id="dob" type="text" class="form-control" name="dob">
+                                    @if ($errors->has('dob'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('dob') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="picture">Picture:</label>
+                                    <input id="picture" type="file" class="form-control" name="picture">
+                                    @if ($errors->has('picture'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('picture') }}</strong>
+										</span>
+                                    @endif
+
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="gender">Gender:</label>
+                                    <select id="gender" name="gender" class="form-control form-control-warning">
+
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+
+                                    </select>
+                                    @if ($errors->has('gender'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('gender') }}</strong>
+										</span>
+                                    @endif
+
+                                </div>
+
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="active">Status:</label>
+
+                                    <select id="active" name="active" class="form-control form-control-warning">
+
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="password">Password:</label>
+                                    <input id="password" type="password" class="form-control" name="password">
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
+                                    @endif
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="password-confirm">Confirm Password:</label>
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                 </div>
 
 
 
 
+                                <div class="form-group col-md-10">
+                                    <label for="typeId">User Type:</label>
+                                    <select id="typeId"  name="typeId" class="form-control form-control-warning" required>
 
+                                        @foreach ($userTypes as $userType)
+                                            <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                        @endforeach
+                                    </select>
 
+                                    @if ($errors->has('typeId'))
+                                        <span class="help-block">
+								<strong>{{ $errors->first('typeId') }}</strong>
+							</span>
+                                    @endif
+                                </div>
 
-                            </div></form>
-
-
-
-
-
-
+                                <div class="form-group col-md-6">
+                                <button type="submit" class="btn btn-primary">
+                                    Update
+                                </button>
+                                </div>
+                            </div>
+							
+						</form>
 
                     </div>
 
@@ -288,8 +506,44 @@
                 } );
 
 
+				
+				
+		//for Edit modal
 
-			</script>
+		$('#edit_user_modal').on('show.bs.modal', function(e) {
+
+			//get data-id attribute of the clicked element
+			var id = $(e.relatedTarget).data('id');
+			var userId = $(e.relatedTarget).data('user-id');
+			var typeId = $(e.relatedTarget).data('type-id');
+			var rfID = $(e.relatedTarget).data('rf-id');
+			var userEmail = $(e.relatedTarget).data('user-email');
+			//var password = $(e.relatedTarget).data('password');
+			var firstName = $(e.relatedTarget).data('first-name');
+			var lastName = $(e.relatedTarget).data('last-name');
+			var phoneNumber = $(e.relatedTarget).data('phone-number');
+			var dob = $(e.relatedTarget).data('dob');
+			var gender = $(e.relatedTarget).data('gender');
+			var active = $(e.relatedTarget).data('active');
+			//alert(userId);
+			//populate the textbox
+			$(e.currentTarget).find('#id').val(id);
+			$(e.currentTarget).find('#userId').val(userId);
+			$(e.currentTarget).find('#typeId').val(typeId);
+			$(e.currentTarget).find('#rfID').val(rfID);
+			$(e.currentTarget).find('#userEmail').val(userEmail);
+			//$(e.currentTarget).find('#password').val(password);
+			$(e.currentTarget).find('#firstName').val(firstName);
+			$(e.currentTarget).find('#lastName').val(lastName);
+			$(e.currentTarget).find('#phoneNumber').val(phoneNumber);
+			$(e.currentTarget).find('#dob').val(dob);
+			$(e.currentTarget).find('#gender').val(gender);
+			$(e.currentTarget).find('#active').val(active);
+
+		});
+		
+		
+            </script>
 
 
 		@endsection
