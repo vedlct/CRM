@@ -42,21 +42,16 @@
 						 <font color="red">Urgent</font> 
 						@endif
 					</td>
-					@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
                   <td>
-					
-
-							<!-- Trigger the Edit modal with a button -->
-							<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
-							   data-notice-id="{{$notice->noticeId}}"
-							   data-notice-msg="{{$notice->msg}}"
-							   data-category-id="{{$notice->categoryId}}"">
-								<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
-								
-
+					@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
+						<!-- Trigger the Edit modal with a button -->
+						<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
+						   data-notice-id="{{$notice->noticeId}}"
+						   data-notice-msg="{{$notice->msg}}"
+						   data-category-id="{{$notice->categoryId}}"">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+					@endif
                   </td>
-						@endif
               </tr>
             @endforeach
             </tbody>

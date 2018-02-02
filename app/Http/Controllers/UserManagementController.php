@@ -79,8 +79,12 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
-
+	//return $request;
 		$this->validateInput($request);
+        $this->validate($request, [
+		'userId' => 'required|max:50|unique:users',
+		'userEmail' => 'required|email|max:45|unique:users'
+		]);
 //        // Upload image
         if ($request->file('picture')) {
             $img = $request->file('picture');
@@ -91,9 +95,9 @@ class UserManagementController extends Controller
         }else{
             $filename = '';
         }
-      /*  User::create([
-
-           // DB::table('users')->insert([
+        // User::create([
+		//return $request;
+           DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
             'userEmail' => $request['userEmail'],
@@ -108,18 +112,8 @@ class UserManagementController extends Controller
             'gender' => $request['gender'],
             'active' => $request['active'],
 			
-        ]);*/
-		
-		
-		$keys = ['userId', 'typeId', 'rfID', 'userEmail', 'password', 'firstName', 'lastName', 'phoneNumber',
-        'dob', 'gender', 'active'];
-        $input = $this->createQueryInput($keys, $request);
-        $input['picture'] = $filename;
-        // Not implement yet
-        // $input['company_id'] = 0;
-		//return $request;
-        User::create($input);
         ]);
+		
         Session::flash('message', 'User Added successfully');
         return back();
     }
@@ -166,9 +160,10 @@ class UserManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user = User::findOrFail($request->id);
+		
         $this->validateInput($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
@@ -179,7 +174,6 @@ class UserManagementController extends Controller
             $constraints['password'] = 'required|min:6|confirmed';
             $input['password'] =  bcrypt($request['password']);
         }
-		
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
@@ -189,9 +183,10 @@ class UserManagementController extends Controller
 
         }
 
-        User::where('id', $id)
+        User::where('id', $request->id)
             ->update($input);
 
+        Session::flash('message', 'Successfully user\'s info updated ');
         return redirect()->intended('/user-management');
     }
 
@@ -253,13 +248,13 @@ class UserManagementController extends Controller
 
     private function validateInput($request) {
         $this->validate($request, [
-		'userId' => 'required|max:50|unique:users',
+		'userId' => 'required|max:50',
 		'typeId' => 'required|max:11|numeric',
-		'userEmail' => 'required|email|max:45|unique:users',
-        'password' => 'required|min:6|max:20|confirmed',
+		'userEmail' => 'required|email|max:45',
+        'password' => 'max:20|confirmed',
         'firstName' => 'required|max:20',
         'lastName' => 'required|max:20',
-        'rfID' => 'max:11|numeric',
+        'rfID' => 'max:11',
         'phoneNumber' => 'max:15',
         'picture' => 'max:45',
         'dob' => 'max:10',

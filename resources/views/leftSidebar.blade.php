@@ -140,7 +140,7 @@
                 @endif
 
 
-                @if($userType=='USER' )
+                @if($userType=='ADMIN' )
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>
