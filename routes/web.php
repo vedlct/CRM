@@ -95,6 +95,8 @@ Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
+Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData');
+
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
 
 Route::post('lead/temp','LeadController@tempData')->name('tempData');

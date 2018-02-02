@@ -21,6 +21,7 @@ use App\Callingreport;
 use App\Workprogress;
 use App\Followup;
 use DB;
+use DataTables;
 
 
 class LeadController extends Controller
@@ -169,10 +170,90 @@ class LeadController extends Controller
 
 
         public function filter(){
-//            $leads=Lead::with('assigned')->where('statusId', 2)->get();
+
             $leads=(new Lead())->showNotAssignedLeads();
             return view('layouts.lead.filterLead')->with('leads',$leads);
-        }
+
+
+
+
+    }
+
+    public function getFilterLeads(Request $request){
+
+
+
+//        $totalData = Lead::with('mined')
+//            ->where('leads.statusId','2')
+//            ->where('contactedUserId',0)
+//            ->where('leadAssignStatus',0)
+//            ->count();
+//        $totalFiltered = $totalData;
+//        $start = $request->input('start');
+//        $limit = $request->input('length');
+//
+//        if(empty($request->input('search.value')))
+//        {
+//
+//            $leads = Lead::with('mined')
+//                ->where('leads.statusId','2')
+//                ->where('contactedUserId',0)
+//                ->where('leadAssignStatus',0)
+//                ->offset($start)
+//                ->limit($limit)
+//                ->get();
+//
+//        }
+//
+//        else{
+//            $search = $request->input('search.value');
+//
+//
+//            $leads = Lead::with('mined')
+//                ->where('companyName','LIKE',"%{$search}%")
+//                ->where('leads.statusId','2')
+//                ->where('contactedUserId',0)
+//                ->where('leadAssignStatus',0)
+//                ->offset($start)
+//                ->limit($limit)
+//                ->get();
+//        }
+////        <form method="post" action="{{route('addContacted')}}">
+////                                    {{@csrf_field()}}
+////                                    <input type="hidden" value="{{$lead->leadId}}" name="leadId">
+////                                    <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+////                                </form>
+//
+//        $fStart='<form method="post" action="{{route('')}}">
+//                   <input value="'.Session::token().'" type="text"> <input type="hidden" value="';
+//
+//        $fEnd='" name="leadId">
+//                                    <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+//                                </form>';
+//
+//
+//        $data = array();
+//        foreach ($leads as $lead){
+//            $nestedData['companyName'] = $lead->companyName;
+//            $nestedData['personName'] = $lead->personName;
+//            $nestedData['email'] = $lead->email;
+//            $nestedData['minedBy']=$lead->mined->firstName;
+//            $nestedData['action']=$fStart.$lead->leadId.$fEnd;
+//            $data[]=$nestedData;
+//        }
+//
+//        $json_data = array(
+//            "draw"            => intval($request->input('draw')),
+//            "recordsTotal"    => intval($totalData),
+//            "recordsFiltered" => intval($totalFiltered),
+//            "data"            => $data
+//        );
+//
+//
+//        return json_encode($json_data);
+
+
+    }
 
 
 
@@ -183,7 +264,7 @@ class LeadController extends Controller
             //for user
             $User_Type=Session::get('userType');
 
-            if($User_Type == 'USER') {
+            if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR') {
                 $leads = (new Lead())->myLeads();
                 $callReports = Callingreport::get();
                 $possibilities = Possibility::get();
@@ -400,13 +481,14 @@ class LeadController extends Controller
     public function testLeads(){
             //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
         $User_Type=Session::get('userType');
-        if($User_Type =='USER'){
+        if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
         $leads=Lead::select('leads.*')
             ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
-            ->where('workprogress.progress','Test job')
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->where('leadassigneds.assignTo',Auth::user()->id)
-            ->where('leadassigneds.leaveDate',null)
+            ->where('workprogress.progress','Test Job')
+//            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
+//            ->where('leadassigneds.assignTo',Auth::user()->id)
+//            ->where('leadassigneds.leaveDate',null)
+            ->where('workprogress.userId',Auth::user()->id)
             ->get();
 
 
@@ -427,7 +509,7 @@ class LeadController extends Controller
 
         public function starLeads(){
             $User_Type=Session::get('userType');
-            if($User_Type=='USER'){
+            if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
         $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
@@ -448,8 +530,10 @@ class LeadController extends Controller
 
 
         public function addContacted(Request $r){
+            return $r;
             $lead=Lead::findOrFail($r->leadId);
             $lead->contactedUserId=Auth::user()->id;
+            $lead->statusId=7;
             $lead->save();
             Session::flash('message', 'Lead Added To Contacted List');
             return back();
@@ -458,7 +542,7 @@ class LeadController extends Controller
         public function contacted(){
             //For user
             $User_Type=Session::get('userType');
-        if($User_Type =='USER'){
+        if($User_Type!='RA' || $User_Type!='ADMIN' ){
 
             $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
@@ -478,44 +562,12 @@ class LeadController extends Controller
 
         public function rejectData(Request $request)
     {
-        $totalData = Lead::with('category')->where('statusId',3)->count();
-        $totalFiltered = $totalData;
-        $start = $request->input('start');
-        $limit = $request->input('length');
-        if(empty($request->input('search.value')))
-        {
-            $leads = Lead::with('category')->where('statusId',3)
-                ->offset($start)
-                ->limit($limit)
-                ->get();
 
-        }
+        $leads = Lead::with('mined')
+            ->where('statusId',5)->get();
 
-        else{
-            $search = $request->input('search.value');
-            $leads = Lead::with('category')
-                ->where('companyName','LIKE',"%{$search}%")
-                ->where('statusId',3)->get();
-        }
+        return DataTables::of($leads)->make(true);
 
-
-
-        $data = array();
-        foreach ($leads as $lead){
-            $nestedData['name'] = $lead->companyName;
-            $nestedData['email'] = $lead->email;
-            $nestedData['minedBy']=$lead->mined->firstName;
-            $data[]=$nestedData;
-        }
-        $json_data = array(
-            "draw"            => intval($request->input('draw')),
-            "recordsTotal"    => intval($totalData),
-            "recordsFiltered" => intval($totalFiltered),
-            "data"            => $data
-        );
-
-
-        return json_encode($json_data);
     }
 
 
@@ -523,7 +575,7 @@ class LeadController extends Controller
 
             $lead=Lead::findOrFail($id);
             if($lead->statusId ==1){
-                $lead->statusId=3;
+                $lead->statusId=5;
                 $lead->save();
             }
 
@@ -557,6 +609,7 @@ class LeadController extends Controller
                     $lead=Lead::findOrFail($id);
                     if($lead->contactedUserId == Auth::user()->id){
                         $lead->contactedUserId =null;
+                        $lead->statusId=2;
                         $lead->save();
                         Session::flash('message', 'You have Leave The Lead successfully');
                         return back();

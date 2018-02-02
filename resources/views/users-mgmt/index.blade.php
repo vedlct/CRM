@@ -148,8 +148,9 @@
 
 
                                 <div class="form-group col-md-5">
-                                    <label for="userId">Date Of Birth:</label>
-                                    <input id="dob" type="text" class="form-control" name="dob" value="" required >
+                                    <label>Date Of Birth:</label>
+                                    {{--<input id="dob"  class="form-control" name="dob" placeholder="pick Date" rows="3" required >--}}
+                                    <input class="form-control" id="datepicker" rows="3" name="dob" placeholder="pick Date" required>
                                     @if ($errors->has('dob'))
                                         <span class="help-block">
 								<strong>{{ $errors->first('dob') }}</strong>
@@ -283,8 +284,9 @@
                 });
 
                 $( function() {
-                    $( "#dob" ).datepicker();
+                    $( "#datepicker" ).datepicker();
                 } );
+
 
 
 			</script>
