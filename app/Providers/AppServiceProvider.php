@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $notice=Notice::orderBy('noticeId', 'desc')->first();
 
-        View::share('recentNotice', $notice);
+        View::share('recentNotice',  $notice);
 
     }
 

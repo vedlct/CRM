@@ -34,9 +34,13 @@ class Lead extends Model
 //        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
 //        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
         $leads=Lead::select('leads.*')
+            ->with('mined')
             ->where('leads.statusId','2')
-            ->where('contactedUserId',null)
-            ->where('leadAssignStatus',null)
+//            ->where('contactedUserId',null)
+            ->orWhere('contactedUserId',0)
+//            ->where('leadAssignStatus',null)
+            ->where('leadAssignStatus',0)
+            ->limit(100)
             ->get();
         return $leads;
 

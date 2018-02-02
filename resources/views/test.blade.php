@@ -9,13 +9,13 @@
     <table class="table table-bordered" id="users-table">
         <thead>
         <tr>
-            <th>companyName</th>
-            <th>personName</th>
+            <th>Company Name</th>
+            <th>Mined By</th>
+            <th>Person Name</th>
             <th>Email</th>
             <th>Number</th>
             <th>Created At</th>
-            <th>Action</th>
-            <th>drop</th>
+            {{--<th>Mined By</th>--}}
 
         </tr>
         </thead>
@@ -61,12 +61,12 @@
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'companyName', name: 'companyName' },
-                    { data: 'personName', name: 'personName' },
+                    { data: 'mined.firstName', name: 'mined.firstName' },
+                    { data: 'personName', name: 'personName'},
                     { data: 'email', name: 'email' },
                     { data: 'contactNumber', name: 'contactNumber' },
-                    { data: 'created_at', name: 'created_at' },
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-                    {data: 'drop', name: 'drop', orderable: false, searchable: false}
+                    { data: 'created_at', name: 'created_at' }
+
                 ]
             });
         });

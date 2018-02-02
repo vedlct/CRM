@@ -38,12 +38,14 @@ class NoticeController extends Controller
     public function index()
     {
         $notices = DB::table('notices')
+            -> orderBy('noticeId', 'desc')
         ->leftJoin('users', 'notices.userId', '=', 'users.id')
         ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
         ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName', 'categories.categoryId as categoryId')
         ->get();
 
-        $categories = Category:: where('type', 2)->get();
+        $categories = Category::where('type', 2)
+            ->get();
 		
         return view('notice/index', ['notices' => $notices])
 			->with('categories', $categories);

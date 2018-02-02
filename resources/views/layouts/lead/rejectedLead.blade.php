@@ -10,8 +10,9 @@
             <table class="table table-bordered" id="posts">
                 <thead>
                 <th>Company Name</th>
-                <th>Email</th>
                 <th>Mined By</th>
+                <th>Email</th>
+
 
                 </thead>
             </table>
@@ -37,23 +38,43 @@
 
 
     <script>
-        $(document).ready(function () {
+        {{--$(document).ready(function () {--}}
+            {{--$('#posts').DataTable({--}}
+                {{--"processing": true,--}}
+                {{--"serverSide": true,--}}
+                {{--"pagingType": "full_numbers",--}}
+                {{--"ajax":{--}}
+                    {{--"url": "{{ route('rejectData')}}",--}}
+                    {{--"dataType": "json",--}}
+                    {{--"type": "POST",--}}
+                    {{--"data":{ _token: "{{csrf_token()}}"}--}}
+                {{--},--}}
+                {{--"columns": [--}}
+                    {{--{ "data": "name" },--}}
+                    {{--{ "data": "email" },--}}
+                    {{--{ "data": "minedBy" }--}}
+                {{--]--}}
+
+            {{--});--}}
+        {{--});--}}
+
+        $(function() {
             $('#posts').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "pagingType": "full_numbers",
+                processing: true,
+                serverSide: true,
+                type:"POST",
                 "ajax":{
-                    "url": "{{ route('rejectData')}}",
-                    "dataType": "json",
+                    "url": "{!! route('rejectData') !!}",
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
                 },
-                "columns": [
-                    { "data": "name" },
-                    { "data": "email" },
-                    { "data": "minedBy" }
-                ]
+                {{--ajax: '{!! route('test') !!}',--}}
+                columns: [
+                    { data: 'companyName', name: 'companyName' },
+                    { data: 'mined.firstName', name: 'mined.firstName' },
+                    { data: 'email', name: 'email' },
 
+                ]
             });
         });
     </script>
