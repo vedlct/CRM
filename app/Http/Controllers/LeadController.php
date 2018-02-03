@@ -171,6 +171,10 @@ class LeadController extends Controller
 
         public function filter(){
 
+
+        return '<a href="'.route('home').'">Click me</a>';
+
+
         $leads=(new Lead())->showNotAssignedLeads();
             return view('layouts.lead.filterLead')->with('leads',$leads);
 
