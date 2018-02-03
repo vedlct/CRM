@@ -448,6 +448,7 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
                 ->where('workprogress.progress','Test Job')
+                ->with('category','country')
 //            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
 //            ->where('leadassigneds.assignTo',Auth::user()->id)
 //            ->where('leadassigneds.leaveDate',null)
@@ -465,6 +466,34 @@ class LeadController extends Controller
                 ->with('possibilities',$possibilities);}
 
         return Redirect()->route('home');
+
+
+    }
+
+
+    public function closeLeads(){
+
+        $User_Type=Session::get('userType');
+        if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
+            $leads=Lead::select('leads.*')
+                ->with('category','country')
+                ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
+                ->where('workprogress.progress','Closing')
+                ->where('workprogress.userId',Auth::user()->id)
+                ->distinct('workprogress.leadId')
+                ->get();
+
+
+            $callReports=Callingreport::get();
+            $possibilities=Possibility::get();
+
+            return view('layouts.lead.testList')
+                ->with('leads',$leads)
+                ->with('callReports',$callReports)
+                ->with('possibilities',$possibilities);}
+
+        return Redirect()->route('home');
+
 
 
     }
@@ -513,7 +542,8 @@ class LeadController extends Controller
                 ->get();
 
 
-            $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
+            $leads=Lead::with('category','country')
+                ->where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             return view('layouts.lead.myLead')
