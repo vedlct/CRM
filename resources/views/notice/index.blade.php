@@ -49,7 +49,7 @@
 										<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
 										   data-notice-id="{{$notice->noticeId}}"
 										   data-notice-msg="{{$notice->msg}}"
-										   data-category-id="{{$notice->categoryId}}"">
+										   data-category-id="{{$notice->categoryId}}">
 										<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 									@endif
 								</td>

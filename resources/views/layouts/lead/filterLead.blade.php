@@ -14,10 +14,12 @@
                     <thead>
                     <tr>
                         <th>Company Name</th>
+                        <th>Person</th>
+                        <th>Email</th>
+                        <th>Number</th>
                         <th>Category</th>
                         <th>Country</th>
-                        <th>Contact Person</th>
-                        <th>Mined By</th>
+
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
                             <th>Contacted</th>
@@ -26,37 +28,7 @@
                     </thead>
                     <tbody>
 
-                    @foreach($leads as $lead)
-                        <tr>
-                            <td>{{$lead->companyName}}</td>
-                            <td>{{$lead->category->categoryName}}</td>
-                            <td>{{$lead->country->countryName}}</td>
-                            <td>{{$lead->personName}}</td>
-                            <td>{{$lead->mined->firstName}}</td>
 
-                            {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
-                                <th>
-                                    <form method="post" action="{{route('addContacted')}}">
-                                        {{@csrf_field()}}
-                                        <input type="hidden" value="{{$lead->leadId}}" name="leadId">
-                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-
-                                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                           data-lead-id="{{$lead->leadId}}"
-                                           data-lead-name="{{$lead->companyName}}"
-                                           data-lead-email="{{$lead->email}}"
-                                           data-lead-number="{{$lead->contactNumber}}"
-                                           data-lead-person="{{$lead->personName}}"
-                                           data-lead-website="{{$lead->website}}">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    </form>
-
-
-                                </th>
-                            {{--@endif--}}
-                        </tr>
-
-                    @endforeach
 
                     </tbody>
                 </table>
@@ -84,6 +56,23 @@
 
                     {{csrf_field()}}
                     <div class="row">
+
+                        <div class="col-md-12" align="center">
+                            <b > Mined By:   <div class="mined" id="mined"></div></b>
+                            {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Category:</label>
+                            <select class="form-control"  name="category" id="category">
+                                <option value="">Please Select</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
 
                         <div class="col-md-4">
                             <input type="hidden" name="leadId">
@@ -119,13 +108,7 @@
 
 
 
-
-
                     </div>
-
-
-
-
                 </div>
 
 
@@ -157,10 +140,45 @@
     <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#myTable').DataTable();
+//        $(document).ready(function() {
+//            $('#myTable').DataTable();
+//
+//        });
 
+//<th>Company Name</th>
+//<th>Person</th>
+//<th>Email</th>
+//<th>Number</th>
+//<th>Category</th>
+//<th>Country</th>
+    $(function() {
+        $('#myTable').DataTable({
+//            processing: true,
+//            serverSide: true,
+//            stateSave: true,
+//            Filter: true,
+            processing: true,
+            serverSide: true,
+            Filter: true,
+            type:"POST",
+            "ajax":{
+                "url": "{!! route('filterLeadData') !!}",
+                "type": "POST",
+                "data":{ _token: "{{csrf_token()}}"}
+            },
+            {{--ajax: '{!! route('test') !!}',--}}
+            columns: [
+                { data: 'companyName', name: 'leads.companyName' },
+                { data: 'personName', name: 'leads.personName' },
+                { data: 'email', name: 'leads.email' },
+                { data: 'contactNumber', name: 'leads.contactNumber'},
+                { data: 'category.categoryName', name: 'category.categoryName'},
+                { data: 'countryName', name: 'countries.countryName'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+
+            ]
         });
+    });
 
 
 
@@ -172,7 +190,14 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
+
+
             //populate the textbox
+            $('#category').val(category);
+            $('div.mined').text(minedBy);
+//            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);

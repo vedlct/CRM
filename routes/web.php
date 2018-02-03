@@ -91,7 +91,9 @@ Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
+Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
+
 
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');

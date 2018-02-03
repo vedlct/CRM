@@ -26,22 +26,19 @@ class Lead extends Model
             ->get();
 
         return $leads;
-
     }
 
     public function showNotAssignedLeads(){
        // $leads = DB::select
 //        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
 //        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
-        $leads=Lead::select('leads.*')
-            ->with('mined')
+        $leads=Lead::with('mined','category')
             ->where('leads.statusId','2')
-//            ->where('contactedUserId',null)
             ->orWhere('contactedUserId',0)
-//            ->where('leadAssignStatus',null)
             ->where('leadAssignStatus',0)
-            ->limit(100)
-            ->get();
+            ->leftJoin('countries','leads.countryId', '=','countries.countryId')
+            ->select('leads.*', 'countries.countryName');
+
         return $leads;
 
 

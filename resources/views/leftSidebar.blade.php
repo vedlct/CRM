@@ -34,7 +34,9 @@
                 </li>
                 @endif
 
+
                 @if($userType=='SUPERVISOR' || $userType=='USER' || $userType=='MANAGER')
+
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
@@ -49,7 +51,7 @@
 
                 </li>
 
-                @if($userType =='RA')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
@@ -81,7 +83,7 @@
                 </li>
                 @endif
 
-                @if($userType =='USER')
+                @if($userType =='USER' || $userType =='MANAGER')
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>

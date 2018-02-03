@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Session;
 use App\Team;
 use App\User;
@@ -23,10 +24,15 @@ class TeamController extends Controller
 //        $type=Auth::user()->typeId;
         $User_Type=Session::get('userType');
 
-        if($User_Type=='USER'|| $User_Type=='RA'){
+        if($User_Type=='USER'|| $User_Type=='RA' || $User_Type=='MANAGER'){
 
         $users = User::where('teamId', Auth::user()->teamId)->get();
-        $team = Team::findOrFail(Auth::user()->teamId);
+//        $team = Team::findOrFail(Auth::user()->teamId);
+            try {
+                $team = Team::findOrFail(Auth::user()->teamId);
+            } catch (ModelNotFoundException $ex) {
+               return '<h1>You are not assigned into any team yet</h1>';
+            }
 
         return view('layouts.Team.myTeam')
             ->with('users', $users)
