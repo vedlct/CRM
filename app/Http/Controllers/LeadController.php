@@ -274,7 +274,7 @@ class LeadController extends Controller
 
         //For Ra
         $User_Type=Session::get('userType');
-        if($User_Type=='RA'){
+        if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
 
             return view('layouts.lead.temp');
         }
@@ -506,13 +506,20 @@ class LeadController extends Controller
 
         if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
 
+            $categories=Category::where('type',1)
+                ->get();
+
+
             $leads=Lead::where('contactedUserId',Auth::user()->id)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             return view('layouts.lead.myLead')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);
+
+        }
 
         return Redirect()->route('home');
     }

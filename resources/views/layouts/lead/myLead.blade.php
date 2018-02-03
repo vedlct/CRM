@@ -50,7 +50,11 @@
                                    data-lead-email="{{$lead->email}}"
                                    data-lead-number="{{$lead->contactNumber}}"
                                    data-lead-person="{{$lead->personName}}"
-                                   data-lead-website="{{$lead->website}}">
+                                   data-lead-website="{{$lead->website}}"
+                                   data-lead-mined="{{$lead->mined->firstName}}"
+                                   data-lead-category="{{$lead->category->categoryId}}"
+
+                                >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
                             </td>
@@ -88,6 +92,24 @@
                 <div class="modal-body">
                     {{csrf_field()}}
                     <div class="row">
+                        
+
+                            <div class="col-md-12" align="center">
+                                <b > Mined By:   <div class="mined" id="mined"></div></b>
+                                {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Category:</label>
+                                <select class="form-control"  name="category" id="category">
+                                    <option value="">Please Select</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
 
                         <div class="col-md-4">
                             <input type="hidden" name="leadId">
@@ -258,16 +280,21 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
 
 
             //populate the textbox
+            $('#category').val(category);
+            $('div.mined').text(minedBy);
+//            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
 
         });
