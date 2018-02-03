@@ -34,7 +34,9 @@
                 </li>
                 @endif
 
-                @if($userType!='RA' || $userType!='ADMIN' ||'USER' )
+
+                @if($userType=='SUPERVISOR' || $userType=='USER' || $userType=='MANAGER')
+
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
@@ -132,7 +134,7 @@
                 </li>
                 @endif
 
-                @if($userType=='MANAGER' )
+                @if($userType=='MANAGER')
                 <li>
                     <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
 
@@ -140,7 +142,9 @@
                 @endif
 
 
+
                 @if($userType=='ADMIN')
+
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>

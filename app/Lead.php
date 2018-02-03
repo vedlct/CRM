@@ -39,9 +39,8 @@ class Lead extends Model
 //            ->where('contactedUserId',null)
             ->orWhere('contactedUserId',0)
 //            ->where('leadAssignStatus',null)
-            ->where('leadAssignStatus',0)
-            ->limit(100)
-            ->get();
+            ->where('leadAssignStatus',0);
+
         return $leads;
 
 

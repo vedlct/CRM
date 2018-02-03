@@ -1,12 +1,13 @@
 @extends('main')
 
 @section('content')
+	@php($userType = Session::get('userType'))
 	<div class="box-body">
 		<div class="card" style="padding: 2px;">
 			<div class="card-body">
 				<h2 align="center"><b>Notices</b></h2>
 
-				@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
+				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
 					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-info btn-sm">Add Notice</a>
 
 				@endif
@@ -24,7 +25,7 @@
 						<tr role="row">
 							<th>Notice Name</th>
 							<th>Notice</th>
-							@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
+							@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
 								<th>Action</th>
 							@endif
 						</tr>
@@ -42,21 +43,16 @@
 										<font color="red">Urgent</font>
 									@endif
 								</td>
-								@if(Auth::user()->typeId ==1 || Auth::user()->typeId ==2 || Auth::user()->typeId ==3)
-									<td>
-
-
-										<!-- Trigger the Edit modal with a button -->
+								<td>
+								@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
+									<!-- Trigger the Edit modal with a button -->
 										<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
 										   data-notice-id="{{$notice->noticeId}}"
 										   data-notice-msg="{{$notice->msg}}"
 										   data-category-id="{{$notice->categoryId}}">
 										<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
-
-
-									</td>
-								@endif
+									@endif
+								</td>
 							</tr>
 						@endforeach
 						</tbody>

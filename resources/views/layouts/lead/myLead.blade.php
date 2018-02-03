@@ -178,7 +178,7 @@
                             <label ><b>Progress : </b></label>
                             <select class="form-control" name="progress" >
                                 <option value=""><b>(select one)</b></option>
-                                <option value="Test job">Test job</option>
+                                <option value="Test Job">Test Job</option>
                                 <option value="Closing">Closing</option>
                             </select>
                             <br>
