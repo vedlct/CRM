@@ -452,6 +452,7 @@ class LeadController extends Controller
 //            ->where('leadassigneds.assignTo',Auth::user()->id)
 //            ->where('leadassigneds.leaveDate',null)
                 ->where('workprogress.userId',Auth::user()->id)
+                ->distinct('workprogress.leadId')
                 ->get();
 
 
