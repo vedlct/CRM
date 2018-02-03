@@ -24,52 +24,31 @@
 
                         <th>Select</th>
                         <th>Company Name</th>
-                        <th>Category</th>
+                        <th>Mined By</th>
+                        {{--<th>Category</th>--}}
                         <th>Website</th>
                         <th>Email</th>
                         <th>Country</th>
                         <th>Comments</th>
-                        <th>Mined By</th>
                         <th>Created At</th>
-                        {{--<th>Delete</th>--}}
+
 
                     </tr>
                     </thead>
                     <tbody>
 
 
-                    @foreach($leads as $lead)
-                        <tr>
-                            <td><input type='checkbox' class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
-                            <td>{{$lead->companyName}}</td>
-                            <td>{{$lead->category->categoryName}}</td>
-                            <td>{{$lead->website}}</td>
-                            <td>{{$lead->email}}</td>
-                            <td>{{$lead->country->countryName}}</td>
-                            <td>{{$lead->comments}}</td>
-                            <td>{{$lead->mined->firstName}}</td>
-                            <td>{{$lead->created_at}}</td>
 
-
-
-                            {{--<td>--}}
-                                {{--<form method="post" action="{{ URL::to('lead/' . $lead->leadId) }}" onsubmit="return confirm('Do you really want to Delete?');">--}}
-                                    {{--{{csrf_field()}}--}}
-                                    {{--{{ method_field('DELETE') }}--}}
-
-                                {{--<button type="submit" class="btn btn-danger btn-sm">--}}
-
-                                    {{--<i class="fa fa-trash"></i></button></form></td>--}}
-                        </tr>
-                    @endforeach
 
                     </tbody>
                 </table>
             </div>
 
+
+
+
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
             <div class="form-group">
-
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Name:</b></label>
@@ -118,17 +97,56 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script>
 
-        var datatable;
+//        var datatable;
+//
+//
+//        $(document).ready(function() {
+//             datatable= $('#myTable').DataTable(
+//                {
+//                    "order": [[ 7, "desc" ]]
+//                }
+//            );
+//
+//        });
 
 
-        $(document).ready(function() {
-             datatable= $('#myTable').DataTable(
-                {
-                    "order": [[ 7, "desc" ]]
-                }
-            );
+//<th>Select</th>
+//<th>Company Name</th>
+//<th>Mined By</th>
+//<th>Category</th>
+//<th>Website</th>
+//<th>Email</th>
+//<th>Country</th>
+//<th>Comments</th>
+//<th>Created At</th>
 
+        $(function() {
+            $('#myTable').DataTable({
+                processing: true,
+                serverSide: true,
+                type:"POST",
+                "ajax":{
+                    "url": "{!! route('getAssignLeadData') !!}",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+                {{--ajax: '{!! route('test') !!}',--}}
+                columns: [
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'companyName', name: 'companyName' },
+                    { data: 'mined.firstName', name: 'mined.firstName' },
+                    { data: 'website', name: 'website' },
+                    { data: 'email', name: 'email' },
+                    { data: 'country.countryName', name: 'country.countryName' },
+                    { data: 'comments', name: 'comments' },
+                    { data: 'created_at', name: 'created_at' },
+
+
+                ]
+            });
         });
+
+
 
         function selectAll(source) {
             checkboxes = document.getElementsByName('checkboxvar[]');

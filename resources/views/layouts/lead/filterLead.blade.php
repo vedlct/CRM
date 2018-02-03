@@ -17,6 +17,7 @@
                         <th>Mined By</th>
                         <th>Email</th>
                         <th>Contact Person</th>
+                        <th>Country</th>
 
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
@@ -148,6 +149,7 @@
                 { data: 'mined.firstName', name: 'mined.firstName' },
                 { data: 'email', name: 'email' },
                 { data: 'personName', name: 'personName' },
+                { data: 'country.countryName', name: 'country.countryName' },
                 {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]

@@ -92,7 +92,10 @@ class LeadController extends Controller
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER'){
 
-            $leads=(new Lead())->showNotAssignedLeads();
+//            $leads=(new Lead())->showNotAssignedLeads();
+//            $leads=$leads
+//                ->limit(100)
+//                ->get();
 
             //getting only first name of users
             if($User_Type == 'RA'){
@@ -111,13 +114,28 @@ class LeadController extends Controller
 
 
             return view('layouts.lead.assignLead')
-                ->with('leads',$leads)
-                ->with('users',$users);}
+//                ->with('leads',$leads)
+                ->with('users',$users);
+        }
 
         return Redirect()->route('home');
 
     }
 
+
+    public function getAssignLeadData(){
+
+        $leads=(new Lead())->showNotAssignedLeads();
+
+        return DataTables::of($leads)
+            ->addColumn('action', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+
+            })
+            ->make(true);
+
+
+    }
 
 
 
@@ -494,7 +512,7 @@ class LeadController extends Controller
 
 
     public function addContacted(Request $r){
-   
+
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
         $lead->statusId=7;
@@ -573,7 +591,7 @@ class LeadController extends Controller
         else{
             $lead=Lead::findOrFail($id);
             if($lead->contactedUserId == Auth::user()->id){
-                $lead->contactedUserId =null;
+                $lead->contactedUserId =0;
                 $lead->statusId=2;
                 $lead->save();
                 Session::flash('message', 'You have Leave The Lead successfully');
