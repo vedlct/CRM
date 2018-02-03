@@ -144,8 +144,6 @@
 
 					  </div>
 
-
-
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					  </div></form>
@@ -153,14 +151,6 @@
 			  </div>
 		  </div>
 		  </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -200,7 +190,7 @@
 									  <label ><b>Progress : </b></label>
 									  <select class="form-control" name="progress" >
 										  <option value=""><b>(select one)</b></option>
-										  <option value="Test job">Test job</option>
+										  <option value="Test job">Test Job</option>
 										  <option value="Closing">Closing</option>
 									  </select>
 									  <br>

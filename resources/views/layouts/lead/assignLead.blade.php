@@ -137,7 +137,7 @@
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'website' },
                     { data: 'email', name: 'email' },
-                    { data: 'country.countryName', name: 'country.countryName' },
+                    { data: 'countryName', name: 'countries.countryName'},
                     { data: 'comments', name: 'comments' },
                     { data: 'created_at', name: 'created_at' },
 

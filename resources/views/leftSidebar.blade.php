@@ -83,7 +83,7 @@
                 </li>
                 @endif
 
-                @if($userType =='USER')
+                @if($userType =='USER' || $userType =='MANAGER')
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>

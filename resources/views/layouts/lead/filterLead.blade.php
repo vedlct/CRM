@@ -14,9 +14,10 @@
                     <thead>
                     <tr>
                         <th>Company Name</th>
-                        <th>Mined By</th>
+                        <th>Person</th>
                         <th>Email</th>
-                        <th>Contact Person</th>
+                        <th>Number</th>
+                        <th>Category</th>
                         <th>Country</th>
 
 
@@ -55,6 +56,23 @@
 
                     {{csrf_field()}}
                     <div class="row">
+
+                        <div class="col-md-12" align="center">
+                            <b > Mined By:   <div class="mined" id="mined"></div></b>
+                            {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Category:</label>
+                            <select class="form-control"  name="category" id="category">
+                                <option value="">Please Select</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
 
                         <div class="col-md-4">
                             <input type="hidden" name="leadId">
@@ -128,15 +146,20 @@
 //        });
 
 //<th>Company Name</th>
+//<th>Person</th>
+//<th>Email</th>
+//<th>Number</th>
 //<th>Category</th>
 //<th>Country</th>
-//<th>Contact Person</th>
-//<th>Mined By</th>
-
     $(function() {
         $('#myTable').DataTable({
+//            processing: true,
+//            serverSide: true,
+//            stateSave: true,
+//            Filter: true,
             processing: true,
             serverSide: true,
+            Filter: true,
             type:"POST",
             "ajax":{
                 "url": "{!! route('filterLeadData') !!}",
@@ -145,11 +168,12 @@
             },
             {{--ajax: '{!! route('test') !!}',--}}
             columns: [
-                { data: 'companyName', name: 'companyName' },
-                { data: 'mined.firstName', name: 'mined.firstName' },
-                { data: 'email', name: 'email' },
-                { data: 'personName', name: 'personName' },
-                { data: 'country.countryName', name: 'country.countryName' },
+                { data: 'companyName', name: 'leads.companyName' },
+                { data: 'personName', name: 'leads.personName' },
+                { data: 'email', name: 'leads.email' },
+                { data: 'contactNumber', name: 'leads.contactNumber'},
+                { data: 'category.categoryName', name: 'category.categoryName'},
+                { data: 'countryName', name: 'countries.countryName'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]
@@ -166,7 +190,14 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
+
+
             //populate the textbox
+            $('#category').val(category);
+            $('div.mined').text(minedBy);
+//            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);

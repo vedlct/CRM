@@ -189,30 +189,15 @@ class LeadController extends Controller
 
     public function filter(){
 
-//        $leads=(new Lead())->showNotAssignedLeads();
-//        return view('layouts.lead.filterLead')->with('leads',$leads);
+        $categories=Category::where('type',1)
+        ->get();
 
 
-        return view('layouts.lead.filterLead');
+        return view('layouts.lead.filterLead')->with('categories',$categories);
 
     }
 
     public function getFilterLeads(Request $request){
-
-//        <form method="post" action="{{route('addContacted')}}">
-//                                        {{@csrf_field()}}
-//                                        <input type="hidden" value="{{$lead->leadId}}" name="leadId">
-//                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-//
-//                                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
-//                                           data-lead-id="{{$lead->leadId}}"
-//                                           data-lead-name="{{$lead->companyName}}"
-//                                           data-lead-email="{{$lead->email}}"
-//                                           data-lead-number="{{$lead->contactNumber}}"
-//                                           data-lead-person="{{$lead->personName}}"
-//                                           data-lead-website="{{$lead->website}}">
-//                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-//                                    </form>
 
         $leads=(new Lead())->showNotAssignedLeads();
 
@@ -222,14 +207,17 @@ class LeadController extends Controller
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-
                                         <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
-                                           data-lead-website="'.$lead->website.'">
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                           
+                                           >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     </form>';
             })
@@ -292,12 +280,7 @@ class LeadController extends Controller
         }
 
         return Redirect()->route('home');
-//            $leads=Lead::where('statusId',1)->get();
-//
-//            $possibilities=Possibility::get();
-//            return view('layouts.lead.temp')
-//                ->with('leads',$leads)
-//                ->with('possibilities',$possibilities);
+
 
     }
 
@@ -315,11 +298,7 @@ class LeadController extends Controller
 
             $search = $request->input('search.value');
             $leads=(new Lead())->getTempLead($start,$limit,$search);
-//                $leads=Lead::where('statusId', 1)
-//                    ->where('companyName','LIKE',"%{$search}%")
-//                    ->offset($start)
-//                    ->limit($limit)
-//                    ->get();
+
         }
 
 
