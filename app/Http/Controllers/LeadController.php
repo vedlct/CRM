@@ -384,6 +384,7 @@ class LeadController extends Controller
 
 
     public function storeReport(Request $r){
+
         $this->validate($r,[
             'leadId'=>'required',
             'report' => 'required',
@@ -422,6 +423,7 @@ class LeadController extends Controller
         $progress->userId=Auth::user()->id;
         $progress->comments=$r->comment;
         $progress->save();
+
 
         Session::flash('message', 'Report Updated Successfully');
         return back();
