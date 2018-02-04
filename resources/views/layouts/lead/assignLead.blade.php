@@ -185,6 +185,7 @@
 //                        });
                         $('#alert').html(' <strong>Success!</strong> Assigned');
                         $('#alert').show();
+
                     }
                 }
             });
