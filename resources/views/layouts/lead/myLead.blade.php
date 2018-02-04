@@ -300,6 +300,8 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+
             $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
 

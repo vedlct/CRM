@@ -175,6 +175,7 @@ class LeadController extends Controller
         $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
+        $lead->categoryId=$r->category;
         $lead->personName=$r->personName;
         $lead->contactNumber=$r->number;
         $lead->website=$r->website;
@@ -277,8 +278,10 @@ class LeadController extends Controller
         //For Ra
         $User_Type=Session::get('userType');
         if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
+            $categories=Category::where('type',1)->get();
 
-            return view('layouts.lead.temp');
+            return view('layouts.lead.temp')
+                    ->with('categories',$categories);
         }
 
         return Redirect()->route('home');
@@ -335,7 +338,10 @@ class LeadController extends Controller
                                     data-lead-email="'.$lead->email.'"
                                     data-lead-number="'.$lead->contactNumber.'"
                                     data-lead-person="'.$lead->personName.'"
-                                    data-lead-website="'.$lead->website.'">
+                                    data-lead-website="'.$lead->website.'"
+                                    data-lead-mined="'.$lead->mined->firstName.'"
+                                    data-lead-category="'.$lead->category->categoryId.'"
+                                    >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             $nestedData['possibility']=$pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
             $data[]=$nestedData;
@@ -594,7 +600,7 @@ class LeadController extends Controller
             ->limit(1)->first();
 
 
-        if ($assignId){
+        if ($assignId !=0){
             $leave=Leadassigned::find($assignId->assignId);
             $leave->leaveDate=date('Y-m-d');
             $leave->save();
@@ -613,7 +619,7 @@ class LeadController extends Controller
                 $lead->contactedUserId =0;
                 $lead->statusId=2;
                 $lead->save();
-                Session::flash('message', 'You have Leave The Lead successfully');
+                Session::flash('message', 'You have Leave The Lead From Contact successfully');
                 return back();
             }
 
