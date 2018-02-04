@@ -54,7 +54,7 @@ class LeadController extends Controller
             'email' => 'required|max:100',
             'category' => 'required',
             'personName' => 'required|max:100',
-            'personNumber' => 'required|max:15|regex:/^[\0-9\-\(\)\s]*$/',
+            'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
             'country' => 'required',
             'country' => 'required',
             'designation'=>'required|max:100'
@@ -127,7 +127,7 @@ class LeadController extends Controller
 
         $leads=(new Lead())->showNotAssignedLeads();
 
-        return DataTables::of($leads)
+        return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
 
@@ -203,7 +203,7 @@ class LeadController extends Controller
 
         $leads=(new Lead())->showNotAssignedLeads();
 
-        return DataTables::of($leads)
+        return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 return '<form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />

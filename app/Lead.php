@@ -32,12 +32,17 @@ class Lead extends Model
        // $leads = DB::select
 //        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
 //        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
-        $leads=Lead::with('mined','category')
-            ->where('leads.statusId','2')
-            ->orWhere('contactedUserId',0)
+//        $leads=Lead::with('mined','category')
+//            ->where('leads.statusId','2')
+//            ->orWhere('contactedUserId',0)
+//            ->where('leadAssignStatus',0)
+//            ->leftJoin('countries','leads.countryId', '=','countries.countryId')
+//            ->select('leads.*', 'countries.countryName');
+        $leads=Lead::with('mined','category','country')
+            ->where('statusId',2)
+            ->where('contactedUserId',0)
             ->where('leadAssignStatus',0)
-            ->leftJoin('countries','leads.countryId', '=','countries.countryId')
-            ->select('leads.*', 'countries.countryName');
+            ->select('leads.*');
 
         return $leads;
 
@@ -61,14 +66,26 @@ class Lead extends Model
 
     public function getTempLead($start,$limit,$search){
         if($search==null){
-            $leads=Lead::where('statusId', 1)
+            $leads=Lead::with('category','country')
+                ->where('statusId', 1)
                 ->offset($start)
                 ->limit($limit)
+                ->orderBy('leadId','desc')
                 ->get();
             }
             else{
-                $leads=Lead::where('statusId', 1)
-                    ->where('companyName','LIKE',"%{$search}%")
+                $leads=Lead::with('country')
+                    ->where(function($q) use ($search){
+                        $q->orWhere('companyName','like',"%{$search}%")
+                            ->orWhere('website','like',"%{$search}%")
+                        ->orWhereHas('category', function ($query) use ($search){
+                            $query->where('categoryName', 'like', '%'.$search.'%');
+                        });
+                    })
+//                    ->orWhereHas('category', function ($query) use ($search){
+//                        $query->where('categoryName', 'like', '%'.$search.'%');
+//                    })
+                    ->where('statusId', 1)
                     ->offset($start)
                     ->limit($limit)
                     ->get();

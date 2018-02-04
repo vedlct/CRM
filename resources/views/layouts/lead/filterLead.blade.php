@@ -173,7 +173,7 @@
                 { data: 'email', name: 'leads.email' },
                 { data: 'contactNumber', name: 'leads.contactNumber'},
                 { data: 'category.categoryName', name: 'category.categoryName'},
-                { data: 'countryName', name: 'countries.countryName'},
+                { data: 'country.countryName', name: 'country.countryName'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]
