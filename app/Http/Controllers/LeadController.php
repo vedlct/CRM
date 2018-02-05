@@ -110,6 +110,7 @@ class LeadController extends Controller
             else{
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
+                    ->where('teamId','!=',null)
                     ->get();
             }
 

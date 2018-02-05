@@ -59,6 +59,7 @@ class HomeController extends Controller
             $teamMembers=0;
         }
 
+
         //Graph Access for Manager /SuperVisor / Admin
 
         return view('dashboard')

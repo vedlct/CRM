@@ -81,8 +81,11 @@
     </div>
 
     {{--Graph--}}
-    @if($teamMembers !=0)
-    <div class="row">
+    @php($userType = Session::get('userType'))
+
+    @if($userType=='ADMIN' || $userType=='MANAGER' || $userType=='SUPERVISOR')
+
+        <div class="row">
 
         <div class="col-md-2">
     <div class="card">
