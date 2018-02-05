@@ -159,7 +159,14 @@
 
         function drawBasic() {
 
-            var data = new google.visualization.DataTable();
+            var data = new google.visualization.DataTable([
+                ['Element', 'Density', { role: 'style' }],
+                ['Copper', 8.94, '#b87333'],            // RGB value
+                ['Silver', 10.49, 'silver'],            // English color name
+                ['Gold', 19.30, 'gold'],
+
+                ['Platinum', 21.45, 'color: #e5e4e2' ], // CSS-style declaration
+            ]);
             data.addColumn('timeofday', 'Time of Day');
             data.addColumn('number', 'Motivation Level');
 
