@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
-
 use Carbon\Carbon;
 use Auth;
 use Session;
@@ -23,7 +20,6 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
     /**
      * Show the application dashboard.
      *
@@ -31,34 +27,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-       // return view('home');
+        // return view('home');
         $date = Carbon::now();
-
-
-
         $totalFollowUp=Followup::where('userId',Auth::user()->id)
             ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
         $totalFollowUpCalled=Workprogress::where('userId',Auth::user()->id)
-                            ->where('callingReport',4)
+            ->where('callingReport',4)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
-                    ->where('created_at',date('Y-m-d',strtotime("-1 days")))->count();
-
+            ->where('created_at',date('Y-m-d',strtotime("-1 days")))->count();
         $leadMined=Lead::where('minedBy',Auth::user()->id)
-                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
         $User_Type=Session::get('userType');
         $teamMembers=User::select('id','firstName','lastName','typeId')
-                ->where('teamId',Auth::user()->teamId)->get();
-
-
-
+            ->where('teamId',Auth::user()->teamId)->get();
         return view('dashboard')
             ->with('calledThisWeek',$calledThisWeek)
             ->with('totalFollowUp',$totalFollowUp)
