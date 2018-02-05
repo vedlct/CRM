@@ -42,7 +42,10 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
         $User_Type=Session::get('userType');
         $teamMembers=User::select('id','firstName','lastName','typeId')
-            ->where('teamId',Auth::user()->teamId)->get();
+            ->where('teamId',Auth::user()->teamId)
+            ->where('teamId','!=',null)
+            ->get();
+
         return view('dashboard')
             ->with('calledThisWeek',$calledThisWeek)
             ->with('totalFollowUp',$totalFollowUp)
