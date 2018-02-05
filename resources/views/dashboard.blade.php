@@ -81,7 +81,7 @@
     </div>
 
     {{--Graph--}}
-
+    @if($teamMembers !=0)
     <div class="row">
 
         <div class="col-md-2">
@@ -116,6 +116,7 @@
 
 
     </div>
+    @endif
 
 
 

@@ -101,16 +101,15 @@ class LeadController extends Controller
             if($User_Type == 'RA'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
-                    ->Where('typeId',5)
+                    ->where('typeId',5)
+                    ->orWhere('typeId',2)
+                    ->orWhere('typeId',3)
                     ->get();
             }
 
             else{
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
-                    ->where('typeId',5)
-                    ->orWhere('typeId',2)
-                    ->orWhere('typeId',3)
                     ->get();
             }
 
