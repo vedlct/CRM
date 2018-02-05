@@ -49,8 +49,10 @@
                                        data-phone-number="{{$user->phoneNumber}}"
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
-                                       data-active="{{$user->active}}"">
+                                       data-active="{{$user->active}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                                    <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"><i class="fa fa-angle-double-up"></i></a>
 
                                 </td>
                             </tr>
@@ -64,8 +66,43 @@
 
 
 
+    {{--Set Target Modal--}}
+            <div class="modal fade" id="target_user_modal" >
+                <div class="modal-dialog" style="max-width: 60%;">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Set Target</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Calling:</label>
+                                <input id="firstName" type="number" class="form-control" name="firstName" required>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Follow Up:</label>
+                                <input id="firstName" type="number" class="form-control" name="firstName" required>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Lead Mine:</label>
+                                <input id="firstName" type="number" class="form-control" name="firstName" required>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                               <button class="btn btn-success">Submit</button>
+                            </div>
 
 
+                            </div></div>
+
+                    </div></div></div>
 
 
 
@@ -82,7 +119,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title">Create New User</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
+                                     </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
