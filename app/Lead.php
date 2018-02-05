@@ -38,10 +38,18 @@ class Lead extends Model
 //            ->where('leadAssignStatus',0)
 //            ->leftJoin('countries','leads.countryId', '=','countries.countryId')
 //            ->select('leads.*', 'countries.countryName');
+//
+//        ->where(function($q){
+//            $q->orWhere('contactedUserId',0)
+//                ->orWhere('contactedUserId',null);
+//        })
+
         $leads=Lead::with('mined','category','country')
             ->where('statusId',2)
             ->where('contactedUserId',0)
+            ->orWhere('contactedUserId',null)
             ->where('leadAssignStatus',0)
+            ->orWhere('leadAssignStatus',null)
             ->select('leads.*');
 
         return $leads;

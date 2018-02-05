@@ -7,7 +7,7 @@
             <a class="navbar-brand" href="{{route('home')}}">
                 <!-- Logo icon -->
 
-                <img src="{{asset('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" width="40px"/>
+                <img src="{{url('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" width="40px"/>
 
 
                 <span>

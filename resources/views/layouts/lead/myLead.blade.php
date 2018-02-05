@@ -98,7 +98,7 @@
                 <div class="modal-body">
                     {{csrf_field()}}
                     <div class="row">
-                        
+
 
                             <div class="col-md-12" align="center">
                                 <b > Mined By:   <div class="mined" id="mined"></div></b>
@@ -262,13 +262,13 @@
 
 @section('foot-js')
 
-    <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
 
 
-    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 
