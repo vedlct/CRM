@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Khill\Lavacharts\Lavacharts;
-use App\Workprogress;
+
+use Carbon\Carbon;
 use Auth;
 use Session;
-
+use App\Workprogress;
+use App\Followup;
+use App\Lead;
+use App\User;
 class HomeController extends Controller
 {
     /**
@@ -28,30 +32,39 @@ class HomeController extends Controller
     public function index()
     {
        // return view('home');
-
-        $lava = new Lavacharts; // See note below for Laravel
-
-        $reasons = $lava->DataTable();
-
-        $reasons->addStringColumn('Reasons')
-            ->addNumberColumn('Percent')
-            ->addRow(['Check Reviews', 5])
-            ->addRow(['Watch Trailers', 2])
-            ->addRow(['See Actors Other Work', 4])
-            ->addRow(['Settle Argument', 89]);
-
-        $lava->PieChart('IMDB', $reasons, [
-            'title'  => 'Reasons I visit IMDB',
-            'is3D'   => true,
-            'slices' => [
-                ['offset' => 0.2],
-                ['offset' => 0.25],
-                ['offset' => 0.3]
-            ]
-        ]);
+        $date = Carbon::now();
 
 
 
-        return view('dashboard')->with('lava',$lava);
+        $totalFollowUp=Followup::where('userId',Auth::user()->id)
+            ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+        $totalFollowUpCalled=Workprogress::where('userId',Auth::user()->id)
+                            ->where('callingReport',4)
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+        $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+                    ->where('created_at',date('Y-m-d',strtotime("-1 days")))->count();
+
+        $leadMined=Lead::where('minedBy',Auth::user()->id)
+                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+        $User_Type=Session::get('userType');
+        $teamMembers=User::select('id','firstName','lastName','typeId')
+                ->where('teamId',Auth::user()->teamId)->get();
+
+
+
+        return view('dashboard')
+            ->with('calledThisWeek',$calledThisWeek)
+            ->with('totalFollowUp',$totalFollowUp)
+            ->with('totalFollowUpCalled',$totalFollowUpCalled)
+            ->with('lastDayCalled',$lastDayCalled)
+            ->with('leadMined',$leadMined)
+            ->with('teamMembers',$teamMembers);
     }
 }

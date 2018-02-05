@@ -108,7 +108,9 @@ class LeadController extends Controller
             else{
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
-                    ->Where('typeId',5)
+                    ->where('typeId',5)
+                    ->orWhere('typeId',2)
+                    ->orWhere('typeId',3)
                     ->get();
             }
 
@@ -241,11 +243,13 @@ class LeadController extends Controller
             $leads = (new Lead())->myLeads();
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
+            $categories=Category::where('type',1)->get();
 
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
                 ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities);
+                ->with('possibilities', $possibilities)
+                ->with('categories',$categories);
         }
 
         return Redirect()->route('home');
@@ -602,7 +606,7 @@ class LeadController extends Controller
             ->limit(1)->first();
 
 
-        if ($assignId !=0){
+        if ($assignId){
             $leave=Leadassigned::find($assignId->assignId);
             $leave->leaveDate=date('Y-m-d');
             $leave->save();
@@ -618,7 +622,7 @@ class LeadController extends Controller
         else{
             $lead=Lead::findOrFail($id);
             if($lead->contactedUserId == Auth::user()->id){
-                $lead->contactedUserId =0;
+                $lead->contactedUserId =null;
                 $lead->statusId=2;
                 $lead->save();
                 Session::flash('message', 'You have Leave The Lead From Contact successfully');

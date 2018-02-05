@@ -26,7 +26,7 @@
                 </li>
 
                 {{--For user --}}
-                @if($userType =='USER' )
+                @if($userType =='USER' || $userType=='MANAGER' || $userType=='SUPERVISOR')
 
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">

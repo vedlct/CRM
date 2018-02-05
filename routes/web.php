@@ -175,3 +175,10 @@ Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');
+
+
+
+//Graph
+Route::post('graph/user','ReportController@getUserGraph')->name('getUserGraph');
+
+
