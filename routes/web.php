@@ -122,6 +122,10 @@ Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
 
 //testList
 Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
+Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
+
+
+
 Route::get('/modal', 'TestController@modal')->name('modal');
 
 

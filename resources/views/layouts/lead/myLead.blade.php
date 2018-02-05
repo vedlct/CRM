@@ -7,7 +7,13 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
+            @if(Request::url()==route('assignedLeads'))
             <h2 class="card-title" align="center"><b>My List</b></h2>
+            @endif
+
+                @if(Request::url()==route('contacted'))
+                    <h2 class="card-title" align="center"><b>Contacted</b></h2>
+                @endif
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -294,6 +300,8 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+
             $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
 

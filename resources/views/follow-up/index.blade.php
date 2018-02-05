@@ -178,7 +178,7 @@
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
 									  <select class="form-control" name="report" required>
-										  <option value=""><b>(select one)</b></option>
+										  <option value="4"><b>Follow Up</b></option>
 
 										  @foreach($callReports as $report)
 											  <option value="{{$report->callingReportId}}">{{$report->report}}</option>

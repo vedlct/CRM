@@ -133,13 +133,13 @@
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
-                    { data: 'companyName', name: 'companyName' },
+                    { data: 'companyName', name: 'leads.companyName' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
-                    { data: 'website', name: 'website' },
-                    { data: 'email', name: 'email' },
-                    { data: 'countryName', name: 'countries.countryName'},
-                    { data: 'comments', name: 'comments' },
-                    { data: 'created_at', name: 'created_at' },
+                    { data: 'website', name: 'leads.website' },
+                    { data: 'email', name: 'leads.email' },
+                    { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'comments', name: 'leads.comments' },
+                    { data: 'created_at', name: 'leads.created_at' },
 
 
                 ]
@@ -178,13 +178,14 @@
                 success : function(data){
                     console.log(data);
                     if(data == 'true'){
-                        $('#myTable').load(document.URL +  ' #myTable');
+                        // $('#myTable').load(document.URL +  ' #myTable');
 //                        $.alert({
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
                         $('#alert').html(' <strong>Success!</strong> Assigned');
                         $('#alert').show();
+
                     }
                 }
             });
