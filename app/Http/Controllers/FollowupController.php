@@ -13,6 +13,7 @@ use App\Callingreport;
 use App\Possibility;
 use Session;
 use App\Lead;
+use App\Category;
 
 
 class FollowupController extends Controller
@@ -49,9 +50,10 @@ class FollowupController extends Controller
             ->where('followup.userId',Auth::user()->id)->get();
 
             $callReports=Callingreport::get();
+            $categories=Category::where('type',1)->get();
 		 /// return $callReports;
             $possibilities=Possibility::get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);}
         return Redirect()->route('home');
 
     }

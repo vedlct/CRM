@@ -103,7 +103,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Graph</h4>
 
-                    <div id="chart_div"></div>
+                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
 
 
@@ -125,7 +125,8 @@
 
 @section('foot-js')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    {{--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>--}}
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
 
 
@@ -142,7 +143,10 @@
                 {
                    console.log(data);
                   // alert(data.name);
-                   test(data.name);
+//                   test(data.name);
+                    console.log(data.totalFollowUp);
+
+                    graph(data);
                 }
             });
 
@@ -150,61 +154,101 @@
         }
 
 
-        function test(x) {
-            alert(x)
-        }
+//        function test(x) {
+//            alert(x)
+//        }
 
-        google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawBasic);
+//        function graph(x, y) {
+//
+//
+//            google.charts.load('current', {packages: ['corechart', 'bar']});
+//            google.charts.setOnLoadCallback(drawBasic);
+//
+//            function drawBasic() {
+//
+//                var data = new google.visualization.DataTable();
+//                data.addColumn('timeofday', 'Time of Day');
+//                data.addColumn('number', 'Motivation Level');
+//
+//                data.addRows([
+//                    [{v: [8, 0, 0], f: x}, 1],
+//                    [{v: [9, 0, 0], f: '9 am'}, 2],
+//                    [{v: [10, 0, 0], f: '10 am'}, 3],
+//                    [{v: [11, 0, 0], f: '11 am'}, 4],
+//                    [{v: [12, 0, 0], f: '12 pm'}, 5],
+//                    [{v: [13, 0, 0], f: '1 pm'}, 6],
+//                    [{v: [14, 0, 0], f: '2 pm'}, 7],
+//                    [{v: [15, 0, 0], f: '3 pm'}, 8],
+//                    [{v: [16, 0, 0], f: '4 pm'}, 9],
+//                    [{v: [17, 0, 0], f: '5 pm'}, 10],
+//                ]);
+//
+//                var options = {
+//                    title: 'Motivation Level Throughout the Day',
+//                    hAxis: {
+//                        title: 'Time of Day',
+//                        format: 'h:mm a',
+//                        viewWindow: {
+//                            min: [7, 30, 0],
+//                            max: [17, 30, 0]
+//                        }
+//                    },
+//                    vAxis: {
+//                        title: 'Rating (scale of 1-10)'
+//                    },
+//
+//                axes: {
+//                    y: {
+//                        all: {
+//                            range: {
+//                                max: 3000,
+//                                    min: 500
+//                            }
+//                        }
+//                    }
+//                }
+//                };
+//                var chart = new google.visualization.ColumnChart(
+//                    document.getElementById('chart_div'));
+//
+//                chart.draw(data, options);
+//            }
+//
+//        }
 
-        function drawBasic() {
 
-            var data = new google.visualization.DataTable([
-                ['Element', 'Density', { role: 'style' }],
-                ['Copper', 8.94, '#b87333'],            // RGB value
-                ['Silver', 10.49, 'silver'],            // English color name
-                ['Gold', 19.30, 'gold'],
+        function graph(data) {
 
-                ['Platinum', 21.45, 'color: #e5e4e2' ], // CSS-style declaration
-            ]);
-            data.addColumn('timeofday', 'Time of Day');
-            data.addColumn('number', 'Motivation Level');
-
-            data.addRows([
-                [{v: [8, 0, 0], f: '8 am'}, 1],
-                [{v: [9, 0, 0], f: '9 am'}, 2],
-                [{v: [10, 0, 0], f:'10 am'}, 3],
-                [{v: [11, 0, 0], f: '11 am'}, 4],
-                [{v: [12, 0, 0], f: '12 pm'}, 5],
-                [{v: [13, 0, 0], f: '1 pm'}, 6],
-                [{v: [14, 0, 0], f: '2 pm'}, 7],
-                [{v: [15, 0, 0], f: '3 pm'}, 8],
-                [{v: [16, 0, 0], f: '4 pm'}, 9],
-                [{v: [17, 0, 0], f: '5 pm'}, 10],
-            ]);
-
-            var options = {
-                title: 'Motivation Level Throughout the Day',
-                hAxis: {
-                    title: 'Time of Day',
-                    format: 'h:mm a',
-                    viewWindow: {
-                        min: [7, 30, 0],
-                        max: [17, 30, 0]
-                    }
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title:{
+                    text: "Top Oil Reserves"
                 },
-                vAxis: {
-                    title: 'Rating (scale of 1-10)'
-                }
-            };
+                axisY: {
+                    title: "Reserves(MMbbl)",
+                    maximum: 80,
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: true,
+                    legendMarkerColor: "grey",
+                    legendText: "MMbbl = one million barrels",
+                    dataPoints: [
+                        { y: data.totalFollowUp, label: "Total Follow Up" },
+                        { y: 50,  label: "Saudi" },
+                        { y: 40,  label: "Canada" },
+                        { y: 30,  label: "Iran" },
+                        { y: 80,  label: "Iraq" },
+                        { y: 40, label: "Kuwait" },
+                        { y: 70,  label: "UAE" },
+                        { y: 20,  label: "Russia" }
+                    ]
+                }]
+            });
+            chart.render();
 
-            var chart = new google.visualization.ColumnChart(
-                document.getElementById('chart_div'));
-
-            chart.draw(data, options);
         }
-
-
     </script>
 
 
