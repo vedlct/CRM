@@ -91,10 +91,14 @@ Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
+Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
+
 
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
+Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData');
+
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
 
 Route::post('lead/temp','LeadController@tempData')->name('tempData');
@@ -118,6 +122,10 @@ Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
 
 //testList
 Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
+Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
+
+
+
 Route::get('/modal', 'TestController@modal')->name('modal');
 
 

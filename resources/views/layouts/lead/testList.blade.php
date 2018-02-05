@@ -9,7 +9,13 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
+            @if(Request::url()==route('testlist'))
             <h2 class="card-title" align="center"><b>Test Lead</b></h2>
+            @endif
+
+                @if(Request::url()==route('closelist'))
+                    <h2 class="card-title" align="center"><b>Close Lead</b></h2>
+                @endif
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -128,9 +134,9 @@
                         </div>
 
 
-                        <div class="col-md-6" style="">
-                            <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
-                        </div>
+                        {{--<div class="col-md-6" style="">--}}
+                            {{--<a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>--}}
+                        {{--</div>--}}
                     </div>
 
                 </div>
@@ -177,7 +183,7 @@
                                 <label ><b>Progress : </b></label>
                                 <select class="form-control" name="progress" >
                                     <option value=""><b>(select one)</b></option>
-                                    <option value="Test job">Test job</option>
+                                    <option value="Test job">Test Job</option>
                                     <option value="Closing">Closing</option>
                                 </select>
                                 <br>

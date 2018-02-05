@@ -41,11 +41,16 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
-		$users = User::get();
-		return view('users-mgmt/index', ['users' => $users]);
+        $User_Type=Session::get('userType');
+		if($User_Type=='ADMIN') {
+
+            $users = User::get();
+            $userTypes = Usertype::get();
+            return view('users-mgmt/index')
+                ->with('users', $users)
+                ->with('userTypes', $userTypes);
+        }
+        return Redirect()->route('home');
     }
 
     /**
@@ -55,13 +60,16 @@ class UserManagementController extends Controller
      */
     public function create()
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
+        $User_Type=Session::get('userType');
+		if($User_Type== 'ADMIN'){
+
+
         $userTypes=Usertype::get();
 //        return $Types;
         return view('users-mgmt/create')
-            ->with('userTypes', $userTypes);
+            ->with('userTypes', $userTypes);}
+
+        return Redirect()->route('home');
     }
 
     /**
@@ -72,21 +80,25 @@ class UserManagementController extends Controller
      */
     public function store(Request $request)
     {
-
+	//return $request;
 		$this->validateInput($request);
+        $this->validate($request, [
+		'userId' => 'required|max:50|unique:users',
+		'userEmail' => 'required|email|max:45|unique:users'
+		]);
 //        // Upload image
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
             $location = public_path('img/'.$filename);
-            Image::make($img)->resize(300,200)->save($location);
+            Image::make($img)->resize(200,200)->save($location);
 
         }else{
             $filename = '';
         }
-        //User::create([
-
-            DB::table('users')->insert([
+        // User::create([
+		//return $request;
+           DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
             'userEmail' => $request['userEmail'],
@@ -100,8 +112,11 @@ class UserManagementController extends Controller
             'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
+			
         ]);
-       return redirect()->intended('/user-management');
+		
+        Session::flash('message', 'User Added successfully');
+        return back();
     }
 
     /**
@@ -123,9 +138,10 @@ class UserManagementController extends Controller
      */
     public function edit($id)
     {
-		if(Auth::user()->typeId != 1){
-			return Redirect()->route('home');
-		}
+        $User_Type=Session::get('userType');
+		if( $User_Type== 'ADMIN'){
+
+
         $user = User::find($id);
         // Redirect to user list if updating user wasn't existed
         if ($user == null || count($user) == 0) {
@@ -133,7 +149,8 @@ class UserManagementController extends Controller
         }
 
        $userTypes = Usertype::get();
-        return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);
+        return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);}
+        return Redirect()->route('home');
     }
 
     /**
@@ -144,10 +161,11 @@ class UserManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
-      //  $this->validateInput($request);
+        $user = User::findOrFail($request->id);
+		
+        $this->validateInput($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
             'phoneNumber', 'dob', 'gender', 'active'];
@@ -166,9 +184,10 @@ class UserManagementController extends Controller
 
         }
 
-        User::where('id', $id)
+        User::where('id', $request->id)
             ->update($input);
 
+        Session::flash('message', 'Successfully user\'s info updated ');
         return redirect()->intended('/user-management');
     }
 
@@ -230,11 +249,18 @@ class UserManagementController extends Controller
 
     private function validateInput($request) {
         $this->validate($request, [
-		'userId' => 'required|max:20',
-		'userEmail' => 'required|email|max:255|unique:users',
-        'password' => 'required|min:6|confirmed',
-        'firstName' => 'required|max:60',
-        'lastName' => 'required|max:60'
+		'userId' => 'required|max:50',
+		'typeId' => 'required|max:11|numeric',
+		'userEmail' => 'required|email|max:45',
+        'password' => 'max:20|confirmed',
+        'firstName' => 'required|max:20',
+        'lastName' => 'required|max:20',
+        'rfID' => 'max:11',
+        'phoneNumber' => 'max:15',
+        'picture' => 'max:45',
+        'dob' => 'max:10',
+        'gender' => 'max:1',
+        'active' => 'required|max:1'
     ]);
     }
 
@@ -279,5 +305,6 @@ class UserManagementController extends Controller
         Session::flash('message', 'Password did not match');
         return back();
     }
-
+	
+	
 }

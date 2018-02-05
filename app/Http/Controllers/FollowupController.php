@@ -42,13 +42,31 @@ class FollowupController extends Controller
     public function index()
     {
         //access for user
-        if(Auth::user()->typeId==5) {
+        $User_Type=Session::get('userType');
+        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->where('followUpDate', date('Y-m-d'))
             ->where('followup.userId',Auth::user()->id)->get();
 
             $callReports=Callingreport::get();
 		 /// return $callReports;
+            $possibilities=Possibility::get();
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
+        return Redirect()->route('home');
+
+    }
+
+
+    public function show(){
+
+        $User_Type=Session::get('userType');
+        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
+            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                ->where('followUpDate', date('Y-m-d'))
+                ->where('followup.userId',Auth::user()->id)->get();
+
+            $callReports=Callingreport::get();
+            /// return $callReports;
             $possibilities=Possibility::get();
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
         return Redirect()->route('home');

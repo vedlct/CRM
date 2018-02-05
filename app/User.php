@@ -23,7 +23,7 @@ class User extends Authenticatable
      public $timestamps = false;
 
     protected $fillable = [
-        'name', 'email', 'password',
+       // 'userId', 'typeId', 'rfID', 'userEmail', 'password', 'firstName', 'lastName', 'phoneNumber', 'dob', 'gender', 'active'
     ];
 
     /**
@@ -48,6 +48,12 @@ class User extends Authenticatable
 
     public function teams(){
       return $this->belongsTo(Team::class,'teamId','teamId');
+
+    }
+    public function getUserType($typeId){
+        $userType = DB::table('usertypes')->select('typeId')->where('typeId', $typeId)->get();
+
+        return $userType;
 
     }
 }

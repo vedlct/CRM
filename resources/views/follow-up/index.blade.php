@@ -144,8 +144,6 @@
 
 					  </div>
 
-
-
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					  </div></form>
@@ -153,14 +151,6 @@
 			  </div>
 		  </div>
 		  </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -188,7 +178,7 @@
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
 									  <select class="form-control" name="report" required>
-										  <option value=""><b>(select one)</b></option>
+										  <option value="4"><b>Follow Up</b></option>
 
 										  @foreach($callReports as $report)
 											  <option value="{{$report->callingReportId}}">{{$report->report}}</option>
@@ -200,7 +190,7 @@
 									  <label ><b>Progress : </b></label>
 									  <select class="form-control" name="progress" >
 										  <option value=""><b>(select one)</b></option>
-										  <option value="Test job">Test job</option>
+										  <option value="Test job">Test Job</option>
 										  <option value="Closing">Closing</option>
 									  </select>
 									  <br>
