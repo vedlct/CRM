@@ -28,6 +28,8 @@ class HomeController extends Controller
     {
        // return view('home');
 
+
+       // echo Auth::user()->userType->typeName;
         $lava = new Lavacharts; // See note below for Laravel
 
         $reasons = $lava->DataTable();
