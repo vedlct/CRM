@@ -41,10 +41,21 @@ class HomeController extends Controller
         $leadMined=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
         $User_Type=Session::get('userType');
-        $teamMembers=User::select('id','firstName','lastName','typeId')
-            ->where('teamId',Auth::user()->teamId)
-            ->where('teamId','!=',null)
-            ->get();
+        if($User_Type=='MANAGER') {
+
+
+            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
+                ->where('teamId', Auth::user()->teamId)
+                ->where('teamId', '!=', null)
+                ->get();
+        }
+        if($User_Type=='ADMIN' || $User_Type =='SUPERVISOR'){
+            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
+//                ->where('teamId', Auth::user()->teamId)
+//                ->where('teamId', '!=', null)
+                ->get();
+
+        }
 
         //Graph Access for Manager /SuperVisor / Admin
 

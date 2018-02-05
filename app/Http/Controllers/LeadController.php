@@ -460,7 +460,7 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
                 ->where('workprogress.progress','Test Job')
-                ->with('category','country')
+                ->with('category','country','mined')
 //            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
 //            ->where('leadassigneds.assignTo',Auth::user()->id)
 //            ->where('leadassigneds.leaveDate',null)
@@ -468,14 +468,15 @@ class LeadController extends Controller
                 ->distinct('workprogress.leadId')
                 ->get();
 
-
+            $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
 
             return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
 
         return Redirect()->route('home');
 
@@ -495,14 +496,15 @@ class LeadController extends Controller
                 ->distinct('workprogress.leadId')
                 ->get();
 
-
+            $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
 
             return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
 
         return Redirect()->route('home');
 
@@ -518,17 +520,27 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-                ->where('leadassigneds.assignTo',Auth::user()->id)
-                ->where('leadassigneds.leaveDate',null)
+                ->where(function($q){
+                    $q->where('leadassigneds.assignTo',Auth::user()->id)
+                        ->where('leadassigneds.leaveDate',null)
+                        ->orWhere('contactedUserId',Auth::user()->id);
+
+                })
+//                ->where('leadassigneds.assignTo',Auth::user()->id)
+//                ->where('leadassigneds.leaveDate',null)
+
                 ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
+            $categories=Category::where('type',1)->get();
 
-            return view('layouts.lead.starLead')
+
+            return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
         return Redirect()->route('home');
 
     }
