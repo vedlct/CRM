@@ -15,27 +15,27 @@
 
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('img/logo/TCL_logo.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{url('img/logo/TCL_logo.png')}}">
     <title>Customer relationship management</title>
 
 @yield('header')
 
 <!-- Bootstrap Core CSS -->
-    <link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
 
     <!-- chartist CSS -->
-{{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist.min.css')}}" rel="stylesheet">--}}
-{{--<link href="{{asset('assets/plugins/chartist-js/dist/chartist-init.css')}}" rel="stylesheet">--}}
-{{--<link href="{{asset('')}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">--}}
-{{--<link href="{{asset('')}}../assets/plugins/css-chart/css-chart.css" rel="stylesheet">--}}
+{{--<link href="{{url('assets/plugins/chartist-js/dist/chartist.min.css')}}" rel="stylesheet">--}}
+{{--<link href="{{url('assets/plugins/chartist-js/dist/chartist-init.css')}}" rel="stylesheet">--}}
+{{--<link href="{{url('')}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">--}}
+{{--<link href="{{url('')}}../assets/plugins/css-chart/css-chart.css" rel="stylesheet">--}}
 
 <!-- toast CSS -->
-{{--<link href="{{asset('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">--}}
+{{--<link href="{{url('assets/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet">--}}
 <!-- Custom CSS -->
-    <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    <link href="{{url('css/style.css')}}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
-    <link href="{{asset('css/colors/blue.css')}}" id="theme" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('date/date-picker.css')}}">
+    <link href="{{url('css/colors/blue.css')}}" id="theme" rel="stylesheet">
+    <link rel="stylesheet" href="{{url('date/date-picker.css')}}">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -97,20 +97,20 @@
 
 
 
-<script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
-<script src="{{asset('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
-<script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
-<script src="{{asset('js/jquery.slimscroll.js')}}"></script>
+<script src="{{url('assets/plugins/jquery/jquery.min.js')}}"></script>
+<script src="{{url('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
+<script src="{{url('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{url('js/jquery.slimscroll.js')}}"></script>
 <!--Wave Effects -->
-{{--<script src="{{asset('js/waves.js')}}"></script>--}}
+{{--<script src="{{url('js/waves.js')}}"></script>--}}
 <!--Menu sidebar -->
-<script src="{{asset('js/sidebarmenu.js')}}"></script>
+<script src="{{url('js/sidebarmenu.js')}}"></script>
 <!--stickey kit -->
-<script src="{{asset('assets/plugins/sticky-kit-master/dist/sticky-kit.min.js')}}"></script>
+<script src="{{url('assets/plugins/sticky-kit-master/dist/sticky-kit.min.js')}}"></script>
 <!--Custom JavaScript -->
-<script src="{{asset('js/custom.min.js')}}"></script>
-<script src="{{asset('date/jquery-ui.js')}}"></script>
-<script src="{{asset('date/script.js')}}"></script>
+<script src="{{url('js/custom.min.js')}}"></script>
+<script src="{{url('date/jquery-ui.js')}}"></script>
+<script src="{{url('date/script.js')}}"></script>
 
 
 

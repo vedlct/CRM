@@ -88,7 +88,7 @@ class UserManagementController extends Controller
 //        // Upload image
         if ($request->file('picture')) {
             $img = $request->file('picture');
-            $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
+            $filename= $request['userId'].'.'.$img->getClientOriginalExtension();
             $location = public_path('img/'.$filename);
             Image::make($img)->resize(300,200)->save($location);
 
@@ -176,7 +176,7 @@ class UserManagementController extends Controller
         }
         if ($request->file('picture')) {
             $img = $request->file('picture');
-            $filename=  Auth::user()->id.'.'.$request['userId'].'.'.$img->getClientOriginalExtension();
+            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
             $location = public_path('img/'.$filename);
             Image::make($img)->resize(200,200)->save($location);
             $input['picture'] = $filename;
