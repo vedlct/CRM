@@ -46,6 +46,8 @@ class HomeController extends Controller
             ->where('teamId','!=',null)
             ->get();
 
+        //Graph Access for Manager /SuperVisor / Admin
+
         return view('dashboard')
             ->with('calledThisWeek',$calledThisWeek)
             ->with('totalFollowUp',$totalFollowUp)

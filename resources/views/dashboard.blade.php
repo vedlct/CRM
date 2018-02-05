@@ -223,26 +223,27 @@
                 animationEnabled: true,
                 theme: "light2", // "light1", "light2", "dark1", "dark2"
                 title:{
-                    text: "Top Oil Reserves"
+                    text: "This Week Report"
                 },
                 axisY: {
-                    title: "Reserves(MMbbl)",
+                    title: "Limit",
                     maximum: 80,
                 },
                 data: [{
                     type: "column",
                     showInLegend: true,
                     legendMarkerColor: "grey",
-                    legendText: "MMbbl = one million barrels",
+                    legendText: "Name = "+data.name,
                     dataPoints: [
                         { y: data.totalFollowUp, label: "Total Follow Up" },
-                        { y: 50,  label: "Saudi" },
-                        { y: 40,  label: "Canada" },
-                        { y: 30,  label: "Iran" },
-                        { y: 80,  label: "Iraq" },
-                        { y: 40, label: "Kuwait" },
-                        { y: 70,  label: "UAE" },
-                        { y: 20,  label: "Russia" }
+                        { y: data.totalFollowUpCalled, label: "Follow Up Called" },
+                        { y: data.calledThisWeek,  label: "Called This Week" },
+                        { y: data.leadMined,  label: "Lead Mined" }
+//                        { y: 30,  label: "Iran" },
+//                        { y: 80,  label: "Iraq" },
+//                        { y: 40, label: "Kuwait" },
+//                        { y: 70,  label: "UAE" },
+//                        { y: 20,  label: "Russia" }
                     ]
                 }]
             });
