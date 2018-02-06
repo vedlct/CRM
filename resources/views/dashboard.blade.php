@@ -1,13 +1,19 @@
 @extends('main')
+@section('header')
+<style>
+    .canvasjs-chart-credit
+    {
+        display: none;
+    }
 
+</style>
 
+    @endsection
 
 @section('content')
 
 
-    {{--<div id="chart-div"></div>--}}
 
-    {{--<?//= $lava->render('PieChart', 'IMDB', 'chart-div') ?>--}}
 
 <br><br>
     <div class="row" >
@@ -86,6 +92,7 @@
                     <h4 class="card-title">Total Progress Last Day</h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0"></h2>
+                        <br>&nbsp&nbsp&nbsp<br>
                         @if($count !=0)
                         <span class="text-muted">{{$total/$count}}%</span>
                         <div class="progress">
@@ -160,7 +167,7 @@
 @section('foot-js')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     {{--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>--}}
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="{{url('js/chart.js')}}"></script>
     <script>
 
 
@@ -174,7 +181,7 @@
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
 
                     axisY: {
-                        
+
                         maximum: 100,
                     },
                     data: [{
