@@ -50,6 +50,11 @@ class User extends Authenticatable
       return $this->belongsTo(Team::class,'teamId','teamId');
 
     }
+
+    public function target(){
+        return $this->belongsTo(Usertarget::class,'id','userId');
+    }
+
     public function getUserType($typeId){
         $userType = DB::table('usertypes')->select('typeId')->where('typeId', $typeId)->get();
 

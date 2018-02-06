@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Response;
-use App\User;
-use App\Usertype;
 use Image;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Hash;
+use App\User;
+use App\Usertype;
+use App\Usertarget;
+use App\Targetlog;
 
 
 class UserManagementController extends Controller
@@ -44,7 +47,7 @@ class UserManagementController extends Controller
         $User_Type=Session::get('userType');
 		if($User_Type=='ADMIN') {
 
-            $users = User::get();
+            $users = User::with('target')->get();
             $userTypes = Usertype::get();
             return view('users-mgmt/index')
                 ->with('users', $users)
@@ -282,6 +285,83 @@ class UserManagementController extends Controller
 
         return view('users-mgmt.accountSetting')
                 ->with('user',$user);
+    }
+
+
+    public function setTarget(Request $r){
+
+
+
+       try{
+           $target=Usertarget::findOrFail($r->userId);
+           if($r->call){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=1;
+               $log->save();
+
+               $target->targetCall=$r->call;
+           }
+
+           if($r->highPossibility){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=2;
+               $log->save();
+               $target->targetHighPossibility=$r->highPossibility;
+           }
+
+           if($r->lead){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=3;
+               $log->save();
+               $target->targetLeadmine=$r->lead;
+           }
+
+       }
+       catch (ModelNotFoundException $ex) {
+           $target=new Usertarget;
+           $target->userId=$r->userId;
+
+
+          //Target Type: 1. call, 2.HighPossibility , 3. Lead Mined
+
+           if($r->call){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=1;
+               $log->save();
+
+               $target->targetCall=$r->call;
+           }
+
+           if($r->highPossibility){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=2;
+               $log->save();
+               $target->targetHighPossibility=$r->highPossibility;
+           }
+
+           if($r->lead){
+               $log=new Targetlog;
+               $log->userId=$r->userId;
+               $log->targetType=3;
+               $log->save();
+               $target->targetLeadmine=$r->lead;
+           }
+
+       }
+
+
+
+
+
+        $target->save();
+
+        Session::flash('message', 'Target Set successfully');
+        return back();
     }
 
 

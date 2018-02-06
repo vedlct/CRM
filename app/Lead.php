@@ -29,34 +29,20 @@ class Lead extends Model
     }
 
     public function showNotAssignedLeads(){
-       // $leads = DB::select
-//        ( DB::raw("SELECT * FROM leads LEFT JOIN leadassigneds ON leadassigneds.leadId = leads.leadId WHERE
-//        (leadassigneds.leadId is null OR leadassigneds.leadAssignStatus = '0')") );
-//        $leads=Lead::with('mined','category')
-//            ->where('leads.statusId','2')
-//            ->orWhere('contactedUserId',0)
-//            ->where('leadAssignStatus',0)
-//            ->leftJoin('countries','leads.countryId', '=','countries.countryId')
-//            ->select('leads.*', 'countries.countryName');
-//
-//        ->where(function($q){
-//            $q->orWhere('contactedUserId',0)
-//                ->orWhere('contactedUserId',null);
-//        })
 
         $leads=Lead::with('mined','category','country')
             ->where('statusId',2)
-            ->where('contactedUserId',0)
-            ->orWhere('contactedUserId',null)
+            ->where(function($q){
+                $q->orWhere('contactedUserId',0)
+                    ->orWhere('contactedUserId',null);
+                })
             ->where('leadAssignStatus',0)
-            ->orWhere('leadAssignStatus',null)
             ->select('leads.*');
-
         return $leads;
-
-
-
     }
+
+
+
 
     public function possibility(){
         return $this->belongsTo(Possibility::class,'possibilityId','possibilityId');

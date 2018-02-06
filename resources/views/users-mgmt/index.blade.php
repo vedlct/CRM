@@ -49,8 +49,16 @@
                                        data-phone-number="{{$user->phoneNumber}}"
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
-                                       data-active="{{$user->active}}"">
+                                       data-active="{{$user->active}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                                    <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                       data-id="{{$user->id}}"
+                                       data-first-name="{{$user->firstName}}"
+                                       data-target-call="{{$user->target['targetCall']}}"
+                                       data-target-high="{{$user->target['targetHighPossibility']}}"
+                                       data-target-lead="{{$user->target['targetLeadmine']}}"
+                                    ><i class="fa fa-angle-double-up"></i></a>
 
                                 </td>
                             </tr>
@@ -64,6 +72,46 @@
 
 
 
+    {{--Set Target Modal--}}
+            <div class="modal fade" id="target_user_modal" >
+                <div class="modal-dialog" style="max-width: 60%;">
+                    <div class="modal-content">
+            <form method="post" action="{{route('setTarget')}}">
+                {{csrf_field()}}
+                    <input type="hidden" name="userId">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Set User Target Per Day</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    <input type="text" name="name" class="col-md-12" style="text-align: center;" readonly>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Calling:</label>
+                                <input id="call" type="number" class="form-control" name="call" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">High Possibility:</label>
+                                <input id="followup" type="number" class="form-control" name="highPossibility" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Lead Mine:</label>
+                                <input id="lead" type="number" class="form-control" name="lead" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                               <button class="btn btn-success" type="submit">set</button>
+                            </div>
+
+
+                            </div></div> </form>
+
+                    </div></div></div>
 
 
 
@@ -71,9 +119,7 @@
 
 
 
-
-
-            <!-- The Modal -->
+            <!-- Create User Modal -->
             <div class="modal fade" id="myModal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
@@ -82,7 +128,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title">Create New User</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
+                                     </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
@@ -91,7 +137,6 @@
                                 {{ csrf_field() }}
 
                                 <div class="row">
-
                                     <div class="form-group col-md-6">
                                         <label for="userId">User Id:</label>
                                         @if ($errors->has('userId'))
@@ -112,8 +157,6 @@
 										</span>
                                         @endif
                                     </div>
-
-
                                     <div class="form-group col-md-6">
                                         <label for="firstName">First Name:</label>
 
@@ -125,8 +168,6 @@
 											</span>
                                         @endif
                                     </div>
-
-
                                     <div class="form-group col-md-6">
                                         <label for="lastName">Last Name:</label>
                                         <input id="lastName" type="text" class="form-control" name="lastName" value="{{ old('lastName') }}" required>
@@ -137,8 +178,6 @@
 										</span>
                                         @endif
                                     </div>
-
-
                                     <div class="form-group col-md-6">
                                         <label for="userEmail">Email:</label>
                                         <input id="userEmail" type="email" class="form-control" name="userEmail" value="{{ old('userEmail') }}" required>
@@ -149,8 +188,6 @@
 										</span>
                                         @endif
                                     </div>
-
-
                                     <div class="form-group col-md-6">
                                         <label for="phoneNumber">Phone Number:</label>
                                         <input id="phoneNumber" type="text" class="form-control" name="phoneNumber" value="{{ old('phoneNumber') }}">
@@ -161,9 +198,6 @@
 										</span>
                                         @endif
                                     </div>
-
-
-
                                     <div class="form-group col-md-6">
                                         <label>Date Of Birth:</label>
                                         {{--<input id="dob"  class="form-control" name="dob" placeholder="pick Date" rows="3" required >--}}
@@ -187,8 +221,6 @@
                                         @endif
 
                                     </div>
-
-
                                     <div class="form-group col-md-6">
                                         <label for="gender">Gender:</label>
                                         <select id="gender" name="gender" class="form-control form-control-warning">
@@ -205,8 +237,6 @@
 
                                     </div>
 
-
-
                                     <div class="form-group col-md-6">
                                         <label for="active">Status:</label>
 
@@ -218,7 +248,6 @@
 
                                     </div>
 
-
                                     <div class="form-group col-md-6">
                                         <label for="Password">Password:</label>
                                         <input id="password" type="password" class="form-control" name="password">
@@ -229,14 +258,10 @@
                                         @endif
                                     </div>
 
-
                                     <div class="form-group col-md-6">
                                         <label for="password-confirm">Confirm Password:</label>
                                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                     </div>
-
-
-
 
                                     <div class="form-group col-md-10">
                                         <label for="typeId">User Type:</label>
@@ -285,7 +310,7 @@
 
 
 
-            <!-- The Modal -->
+            <!-- Edit Modal -->
             <div class="modal fade" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
@@ -399,7 +424,6 @@
 
                                     </div>
 
-
                                     <div class="form-group col-md-6">
                                         <label for="gender">Gender:</label>
                                         <select id="gender" name="gender" class="form-control form-control-warning">
@@ -416,8 +440,6 @@
 
                                     </div>
 
-
-
                                     <div class="form-group col-md-6">
                                         <label for="active">Status:</label>
 
@@ -429,7 +451,6 @@
 
                                     </div>
 
-
                                     <div class="form-group col-md-6">
                                         <label for="password">Password:</label>
                                         <input id="password" type="password" class="form-control" name="password">
@@ -440,14 +461,10 @@
                                         @endif
                                     </div>
 
-
                                     <div class="form-group col-md-6">
                                         <label for="password-confirm">Confirm Password:</label>
                                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                     </div>
-
-
-
 
                                     <div class="form-group col-md-10">
                                         <label for="typeId">User Type:</label>
@@ -505,7 +522,26 @@
             $( "#datepicker" ).datepicker();
         } );
 
+        //Set  target_user_modal
 
+        $('#target_user_modal').on('show.bs.modal', function(e){
+            var id = $(e.relatedTarget).data('id');
+            var name = $(e.relatedTarget).data('first-name');
+            var call = $(e.relatedTarget).data('target-call');
+            var high = $(e.relatedTarget).data('target-high');
+            var lead = $(e.relatedTarget).data('target-lead');
+
+
+
+
+
+            $(e.currentTarget).find('input[name="userId"]').val(id);
+            $(e.currentTarget).find('input[name="name"]').val(name);
+            $(e.currentTarget).find('input[name="call"]').val(call);
+            $(e.currentTarget).find('input[name="highPossibility"]').val(high);
+            $(e.currentTarget).find('input[name="lead"]').val(lead);
+
+        });
 
 
         //for Edit modal

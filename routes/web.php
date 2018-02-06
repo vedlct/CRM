@@ -61,8 +61,10 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
-Route::resource('follow-up', 'FollowupController');
+//Set Target
+Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
+Route::resource('follow-up', 'FollowupController');
 
 Route::resource('system-management/country', 'CountryController');
 Route::post('system-management/country/search', 'CountryController@search')->name('country.search');

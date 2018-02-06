@@ -22,7 +22,7 @@
 
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
-                            <th>Contacted</th>
+                        <th>Contacted</th>
                         {{--@endif--}}
                     </tr>
                     </thead>
@@ -134,51 +134,51 @@
 @endsection
 
 @section('foot-js')
-    <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+    <script src="{{asset('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
     <script>
-//        $(document).ready(function() {
-//            $('#myTable').DataTable();
-//
-//        });
+        //        $(document).ready(function() {
+        //            $('#myTable').DataTable();
+        //
+        //        });
 
-//<th>Company Name</th>
-//<th>Person</th>
-//<th>Email</th>
-//<th>Number</th>
-//<th>Category</th>
-//<th>Country</th>
-    $(function() {
-        $('#myTable').DataTable({
+        //<th>Company Name</th>
+        //<th>Person</th>
+        //<th>Email</th>
+        //<th>Number</th>
+        //<th>Category</th>
+        //<th>Country</th>
+        $(function() {
+            $('#myTable').DataTable({
 //            processing: true,
 //            serverSide: true,
 //            stateSave: true,
 //            Filter: true,
-            processing: true,
-            serverSide: true,
-            Filter: true,
-            type:"POST",
-            "ajax":{
-                "url": "{!! route('filterLeadData') !!}",
-                "type": "POST",
-                "data":{ _token: "{{csrf_token()}}"}
-            },
-            {{--ajax: '{!! route('test') !!}',--}}
-            columns: [
-                { data: 'companyName', name: 'leads.companyName' },
-                { data: 'personName', name: 'leads.personName' },
-                { data: 'email', name: 'leads.email' },
-                { data: 'contactNumber', name: 'leads.contactNumber'},
-                { data: 'category.categoryName', name: 'category.categoryName'},
-                { data: 'country.countryName', name: 'country.countryName'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
+                processing: true,
+                serverSide: true,
+                Filter: true,
+                type:"POST",
+                "ajax":{
+                    "url": "{!! route('filterLeadData') !!}",
+                    "type": "POST",
+                    "data":{ _token: "{{csrf_token()}}"}
+                },
+                {{--ajax: '{!! route('test') !!}',--}}
+                columns: [
+                    { data: 'companyName', name: 'leads.companyName' },
+                    { data: 'personName', name: 'leads.personName' },
+                    { data: 'email', name: 'leads.email' },
+                    { data: 'contactNumber', name: 'leads.contactNumber'},
+                    { data: 'category.categoryName', name: 'category.categoryName'},
+                    { data: 'country.countryName', name: 'country.countryName'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false}
 
-            ]
+                ]
+            });
         });
-    });
 
 
 
