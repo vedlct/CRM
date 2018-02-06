@@ -34,7 +34,8 @@ class LeadController extends Controller
 
 
     public function allLeads(Request $r){
-        $leads=Lead::with('country','category');
+        $leads=Lead::with('country','category')
+                    ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)->make(true);
 
