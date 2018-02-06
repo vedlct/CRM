@@ -58,7 +58,6 @@
     </div>
 
 
-
             <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -80,7 +79,8 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+
+            <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Total Progress Last Day</h4>
@@ -172,12 +172,10 @@
                 var chart = new CanvasJS.Chart("chartContainer", {
                     animationEnabled: true,
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
-                    title:{
-                        text: "This Week Report"
-                    },
+
                     axisY: {
                         title: "Limit",
-                        maximum: 80,
+                        maximum: 100,
                     },
                     data: [{
                         type: "column",
@@ -185,9 +183,11 @@
                         legendMarkerColor: "grey",
                         legendText: "{{Auth::user()->firstName}}",
                         dataPoints: [
-                            { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" },
-                            { y: {{ $calledThisWeek}},  label: "Called This Week" },
-                            { y: {{$leadMinedThisWeek}},  label: "Lead Mined" }
+                            { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
+                            { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
+                            { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
+                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3)}}%" },
+
 
                         ]
                     }]

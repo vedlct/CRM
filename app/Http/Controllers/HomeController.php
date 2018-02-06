@@ -42,6 +42,8 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
+
+
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
@@ -81,6 +83,24 @@ class HomeController extends Controller
 
 
         }
+
+        if($target->targetCall>0){
+            $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+        }
+
+        if($target->targetLeadmine>0){
+            $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+        }
+
+        if($target->targetHighPossibility>0){
+            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*5))*100);
+        }
+
+
+
+
+
+
 
 
 

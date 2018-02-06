@@ -51,7 +51,7 @@
 
                 </li>
 
-                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN')
 
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
@@ -144,7 +144,7 @@
 
 
 
-                @if($userType=='ADMIN')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>

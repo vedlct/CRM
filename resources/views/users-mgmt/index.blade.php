@@ -6,9 +6,14 @@
             <div class="card-body">
                 <h2 style="display: inline-block; margin: 0px 200px;">List of users</h2>
                 {{--<a class="btn btn-primary" href="{{ route('user-management.create') }}">Add new user</a>--}}
+                @php($userType = Session::get('userType'))
+
+                @if($userType=='ADMIN')
+
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                     Add new user
                 </button>
+                @endif
 
 
                 <div class="table-responsive m-t-40" >
@@ -37,6 +42,7 @@
                                 </td>
                                 <td>
                                     <!-- Trigger the Edit modal with a button -->
+                                    @if($userType=='ADMIN')
                                     <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                        data-id="{{$user->id}}"
                                        data-user-id="{{$user->userId}}"
@@ -51,6 +57,7 @@
                                        data-gender="{{$user->gender}}"
                                        data-active="{{$user->active}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    @endif
 
                                     <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                        data-id="{{$user->id}}"

@@ -281,7 +281,7 @@ class LeadController extends Controller
 
         //For Ra
         $User_Type=Session::get('userType');
-        if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
+        if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR' || $User_Type=='ADMIN'){
             $categories=Category::where('type',1)->get();
             $countries=Country::get();
 

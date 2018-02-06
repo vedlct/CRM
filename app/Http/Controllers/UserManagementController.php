@@ -45,7 +45,7 @@ class UserManagementController extends Controller
     public function index()
     {
         $User_Type=Session::get('userType');
-		if($User_Type=='ADMIN') {
+		if($User_Type=='ADMIN' || $User_Type=='SUPERVISOR') {
 
             $users = User::with('target')->get();
             $userTypes = Usertype::get();
