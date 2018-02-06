@@ -32,6 +32,14 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function allLeads(Request $r){
+        $leads=Lead::with('country','category');
+
+        return DataTables::eloquent($leads)->make(true);
+
+    }
+
     public function add(){
         //for RA
         $User_Type=Session::get('userType');
@@ -41,7 +49,7 @@ class LeadController extends Controller
             $countries=Country::get();
 
             return view('layouts.lead.add')
-                ->with('cats',$cats)
+                ->with('categories',$cats)
                 ->with('countries',$countries);}
         return Redirect()->route('home');
     }

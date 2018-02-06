@@ -92,6 +92,8 @@ Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.se
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 
+Route::post('lead/all','LeadController@allLeads')->name('allLeads');
+
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
