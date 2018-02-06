@@ -174,7 +174,7 @@
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
 
                     axisY: {
-                        title: "Limit",
+                        
                         maximum: 100,
                     },
                     data: [{
