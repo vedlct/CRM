@@ -583,7 +583,7 @@ class LeadController extends Controller
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
-        $lead->statusId=7;
+        $lead->statusId=6;
         $lead->save();
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
