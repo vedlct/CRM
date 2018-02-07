@@ -94,7 +94,7 @@
                         <h2 class="font-light m-b-0"></h2>
                         <br>&nbsp&nbsp&nbsp<br>
                         @if($count !=0)
-                        <span class="text-muted">{{$total/$count}}%</span>
+                        <span class="text-muted">{{round($total/$count)}}%</span>
                         <div class="progress">
                         <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
