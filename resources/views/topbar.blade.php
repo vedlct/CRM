@@ -21,7 +21,7 @@
         <!-- ============================================================== -->
         <!-- End Logo -->
         <!-- ============================================================== -->
-        <span class="navbar-collapse">
+        <div class="navbar-collapse">
             <!-- ============================================================== -->
             <!-- toggle and nav items -->
             <!-- ============================================================== -->
@@ -76,6 +76,7 @@
                     </div>
                 </li>
 
+                {{--<input type="text" placeholder="search bar">--}}
                 <!-- ============================================================== -->
                 <!-- End Messages -->
                 <!-- ============================================================== -->
@@ -86,6 +87,10 @@
             {{--For recent Notice--}}
 
             <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee>
+
+
+
+
             <ul class="navbar-nav my-lg-0">
 
                 <li class="nav-item dropdown">
@@ -128,6 +133,7 @@
                 </li>
 
             </ul>
+        </div>
         </div>
     </nav>
 </header>

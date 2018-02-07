@@ -93,7 +93,7 @@ class HomeController extends Controller
         }
 
         if($target->targetHighPossibility>0){
-            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*5))*100);
+            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
         }
 
 

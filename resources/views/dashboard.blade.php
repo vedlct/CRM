@@ -70,7 +70,7 @@
                     <h4 class="card-title">High Possibilities</h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">Total Followup Last Day</span>
+                        <span class="text-muted">Total High Possibilities Last Day</span>
                     </div>
                     @if($target->targetHighPossibility>0)
                         <?php $count++; $total+=($highPosibilities/$target->targetHighPossibility)*100; ?>

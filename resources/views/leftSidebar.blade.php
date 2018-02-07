@@ -128,12 +128,12 @@
 
 
 
-                @if($userType =='RA' )
+                {{--@if($userType =='RA' )--}}
                 <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
                 </li>
-                @endif
+                {{--@endif--}}
 
                 @if($userType=='MANAGER')
                 <li>

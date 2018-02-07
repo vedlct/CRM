@@ -57,6 +57,11 @@ class Lead extends Model
         return $this->belongsTo(User::class,'minedBy','id');
     }
 
+    public function contact(){
+
+        return $this->belongsTo(User::class,'contactedUserId','id');
+    }
+
 
     public function getTempLead($start,$limit,$search){
         if($search==null){
@@ -76,9 +81,7 @@ class Lead extends Model
                             $query->where('categoryName', 'like', '%'.$search.'%');
                         });
                     })
-//                    ->orWhereHas('category', function ($query) use ($search){
-//                        $query->where('categoryName', 'like', '%'.$search.'%');
-//                    })
+
                     ->where('statusId', 1)
                     ->offset($start)
                     ->limit($limit)
@@ -87,6 +90,12 @@ class Lead extends Model
 
 
         return $leads;
+    }
+
+
+    public function status(){
+
+        return $this->belongsTo(Leadstatus::class,'statusId','statusId');
     }
 
 

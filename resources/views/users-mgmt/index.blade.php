@@ -102,7 +102,7 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label for="firstName">High Possibility:</label>
+                                <label for="firstName">High Possibility (per week):</label>
                                 <input id="followup" type="number" class="form-control" name="highPossibility" >
                             </div>
 

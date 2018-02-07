@@ -32,18 +32,46 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function allLeads(Request $r){
+        $leads=Lead::with('country','category','mined','status','contact')
+                    ->orderBy('leadId','desc');
+
+
+
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) {
+                return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            })
+
+            ->make(true);
+
+    }
+
     public function add(){
-        //for RA
+
+
         $User_Type=Session::get('userType');
-        if($User_Type=='RA'){
+//        if($User_Type=='RA')
+//        {
 
             $cats=Category::where('type', 1)->get();
             $countries=Country::get();
 
             return view('layouts.lead.add')
-                ->with('cats',$cats)
-                ->with('countries',$countries);}
-        return Redirect()->route('home');
+                ->with('categories',$cats)
+                ->with('countries',$countries);
+//        }
+//        return Redirect()->route('home');
     }
 
     public function store(Request $r){
