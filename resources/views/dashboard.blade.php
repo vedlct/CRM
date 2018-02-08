@@ -26,11 +26,11 @@
                 <h4 class="card-title">Call</h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
-                    <span class="text-muted">Called Last Day</span>
+                    <span class="text-muted">Last Day</span>
                 </div>
                 @if($target->targetCall>0)
                     <?php $count++; $total+=($lastDayCalled/$target->targetCall)*100; ?>
-                <span class="text-success">{{($lastDayCalled/$target->targetCall)*100}}%</span>
+                <span class="text-success">{{round(($lastDayCalled/$target->targetCall)*100)}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetCall>0)
@@ -48,7 +48,7 @@
                 <h4 class="card-title">Lead Mined</h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
-                    <span class="text-muted">Lead Mined Last Day</span>
+                    <span class="text-muted">Last Day</span>
                 </div>
                 @if($target->targetLeadmine>0)
                     <?php $count++; $total+=($lastDayLeadMined/$target->targetLeadmine)*100; ?>
@@ -70,15 +70,15 @@
                     <h4 class="card-title">High Possibilities</h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">Total Followup Last Day</span>
+                        <span class="text-muted">This Week</span>
                     </div>
                     @if($target->targetHighPossibility>0)
-                        <?php $count++; $total+=($highPosibilities/$target->targetHighPossibility)*100; ?>
-                    <span class="text-purple">{{($highPosibilities/$target->targetHighPossibility)*100}}%</span>
+
+                    <span class="text-purple">{{$highPosibilitiesThisWeek}}%</span>
                     @endif
                     <div class="progress">
                         @if($target->targetHighPossibility>0)
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{($highPosibilities/$target->targetHighPossibility)*100}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$highPosibilitiesThisWeek}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         @endif
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                         <h2 class="font-light m-b-0"></h2>
                         <br>&nbsp&nbsp&nbsp<br>
                         @if($count !=0)
-                        <span class="text-muted">{{$total/$count}}%</span>
+                        <span class="text-muted">{{round($total/$count)}}%</span>
                         <div class="progress">
                         <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
@@ -193,8 +193,9 @@
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
-                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3)}}%" },
-
+                            @if($countWeek>0)
+                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek)}}%" },
+                             @endif
 
                         ]
                     }]

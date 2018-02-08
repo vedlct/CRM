@@ -21,6 +21,7 @@
                     <tr>
                         <th>Company Name</th>
                         <th>Category</th>
+                        <th>website</th>
                         <th>Possibility</th>
                         <th>Country</th>
                         <th>Contact Person</th>
@@ -35,6 +36,7 @@
                         <tr>
                             <td>{{$lead->companyName}}</td>
                             <td>{{$lead->category->categoryName}}</td>
+                            <td><a href="{{$lead->website}}">{{$lead->website}}</a></td>
                             <td>{{$lead->possibility->possibilityName}}</td>
                             <td>{{$lead->country->countryName}}</td>
                             <td>{{$lead->personName}}</td>
@@ -213,8 +215,8 @@
                             </div>
 
                             <div class="form-group">
-                            <label class=""><b>Follow Up Date : </b></label>
-                            <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
+                                <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+                            <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
                             </div>
 
 
@@ -342,6 +344,29 @@
                 }
             });
 
+        });
+
+//        check followup date count
+
+        $('.changedate').on('change',function(){
+           var currentdate = $('.changedate').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('followupCheck')}}',
+                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+                success : function(data)
+                {
+                    if(data >= 10)
+                    {
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
         });
 
 

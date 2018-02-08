@@ -3,7 +3,7 @@
 @extends('main')
 
 @section('header')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
     @endsection
 @section('content')
 
@@ -29,8 +29,8 @@
                         <th>Website</th>
                         <th>Email</th>
                         <th>Country</th>
-                        <th>Comments</th>
-                        <th>Created At</th>
+                        <th>Category</th>
+                        <th>Possibility</th>
 
 
                     </tr>
@@ -91,7 +91,7 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="{{url('js/jconfirm.js')}}"></script>
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -138,8 +138,8 @@
                     { data: 'website', name: 'leads.website' },
                     { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'comments', name: 'leads.comments' },
-                    { data: 'created_at', name: 'leads.created_at' },
+                    { data: 'category.categoryName', name: 'category.categoryName' },
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
 
 
                 ]

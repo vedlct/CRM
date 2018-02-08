@@ -2,7 +2,26 @@
 
 @section('header')
 
-    <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+
+    <style>
+        #field { margin-left: .5em; float: left; }
+        #field, label { float: left; font-family: Arial, Helvetica, sans-serif; font-size: small; }
+        br { clear: both; }
+        input { border: 1px solid black; margin-bottom: .5em;  }
+        input.error { border: 1px solid red; }
+        label.error {
+            background: url('images/unchecked.gif') no-repeat;
+            padding-left: 16px;
+            margin-left: .3em;
+        }
+        label.valid {
+            background: url('images/checked.gif') no-repeat;
+            display: block;
+            width: 16px;
+            height: 16px;
+        }
+
+    </style>
 
 @endsection
 
@@ -107,8 +126,8 @@
 
 @section('bottom')
 
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="{{url('js/jqueryvalidate.js')}}"></script>
+    <script src="{{url('js/additional-method.js')}}"></script>
 <script>
 
 

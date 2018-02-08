@@ -394,17 +394,9 @@
         </div>
     </div><!-- Category End -->
 
-
-
-
-
-
-
-
-
-
-
 @endsection
+
+
 @section('foot-js')
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>

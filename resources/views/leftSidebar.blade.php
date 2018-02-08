@@ -58,6 +58,11 @@
                 </li>
                 @endif
 
+                <li>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
+
+                </li>
+
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
@@ -71,6 +76,7 @@
                         </li>
                         <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
                         <li><a href="{{route('closelist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Close List</span></a></li>
+                        <li><a href="{{route('rejectlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Reject List</span></a></li>
                         <li><a href="#"><span class="hide-menu">Leave</span></a></li>
 
                     </ul>
@@ -78,7 +84,7 @@
                 @endif
 
 
-                @if($userType =='RA' || $userType =='MANAGER')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                 </li>
@@ -128,12 +134,9 @@
 
 
 
-                @if($userType =='RA' )
-                <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
+                {{--@if($userType =='RA' )--}}
 
-                </li>
-                @endif
+                {{--@endif--}}
 
                 @if($userType=='MANAGER')
                 <li>
@@ -144,7 +147,7 @@
 
 
 
-                @if($userType=='ADMIN' || $userType=='SUPERVISOR')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>

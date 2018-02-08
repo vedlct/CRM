@@ -3,17 +3,39 @@
 @extends('main')
 
 @section('header')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
 @endsection
 @section('content')
 
+
+    <!-- Trigger the modal with a button -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="addTeamModal" role="dialog">
+        <div class="modal-dialog" style="max-width: 50%">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Team</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
     <div class="card" style="padding:5%;">
         <div style="max-width: 50px; ">
-        <a href="{{route('addTeam')}}" class="btn btn-info btn-sm">Add Team</a>
+            <button type="button" class="btn btn-success openBtn">Add Team</button>
+
         </div>
 
         <div class="card-body">
@@ -155,7 +177,10 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="{{url('js/jconfirm.js')}}"></script>
+
+
+
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -212,6 +237,17 @@
 
 
         });
+
+
+
+
+
+        $('.openBtn').on('click',function(){
+            $('.modal-body').load('{{route("insertTeam")}}',function(){
+                $('#addTeamModal').modal({show:true});
+            });
+        });
+
 
 
 

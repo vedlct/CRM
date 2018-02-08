@@ -84,16 +84,24 @@ class HomeController extends Controller
 
         }
 
+
+
+        $countWeek=0;
+
+        //Weekly Report
         if($target->targetCall>0){
             $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+            $countWeek++;
         }
 
         if($target->targetLeadmine>0){
             $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+            $countWeek++;
         }
 
         if($target->targetHighPossibility>0){
-            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*5))*100);
+            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+            $countWeek++;
         }
 
 
@@ -134,7 +142,8 @@ class HomeController extends Controller
             ->with('lastDayCalled',$lastDayCalled)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
-            ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek);
+            ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
+            ->with('countWeek',$countWeek);
 
 //            ->with('teamMembers',$teamMembers);
     }

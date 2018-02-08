@@ -45,9 +45,19 @@ class UserManagementController extends Controller
     public function index()
     {
         $User_Type=Session::get('userType');
-		if($User_Type=='ADMIN' || $User_Type=='SUPERVISOR') {
+		if($User_Type=='ADMIN' || $User_Type=='SUPERVISOR' || $User_Type=='MANAGER') {
 
-            $users = User::with('target')->get();
+		    //Manager have ony access to his team
+		    if($User_Type=='MANAGER'){
+                $users = User::with('target')
+                    ->where('teamId',Auth::user()->teamId)
+                    ->get();
+            }
+            else{
+                $users = User::with('target')
+                    ->get();
+            }
+
             $userTypes = Usertype::get();
             return view('users-mgmt/index')
                 ->with('users', $users)
@@ -260,7 +270,7 @@ class UserManagementController extends Controller
         'lastName' => 'required|max:20',
         'rfID' => 'max:11',
         'phoneNumber' => 'max:15',
-        'picture' => 'max:45',
+        'picture' => 'max:3000',
         'dob' => 'max:10',
         'gender' => 'max:1',
         'active' => 'required|max:1'
