@@ -3,7 +3,7 @@
 @extends('main')
 
 @section('header')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
 @endsection
 @section('content')
 
@@ -12,9 +12,9 @@
 
 
     <div class="card" style="padding:5%;">
-        <div style="max-width: 50px; ">
-        <a href="{{route('addTeam')}}" class="btn btn-info btn-sm">Add Team</a>
-        </div>
+        {{--<div style="max-width: 50px; ">--}}
+        {{--<a href="{{route('addTeam')}}" class="btn btn-info btn-sm">Add Team</a>--}}
+        {{--</div>--}}
 
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Assign team To User</b></h2>
@@ -155,7 +155,10 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="{{url('js/jconfirm.js')}}"></script>
+
+
+
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />

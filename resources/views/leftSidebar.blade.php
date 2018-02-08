@@ -58,6 +58,11 @@
                 </li>
                 @endif
 
+                <li>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
+
+                </li>
+
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
@@ -129,10 +134,7 @@
 
 
                 {{--@if($userType =='RA' )--}}
-                <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
-                </li>
                 {{--@endif--}}
 
                 @if($userType=='MANAGER')
@@ -144,7 +146,7 @@
 
 
 
-                @if($userType=='ADMIN' || $userType=='SUPERVISOR')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
