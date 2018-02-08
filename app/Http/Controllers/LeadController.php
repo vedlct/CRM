@@ -600,7 +600,9 @@ class LeadController extends Controller
 
 
             $leads=Lead::with('category','country')
-                ->where('contactedUserId',Auth::user()->id)->get();
+                ->where('contactedUserId',Auth::user()->id)
+                ->orderBy('leadId','desc')
+                ->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             return view('layouts.lead.myLead')
