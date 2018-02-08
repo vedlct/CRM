@@ -14,11 +14,11 @@
                     <thead>
                     <tr>
                         <th>Company Name</th>
-                        <th>Person</th>
-                        <th>Email</th>
+                        <th>website</th>
                         <th>Number</th>
                         <th>Category</th>
                         <th>Country</th>
+                        <th>Possibility</th>
 
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
@@ -170,11 +170,11 @@
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'companyName', name: 'leads.companyName' },
-                    { data: 'personName', name: 'leads.personName' },
-                    { data: 'email', name: 'leads.email' },
+                    { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]

@@ -34,7 +34,7 @@ class LeadController extends Controller
 
 
     public function allLeads(Request $r){
-        $leads=Lead::with('country','category','mined','status','contact')
+        $leads=Lead::with('country','category','mined','status','contact','possibility')
                     ->orderBy('leadId','desc');
 
 
@@ -90,7 +90,14 @@ class LeadController extends Controller
 
         //Inserting Data To Leads TAble
         $l=new Lead;
-        $l->statusId = 1;
+        if($r->contact){
+            $l->statusId = 2;
+            $l->contactedUserId=Auth::user()->id;
+        }
+        else{
+            $l->statusId = 1;
+        }
+
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;

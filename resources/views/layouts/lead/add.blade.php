@@ -23,13 +23,13 @@
                     <thead>
                     <tr>
                         <th>Company Name</th>
-                        <th>Person</th>
-                        <th>Email</th>
+                        <th>website</th>
                         <th>Number</th>
                         <th>Category</th>
                         <th>Country</th>
                         <th>Contact</th>
                         <th>Status</th>
+                        <th>Possibility</th>
                         <th>Edit</th>
 
 
@@ -127,11 +127,15 @@
 
                         <div class="form-group col-md-5">
                             <label for="sel1"><b>Country:</b></label>
-                            <select class="select form-control" id="" name="country">
+                            <select class="select form-control" id="" name="country" style="width: 100%;">
                                 @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div class="form-group col-md-5">
+                            <label>Contact: &nbsp; </label><input type="checkbox" name="contact">
                         </div>
 
                         <div class="form-group col-md-10">
@@ -145,6 +149,8 @@
 
 
                 </textarea>
+
+
 
                         </div>
 
@@ -302,13 +308,13 @@
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'companyName', name: 'leads.companyName' },
-                    { data: 'personName', name: 'leads.personName' },
-                    { data: 'email', name: 'leads.email' },
+                    { data: 'website', name: 'leads.website' },
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
 

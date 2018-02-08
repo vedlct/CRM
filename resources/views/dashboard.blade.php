@@ -30,7 +30,7 @@
                 </div>
                 @if($target->targetCall>0)
                     <?php $count++; $total+=($lastDayCalled/$target->targetCall)*100; ?>
-                <span class="text-success">{{($lastDayCalled/$target->targetCall)*100}}%</span>
+                <span class="text-success">{{round(($lastDayCalled/$target->targetCall)*100)}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetCall>0)

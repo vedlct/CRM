@@ -58,6 +58,14 @@ class FollowupController extends Controller
 
     }
 
+    public function followupCheck(Request $r){
+        $followup=Followup::where('userId',Auth::user()->id)
+                ->where('followUpDate',$r->currentdate)->count();
+
+
+        return $followup;
+
+    }
 
     public function show(){
 

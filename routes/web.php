@@ -64,7 +64,10 @@ Route::post('user-management/search', 'UserManagementController@search')->name('
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
+//Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
+Route::post('checkfollowup','FollowupController@followupCheck')->name('followupCheck');
 Route::resource('follow-up', 'FollowupController');
+
 
 Route::resource('system-management/country', 'CountryController');
 Route::post('system-management/country/search', 'CountryController@search')->name('country.search');
