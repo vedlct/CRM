@@ -2,7 +2,7 @@
 
 @section('header')
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="{{url('css/select2.min.css')}}" rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -263,10 +263,10 @@
 
 @section('bottom')
 
-    {{--Using from https://select2.org/getting-started/basic-usage--}}
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    <script src="{{url('js/select2.min.js')}}"></script>
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
