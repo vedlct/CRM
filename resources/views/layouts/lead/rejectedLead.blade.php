@@ -70,7 +70,7 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
-                    { data: 'companyName', name: 'companyName' },
+                    { data: 'companyName', name: 'leads.companyName' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'email', name: 'email' },
 

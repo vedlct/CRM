@@ -501,9 +501,6 @@ class LeadController extends Controller
                 ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
                 ->where('workprogress.progress','Test Job')
                 ->with('category','country','mined')
-//            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//            ->where('leadassigneds.assignTo',Auth::user()->id)
-//            ->where('leadassigneds.leaveDate',null)
                 ->where('workprogress.userId',Auth::user()->id)
                 ->distinct('workprogress.leadId')
                 ->get();
@@ -634,7 +631,7 @@ class LeadController extends Controller
         $leads = Lead::with('mined')
             ->where('statusId',5);
 
-        return DataTables::of($leads)->make(true);
+        return DataTables::eloquent($leads)->make(true);
 
     }
 
