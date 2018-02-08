@@ -160,6 +160,7 @@
                 processing: true,
                 serverSide: true,
                 Filter: true,
+                stateSave: true,
                 type:"POST",
                 "ajax":{
                     "url": "{!! route('filterLeadData') !!}",

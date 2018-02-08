@@ -260,7 +260,7 @@ class UserManagementController extends Controller
         'lastName' => 'required|max:20',
         'rfID' => 'max:11',
         'phoneNumber' => 'max:15',
-        'picture' => 'max:45',
+        'picture' => 'max:3000',
         'dob' => 'max:10',
         'gender' => 'max:1',
         'active' => 'required|max:1'

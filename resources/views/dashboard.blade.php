@@ -193,8 +193,9 @@
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
-                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/3)}}%" },
-
+                            @if($countWeek>0)
+                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek)}}%" },
+                             @endif
 
                         ]
                     }]
