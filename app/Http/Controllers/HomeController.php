@@ -83,6 +83,9 @@ class HomeController extends Controller
 
 
         }
+
+
+
         $countWeek=0;
 
         //Weekly Report

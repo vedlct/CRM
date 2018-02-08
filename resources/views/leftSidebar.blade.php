@@ -78,7 +78,7 @@
                 @endif
 
 
-                @if($userType =='RA' || $userType =='MANAGER')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                 </li>

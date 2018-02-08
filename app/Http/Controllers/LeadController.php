@@ -118,7 +118,7 @@ class LeadController extends Controller
 
 //        return Auth::user()->teamId;
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
 
 //            $leads=(new Lead())->showNotAssignedLeads();
 //            $leads=$leads
@@ -126,7 +126,7 @@ class LeadController extends Controller
 //                ->get();
 
             //getting only first name of users
-            if($User_Type == 'RA'){
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
                     ->where('typeId',5)

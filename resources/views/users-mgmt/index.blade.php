@@ -61,7 +61,7 @@
 
                                     <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                        data-id="{{$user->id}}"
-                                       data-first-name="{{$user->firstName}}"
+                                       data-first-name="{{$user->userId}}"
                                        data-target-call="{{$user->target['targetCall']}}"
                                        data-target-high="{{$user->target['targetHighPossibility']}}"
                                        data-target-lead="{{$user->target['targetLeadmine']}}"

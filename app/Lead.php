@@ -30,7 +30,7 @@ class Lead extends Model
 
     public function showNotAssignedLeads(){
 
-        $leads=Lead::with('mined','category','country')
+        $leads=Lead::with('mined','category','country','possibility')
             ->where('statusId',2)
             ->where(function($q){
                 $q->orWhere('contactedUserId',0)
