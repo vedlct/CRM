@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
-use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use auth;
 use Session;
-use Auth;
-
 class LoginController extends Controller
 {
     /*
@@ -22,10 +20,7 @@ class LoginController extends Controller
     |
     */
 
-  //  use AuthenticatesUsers;
-    use AuthenticatesUsers {
-        logout as performLogout;
-    }
+    use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
@@ -64,7 +59,7 @@ class LoginController extends Controller
 
 
 
- public function login(\Illuminate\Http\Request $request) {
+    public function login(\Illuminate\Http\Request $request) {
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -104,10 +99,6 @@ class LoginController extends Controller
 
         return $this->sendFailedLoginResponse($request);
     }
-
-	
-	
-	
 
 
 

@@ -11,8 +11,8 @@
                 <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                 </div>
-                <input type="text" value="{{isset($oldVals) ? $oldVals[$index] : ''}}" name="<?=$stringFormat?>" id="<?=$stringFormat?>" placeholder="{{$item}}" required>
-            
+                <input type="text" value="{{isset($oldVals) ? $oldVals[$index] : ''}}" name="<?=$stringFormat?>" id="<?=$stringFormat?>" placeholder="{{$item}}" style="margin-right:15px;" required>
+				<div style="display:inline; width:100px;"></div>
   @php
     $index++;
   @endphp

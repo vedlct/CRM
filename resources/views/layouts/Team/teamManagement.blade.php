@@ -99,6 +99,7 @@
                         <th>Last Name</th>
                         <th>Phone Number</th>
                         <th>Email</th>
+                        <th>Type</th>
                         <th>Team Name</th>
                         <th>Remove</th>
 
@@ -113,6 +114,7 @@
                             <td>{{$user->lastName}}</td>
                             <td>{{$user->phoneNumber}}</td>
                             <td>{{$user->userEmail}}</td>
+                            <td>{{$user->userType->typeName}}</td>
                             <td> {{$user->teamName}}</td>
                             <td><form method="post" action="{{route('removeUser')}}">
                                     {{@csrf_field()}}

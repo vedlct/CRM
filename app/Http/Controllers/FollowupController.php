@@ -13,6 +13,7 @@ use App\Callingreport;
 use App\Possibility;
 use Session;
 use App\Lead;
+use App\Category;
 
 
 class FollowupController extends Controller
@@ -43,13 +44,31 @@ class FollowupController extends Controller
     {
         //access for user
         $User_Type=Session::get('userType');
-        if($User_Type=='USER') {
+        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->where('followUpDate', date('Y-m-d'))
             ->where('followup.userId',Auth::user()->id)->get();
 
             $callReports=Callingreport::get();
+            $categories=Category::where('type',1)->get();
 		 /// return $callReports;
+            $possibilities=Possibility::get();
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);}
+        return Redirect()->route('home');
+
+    }
+
+
+    public function show(){
+
+        $User_Type=Session::get('userType');
+        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
+            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                ->where('followUpDate', date('Y-m-d'))
+                ->where('followup.userId',Auth::user()->id)->get();
+
+            $callReports=Callingreport::get();
+            /// return $callReports;
             $possibilities=Possibility::get();
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
         return Redirect()->route('home');

@@ -26,7 +26,7 @@
                 </li>
 
                 {{--For user --}}
-                @if($userType =='USER' )
+                @if($userType =='USER' || $userType=='MANAGER' || $userType=='SUPERVISOR')
 
                 <li>
                     <a href="{{route('assignedLeads')}}" ><i class="fa fa-list"></i><span class="hide-menu">
@@ -34,7 +34,9 @@
                 </li>
                 @endif
 
-                @if($userType=='USER')
+
+                @if($userType=='SUPERVISOR' || $userType=='USER' || $userType=='MANAGER')
+
                 <li>
 				 <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                      <span class="hide-menu">Todays Follow-up</span></a>
@@ -49,14 +51,14 @@
 
                 </li>
 
-                @if($userType =='MANAGER')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
                 </li>
                 @endif
 
-                @if($userType =='USER' )
+                @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
                         <span class="pull-right-container">
@@ -68,6 +70,7 @@
                             <a href="{{route('starLeads')}}"><i class="fa fa-star"></i><span class="hide-menu">Star Leads</span></a>
                         </li>
                         <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
+                        <li><a href="{{route('closelist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Close List</span></a></li>
                         <li><a href="#"><span class="hide-menu">Leave</span></a></li>
 
                     </ul>
@@ -81,7 +84,7 @@
                 </li>
                 @endif
 
-                @if($userType =='USER')
+                @if($userType =='USER' || $userType =='MANAGER')
 
                 <li>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
@@ -132,7 +135,7 @@
                 </li>
                 @endif
 
-                @if($userType=='MANAGER' )
+                @if($userType=='MANAGER')
                 <li>
                     <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
 
@@ -140,7 +143,9 @@
                 @endif
 
 
-                @if($userType=='ADMIN' )
+
+                @if($userType=='ADMIN')
+
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>

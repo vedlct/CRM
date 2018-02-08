@@ -61,7 +61,9 @@
 										 data-lead-email="{{$lead->email}}"
 										 data-lead-number="{{$lead->contactNumber}}"
 										 data-lead-person="{{$lead->personName}}"
-										 data-lead-website="{{$lead->website}}">
+										 data-lead-website="{{$lead->website}}"
+										 data-lead-mined="{{$lead->mined->firstName}}"
+										 data-lead-category="{{$lead->category->categoryId}}">
 										  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 								  </td>
@@ -103,6 +105,22 @@
 
 
 						  <div class="row">
+							  <div class="col-md-12" align="center">
+								  <b > Mined By:   <div class="mined" id="mined"></div></b>
+								  {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+
+							  </div>
+
+							  <div class="col-md-4">
+								  <label>Category:</label>
+								  <select class="form-control"  name="category" id="category">
+									  <option value="">Please Select</option>
+									  @foreach($categories as $category)
+										  <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+									  @endforeach
+
+								  </select>
+							  </div>
 
 							  <div class="col-md-4">
 								  <input type="hidden" name="leadId">
@@ -144,8 +162,6 @@
 
 					  </div>
 
-
-
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					  </div></form>
@@ -153,14 +169,6 @@
 			  </div>
 		  </div>
 		  </div>
-
-
-
-
-
-
-
-
 
 
 
@@ -188,11 +196,11 @@
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
 									  <select class="form-control" name="report" required>
-										  <option value=""><b>(select one)</b></option>
+										  <option value="4"><b>Follow Up</b></option>
 
-										  @foreach($callReports as $report)
-											  <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-										  @endforeach
+										  {{--@foreach($callReports as $report)--}}
+											  {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
+										  {{--@endforeach--}}
 									  </select>
 								  </div>
 
@@ -200,7 +208,7 @@
 									  <label ><b>Progress : </b></label>
 									  <select class="form-control" name="progress" >
 										  <option value=""><b>(select one)</b></option>
-										  <option value="Test job">Test job</option>
+										  <option value="Test job">Test Job</option>
 										  <option value="Closing">Closing</option>
 									  </select>
 									  <br>
@@ -281,9 +289,13 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
 
 
             //populate the textbox
+            $('#category').val(category);
+            $('div.mined').text(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);

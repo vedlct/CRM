@@ -6,12 +6,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
 @endsection
 
+
+					
 @section('content')
 
 
     <div class="card" style="padding: 2px;" id="card">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Temp Leads</b></h2>
+				<a href="#create_lead_modal" data-toggle="modal" class="btn btn-info btn-md">Add Lead</a>
 
             <div class="table-responsive m-t-40" >
                 <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
@@ -24,7 +27,6 @@
                         <th>Created At</th>
                         <th>Set Possibility</th>
                         <th>Action</th>
-
                     </tr>
                     </thead>
                 </table>
@@ -48,6 +50,22 @@
 
                     {{csrf_field()}}
                     <div class="row">
+                        <div class="col-md-12" align="center">
+                            <b > Mined By:   <div class="mined" id="mined"></div></b>
+                            {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Category:</label>
+                            <select class="form-control"  name="category" id="category">
+                                <option value="">Please Select</option>
+                                @foreach($categories as $category)
+                                    <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
 
                         <div class="col-md-4">
                             <input type="hidden" name="leadId">
@@ -104,6 +122,133 @@
     </div>
     </div>
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+<!--Create -->
+<div class="modal" id="create_lead_modal">
+	<div class="modal-dialog" style="max-width:60%; padding:10px;">
+
+		<form class="modal-content" method="post" action="{{ route('storeLead') }}" onsubmit="return chkValidate()">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				<h4 class="modal-title" name="modal-title">Create Lead</h4>
+			</div>
+
+
+            {{csrf_field()}}
+            <div class="row">
+
+            <div class="form-group col-md-5">
+                <label class="control-label " ><b>Company Name</b></label>
+
+                {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
+
+                    <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" required>
+
+            </div>
+
+
+            <div class="form-group col-md-5">
+                <label class="control-label" ><b>Website</b></label>
+                {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
+                    <input type="text" class="form-control" name="website" placeholder="Enter url" required>
+
+            </div>
+
+			
+			<div class="form-group col-md-5" style="">
+				<label class="control-label" ><b>Contact Person</b></label>
+				{!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
+				<input type="text" class="form-control" id="" name="personName" placeholder="name" required>
+
+			</div>
+
+
+            <div class="form-group col-md-5">
+                <label class="control-label" ><b> Email:</b></label>
+                {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
+
+            </div>
+
+			<div class="form-group col-md-5">
+				<label class="control-label" ><b>Contact Number</b></label>
+				{!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
+				<input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
+			</div>
+
+			<div class="form-group col-md-5">
+				<label class="control-label " ><b>Designation</b></label>
+				{!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
+				<input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" required>
+
+			</div>
+
+
+
+			<div class="form-group col-md-5" style="">
+				<label ><b>Category:</b></label>
+				<select class="form-control" id="" name="category">
+					@foreach($categories as $cat)
+						<option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
+
+					@endforeach
+				</select>
+			</div>
+
+			<div class="form-group col-md-5">
+				<label for="sel1"><b>Country:</b></label>
+				<select class="select form-control" id="" name="country">
+					@foreach($countries as $country)
+
+						<option value="{{$country->countryId}}">{{$country->countryName}}</option>
+
+					@endforeach
+				</select>
+			</div>
+
+
+
+
+
+
+            <div class="form-group col-md-10">
+                <label class="control-label " ><b>Comments</b></label>
+
+                {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
+
+                    {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
+
+                <textarea name="comment" rows="4"  class="form-control">
+
+
+                </textarea>
+
+            </div>
+
+            
+            <button type="submit" class="btn btn-success btn-md" style="width: 30%">Insert</button>
+			</div>
+
+
+
+        </form>
+    </div>
+  </div>
+
+
+
+
 @endsection
 
 @section('foot-js')
@@ -125,9 +270,6 @@
 
 
     <script>
-
-
-
         $('#my_modal').on('show.bs.modal', function(e) {
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
@@ -136,7 +278,12 @@
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
+            var category=$(e.relatedTarget).data('lead-category');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+
             //populate the textbox
+            $('#category').val(category);
+            $('div.mined').text(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
