@@ -122,8 +122,8 @@
                         </div>
 
                         <div class="form-group col-md-5">
-                            <label for="sel1"><b>Country:</b></label>
-                            <select class="select form-control" id="" name="country">
+                            <label ><b>Country:</b></label>
+                            <select class="select form-control" id="" name="country" style="width: 80%">
                                 @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach
