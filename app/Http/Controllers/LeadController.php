@@ -696,8 +696,8 @@ class LeadController extends Controller
             $l->leadAssignStatus=null;
             $l->save();
 
-            Session::flash('message', 'You have Leave The Lead successfully');
-            return back();
+//            Session::flash('message', 'You have Leave The Lead successfully');
+//            return back();
         }
 
 
@@ -706,7 +706,7 @@ class LeadController extends Controller
                 $lead->contactedUserId =null;
                 $lead->statusId=2;
                 $lead->save();
-                Session::flash('message', 'You have Leave The Lead From Contact successfully');
+                Session::flash('message', 'You have Leave The Lead successfully');
                 return back();
             }
 
