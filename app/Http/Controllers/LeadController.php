@@ -656,12 +656,20 @@ class LeadController extends Controller
     }
 
 
-    public function rejectStore($id){
+    public function rejectStore(Request $r){
 
-        $lead=Lead::findOrFail($id);
+
+        $lead=Lead::findOrFail($r->leadId);
         if($lead->statusId ==1){
             $lead->statusId=5;
             $lead->save();
+
+            $work=new Workprogress;
+            $work->progress='Reject';
+            $work->leadId=$r->leadId;
+            $work->userId=Auth::user()->id;
+            $work->comments=$r->comment;
+            $work->save();
         }
 
         Session::flash('message', 'Lead Rejected Successfully');

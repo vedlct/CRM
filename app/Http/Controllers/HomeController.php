@@ -66,7 +66,7 @@ class HomeController extends Controller
 
         $highPosibilities=Possibilitychange::where('userId',Auth::user()->id)
             ->where('possibilityId',3)
-            ->whereDate('created_at',$lastDate)->count();
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
         try{

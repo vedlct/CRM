@@ -51,96 +51,86 @@
 
 
                     {{csrf_field()}}
-                    <div class="row">
-                        <div class="col-md-12" align="center">
+                    <div class="row ">
+                            <div class="col-md-12" align="center">
                             <b > Mined By:   <div class="mined" id="mined"></div></b>
                             {{--<input type="text" class="form-control" name="minedBy" value="">--}}
+                            </div>
 
+                            <div class="col-md-4">
+                                <label>Category:</label>
+                                <select class="form-control"  name="category" id="category">
+                                    <option value="">Please Select</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-4">
+                                <input type="hidden" name="leadId">
+                                <label>Company Name:</label>
+                                <input type="text" class="form-control" name="companyName" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Email:</label>
+                                <input type="email" class="form-control" name="email" value="">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label>Contact Person:</label>
+                                <input type="text" class="form-control" name="personName" value=""> <br><br><br>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label>Number:</label>
+                                <input type="text" class="form-control" name="number" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Website:</label>
+                                <input type="text" class="form-control" name="website" value=""> <br><br><br>
+                            </div>
+
+                            <div class="col-md-8">
+                                <button class="btn btn-success" type="submit">Update</button>
+                            </div>
+                     </div>
+                    </form>
+                    <br><br>
+                    <form method="post" action="{{route('rejectStore')}}">
+                    {{csrf_field()}}
+                        <div class="row">
+
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="comment for reject" name="comment" class="form-control">
+                                    <input type="hidden" name="leadId">
+                                </div>
+                                <div class="col-md-6">
+                                    <button id="reject" class="btn btn-danger" type="submit">Reject</button>
+                                </div>
                         </div>
+                    </form>
 
-                        <div class="col-md-4">
-                            <label>Category:</label>
-                            <select class="form-control"  name="category" id="category">
-                                <option value="">Please Select</option>
-                                @foreach($categories as $category)
-                                    <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <input type="hidden" name="leadId">
-                            <label>Company Name:</label>
-                            <input type="text" class="form-control" name="companyName" value="">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Email:</label>
-                            <input type="email" class="form-control" name="email" value="">
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <label>Contact Person:</label>
-                            <input type="text" class="form-control" name="personName" value=""> <br><br><br>
-                        </div>
-
-
-                        <div class="col-md-4">
-                            <label>Number:</label>
-                            <input type="text" class="form-control" name="number" value="">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label>Website:</label>
-                            <input type="text" class="form-control" name="website" value=""> <br><br><br>
-                        </div>
-
-                        <div class="col-md-8">
-                            <button class="btn btn-success" type="submit">Update</button>
-                        </div>
-                    </div></form>
-                    <div class="row">
-                        <hr> &nbsp;
-
-                        <div class="form-group">
-                        <div class="col-md-8">
-                            <input type="hidden" name="leadId">
-
-
-                            <input type="text" placeholder="comment for reject">
-                        </div>
-
-                        <div class="col-md-4">
-                            <a id="reject" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this Lead?')">Reject</a>
-                        </div></div></div>
-
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-
+            </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div></div>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
+
 
 @endsection
 
 @section('foot-js')
 
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="js/select2.min.js"></script>
+    <script src="{{url('js/select2.min.js')}}"></script>
 
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
@@ -199,7 +189,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+//            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
         });
 

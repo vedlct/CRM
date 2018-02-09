@@ -148,7 +148,7 @@ Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
 Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 
-Route::get('/lead/reject/{id}','LeadController@rejectStore');
+Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
 
 //My Team
