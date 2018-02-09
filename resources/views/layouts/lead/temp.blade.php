@@ -24,7 +24,8 @@
                         <th>Company Name</th>
                         <th>Category</th>
                         <th>Website</th>
-                        <th>Created At</th>
+                        <th>Number</th>
+                        <th>Country</th>
                         <th>Set Possibility</th>
                         <th>Action</th>
 
@@ -102,6 +103,7 @@
                      </div>
                     </form>
                     <br><br>
+                    @if(Session::get('userType') !='RA')
                     <form method="post" action="{{route('rejectStore')}}">
                     {{csrf_field()}}
                         <div class="row">
@@ -115,6 +117,7 @@
                                 </div>
                         </div>
                     </form>
+                        @endif
 
             </div>
                 <div class="modal-footer">
@@ -140,8 +143,8 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <script src="{{url('js/jconfirm.js')}}"></script>
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 
 
 
@@ -196,29 +199,32 @@
 
 
 
-        $(document).ready(function () {
-
+        $(function() {
             $('#myTable').DataTable({
-                "processing": true,
-                "serverSide": true,
+                processing: true,
+                serverSide: true,
+                Filter: true,
                 stateSave: true,
+                type:"POST",
                 "ajax":{
-                    "url": "{{ route('tempData')}}",
-                    "dataType": "json",
+                    "url": "{!! route('tempData') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data":{ _token: "{{csrf_token()}}"},
                 },
-                "columns": [
-                    { "data": "minedBy" },
-                    { "data": "name" },
-                    { "data": "category" },
-                    { "data": "website" },
-                    { "data": "createdAt" },
-                    { "data": "possibility" },
-                    { "data": "edit" }
-                ]
+                columns: [
+                    { data: 'mined.firstName', name: 'mined.firstName' },
+                    { data: 'companyName', name: 'leads.companyName'},
+                    { data: 'category.categoryName', name: 'category.categoryName'},
+                    { data: 'website', name: 'leads.website'},
+                    { data: 'contactNumber', name: 'leads.contactNumber'},
+                    { data: 'country.countryName', name: 'country.countryName'},
+                    // { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+                     {data: 'action', name: 'action', orderable: false, searchable: false},
+                     {data: 'edit', name: 'edit', orderable: false, searchable: false}
 
+                ]
             });
+
             $('#myTable tbody').on('change', '[id=drop]', function (e){
                 var leadId = $(e.currentTarget).data('lead-id');
                 var possibility=$(this).val();
@@ -239,6 +245,10 @@
                 });
             });
         });
+
+
+
+
 
 
     </script>

@@ -108,7 +108,7 @@ Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData
 
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
 
-Route::post('lead/temp','LeadController@tempData')->name('tempData');
+Route::post('lead/tempdata','LeadController@tempData')->name('tempData');
 
 Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 

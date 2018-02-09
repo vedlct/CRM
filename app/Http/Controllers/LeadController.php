@@ -308,6 +308,8 @@ class LeadController extends Controller
 
     public function tempLeads(){
 
+
+
         //For Ra
         $User_Type=Session::get('userType');
         if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR' || $User_Type=='ADMIN'){
@@ -330,23 +332,6 @@ class LeadController extends Controller
 
     public function tempData(Request $request){
 
-        $start = $request->input('start');
-        $limit = $request->input('length');
-        if(empty($request->input('search.value')))
-        {
-            $leads=(new Lead())->getTempLead($start,$limit,null);
-
-        }
-        else{
-
-            $search = $request->input('search.value');
-            $leads=(new Lead())->getTempLead($start,$limit,$search);
-
-        }
-
-
-        $totalData =Lead::where('statusId', 1)->count();
-        $totalFiltered = $totalData;
 
         $possibility=Possibility::get();
 
@@ -358,41 +343,32 @@ class LeadController extends Controller
         }
         $pAfter.='</select>';
 
+        $leads=(new Lead())->getTempLead();
 
-        $data = array();
-        foreach ($leads as $lead){
-            $nestedData['name'] = $lead->companyName;
-            $nestedData['email'] = $lead->email;
-            $nestedData['website'] = '<a href="http://'.$lead->website.'" target="_blank" >'.$lead->website.'</a>';
-            $nestedData['category'] = $lead->category->categoryName;
-            $nestedData['person'] = $lead->personName;
-            $nestedData['number'] = $lead->contactNumber;
-            $nestedData['country'] = $lead->country->countryName;
-            $nestedData['minedBy']=$lead->mined->firstName;
-            $nestedData['createdAt']=$lead->created_at;
-            $nestedData['edit']='<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+
+
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) use ($pAfter,$pBefore){
+                return $pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
+            })
+            ->addColumn('edit', function ($lead) use ($pAfter,$pBefore){
+                return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                       data-lead-id="'.$lead->leadId.
-                '"data-lead-name="'.$lead->companyName.'"
+                                    '"data-lead-name="'.$lead->companyName.'"
                                     data-lead-email="'.$lead->email.'"
                                     data-lead-number="'.$lead->contactNumber.'"
                                     data-lead-person="'.$lead->personName.'"
                                     data-lead-website="'.$lead->website.'"
                                     data-lead-mined="'.$lead->mined->firstName.'"
-                                    data-lead-category="'.$lead->category->categoryId.'"
-                                    >
+                                    data-lead-category="'.$lead->category->categoryId.'">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-            $nestedData['possibility']=$pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
-            $data[]=$nestedData;
-        }
-        $json_data = array(
-            "draw"            => intval($request->input('draw')),
-            "recordsTotal"    => intval($totalData),
-            "recordsFiltered" => intval($totalFiltered),
-            "data"            => $data
-        );
+            })
+            ->rawColumns(['edit', 'action'])
+            ->make(true);
 
 
-        return json_encode($json_data);
+
+
 
 
     }
