@@ -214,9 +214,9 @@
 									  <br>
 								  </div>
 
-								  <div class="form-group" style=" margin-bottom: 5px;">
-									  <label class=""><b>Follow Up Date : </b></label>
-									  <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
+								  <div class="form-group">
+									  <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+									  <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
 								  </div>
 
 
@@ -315,6 +315,29 @@
             $( "#todate" ).datepicker();
         } );
 
+
+		// check followup limit
+
+        $('.changedate').on('change',function(){
+            var currentdate = $('.changedate').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('followupCheck')}}',
+                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+                success : function(data)
+                {
+                    if(data >= 10)
+                    {
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
+        });
 
 
         //for Call Modal
