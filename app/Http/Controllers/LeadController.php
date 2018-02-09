@@ -58,20 +58,14 @@ class LeadController extends Controller
     }
 
     public function add(){
-
-
-        $User_Type=Session::get('userType');
-//        if($User_Type=='RA')
-//        {
-
+        
             $cats=Category::where('type', 1)->get();
             $countries=Country::get();
 
             return view('layouts.lead.add')
                 ->with('categories',$cats)
                 ->with('countries',$countries);
-//        }
-//        return Redirect()->route('home');
+
     }
 
     public function store(Request $r){

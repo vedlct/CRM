@@ -41,12 +41,13 @@
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%">
 
-            <form class="modal-content" method="post" action="{{route('leadUpdate')}}" onsubmit="return chkValidate()">
+            <div class="modal-content" >
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
                 </div>
                 <div class="modal-body">
+                    <form method="post" action="{{route('leadUpdate')}}" onsubmit="return chkValidate()">
 
 
                     {{csrf_field()}}
@@ -99,10 +100,21 @@
                         <div class="col-md-8">
                             <button class="btn btn-success" type="submit">Update</button>
                         </div>
+                    </div></form>
+                    <div class="row">
+                        <hr> &nbsp;
+
+                        <div class="form-group">
+                        <div class="col-md-8">
+                            <input type="hidden" name="leadId">
+
+
+                            <input type="text" placeholder="comment for reject">
+                        </div>
 
                         <div class="col-md-4">
                             <a id="reject" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this Lead?')">Reject</a>
-                        </div>
+                        </div></div></div>
 
 
 
@@ -118,7 +130,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div></form>
+                </div></div>
         </div>
     </div>
     </div>
