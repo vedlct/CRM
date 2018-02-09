@@ -595,18 +595,10 @@ class LeadController extends Controller
 
         if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
 
-            $categories=Category::where('type',1)
-                ->get();
-
-
-            $leads=Lead::with('category','country')
-                ->where('contactedUserId',Auth::user()->id)
-                ->orderBy('leadId','desc')
-                ->get();
+            $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
-            return view('layouts.lead.myLead')
-                ->with('leads',$leads)
+            return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories);
@@ -615,6 +607,40 @@ class LeadController extends Controller
 
         return Redirect()->route('home');
     }
+
+
+    public function getContacedData(Request $r){
+
+        $leads=Lead::with('mined','category','country','possibility')
+            ->where('contactedUserId',Auth::user()->id)
+            ->orderBy('leadId','desc');
+
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) {
+                return '<a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-name="'.$lead->companyName.'"
+                                   data-lead-email="'.$lead->email.'"
+                                   data-lead-number="'.$lead->contactNumber.'"
+                                   data-lead-person="'.$lead->personName.'"
+                                   data-lead-website="'.$lead->website.'"
+                                   data-lead-mined="'.$lead->mined->firstName.'"
+                                   data-lead-category="'.$lead->category->categoryId.'"
+
+                                >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            })
+            ->make(true);
+
+
+    }
+
+
 
     public function rejectedLeads(){
         return view('layouts.lead.rejectedLead');
@@ -674,7 +700,7 @@ class LeadController extends Controller
             return back();
         }
 
-        else{
+
             $lead=Lead::findOrFail($id);
             if($lead->contactedUserId == Auth::user()->id){
                 $lead->contactedUserId =null;
@@ -684,7 +710,7 @@ class LeadController extends Controller
                 return back();
             }
 
-        }
+
 
     }
 
