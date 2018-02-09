@@ -19,14 +19,14 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Company Name</th>
-                        <th>Category</th>
-                        <th>website</th>
-                        <th>Possibility</th>
-                        <th>Country</th>
-                        <th>Contact Person</th>
-                        <th>Contact Number</th>
-                        <th>Action</th>
+                        <th width="15%">Company Name</th>
+                        <th width="8%">Category</th>
+                        <th width="10%">website</th>
+                        <th width="8%">Possibility</th>
+                        <th width="5%">Country</th>
+                        <th width="8%">Contact Person</th>
+                        <th width="8%">Contact Number</th>
+                        <th width="10%">Action</th>
 
                     </tr>
                     </thead>
@@ -34,17 +34,27 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td>{{$lead->companyName}}</td>
-                            <td>{{$lead->category->categoryName}}</td>
-                            <td><a href="{{$lead->website}}">{{$lead->website}}</a></td>
-                            <td>{{$lead->possibility->possibilityName}}</td>
-                            <td>{{$lead->country->countryName}}</td>
-                            <td>{{$lead->personName}}</td>
-                            <td>{{$lead->contactNumber}}</td>
+                            <td width="15%">{{$lead->companyName}}</td>
+                            <td width="8%">{{$lead->category->categoryName}}</td>
+                            <td width="10%"><a href="{{$lead->website}}">{{$lead->website}}</a></td>
+                            <td width="8%">{{$lead->possibility->possibilityName}}</td>
+                            <td width="5%">{{$lead->country->countryName}}</td>
+                            <td width="8%">{{$lead->personName}}</td>
+                            <td width="8%">{{$lead->contactNumber}}</td>
 
 
                             {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
-                            <td>
+                            <td width="10%">
+
+                                @if($lead->contactedUserId==null)
+                                    <form method="post" action="{{route('addContacted')}}" style="float: left;">
+                                        {{csrf_field()}}
+                                        <input type="hidden" value="{{$lead->leadId}}" name="leadId">
+                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+
+                                    </form>
+                                @endif
+                                &nbsp;
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
@@ -64,7 +74,6 @@
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
                             </td>
                         </tr>
 
