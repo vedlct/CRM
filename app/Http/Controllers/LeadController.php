@@ -569,9 +569,10 @@ class LeadController extends Controller
        $User_Type=Session::get('userType');
        if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR') {
 
-           $leads=Lead::select('leads.*')
-               ->with('category','country','mined')
+           $leads=Lead::select('leads.*','workprogress.comments','workprogress.created_at','users.firstName')
+               ->with('category','country')
                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+               ->leftJoin('users','workprogress.userId','users.id')
                ->where('workprogress.progress','Reject')
                ->where('minedBy',Auth::user()->id)
                ->where('statusId',5)->get();
@@ -580,7 +581,9 @@ class LeadController extends Controller
            $callReports=Callingreport::get();
            $possibilities=Possibility::get();
 
-           return view('layouts.lead.testList')
+//            return $leads;
+
+           return view('layouts.lead.rejectList')
                ->with('leads',$leads)
                ->with('callReports',$callReports)
                ->with('possibilities',$possibilities)

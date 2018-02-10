@@ -319,7 +319,7 @@
                 data:{_token: CSRF_TOKEN,'number':number},
                 success : function(data)
                 {
-                    console.log(data);
+
                     if(data >0)
                     {
                         document.getElementById('exceed').style.display="inline";
