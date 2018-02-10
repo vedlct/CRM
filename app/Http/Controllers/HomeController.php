@@ -12,6 +12,9 @@ use App\Lead;
 use App\User;
 use App\Possibilitychange;
 use App\Usertarget;
+use App\Callingreport;
+use App\Possibility;
+use App\Category;
 class HomeController extends Controller
 {
     /**
@@ -32,11 +35,7 @@ class HomeController extends Controller
     {
 
         $date = Carbon::now();
-//        $totalFollowUp=Followup::where('userId',Auth::user()->id)
-//            ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-//        $totalFollowUpCalled=Workprogress::where('userId',Auth::user()->id)
-//            ->where('callingReport',4)
-//            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
 
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
@@ -64,9 +63,23 @@ class HomeController extends Controller
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
             ->whereDate('created_at',$lastDate)->count();
 
-        $highPosibilities=Possibilitychange::where('userId',Auth::user()->id)
-            ->where('possibilityId',3)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+        $User_Type=Session::get('userType');
+        if($User_Type=='RA'){
+            $highPosibilities=Lead::select('leads.*')
+                ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                ->where('leads.minedBy',Auth::user()->id)
+                ->where('possibilitychanges.possibilityId',3)
+                ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+        }
+
+        else{
+            $highPosibilities=Possibilitychange::where('userId',Auth::user()->id)
+                ->where('possibilityId',3)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+        }
+
 
 
         try{
@@ -106,35 +119,6 @@ class HomeController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-//
-//        if($User_Type=='MANAGER') {
-//            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
-//                ->where('teamId', Auth::user()->teamId)
-//                ->where('teamId', '!=', null)
-//                ->get();
-//        }
-//        else if($User_Type=='ADMIN' || $User_Type =='SUPERVISOR'){
-//            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
-////                ->where('teamId', Auth::user()->teamId)
-////                ->where('teamId', '!=', null)
-//                ->get();
-//
-//        }
-//        else{
-//            $teamMembers=0;
-//        }
-
-
-        //Graph Access for Manager /SuperVisor / Admin
-
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
@@ -145,6 +129,49 @@ class HomeController extends Controller
             ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
             ->with('countWeek',$countWeek);
 
-//            ->with('teamMembers',$teamMembers);
+
     }
+
+
+
+
+ public function highPossibility(){
+     $date = Carbon::now();
+
+
+     $User_Type=Session::get('userType');
+     if($User_Type=='RA'){
+         $leads=Lead::select('leads.*')
+             ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+             ->where('leads.minedBy',Auth::user()->id)
+             ->where('possibilitychanges.possibilityId',3)
+             ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+
+     }
+
+    else{
+        $leads=Lead::select('leads.*')
+            ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+            ->where('possibilitychanges.possibilityId',3)
+            ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+
+    }
+
+
+
+     $callReports = Callingreport::get();
+     $possibilities = Possibility::get();
+     $categories=Category::where('type',1)->get();
+
+     return view('layouts.lead.myLead')
+         ->with('leads', $leads)
+         ->with('callReports', $callReports)
+         ->with('possibilities', $possibilities)
+         ->with('categories',$categories);
+
+
+
+ }
+
+
 }

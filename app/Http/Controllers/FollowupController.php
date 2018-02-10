@@ -42,7 +42,15 @@ class FollowupController extends Controller
      */
     public function index()
     {
-        
+//        SELECT * FROM followup WHERE followup.leadId NOT IN (SELECT workprogress.leadId FROM workprogress) and followup.userId=2
+//        $leads=Lead::select('leads.*')
+//        ->leftJoin('followup','leads.leadId','followup.leadId')
+//        ->leftJoin('workprogress','workprogress.leadId','followup.leadId')
+//        ->whereNotIn('followup.leadId','workprogress.leadId')
+//        ->where('followup.userId',Auth::user()->id)->get();
+//
+//
+//        return $leads;
 
         //access for user
         $User_Type=Session::get('userType');
@@ -54,9 +62,9 @@ class FollowupController extends Controller
 
             $callReports=Callingreport::get();
             $categories=Category::where('type',1)->get();
-		 /// return $callReports;
             $possibilities=Possibility::get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);}
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);
+        }
         return Redirect()->route('home');
 
     }

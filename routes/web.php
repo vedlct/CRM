@@ -37,17 +37,15 @@ Auth::routes();
 Route::get('/system','SystemManagementController@index')->name('system');
 
 
-
-
 Route::view('/lead', 'layouts.lead.add');
 
-
-
+Route::post('/numberCheck','LeadController@numberCheck')->name('numberCheck');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::get('/highPossibility', 'HomeController@highPossibility')->name('highPossibility');
 
 
 Route::get('/test', 'TestController@test');

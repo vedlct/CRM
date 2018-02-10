@@ -23,6 +23,7 @@ class Lead extends Model
             ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
             ->where('leadassigneds.assignTo',Auth::user()->id)
             ->where('leadassigneds.leaveDate',null)
+            ->where('leadassigneds.workStatus',0)
             ->get();
 
         return $leads;
@@ -38,6 +39,8 @@ class Lead extends Model
                 })
             ->where('leadAssignStatus',0)
             ->select('leads.*');
+
+
         return $leads;
     }
 
@@ -67,6 +70,7 @@ class Lead extends Model
 
         $leads=Lead::with('mined','category','country','possibility')
             ->where('statusId',1)
+            ->orderBy('leadId','desc')
             ->select('leads.*');
         return $leads;
 

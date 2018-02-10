@@ -20,14 +20,15 @@
                 <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
                     <thead>
                     <tr>
-                        <th>Mined By</th>
-                        <th>Company Name</th>
-                        <th>Category</th>
-                        <th>Website</th>
-                        <th>Number</th>
-                        <th>Country</th>
-                        <th>Set Possibility</th>
-                        <th>Action</th>
+                        <th width="2%">Mined By</th>
+                        <th  width="10%">Company Name</th>
+                        <th  width="5%">Category</th>
+                        <th  width="10%">Website</th>
+                        <th  width="5%">Number</th>
+                        <th  width="5%">Country</th>
+                        <th  width="4%">Possibility</th>
+                        <th  width="5%">Set Possibility</th>
+                        <th  width="4%">Action</th>
 
                     </tr>
                     </thead>
@@ -218,6 +219,7 @@
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
                     // { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                      {data: 'action', name: 'action', orderable: false, searchable: false},
                      {data: 'edit', name: 'edit', orderable: false, searchable: false}

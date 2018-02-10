@@ -102,8 +102,9 @@
 
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Contact Number</b></label>
+                            <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
                             {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
+                            <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                         </div>
 
                         <div class="form-group col-md-5">
@@ -136,9 +137,24 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-md-5">
-                            <label>Contact: &nbsp; </label><input type="checkbox" name="contact">
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Possibility:</b></label>
+                            <select class="form-control" id="" name="possibility">
+                                @foreach($possibilities as $possibility)
+                                    <option value="{{$possibility->possibilityId}}">{{$possibility->possibilityName}}</option>
+
+                                @endforeach
+                            </select>
+
                         </div>
+
+                        <div class="form-group col-md-5">
+                            <br><br>
+                            <label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">
+                        </div>
+
+
+
 
                         <div class="form-group col-md-10">
                             <label class="control-label " ><b>Comments</b></label>
@@ -151,9 +167,6 @@
 
 
                 </textarea>
-
-
-
                         </div>
 
 
@@ -273,6 +286,8 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 
     <script>
 
@@ -294,6 +309,28 @@
 
         }
 
+
+        $('.numbercheck').bind('input propertychange',function(){
+            var number = $('.numbercheck').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('numberCheck')}}',
+                data:{_token: CSRF_TOKEN,'number':number},
+                success : function(data)
+                {
+                    console.log(data);
+                    if(data >0)
+                    {
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
+        });
 
 
         $(function() {

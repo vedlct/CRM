@@ -61,15 +61,24 @@ class LeadController extends Controller
         
             $cats=Category::where('type', 1)->get();
             $countries=Country::get();
+            $possibilities=Possibility::get();
 
             return view('layouts.lead.add')
                 ->with('categories',$cats)
-                ->with('countries',$countries);
+                ->with('countries',$countries)
+                ->with('possibilities',$possibilities);
 
+    }
+
+    public function numberCheck(Request $r){
+        $number=Lead::where('contactNumber',$r->number)->count();
+
+        return Response($number);
     }
 
     public function store(Request $r){
         //Validating The input Filed
+
         $this->validate($r,[
             'companyName' => 'required|max:100',
             'website' => 'required|max:100',
@@ -85,13 +94,14 @@ class LeadController extends Controller
         //Inserting Data To Leads TAble
         $l=new Lead;
         if($r->contact){
-            $l->statusId = 2;
+            $l->statusId = 7;
             $l->contactedUserId=Auth::user()->id;
         }
         else{
             $l->statusId = 1;
         }
 
+        $l->possibilityId=$r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -117,14 +127,11 @@ class LeadController extends Controller
 
     public function assignShow(){
 
-//        return Auth::user()->teamId;
+
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
 
-//            $leads=(new Lead())->showNotAssignedLeads();
-//            $leads=$leads
-//                ->limit(100)
-//                ->get();
+
 
             //getting only first name of users
             if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
@@ -235,9 +242,28 @@ class LeadController extends Controller
 
         $leads=(new Lead())->showNotAssignedLeads();
 
+
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
-                return '<form method="post" action="'.route('addContacted').'">
+                if(Session::get('userType')=='RA'){
+                    return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                           
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    ';
+
+                }
+
+                else{
+                    return '<form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
@@ -254,6 +280,9 @@ class LeadController extends Controller
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     </form>';
+
+                }
+
             })
             ->make(true);
 
@@ -405,6 +434,23 @@ class LeadController extends Controller
             'comment' => 'required|max:300',
 
         ]);
+
+        $workStatus=Leadassigned::where('leadId',$r->leadId)
+                ->where('assignTo',Auth::user()->id)
+                ->where('workStatus',0)
+                ->first();
+
+
+        if($workStatus != null){
+           $leadAssigned=Leadassigned::findOrFail($workStatus->assignId);
+
+           $leadAssigned->workStatus=1;
+           $leadAssigned->save();
+
+        }
+
+
+
         if($r->followup !=null){
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
@@ -522,8 +568,11 @@ class LeadController extends Controller
    public function rejectlist(){
        $User_Type=Session::get('userType');
        if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR') {
+
            $leads=Lead::select('leads.*')
                ->with('category','country','mined')
+               ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+               ->where('workprogress.progress','Reject')
                ->where('minedBy',Auth::user()->id)
                ->where('statusId',5)->get();
 
@@ -583,7 +632,7 @@ class LeadController extends Controller
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
-        $lead->statusId=6;
+        $lead->statusId=7;
         $lead->save();
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
