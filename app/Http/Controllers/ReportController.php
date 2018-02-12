@@ -8,6 +8,8 @@ use Auth;
 use DB;
 use App\Followup;
 use App\Lead;
+use App\Usertarget;
+use App\Possibilitychange;
 use Carbon\Carbon;
 class ReportController extends Controller
 {
@@ -15,19 +17,77 @@ class ReportController extends Controller
 
 
 
+//
+//    //select users.firstName,count(workprogress.userId)
+//    // from users LEFT JOIN workprogress on users.id=workprogress.userId GROUP BY workprogress.userId
+//
+//        $users= User::select('users.*',DB::raw('count(workprogress.userId) as total'))
+//            ->leftJoin('workprogress','users.id','workprogress.userId')
+//            ->where(DB::raw('DATE(workprogress.created_at)'),'2018-01-27')
+//            ->groupBy('workprogress.userId')
+//            ->get();
 
-    //select users.firstName,count(workprogress.userId)
-    // from users LEFT JOIN workprogress on users.id=workprogress.userId GROUP BY workprogress.userId
 
-        $users= User::select('users.*',DB::raw('count(workprogress.userId) as total'))
-            ->leftJoin('workprogress','users.id','workprogress.userId')
-            ->where(DB::raw('DATE(workprogress.created_at)'),'2018-01-27')
-            ->groupBy('workprogress.userId')
+
+//        return view('report.index')->with('users',$users);g
+
+        $date = Carbon::now();
+
+        $mineTarget=Lead::select(DB::raw('users.firstName as user,COUNT(leads.leadId)*100/(usertargets.targetLeadmine*5) as mined'))
+            ->whereBetween('leads.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->leftJoin('usertargets','usertargets.userId','leads.minedBy')
+            ->leftJoin('users','users.id','leads.minedBy')
+            ->groupBy('leads.minedBy')
             ->get();
+//        return $mineTarget;
+
+
+        $callTarget=Workprogress::select(DB::raw('workprogress.userId ,COUNT(workprogress.progressId)*100/(usertargets.targetCall*5) as called'))
+            ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->leftJoin('usertargets','usertargets.userId','workprogress.userId')
+            ->groupBy('workprogress.userId')->get();
+
+//        return $callTarget;
+
+        $highPossibility=Possibilitychange::select(DB::raw('possibilitychanges.userId,COUNT(*)*100/usertargets.targetHighPossibility as highPossibility'))
+            ->where('possibilitychanges.possibilityId',3)
+            ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->leftJoin('usertargets','usertargets.userId','possibilitychanges.userId')
+            ->groupBy('possibilitychanges.userId')->get();
+
+
+       // return $highPossibility;
 
 
 
-        return view('report.index')->with('users',$users);
+        $call = array();
+        $highp = array();
+
+        foreach($callTarget as $c) {
+            if ($c->called == null){
+                array_push($call , 0);
+            }else
+
+            array_push($call , $c->called);
+
+        };
+
+        foreach($highPossibility as $hp) {
+            if ($hp->highPossibility == null){
+                array_push($highp , 0);
+            }else
+
+            array_push($highp , $hp->highPossibility);
+
+        };
+
+        return $highp;
+
+
+
+        return view('report.index')->with('mineTarget',$mineTarget)
+            ->with ('callTarget' , $call)
+            ->with ('highPoss' , $highp);
     }
 
 

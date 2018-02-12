@@ -81,14 +81,14 @@
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Website</b></label>
                             {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="website" placeholder="Enter url" required>
+                            <input type="text" class="form-control" name="website" placeholder="Enter url" >
 
                         </div>
 
                         <div class="form-group col-md-5" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" id="" name="personName" placeholder="name" required>
+                            <input type="text" class="form-control" id="" name="personName" placeholder="name" >
 
                         </div>
 
@@ -110,7 +110,7 @@
                         <div class="form-group col-md-5">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" required>
+                            <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" >
 
                         </div>
 
@@ -130,7 +130,7 @@
 
                             <label for="sel1"><b>Country:</b></label>
                             <select class="select form-control" id="" name="country" style="width: 100%;">
-
+                                <option value="">Select a Country</option>
                                 @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach

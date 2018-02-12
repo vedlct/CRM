@@ -81,14 +81,11 @@ class LeadController extends Controller
 
         $this->validate($r,[
             'companyName' => 'required|max:100',
-            'website' => 'required|max:100',
+            'website' => 'max:100',
             'email' => 'required|max:100',
-            'category' => 'required',
-            'personName' => 'required|max:100',
+            'personName' => 'max:100',
             'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
-            'country' => 'required',
-            'country' => 'required',
-            'designation'=>'required|max:100'
+            'designation'=>'max:100'
         ]);
 
         //Inserting Data To Leads TAble
