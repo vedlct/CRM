@@ -46,6 +46,43 @@
     </div>
 
 
+    {{--ALL Chat/Comments--}}
+    <div class="modal" id="lead_comments" >
+        <div class="modal-dialog" style="max-width: 60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">All Conversation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                    <b>Company Name:</b>
+                    <input type="text" name="companyName" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label class=""><b>Comment : </b></label>
+
+                                <ul class="list-group" style="margin: 10px; "><br>
+                                    <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+                                    </div>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div></div>
+            </div>
+        </div></div>
+
 
 
 
@@ -193,7 +230,7 @@
             <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
+                    <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
 
@@ -337,6 +374,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
+                stateSave: true,
                 Filter: true,
                 type:"POST",
                 "ajax":{
@@ -359,6 +397,27 @@
 
                 ]
             });
+        });
+
+        $('#lead_comments').on('show.bs.modal', function(e) {
+
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getComments')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    console.log(data);
+                    $("#comment").html(data);
+                    $("#comment").scrollTop($("#comment")[0].scrollHeight);
+                }
+            });
+
         });
 
 

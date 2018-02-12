@@ -124,6 +124,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
+                stateSave: true,
                 type:"POST",
                 "ajax":{
                     "url": "{!! route('getAssignLeadData') !!}",

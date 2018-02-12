@@ -50,7 +50,11 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                            ><i class="fa fa-comments"></i></a>';
             })
 
             ->make(true);
@@ -315,14 +319,15 @@ class LeadController extends Controller
 
 
 
-
     public function getComments(Request $r){
         if($r->ajax()){
-            $comments=Workprogress::select(['comments','created_at'])->where('leadId',$r->leadId)->get();
+            $comments=Workprogress::select(['comments','created_at'])
+                ->where('workprogress.leadId',$r->leadId)
+                ->get();
             $text='';
             foreach ($comments as $comment){
 
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> -('.$comment->created_at.')'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> -By ('.$comment->created_at.')'.'</li>';
 
             }
             return Response($text);

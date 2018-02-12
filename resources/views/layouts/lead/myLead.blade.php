@@ -381,7 +381,8 @@
 
         $(document).ready(function() {
             $('#myTable').DataTable({
-                "processing": true
+                "processing": true,
+                stateSave: true,
             });
 
         });
