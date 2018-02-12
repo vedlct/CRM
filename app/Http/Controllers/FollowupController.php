@@ -77,8 +77,8 @@ class FollowupController extends Controller
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->where('followUpDate', date('Y-m-d'))
                 ->where('leads.contactedUserId',Auth::user()->id)
+                ->where('followup.workStatus',0)
                 ->get();
-
 
 
 
@@ -133,7 +133,9 @@ class FollowupController extends Controller
 
         $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
-            ->where('followup.userId',Auth::user()->id)->get();
+            ->where('followup.userId',Auth::user()->id)
+            ->where('followup.workStatus',0)
+            ->get();
 
         $callReports=Callingreport::get();
         /// return $callReports;

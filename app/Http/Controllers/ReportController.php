@@ -31,14 +31,29 @@ class ReportController extends Controller
 
 //        return view('report.index')->with('users',$users);g
 
-        $date = Carbon::now();
+        $users=User::select('id','firstName')->get();
 
-        $mineTarget=Lead::select(DB::raw('users.firstName as user,COUNT(leads.leadId)*100/(usertargets.targetLeadmine*5) as mined'))
+//        return $users;
+
+
+        $date = Carbon::now();
+        $stack =array();
+
+        foreach ($users as $user){
+            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+            array_push($stack, $user->firstName,$leadMinedThisWeek);
+        }
+
+        return $stack;
+
+        $mineTarget=Lead::select(DB::raw('leads.minedBy as user,COUNT(leads.leadId)*100/(usertargets.targetLeadmine*5) as mined'))
             ->whereBetween('leads.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->leftJoin('usertargets','usertargets.userId','leads.minedBy')
             ->leftJoin('users','users.id','leads.minedBy')
             ->groupBy('leads.minedBy')
             ->get();
+
 //        return $mineTarget;
 
 
@@ -60,34 +75,11 @@ class ReportController extends Controller
 
 
 
-        $call = array();
-        $highp = array();
-
-        foreach($callTarget as $c) {
-            if ($c->called == null){
-                array_push($call , 0);
-            }else
-
-            array_push($call , $c->called);
-
-        };
-
-        foreach($highPossibility as $hp) {
-            if ($hp->highPossibility == null){
-                array_push($highp , 0);
-            }else
-
-            array_push($highp , $hp->highPossibility);
-
-        };
-
-        return $highp;
 
 
 
-        return view('report.index')->with('mineTarget',$mineTarget)
-            ->with ('callTarget' , $call)
-            ->with ('highPoss' , $highp);
+
+        return view('report.index')->with('mineTarget',$mineTarget);
     }
 
 
