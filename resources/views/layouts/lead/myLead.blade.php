@@ -149,6 +149,8 @@
                         </div>
                     </form>
                     <br><br>
+
+                    @if(Request::url()!=route('highPossibility'))
                     <form method="post" action="{{route('leaveLead')}}">
                         <div class="row">
                             {{csrf_field()}}
@@ -169,6 +171,7 @@
                         </div>
 
                     </form>
+                        @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
