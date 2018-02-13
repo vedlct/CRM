@@ -13,13 +13,13 @@
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Year', 'Call', 'Lead mine', 'High Possibility'],
+                ['Name', 'Call', 'Lead mine', 'High Possibility'],
 
 
-                {{$cout = 0}}
-                    @foreach($mineTarget as $mine)
-                ['{{$mine->user}}', 0, {{$mine->mined}}, 0],
-                {{$cout ++}}
+
+                    @foreach($report as $r)
+                ['{{$r->userName}}',{{$r->called}}, {{$r->leadMined}}, {{$r->highPosibilities}}],
+
                 @endforeach
                 //                ['2014', 100, 40, 20],
                 //                ['2015', 17, 46, 25],

@@ -412,6 +412,7 @@
                 url : '{{route('getComments')}}',
                 data : {_token: CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
+                    console.log(data);
                     $("#comment").html(data);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
                 }

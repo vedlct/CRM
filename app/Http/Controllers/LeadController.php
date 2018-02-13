@@ -326,13 +326,14 @@ class LeadController extends Controller
 
     public function getComments(Request $r){
         if($r->ajax()){
-            $comments=Workprogress::select(['comments','created_at'])
+            $comments=Workprogress::select(['users.firstName','comments','workprogress.created_at'])
                 ->where('workprogress.leadId',$r->leadId)
+                ->leftJoin('users','users.id','workprogress.userId')
                 ->get();
             $text='';
             foreach ($comments as $comment){
 
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> -By ('.$comment->created_at.')'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
 
             }
             return Response($text);
@@ -444,12 +445,14 @@ class LeadController extends Controller
 
 
         if($r->report==4){
-            $f=Followup::where('leadId',$r->leadId)
-                        ->where('userId',Auth::user()->id)->first();
+            if($r->followup !=null) {
+                $f = Followup::where('leadId', $r->leadId)
+                    ->where('userId', Auth::user()->id)->first();
 
-            $update=Followup::findOrFail($f->followId);
-            $update->workStatus=1;
-            $update->save();
+                $update = Followup::findOrFail($f->followId);
+                $update->workStatus = 1;
+                $update->save();
+            }
 
         }
 

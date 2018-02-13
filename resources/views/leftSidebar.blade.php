@@ -99,11 +99,12 @@
 
                 @endif
 
-
+                @if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li>
                     <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
                         <span class="hide-menu">Report</span></a>
                 </li>
+                @endif
 
                 @if($userType =='SUPERVISOR')
 
