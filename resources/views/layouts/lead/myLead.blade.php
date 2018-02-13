@@ -101,21 +101,23 @@
     <div class="modal" id="edit_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
-            <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
                 </div>
                 <div class="modal-body">
-                    {{csrf_field()}}
-                    <div class="row">
+                    <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
+                        {{csrf_field()}}
 
+                        <div class="row">
 
                             <div class="col-md-12" align="center">
                                 <b > Mined By:   <div class="mined" id="mined"></div></b>
                                 {{--<input type="text" class="form-control" name="minedBy" value="">--}}
 
                             </div>
+
 
                             <div class="col-md-4">
                                 <label>Category:</label>
@@ -158,12 +160,30 @@
 
                         <div class="col-md-6">
                             <button class="btn btn-success" type="submit">Update</button>
+                        </div></div>
+                    </form>
+
+                    <form method="post" action="{{route('leaveLead')}}">
+                        {{csrf_field()}}
+
+                    <input type="hidden" name="leadId">
+
+                        <div class="col-md-4">
+                            <label>Status:</label>
+                            <select class="form-control"  name="Status" id="Status" required>
+                                <option value="">Please Select</option>
+                                @foreach($status as $s)
+                                    <option value="{{$s->statusId}}">{{$s->statusName}}</option>
+                                @endforeach
+
+                            </select>
                         </div>
 
 
                         <div class="col-md-6" style="">
-                            <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</a>
+                            <button class="btn btn-danger"  onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
                         </div>
+                    </form>
 
 
                     </div>
@@ -174,11 +194,11 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div></form>
+                </div></div>
             {{--<button>Leave</button>--}}
         </div>
     </div>
-    </div>
+
 
 
 
@@ -311,9 +331,9 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+            // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
-            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+
 
 
         });

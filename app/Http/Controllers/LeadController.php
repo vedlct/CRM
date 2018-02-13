@@ -20,6 +20,7 @@ use App\Possibilitychange;
 use App\Callingreport;
 use App\Workprogress;
 use App\Followup;
+use App\Leadstatus;
 use DB;
 use DataTables;
 
@@ -303,12 +304,15 @@ class LeadController extends Controller
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
             $categories=Category::where('type',1)->get();
+            $status=Leadstatus::get();
+
 
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
                 ->with('callReports', $callReports)
                 ->with('possibilities', $possibilities)
-                ->with('categories',$categories);
+                ->with('categories',$categories)
+                ->with('status',$status);
         }
 
         return Redirect()->route('home');
@@ -665,10 +669,12 @@ class LeadController extends Controller
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
+            $status=Leadstatus::get();
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
-                ->with('categories',$categories);
+                ->with('categories',$categories)
+                ->with('status',$status);
 
         }
 
@@ -746,9 +752,10 @@ class LeadController extends Controller
 
     }
 
-    public function leaveLead($id){
+    public function leaveLead(Request $r){
+
         $assignId=Leadassigned::select('assignId')
-            ->where('leadId',$id)
+            ->where('leadId',$r->leadId)
             ->where('assignTo',Auth::user()->id)
             ->where('leaveDate',null)
             ->limit(1)->first();
@@ -763,19 +770,22 @@ class LeadController extends Controller
             $l->leadAssignStatus=null;
             $l->save();
 
-//            Session::flash('message', 'You have Leave The Lead successfully');
-//            return back();
+
         }
 
 
-            $lead=Lead::findOrFail($id);
+            $lead=Lead::findOrFail($r->leadId);
+            $lead->statusId=$r->Status;
             if($lead->contactedUserId == Auth::user()->id){
                 $lead->contactedUserId =null;
-                $lead->statusId=2;
                 $lead->save();
                 Session::flash('message', 'You have Leave The Lead successfully');
                 return back();
             }
+
+            $lead->save();
+            Session::flash('message', 'You have Leave The Lead successfully');
+            return back();
 
 
 

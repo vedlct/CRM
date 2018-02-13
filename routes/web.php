@@ -122,7 +122,8 @@ Route::post('lead/comments','LeadController@getComments')->name('getComments');
 
 
 //Leave Lead
-Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+//Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+Route::post('lead/leave','LeadController@leaveLead')->name('leaveLead');
 
 
 //testList
