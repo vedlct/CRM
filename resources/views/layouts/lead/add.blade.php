@@ -133,7 +133,7 @@
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b> Email:</b></label>
                             {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
 
                         </div>
 
@@ -167,7 +167,6 @@
 
                             <label for="sel1"><b>Country:</b></label>
                             <select class="select form-control" id="" name="country" style="width: 100%;">
-                                <option value="">Select a Country</option>
                                 @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach

@@ -87,7 +87,7 @@ class LeadController extends Controller
         $this->validate($r,[
             'companyName' => 'required|max:100',
             'website' => 'max:100',
-            'email' => 'required|max:100',
+            'email' => 'max:100',
             'personName' => 'max:100',
             'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
             'designation'=>'max:100'
