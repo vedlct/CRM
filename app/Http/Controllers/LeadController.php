@@ -304,7 +304,8 @@ class LeadController extends Controller
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
             $categories=Category::where('type',1)->get();
-            $status=Leadstatus::get();
+            $status=Leadstatus::where('statusId','!=',7)
+                    ->get();
 
 
             return view('layouts.lead.myLead')
@@ -669,7 +670,8 @@ class LeadController extends Controller
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
-            $status=Leadstatus::get();
+            $status=Leadstatus::where('statusId','!=',7)
+                ->get();
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
