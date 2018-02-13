@@ -772,7 +772,7 @@ class LeadController extends Controller
             $leave->save();
 
             $l=Lead::findOrFail($leave->leadId);
-            $l->leadAssignStatus=null;
+            $l->leadAssignStatus=0;
             $l->save();
 
 
