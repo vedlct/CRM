@@ -46,6 +46,7 @@ class HomeController extends Controller
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+
         $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
             ->where('possibilityId',3)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();

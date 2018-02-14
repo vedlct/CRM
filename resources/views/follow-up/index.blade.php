@@ -10,14 +10,17 @@
 			  <div class="card-body">
 				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
 
-                  <form method="POST" action="{{ route('follow-up.search') }}">
-                      {{ csrf_field() }}
-                      @component('layouts.search', ['title' => 'Search'])
-                          @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
-                          'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
-                          @endcomponent
-                      @endcomponent
-                  </form>
+                  {{--<form method="GET" action="{{ route('follow-up.search') }}">--}}
+                      {{--{{ csrf_field() }}--}}
+                      {{--@component('layouts.search', ['title' => 'Search'])--}}
+                          {{--@component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],--}}
+                          {{--'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])--}}
+                          {{--@endcomponent--}}
+                      {{--@endcomponent--}}
+					  <input id="fromdate" name="fromDate" placeholder="from">
+					  <input id="todate" name="toDate" placeholder="to">
+					  <button onclick="search()">Search</button>
+                  {{--</form>--}}
 
 
 				  <div class="table-responsive m-t-40">
@@ -54,7 +57,8 @@
 									  <!-- Trigger the modal with a button -->
 									  <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
 										 data-lead-id="{{$lead->leadId}}"
-										 data-lead-possibility="{{$lead->possibilityId}}">
+										 data-lead-possibility="{{$lead->possibilityId}}"
+										 data-follow-id="{{$lead->followId}}">
 										  <i class="fa fa-phone" aria-hidden="true"></i></a>
 
 									  <!-- Trigger the Edit modal with a button -->
@@ -176,7 +180,7 @@
 		  <div class="modal" id="my_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
 
-				  <form class="modal-content" action="{{route('storeReport')}}" method="post">
+				  <form class="modal-content" action="{{route('storeFollowupReport')}}" method="post">
 					  <div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 						  <h4 class="modal-title" name="modal-title">Calling Report</h4>
@@ -184,6 +188,7 @@
 					  <div class="modal-body" style="padding: 20px;">
 						  {{csrf_field()}}
 						  <input type="hidden" name="leadId">
+						  <input type="hidden" name="followId">
 
 						  <div class="row">
 							  <div class="col-md-6">
@@ -272,6 +277,22 @@
 
 	<script>
 
+		//search with date
+
+		function search() {
+		    var fromdate=document.getElementById('fromdate').value;
+		    var todate=document.getElementById('todate').value;
+
+		    if(fromdate !='' || todate !=''){
+
+                window.location.href = '/follow-up/search/'+fromdate+'/'+todate;
+			}
+
+
+        }
+
+
+
         //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function(e) {
@@ -341,10 +362,14 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var followup=$(e.relatedTarget).data('follow-id');
+
+
 
 
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+            $(e.currentTarget).find('input[name="followId"]').val(followup);
 
 
 

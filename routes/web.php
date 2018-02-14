@@ -64,7 +64,11 @@ Route::post('user-management/setTarget','UserManagementController@setTarget')->n
 
 //Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 Route::post('checkfollowup','FollowupController@followupCheck')->name('followupCheck');
-Route::resource('follow-up', 'FollowupController');
+Route::post('storeFollowupReport','FollowupController@storeFollowupReport')->name('storeFollowupReport');
+Route::get('follow-up','FollowupController@index')->name('follow-up.index');
+Route::get('follow-up/search/{fromdate}/{todate}', 'FollowupController@search')->name('follow-up.search');
+
+//Route::resource('follow-up', 'FollowupController');
 
 
 Route::resource('system-management/country', 'CountryController');
@@ -90,7 +94,6 @@ Route::post('showchart', 'HighChartsController@search')->name('showchart.search'
 //Route::view('/user-management', 'user-management.index');
 
 //Search bettween dates
-Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 
 //Lead

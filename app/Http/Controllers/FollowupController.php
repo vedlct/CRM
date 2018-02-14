@@ -17,6 +17,7 @@ use App\Category;
 use App\Workprogress;
 use App\Leadstatus;
 use Carbon\Carbon;
+use Redirect;
 
 
 
@@ -59,6 +60,8 @@ class FollowupController extends Controller
 
 
 
+
+
             $callReports=Callingreport::get();
             $categories=Category::where('type',1)->get();
             $possibilities=Possibility::get();
@@ -73,52 +76,110 @@ class FollowupController extends Controller
 
     public function followupCheck(Request $r){
         $followup=Followup::where('userId',Auth::user()->id)
-                ->where('followUpDate',$r->currentdate)->count();
-
+                ->where('followUpDate',$r->currentdate)
+                ->where('workStatus',0)->count();
 
         return $followup;
+        }
 
-    }
+//    public function show(){
+//
+//        $User_Type=Session::get('userType');
+//        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
+//            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+//                ->where('followUpDate', date('Y-m-d'))
+//                ->where('leads.contactedUserId',Auth::user()->id)
+//                ->where('followup.workStatus',0)
+//                ->get();
+//
+//
+//            $callReports=Callingreport::get();
+//            /// return $callReports;
+//            $possibilities=Possibility::get();
+//            $categories=Category::where('type',1)->get();
+//            $status=Leadstatus::where('statusId','!=',7)
+//                ->get();
+//            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
+//                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);}
+//        return Redirect()->route('home');
+//
+//    }
 
-    public function show(){
 
-        $User_Type=Session::get('userType');
-        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
-            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-                ->where('followUpDate', date('Y-m-d'))
-                ->where('followup.userId',Auth::user()->id)->get();
-
-            $callReports=Callingreport::get();
-            /// return $callReports;
-            $possibilities=Possibility::get();
-            $categories=Category::where('type',1)->get();
-            $status=Leadstatus::where('statusId','!=',7)
-                ->get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);}
-        return Redirect()->route('home');
-
-    }
+//    public function destroy($id){
+//        $lead=Lead::findOrFail($id);
+//        $lead->delete();
+//        Session::flash('message', 'Lead deleted successfully');
+//        return back();
+//    }
 
 
-    public function destroy($id){
-        $lead=Lead::findOrFail($id);
-        $lead->delete();
-        Session::flash('message', 'Lead deleted successfully');
+
+    public function storeFollowupReport(Request $r){
+
+
+
+
+        if($r->followup !=null) {
+
+            $update = Followup::findOrFail($r->followId);
+            $update->workStatus = 1;
+            $update->save();
+
+            $followUp=New Followup;
+            $followUp->leadId=$r->leadId;
+            $followUp->userId=Auth::user()->id;
+            $followUp->followUpDate=$r->followup;
+            $followUp->save();
+        }
+
+        //posssibility Change
+        $lead=Lead::findOrFail($r->leadId);
+        $currentPossibility=$lead->possibilityId;
+        $lead->possibilityId=$r->possibility;
+        $lead->save();
+
+        if($currentPossibility !=$r->possibility){
+            $log=new Possibilitychange;
+            $log->leadId=$r->leadId;
+            $log->possibilityId=$r->possibility;
+            $log->userId=Auth::user()->id;
+            $log->save();
+        }
+
+        $progress=New Workprogress;
+        $progress->callingReport=$r->report;
+//            $progress->response=$r->response;
+        $progress->leadId=$r->leadId;
+        $progress->progress=$r->progress;
+        $progress->userId=Auth::user()->id;
+        $progress->comments=$r->comment;
+        $progress->save();
+
+
+
+
+        Session::flash('message', 'Report Updated Successfully');
+
+//        return 'done';
+
         return back();
+
+
+
+
     }
 
 
-
-    public function search(Request $request) {
-
+    public function search($fromdate , $todate) {
 
 
-        $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-            ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
+       $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+            ->whereBetween('followUpDate', [$fromdate, $todate])
             ->where('followup.userId',Auth::user()->id)
             ->where('followup.workStatus',0)
             ->get();
+
 
         $callReports=Callingreport::get();
         /// return $callReports;
@@ -127,7 +188,7 @@ class FollowupController extends Controller
         $status=Leadstatus::where('statusId','!=',7)
             ->get();
 
-        Session::flash('message', 'From '.$request->fromdate.' To '.$request->todate.'');
+        Session::flash('message', 'From '.$fromdate.' To '.$todate.'');
 
         return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
             'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);
