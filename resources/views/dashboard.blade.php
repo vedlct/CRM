@@ -181,7 +181,6 @@
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
 
                     axisY: {
-
                         maximum: 100,
                     },
                     data: [{

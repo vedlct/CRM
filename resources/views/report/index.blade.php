@@ -1,63 +1,86 @@
 
 @extends('main')
+@section('header')
+    <style>
+        .canvasjs-chart-credit
+        {
+            display: none;
+        }
 
+    </style>
+
+@endsection
 
 @section('content')
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-    {{--<script type="text/javascript" src={{url('js/googlechart.js')}}></script>--}}
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['bar']});
-        google.charts.setOnLoadCallback(drawChart);
+    <div align="center" style="padding-top:50px;" >
+        <div id="chartContainer" style="height: 600px; width:100%;"></div>
 
 
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Name', 'Call', 'Lead mine', 'High Possibility'],
-
-
-
-                    @foreach($report as $r)
-                ['{{$r->userName}}',{{$r->called}}, {{$r->leadMined}}, {{$r->highPosibilities}}],
-
-                @endforeach
-                //                ['2014', 100, 40, 20],
-                //                ['2015', 17, 46, 25],
-                //                ['2016', 66, 90, 30],
-                //                ['2017', 100, 50, 30]
-            ]);
-
-            var options = {
-                chart: {
-                    title: 'Employees Performence',
-                    subtitle: 'This week',
-                },
-
-                vAxis: {
-                    viewWindowMode:'explicit',
-                    viewWindow: {
-                        max:100,
-                        min:0
-
-                    },
-
-                }
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
-    </script>
-    <div class="box-body">
-        <div class="card" style="padding: 0px;">
-            <div class="card-body">
-              <div id="columnchart_material" style="width: 100%; height: 600px;  "></div>
-            </div>
-        </div>
     </div>
 
 @endsection
+
+@section('foot-js')
+
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    {{--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>--}}
+    <script src="{{url('js/chart.js')}}"></script>
+
+
+
+    <script>
+        window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+
+                title:{
+                    text:"Report Of Employee"
+                },
+                axisX:{
+                    interval: 1,
+
+                },
+
+                axisY2:{
+                    title: "C-call ,M-lead mined ,P- high possibility",
+                    maximum: 100,
+                },
+                data: [{
+                    type: "bar",
+                    name: "companies",
+                    axisYType: "secondary",
+
+                    dataPoints: [
+                            @foreach($report as $r)
+                        { label: "{{$r->userName}}",y:{{($r->called+$r->leadMined+$r->highPosibilities)/3}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+
+
+                            @endforeach
+//                        { y: 3, label: "Sweden" },
+//                        { y: 7, label: "Taiwan" },
+//                        { y: 5, label: "Russia" },
+//                        { y: 9, label: "Spain" },
+//                        { y: 7, label: "Brazil" },
+//                        { y: 7, label: "India" },
+//                        { y: 9, label: "Italy" },
+//                        { y: 8, label: "Australia" },
+//                        { y: 134, label: "US",indexLabel:"Lead 40% , Call 50% , Possibility 100%" }
+                    ]
+                }]
+            });
+            chart.render();
+
+        }
+    </script>
+
+
+
+    @endsection
+
+
+
+
 
 
 

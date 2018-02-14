@@ -464,12 +464,10 @@ class LeadController extends Controller
                 ->first();
 
 
-        if($workStatus != null){
-           $leadAssigned=Leadassigned::findOrFail($workStatus->assignId);
-
-           $leadAssigned->workStatus=1;
-           $leadAssigned->save();
-
+        if($workStatus != 0){
+            $leadAssigned=Leadassigned::findOrFail($workStatus->assignId);
+            $leadAssigned->workStatus=1;
+            $leadAssigned->save();
         }
 
 

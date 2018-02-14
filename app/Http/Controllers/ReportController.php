@@ -23,11 +23,14 @@ class ReportController extends Controller
 
             if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName')
+                    ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
             else{
-                $users=User::select('id','firstName')->get();
+                $users=User::select('id','firstName')
+                    ->where('typeId','!=',1)
+                    ->get();
             }
 
 
