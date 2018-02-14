@@ -30,12 +30,19 @@
 
     <script>
         window.onload = function () {
+            function compareDataPointYAscend(dataPoint1, dataPoint2) {
+                return dataPoint1.y - dataPoint2.y;
+            }
+
+            function compareDataPointYDescend(dataPoint1, dataPoint2) {
+                return dataPoint2.y - dataPoint1.y;
+            }
 
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
 
                 title:{
-                    text:"Report Of Employee"
+                    text:"Weekly Report Of Employee"
                 },
                 axisX:{
                     interval: 1,
@@ -69,6 +76,7 @@
                     ]
                 }]
             });
+            chart.options.data[0].dataPoints.sort(compareDataPointYAscend);
             chart.render();
 
         }
