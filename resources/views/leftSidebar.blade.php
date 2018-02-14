@@ -51,7 +51,7 @@
 
                 </li>
 
-                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN')
 
                 <li>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
@@ -78,7 +78,7 @@
                 @endif
 
 
-                @if($userType =='RA' || $userType =='MANAGER')
+                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                 <li>
                     <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                 </li>
@@ -128,12 +128,12 @@
 
 
 
-                @if($userType =='RA' )
+                {{--@if($userType =='RA' )--}}
                 <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">New Lead</span></a>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
                 </li>
-                @endif
+                {{--@endif--}}
 
                 @if($userType=='MANAGER')
                 <li>
@@ -144,7 +144,7 @@
 
 
 
-                @if($userType=='ADMIN')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>

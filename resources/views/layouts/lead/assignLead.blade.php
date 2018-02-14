@@ -29,8 +29,8 @@
                         <th>Website</th>
                         <th>Email</th>
                         <th>Country</th>
-                        <th>Comments</th>
-                        <th>Created At</th>
+                        <th>Category</th>
+                        <th>Possibility</th>
 
 
                     </tr>
@@ -138,8 +138,8 @@
                     { data: 'website', name: 'leads.website' },
                     { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'comments', name: 'leads.comments' },
-                    { data: 'created_at', name: 'leads.created_at' },
+                    { data: 'category.categoryName', name: 'category.categoryName' },
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
 
 
                 ]

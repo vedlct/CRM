@@ -61,6 +61,11 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
+//Set Target
+Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
+
+//Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
+Route::post('checkfollowup','FollowupController@followupCheck')->name('followupCheck');
 Route::resource('follow-up', 'FollowupController');
 
 
@@ -93,6 +98,8 @@ Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.se
 //Lead
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
+
+Route::post('lead/all','LeadController@allLeads')->name('allLeads');
 
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table

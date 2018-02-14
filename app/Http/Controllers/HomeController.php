@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Khill\Lavacharts\Lavacharts;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Carbon\Carbon;
 use Auth;
 use Session;
@@ -9,6 +10,8 @@ use App\Workprogress;
 use App\Followup;
 use App\Lead;
 use App\User;
+use App\Possibilitychange;
+use App\Usertarget;
 class HomeController extends Controller
 {
     /**
@@ -27,33 +30,121 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // return view('home');
+
         $date = Carbon::now();
-        $totalFollowUp=Followup::where('userId',Auth::user()->id)
-            ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-        $totalFollowUpCalled=Workprogress::where('userId',Auth::user()->id)
-            ->where('callingReport',4)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+//        $totalFollowUp=Followup::where('userId',Auth::user()->id)
+//            ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+//        $totalFollowUpCalled=Workprogress::where('userId',Auth::user()->id)
+//            ->where('callingReport',4)
+//            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
-            ->where('created_at',date('Y-m-d',strtotime("-1 days")))->count();
-        $leadMined=Lead::where('minedBy',Auth::user()->id)
+
+
+
+
+        $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-        $User_Type=Session::get('userType');
-        $teamMembers=User::select('id','firstName','lastName','typeId')
-            ->where('teamId',Auth::user()->teamId)
-            ->where('teamId','!=',null)
-            ->get();
+
+        $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
+            ->where('possibilityId',3)
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+
+
+        $lastDate=Carbon::now()->subDay()->format('Y-m-d');
+
+
+
+        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+            ->whereDate('created_at',$lastDate)->count();
+
+        $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
+            ->whereDate('created_at',$lastDate)->count();
+
+        $highPosibilities=Possibilitychange::where('userId',Auth::user()->id)
+            ->where('possibilityId',3)
+            ->whereDate('created_at',$lastDate)->count();
+
+
+        try{
+            $target=Usertarget::findOrFail(Auth::user()->id);
+        }
+        catch (ModelNotFoundException $ex) {
+
+            $target=new Usertarget;
+            $target->userId=Auth::user()->id;
+            $target->targetCall=0;
+            $target->targetHighPossibility=0;
+            $target->targetLeadmine=0;
+            $target->save();
+
+
+        }
+
+
+
+        $countWeek=0;
+
+        //Weekly Report
+        if($target->targetCall>0){
+            $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+            $countWeek++;
+        }
+
+        if($target->targetLeadmine>0){
+            $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+            $countWeek++;
+        }
+
+        if($target->targetHighPossibility>0){
+            $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+            $countWeek++;
+        }
+
+
+
+
+
+
+
+
+
+
+
+//
+//        if($User_Type=='MANAGER') {
+//            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
+//                ->where('teamId', Auth::user()->teamId)
+//                ->where('teamId', '!=', null)
+//                ->get();
+//        }
+//        else if($User_Type=='ADMIN' || $User_Type =='SUPERVISOR'){
+//            $teamMembers = User::select('id', 'firstName', 'lastName', 'typeId')
+////                ->where('teamId', Auth::user()->teamId)
+////                ->where('teamId', '!=', null)
+//                ->get();
+//
+//        }
+//        else{
+//            $teamMembers=0;
+//        }
+
 
         //Graph Access for Manager /SuperVisor / Admin
 
         return view('dashboard')
-            ->with('calledThisWeek',$calledThisWeek)
-            ->with('totalFollowUp',$totalFollowUp)
-            ->with('totalFollowUpCalled',$totalFollowUpCalled)
+            ->with('target',$target)
+            ->with('lastDayLeadMined',$lastDayLeadMined)
+            ->with('highPosibilities',$highPosibilities)
             ->with('lastDayCalled',$lastDayCalled)
-            ->with('leadMined',$leadMined)
-            ->with('teamMembers',$teamMembers);
+            ->with('calledThisWeek', $calledThisWeek)
+            ->with('leadMinedThisWeek',$leadMinedThisWeek)
+            ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
+            ->with('countWeek',$countWeek);
+
+//            ->with('teamMembers',$teamMembers);
     }
 }

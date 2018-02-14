@@ -32,18 +32,46 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function allLeads(Request $r){
+        $leads=Lead::with('country','category','mined','status','contact','possibility')
+                    ->orderBy('leadId','desc');
+
+
+
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) {
+                return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            })
+
+            ->make(true);
+
+    }
+
     public function add(){
-        //for RA
+
+
         $User_Type=Session::get('userType');
-        if($User_Type=='RA'){
+//        if($User_Type=='RA')
+//        {
 
             $cats=Category::where('type', 1)->get();
             $countries=Country::get();
 
             return view('layouts.lead.add')
-                ->with('cats',$cats)
-                ->with('countries',$countries);}
-        return Redirect()->route('home');
+                ->with('categories',$cats)
+                ->with('countries',$countries);
+//        }
+//        return Redirect()->route('home');
     }
 
     public function store(Request $r){
@@ -62,7 +90,14 @@ class LeadController extends Controller
 
         //Inserting Data To Leads TAble
         $l=new Lead;
-        $l->statusId = 1;
+        if($r->contact){
+            $l->statusId = 2;
+            $l->contactedUserId=Auth::user()->id;
+        }
+        else{
+            $l->statusId = 1;
+        }
+
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -81,7 +116,7 @@ class LeadController extends Controller
 
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
-        return redirect()->route('addLead');
+        return back();
 
     }
 
@@ -90,7 +125,7 @@ class LeadController extends Controller
 
 //        return Auth::user()->teamId;
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
 
 //            $leads=(new Lead())->showNotAssignedLeads();
 //            $leads=$leads
@@ -98,19 +133,19 @@ class LeadController extends Controller
 //                ->get();
 
             //getting only first name of users
-            if($User_Type == 'RA'){
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
-                    ->Where('typeId',5)
+                    ->where('typeId',5)
+                    ->orWhere('typeId',2)
+                    ->orWhere('typeId',3)
                     ->get();
             }
 
             else{
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
-                    ->where('typeId',5)
-                    ->orWhere('typeId',2)
-                    ->orWhere('typeId',3)
+                    ->where('teamId','!=',null)
                     ->get();
             }
 
@@ -281,7 +316,7 @@ class LeadController extends Controller
 
         //For Ra
         $User_Type=Session::get('userType');
-        if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
+        if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR' || $User_Type=='ADMIN'){
             $categories=Category::where('type',1)->get();
             $countries=Country::get();
 
@@ -462,7 +497,7 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
                 ->where('workprogress.progress','Test Job')
-                ->with('category','country')
+                ->with('category','country','mined')
 //            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
 //            ->where('leadassigneds.assignTo',Auth::user()->id)
 //            ->where('leadassigneds.leaveDate',null)
@@ -470,14 +505,15 @@ class LeadController extends Controller
                 ->distinct('workprogress.leadId')
                 ->get();
 
-
+            $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
 
             return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
 
         return Redirect()->route('home');
 
@@ -497,14 +533,15 @@ class LeadController extends Controller
                 ->distinct('workprogress.leadId')
                 ->get();
 
-
+            $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
 
             return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
 
         return Redirect()->route('home');
 
@@ -520,17 +557,27 @@ class LeadController extends Controller
             $leads=Lead::select('leads.*')
                 ->where('possibilityId',4)
                 ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-                ->where('leadassigneds.assignTo',Auth::user()->id)
-                ->where('leadassigneds.leaveDate',null)
+                ->where(function($q){
+                    $q->where('leadassigneds.assignTo',Auth::user()->id)
+                        ->where('leadassigneds.leaveDate',null)
+                        ->orWhere('contactedUserId',Auth::user()->id);
+
+                })
+//                ->where('leadassigneds.assignTo',Auth::user()->id)
+//                ->where('leadassigneds.leaveDate',null)
+
                 ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
+            $categories=Category::where('type',1)->get();
 
-            return view('layouts.lead.starLead')
+
+            return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities);}
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
         return Redirect()->route('home');
 
     }
@@ -540,7 +587,7 @@ class LeadController extends Controller
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
-        $lead->statusId=7;
+        $lead->statusId=6;
         $lead->save();
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
@@ -557,7 +604,9 @@ class LeadController extends Controller
 
 
             $leads=Lead::with('category','country')
-                ->where('contactedUserId',Auth::user()->id)->get();
+                ->where('contactedUserId',Auth::user()->id)
+                ->orderBy('leadId','desc')
+                ->get();
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             return view('layouts.lead.myLead')

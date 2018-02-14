@@ -58,6 +58,14 @@ class FollowupController extends Controller
 
     }
 
+    public function followupCheck(Request $r){
+        $followup=Followup::where('userId',Auth::user()->id)
+                ->where('followUpDate',$r->currentdate)->count();
+
+
+        return $followup;
+
+    }
 
     public function show(){
 
@@ -70,7 +78,8 @@ class FollowupController extends Controller
             $callReports=Callingreport::get();
             /// return $callReports;
             $possibilities=Possibility::get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);}
+            $categories=Category::where('type',1)->get();
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);}
         return Redirect()->route('home');
 
     }
@@ -87,20 +96,7 @@ class FollowupController extends Controller
 
     public function search(Request $request) {
 
-//        $followups = DB::table('followup')
-//            ->leftJoin('leads', 'followup.leadId', '=', 'leads.leadId')
-//            ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
-//            ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
-//            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-//            ->leftJoin('users', 'users.id', '=', 'leads.minedBy')
-//            ->where('followup.userId',Auth::user()->id)
-//            ->whereBetween('followup.followUpDate', [$request->fromdate, $request->todate])
-//            ->select('followup.*', 'users.*', 'leads.*', 'countries.*', 'categories.*')
-//            ->get();
 
-
-//        $followups= Followup::where('userId',Auth::user()->id)
-//                ->whereBetween('followUpDate', [$request->fromdate, $request->todate])->get();
 
         $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
@@ -108,10 +104,11 @@ class FollowupController extends Controller
 
         $callReports=Callingreport::get();
         /// return $callReports;
+        $categories=Category::where('type',1)->get();
         $possibilities=Possibility::get();
 
         Session::flash('message', 'From '.$request->fromdate.' To '.$request->todate.'');
 
-        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities]);
+        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);
     }
 }
