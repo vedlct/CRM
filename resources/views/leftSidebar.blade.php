@@ -100,10 +100,26 @@
                 @endif
 
                 @if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-                <li>
-                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                        <span class="hide-menu">Report</span></a>
-                </li>
+
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Report</span>
+                            <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                                    <span class="hide-menu">Graph</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('reportTable')}}"><i class="fa fa-ban" aria-hidden="true"></i>
+                                    <span class="hide-menu">Value</span></a>
+
+                            </li>
+
+                        </ul>
+                    </li>
                 @endif
 
                 @if($userType =='SUPERVISOR')

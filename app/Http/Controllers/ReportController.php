@@ -99,6 +99,16 @@ class ReportController extends Controller
 
     }
 
+    public function reportTable(){
+
+
+
+
+
+        return view('report.table');
+
+
+    }
 
     public function individualCall($id){
         $report=Workprogress::where('userId',$id)->count();
