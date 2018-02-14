@@ -1,7 +1,7 @@
-@extends('main')
+<html>
 
+<body>
 
-@section('content')
 
     <div class="card" style="padding: 10px;">
         <div class="card-body">
@@ -68,7 +68,7 @@
     <!-- Edit Modal -->
 
     <div class="modal" id="edit_modal" style="">
-        <div class="modal-dialog" style="max-width: 30%;">
+        <div class="modal-dialog" style="max-width: 80%;">
 
             <form class="modal-content" method="post" action="{{route('teamUpdate')}}">
                 <div class="modal-header">
@@ -110,9 +110,26 @@
 
 
 
-@endsection
+</body>
 
-@section('foot-js')
+
+
+
+    <script src="{{url('assets/plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{url('assets/plugins/bootstrap/js/popper.min.js')}}"></script>
+    <script src="{{url('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{url('js/jquery.slimscroll.js')}}"></script>
+    <!--Wave Effects -->
+    {{--<script src="{{url('js/waves.js')}}"></script>--}}
+    <!--Menu sidebar -->
+    <script src="{{url('js/sidebarmenu.js')}}"></script>
+    <!--stickey kit -->
+    <script src="{{url('assets/plugins/sticky-kit-master/dist/sticky-kit.min.js')}}"></script>
+    <!--Custom JavaScript -->
+
+
+
+
 <script>
     
     $('#edit_modal').on('show.bs.modal', function(e) {
@@ -120,6 +137,8 @@
         //get data-id attribute of the clicked element
         var teamId = $(e.relatedTarget).data('team-id');
         var teamName = $(e.relatedTarget).data('team-name');
+
+
         
 
 
@@ -129,9 +148,10 @@
         
 
     });
-    
+
+
+
     
 </script>
 
-    
-@endsection    
+</html>

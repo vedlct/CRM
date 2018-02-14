@@ -3,7 +3,7 @@
 @extends('main')
 
 @section('header')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
     @endsection
 @section('content')
 
@@ -91,7 +91,7 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="{{url('js/jconfirm.js')}}"></script>
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -124,6 +124,7 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
+                stateSave: true,
                 type:"POST",
                 "ajax":{
                     "url": "{!! route('getAssignLeadData') !!}",

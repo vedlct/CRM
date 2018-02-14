@@ -37,17 +37,15 @@ Auth::routes();
 Route::get('/system','SystemManagementController@index')->name('system');
 
 
-
-
 Route::view('/lead', 'layouts.lead.add');
 
-
-
+Route::post('/numberCheck','LeadController@numberCheck')->name('numberCheck');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::get('/highPossibility', 'HomeController@highPossibility')->name('highPossibility');
 
 
 Route::get('/test', 'TestController@test');
@@ -112,7 +110,7 @@ Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData
 
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
 
-Route::post('lead/temp','LeadController@tempData')->name('tempData');
+Route::post('lead/tempdata','LeadController@tempData')->name('tempData');
 
 Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 
@@ -128,12 +126,14 @@ Route::post('lead/comments','LeadController@getComments')->name('getComments');
 
 
 //Leave Lead
-Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+//Route::get('lead/leave/{id}','LeadController@leaveLead')->name('leaveLead');
+Route::post('lead/leave','LeadController@leaveLead')->name('leaveLead');
 
 
 //testList
 Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
 Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
+Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
 
 
 
@@ -146,12 +146,13 @@ Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 //Contacted Lead
 Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
+Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
 
 //Reject Leads rejectedLeads
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');
 Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 
-Route::get('/lead/reject/{id}','LeadController@rejectStore');
+Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
 
 //My Team
@@ -186,6 +187,8 @@ Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');
+
+Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 
 
 

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Test;
 use Illuminate\Http\Request;
 use DataTables;
 use App\Lead;
 use App\Possibility;
+use DB;
 class TestController extends Controller
 {
 //    protected $pAfter = '';
@@ -19,12 +21,30 @@ class TestController extends Controller
     }
 
     public function test(){
-//        $leads = Lead::with('category','mined')
-//            ->where('statusId',5)->get();
+       // $leads = Lead::get();
+////
+////        return $leads;
 //
-//        return $leads;
+//        return view('test');
 
-        return view('test');
+
+// Execute the query
+
+//        $leads=Lead::with('mined','category','country','possibility')
+//            ->where('statusId',2)
+//            ->where(function($q){
+//                $q->orWhere('contactedUserId',0)
+//                    ->orWhere('contactedUserId',null);
+//            })
+//            ->where('leadAssignStatus',0)
+//            ->select('leads.*')->get();
+       $time=(new Test())->test();
+        return $time;
+
+
+
+        //return $leads;
+       // return DB::getQueryLog();
     }
     public function anyData(Request $r)
     {

@@ -46,6 +46,43 @@
     </div>
 
 
+    {{--ALL Chat/Comments--}}
+    <div class="modal" id="lead_comments" >
+        <div class="modal-dialog" style="max-width: 60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">All Conversation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                    <b>Company Name:</b>
+                    <input type="text" name="companyName" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label class=""><b>Comment : </b></label>
+
+                                <ul class="list-group" style="margin: 10px; "><br>
+                                    <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+                                    </div>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div></div>
+            </div>
+        </div></div>
+
 
 
 
@@ -81,14 +118,14 @@
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Website</b></label>
                             {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="website" placeholder="Enter url" required>
+                            <input type="text" class="form-control" name="website" placeholder="Enter url" >
 
                         </div>
 
                         <div class="form-group col-md-5" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" id="" name="personName" placeholder="name" required>
+                            <input type="text" class="form-control" id="" name="personName" placeholder="name" >
 
                         </div>
 
@@ -96,20 +133,21 @@
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b> Email:</b></label>
                             {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" required>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
 
                         </div>
 
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Contact Number</b></label>
+                            <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
                             {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
+                            <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                         </div>
 
                         <div class="form-group col-md-5">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" required>
+                            <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" >
 
                         </div>
 
@@ -126,6 +164,7 @@
                         </div>
 
                         <div class="form-group col-md-5">
+
                             <label for="sel1"><b>Country:</b></label>
                             <select class="select form-control" id="" name="country" style="width: 100%;">
                                 @foreach($countries as $c)
@@ -134,9 +173,24 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-md-5">
-                            <label>Contact: &nbsp; </label><input type="checkbox" name="contact">
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Possibility:</b></label>
+                            <select class="form-control" id="" name="possibility">
+                                @foreach($possibilities as $possibility)
+                                    <option value="{{$possibility->possibilityId}}">{{$possibility->possibilityName}}</option>
+
+                                @endforeach
+                            </select>
+
                         </div>
+
+                        <div class="form-group col-md-5">
+                            <br><br>
+                            <label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">
+                        </div>
+
+
+
 
                         <div class="form-group col-md-10">
                             <label class="control-label " ><b>Comments</b></label>
@@ -149,9 +203,6 @@
 
 
                 </textarea>
-
-
-
                         </div>
 
 
@@ -178,7 +229,7 @@
             <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
+                    <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
 
@@ -271,6 +322,8 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 
     <script>
 
@@ -293,11 +346,34 @@
         }
 
 
+        $('.numbercheck').bind('input propertychange',function(){
+            var number = $('.numbercheck').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('numberCheck')}}',
+                data:{_token: CSRF_TOKEN,'number':number},
+                success : function(data)
+                {
+
+                    if(data >0)
+                    {
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
+        });
+
 
         $(function() {
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
+                stateSave: true,
                 Filter: true,
                 type:"POST",
                 "ajax":{
@@ -320,6 +396,27 @@
 
                 ]
             });
+        });
+
+        $('#lead_comments').on('show.bs.modal', function(e) {
+
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getComments')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    console.log(data);
+                    $("#comment").html(data);
+                    $("#comment").scrollTop($("#comment")[0].scrollHeight);
+                }
+            });
+
         });
 
 
@@ -345,7 +442,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+//            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
         });
 

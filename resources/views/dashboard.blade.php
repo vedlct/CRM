@@ -67,7 +67,7 @@
             <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">High Possibilities</h4>
+                    <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
                         <span class="text-muted">This Week</span>
@@ -180,7 +180,6 @@
                     theme: "light2", // "light1", "light2", "dark1", "dark2"
 
                     axisY: {
-
                         maximum: 100,
                     },
                     data: [{

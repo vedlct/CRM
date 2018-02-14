@@ -37,7 +37,12 @@
 						  <tbody>
 
 						  @foreach($leads as $lead)
-							  <tr>
+							  {{--@if($lead->followUpDate ==date('Y-m-d'))--}}
+								  <tr>
+								  {{--@else--}}
+							  {{--<tr style="background-color:#ffcccc;">--}}
+								  {{--@endif--}}
+
 								  <td>{{$lead->companyName}}</td>
 								  <td>{{$lead->category->categoryName}}</td>
 								  <td>{{$lead->possibility->possibilityName}}</td>
@@ -45,8 +50,6 @@
 								  <td>{{$lead->personName}}</td>
 								  <td>{{$lead->contactNumber}}</td>
 
-
-								  {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
 								  <td>
 									  <!-- Trigger the modal with a button -->
 									  <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -70,7 +73,6 @@
 							  </tr>
 
 						  @endforeach
-
 						  </tbody>
 					  </table>
 				  </div>
@@ -82,93 +84,85 @@
 
 
 
-
-
-
-
-
-
-
 		  <!-- Edit Modal -->
 		  <div class="modal" id="edit_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
-
-				  <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
+				  <div class="modal-content">
 					  <div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-						  <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
+						  <h4 class="modal-title" name="modal-title">Edit Lead</h4>
 					  </div>
 					  <div class="modal-body">
+						  <form  method="post" action="{{route('leadUpdate')}}">
+							  {{csrf_field()}}
+							  <div class="row">
+								  <div class="col-md-12" align="center">
+									  <b > Mined By:   <div class="mined" id="mined"></div></b>
+								  </div>
+								  <div class="col-md-4">
+									  <label>Category:</label>
+									  <select class="form-control"  name="category" id="category">
+										  <option value="">Please Select</option>
+										  @foreach($categories as $category)
+											  <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+										  @endforeach
+									  </select>
+								  </div>
+								  <div class="col-md-4">
+									  <input type="hidden" name="leadId">
+									  <label>Company Name:</label>
+									  <input type="text" class="form-control" name="companyName" value="">
+								  </div>
 
-
-						  {{csrf_field()}}
-
-
-						  <div class="row">
-							  <div class="col-md-12" align="center">
-								  <b > Mined By:   <div class="mined" id="mined"></div></b>
-								  {{--<input type="text" class="form-control" name="minedBy" value="">--}}
-
+								  <div class="col-md-4">
+									  <label>Email:</label>
+									  <input type="email" class="form-control" name="email" value="">
+								  </div>
+								  <div class="col-md-4">
+									  <label>Contact Person:</label>
+									  <input type="text" class="form-control" name="personName" value=""> <br><br><br>
+								  </div>
+								  <div class="col-md-4">
+									  <label>Number:</label>
+									  <input type="text" class="form-control" name="number" value="">
+								  </div>
+								  <div class="col-md-4">
+									  <label>Website:</label>
+									  <input type="text" class="form-control" name="website" value=""> <br><br><br>
+								  </div>
+								  <div class="col-md-6">
+									  <button class="btn btn-success" type="submit">Update</button>
+								  </div>
 							  </div>
+						  </form>
+						  <br><br>
+						  <form method="post" action="{{route('leaveLead')}}">
+							  <div class="row">
+								  {{csrf_field()}}
 
-							  <div class="col-md-4">
-								  <label>Category:</label>
-								  <select class="form-control"  name="category" id="category">
-									  <option value="">Please Select</option>
-									  @foreach($categories as $category)
-										  <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
-									  @endforeach
+								  <div class=" form-group col-md-6">
+									  <input type="hidden" name="leadId">
+									  <label>Status:</label>
+									  <select class="form-control"  name="Status" id="Status" required>
+										  <option value="">Please Select</option>
+										  @foreach($status as $s)
+											  <option value="{{$s->statusId}}">{{$s->statusName}}</option>
+										  @endforeach
+									  </select>
+								  </div>
+								  <div class=" form-group col-md-6" style="margin-top: 3.2%">
+									  <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
+								  </div>
+								  </div>
 
-								  </select>
-							  </div>
-
-							  <div class="col-md-4">
-								  <input type="hidden" name="leadId">
-								  <label>Company Name:</label>
-								  <input type="text" class="form-control" name="companyName" value="">
-							  </div>
-
-							  <div class="col-md-4">
-								  <label>Email:</label>
-								  <input type="email" class="form-control" name="email" value="">
-							  </div>
-
-
-							  <div class="col-md-4">
-								  <label>Contact Person:</label>
-								  <input type="text" class="form-control" name="personName" value=""> <br><br><br>
-							  </div>
-
-
-							  <div class="col-md-4">
-								  <label>Number:</label>
-								  <input type="text" class="form-control" name="number" value="">
-							  </div>
-
-							  <div class="col-md-4">
-								  <label>Website:</label>
-								  <input type="text" class="form-control" name="website" value=""> <br><br><br>
-							  </div>
-
-							  <div class="col-md-6">
-								  <button class="btn btn-success" type="submit">Update</button>
-							  </div>
-
-
-							  <div class="col-md-6" style="">
-								  <a class="btn btn-danger" id="leave" onclick="return confirm('Are you sure you want ot leave this Lead?')">Leave</a>
-							  </div>
-						  </div>
-
+						  </form>
 					  </div>
-
 					  <div class="modal-footer">
 						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					  </div></form>
-				  {{--<button>Leave</button>--}}
+					  </div>
+				  </div>
 			  </div>
-		  </div>
-		  </div>
+		  </div> </div>
 
 
 
@@ -214,9 +208,9 @@
 									  <br>
 								  </div>
 
-								  <div class="form-group" style=" margin-bottom: 5px;">
-									  <label class=""><b>Follow Up Date : </b></label>
-									  <input class="form-control" id="datepicker" rows="3" name="followup" placeholder="pick Date">
+								  <div class="form-group">
+									  <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+									  <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
 								  </div>
 
 
@@ -315,6 +309,29 @@
             $( "#todate" ).datepicker();
         } );
 
+
+		// check followup limit
+
+        $('.changedate').on('change',function(){
+            var currentdate = $('.changedate').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('followupCheck')}}',
+                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+                success : function(data)
+                {
+                    if(data >= 10)
+                    {
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
+        });
 
 
         //for Call Modal

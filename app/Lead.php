@@ -23,6 +23,7 @@ class Lead extends Model
             ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
             ->where('leadassigneds.assignTo',Auth::user()->id)
             ->where('leadassigneds.leaveDate',null)
+            ->where('leadassigneds.workStatus',0)
             ->get();
 
         return $leads;
@@ -38,6 +39,8 @@ class Lead extends Model
                 })
             ->where('leadAssignStatus',0)
             ->select('leads.*');
+
+
         return $leads;
     }
 
@@ -63,34 +66,15 @@ class Lead extends Model
     }
 
 
-    public function getTempLead($start,$limit,$search){
-        if($search==null){
-            $leads=Lead::with('category','country')
-                ->where('statusId', 1)
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy('leadId','desc')
-                ->get();
-            }
-            else{
-                $leads=Lead::with('country')
-                    ->where(function($q) use ($search){
-                        $q->orWhere('companyName','like',"%{$search}%")
-                            ->orWhere('website','like',"%{$search}%")
-                        ->orWhereHas('category', function ($query) use ($search){
-                            $query->where('categoryName', 'like', '%'.$search.'%');
-                        });
-                    })
+    public function getTempLead(){
 
-                    ->where('statusId', 1)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->get();
-            }
-
-
+        $leads=Lead::with('mined','category','country','possibility')
+            ->where('statusId',1)
+            ->orderBy('leadId','desc')
+            ->select('leads.*');
         return $leads;
-    }
+
+        }
 
 
     public function status(){

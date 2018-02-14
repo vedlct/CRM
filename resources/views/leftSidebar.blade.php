@@ -58,6 +58,11 @@
                 </li>
                 @endif
 
+                <li>
+                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
+
+                </li>
+
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
@@ -71,6 +76,7 @@
                         </li>
                         <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
                         <li><a href="{{route('closelist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Close List</span></a></li>
+                        <li><a href="{{route('rejectlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Reject List</span></a></li>
                         <li><a href="#"><span class="hide-menu">Leave</span></a></li>
 
                     </ul>
@@ -93,11 +99,28 @@
 
                 @endif
 
+                @if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 
-                <li>
-                    <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
-                        <span class="hide-menu">Report</span></a>
-                </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Report</span>
+                            <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                <a href="{{route('report')}}"><i class="fa fa-flag-checkered" aria-hidden="true"></i>
+                                    <span class="hide-menu">Graph</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('reportTable')}}"><i class="fa fa-ban" aria-hidden="true"></i>
+                                    <span class="hide-menu">Value</span></a>
+
+                            </li>
+
+                        </ul>
+                    </li>
+                @endif
 
                 @if($userType =='SUPERVISOR')
 
@@ -129,10 +152,7 @@
 
 
                 {{--@if($userType =='RA' )--}}
-                <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
-                </li>
                 {{--@endif--}}
 
                 @if($userType=='MANAGER')
@@ -144,7 +164,7 @@
 
 
 
-                @if($userType=='ADMIN' || $userType=='SUPERVISOR')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
