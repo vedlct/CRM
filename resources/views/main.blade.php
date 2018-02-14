@@ -49,6 +49,9 @@
         .help-block{
             color: red;
         }
+        table{
+            color: black;
+        }
     </style>
 
 
