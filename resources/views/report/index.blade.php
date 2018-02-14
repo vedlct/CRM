@@ -60,7 +60,7 @@
 
                     dataPoints: [
                             @foreach($report as $r)
-                        { label: "{{$r->userName}}",y:{{($r->called+$r->leadMined+$r->highPosibilities)/3}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+                        { label: "{{$r->userName}}",y:{{($r->called+$r->leadMined+$r->highPosibilities)/$r->t}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
 
 
                             @endforeach

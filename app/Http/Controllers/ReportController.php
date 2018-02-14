@@ -61,18 +61,25 @@ class ReportController extends Controller
                 }
 
 
+                $t=0;
 
                 //Weekly Report
                 if($target->targetCall>0){
                     $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+                    $t++;
                     }
 
                 if($target->targetLeadmine>0){
                     $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+                    $t++;
                    }
 
                 if($target->targetHighPossibility>0){
                     $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+                    $t++;
+                   }
+                   if($t==0){
+                    $t=1;
                    }
 
                 $u = new stdClass;
@@ -80,6 +87,7 @@ class ReportController extends Controller
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
+                $u->t=$t;
                 array_push($report, $u);
 
             }
