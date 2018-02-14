@@ -190,11 +190,15 @@
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
 									  <select class="form-control" name="report" required>
-										  <option value="4"><b>Follow Up</b></option>
+										  {{--<option value="4"><b>Follow Up</b></option>--}}
 
-										  {{--@foreach($callReports as $report)--}}
-											  {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
-										  {{--@endforeach--}}
+										  @foreach($callReports as $report)
+											  @if($report->callingReportId == '4')
+											  <option value="{{$report->callingReportId}}" selected>{{$report->report}}</option>
+											  @else
+												  <option value="{{$report->callingReportId}}" >{{$report->report}}</option>
+											  @endif
+										  @endforeach
 									  </select>
 								  </div>
 
@@ -251,10 +255,6 @@
 				  </form>
 			  </div>
 		  </div>
-
-
-
-
 @endsection
 
 @section('foot-js')

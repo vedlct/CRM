@@ -202,10 +202,10 @@ class LeadController extends Controller
 
     public function update(Request $r){
         $this->validate($r,[
-            'companyName' => 'required|max:100',
-            'website' => 'required|max:100',
-            'email' => 'required|max:100',
-            'personName' => 'required|max:100',
+            'companyName' => 'max:100',
+            'website' => 'max:100',
+            'email' => 'max:100',
+            'personName' => 'max:100',
             'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
 
         ]);
