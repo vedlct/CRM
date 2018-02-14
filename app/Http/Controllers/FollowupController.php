@@ -92,7 +92,10 @@ class FollowupController extends Controller
             /// return $callReports;
             $possibilities=Possibility::get();
             $categories=Category::where('type',1)->get();
-            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports, 'possibilities' => $possibilities,'categories'=>$categories]);}
+            $status=Leadstatus::where('statusId','!=',7)
+                ->get();
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
+                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);}
         return Redirect()->route('home');
 
     }
