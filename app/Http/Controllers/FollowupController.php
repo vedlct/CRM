@@ -16,6 +16,7 @@ use App\Lead;
 use App\Category;
 use App\Workprogress;
 use App\Leadstatus;
+use App\Possibilitychange;
 use Carbon\Carbon;
 use Redirect;
 
@@ -106,13 +107,17 @@ class FollowupController extends Controller
         $lead->possibilityId=$r->possibility;
         $lead->save();
 
-        if($currentPossibility !=$r->possibility){
-            $log=new Possibilitychange;
-            $log->leadId=$r->leadId;
-            $log->possibilityId=$r->possibility;
-            $log->userId=Auth::user()->id;
-            $log->save();
+        if($r->report !=2){
+            if($currentPossibility !=$r->possibility){
+                $log=new Possibilitychange;
+                $log->leadId=$r->leadId;
+                $log->possibilityId=$r->possibility;
+                $log->userId=Auth::user()->id;
+                $log->save();
+            }
+
         }
+
 
         $progress=New Workprogress;
         $progress->callingReport=$r->report;

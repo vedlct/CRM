@@ -419,11 +419,11 @@ class LeadController extends Controller
             $lead->statusId=2;
             $lead->save();
 
-            $log=new Possibilitychange;
-            $log->leadId=$r->leadId;
-            $log->possibilityId=$r->possibility;
-            $log->userId=Auth::user()->id;
-            $log->save();
+//            $log=new Possibilitychange;
+//            $log->leadId=$r->leadId;
+//            $log->possibilityId=$r->possibility;
+//            $log->userId=Auth::user()->id;
+//            $log->save();
             return Response('true');
         }
     }
@@ -483,15 +483,15 @@ class LeadController extends Controller
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
         $lead->save();
-
-        if($currentPossibility !=$r->possibility){
-            $log=new Possibilitychange;
-            $log->leadId=$r->leadId;
-            $log->possibilityId=$r->possibility;
-            $log->userId=Auth::user()->id;
-            $log->save();
+        if($r->report !=2) {
+            if ($currentPossibility != $r->possibility) {
+                $log = new Possibilitychange;
+                $log->leadId = $r->leadId;
+                $log->possibilityId = $r->possibility;
+                $log->userId = Auth::user()->id;
+                $log->save();
+            }
         }
-
 
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
