@@ -168,7 +168,7 @@ class ReportController extends Controller
 
 //            $contacted=Lead::where('contactedUserId',$user->id)->count();
             $contacted=Workprogress::where('userId',$user->id)
-                    ->where('callingReport',5)
+                    ->where('callingReport',5)->count();
 
 
 
