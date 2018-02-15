@@ -17,6 +17,7 @@ use App\Category;
 use App\Workprogress;
 use App\Leadstatus;
 use App\Possibilitychange;
+use App\Country;
 use Carbon\Carbon;
 use Redirect;
 
@@ -59,17 +60,14 @@ class FollowupController extends Controller
                 ->where('followup.workStatus',0)
                 ->get();
 
-
-
-
-
+            $country=Country::get();
             $callReports=Callingreport::get();
             $categories=Category::where('type',1)->get();
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->get();
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);
+                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'country'=>$country]);
         }
         return Redirect()->route('home');
 
@@ -151,10 +149,12 @@ class FollowupController extends Controller
             $status=Leadstatus::where('statusId','!=',7)
                 ->get();
 
+            $country=Country::get();
+
             Session::flash('message', 'From '.$r->fromDate.' To '.$r->toDate.'');
 
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$r->fromDate,'toDate'=> $r->toDate]);
+                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$r->fromDate,'toDate'=> $r->toDate,'country'=>$country]);
 
         }
         else
@@ -204,11 +204,12 @@ class FollowupController extends Controller
         $possibilities=Possibility::get();
         $status=Leadstatus::where('statusId','!=',7)
             ->get();
+        $country=Country::get();
 
         Session::flash('message', 'From '.$request->fromdate.' To '.$request->todate.'');
 
         return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-            'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$request->fromdate,'toDate'=> $request->todate]);
+            'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$request->fromdate,'toDate'=> $request->todate,'country'=>$country]);
     }
 
 }

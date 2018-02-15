@@ -327,6 +327,10 @@
 
     <script>
 
+        $(window).on('load',function(){
+            $('#create_temp_modal').modal('show');
+        });
+
         $(document).ready(function() {
             $('.select').select2();
         });
@@ -411,7 +415,7 @@
                 url : '{{route('getComments')}}',
                 data : {_token: CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
-                    console.log(data);
+
                     $("#comment").html(data);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
                 }

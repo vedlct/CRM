@@ -71,6 +71,8 @@
                                    data-lead-website="{{$lead->website}}"
                                    data-lead-mined="{{$lead->mined->firstName}}"
                                    data-lead-category="{{$lead->category->categoryId}}"
+                                   data-lead-country="{{$lead->countryId}}"
+                                   data-lead-designation="{{$lead->designation}}"
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -133,7 +135,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label>Contact Person:</label>
-                                <input type="text" class="form-control" name="personName" value=""> <br><br><br>
+                                <input type="text" class="form-control" name="personName" value=""> <br>
                             </div>
                             <div class="col-md-4">
                                 <label>Number:</label>
@@ -141,8 +143,27 @@
                             </div>
                             <div class="col-md-4">
                                 <label>Website:</label>
-                                <input type="text" class="form-control" name="website" value=""> <br><br><br>
+                                <input type="text" class="form-control" name="website" value=""> <br>
                             </div>
+
+                            <div class="col-md-4">
+                                <label>Designation:</label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Country:</label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <br><br><br>
+
+
+
                             <div class="col-md-6">
                                 <button class="btn btn-success" type="submit">Update</button>
                             </div>
@@ -301,10 +322,13 @@
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
+            var country=$(e.relatedTarget).data('lead-country');
+            var designation=$(e.relatedTarget).data('lead-designation');
 
 
             //populate the textbox
             $('#category').val(category);
+            $('#country').val(country);
             $('div.mined').text(minedBy);
 //            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
@@ -313,6 +337,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('input[name="designation"]').val(designation);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
 

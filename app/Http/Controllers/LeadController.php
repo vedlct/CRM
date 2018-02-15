@@ -219,6 +219,13 @@ class LeadController extends Controller
         $lead->personName=$r->personName;
         $lead->contactNumber=$r->number;
         $lead->website=$r->website;
+        if($r->country){
+            $lead->countryId=$r->country;
+        }
+        if($r->designation){
+            $lead->designation=$r->designation;
+        }
+
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
         return back();
@@ -306,6 +313,7 @@ class LeadController extends Controller
             $categories=Category::where('type',1)->get();
             $status=Leadstatus::where('statusId','!=',7)
                     ->get();
+            $country=Country::get();
 
 
             return view('layouts.lead.myLead')
@@ -313,6 +321,7 @@ class LeadController extends Controller
                 ->with('callReports', $callReports)
                 ->with('possibilities', $possibilities)
                 ->with('categories',$categories)
+                ->with('country',$country)
                 ->with('status',$status);
         }
 
