@@ -7,13 +7,11 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>Assigned Leads</b></h2>
+            @if(Request::url()==route('highPossibility'))
+                <h2 class="card-title" align="center"><b>High Possibility This Week</b></h2>
             @endif
 
-            @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>Contacted</b></h2>
-            @endif
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

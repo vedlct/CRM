@@ -184,7 +184,7 @@ class HomeController extends Controller
      $possibilities = Possibility::get();
      $categories=Category::where('type',1)->get();
 
-     return view('layouts.lead.myLead')
+     return view('report.weekly')
          ->with('leads', $leads)
          ->with('callReports', $callReports)
          ->with('possibilities', $possibilities)

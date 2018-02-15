@@ -82,43 +82,10 @@ class FollowupController extends Controller
         return $followup;
         }
 
-//    public function show(){
-//
-//        $User_Type=Session::get('userType');
-//        if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
-//            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-//                ->where('followUpDate', date('Y-m-d'))
-//                ->where('leads.contactedUserId',Auth::user()->id)
-//                ->where('followup.workStatus',0)
-//                ->get();
-//
-//
-//            $callReports=Callingreport::get();
-//            /// return $callReports;
-//            $possibilities=Possibility::get();
-//            $categories=Category::where('type',1)->get();
-//            $status=Leadstatus::where('statusId','!=',7)
-//                ->get();
-//            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-//                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);}
-//        return Redirect()->route('home');
-//
-//    }
-
-
-//    public function destroy($id){
-//        $lead=Lead::findOrFail($id);
-//        $lead->delete();
-//        Session::flash('message', 'Lead deleted successfully');
-//        return back();
-//    }
 
 
 
     public function storeFollowupReport(Request $r){
-
-
-
 
         if($r->followup !=null) {
 
@@ -149,24 +116,14 @@ class FollowupController extends Controller
 
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
-//            $progress->response=$r->response;
         $progress->leadId=$r->leadId;
         $progress->progress=$r->progress;
         $progress->userId=Auth::user()->id;
         $progress->comments=$r->comment;
         $progress->save();
 
-
-
-
         Session::flash('message', 'Report Updated Successfully');
-
-//        return 'done';
-
         return back();
-
-
-
 
     }
 

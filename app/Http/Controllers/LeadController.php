@@ -441,17 +441,17 @@ class LeadController extends Controller
         ]);
 
 
-        if($r->report==4){
-            if($r->followup !=null) {
-                $f = Followup::where('leadId', $r->leadId)
-                    ->where('userId', Auth::user()->id)->first();
-
-                $update = Followup::findOrFail($f->followId);
-                $update->workStatus = 1;
-                $update->save();
-            }
-
-        }
+//        if($r->report==4){
+//            if($r->followup !=null) {
+//                $f = Followup::where('leadId', $r->leadId)
+//                    ->where('userId', Auth::user()->id)->first();
+//
+//                $update = Followup::findOrFail($f->followId);
+//                $update->workStatus = 1;
+//                $update->save();
+//            }
+//
+//        }
 
 
 
