@@ -302,6 +302,8 @@ class UserManagementController extends Controller
 
 
 
+
+
        try{
            $target=Usertarget::findOrFail($r->userId);
            if($r->call){
