@@ -135,6 +135,25 @@ class HomeController extends Controller
 
 
 
+    public  function call(){
+        $date = Carbon::now();
+        $leads=Lead::leftJoin('workprogress','leads.leadId','workprogress.leadId')
+            ->where('workprogress.userId',Auth::user()->id)
+            ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('report.weekly')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+
+    }
+
+
 
  public function highPossibility(){
      $date = Carbon::now();
@@ -153,6 +172,7 @@ class HomeController extends Controller
     else{
         $leads=Lead::select('leads.*')
             ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+            ->where('possibilitychanges.userId',Auth::user()->id)
             ->where('possibilitychanges.possibilityId',3)
             ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 

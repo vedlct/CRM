@@ -46,6 +46,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::get('/highPossibility', 'HomeController@highPossibility')->name('highPossibility');
+Route::get('/called', 'HomeController@call')->name('called');
 
 
 Route::get('/test', 'TestController@test');
