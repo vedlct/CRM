@@ -23,14 +23,14 @@ use Redirect;
 
 class FollowupController extends Controller
 {
-       /**
+    /**
      * Where to redirect users after registration.
      *
      * @var string
      */
     protected $redirectTo = '/follow-up';
 
-         /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -76,11 +76,11 @@ class FollowupController extends Controller
 
     public function followupCheck(Request $r){
         $followup=Followup::where('userId',Auth::user()->id)
-                ->where('followUpDate',$r->currentdate)
-                ->where('workStatus',0)->count();
+            ->where('followUpDate',$r->currentdate)
+            ->where('workStatus',0)->count();
 
         return $followup;
-        }
+    }
 
 
 
@@ -123,19 +123,74 @@ class FollowupController extends Controller
         $progress->save();
 
         Session::flash('message', 'Report Updated Successfully');
-        return back();
+
+
+
+
+//        return redirect()->route('follow-up.index',['fromDate'=>$r->fromdate,'toDate'=> $r->todate]);
+//        return redirect()->route('follow-up.search' , ['fromdate'=>'2018-02-12','todate'=>'2018-02-14']);
+        if($r->fromDate!= null && $r->toDate){
+
+            $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                ->whereBetween('followUpDate', [$r->fromDate, $r->toDate])
+                ->where('followup.userId',Auth::user()->id)
+                ->where('followup.workStatus',0)
+                ->get();
+
+
+
+            $callReports=Callingreport::get();
+            /// return $callReports;
+            $categories=Category::where('type',1)->get();
+            $possibilities=Possibility::get();
+            $status=Leadstatus::where('statusId','!=',7)
+                ->get();
+
+            Session::flash('message', 'From '.$r->fromDate.' To '.$r->toDate.'');
+
+            return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
+                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$r->fromDate,'toDate'=> $r->toDate]);
+
+        }
+        else
+            return back();
 
     }
 
 
-    public function search($fromdate , $todate) {
+//    public function search($fromdate,$todate) {
+//
+//
+//       $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+//            ->whereBetween('followUpDate', [$fromdate, $todate])
+//            ->where('followup.userId',Auth::user()->id)
+//            ->where('followup.workStatus',0)
+//            ->get();
+//
+//
+//        $callReports=Callingreport::get();
+//        /// return $callReports;
+//        $categories=Category::where('type',1)->get();
+//        $possibilities=Possibility::get();
+//        $status=Leadstatus::where('statusId','!=',7)
+//            ->get();
+//
+//        Session::flash('message', 'From '.$fromdate.' To '.$todate.'');
+//
+//        return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
+//            'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);
+//    }
+
+    public function search(Request $request) {
 
 
-       $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-            ->whereBetween('followUpDate', [$fromdate, $todate])
+
+        $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+            ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
             ->where('followup.userId',Auth::user()->id)
             ->where('followup.workStatus',0)
             ->get();
+
 
 
         $callReports=Callingreport::get();
@@ -145,9 +200,10 @@ class FollowupController extends Controller
         $status=Leadstatus::where('statusId','!=',7)
             ->get();
 
-        Session::flash('message', 'From '.$fromdate.' To '.$todate.'');
+        Session::flash('message', 'From '.$request->fromdate.' To '.$request->todate.'');
 
         return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-            'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status]);
+            'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$request->fromdate,'toDate'=> $request->todate]);
     }
+
 }

@@ -4,23 +4,24 @@
 
 
 
-
 		  <div class="card" style="padding:10px;">
 
 			  <div class="card-body">
 				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
 
-                  {{--<form method="GET" action="{{ route('follow-up.search') }}">--}}
-                      {{--{{ csrf_field() }}--}}
-                      {{--@component('layouts.search', ['title' => 'Search'])--}}
-                          {{--@component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],--}}
-                          {{--'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])--}}
-                          {{--@endcomponent--}}
-                      {{--@endcomponent--}}
-					  <input id="fromdate" name="fromDate" placeholder="from">
-					  <input id="todate" name="toDate" placeholder="to">
-					  <button onclick="search()">Search</button>
-                  {{--</form>--}}
+                  <form id="serchf" method="POST" action="{{ route('follow-up.search')}}">
+                      {{ csrf_field() }}
+                      @component('layouts.search', ['title' => 'Search'])
+                          @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
+                          'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
+                          @endcomponent
+                      @endcomponent
+
+                  </form>
+
+				  {{--<input id="fromdate" name="fromDate" placeholder="from">--}}
+				  {{--<input id="todate" name="toDate" placeholder="to">--}}
+				  {{--<button onclick="search()">Search</button>--}}
 
 
 				  <div class="table-responsive m-t-40">
@@ -190,6 +191,14 @@
 						  <input type="hidden" name="leadId">
 						  <input type="hidden" name="followId">
 
+						  @if(isset($fromDate) && isset($toDate))
+							  <input type="hidden" value="{{$fromDate}}" name="fromDate">
+							  <input type="hidden" value="{{$toDate}}" name="toDate">
+
+
+						  @endif
+
+
 						  <div class="row">
 							  <div class="col-md-6">
 								  <div class="form-group" style=" margin-bottom: 5px;">
@@ -278,6 +287,8 @@
 	<script>
 
 		//search with date
+
+
 
 		function search() {
 		    var fromdate=document.getElementById('fromdate').value;

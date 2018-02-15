@@ -27,7 +27,7 @@
                         <th>Mined By</th>
                         {{--<th>Category</th>--}}
                         <th>Website</th>
-                        <th>Email</th>
+                        {{--<th>Email</th>--}}
                         <th>Country</th>
                         <th>Category</th>
                         <th>Possibility</th>
@@ -137,7 +137,7 @@
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'leads.website' },
-                    { data: 'email', name: 'leads.email' },
+//                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'category.categoryName', name: 'category.categoryName' },
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
