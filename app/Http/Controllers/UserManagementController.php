@@ -299,11 +299,7 @@ class UserManagementController extends Controller
 
 
     public function setTarget(Request $r){
-
-
-
-
-
+        
        try{
            $target=Usertarget::findOrFail($r->userId);
            if($r->call){
