@@ -373,7 +373,7 @@
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'leads.personName'},
-                    { data: 'contactNumber', name: 'leads.contactNumber'},
+                    { data: 'call', name: 'leads.contactNumber',searchable: true},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
