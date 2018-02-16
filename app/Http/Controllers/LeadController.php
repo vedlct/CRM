@@ -722,6 +722,10 @@ class LeadController extends Controller
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             })
+            ->addColumn('call', function ($lead){
+                return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
+            })
+            ->rawColumns(['call', 'action'])
             ->make(true);
 
 
