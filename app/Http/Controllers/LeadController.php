@@ -679,11 +679,14 @@ class LeadController extends Controller
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->get();
+            $country=Country::get();
+
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories)
-                ->with('status',$status);
+                ->with('status',$status)
+                ->with('country',$country);
 
         }
 
@@ -713,6 +716,8 @@ class LeadController extends Controller
                                    data-lead-website="'.$lead->website.'"
                                    data-lead-mined="'.$lead->mined->firstName.'"
                                    data-lead-category="'.$lead->category->categoryId.'"
+                                    data-lead-country="'.$lead->countryId.'"
+                                   data-lead-designation="'.$lead->designation.'"
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';

@@ -153,9 +153,10 @@
 											  <option value="{{$c->countryId}}">{{$c->countryName}}</option>
 										  @endforeach
 									  </select>
+									  <br><br><br>
+
 								  </div>
 
-								  <br><br><br>
 
 								  <div class="col-md-6">
 									  <button class="btn btn-success" type="submit">Update</button>

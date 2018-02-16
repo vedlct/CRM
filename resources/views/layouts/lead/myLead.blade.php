@@ -40,7 +40,7 @@
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
-                            <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="8%"><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
 
                             {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
@@ -158,9 +158,10 @@
                                         <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                     @endforeach
                                 </select>
+                                <br><br><br>
                             </div>
 
-                            <br><br><br>
+
 
 
 

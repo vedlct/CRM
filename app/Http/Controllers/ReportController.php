@@ -43,10 +43,7 @@ class ReportController extends Controller
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
                     ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-//
-//                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-//                    ->where('possibilityId',3)
-//                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
                 //When user is RA
                 if($user->typeId==4){
                     $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
@@ -81,16 +78,25 @@ class ReportController extends Controller
                 //Weekly Report
                 if($target->targetCall>0){
                     $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+                    if($calledThisWeek>100){
+                        $calledThisWeek=100;
+                    }
                     $t++;
                     }
 
                 if($target->targetLeadmine>0){
                     $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+                    if ($leadMinedThisWeek>100){
+                        $leadMinedThisWeek=100;
+                    }
                     $t++;
                    }
 
                 if($target->targetHighPossibility>0){
                     $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+                    if($highPosibilitiesThisWeek>100){
+                        $highPosibilitiesThisWeek=100;
+                    }
                     $t++;
                    }
                    if($t==0){
