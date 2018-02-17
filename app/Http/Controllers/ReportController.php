@@ -214,8 +214,12 @@ class ReportController extends Controller
 
 
         $length = $t->diffInWeeks($f);
+
+
         if($length==0){
-            $length=1;
+            $length = $t->diffInDays($f);
+            $length = $length/5;
+
         }
 
 
