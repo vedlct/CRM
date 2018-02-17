@@ -209,6 +209,20 @@ class ReportController extends Controller
 
     public function searchGraphByDate(Request $r){
         $User_Type=Session::get('userType');
+        $f = Carbon::parse($r->fromDate);
+        $t = Carbon::parse($r->toDate);
+
+
+        $length = $t->diffInWeeks($f);
+        if($length==0){
+            $length=1;
+        }
+
+
+// show difference in days between now and end dates
+//        return $length;
+
+
         if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
 
             if( $User_Type =='MANAGER'){
@@ -265,7 +279,7 @@ class ReportController extends Controller
 
                 //Weekly Report
                 if($target->targetCall>0){
-                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*5*$length))*100);
                     if($calledThisWeek>100){
                         $calledThisWeek=100;
                     }
@@ -273,7 +287,7 @@ class ReportController extends Controller
                 }
 
                 if($target->targetLeadmine>0){
-                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5*$length))*100);
                     if ($leadMinedThisWeek>100){
                         $leadMinedThisWeek=100;
                     }
@@ -281,7 +295,7 @@ class ReportController extends Controller
                 }
 
                 if($target->targetHighPossibility>0){
-                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$length))*100);
                     if($highPosibilitiesThisWeek>100){
                         $highPosibilitiesThisWeek=100;
                     }
@@ -351,7 +365,12 @@ class ReportController extends Controller
                     ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                     ->where('leads.minedBy',$user->id)
                     ->where('possibilitychanges.possibilityId',3)
-                    ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                    ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                    ->count();
+
+                //                $highPosibilitiesThisWeek=Lead::where('leads.minedBy',$user->id)
+//                    ->where('possibilityId',3)
+//                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             }
             else{
