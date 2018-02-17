@@ -23,13 +23,13 @@ class ReportController extends Controller
         if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
 
             if( $User_Type =='MANAGER'){
-                $users=User::select('id','firstName')
+                $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
             else{
-                $users=User::select('id','firstName')
+                $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->get();
             }
@@ -127,13 +127,13 @@ class ReportController extends Controller
         $User_Type=Session::get('userType');
 
         if( $User_Type =='MANAGER'){
-            $users=User::select('id','firstName')
+            $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
         else{
-            $users=User::select('id','firstName')
+            $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->get();
         }
@@ -212,13 +212,13 @@ class ReportController extends Controller
         if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
 
             if( $User_Type =='MANAGER'){
-                $users=User::select('id','firstName')
+                $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
             else{
-                $users=User::select('id','firstName')
+                $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->get();
             }
@@ -315,22 +315,26 @@ class ReportController extends Controller
     }
 
     public function reportTable(){
+
+
         $date = Carbon::now();
         $User_Type=Session::get('userType');
 
         if( $User_Type =='MANAGER'){
-            $users=User::select('id','firstName')
+            $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
         else{
-            $users=User::select('id','firstName')
+            $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->get();
         }
 
         $report =array();
+
+
 
         foreach ($users as $user) {
 
@@ -340,12 +344,14 @@ class ReportController extends Controller
             $calledThisWeek=Workprogress::where('userId',$user->id)
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+
             if($user->typeId==4){
-                $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
+
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
                     ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
                     ->where('possibilitychanges.possibilityId',3)
                     ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
 
             }
             else{
