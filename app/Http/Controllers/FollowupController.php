@@ -128,10 +128,6 @@ class FollowupController extends Controller
         Session::flash('message', 'Report Updated Successfully');
 
 
-
-
-//        return redirect()->route('follow-up.index',['fromDate'=>$r->fromdate,'toDate'=> $r->todate]);
-//        return redirect()->route('follow-up.search' , ['fromdate'=>'2018-02-12','todate'=>'2018-02-14']);
         if($r->fromDate!= null && $r->toDate){
 
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')

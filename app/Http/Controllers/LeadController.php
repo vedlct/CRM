@@ -450,18 +450,6 @@ class LeadController extends Controller
         ]);
 
 
-//        if($r->report==4){
-//            if($r->followup !=null) {
-//                $f = Followup::where('leadId', $r->leadId)
-//                    ->where('userId', Auth::user()->id)->first();
-//
-//                $update = Followup::findOrFail($f->followId);
-//                $update->workStatus = 1;
-//                $update->save();
-//            }
-//
-//        }
-
 
 
         $workStatus=Leadassigned::where('leadId',$r->leadId)
@@ -492,6 +480,7 @@ class LeadController extends Controller
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
         $lead->save();
+
         if($r->report !=2) {
             if ($currentPossibility != $r->possibility) {
                 $log = new Possibilitychange;
@@ -504,7 +493,6 @@ class LeadController extends Controller
 
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
-//            $progress->response=$r->response;
         $progress->leadId=$r->leadId;
         $progress->progress=$r->progress;
         $progress->userId=Auth::user()->id;
