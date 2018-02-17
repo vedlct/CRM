@@ -417,7 +417,8 @@ class ReportController extends Controller
 
 
         if($user->typeId == 4) {
-            $highPosibilitiesThisWeek = Lead::with('country','category','possibility')
+            $highPosibilitiesThisWeek = Lead::select('leads.*','possibilitychanges.created_at')
+                ->with('country','category','possibility')
                 ->where('minedBy', $user->id)
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.possibilityId', 3)
@@ -425,7 +426,8 @@ class ReportController extends Controller
         }
 
         else{
-            $highPosibilitiesThisWeek=Lead::with('country','category','possibility')
+            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at')
+                ->with('country','category','possibility')
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.userId',$user->id)
                 ->where('possibilitychanges.possibilityId',3)
@@ -433,12 +435,13 @@ class ReportController extends Controller
         }
 
 
-
+//        return $highPosibilitiesThisWeek;
         $table='<table class="table"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
+                 <th>Created_at</th>
       </tr></thead>
     <tbody>';
         foreach ($highPosibilitiesThisWeek as $l){
@@ -447,6 +450,7 @@ class ReportController extends Controller
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->created_at.'</td>
                     </tr>';
 
         }

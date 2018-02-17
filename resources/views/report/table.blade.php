@@ -68,7 +68,7 @@
                 <td>{{$r->called}}</td>
                 <td>{{$r->contacted}}</td>
                 <td>{{$r->assignedLead}}</td>
-                <td><button class="highpossibility" onclick="highpossibility(this)"
+                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
                             @if(isset($fromDate) && isset($toDate))
                             data-date-from="{{$fromDate}}"
                             data-date-to="{{$toDate}}"
@@ -79,7 +79,7 @@
 
                     >
                         {{$r->highPosibilities}}
-                    </button>
+                    </a>
                 </td>
                 <td>{{$r->test}}</td>
                 <td>{{$r->closing}}</td>
