@@ -13,6 +13,14 @@
 
 @section('content')
     <div align="center" style="padding-top:50px;" >
+        <form method="post" action="{{route('searchGraphByDate')}}">
+            {{csrf_field()}}
+        <input type="text" placeholder="From" id="fromdate" name="fromDate">
+        <input type="text" placeholder="To" id="todate" name="toDate">
+        <button type="submit" class="btn btn-success">Search</button>
+
+        </form>
+
         <div id="chartContainer" style="height: 600px; width:100%;"></div>
 
 
@@ -42,7 +50,12 @@
                 animationEnabled: true,
 
                 title:{
+                    @if(isset($fromDate) && isset($toDate))
+                    text:"Report Of Employee From {{$fromDate}} To {{$toDate}}",
+
+                    @else
                     text:"Weekly Report Of Employee"
+                    @endif
                 },
                 axisX:{
                     interval: 1,
@@ -64,15 +77,7 @@
 
 
                             @endforeach
-//                        { y: 3, label: "Sweden" },
-//                        { y: 7, label: "Taiwan" },
-//                        { y: 5, label: "Russia" },
-//                        { y: 9, label: "Spain" },
-//                        { y: 7, label: "Brazil" },
-//                        { y: 7, label: "India" },
-//                        { y: 9, label: "Italy" },
-//                        { y: 8, label: "Australia" },
-//                        { y: 134, label: "US",indexLabel:"Lead 40% , Call 50% , Possibility 100%" }
+
                     ]
                 }]
             });
@@ -80,6 +85,14 @@
             chart.render();
 
         }
+
+        $( function() {
+            $( "#fromdate" ).datepicker();
+            $( "#todate" ).datepicker();
+        } );
+
+
+
     </script>
 
 

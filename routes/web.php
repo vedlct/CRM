@@ -194,8 +194,12 @@ Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');
-
 Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
+
+Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
+Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
+
+Route::post('/getHighPossibilityIndividual','ReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
 
 
 
