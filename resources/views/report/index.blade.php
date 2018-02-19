@@ -12,19 +12,27 @@
 @endsection
 
 @section('content')
-    <div align="center" style="padding-top:50px;" >
+    <div class="card">
+        <div class="card-body">
+            <label><b>Search</b></label>
+
         <form method="post" action="{{route('searchGraphByDate')}}">
             {{csrf_field()}}
-        <input type="text" placeholder="From" id="fromdate" name="fromDate">
-        <input type="text" placeholder="To" id="todate" name="toDate">
-        <button type="submit" class="btn btn-success">Search</button>
+            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;">
+            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;">
+            <button type="submit" class="btn btn-success">Search</button>
 
         </form>
 
+
+
+
+
+    {{--<div style="padding-top:50px;" >--}}
         <div id="chartContainer" style="height: 600px; width:100%;"></div>
-
-
     </div>
+    </div>
+    {{--</div>--}}
 
 @endsection
 

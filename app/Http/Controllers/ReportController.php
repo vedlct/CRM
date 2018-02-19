@@ -164,6 +164,7 @@ class ReportController extends Controller
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
+                ->where('leaveDate',null)
                 ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
 
             $closing=Workprogress::where('userId',$user->id)
@@ -218,6 +219,9 @@ class ReportController extends Controller
             $length = $t->diffInDays($f);
             $length = $length/5;
         }
+//        $length = $t->diffInDays($f);
+//        $length = $length/5;
+
         
 
         if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
@@ -378,6 +382,7 @@ class ReportController extends Controller
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
+                ->where('leaveDate',null)
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             $closing=Workprogress::where('userId',$user->id)
@@ -424,64 +429,64 @@ class ReportController extends Controller
 
 
 
-    public function getHighPossibilityIndividual(Request $r){
-
-        $date = Carbon::now();
-        $fromDate=$date->startOfWeek()->format('Y-m-d');
-        $toDate=$date->endOfWeek()->format('Y-m-d');
-
-        if($r->fromdate !=null && $r->todate !=null){
-            $fromDate=$r->fromdate;
-            $toDate=$r->todate;
-        }
-        $user=User::findOrFail($r->userid);
-
-
-
-        if($user->typeId == 4) {
-            $highPosibilitiesThisWeek = Lead::select('leads.*','possibilitychanges.created_at')
-                ->with('country','category','possibility')
-                ->where('minedBy', $user->id)
-                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
-                ->where('possibilitychanges.possibilityId', 3)
-                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
-        }
-
-        else{
-            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at')
-                ->with('country','category','possibility')
-                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
-                ->where('possibilitychanges.userId',$user->id)
-                ->where('possibilitychanges.possibilityId',3)
-                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
-        }
-
-
-//        return $highPosibilitiesThisWeek;
-        $table='<table class="table"><thead><tr>
-                 <th>CompanyName</th>
-                 <th>Possibility</th>
-                 <th>Category</th>
-                 <th>Country</th>
-                 <th>Created_at</th>
-      </tr></thead>
-    <tbody>';
-        foreach ($highPosibilitiesThisWeek as $l){
-            $table.='<tr>
-                    <td>'.$l->companyName.'</td>
-                    <td>'.$l->possibility->possibilityName.'</td>
-                    <td>'.$l->category->categoryName.'</td>
-                    <td>'.$l->country->countryName.'</td>
-                    <td>'.$l->created_at.'</td>
-                    </tr>';
-
-        }
-        $table.='</tbody></table>';
-
-
-
-        return Response($table);
-    }
+//    public function getHighPossibilityIndividual(Request $r){
+//
+//        $date = Carbon::now();
+//        $fromDate=$date->startOfWeek()->format('Y-m-d');
+//        $toDate=$date->endOfWeek()->format('Y-m-d');
+//
+//        if($r->fromdate !=null && $r->todate !=null){
+//            $fromDate=$r->fromdate;
+//            $toDate=$r->todate;
+//        }
+//        $user=User::findOrFail($r->userid);
+//
+//
+//
+//        if($user->typeId == 4) {
+//            $highPosibilitiesThisWeek = Lead::select('leads.*','possibilitychanges.created_at')
+//                ->with('country','category','possibility')
+//                ->where('minedBy', $user->id)
+//                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
+//                ->where('possibilitychanges.possibilityId', 3)
+//                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
+//        }
+//
+//        else{
+//            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at')
+//                ->with('country','category','possibility')
+//                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
+//                ->where('possibilitychanges.userId',$user->id)
+//                ->where('possibilitychanges.possibilityId',3)
+//                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
+//        }
+//
+//
+////        return $highPosibilitiesThisWeek;
+//        $table='<table class="table"><thead><tr>
+//                 <th>CompanyName</th>
+//                 <th>Possibility</th>
+//                 <th>Category</th>
+//                 <th>Country</th>
+//                 <th>Created_at</th>
+//      </tr></thead>
+//    <tbody>';
+//        foreach ($highPosibilitiesThisWeek as $l){
+//            $table.='<tr>
+//                    <td>'.$l->companyName.'</td>
+//                    <td>'.$l->possibility->possibilityName.'</td>
+//                    <td>'.$l->category->categoryName.'</td>
+//                    <td>'.$l->country->countryName.'</td>
+//                    <td>'.$l->created_at.'</td>
+//                    </tr>';
+//
+//        }
+//        $table.='</tbody></table>';
+//
+//
+//
+//        return Response($table);
+//    }
 
 
 
