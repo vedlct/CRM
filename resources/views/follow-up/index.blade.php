@@ -52,7 +52,7 @@
 								  <td>{{$lead->possibility->possibilityName}}</td>
 								  <td>{{$lead->country->countryName}}</td>
 								  <td>{{$lead->personName}}</td>
-								  <td>{{$lead->contactNumber}}</td>
+								  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
 								  <td>
 									  <!-- Trigger the modal with a button -->
@@ -153,9 +153,10 @@
 											  <option value="{{$c->countryId}}">{{$c->countryName}}</option>
 										  @endforeach
 									  </select>
+									  <br><br><br>
+
 								  </div>
 
-								  <br><br><br>
 
 								  <div class="col-md-6">
 									  <button class="btn btn-success" type="submit">Update</button>

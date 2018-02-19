@@ -482,13 +482,13 @@ class LeadController extends Controller
         $lead->save();
 
         if($r->report !=2) {
-            if ($currentPossibility != $r->possibility) {
+//            if ($currentPossibility != $r->possibility) {
                 $log = new Possibilitychange;
                 $log->leadId = $r->leadId;
                 $log->possibilityId = $r->possibility;
                 $log->userId = Auth::user()->id;
                 $log->save();
-            }
+//            }
         }
 
         $progress=New Workprogress;
@@ -667,11 +667,14 @@ class LeadController extends Controller
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->get();
+            $country=Country::get();
+
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories)
-                ->with('status',$status);
+                ->with('status',$status)
+                ->with('country',$country);
 
         }
 
@@ -701,10 +704,16 @@ class LeadController extends Controller
                                    data-lead-website="'.$lead->website.'"
                                    data-lead-mined="'.$lead->mined->firstName.'"
                                    data-lead-category="'.$lead->category->categoryId.'"
+                                    data-lead-country="'.$lead->countryId.'"
+                                   data-lead-designation="'.$lead->designation.'"
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             })
+            ->addColumn('call', function ($lead){
+                return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
+            })
+            ->rawColumns(['call', 'action'])
             ->make(true);
 
 

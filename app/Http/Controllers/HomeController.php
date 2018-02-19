@@ -53,7 +53,6 @@ class HomeController extends Controller
 
 
 
-
         $lastDate=Carbon::now()->subDay()->format('Y-m-d');
 
 
@@ -105,16 +104,25 @@ class HomeController extends Controller
         //Weekly Report
         if($target->targetCall>0){
             $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+            if($calledThisWeek>100){
+                $calledThisWeek=100;
+            }
             $countWeek++;
         }
 
         if($target->targetLeadmine>0){
             $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+            if($leadMinedThisWeek>100){
+                $leadMinedThisWeek=100;
+            }
             $countWeek++;
         }
 
         if($target->targetHighPossibility>0){
             $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+            if($highPosibilitiesThisWeek>100){
+                $highPosibilitiesThisWeek=100;
+            }
             $countWeek++;
         }
 

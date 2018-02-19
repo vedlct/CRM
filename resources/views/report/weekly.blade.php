@@ -11,6 +11,10 @@
                 <h2 class="card-title" align="center"><b>High Possibility This Week</b></h2>
             @endif
 
+                @if(Request::url()==route('called'))
+                    <h2 class="card-title" align="center"><b>Called This Week</b></h2>
+                @endif
+
 
 
             <div class="table-responsive m-t-40">
