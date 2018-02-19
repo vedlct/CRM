@@ -92,7 +92,7 @@ class GetIndividualReportController extends Controller
             $toDate=$r->todate;
         }
         $user=User::findOrFail($r->userid);
-        $leads = Lead::select('leads.*','workprogress.created_at')
+        $leads = Lead::select('leads.*','workprogress.comments','workprogress.created_at')
                 ->with('country','category','possibility')
                 ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
                 ->where('workprogress.userId',$user->id)
@@ -101,17 +101,17 @@ class GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
-                 <th>Category</th>
                  <th>Country</th>
-                 <th>Created_at</th>
+                 <th>Comment</th>
+                 <th>Call Date</th>
       </tr></thead>
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
-                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->comments.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
 
@@ -173,34 +173,32 @@ class GetIndividualReportController extends Controller
         }
         $user=User::findOrFail($r->userid);
 
-
-//        $assignedLead=Leadassigned::where('assignTo',$user->id)
-//            ->where('leaveDate',null)
-//            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-        $leads = Lead::select('leads.*','leadassigneds.created_at')
+        $leads = Lead::select('leads.*','leadassigneds.created_at','leadassigneds.leaveDate','users.firstName')
             ->with('country','category','possibility')
             ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
+            ->leftJoin('users','users.id','leadassigneds.assignBy')
             ->where('leadassigneds.assignTo',$user->id)
-            ->where('leadassigneds.leaveDate',null)
             ->whereBetween('leadassigneds.created_at',[$fromDate,$toDate])->get();
 
-
-
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Assign By</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
-                 <th>Created_at</th>
+                <th>Assign Date</th>
+                 <th>Leave</th>
       </tr></thead>
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->firstName.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->created_at.'</td>
+                    <td>'.$l->leaveDate.'</td>
                     </tr>';
 
         }

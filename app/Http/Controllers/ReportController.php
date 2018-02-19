@@ -164,7 +164,7 @@ class ReportController extends Controller
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
-                ->where('leaveDate',null)
+//                ->where('leaveDate',null)
                 ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
 
             $closing=Workprogress::where('userId',$user->id)
@@ -382,8 +382,8 @@ class ReportController extends Controller
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
-                ->where('leaveDate',null)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+//                ->where('leaveDate',null)
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             $closing=Workprogress::where('userId',$user->id)
                 ->where('progress','Closing')

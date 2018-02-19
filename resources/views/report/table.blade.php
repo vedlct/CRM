@@ -197,7 +197,7 @@
                 cache: false,
                 success:function(data) {
 
-//                    console.log(data);
+                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
