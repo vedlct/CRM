@@ -214,18 +214,11 @@ class ReportController extends Controller
 
 
         $length = $t->diffInWeeks($f);
-
-
         if($length==0){
             $length = $t->diffInDays($f);
             $length = $length/5;
-
         }
-
-
-// show difference in days between now and end dates
-//        return $length;
-
+        
 
         if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
 
@@ -242,7 +235,7 @@ class ReportController extends Controller
             }
 
 
-            $report =array();
+            $report=array();
             foreach ($users as $user){
                 $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                     ->whereBetween('created_at', [$r->fromDate, $r->toDate])->count();
