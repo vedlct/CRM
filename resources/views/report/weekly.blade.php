@@ -28,6 +28,7 @@
                         <th width="5%">Country</th>
                         <th width="8%">Contact Person</th>
                         <th width="8%">Contact Number</th>
+                        <th width="8%">Created At</th>
 
                     </tr>
                     </thead>
@@ -42,6 +43,7 @@
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
                             <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="8%">{{$lead->created_at}}</td>
 
                         </tr>
 
