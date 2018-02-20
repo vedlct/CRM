@@ -199,7 +199,10 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 
-Route::post('/getHighPossibilityIndividual','ReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
+Route::post('/getHighPossibilityIndividual','GetIndividualReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
+Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividual')->name('getCallIndividual');
+Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
+Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
 
 
 
