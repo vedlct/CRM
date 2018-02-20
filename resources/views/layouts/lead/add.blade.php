@@ -30,7 +30,7 @@
                         <th width="5%">Contact</th>
                         <th width="8%">Status</th>
                         <th width="8%">Possibility</th>
-                        <th width="10%">Edit</th>
+                        <th width="15%">Edit</th>
 
 
                     </tr>
