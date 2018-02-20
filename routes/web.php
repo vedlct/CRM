@@ -46,6 +46,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::get('/highPossibility', 'HomeController@highPossibility')->name('highPossibility');
+Route::get('/called', 'HomeController@call')->name('called');
 
 
 Route::get('/test', 'TestController@test');
@@ -64,7 +65,14 @@ Route::post('user-management/setTarget','UserManagementController@setTarget')->n
 
 //Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 Route::post('checkfollowup','FollowupController@followupCheck')->name('followupCheck');
-Route::resource('follow-up', 'FollowupController');
+Route::post('storeFollowupReport','FollowupController@storeFollowupReport')->name('storeFollowupReport');
+Route::get('follow-up','FollowupController@index')->name('follow-up.index');
+//Route::get('follow-up/search/{fromdate}/{todate}', 'FollowupController@search')->name('follow-up.search');
+Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
+
+
+
+//Route::resource('follow-up', 'FollowupController');
 
 
 Route::resource('system-management/country', 'CountryController');
@@ -90,7 +98,6 @@ Route::post('showchart', 'HighChartsController@search')->name('showchart.search'
 //Route::view('/user-management', 'user-management.index');
 
 //Search bettween dates
-Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 
 //Lead
@@ -187,8 +194,19 @@ Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');
-
 Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
+
+Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
+Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
+
+//Report Individual from Report Table
+Route::post('/getHighPossibilityIndividual','GetIndividualReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
+Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividual')->name('getCallIndividual');
+Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
+Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
+Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
+Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
+Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 
 
 

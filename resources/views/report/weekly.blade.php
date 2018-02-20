@@ -7,26 +7,28 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            @if(Request::url()==route('assignedLeads'))
-            <h2 class="card-title" align="center"><b>Assigned Leads</b></h2>
+            @if(Request::url()==route('highPossibility'))
+                <h2 class="card-title" align="center"><b>High Possibility This Week</b></h2>
             @endif
 
-                @if(Request::url()==route('contacted'))
-                    <h2 class="card-title" align="center"><b>Contacted</b></h2>
+                @if(Request::url()==route('called'))
+                    <h2 class="card-title" align="center"><b>Called This Week</b></h2>
                 @endif
+
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="15%">Company Name</th>
+                        <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
-                        <th width="8%">Contact Person</th>
+                        <th width="15%">Contact Person</th>
                         <th width="8%">Contact Number</th>
-                        <th width="10%">Action</th>
+                        <th width="8%">Created At</th>
 
                     </tr>
                     </thead>
@@ -40,41 +42,9 @@
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
-                            <td width="8%"><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
+                            <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="8%">{{$lead->created_at}}</td>
 
-                            <td width="10%">
-
-                                @if($lead->contactedUserId==null)
-                                    <form method="post" action="{{route('addContacted')}}" style="float: left;">
-                                        {{csrf_field()}}
-                                        <input type="hidden" value="{{$lead->leadId}}" name="leadId">
-                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-
-                                    </form>
-                                @endif
-                                &nbsp;
-                                <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
-                                   data-lead-id="{{$lead->leadId}}"
-                                   data-lead-possibility="{{$lead->possibilityId}}">
-                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
-
-                                <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                   data-lead-id="{{$lead->leadId}}"
-                                   data-lead-name="{{$lead->companyName}}"
-                                   data-lead-email="{{$lead->email}}"
-                                   data-lead-number="{{$lead->contactNumber}}"
-                                   data-lead-person="{{$lead->personName}}"
-                                   data-lead-website="{{$lead->website}}"
-                                   data-lead-mined="{{$lead->mined->firstName}}"
-                                   data-lead-category="{{$lead->category->categoryId}}"
-                                   data-lead-country="{{$lead->countryId}}"
-                                   data-lead-designation="{{$lead->designation}}"
-
-                                >
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                            </td>
                         </tr>
 
                     @endforeach
@@ -133,7 +103,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label>Contact Person:</label>
-                                <input type="text" class="form-control" name="personName" value=""> <br>
+                                <input type="text" class="form-control" name="personName" value=""> <br><br><br>
                             </div>
                             <div class="col-md-4">
                                 <label>Number:</label>
@@ -141,28 +111,8 @@
                             </div>
                             <div class="col-md-4">
                                 <label>Website:</label>
-                                <input type="text" class="form-control" name="website" value=""> <br>
+                                <input type="text" class="form-control" name="website" value=""> <br><br><br>
                             </div>
-
-                            <div class="col-md-4">
-                                <label>Designation:</label>
-                                <input type="text" class="form-control" name="designation" value="">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Country:</label>
-                                <select class="form-control"  name="country" id="country">
-                                    @foreach($country as $c)
-                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-                                    @endforeach
-                                </select>
-                                <br><br><br>
-                            </div>
-
-
-
-
-
                             <div class="col-md-6">
                                 <button class="btn btn-success" type="submit">Update</button>
                             </div>
@@ -170,28 +120,6 @@
                     </form>
                     <br><br>
 
-                    @if(Request::url()!=route('highPossibility'))
-                    <form method="post" action="{{route('leaveLead')}}">
-                        <div class="row">
-                            {{csrf_field()}}
-
-                            <div class=" form-group col-md-6">
-                                <input type="hidden" name="leadId">
-                                <label>Status:</label>
-                                <select class="form-control"  name="Status" id="Status" required>
-                                    <option value="">Please Select</option>
-                                    @foreach($status as $s)
-                                        <option value="{{$s->statusId}}">{{$s->statusName}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class=" form-group col-md-6" style="margin-top: 3.2%">
-                                <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
-                            </div>
-                        </div>
-
-                    </form>
-                        @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -223,57 +151,57 @@
                     <input type="hidden" name="leadId">
 
                     <div class="row">
-                <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
-                            <label ><b>Calling Report : </b></label>
-                            <select class="form-control" name="report" required>
-                                <option value=""><b>(select one)</b></option>
+                                <label ><b>Calling Report : </b></label>
+                                <select class="form-control" name="report" required>
+                                    <option value=""><b>(select one)</b></option>
 
-                                @foreach($callReports as $report)
-                                    <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-                                @endforeach
-                            </select>
+                                    @foreach($callReports as $report)
+                                        <option value="{{$report->callingReportId}}">{{$report->report}}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="form-group">
-                            <label ><b>Progress : </b></label>
-                            <select class="form-control" name="progress" >
-                                <option value=""><b>(select one)</b></option>
-                                <option value="Test Job">Test Job</option>
-                                <option value="Closing">Closing</option>
-                            </select>
-                            <br>
+                                <label ><b>Progress : </b></label>
+                                <select class="form-control" name="progress" >
+                                    <option value=""><b>(select one)</b></option>
+                                    <option value="Test Job">Test Job</option>
+                                    <option value="Closing">Closing</option>
+                                </select>
+                                <br>
                             </div>
 
                             <div class="form-group">
                                 <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
-                            <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
+                                <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
                             </div>
 
 
                             <div class="form-group">
-                            <label class=""><b>Possibility : </b></label>
-                            <select class="form-control"  name="possibility" id="possibility">
-                                @foreach($possibilities as $p)
-                                    <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-                                @endforeach
+                                <label class=""><b>Possibility : </b></label>
+                                <select class="form-control"  name="possibility" id="possibility">
+                                    @foreach($possibilities as $p)
+                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                    @endforeach
 
-                            </select>
+                                </select>
                             </div>
 
 
-                             <div class="form-group">
-                            <label class=""><b>Comment : </b></label>
-                            <textarea class="form-control" rows="3" name="comment" required></textarea>
-                             </div>
-                </div>
-                    <div class="col-md-6">
-                        <ul class="list-group" style="margin: 10px; "><br>
-                            <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
-
+                            <div class="form-group">
+                                <label class=""><b>Comment : </b></label>
+                                <textarea class="form-control" rows="3" name="comment" required></textarea>
                             </div>
-                        </ul>
-                    </div>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group" style="margin: 10px; "><br>
+                                <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+                                </div>
+                            </ul>
+                        </div>
 
                         <div class="col-md-12"><br>
                             <button class="btn btn-success">Submit</button>
@@ -321,13 +249,10 @@
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var country=$(e.relatedTarget).data('lead-country');
-            var designation=$(e.relatedTarget).data('lead-designation');
 
 
             //populate the textbox
             $('#category').val(category);
-            $('#country').val(country);
             $('div.mined').text(minedBy);
 //            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
@@ -336,7 +261,6 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
 
@@ -381,10 +305,10 @@
 
         });
 
-//        check followup date count
+        //        check followup date count
 
         $('.changedate').on('change',function(){
-           var currentdate = $('.changedate').val();
+            var currentdate = $('.changedate').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type:'post',

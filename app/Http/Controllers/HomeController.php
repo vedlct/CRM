@@ -46,10 +46,10 @@ class HomeController extends Controller
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+
         $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
             ->where('possibilityId',3)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
 
 
 
@@ -58,6 +58,7 @@ class HomeController extends Controller
 
 
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
             ->whereDate('created_at',$lastDate)->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
@@ -104,19 +105,27 @@ class HomeController extends Controller
         //Weekly Report
         if($target->targetCall>0){
             $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+            if($calledThisWeek>100){
+                $calledThisWeek=100;
+            }
             $countWeek++;
         }
 
         if($target->targetLeadmine>0){
             $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+            if($leadMinedThisWeek>100){
+                $leadMinedThisWeek=100;
+            }
             $countWeek++;
         }
 
         if($target->targetHighPossibility>0){
             $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+            if($highPosibilitiesThisWeek>100){
+                $highPosibilitiesThisWeek=100;
+            }
             $countWeek++;
         }
-
 
 
         return view('dashboard')
@@ -134,6 +143,27 @@ class HomeController extends Controller
 
 
 
+    public  function call(){
+        $date = Carbon::now();
+        $leads=Lead::select('leads.*','workprogress.created_at')
+            ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+            ->where('workprogress.userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
+            ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('report.weekly')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+
+    }
+
+
 
  public function highPossibility(){
      $date = Carbon::now();
@@ -141,7 +171,7 @@ class HomeController extends Controller
 
      $User_Type=Session::get('userType');
      if($User_Type=='RA'){
-         $leads=Lead::select('leads.*')
+         $leads=Lead::select('leads.*','possibilitychanges.created_at')
              ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
              ->where('leads.minedBy',Auth::user()->id)
              ->where('possibilitychanges.possibilityId',3)
@@ -150,8 +180,9 @@ class HomeController extends Controller
      }
 
     else{
-        $leads=Lead::select('leads.*')
+        $leads=Lead::select('leads.*','possibilitychanges.created_at')
             ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+            ->where('possibilitychanges.userId',Auth::user()->id)
             ->where('possibilitychanges.possibilityId',3)
             ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
@@ -163,7 +194,7 @@ class HomeController extends Controller
      $possibilities = Possibility::get();
      $categories=Category::where('type',1)->get();
 
-     return view('layouts.lead.myLead')
+     return view('report.weekly')
          ->with('leads', $leads)
          ->with('callReports', $callReports)
          ->with('possibilities', $possibilities)

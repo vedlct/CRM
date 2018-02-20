@@ -22,15 +22,15 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Company Name</th>
-                        <th>website</th>
-                        <th>Number</th>
-                        <th>Category</th>
-                        <th>Country</th>
-                        <th>Contact</th>
-                        <th>Status</th>
-                        <th>Possibility</th>
-                        <th>Edit</th>
+                        <th width="15%">Company Name</th>
+                        <th width="8%">website</th>
+                        <th width="5%">Number</th>
+                        <th width="5%">Category</th>
+                        <th width="5%">Country</th>
+                        <th width="5%">Contact</th>
+                        <th width="8%">Status</th>
+                        <th width="8%">Possibility</th>
+                        <th width="10%">Edit</th>
 
 
                     </tr>
@@ -327,6 +327,12 @@
 
     <script>
 
+        @if(Session::has('message'))
+        $(window).on('load',function(){
+            $('#create_temp_modal').modal('show');
+        });
+        @endif
+
         $(document).ready(function() {
             $('.select').select2();
         });
@@ -411,7 +417,7 @@
                 url : '{{route('getComments')}}',
                 data : {_token: CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
-                    console.log(data);
+
                     $("#comment").html(data);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
                 }

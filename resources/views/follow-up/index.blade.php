@@ -4,20 +4,24 @@
 
 
 
-
 		  <div class="card" style="padding:10px;">
 
 			  <div class="card-body">
 				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
 
-                  <form method="POST" action="{{ route('follow-up.search') }}">
+                  <form id="serchf" method="POST" action="{{ route('follow-up.search')}}">
                       {{ csrf_field() }}
                       @component('layouts.search', ['title' => 'Search'])
                           @component('layouts.two-cols-date-search-row', ['items' => ['From Date', 'To Date'],
                           'oldVals' => [isset($searchingVals) ? $searchingVals['fromdate'] : '', isset($searchingVals) ? $searchingVals['todate'] : '']])
                           @endcomponent
                       @endcomponent
+
                   </form>
+
+				  {{--<input id="fromdate" name="fromDate" placeholder="from">--}}
+				  {{--<input id="todate" name="toDate" placeholder="to">--}}
+				  {{--<button onclick="search()">Search</button>--}}
 
 
 				  <div class="table-responsive m-t-40">
@@ -48,13 +52,14 @@
 								  <td>{{$lead->possibility->possibilityName}}</td>
 								  <td>{{$lead->country->countryName}}</td>
 								  <td>{{$lead->personName}}</td>
-								  <td>{{$lead->contactNumber}}</td>
+								  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
 								  <td>
 									  <!-- Trigger the modal with a button -->
 									  <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
 										 data-lead-id="{{$lead->leadId}}"
-										 data-lead-possibility="{{$lead->possibilityId}}">
+										 data-lead-possibility="{{$lead->possibilityId}}"
+										 data-follow-id="{{$lead->followId}}">
 										  <i class="fa fa-phone" aria-hidden="true"></i></a>
 
 									  <!-- Trigger the Edit modal with a button -->
@@ -66,7 +71,11 @@
 										 data-lead-person="{{$lead->personName}}"
 										 data-lead-website="{{$lead->website}}"
 										 data-lead-mined="{{$lead->mined->firstName}}"
-										 data-lead-category="{{$lead->category->categoryId}}">
+										 data-lead-category="{{$lead->category->categoryId}}"
+										 data-lead-country="{{$lead->countryId}}"
+										 data-lead-designation="{{$lead->designation}}"
+
+									  >
 										  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 								  </td>
@@ -120,7 +129,7 @@
 								  </div>
 								  <div class="col-md-4">
 									  <label>Contact Person:</label>
-									  <input type="text" class="form-control" name="personName" value=""> <br><br><br>
+									  <input type="text" class="form-control" name="personName" value="">
 								  </div>
 								  <div class="col-md-4">
 									  <label>Number:</label>
@@ -128,8 +137,27 @@
 								  </div>
 								  <div class="col-md-4">
 									  <label>Website:</label>
-									  <input type="text" class="form-control" name="website" value=""> <br><br><br>
+									  <input type="text" class="form-control" name="website" value="">
 								  </div>
+
+
+								  <div class="col-md-4">
+									  <label>Designation:</label>
+									  <input type="text" class="form-control" name="designation" value="">
+								  </div>
+
+								  <div class="col-md-4">
+									  <label>Country:</label>
+									  <select class="form-control"  name="country" id="country">
+										  @foreach($country as $c)
+											  <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+										  @endforeach
+									  </select>
+									  <br><br><br>
+
+								  </div>
+
+
 								  <div class="col-md-6">
 									  <button class="btn btn-success" type="submit">Update</button>
 								  </div>
@@ -176,7 +204,7 @@
 		  <div class="modal" id="my_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
 
-				  <form class="modal-content" action="{{route('storeReport')}}" method="post">
+				  <form class="modal-content" action="{{route('storeFollowupReport')}}" method="post">
 					  <div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 						  <h4 class="modal-title" name="modal-title">Calling Report</h4>
@@ -184,17 +212,30 @@
 					  <div class="modal-body" style="padding: 20px;">
 						  {{csrf_field()}}
 						  <input type="hidden" name="leadId">
+						  <input type="hidden" name="followId">
+
+						  @if(isset($fromDate) && isset($toDate))
+							  <input type="hidden" value="{{$fromDate}}" name="fromDate">
+							  <input type="hidden" value="{{$toDate}}" name="toDate">
+
+
+						  @endif
+
 
 						  <div class="row">
 							  <div class="col-md-6">
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
 									  <select class="form-control" name="report" required>
-										  <option value="4"><b>Follow Up</b></option>
+										  {{--<option value="4"><b>Follow Up</b></option>--}}
 
-										  {{--@foreach($callReports as $report)--}}
-											  {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
-										  {{--@endforeach--}}
+										  @foreach($callReports as $report)
+											  @if($report->callingReportId == '4')
+											  <option value="{{$report->callingReportId}}" selected>{{$report->report}}</option>
+											  @else
+												  <option value="{{$report->callingReportId}}" >{{$report->report}}</option>
+											  @endif
+										  @endforeach
 									  </select>
 								  </div>
 
@@ -251,10 +292,6 @@
 				  </form>
 			  </div>
 		  </div>
-
-
-
-
 @endsection
 
 @section('foot-js')
@@ -272,6 +309,24 @@
 
 	<script>
 
+		//search with date
+
+
+
+		function search() {
+		    var fromdate=document.getElementById('fromdate').value;
+		    var todate=document.getElementById('todate').value;
+
+		    if(fromdate !='' || todate !=''){
+
+                window.location.href = '/follow-up/search/'+fromdate+'/'+todate;
+			}
+
+
+        }
+
+
+
         //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function(e) {
@@ -285,10 +340,14 @@
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
+            var country=$(e.relatedTarget).data('lead-country');
+            var designation=$(e.relatedTarget).data('lead-designation');
+
 
 
             //populate the textbox
             $('#category').val(category);
+            $('#country').val(country);
             $('div.mined').text(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
@@ -296,7 +355,9 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
+            $(e.currentTarget).find('input[name="designation"]').val(designation);
+
+//            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
         });
 
@@ -341,10 +402,14 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var followup=$(e.relatedTarget).data('follow-id');
+
+
 
 
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+            $(e.currentTarget).find('input[name="followId"]').val(followup);
 
 
 
@@ -376,7 +441,6 @@
 
 
 	</script>
-
 
 @endsection
 

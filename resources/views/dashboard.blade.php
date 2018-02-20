@@ -18,23 +18,30 @@
 <br><br>
     <div class="row" >
 
-        <?php $count=0; $total=0;?>
+        <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
 
     <div class="col-lg-3 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Call</h4>
+                <h4 class="card-title"><a href="{{route('called')}}">Call</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
                     <span class="text-muted">Last Day</span>
                 </div>
                 @if($target->targetCall>0)
-                    <?php $count++; $total+=($lastDayCalled/$target->targetCall)*100; ?>
-                <span class="text-success">{{round(($lastDayCalled/$target->targetCall)*100)}}%</span>
+                    <?php
+                                  $lastCallPercent= round(($lastDayCalled/$target->targetCall)*100);
+                                  if($lastCallPercent > 100){
+                                      $lastCallPercent=100;
+                                  }
+                    $count++; $total+=$lastCallPercent;
+                    ?>
+
+                <span class="text-success">{{$lastCallPercent}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetCall>0)
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{($lastDayCalled/$target->targetCall)*100}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastCallPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                     @endif
                 </div>
             </div>
@@ -51,12 +58,20 @@
                     <span class="text-muted">Last Day</span>
                 </div>
                 @if($target->targetLeadmine>0)
-                    <?php $count++; $total+=($lastDayLeadMined/$target->targetLeadmine)*100; ?>
-                <span class="text-info">{{($lastDayLeadMined/$target->targetLeadmine)*100}}%</span>
+                    <?php $count++;
+                    $lastLeadMinedPercent=($lastDayLeadMined/$target->targetLeadmine)*100;
+                    if($lastLeadMinedPercent>100){
+                        $lastLeadMinedPercent=100;
+                    }
+                    $total+=$lastLeadMinedPercent;
+
+
+                    ?>
+                <span class="text-info">{{$lastLeadMinedPercent}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetLeadmine>0)
-                    <div class="progress-bar bg-info" role="progressbar" style="width: {{($lastDayLeadMined/$target->targetLeadmine)*100}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{$lastLeadMinedPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         @endif
                 </div>
             </div>

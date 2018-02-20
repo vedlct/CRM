@@ -302,9 +302,11 @@ class UserManagementController extends Controller
 
 
 
+
+
        try{
            $target=Usertarget::findOrFail($r->userId);
-           if($r->call){
+           if($r->call !=null){
                $log=new Targetlog;
                $log->userId=$r->userId;
                $log->targetType=1;
@@ -313,7 +315,7 @@ class UserManagementController extends Controller
                $target->targetCall=$r->call;
            }
 
-           if($r->highPossibility){
+           if($r->highPossibility !=null){
                $log=new Targetlog;
                $log->userId=$r->userId;
                $log->targetType=2;
@@ -321,7 +323,7 @@ class UserManagementController extends Controller
                $target->targetHighPossibility=$r->highPossibility;
            }
 
-           if($r->lead){
+           if($r->lead !=null){
                $log=new Targetlog;
                $log->userId=$r->userId;
                $log->targetType=3;
