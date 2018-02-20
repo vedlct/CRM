@@ -297,10 +297,6 @@ class LeadController extends Controller
 
     }
 
-
-
-
-
     public function assignedLeads(){
         //will return the leads assigned to you
         //for user
@@ -408,11 +404,6 @@ class LeadController extends Controller
             })
             ->rawColumns(['edit', 'action'])
             ->make(true);
-
-
-
-
-
 
     }
 
