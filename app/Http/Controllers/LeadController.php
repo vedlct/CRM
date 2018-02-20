@@ -38,6 +38,28 @@ class LeadController extends Controller
                     ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
+                if($lead->leadAssignStatus == 0 && $lead->statusId==2 && Session::get('userType')!='RA'){
+                    return '<form method="post" action="'.route('addContacted').'">
+                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                    <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                            ><i class="fa fa-comments"></i></a></form>';
+
+                }
+                else{
                 return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -52,6 +74,7 @@ class LeadController extends Controller
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
                                             ><i class="fa fa-comments"></i></a>';
+                }
             })
 
             ->make(true);
