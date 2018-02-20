@@ -206,6 +206,7 @@ Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividua
 Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
 Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
+Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 
 
 

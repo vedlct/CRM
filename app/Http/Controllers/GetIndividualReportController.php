@@ -124,6 +124,46 @@ class GetIndividualReportController extends Controller
         return Response($table);
     }
 
+    public function getFollowupIndividual(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+        $user=User::findOrFail($r->userid);
+//        $followupThisWeek=Followup::where('userId',$user->id)
+//            ->whereBetween('created_at',[$r->fromDate,$r->toDate])->count();
+        $leads = Lead::select('leads.*','followup.followUpDate','followup.created_at')
+            ->with('country','possibility')
+            ->leftJoin('followup', 'leads.leadId', 'followup.leadId')
+            ->where('followup.userId',$user->id)
+            ->whereBetween('followup.created_at', [$fromDate,$toDate])->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Possibility</th>
+                 <th>Country</th>
+                <th>Followup Date</th>
+                <th>Created At</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($leads as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->followUpDate.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
+
 
 
     public function getTestIndividual(Request $r){

@@ -133,6 +133,9 @@ class ReportController extends Controller
                 ->where('workprogress.callingReport','!=',null)
                 ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
 
+            $followupThisWeek=Followup::where('userId',$user->id)
+                ->whereBetween('created_at',[$r->fromDate,$r->toDate])->count();
+
             if($user->typeId==4){
                 $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
                     ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
@@ -166,6 +169,7 @@ class ReportController extends Controller
             $u->id=$user->id;
             $u->userName=$user->firstName;
             $u->leadMined=$leadMinedThisWeek;
+            $u->followupThisWeek=$followupThisWeek;
             $u->called=$calledThisWeek;
             $u->highPosibilities=$highPosibilitiesThisWeek;
             $u->assignedLead=$assignedLead;
@@ -325,6 +329,11 @@ class ReportController extends Controller
                 ->where('workprogress.callingReport','!=',null)
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+            $followupThisWeek=Followup::where('userId',$user->id)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+
 
             if($user->typeId==4){
 
@@ -371,6 +380,7 @@ class ReportController extends Controller
             $u->called=$calledThisWeek;
             $u->highPosibilities=$highPosibilitiesThisWeek;
             $u->assignedLead=$assignedLead;
+            $u->followupThisWeek=$followupThisWeek;
             $u->closing=$closing;
             $u->test=$test;
             $u->contacted=$contacted;

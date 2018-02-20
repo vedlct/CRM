@@ -51,6 +51,7 @@
             <tr>
                 <th>Name</th>
                 <th>Total Call</th>
+                <th>Follow up</th>
                 <th>Contacted</th>
                 <th>Assigned Lead</th>
                 <th>High Possibility</th>
@@ -72,6 +73,15 @@
                        data-user-name="{{$r->userName}}"
                     >{{$r->called}}</a></td>
 
+                <td><a href="#" class="highpossibility" onclick="followup(this)"
+                       @if(isset($fromDate) && isset($toDate))
+                       data-date-from="{{$fromDate}}"
+                       data-date-to="{{$toDate}}"
+                       @endif
+                       data-user-id="{{$r->id}}"
+                       data-user-name="{{$r->userName}}"
+                    >{{$r->followupThisWeek}}</a>
+                </td>
                 <td>{{$r->contacted}}</td>
                 <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
                        @if(isset($fromDate) && isset($toDate))
@@ -355,6 +365,42 @@
             });
 
         }
+
+
+        function followup(x){
+
+            var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getFollowupIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Lead Assigned');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+                }
+            });
+
+        }
+
 
 
 

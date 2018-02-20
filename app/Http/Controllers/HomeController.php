@@ -128,7 +128,6 @@ class HomeController extends Controller
         }
 
 
-
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
