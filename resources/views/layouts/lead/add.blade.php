@@ -327,9 +327,11 @@
 
     <script>
 
+        @if(Session::has('message'))
         $(window).on('load',function(){
             $('#create_temp_modal').modal('show');
         });
+        @endif
 
         $(document).ready(function() {
             $('.select').select2();
