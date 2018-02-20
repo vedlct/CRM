@@ -34,6 +34,7 @@
 							  <th>Country</th>
 							  <th>Contact Person</th>
 							  <th>Contact Number</th>
+							  <th>Time</th>
 							  <th>Action</th>
 
 						  </tr>
@@ -52,7 +53,8 @@
 								  <td>{{$lead->possibility->possibilityName}}</td>
 								  <td>{{$lead->country->countryName}}</td>
 								  <td>{{$lead->personName}}</td>
-								  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
+									  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
+									  <td>{{$lead->time}}</td>
 
 								  <td>
 									  <!-- Trigger the modal with a button -->
@@ -249,9 +251,16 @@
 									  <br>
 								  </div>
 
-								  <div class="form-group">
-									  <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
-									  <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
+								  <div class="row">
+									  <div class="form-group col-md-6">
+										  <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+										  <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
+									  </div>
+
+									  <div class="form-group col-md-6">
+										  <label class=""><b>Time: </b> </label>
+										  <input class="form-control" name="time" placeholder="pick Time">
+									  </div>
 								  </div>
 
 

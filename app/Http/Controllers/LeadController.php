@@ -369,6 +369,8 @@ class LeadController extends Controller
 
     public function storeReport(Request $r){
 
+
+
         $this->validate($r,[
             'leadId'=>'required',
             'report' => 'required',
@@ -394,6 +396,7 @@ class LeadController extends Controller
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
             $followUp->userId=Auth::user()->id;
+            $followUp->time=$r->time;
             $followUp->followUpDate=$r->followup;
             $followUp->save();
 

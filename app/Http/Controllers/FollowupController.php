@@ -95,6 +95,7 @@ class FollowupController extends Controller
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
             $followUp->userId=Auth::user()->id;
+            $followUp->time=$r->time;
             $followUp->followUpDate=$r->followup;
             $followUp->save();
         }
