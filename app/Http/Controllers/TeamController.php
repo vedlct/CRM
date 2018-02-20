@@ -47,10 +47,12 @@ class TeamController extends Controller
         $User_Type=Session::get('userType');
 
         if($User_Type=='SUPERVISOR'){
-        $users = User::where('typeId',2)
-                    ->orWhere('typeId',5)
-                    ->where('teamId',null)
-                    ->get();
+        $users = User::where('teamId',null)
+                ->where(function($q){
+                $q->orWhere('typeId',2)
+                    ->orWhere('typeId',5);
+                    })
+                ->get();
                 $teams = Team::with('user')->get();
 
                 $userAssigneds=User::where('users.teamId','!=',null)

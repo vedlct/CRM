@@ -194,8 +194,22 @@ Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.
 //Report
 Route::get('/report','ReportController@index')->name('report');
 Route::get('report/user/{id}','ReportController@individualCall');
-
 Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
+Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+
+
+Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
+Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
+Route::post('/searchTableByDateForUser','ReportController@searchTableByDateForUser')->name('searchTableByDateForUser');
+
+//Report Individual from Report Table
+Route::post('/getHighPossibilityIndividual','GetIndividualReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
+Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividual')->name('getCallIndividual');
+Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
+Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
+Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
+Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
+Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 
 
 

@@ -33,8 +33,6 @@ class DetachedLeadController extends Controller
         }
 
         return Redirect()->route('home');
-
-
     }
 
 

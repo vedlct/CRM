@@ -36,14 +36,12 @@
                         <tr>
                             <td width="15%">{{$lead->companyName}}</td>
                             <td width="8%">{{$lead->category->categoryName}}</td>
-                            <td width="10%"><a href="{{$lead->website}}">{{$lead->website}}</a></td>
+                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
                             <td width="8%"><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
-
-                            {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
                             <td width="10%">
 
                                 @if($lead->contactedUserId==null)
@@ -247,13 +245,19 @@
                             <br>
                             </div>
 
-                            <div class="form-group">
-                                <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
                             <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
-                            </div>
+                        </div>
 
+                        <div class="form-group col-md-6">
+                            <label class=""><b>Time: </b> </label>
+                            <input class="form-control" name="time" placeholder="pick Time">
+                        </div>
+                    </div>
 
-                            <div class="form-group">
+                    <div class="form-group">
                             <label class=""><b>Possibility : </b></label>
                             <select class="form-control"  name="possibility" id="possibility">
                                 @foreach($possibilities as $p)

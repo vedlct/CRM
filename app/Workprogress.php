@@ -13,4 +13,9 @@ class Workprogress extends Model
     public function user(){
         return $this->belongsTo(User::class,'userId','id');
     }
+
+    public function possibility(){
+        return $this->belongsTo(Possibility::class,'possibilityId','possibilityId');
+    }
+
 }

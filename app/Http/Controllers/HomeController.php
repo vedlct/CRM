@@ -58,6 +58,7 @@ class HomeController extends Controller
 
 
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
             ->whereDate('created_at',$lastDate)->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
@@ -127,7 +128,6 @@ class HomeController extends Controller
         }
 
 
-
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
@@ -145,8 +145,10 @@ class HomeController extends Controller
 
     public  function call(){
         $date = Carbon::now();
-        $leads=Lead::leftJoin('workprogress','leads.leadId','workprogress.leadId')
+        $leads=Lead::select('leads.*','workprogress.created_at')
+            ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
             ->where('workprogress.userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
             ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
         $callReports = Callingreport::get();
@@ -169,7 +171,7 @@ class HomeController extends Controller
 
      $User_Type=Session::get('userType');
      if($User_Type=='RA'){
-         $leads=Lead::select('leads.*')
+         $leads=Lead::select('leads.*','possibilitychanges.created_at')
              ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
              ->where('leads.minedBy',Auth::user()->id)
              ->where('possibilitychanges.possibilityId',3)
@@ -178,7 +180,7 @@ class HomeController extends Controller
      }
 
     else{
-        $leads=Lead::select('leads.*')
+        $leads=Lead::select('leads.*','possibilitychanges.created_at')
             ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
             ->where('possibilitychanges.userId',Auth::user()->id)
             ->where('possibilitychanges.possibilityId',3)

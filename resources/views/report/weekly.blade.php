@@ -21,13 +21,14 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="15%">Company Name</th>
+                        <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
-                        <th width="8%">Contact Person</th>
+                        <th width="15%">Contact Person</th>
                         <th width="8%">Contact Number</th>
+                        <th width="8%">Created At</th>
 
                     </tr>
                     </thead>
@@ -37,11 +38,12 @@
                         <tr>
                             <td width="15%">{{$lead->companyName}}</td>
                             <td width="8%">{{$lead->category->categoryName}}</td>
-                            <td width="10%"><a href="{{$lead->website}}">{{$lead->website}}</a></td>
+                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
                             <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="8%">{{$lead->created_at}}</td>
 
                         </tr>
 
