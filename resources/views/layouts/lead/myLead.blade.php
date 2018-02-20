@@ -245,13 +245,19 @@
                             <br>
                             </div>
 
-                            <div class="form-group">
-                                <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
                             <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
-                            </div>
+                        </div>
 
+                        <div class="form-group col-md-6">
+                            <label class=""><b>Time: </b> </label>
+                            <input class="form-control" name="time" placeholder="pick Time">
+                        </div>
+                    </div>
 
-                            <div class="form-group">
+                    <div class="form-group">
                             <label class=""><b>Possibility : </b></label>
                             <select class="form-control"  name="possibility" id="possibility">
                                 @foreach($possibilities as $p)
