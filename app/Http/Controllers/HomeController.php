@@ -58,6 +58,7 @@ class HomeController extends Controller
 
 
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
             ->whereDate('created_at',$lastDate)->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
@@ -148,6 +149,7 @@ class HomeController extends Controller
         $leads=Lead::select('leads.*','workprogress.created_at')
             ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
             ->where('workprogress.userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
             ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
         $callReports = Callingreport::get();

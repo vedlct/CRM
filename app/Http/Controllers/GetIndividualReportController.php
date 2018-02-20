@@ -97,6 +97,7 @@ class GetIndividualReportController extends Controller
                 ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
                 ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
                 ->where('workprogress.userId',$user->id)
+                ->where('workprogress.callingReport','!=',null)
                 ->whereBetween('workprogress.created_at', [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>

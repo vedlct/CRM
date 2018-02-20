@@ -33,13 +33,9 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
-
     public function allLeads(Request $r){
         $leads=Lead::with('country','category','mined','status','contact','possibility')
                     ->orderBy('leadId','desc');
-
-
-
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -63,8 +59,7 @@ class LeadController extends Controller
     }
 
     public function add(){
-        
-            $cats=Category::where('type', 1)->get();
+        $cats=Category::where('type', 1)->get();
             $countries=Country::get();
             $possibilities=Possibility::get();
 
@@ -83,7 +78,6 @@ class LeadController extends Controller
 
     public function store(Request $r){
         //Validating The input Filed
-
         $this->validate($r,[
             'companyName' => 'required|max:100',
             'website' => 'max:100',
@@ -102,7 +96,6 @@ class LeadController extends Controller
         else{
             $l->statusId = 1;
         }
-
         $l->possibilityId=$r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
@@ -117,9 +110,6 @@ class LeadController extends Controller
         //getting Loggedin User id
         $l->minedBy = Auth::user()->id;
         $l->save();
-
-
-
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
         return back();
@@ -128,12 +118,8 @@ class LeadController extends Controller
 
 
     public function assignShow(){
-
-
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-
-
 
             //getting only first name of users
             if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
@@ -152,35 +138,24 @@ class LeadController extends Controller
                     ->get();
             }
 
-
             return view('layouts.lead.assignLead')
-//                ->with('leads',$leads)
-                ->with('users',$users);
-        }
-
+                ->with('users',$users);}
         return Redirect()->route('home');
 
     }
 
 
     public function getAssignLeadData(){
-
         $leads=(new Lead())->showNotAssignedLeads();
-
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
 
             })
             ->make(true);
-
-
     }
 
-
-
     public function assignStore(Request $r){
-
         if($r->ajax()){
             foreach ($r->leadId as $lead){
                 $l=Lead::findOrFail($lead);
@@ -209,9 +184,6 @@ class LeadController extends Controller
             'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
 
         ]);
-
-
-
         $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
@@ -236,22 +208,14 @@ class LeadController extends Controller
 
 
     public function filter(){
-
-
         $categories=Category::where('type',1)
         ->get();
-
-
-
         return view('layouts.lead.filterLead')->with('categories',$categories);
 
     }
 
     public function getFilterLeads(Request $request){
-
         $leads=(new Lead())->showNotAssignedLeads();
-
-
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 if(Session::get('userType')=='RA'){
@@ -288,11 +252,7 @@ class LeadController extends Controller
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    </form>';
-
-                }
-
-            })
+                                    </form>';}})
             ->make(true);
 
     }
@@ -314,8 +274,6 @@ class LeadController extends Controller
             $status=Leadstatus::where('statusId','!=',7)
                     ->get();
             $country=Country::get();
-
-
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
                 ->with('callReports', $callReports)
@@ -324,14 +282,7 @@ class LeadController extends Controller
                 ->with('country',$country)
                 ->with('status',$status);
         }
-
-        return Redirect()->route('home');
-
-    }
-
-
-
-
+        return Redirect()->route('home');}
 
     public function getComments(Request $r){
         if($r->ajax()){
@@ -341,9 +292,7 @@ class LeadController extends Controller
                 ->get();
             $text='';
             foreach ($comments as $comment){
-
                 $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
-
             }
             return Response($text);
         }
@@ -353,9 +302,6 @@ class LeadController extends Controller
 
 
     public function tempLeads(){
-
-
-
         //For Ra
         $User_Type=Session::get('userType');
         if($User_Type=='RA' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR' || $User_Type=='ADMIN'){
@@ -364,31 +310,20 @@ class LeadController extends Controller
 
             return view('layouts.lead.temp')
                     ->with('categories',$categories)
-                    ->with('countries',$countries);
-        }
-
+                    ->with('countries',$countries);}
         return Redirect()->route('home');
-
-
     }
 
 
     public function tempData(Request $request){
-
-
         $possibility=Possibility::get();
-
         $pBefore='<select class="form-control" id="drop" ';
-
         $pAfter=' name="possibility" ><option value="">Select</option>';
         foreach ($possibility as $pos){
             $pAfter.='<option value="'.$pos->possibilityId.'">'.$pos->possibilityName.'</option>';
         }
         $pAfter.='</select>';
-
         $leads=(new Lead())->getTempLead();
-
-
 
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) use ($pAfter,$pBefore){
@@ -408,19 +343,11 @@ class LeadController extends Controller
             })
             ->rawColumns(['edit', 'action'])
             ->make(true);
-
-
-
-
-
-
     }
 
 
 
     public function changePossibility(Request $r){
-
-        //return Response($r);
 
         if($r->ajax()){
             $lead=Lead::findOrFail($r->leadId);
@@ -448,21 +375,6 @@ class LeadController extends Controller
             'comment' => 'required|max:300',
 
         ]);
-
-
-//        if($r->report==4){
-//            if($r->followup !=null) {
-//                $f = Followup::where('leadId', $r->leadId)
-//                    ->where('userId', Auth::user()->id)->first();
-//
-//                $update = Followup::findOrFail($f->followId);
-//                $update->workStatus = 1;
-//                $update->save();
-//            }
-//
-//        }
-
-
 
         $workStatus=Leadassigned::where('leadId',$r->leadId)
                 ->where('assignTo',Auth::user()->id)
@@ -504,13 +416,11 @@ class LeadController extends Controller
 
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
-//            $progress->response=$r->response;
         $progress->leadId=$r->leadId;
         $progress->progress=$r->progress;
         $progress->userId=Auth::user()->id;
         $progress->comments=$r->comment;
         $progress->save();
-
 
         Session::flash('message', 'Report Updated Successfully');
         return back();
@@ -527,12 +437,8 @@ class LeadController extends Controller
                 $leadAssigned->assignTo=$r->userId;
                 $leadAssigned->leadId=$lead;
                 $leadAssigned->save();
-
-
-
             }
             return Response('true');
-            // return Response($r->leadId);
         }
     }
 
@@ -587,9 +493,6 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
 
         return Redirect()->route('home');
-
-
-
     }
 
    public function rejectlist(){
@@ -603,28 +506,19 @@ class LeadController extends Controller
                ->where('workprogress.progress','Reject')
                ->where('minedBy',Auth::user()->id)
                ->where('statusId',5)->get();
-
            $categories=Category::where('type',1)->get();
            $callReports=Callingreport::get();
            $possibilities=Possibility::get();
-
-//            return $leads;
 
            return view('layouts.lead.rejectList')
                ->with('leads',$leads)
                ->with('callReports',$callReports)
                ->with('possibilities',$possibilities)
                ->with('categories',$categories);
-
-   }
+       }
 
        return Redirect()->route('home');
-
-
-
    }
-
-
 
     public function starLeads(){
         $User_Type=Session::get('userType');
@@ -638,28 +532,22 @@ class LeadController extends Controller
                         ->orWhere('contactedUserId',Auth::user()->id);
 
                 })
-//                ->where('leadassigneds.assignTo',Auth::user()->id)
-//                ->where('leadassigneds.leaveDate',null)
-
                 ->get();
 
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             $categories=Category::where('type',1)->get();
 
-
             return view('layouts.lead.testList')
                 ->with('leads',$leads)
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories);}
-        return Redirect()->route('home');
 
-    }
+                return Redirect()->route('home');}
 
 
     public function addContacted(Request $r){
-
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
         $lead->statusId=7;
@@ -687,15 +575,12 @@ class LeadController extends Controller
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country);
-
         }
-
         return Redirect()->route('home');
     }
 
 
     public function getContacedData(Request $r){
-
         $leads=Lead::with('mined','category','country','possibility')
             ->where('contactedUserId',Auth::user()->id)
             ->orderBy('leadId','desc');
@@ -756,14 +641,12 @@ class LeadController extends Controller
         if($lead->statusId ==1){
             $lead->statusId=5;
             $lead->save();
-
             $work=new Workprogress;
             $work->progress='Reject';
             $work->leadId=$r->leadId;
             $work->userId=Auth::user()->id;
             $work->comments=$r->comment;
-            $work->save();
-        }
+            $work->save();}
 
         Session::flash('message', 'Lead Rejected Successfully');
         return back();
@@ -778,7 +661,6 @@ class LeadController extends Controller
             ->where('leaveDate',null)
             ->limit(1)->first();
 
-
         if ($assignId){
             $leave=Leadassigned::find($assignId->assignId);
             $leave->leaveDate=date('Y-m-d');
@@ -787,12 +669,8 @@ class LeadController extends Controller
             $l=Lead::findOrFail($leave->leadId);
             $l->leadAssignStatus=0;
             $l->save();
-
-
         }
-
-
-            $lead=Lead::findOrFail($r->leadId);
+        $lead=Lead::findOrFail($r->leadId);
             $lead->statusId=$r->Status;
             if($lead->contactedUserId == Auth::user()->id){
                 $lead->contactedUserId =null;
@@ -800,14 +678,9 @@ class LeadController extends Controller
                 Session::flash('message', 'You have Leave The Lead successfully');
                 return back();
             }
-
             $lead->save();
             Session::flash('message', 'You have Leave The Lead successfully');
-            return back();
-
-
-
-    }
+            return back();}
 
     public function destroy($id){
         $lead=Lead::findOrFail($id);
@@ -815,7 +688,4 @@ class LeadController extends Controller
         Session::flash('message', 'Lead deleted successfully');
         return back();
     }
-
-
-
 }
