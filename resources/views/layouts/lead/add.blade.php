@@ -30,7 +30,7 @@
                         <th width="5%">Contact</th>
                         <th width="8%">Status</th>
                         <th width="8%">Possibility</th>
-                        <th width="10%">Edit</th>
+                        <th width="15%">Edit</th>
 
 
                     </tr>
@@ -327,9 +327,11 @@
 
     <script>
 
+        @if(Session::has('message'))
         $(window).on('load',function(){
             $('#create_temp_modal').modal('show');
         });
+        @endif
 
         $(document).ready(function() {
             $('.select').select2();

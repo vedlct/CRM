@@ -51,6 +51,7 @@
             <tr>
                 <th>Name</th>
                 <th>Total Call</th>
+                <th>Follow up</th>
                 <th>Contacted</th>
                 <th>Assigned Lead</th>
                 <th>High Possibility</th>
@@ -71,6 +72,16 @@
                        data-user-id="{{$r->id}}"
                        data-user-name="{{$r->userName}}"
                     >{{$r->called}}</a></td>
+
+                <td><a href="#" class="highpossibility" onclick="followup(this)"
+                       @if(isset($fromDate) && isset($toDate))
+                       data-date-from="{{$fromDate}}"
+                       data-date-to="{{$toDate}}"
+                       @endif
+                       data-user-id="{{$r->id}}"
+                       data-user-name="{{$r->userName}}"
+                    >{{$r->followupThisWeek}}</a>
+                </td>
                 <td>{{$r->contacted}}</td>
                 <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
                        @if(isset($fromDate) && isset($toDate))
@@ -78,33 +89,44 @@
                        data-date-to="{{$toDate}}"
                        @endif
                        data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}"
-
-
-                    >{{$r->assignedLead}}</a></td>
+                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
+                </td>
                 <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
                             @if(isset($fromDate) && isset($toDate))
                             data-date-from="{{$fromDate}}"
                             data-date-to="{{$toDate}}"
                             @endif
                             data-user-id="{{$r->id}}"
-                            data-user-name="{{$r->userName}}"
-                    >
-                        {{$r->highPosibilities}}
+                            data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
                     </a>
                 </td>
-                <td>{{$r->test}}</td>
-                <td>{{$r->closing}}</td>
-                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
+                <td><a href="#" class="highpossibility" onclick="testlead(this)"
                        @if(isset($fromDate) && isset($toDate))
                        data-date-from="{{$fromDate}}"
                        data-date-to="{{$toDate}}"
                        @endif
                        data-user-id="{{$r->id}}"
                        data-user-name="{{$r->userName}}"
-                    >
-                    {{$r->leadMined}}
-                    </a></td>
+                    >{{$r->test}}</a>
+                </td>
+
+                <td><a href="#" class="highpossibility" onclick="closelead(this)"
+                       @if(isset($fromDate) && isset($toDate))
+                       data-date-from="{{$fromDate}}"
+                       data-date-to="{{$toDate}}"
+                       @endif
+                       data-user-id="{{$r->id}}"
+                       data-user-name="{{$r->userName}}">
+                        {{$r->closing}}<a/>
+                </td>
+                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
+                       @if(isset($fromDate) && isset($toDate))
+                       data-date-from="{{$fromDate}}"
+                       data-date-to="{{$toDate}}"
+                       @endif
+                       data-user-id="{{$r->id}}"
+                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
+                </td>
             </tr>
                 @endforeach
             </tbody>
@@ -130,14 +152,6 @@
         } );
 
 
-
-        {{--$('.highpossibility').on('click',function(e){--}}
-            {{--var userId=$(e.relatedTarget).data('user-id');--}}
-            {{--alert(userId);--}}
-            {{--$('.modal-body').load('{{route("insertTeam")}}',function(){--}}
-                {{--$('#highPossibility').modal({show:true});--}}
-            {{--});--}}
-        {{--});--}}
 
         function highpossibility(x){
 
@@ -279,6 +293,115 @@
             });
 
         }
+
+
+
+        function testlead(x){
+
+            var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getTestIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Lead Assigned');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+                }
+            });
+
+        }
+
+
+
+        function closelead(x){
+
+            var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getClosingIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Lead Assigned');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+                }
+            });
+
+        }
+
+
+        function followup(x){
+
+            var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getFollowupIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Lead Assigned');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+                }
+            });
+
+        }
+
+
 
 
 
