@@ -120,6 +120,48 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return back();
     }
+
+
+
+    public function storeLeadAdmin(Request $r){
+
+        //Validating The input Filed
+        $this->validate($r,[
+            'companyName' => 'required|max:100',
+            'website' => 'max:100',
+            'email' => 'max:100',
+            'personName' => 'max:100',
+            'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
+            'designation'=>'max:100'
+        ]);
+        //Inserting Data To Leads TAble
+        $l=new Lead;
+//        if($r->contact){
+//            $l->statusId = 7;
+//            $l->contactedUserId=Auth::user()->id;
+//        }
+//        else{
+            $l->statusId = 6;
+//        }
+        $l->possibilityId=$r->possibility;
+        $l->categoryId = $r->category;
+        $l->companyName = $r->companyName;
+        $l->personName= $r->personName;
+        $l->designation=$r->designation;
+        $l->website = $r->website;
+        $l->email= $r->email;
+        $l->contactNumber = $r->personNumber;
+        $l->countryId = $r->country;
+        $l->comments=$r->comment;
+        //getting Loggedin User id
+        $l->minedBy = Auth::user()->id;
+        $l->save();
+        //for Flash Meassage
+        Session::flash('message', 'Lead Added successfully');
+        return back();
+    }
+
+
     public function assignShow(){
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
@@ -223,7 +265,10 @@ class LeadController extends Controller
     public function filter(){
         $categories=Category::where('type',1)
             ->get();
-        return view('layouts.lead.filterLead')->with('categories',$categories);
+        $country=Country::get();
+        return view('layouts.lead.filterLead')
+            ->with('categories',$categories)
+            ->with('country',$country);
     }
     public function getFilterLeads(Request $request){
         $leads=(new Lead())->showNotAssignedLeads();
@@ -239,7 +284,8 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
-                                           
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     ';
@@ -258,6 +304,8 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>

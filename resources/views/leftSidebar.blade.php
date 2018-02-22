@@ -77,7 +77,6 @@
                         <li><a href="{{route('testlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Test List</span></a></li>
                         <li><a href="{{route('closelist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Close List</span></a></li>
                         <li><a href="{{route('rejectlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Reject List</span></a></li>
-                        <li><a href="#"><span class="hide-menu">Leave</span></a></li>
 
                     </ul>
                 </li>

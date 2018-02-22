@@ -191,7 +191,9 @@
 
         $(document).ready(function() {
             datatable= $('#myTable').DataTable();
-            datatable= $('#myTable2').DataTable();
+            datatable= $('#myTable2').DataTable({
+                "order": [[ 6, "asc" ]]
+            });
 
         });
 
