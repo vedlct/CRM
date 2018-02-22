@@ -40,7 +40,8 @@ class GetIndividualReportController extends Controller
                 ->where('minedBy', $user->id)
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.possibilityId', 3)
-                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+
         }
 
         else{
@@ -49,7 +50,7 @@ class GetIndividualReportController extends Controller
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.userId',$user->id)
                 ->where('possibilitychanges.possibilityId',3)
-                ->whereBetween('possibilitychanges.created_at', [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
         }
 
 
@@ -98,7 +99,7 @@ class GetIndividualReportController extends Controller
                 ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
                 ->where('workprogress.userId',$user->id)
                 ->where('workprogress.callingReport','!=',null)
-                ->whereBetween('workprogress.created_at', [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -140,7 +141,7 @@ class GetIndividualReportController extends Controller
             ->with('country','possibility')
             ->leftJoin('followup', 'leads.leadId', 'followup.leadId')
             ->where('followup.userId',$user->id)
-            ->whereBetween('followup.created_at', [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(followup.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -272,7 +273,7 @@ class GetIndividualReportController extends Controller
         $leads = Lead::select('leads.*')
             ->with('country','category','possibility')
             ->where('minedBy',$user->id)
-            ->whereBetween('created_at', [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -314,7 +315,7 @@ class GetIndividualReportController extends Controller
             ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
             ->leftJoin('users','users.id','leadassigneds.assignBy')
             ->where('leadassigneds.assignTo',$user->id)
-            ->whereBetween('leadassigneds.created_at',[$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'),[$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>Assign By</th>

@@ -108,11 +108,11 @@ class FollowupController extends Controller
 
         if($r->report !=2){
 //            if($currentPossibility !=$r->possibility){
-                $log=new Possibilitychange;
-                $log->leadId=$r->leadId;
-                $log->possibilityId=$r->possibility;
-                $log->userId=Auth::user()->id;
-                $log->save();
+            $log=new Possibilitychange;
+            $log->leadId=$r->leadId;
+            $log->possibilityId=$r->possibility;
+            $log->userId=Auth::user()->id;
+            $log->save();
 //            }
 
         }
