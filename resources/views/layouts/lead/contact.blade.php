@@ -59,10 +59,71 @@
                     <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
+                    <form  method="post" action="{{route('leadUpdate')}}">
+                        {{csrf_field()}}
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Category:</b></label>
+                                <select class="form-control"  name="category" id="category">
+                                    <option value="">Please Select</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="hidden" name="leadId">
+                                <label><b>Company Name:</b></label>
+                                <input type="text" class="form-control" name="companyName" value="">
+                            </div>
 
-                    {{--this div is refer from editContactModal.blade.php--}}
-                    <div id="txtHint"></div>
+                            <div class="col-md-4">
+                                <label><b>Email:</b></label>
+                                <input type="email" class="form-control" name="email" value="">
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Contact Person:</b></label>
+                                <input type="text" class="form-control" name="personName" value="">
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Number:</b></label>
+                                <input type="text" class="form-control" name="number" value="">
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Website:</b></label>
+                                <input type="text" class="form-control" name="website" value="">
+                            </div>
 
+                            <div class="col-md-4">
+                                <label><b>Designation:</b></label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                                <br><br><br>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Follow up Date:</b></label>
+                                <input type="text" class="form-control" id="follow-show" value="" readonly>
+                            </div>
+
+
+
+                            <div class="col-md-6">
+                                <button class="btn btn-success" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </form>
                     <br><br>
                     <form method="post" action="{{route('leaveLead')}}">
                         <div class="row">
@@ -138,15 +199,15 @@
                             </div>
 
                             <div class="row">
-                            <div class="form-group col-md-6">
-                                <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
-                                <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
-                            </div>
+                                <div class="form-group col-md-6">
+                                    <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+                                    <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
+                                </div>
 
-                            <div class="form-group col-md-6">
-                                <label class=""><b>Time: </b> </label>
-                                <input class="form-control" name="time" placeholder="pick Time">
-                            </div>
+                                <div class="form-group col-md-6">
+                                    <label class=""><b>Time: </b> </label>
+                                    <input class="form-control" name="time" placeholder="pick Time">
+                                </div>
                             </div>
 
 
@@ -210,7 +271,7 @@
         //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function(e) {
-
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var leadName = $(e.relatedTarget).data('lead-name');
@@ -222,6 +283,18 @@
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('editcontactmodalshow')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    // $('#txtHint').html(data);
+                    console.log(data);
+                    $('#follow-show').val(data.followUpDate);
+
+                }
+            });
 
 
             //populate the textbox
@@ -333,28 +406,7 @@
         });
 
 
-        function edtcontactmodal(x) {
 
-            leadId = $(x).data('lead-id');
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           // alert(leadId);
-
-            $.ajax({
-                type : 'post' ,
-                url : '{{route('editcontactmodalshow')}}',
-                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-                success : function(data){
-                    $('#txtHint').html(data);
-
-                }
-            });
-
-           // document.getElementById("edit_modal").style.display = "block";
-            $('#edit_modal').modal('show');
-            $(".custom-close").on('click', function() {
-                $('#edit_modal').modal('hide');
-            });
-        }
 
 
 
