@@ -123,7 +123,7 @@
                     @elseif($userType =='USER' || $userType =='RA' )
 
                             <li>
-                                <a href="{{route('reportTableForUser')}}"><i class="fa fa-table" aria-hidden="true"></i>
+                                <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
                                     <span class="hide-menu">Report</span></a>
 
                             </li>

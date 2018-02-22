@@ -31,7 +31,7 @@ class LeadController extends Controller
             ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
-                if($lead->leadAssignStatus == 0 && $lead->statusId==2 && Session::get('userType')!='RA'){
+                if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
                     return '<form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
@@ -493,6 +493,7 @@ class LeadController extends Controller
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories);}
         return Redirect()->route('home');}
+
     public function addContacted(Request $r){
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;

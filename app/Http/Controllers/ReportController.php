@@ -116,6 +116,12 @@ class ReportController extends Controller
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
+        else if($User_Type =='USER' || $User_Type =='RA'){
+            $users=User::select('id','firstName','typeId')
+                ->where('id',Auth::user()->id)
+                ->get();
+
+        }
         else{
             $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
@@ -155,13 +161,13 @@ class ReportController extends Controller
 
             $closing=Workprogress::where('userId',$user->id)
                 ->where('progress','Closing')
-                ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
-//                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])->count();
+//                ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])->count();
 
             $test=Workprogress::where('userId',$user->id)
                 ->where('progress','Test Job')
-                ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
-//            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
+//                ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
 
             $contacted=Workprogress::where('userId',$user->id)
@@ -198,14 +204,19 @@ class ReportController extends Controller
 
 
     public function searchGraphByDate(Request $r){
+
         $User_Type=Session::get('userType');
         $f = Carbon::parse($r->fromDate);
         $t = Carbon::parse($r->toDate);
 
 
+
+
+
         $length = $t->diffInWeeks($f);
         if($length==0){
             $length = $t->diffInDays($f);
+            $length++;
             $length = $length/5;
         }
 //        $length = $t->diffInDays($f);
@@ -231,22 +242,22 @@ class ReportController extends Controller
             $report=array();
             foreach ($users as $user){
                 $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                    ->whereBetween('created_at', [$r->fromDate, $r->toDate])->count();
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
-                    ->whereBetween('created_at', [$r->fromDate, $r->toDate])->count();
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
                 //When user is RA
                 if($user->typeId==4){
                     $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
                         ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                         ->where('possibilitychanges.possibilityId',3)
-                        ->whereBetween('possibilitychanges.created_at', [$r->fromDate, $r->toDate])->count();
+                        ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate, $r->toDate])->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
                         ->where('possibilityId',3)
-                        ->whereBetween('created_at', [$r->fromDate,  $r->toDate])->count();
+                        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,  $r->toDate])->count();
                 }
 
                 try{
@@ -315,6 +326,12 @@ class ReportController extends Controller
                 ->where('typeId','!=',1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
+        }
+        else if($User_Type =='USER' || $User_Type =='RA'){
+            $users=User::select('id','firstName','typeId')
+                ->where('id',Auth::user()->id)
+                ->get();
+
         }
         else{
             $users=User::select('id','firstName','typeId')
