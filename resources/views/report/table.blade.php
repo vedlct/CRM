@@ -8,7 +8,7 @@
 
     <!--High Possibility Modal -->
     <div class="modal fade" id="highPossibility" role="dialog">
-        <div class="modal-dialog" style="max-width: 50%">
+        <div class="modal-dialog" style="max-width: 80%">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
