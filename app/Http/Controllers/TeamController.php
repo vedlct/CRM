@@ -62,7 +62,7 @@ class TeamController extends Controller
                     ->with('users', $users)
                     ->with('teams', $teams)
                     ->with('userAssigneds',$userAssigneds);}
-        return Redirect()->route('home');
+                return Redirect()->route('home');
 
 
                 }
