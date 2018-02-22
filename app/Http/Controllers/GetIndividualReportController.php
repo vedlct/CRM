@@ -183,7 +183,7 @@ class GetIndividualReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('workprogress.userId',$user->id)
             ->where('workprogress.progress','Test Job')
-            ->whereBetween('workprogress.created_at', [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -227,7 +227,7 @@ class GetIndividualReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('workprogress.userId',$user->id)
             ->where('workprogress.progress','Closing')
-            ->whereBetween('workprogress.created_at', [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
