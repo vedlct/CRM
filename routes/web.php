@@ -155,6 +155,7 @@ Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
+Route::post('/editcontactmodalshow','LeadController@editcontactmodalshow')->name('editcontactmodalshow');
 
 //Reject Leads rejectedLeads
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');

@@ -53,7 +53,6 @@
                     </div>
                     <div class="modal-body">
 
-
                         {{csrf_field()}}
                         <div class="row">
 
@@ -226,6 +225,7 @@
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
         });
+
 
     </script>
 @endsection
