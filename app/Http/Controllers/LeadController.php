@@ -124,7 +124,7 @@ class LeadController extends Controller
 
 
     public function storeLeadAdmin(Request $r){
-        return $r;
+
         //Validating The input Filed
         $this->validate($r,[
             'companyName' => 'required|max:100',
@@ -136,13 +136,13 @@ class LeadController extends Controller
         ]);
         //Inserting Data To Leads TAble
         $l=new Lead;
-        if($r->contact){
-            $l->statusId = 7;
-            $l->contactedUserId=Auth::user()->id;
-        }
-        else{
-            $l->statusId = 1;
-        }
+//        if($r->contact){
+//            $l->statusId = 7;
+//            $l->contactedUserId=Auth::user()->id;
+//        }
+//        else{
+            $l->statusId = 6;
+//        }
         $l->possibilityId=$r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
