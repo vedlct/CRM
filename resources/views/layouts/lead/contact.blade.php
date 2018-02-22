@@ -406,7 +406,28 @@
         });
 
 
+        {{--function edtcontactmodal(x) {--}}
 
+            {{--leadId = $(x).data('lead-id');--}}
+            {{--var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
+            {{--// alert(leadId);--}}
+
+            {{--$.ajax({--}}
+                {{--type : 'post' ,--}}
+                {{--url : '{{route('editcontactmodalshow')}}',--}}
+                {{--data : {_token: CSRF_TOKEN,'leadId':leadId} ,--}}
+                {{--success : function(data){--}}
+                    {{--$('#txtHint').html(data);--}}
+
+                {{--}--}}
+            {{--});--}}
+
+            {{--// document.getElementById("edit_modal").style.display = "block";--}}
+            {{--$('#edit_modal').modal('show');--}}
+            {{--$(".custom-close").on('click', function() {--}}
+                {{--$('#edit_modal').modal('hide');--}}
+            {{--});--}}
+        {{--}--}}
 
 
 
