@@ -103,6 +103,7 @@ Route::post('showchart', 'HighChartsController@search')->name('showchart.search'
 //Lead
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
+Route::post('lead/storeLeadAdmin', 'LeadController@storeLeadAdmin')->name('storeLeadAdmin');
 
 Route::post('lead/all','LeadController@allLeads')->name('allLeads');
 

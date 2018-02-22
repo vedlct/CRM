@@ -17,7 +17,7 @@
         <div class="card-body">
             <a href="#create_temp_modal" data-toggle="modal" class="btn btn-info btn-md" style="border-radius: 50%; float: right;"><i class="fa fa-plus"></i></a>
             @if($userType =='ADMIN')
-            <a href="#admin_create_temp_modal" data-toggle="modal" class="btn btn-success btn-md" style="border-radius: 50%; float: right; margin-right: 10px;"><i class="fa fa-plus"></i></a>
+            <a href="#admin_create_temp_modal" title="Client!" data-toggle="modal" class="btn btn-success btn-md" style="border-radius: 50%; float: right; margin-right: 10px;"><i class="fa fa-plus"></i></a>
             @endif
             <h2 class="card-title" align="center"><b>All Leads</b></h2>
 
@@ -232,7 +232,7 @@
     <div class="modal" id="admin_create_temp_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
-            <form class="modal-content" action="{{route('storeLead')}}" method="POST">
+            <form class="modal-content" action="{{route('storeLeadAdmin')}}" method="POST">
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -323,10 +323,10 @@
 
                         </div>
 
-                        <div class="form-group col-md-5">
-                            <br><br>
-                            <label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">
-                        </div>
+                        {{--<div class="form-group col-md-5">--}}
+                            {{--<br><br>--}}
+                            {{--<label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">--}}
+                        {{--</div>--}}
 
 
 

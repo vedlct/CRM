@@ -120,6 +120,48 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added successfully');
         return back();
     }
+
+
+
+    public function storeLeadAdmin(Request $r){
+        return $r;
+        //Validating The input Filed
+        $this->validate($r,[
+            'companyName' => 'required|max:100',
+            'website' => 'max:100',
+            'email' => 'max:100',
+            'personName' => 'max:100',
+            'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
+            'designation'=>'max:100'
+        ]);
+        //Inserting Data To Leads TAble
+        $l=new Lead;
+        if($r->contact){
+            $l->statusId = 7;
+            $l->contactedUserId=Auth::user()->id;
+        }
+        else{
+            $l->statusId = 1;
+        }
+        $l->possibilityId=$r->possibility;
+        $l->categoryId = $r->category;
+        $l->companyName = $r->companyName;
+        $l->personName= $r->personName;
+        $l->designation=$r->designation;
+        $l->website = $r->website;
+        $l->email= $r->email;
+        $l->contactNumber = $r->personNumber;
+        $l->countryId = $r->country;
+        $l->comments=$r->comment;
+        //getting Loggedin User id
+        $l->minedBy = Auth::user()->id;
+        $l->save();
+        //for Flash Meassage
+        Session::flash('message', 'Lead Added successfully');
+        return back();
+    }
+
+
     public function assignShow(){
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
