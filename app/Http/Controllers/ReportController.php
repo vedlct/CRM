@@ -184,7 +184,6 @@ class ReportController extends Controller
             $u->contacted=$contacted;
             array_push($report, $u);
 
-
         }
 
 
