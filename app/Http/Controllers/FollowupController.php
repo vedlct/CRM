@@ -108,11 +108,11 @@ class FollowupController extends Controller
 
         if($r->report !=2){
 //            if($currentPossibility !=$r->possibility){
-                $log=new Possibilitychange;
-                $log->leadId=$r->leadId;
-                $log->possibilityId=$r->possibility;
-                $log->userId=Auth::user()->id;
-                $log->save();
+            $log=new Possibilitychange;
+            $log->leadId=$r->leadId;
+            $log->possibilityId=$r->possibility;
+            $log->userId=Auth::user()->id;
+            $log->save();
 //            }
 
         }
@@ -133,6 +133,8 @@ class FollowupController extends Controller
 
 //        return redirect()->route('follow-up.index',['fromDate'=>$r->fromdate,'toDate'=> $r->todate]);
 //        return redirect()->route('follow-up.search' , ['fromdate'=>'2018-02-12','todate'=>'2018-02-14']);
+
+        ////this is for back to search result///////////
         if($r->fromDate!= null && $r->toDate){
 
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')

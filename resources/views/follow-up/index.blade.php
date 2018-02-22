@@ -91,10 +91,6 @@
 		  </div>
 
 
-
-
-
-
 		  <!-- Edit Modal -->
 		  <div class="modal" id="edit_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
@@ -106,6 +102,12 @@
 					  <div class="modal-body">
 						  <form  method="post" action="{{route('leadUpdate')}}">
 							  {{csrf_field()}}
+
+							    @if(isset($fromDate) && isset($toDate))
+								  <input type="hidden" value="{{$fromDate}}" name="fromDate">
+								  <input type="hidden" value="{{$toDate}}" name="toDate">
+
+							 	 @endif
 							  <div class="row">
 								  <div class="col-md-12" align="center">
 									  <b > Mined By:   <div class="mined" id="mined"></div></b>
