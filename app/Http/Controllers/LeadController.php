@@ -265,7 +265,10 @@ class LeadController extends Controller
     public function filter(){
         $categories=Category::where('type',1)
             ->get();
-        return view('layouts.lead.filterLead')->with('categories',$categories);
+        $country=Country::get();
+        return view('layouts.lead.filterLead')
+            ->with('categories',$categories)
+            ->with('country',$country);
     }
     public function getFilterLeads(Request $request){
         $leads=(new Lead())->showNotAssignedLeads();
@@ -281,7 +284,8 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
-                                           
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     ';
@@ -300,6 +304,8 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>

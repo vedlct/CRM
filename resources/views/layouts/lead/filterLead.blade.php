@@ -42,7 +42,7 @@
 
 
 
-    <!-- Modal -->
+    <!--Edit Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%">
             <div class="modal-content">
@@ -100,6 +100,20 @@
                             <div class="col-md-4">
                                 <label>Website:</label>
                                 <input type="text" class="form-control" name="website" value=""> <br><br><br>
+                            </div>
+                            <div class="col-md-4">
+                                <label><b>Designation:</b></label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                                <br><br><br>
                             </div>
 
                             <div class="col-md-8">
@@ -191,9 +205,14 @@
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
+            var country=$(e.relatedTarget).data('lead-country');
+            var designation=$(e.relatedTarget).data('lead-designation');
+
+
 
 
             //populate the textbox
+            $('#country').val(country);
             $('#category').val(category);
             $('div.mined').text(minedBy);
 //            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
@@ -203,7 +222,8 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+            $(e.currentTarget).find('input[name="designation"]').val(designation);
+//            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
         });
 

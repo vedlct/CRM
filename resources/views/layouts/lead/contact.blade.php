@@ -63,10 +63,10 @@
                         {{csrf_field()}}
                         <div class="row">
                             <div class="col-md-12" align="center">
-                                <b > Mined By:   <div class="mined" id="mined"></div></b>
+                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div>
                             </div>
                             <div class="col-md-4">
-                                <label>Category:</label>
+                                <label><b>Category:</b></label>
                                 <select class="form-control"  name="category" id="category">
                                     <option value="">Please Select</option>
                                     @foreach($categories as $category)
@@ -76,34 +76,34 @@
                             </div>
                             <div class="col-md-4">
                                 <input type="hidden" name="leadId">
-                                <label>Company Name:</label>
+                                <label><b>Company Name:</b></label>
                                 <input type="text" class="form-control" name="companyName" value="">
                             </div>
 
                             <div class="col-md-4">
-                                <label>Email:</label>
+                                <label><b>Email:</b></label>
                                 <input type="email" class="form-control" name="email" value="">
                             </div>
                             <div class="col-md-4">
-                                <label>Contact Person:</label>
+                                <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
                             </div>
                             <div class="col-md-4">
-                                <label>Number:</label>
+                                <label><b>Number:</b></label>
                                 <input type="text" class="form-control" name="number" value="">
                             </div>
                             <div class="col-md-4">
-                                <label>Website:</label>
+                                <label><b>Website:</b></label>
                                 <input type="text" class="form-control" name="website" value="">
                             </div>
 
                             <div class="col-md-4">
-                                <label>Designation:</label>
+                                <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
                             </div>
 
                             <div class="col-md-4">
-                                <label>Country:</label>
+                                <label><b>Country:</b></label>
                                 <select class="form-control"  name="country" id="country">
                                     @foreach($country as $c)
                                         <option value="{{$c->countryId}}">{{$c->countryName}}</option>
@@ -126,7 +126,7 @@
 
                             <div class=" form-group col-md-6">
                                 <input type="hidden" name="leadId">
-                                <label>Status:</label>
+                                <label><b>Status:</b></label>
                                 <select class="form-control"  name="Status" id="Status" required>
                                     <option value="">Please Select</option>
                                     @foreach($status as $s)
