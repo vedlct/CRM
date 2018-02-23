@@ -54,11 +54,20 @@ class FollowupController extends Controller
         //access for user
         $User_Type=Session::get('userType');
         if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
+
+            $date = Carbon::now()->format('Y-m-d');
+            $lastDate=Carbon::now()->subDay(5)->format('Y-m-d');
+
+
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-                ->where('followUpDate', date('Y-m-d'))
+//                ->where('followUpDate', date('Y-m-d'))
+                ->whereBetween('followUpDate', [$lastDate,$date])
                 ->where('leads.contactedUserId',Auth::user()->id)
                 ->where('followup.workStatus',0)
+                ->orderBy('followup.followUpDate','desc')
                 ->get();
+
+
 
             $country=Country::get();
             $callReports=Callingreport::get();
@@ -88,9 +97,6 @@ class FollowupController extends Controller
 
         if($r->followup !=null) {
 
-            $update = Followup::findOrFail($r->followId);
-            $update->workStatus = 1;
-            $update->save();
 
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
@@ -99,6 +105,10 @@ class FollowupController extends Controller
             $followUp->followUpDate=$r->followup;
             $followUp->save();
         }
+
+        $update = Followup::findOrFail($r->followId);
+        $update->workStatus = 1;
+        $update->save();
 
         //posssibility Change
         $lead=Lead::findOrFail($r->leadId);

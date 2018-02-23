@@ -28,35 +28,35 @@
 					  <table id="myTable" class="table table-bordered table-striped">
 						  <thead>
 						  <tr>
-							  <th>Company Name</th>
+							  <th width="15%">Company Name</th>
 							  <th>Category</th>
 							  <th>Possibility</th>
 							  <th>Country</th>
-							  <th>Contact Person</th>
+							  <th width="5%">Contact Person</th>
 							  <th>Contact Number</th>
 							  <th>Time</th>
-							  <th>Action</th>
+							  <th width="8%">Action</th>
 
 						  </tr>
 						  </thead>
 						  <tbody>
 
 						  @foreach($leads as $lead)
-							  {{--@if($lead->followUpDate ==date('Y-m-d'))--}}
+							  @if($lead->followUpDate >=date('Y-m-d'))
 								  <tr>
-								  {{--@else--}}
-							  {{--<tr style="background-color:#ffcccc;">--}}
-								  {{--@endif--}}
+								  @else
+							  <tr style="background-color:#ffcccc;">
+								  @endif
 
-								  <td>{{$lead->companyName}}</td>
+								  <td width="15%">{{$lead->companyName}}</td>
 								  <td>{{$lead->category->categoryName}}</td>
 								  <td>{{$lead->possibility->possibilityName}}</td>
 								  <td>{{$lead->country->countryName}}</td>
-								  <td>{{$lead->personName}}</td>
+								  <td width="5%">{{$lead->personName}}</td>
 									  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 									  <td>{{$lead->time}}</td>
 
-								  <td>
+								  <td width="8%">
 									  <!-- Trigger the modal with a button -->
 									  <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
 										 data-lead-id="{{$lead->leadId}}"
@@ -442,8 +442,8 @@
 
         $(document).ready(function() {
             $('#myTable').DataTable({
-                "processing": true
-            });
+                "bSort": false
+			});
 
         });
 

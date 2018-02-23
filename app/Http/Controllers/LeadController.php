@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers;
-use App\Status;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Auth;
@@ -276,7 +275,7 @@ class LeadController extends Controller
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 if(Session::get('userType')=='RA'){
-                    return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
+                    return '<a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
@@ -576,11 +575,11 @@ class LeadController extends Controller
             ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
-                return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
+                return '<a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-possibility="'.$lead->possibilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <a href="#"  onclick="edtcontactmodal(this)" class="btn btn-info btn-sm"
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-name="'.$lead->companyName.'"
                                    data-lead-email="'.$lead->email.'"
@@ -600,30 +599,32 @@ class LeadController extends Controller
             ->rawColumns(['call', 'action'])
             ->make(true);
     }
+
     public function  editcontactmodalshow (Request $r){
         // return "0";
-        $categories=Category::where('type',1)->get();
-        $country=Country::get();
-        $status = Leadstatus::get();
-//        $leads=Lead::with('mined','category','country','possibility')
-//            ->where('contactedUserId',Auth::user()->id)
-//            ->orderBy('leadId','desc')
-//            ->get();
 
 //        $leads = Lead::select('companyName , personName , designation, website, email, contactNumber, countryId, categoryId')
-        $leads = Lead::select('leads.*','followup.followUpDate as fDate')
-            ->leftJoin('followup' , 'followup.leadId', '=', 'leads.leadId')
-            ->where('contactedUserId',Auth::user()->id)
-            ->where ('leads.leadId' , $r->leadId)
-            ->orderBy('followId','desc')
-            ->limit(1)
-            ->get();
+//        $leads = Lead::select('leads.*','followup.followUpDate as fDate')
+//            ->leftJoin('followup' , 'followup.leadId', '=', 'leads.leadId')
+//            ->where('contactedUserId',Auth::user()->id)
+//            ->where ('leads.leadId' , $r->leadId)
+//            ->orderBy('followId','desc')
+//            ->limit(1)
+//            ->get();
 
-        return view('layouts.lead.editContactModal')
-            ->with('leads',$leads)
-            ->with('categories',$categories)
-            ->with('country',$country)
-            ->with('status',$status);
+        $follow=Followup::select('followUpDate')
+            ->where('leadId', $r->leadId)
+            ->where('userId',Auth::user()->id)
+            ->where('workStatus',0)
+            ->orderBy('followId','desc')
+//            ->limit(1)
+            ->first();
+
+
+        return Response($follow);
+
+
+
     }
     public function rejectedLeads(){
         return view('layouts.lead.rejectedLead');
