@@ -25,15 +25,15 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="15%">Company Name</th>
-                        <th width="8%">website</th>
-                        <th width="5%">Number</th>
-                        <th width="5%">Category</th>
-                        <th width="5%">Country</th>
-                        <th width="5%">Contact</th>
-                        <th width="8%">Status</th>
-                        <th width="8%">Possibility</th>
-                        <th width="15%">Edit</th>
+                        <th width="5%">Company Name</th>
+                        <th width="5%">website</th>
+                        <th width="4%">Number</th>
+                        <th width="4%">Category</th>
+                        <th width="4%">Country</th>
+                        <th width="4%">Contact</th>
+                        <th width="4%">Status</th>
+                        <th width="4%">Possib</th>
+                        <th width="10%">Edit</th>
 
 
                     </tr>

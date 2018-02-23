@@ -23,12 +23,12 @@
                         <th width="2%">Mined By</th>
                         <th  width="10%">Company Name</th>
                         <th  width="5%">Category</th>
-                        <th  width="10%">Website</th>
+                        <th  width="5%">Website</th>
                         <th  width="5%">Number</th>
                         <th  width="5%">Country</th>
                         <th  width="4%">Possibility</th>
-                        <th  width="5%">Set Possibility</th>
-                        <th  width="4%">Action</th>
+                        <th  width="10%">Set Possibility</th>
+                        <th  width="7%">Action</th>
 
                     </tr>
                     </thead>
@@ -96,6 +96,22 @@
                             <div class="col-md-4">
                                 <label>Website:</label>
                                 <input type="text" class="form-control" name="website" value=""> <br><br><br>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Designation:</label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Country:</label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($countries as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                                <br><br><br>
+
                             </div>
 
                             <div class="col-md-8">
@@ -172,7 +188,10 @@
             var website = $(e.relatedTarget).data('lead-website');
             var category=$(e.relatedTarget).data('lead-category');
             var minedBy=$(e.relatedTarget).data('lead-mined');
+            var country=$(e.relatedTarget).data('lead-country');
+            var designation=$(e.relatedTarget).data('lead-designation');
             //populate the textbox
+            $('#country').val(country);
             $('#category').val(category);
             $('div.mined').text(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
@@ -181,6 +200,7 @@
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('input[name="designation"]').val(designation);
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
         });
         $(function() {
