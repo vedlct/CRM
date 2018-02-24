@@ -4,23 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
-
+use App\Lead;
 class Test extends Model
 {
     public function test(){
 
         $start = microtime(true);
-        //$leads = Lead::get();
-         // $leads = DB::select('select * from leads');
-                $leads=Lead::where('statusId',2)
-            ->where(function($q){
-                $q->orWhere('contactedUserId',0)
-                    ->orWhere('contactedUserId',null);
-            })
-            ->where('leadAssignStatus',0)
-            ->select('leads.*')
-                    ->limit(20)
-                    ->get();
+
+//        $leads=Lead::with('category','country','status')
+//                ->get();
+
+        $leads=Lead::select('leads.*')
+            ->leftJoin('categories','leads.categoryId','categories.categoryId')
+            ->leftJoin('countries','leads.countryId','countries.countryId')
+            ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
+            ->get();
         $time = microtime(true) - $start;
 
         return $time;

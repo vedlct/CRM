@@ -43,8 +43,7 @@ class TestController extends Controller
 
 
 
-        //return $leads;
-       // return DB::getQueryLog();
+
     }
     public function anyData(Request $r)
     {

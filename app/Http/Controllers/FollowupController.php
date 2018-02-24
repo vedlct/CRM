@@ -58,9 +58,7 @@ class FollowupController extends Controller
             $date = Carbon::now()->format('Y-m-d');
             $lastDate=Carbon::now()->subDay(5)->format('Y-m-d');
 
-
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
-//                ->where('followUpDate', date('Y-m-d'))
                 ->whereBetween('followUpDate', [$lastDate,$date])
                 ->where('leads.contactedUserId',Auth::user()->id)
                 ->where('followup.workStatus',0)

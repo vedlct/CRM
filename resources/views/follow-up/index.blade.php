@@ -255,7 +255,7 @@
 
 								  <div class="row">
 									  <div class="form-group col-md-6">
-										  <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+										  <label class=""><b>Follow Up Date : </b></label>
 										  <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
 									  </div>
 
@@ -263,6 +263,14 @@
 										  <label class=""><b>Time: </b> </label>
 										  <input class="form-control" name="time" placeholder="pick Time">
 									  </div>
+									  <div class="col-md-12" style="text-align: center; font-weight: bold;">
+										  <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>
+									  </div>
+								  </div>
+
+
+								  <div class="col-md-12" style="text-align: center; font-weight: bold;">
+									  <span id="follow-show" style="color:grey;"><i></i></span>
 								  </div>
 
 
@@ -434,6 +442,20 @@
                 success : function(data){
                     $('#comment').html(data);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
+                }
+            });
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('editcontactmodalshow')}}',
+                data : {_token:CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    // $('#txtHint').html(data);
+                    console.log(data);
+//                    $('#follow-show').val(data.followUpDate);
+                    if(data !=''){
+                        $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
+
                 }
             });
 
