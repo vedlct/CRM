@@ -356,7 +356,7 @@
                     // $('#txtHint').html(data);
                     console.log(data);
 //                    $('#follow-show').val(data.followUpDate);
-                    if(data !=null){
+                    if(data !=''){
                         $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
 
                 }
