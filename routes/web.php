@@ -30,8 +30,6 @@ Route::view('/profile', 'layouts.profile');
 Route::get('/user','UserController@index');
 
 
-Route::view('/test', 'test');
-
 Auth::routes();
 
 Route::get('/system','SystemManagementController@index')->name('system');

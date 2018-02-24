@@ -37,6 +37,10 @@ class HomeController extends Controller
         $date = Carbon::now();
 
 
+
+
+
+
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
@@ -52,8 +56,17 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
+        $day=Carbon::now()->format('l');
 
         $lastDate=Carbon::now()->subDay()->format('Y-m-d');
+
+
+        if ($day=='Monday'){
+            $lastDate=Carbon::now()->subDay(3)->format('Y-m-d');
+
+        }
+
+
 
 
 
