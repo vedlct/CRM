@@ -212,8 +212,8 @@
                             </div>
 
                             {{--<div class="col-md-4">--}}
-                                {{--<label><b>Follow up Date:</b></label>--}}
-                                {{--<input type="text" class="form-control" id="follow-show" value="" readonly>--}}
+                            {{--<label><b>Follow up Date:</b></label>--}}
+                            {{--<input type="text" class="form-control" id="follow-show" value="" readonly>--}}
                             {{--</div>--}}
 
 
@@ -357,7 +357,7 @@
                     console.log(data);
 //                    $('#follow-show').val(data.followUpDate);
                     if(data !=null){
-                    $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
+                        $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
 
                 }
             });

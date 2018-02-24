@@ -589,7 +589,7 @@ class LeadController extends Controller
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-possibility="'.$lead->possibilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <a href="#"  onclick="edtcontactmodal(this)" class="btn btn-info btn-sm"
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-name="'.$lead->companyName.'"
                                    data-lead-email="'.$lead->email.'"
@@ -611,27 +611,17 @@ class LeadController extends Controller
     }
     public function  editcontactmodalshow (Request $r){
         // return "0";
-        $categories=Category::where('type',1)->get();
-        $country=Country::get();
-        $status = Leadstatus::get();
-//        $leads=Lead::with('mined','category','country','possibility')
-//            ->where('contactedUserId',Auth::user()->id)
-//            ->orderBy('leadId','desc')
-//            ->get();
 
-//        $leads = Lead::select('companyName , personName , designation, website, email, contactNumber, countryId, categoryId')
-        $leads = Lead::select('leads.*','followup.followUpDate as fDate')
-            ->leftJoin('followup' , 'followup.leadId', '=', 'leads.leadId')
-            ->where('contactedUserId',Auth::user()->id)
-            ->where ('leads.leadId' , $r->leadId)
+        $follow=Followup::select('followUpDate')
+            ->where('leadId', $r->leadId)
+            ->where('userId',Auth::user()->id)
+            ->where('workStatus',0)
             ->orderBy('followId','desc')
-            ->limit(1)
-            ->get();
+//            ->limit(1)
+            ->first();
 
-        return view('layouts.lead.editContactModal')
-            ->with('leads',$leads)
-            ->with('categories',$categories)
-            ->with('country',$country);
+
+        return Response($follow);
     }
     public function rejectedLeads(){
         return view('layouts.lead.rejectedLead');
