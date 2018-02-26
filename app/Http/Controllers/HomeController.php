@@ -36,17 +36,9 @@ class HomeController extends Controller
 
         $date = Carbon::now();
 
-        $day = Carbon::now()->format( 'l' );
-        return $day;
-
-
-
-
 
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-
 
 
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
