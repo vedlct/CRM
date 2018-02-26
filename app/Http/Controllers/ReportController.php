@@ -42,6 +42,7 @@ class ReportController extends Controller
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
                     ->where('workprogress.callingReport','!=',null)
+                    ->where('callingReport','!=',6)
                     ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
                 //When user is RA
@@ -137,6 +138,7 @@ class ReportController extends Controller
 
             $calledThisWeek=Workprogress::where('userId',$user->id)
                 ->where('workprogress.callingReport','!=',null)
+                ->where('callingReport','!=',6)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
@@ -245,6 +247,7 @@ class ReportController extends Controller
                     ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
+                    ->where('callingReport','!=',6)
                     ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
                 //When user is RA
@@ -350,6 +353,7 @@ class ReportController extends Controller
 
             $calledThisWeek=Workprogress::where('userId',$user->id)
                 ->where('workprogress.callingReport','!=',null)
+                ->where('callingReport','!=',6)
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
