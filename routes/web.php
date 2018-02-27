@@ -210,6 +210,7 @@ Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssig
 Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
 Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
+Route::post('/getContactedIndividual','GetIndividualReportController@getContactedIndividual')->name('getContactedIndividual');
 
 
 
