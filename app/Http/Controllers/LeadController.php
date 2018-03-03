@@ -20,6 +20,7 @@ use App\Followup;
 use App\Leadstatus;
 use DB;
 use DataTables;
+
 class LeadController extends Controller
 {
 

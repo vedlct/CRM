@@ -37,20 +37,12 @@ class HomeController extends Controller
         $date = Carbon::now();
 
 
-
-
-
-
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->where('callingReport','!=',6)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
-
-
-
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
 
         $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
             ->where('possibilityId',3)
@@ -66,9 +58,6 @@ class HomeController extends Controller
             $lastDate=Carbon::now()->subDay(3)->format('Y-m-d');
 
         }
-
-
-
 
 
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)

@@ -18,8 +18,8 @@
 
         <form method="post" action="{{route('searchGraphByDate')}}">
             {{csrf_field()}}
-            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;">
-            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;">
+            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
+            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
             <button type="submit" class="btn btn-success">Search</button>
 
         </form>
@@ -65,10 +65,6 @@
                     text:"Weekly Report Of Employee"
                     @endif
                 },
-                axisX:{
-                    interval: 1,
-
-                },
 
                 axisY2:{
                     title: "C-call ,M-lead mined ,P- high possibility",
@@ -81,7 +77,7 @@
 
                     dataPoints: [
                             @foreach($report as $r)
-                        { label: "{{$r->userName}}",y:{{($r->called+$r->leadMined+$r->highPosibilities)/$r->t}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->leadMined*25/100)+($r->highPosibilities*50/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
 
 
                             @endforeach

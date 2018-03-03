@@ -25,7 +25,7 @@ class ReportController extends Controller
     public function index(){
 
         $User_Type=Session::get('userType');
-        if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
+
 
             if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
@@ -33,6 +33,11 @@ class ReportController extends Controller
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
+            else if($User_Type =='USER'){
+                $users=User::select('id','firstName','typeId')
+                            ->where('id',Auth::user()->id)->get();
+            }
+
             else{
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
@@ -111,7 +116,7 @@ class ReportController extends Controller
                 $u->t=$t;
                 array_push($report, $u);
             }
-            return view('report.index')->with('report',$report);}
+            return view('report.index')->with('report',$report);
     }
 
     public function searchTableByDate(Request $r){
@@ -215,29 +220,59 @@ class ReportController extends Controller
         $User_Type=Session::get('userType');
         $f = Carbon::parse($r->fromDate);
         $t = Carbon::parse($r->toDate);
+        $length=0;
 
 
+        $dates = [];
 
+        for($date =  $f; $date->lte( $t); $date->addDay()) {
+            $dates = Carbon::parse($date->format('Y-m-d'));
+            if($dates->isWeekday()){
+                $length++;
+            }
 
-
-        $length = $t->diffInWeeks($f);
-        if($length==0){
-            $length = $t->diffInDays($f);
-            $length++;
-            $length = $length/5;
         }
+        $length = $length/5;
+
+
+
+        //$dt = Carbon::now();
+//
+//        if ($f->isWeekday()){
+//            return 'true';
+//        }
+//        else{
+//            return 'false';
+//
+//        }
+
+
+
+
+
+
+//        $length = $t->diffInWeeks($f);
+//        if($length==0){
+//            $length = $t->diffInDays($f);
+//            $length++;
+//            $length = $length/5;
+//        }
 //        $length = $t->diffInDays($f);
 //        $length = $length/5;
 
 
 
-        if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
+
 
             if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
+            }
+            else if($User_Type =='USER'){
+                $users=User::select('id','firstName','typeId')
+                    ->where('id',Auth::user()->id)->get();
             }
             else{
                 $users=User::select('id','firstName','typeId')
@@ -321,7 +356,7 @@ class ReportController extends Controller
                 ->with('report',$report)
                 ->with('fromDate',$r->fromDate)
                 ->with('toDate',$r->toDate);
-        }
+
 
     }
 
