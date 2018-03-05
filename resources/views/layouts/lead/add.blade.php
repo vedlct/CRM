@@ -30,7 +30,7 @@
                         <th width="4%">Number</th>
                         <th width="4%">Category</th>
                         <th width="4%">Country</th>
-                        <th width="4%">Contact</th>
+                        <th width="4%">Cont</th>
                         <th width="4%">Status</th>
                         <th width="4%">Possib</th>
                         <th width="10%">Edit</th>
@@ -441,6 +441,94 @@
 
 
 
+    <!-- Call Modal -->
+    <div class="modal" id="call_modal" style="">
+        <div class="modal-dialog" style="max-width: 60%;">
+
+            <form class="modal-content" action="{{route('storeReport')}}" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">Calling Report</h4>
+                </div>
+                <div class="modal-body" >
+                    {{csrf_field()}}
+                    <input type="hidden" name="leadId">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label ><b>Calling Report : </b></label>
+                                <select class="form-control" name="report" required>
+                                    <option value=""><b>(select one)</b></option>
+
+                                    @foreach($callReports as $report)
+                                        <option value="{{$report->callingReportId}}">{{$report->report}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label ><b>Progress : </b></label>
+                                <select class="form-control" name="progress" >
+                                    <option value=""><b>(select one)</b></option>
+                                    <option value="Test Job">Test Job</option>
+                                    <option value="Closing">Closing</option>
+                                </select>
+                                <br>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
+                                    <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class=""><b>Time: </b> </label>
+                                    <input class="form-control" name="time" placeholder="pick Time">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=""><b>Possibility : </b></label>
+                                <select class="form-control"  name="possibility" id="possibility">
+                                    @foreach($possibilities as $p)
+                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=""><b>Comment : </b></label>
+                                <textarea class="form-control" rows="3" name="comment" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group" style="margin: 10px; "><br>
+                                <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment2">
+
+                                </div>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-12"><br>
+                            <button class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
 
 
 
@@ -591,6 +679,38 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+
+        });
+
+
+
+
+        $('#call_modal').on('show.bs.modal', function(e) {
+
+            //get data-id attribute of the clicked element
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var possibility=$(e.relatedTarget).data('lead-possibility');
+
+
+
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+
+
+
+            $('#possibility').val(possibility);
+            //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getComments')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    $('#comment2').html(data);
+                    $("#comment2").scrollTop($("#comment2")[0].scrollHeight);
+                }
+            });
 
         });
 

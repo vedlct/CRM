@@ -33,7 +33,7 @@ class LeadController extends Controller
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
-                    return '<form method="post" action="'.route('addContacted').'">
+                    return ' <form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
@@ -53,8 +53,13 @@ class LeadController extends Controller
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
-                    return '<button class="btn btn-info btn-sm" disabled><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                    if($lead->contactedUserId==Auth::user()->id){
+                        return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                       
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
@@ -68,7 +73,27 @@ class LeadController extends Controller
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
                                             ><i class="fa fa-comments"></i></a>';
-                }
+
+                    }
+                    else{
+                    return '<a href="#" class="btn btn-danger btn-sm" >
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                       
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                            ><i class="fa fa-comments"></i></a>';
+                }}
             })
             ->make(true);
     }
@@ -76,10 +101,13 @@ class LeadController extends Controller
         $cats=Category::where('type', 1)->get();
         $countries=Country::get();
         $possibilities=Possibility::get();
+        $callReports = Callingreport::get();
+
         return view('layouts.lead.add')
             ->with('categories',$cats)
             ->with('countries',$countries)
-            ->with('possibilities',$possibilities);
+            ->with('possibilities',$possibilities)
+            ->with('callReports',$callReports);
     }
     public function numberCheck(Request $r){
         $number=Lead::where('contactNumber',$r->number)->count();
@@ -436,6 +464,7 @@ class LeadController extends Controller
         $lead=Lead::findOrFail($r->leadId);
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
+        $lead->leadAssignStatus=0;
         $lead->save();
         if($r->report !=2) {
 //            if ($currentPossibility != $r->possibility) {
