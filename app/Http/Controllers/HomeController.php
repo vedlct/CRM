@@ -41,6 +41,7 @@ class HomeController extends Controller
             ->where('callingReport','!=',6)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 

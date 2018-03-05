@@ -69,7 +69,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Welcome<b> {{Auth::user()->firstName}} <i class="fa fa-sort-desc" aria-hidden="true"></i></b></a>
-                    <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <ul class="dropdown-user">
                             <li>
                                 <div class="dw-user-box">
