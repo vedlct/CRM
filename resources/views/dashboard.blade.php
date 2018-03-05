@@ -177,7 +177,7 @@
     </div></div></div>
 
 @endsection
-
+@php($userType = Session::get('userType'))
 
 @section('foot-js')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -206,9 +206,14 @@
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
-                            @if($countWeek>0)
-                            { y: {{($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek+$calledThisWeek+$leadMinedThisWeek)/$countWeek)}}%" },
-                             @endif
+
+                            @if($userType=="RA")
+                            { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
+
+
+                            @else
+                            { y: {{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($leadMinedThisWeek*25/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($leadMinedThisWeek*25/100))}}%" },
+                            @endif
 
                         ]
                     }]

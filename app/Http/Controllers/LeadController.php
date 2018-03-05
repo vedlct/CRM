@@ -465,6 +465,7 @@ class LeadController extends Controller
         $lead=Lead::findOrFail($r->leadId);
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
+        $lead->leadAssignStatus=0;
         $lead->save();
         if($r->report !=2) {
 //            if ($currentPossibility != $r->possibility) {

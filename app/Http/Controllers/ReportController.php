@@ -110,6 +110,7 @@ class ReportController extends Controller
                 }
                 $u = new stdClass;
                 $u->userName=$user->firstName;
+                $u->typeId=$user->typeId;
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
@@ -346,6 +347,7 @@ class ReportController extends Controller
                     $t=1;}
                 $u = new stdClass;
                 $u->userName=$user->firstName;
+                $u->typeId=$user->typeId;
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;

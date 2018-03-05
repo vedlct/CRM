@@ -77,8 +77,11 @@
 
                     dataPoints: [
                             @foreach($report as $r)
+                            @if(  $r->typeId==4)
+                            { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+                            @else
                         { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->leadMined*25/100)+($r->highPosibilities*50/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
-
+                            @endif
 
                             @endforeach
 
