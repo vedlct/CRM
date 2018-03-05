@@ -22,6 +22,7 @@
                     <thead>
                     <tr>
 
+
                         <th>Select</th>
                         <th>Company Name</th>
                         <th>Mined By</th>
