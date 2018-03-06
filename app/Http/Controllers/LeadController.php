@@ -127,13 +127,7 @@ class LeadController extends Controller
         ]);
         //Inserting Data To Leads TAble
         $l=new Lead;
-        if($r->contact){
-            $l->statusId = 7;
-            $l->contactedUserId=Auth::user()->id;
-        }
-        else{
-            $l->statusId = 1;
-        }
+
         $l->possibilityId=$r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
@@ -145,7 +139,20 @@ class LeadController extends Controller
         $l->countryId = $r->country;
         $l->comments=$r->comment;
         //getting Loggedin User id
+        $l->statusId = 1;
         $l->minedBy = Auth::user()->id;
+        $l->save();
+
+        if($r->contact){
+            $l->statusId = 7;
+            $l->contactedUserId=Auth::user()->id;
+
+            $pChange=new Possibilitychange;
+            $pChange->leadId=$l->leadId;
+            $pChange->userId=Auth::user()->id;
+            $pChange->possibilityId= $l->possibilityId;
+        }
+      
         $l->save();
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
@@ -597,7 +604,6 @@ class LeadController extends Controller
 
 // Add Contacted From Temp
     public function addContactedTemp(Request $r){
-
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
         $lead->filteredPossibility=$lead->possibilityId;
