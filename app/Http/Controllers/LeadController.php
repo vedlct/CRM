@@ -28,6 +28,7 @@ class LeadController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function allLeads(Request $r){
         $leads=Lead::with('country','category','mined','status','contact','possibility')
             ->orderBy('leadId','desc');
@@ -388,6 +389,7 @@ class LeadController extends Controller
         return Redirect()->route('home');
     }
     public function tempData(Request $request){
+
         $possibility=Possibility::get();
         $pBefore='<select class="form-control" id="drop" ';
         $pAfter=' name="possibility" ><option value="">Select</option>';
@@ -401,7 +403,7 @@ class LeadController extends Controller
                 return $pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
             })
             ->addColumn('edit', function ($lead) use ($pAfter,$pBefore){
-                return '<form method="post" action="'.route('addContacted').'">
+                return '<form method="post" action="'.route('addContactedTemp').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
@@ -428,6 +430,7 @@ class LeadController extends Controller
         if($r->ajax()){
             $lead=Lead::findOrFail($r->leadId);
             $lead->possibilityId=$r->possibility;
+            $lead->filteredPossibility=$r->possibility;
             $lead->statusId=2;
             $lead->save();
 //            $log=new Possibilitychange;
@@ -582,6 +585,7 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
         return Redirect()->route('home');}
 
+        //ADD Contacted
     public function addContacted(Request $r){
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
@@ -590,6 +594,19 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
     }
+
+// Add Contacted From Temp
+    public function addContactedTemp(Request $r){
+
+        $lead=Lead::findOrFail($r->leadId);
+        $lead->contactedUserId=Auth::user()->id;
+        $lead->filteredPossibility=$lead->possibilityId;
+        $lead->statusId=7;
+        $lead->save();
+        Session::flash('message', 'Lead Added To Contacted List');
+        return back();
+    }
+
     public function contacted(){
         //For user
         $User_Type=Session::get('userType');

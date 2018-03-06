@@ -146,7 +146,7 @@ class GetIndividualReportController extends Controller
             ->with('country','possibility')
             ->leftJoin('followup', 'leads.leadId', 'followup.leadId')
             ->where('followup.userId',$user->id)
-            ->whereBetween(DB::raw('DATE(followup.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(followup.followUpDate)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -342,14 +342,11 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->created_at.'</td>
                     <td>'.$l->leaveDate.'</td>
                     </tr>';
-
         }
+
         $table.='</tbody></table>';
         return Response($table);
     }
-
-
-
 
 
     public function getContactedIndividual(Request $r){
@@ -388,7 +385,6 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->report.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
-
         }
         $table.='</tbody></table>';
         return Response($table);

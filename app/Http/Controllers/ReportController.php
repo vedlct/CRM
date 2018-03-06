@@ -153,7 +153,9 @@ class ReportController extends Controller
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])->count();
+//                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])
+                ->whereBetween('followUpDate', [$r->fromDate,$r->toDate])
+                ->count();
 
             if($user->typeId==4){
                 $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
@@ -399,7 +401,9 @@ class ReportController extends Controller
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+//                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count();
 
 
 
@@ -439,21 +443,21 @@ class ReportController extends Controller
 
             $contacted=Workprogress::where('userId',$user->id)
                 ->where('callingReport',5)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
-            $u = new stdClass;
-            $u->id=$user->id;
-            $u->userName=$user->firstName;
-            $u->leadMined=$leadMinedThisWeek;
-            $u->called=$calledThisWeek;
-            $u->highPosibilities=$highPosibilitiesThisWeek;
-            $u->assignedLead=$assignedLead;
-            $u->followupThisWeek=$followupThisWeek;
-            $u->closing=$closing;
-            $u->test=$test;
-            $u->contacted=$contacted;
-            array_push($report, $u);
+                $u = new stdClass;
+                $u->id=$user->id;
+                $u->userName=$user->firstName;
+                $u->leadMined=$leadMinedThisWeek;
+                $u->called=$calledThisWeek;
+                $u->highPosibilities=$highPosibilitiesThisWeek;
+                $u->assignedLead=$assignedLead;
+                $u->followupThisWeek=$followupThisWeek;
+                $u->closing=$closing;
+                $u->test=$test;
+                $u->contacted=$contacted;
+                array_push($report, $u);
         }
 
 
