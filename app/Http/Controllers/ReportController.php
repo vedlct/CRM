@@ -25,7 +25,7 @@ class ReportController extends Controller
     public function index(){
 
         $User_Type=Session::get('userType');
-        if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
+
 
             if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
@@ -33,6 +33,11 @@ class ReportController extends Controller
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
+            else if($User_Type =='USER' || $User_Type =='RA'){
+                $users=User::select('id','firstName','typeId')
+                            ->where('id',Auth::user()->id)->get();
+            }
+
             else{
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
@@ -52,10 +57,13 @@ class ReportController extends Controller
 
                 //When user is RA
                 if($user->typeId==4){
-                    $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                        ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('possibilitychanges.possibilityId',3)
-                        ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+                    $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                        ->where('leads.minedBy',$user->id)
+                        ->where('filteredPossibility',3)
+                        ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                        ->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -105,13 +113,14 @@ class ReportController extends Controller
                 }
                 $u = new stdClass;
                 $u->userName=$user->firstName;
+                $u->typeId=$user->typeId;
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
                 $u->t=$t;
                 array_push($report, $u);
             }
-            return view('report.index')->with('report',$report);}
+            return view('report.index')->with('report',$report);
     }
 
     public function searchTableByDate(Request $r){
@@ -147,13 +156,18 @@ class ReportController extends Controller
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])->count();
+//                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])
+                ->whereBetween('followUpDate', [$r->fromDate,$r->toDate])
+                ->count();
 
             if($user->typeId==4){
-                $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                    ->where('possibilitychanges.possibilityId',3)
-                    ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate,$r->toDate])->count();
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                    ->count();
+
             }
             else{
                 $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -199,8 +213,6 @@ class ReportController extends Controller
         }
 
 
-
-
         return view('report.table')
             ->with('report',$report)
             ->with('fromDate',$r->fromDate)
@@ -215,29 +227,59 @@ class ReportController extends Controller
         $User_Type=Session::get('userType');
         $f = Carbon::parse($r->fromDate);
         $t = Carbon::parse($r->toDate);
+        $length=0;
 
 
+        $dates = [];
 
+        for($date =  $f; $date->lte( $t); $date->addDay()) {
+            $dates = Carbon::parse($date->format('Y-m-d'));
+            if($dates->isWeekday()){
+                $length++;
+            }
 
-
-        $length = $t->diffInWeeks($f);
-        if($length==0){
-            $length = $t->diffInDays($f);
-            $length++;
-            $length = $length/5;
         }
+        $length = $length/5;
+
+
+
+        //$dt = Carbon::now();
+//
+//        if ($f->isWeekday()){
+//            return 'true';
+//        }
+//        else{
+//            return 'false';
+//
+//        }
+
+
+
+
+
+
+//        $length = $t->diffInWeeks($f);
+//        if($length==0){
+//            $length = $t->diffInDays($f);
+//            $length++;
+//            $length = $length/5;
+//        }
 //        $length = $t->diffInDays($f);
 //        $length = $length/5;
 
 
 
-        if($User_Type=='ADMIN' || $User_Type =='MANAGER' ||$User_Type=='SUPERVISOR'){
+
 
             if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
+            }
+            else if($User_Type =='USER' || $User_Type =='RA'){
+                $users=User::select('id','firstName','typeId')
+                    ->where('id',Auth::user()->id)->get();
             }
             else{
                 $users=User::select('id','firstName','typeId')
@@ -257,10 +299,12 @@ class ReportController extends Controller
 
                 //When user is RA
                 if($user->typeId==4){
-                    $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                        ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('possibilitychanges.possibilityId',3)
-                        ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate, $r->toDate])->count();
+                    $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                        ->where('leads.minedBy',$user->id)
+                        ->where('filteredPossibility',3)
+                        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                        ->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -311,6 +355,7 @@ class ReportController extends Controller
                     $t=1;}
                 $u = new stdClass;
                 $u->userName=$user->firstName;
+                $u->typeId=$user->typeId;
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
@@ -321,7 +366,7 @@ class ReportController extends Controller
                 ->with('report',$report)
                 ->with('fromDate',$r->fromDate)
                 ->with('toDate',$r->toDate);
-        }
+
 
     }
 
@@ -362,7 +407,9 @@ class ReportController extends Controller
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
             $followupThisWeek=Followup::where('userId',$user->id)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+//                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count();
 
 
 
@@ -370,10 +417,10 @@ class ReportController extends Controller
             if($user->typeId==4){
 
                 $highPosibilitiesThisWeek=Lead::select('leads.*')
-                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                     ->where('leads.minedBy',$user->id)
-                    ->where('possibilitychanges.possibilityId',3)
-                    ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
                     ->count();
 
                 //                $highPosibilitiesThisWeek=Lead::where('leads.minedBy',$user->id)
@@ -402,21 +449,21 @@ class ReportController extends Controller
 
             $contacted=Workprogress::where('userId',$user->id)
                 ->where('callingReport',5)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
-            $u = new stdClass;
-            $u->id=$user->id;
-            $u->userName=$user->firstName;
-            $u->leadMined=$leadMinedThisWeek;
-            $u->called=$calledThisWeek;
-            $u->highPosibilities=$highPosibilitiesThisWeek;
-            $u->assignedLead=$assignedLead;
-            $u->followupThisWeek=$followupThisWeek;
-            $u->closing=$closing;
-            $u->test=$test;
-            $u->contacted=$contacted;
-            array_push($report, $u);
+                $u = new stdClass;
+                $u->id=$user->id;
+                $u->userName=$user->firstName;
+                $u->leadMined=$leadMinedThisWeek;
+                $u->called=$calledThisWeek;
+                $u->highPosibilities=$highPosibilitiesThisWeek;
+                $u->assignedLead=$assignedLead;
+                $u->followupThisWeek=$followupThisWeek;
+                $u->closing=$closing;
+                $u->test=$test;
+                $u->contacted=$contacted;
+                array_push($report, $u);
         }
 
 

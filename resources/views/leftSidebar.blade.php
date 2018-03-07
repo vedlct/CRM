@@ -98,7 +98,7 @@
 
                 @endif
 
-                @if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
+
 
                     <li class="treeview">
                         <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span class="hide-menu">Report</span>
@@ -119,15 +119,6 @@
                         </ul>
                     </li>
 
-                    @elseif($userType =='USER' || $userType =='RA' )
-
-                            <li>
-                                <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                    <span class="hide-menu">Report</span></a>
-
-                            </li>
-
-                    @endif
 
                 @if($userType =='SUPERVISOR')
 

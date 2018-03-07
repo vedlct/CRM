@@ -20,6 +20,7 @@ use App\Followup;
 use App\Leadstatus;
 use DB;
 use DataTables;
+
 class LeadController extends Controller
 {
 
@@ -27,6 +28,7 @@ class LeadController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function allLeads(Request $r){
         $leads=Lead::with('country','category','mined','status','contact','possibility')
             ->orderBy('leadId','desc');
@@ -50,6 +52,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                data-lead-country="'.$lead->countryId.'"
+                                                data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
@@ -72,6 +76,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                 data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
@@ -92,6 +98,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                 data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a>';
                 }}
             })
@@ -125,13 +133,7 @@ class LeadController extends Controller
         ]);
         //Inserting Data To Leads TAble
         $l=new Lead;
-        if($r->contact){
-            $l->statusId = 7;
-            $l->contactedUserId=Auth::user()->id;
-        }
-        else{
-            $l->statusId = 1;
-        }
+
         $l->possibilityId=$r->possibility;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
@@ -143,7 +145,20 @@ class LeadController extends Controller
         $l->countryId = $r->country;
         $l->comments=$r->comment;
         //getting Loggedin User id
+        $l->statusId = 1;
         $l->minedBy = Auth::user()->id;
+        $l->save();
+
+        if($r->contact){
+            $l->statusId = 7;
+            $l->contactedUserId=Auth::user()->id;
+
+            $pChange=new Possibilitychange;
+            $pChange->leadId=$l->leadId;
+            $pChange->userId=Auth::user()->id;
+            $pChange->possibilityId= $l->possibilityId;
+        }
+
         $l->save();
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
@@ -387,6 +402,7 @@ class LeadController extends Controller
         return Redirect()->route('home');
     }
     public function tempData(Request $request){
+
         $possibility=Possibility::get();
         $pBefore='<select class="form-control" id="drop" ';
         $pAfter=' name="possibility" ><option value="">Select</option>';
@@ -400,7 +416,7 @@ class LeadController extends Controller
                 return $pBefore.'data-lead-id="'.$lead->leadId.'"'.$pAfter;
             })
             ->addColumn('edit', function ($lead) use ($pAfter,$pBefore){
-                return '<form method="post" action="'.route('addContacted').'">
+                return '<form method="post" action="'.route('addContactedTemp').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
@@ -427,6 +443,7 @@ class LeadController extends Controller
         if($r->ajax()){
             $lead=Lead::findOrFail($r->leadId);
             $lead->possibilityId=$r->possibility;
+            $lead->filteredPossibility=$r->possibility;
             $lead->statusId=2;
             $lead->save();
 //            $log=new Possibilitychange;
@@ -581,6 +598,7 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
         return Redirect()->route('home');}
 
+        //ADD Contacted
     public function addContacted(Request $r){
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
@@ -589,6 +607,18 @@ class LeadController extends Controller
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
     }
+
+// Add Contacted From Temp
+    public function addContactedTemp(Request $r){
+        $lead=Lead::findOrFail($r->leadId);
+        $lead->contactedUserId=Auth::user()->id;
+        $lead->filteredPossibility=$lead->possibilityId;
+        $lead->statusId=7;
+        $lead->save();
+        Session::flash('message', 'Lead Added To Contacted List');
+        return back();
+    }
+
     public function contacted(){
         //For user
         $User_Type=Session::get('userType');

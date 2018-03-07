@@ -36,7 +36,6 @@ class HomeController extends Controller
 
         $date = Carbon::now();
 
-
         $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->where('callingReport','!=',6)
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
@@ -46,9 +45,8 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
 
-        $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
-            ->where('possibilityId',3)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
 
 
         $day=Carbon::now()->format('l');
@@ -62,9 +60,6 @@ class HomeController extends Controller
         }
 
 
-
-
-
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
             ->where('workprogress.callingReport','!=',null)
             ->where('callingReport','!=',6)
@@ -76,15 +71,26 @@ class HomeController extends Controller
         $User_Type=Session::get('userType');
         if($User_Type=='RA'){
             $highPosibilities=Lead::select('leads.*')
-                ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                 ->where('leads.minedBy',Auth::user()->id)
-                ->where('possibilitychanges.possibilityId',3)
-                ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                ->where('filteredPossibility',3)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                ->where('leads.minedBy',Auth::user()->id)
+                ->where('filteredPossibility',3)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count();
 
         }
 
         else{
             $highPosibilities=Possibilitychange::where('userId',Auth::user()->id)
+                ->where('possibilityId',3)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+            $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
                 ->where('possibilityId',3)
                 ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
@@ -181,11 +187,10 @@ class HomeController extends Controller
 
      $User_Type=Session::get('userType');
      if($User_Type=='RA'){
-         $leads=Lead::select('leads.*','possibilitychanges.created_at')
-             ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+         $leads=Lead::select('leads.*')
              ->where('leads.minedBy',Auth::user()->id)
-             ->where('possibilitychanges.possibilityId',3)
-             ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+             ->where('filteredPossibility',3)
+             ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
      }
 
