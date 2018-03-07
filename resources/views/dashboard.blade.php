@@ -87,9 +87,9 @@
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
                         <span class="text-muted">This Week</span>
                     </div>
-                    @if($target->targetHighPossibility>0)
 
-                    <span class="text-purple">{{$highPosibilitiesThisWeek}}%</span>
+                    @if($target->targetHighPossibility>0)
+                        <span class="text-purple">{{$highPosibilitiesThisWeek}}%</span>
                     @endif
                     <div class="progress">
                         @if($target->targetHighPossibility>0)

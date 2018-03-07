@@ -152,7 +152,7 @@ class LeadController extends Controller
             $pChange->userId=Auth::user()->id;
             $pChange->possibilityId= $l->possibilityId;
         }
-      
+
         $l->save();
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');

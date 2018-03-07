@@ -39,12 +39,11 @@ class GetIndividualReportController extends Controller
 
 
         if($user->typeId == 4) {
-            $highPosibilitiesThisWeek = Lead::select('leads.*','possibilitychanges.created_at')
+            $highPosibilitiesThisWeek = Lead::select('leads.*')
                 ->with('country','category','possibility')
                 ->where('minedBy', $user->id)
-                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
-                ->where('possibilitychanges.possibilityId', 3)
-                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+                ->where('filteredPossibility', 3)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
 
         }
 

@@ -33,7 +33,7 @@ class ReportController extends Controller
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
-            else if($User_Type =='USER'){
+            else if($User_Type =='USER' || $User_Type =='RA'){
                 $users=User::select('id','firstName','typeId')
                             ->where('id',Auth::user()->id)->get();
             }
@@ -57,10 +57,13 @@ class ReportController extends Controller
 
                 //When user is RA
                 if($user->typeId==4){
-                    $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                        ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('possibilitychanges.possibilityId',3)
-                        ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+                    $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                        ->where('leads.minedBy',$user->id)
+                        ->where('filteredPossibility',3)
+                        ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                        ->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -158,10 +161,13 @@ class ReportController extends Controller
                 ->count();
 
             if($user->typeId==4){
-                $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                    ->where('possibilitychanges.possibilityId',3)
-                    ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate,$r->toDate])->count();
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                    ->count();
+
             }
             else{
                 $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -205,8 +211,6 @@ class ReportController extends Controller
             array_push($report, $u);
 
         }
-
-
 
 
         return view('report.table')
@@ -273,7 +277,7 @@ class ReportController extends Controller
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
             }
-            else if($User_Type =='USER'){
+            else if($User_Type =='USER' || $User_Type =='RA'){
                 $users=User::select('id','firstName','typeId')
                     ->where('id',Auth::user()->id)->get();
             }
@@ -295,10 +299,12 @@ class ReportController extends Controller
 
                 //When user is RA
                 if($user->typeId==4){
-                    $highPosibilitiesThisWeek=Lead::where('minedBy',$user->id)
-                        ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('possibilitychanges.possibilityId',3)
-                        ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate, $r->toDate])->count();
+                    $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                        ->where('leads.minedBy',$user->id)
+                        ->where('filteredPossibility',3)
+                        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                        ->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
@@ -411,10 +417,10 @@ class ReportController extends Controller
             if($user->typeId==4){
 
                 $highPosibilitiesThisWeek=Lead::select('leads.*')
-                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                     ->where('leads.minedBy',$user->id)
-                    ->where('possibilitychanges.possibilityId',3)
-                    ->whereBetween('possibilitychanges.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
                     ->count();
 
                 //                $highPosibilitiesThisWeek=Lead::where('leads.minedBy',$user->id)
