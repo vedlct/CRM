@@ -47,13 +47,15 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                           data-lead-category="'.$lead->category->categoryId.'">
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                           >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                data-lead-country="'.$lead->countryId.'"
-                                                data-lead-designation="'.$lead->designation.'"
+                                      
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
@@ -71,13 +73,15 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                           data-lead-category="'.$lead->category->categoryId.'">
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                                data-lead-designation="'.$lead->designation.'"
+                                           >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                 data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
+                                                 
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
@@ -93,14 +97,15 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                           data-lead-category="'.$lead->category->categoryId.'">
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                                data-lead-designation="'.$lead->designation.'">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                 data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
-                                            ><i class="fa fa-comments"></i></a>';
+                                              
+                                         ><i class="fa fa-comments"></i></a>';
                 }}
             })
             ->make(true);
@@ -273,6 +278,12 @@ class LeadController extends Controller
         if($r->designation){
             $lead->designation=$r->designation;
         }
+        if($r->status==5){
+            $lead->statusId=5;
+            $lead->contactedUserId=null;
+            $lead->leadAssignStatus=0;
+
+        }
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
         //return back();
@@ -366,6 +377,7 @@ class LeadController extends Controller
             $possibilities = Possibility::get();
             $categories=Category::where('type',1)->get();
             $status=Leadstatus::where('statusId','!=',7)
+                ->where('statusId','!=',1)
                 ->get();
             $country=Country::get();
             return view('layouts.lead.myLead')
@@ -627,6 +639,7 @@ class LeadController extends Controller
             $callReports=Callingreport::get();
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
+                ->where('statusId','!=',1)
                 ->get();
             $country=Country::get();
             return view('layouts.lead.contact')

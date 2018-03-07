@@ -212,6 +212,7 @@ Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividua
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
 Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 Route::post('/getContactedIndividual','GetIndividualReportController@getContactedIndividual')->name('getContactedIndividual');
+Route::post('/approval','GetIndividualReportController@approval')->name('approval');
 
 
 

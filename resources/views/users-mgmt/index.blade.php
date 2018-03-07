@@ -65,6 +65,7 @@
                                        data-target-call="{{$user->target['targetCall']}}"
                                        data-target-high="{{$user->target['targetHighPossibility']}}"
                                        data-target-lead="{{$user->target['targetLeadmine']}}"
+                                       data-target-contact="{{$user->target['targetContact']}}"
                                     ><i class="fa fa-angle-double-up"></i></a>
 
                                 </td>
@@ -96,22 +97,27 @@
                         <!-- Modal body -->
                         <div class="modal-body">
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="firstName">Calling:</label>
                                 <input id="call" type="number" class="form-control" name="call" >
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="firstName">High Possibility (per week):</label>
                                 <input id="followup" type="number" class="form-control" name="highPossibility" >
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label for="firstName">Lead Mine:</label>
                                 <input id="lead" type="number" class="form-control" name="lead" >
                             </div>
 
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
+                                <label for="firstName">Contacted:</label>
+                                <input id="lead" type="number" class="form-control" name="contact" >
+                            </div>
+
+                            <div class="form-group col-md-3">
                                <button class="btn btn-success" type="submit">set</button>
                             </div>
 
@@ -542,6 +548,7 @@
             var call = $(e.relatedTarget).data('target-call');
             var high = $(e.relatedTarget).data('target-high');
             var lead = $(e.relatedTarget).data('target-lead');
+            var contact = $(e.relatedTarget).data('target-contact');
 
 
 
@@ -552,6 +559,7 @@
             $(e.currentTarget).find('input[name="call"]').val(call);
             $(e.currentTarget).find('input[name="highPossibility"]').val(high);
             $(e.currentTarget).find('input[name="lead"]').val(lead);
+            $(e.currentTarget).find('input[name="contact"]').val(contact);
 
         });
 

@@ -25,6 +25,7 @@ class GetIndividualReportController extends Controller
         $this->middleware('auth');
     }
     public function getHighPossibilityIndividual(Request $r){
+        $user=User::findOrFail($r->userid);
 
         $date = Carbon::now();
         $fromDate=$date->startOfWeek()->format('Y-m-d');
@@ -34,7 +35,6 @@ class GetIndividualReportController extends Controller
             $fromDate=$r->fromdate;
             $toDate=$r->todate;
         }
-        $user=User::findOrFail($r->userid);
 
 
 
@@ -43,12 +43,12 @@ class GetIndividualReportController extends Controller
                 ->with('country','category','possibility')
                 ->where('minedBy', $user->id)
                 ->where('filteredPossibility', 3)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(created_at)'),[$fromDate,$toDate])->get();
 
         }
 
         else{
-            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at')
+            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
                 ->with('country','category','possibility')
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.userId',$user->id)
@@ -63,17 +63,47 @@ class GetIndividualReportController extends Controller
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
-                 <th>Created_at</th>
-      </tr></thead>
-    <tbody>';
+                 <th>Created_at</th>';
+        if(Session::get('userType')=='ADMIN' && $user->typeId!=4){
+            $table.='<th>action</th>';
+
+        }
+        $table.='</tr></thead><tbody>';
+
         foreach ($highPosibilitiesThisWeek as $l){
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
-                    <td>'.$l->created_at.'</td>
+                    <td>'.$l->created_at.'</td>';
+
+
+            if(Session::get('userType')=='ADMIN' && $user->typeId!=4) {
+
+                $table .= '<td><select class="form-control"  name="aprove" id="' . $l->changeId . '" data-changeid="' . $l->changeId . '" onChange="test(this)">';
+                if ($l->approval == 1) {
+                    $table .= '<option value="">select</option> 
+                        <option value="1" selected>Approve</option>
+                        <option value="0">Decline</option>
+                      </td>
                     </tr>';
+                } else if ($l->approval == 2) {
+                    $table .= '<option value="">select</option> 
+                        <option value="1" >Approve</option>
+                        <option value="0" selected>Decline</option>
+                      </td>
+                    </tr>';
+
+                } else if ($l->approval == null) {
+                    $table .= '<option value="" selected>select</option> 
+                        <option value="1" >Approve</option>
+                        <option value="0">Decline</option>
+                      </td>
+                    </tr>';
+                }
+
+            }
 
         }
         $table.='</tbody></table>';
@@ -83,6 +113,19 @@ class GetIndividualReportController extends Controller
         return Response($table);
     }
 
+    public function approval(Request $r){
+        $possibilityChanges=Possibilitychange::findOrFail($r->changeId);
+        if($r->value==0){
+            $possibilityChanges->possibilityId=2;
+            $lead=Lead::findOrFail($possibilityChanges->leadId);
+            $lead->possibilityId=2;
+            $lead->save();
+        }
+        $possibilityChanges->approval=$r->value;
+        $possibilityChanges->save();
+
+        return Response($r);
+    }
 
 
 

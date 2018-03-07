@@ -241,7 +241,6 @@ class UserManagementController extends Controller
             if ($constraint != null) {
                 $query = $query->where( $fields[$index], 'like', '%'.$constraint.'%');
             }
-
             $index++;
         }
         return $query->paginate(5);
@@ -326,6 +325,13 @@ class UserManagementController extends Controller
                $log->save();
                $target->targetLeadmine=$r->lead;
            }
+           if($r->contact !=null){
+//               $log=new Targetlog;
+//               $log->userId=$r->userId;
+//               $log->targetType=3;
+//               $log->save();
+               $target->targetContact=$r->contact;
+           }
 
        }
        catch (ModelNotFoundException $ex) {
@@ -333,7 +339,7 @@ class UserManagementController extends Controller
            $target->userId=$r->userId;
 
 
-          //Target Type: 1. call, 2.HighPossibility , 3. Lead Mined
+          //Target Type: 1. call, 2.HighPossibility , 3. Lead Mined, 4. Contact
 
            if($r->call){
                $log=new Targetlog;

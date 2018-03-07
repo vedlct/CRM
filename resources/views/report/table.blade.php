@@ -25,6 +25,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 
@@ -62,7 +63,11 @@
             </thead>
             <tbody>
             @foreach($report as $r)
-            <tr>
+
+            @if($r->type !=4)
+
+
+                <tr>
                 <td>{{$r->userName}}</td>
                 <td><a href="#" class="highpossibility" onclick="totalcall(this)"
                        @if(isset($fromDate) && isset($toDate))
@@ -126,8 +131,8 @@
                        @endif
                        data-user-id="{{$r->id}}"
                        data-user-name="{{$r->userName}}">
-                        {{$r->closing}}<a/>
-                </td>
+                        {{$r->closing}}
+                    </a></td>
                 <td><a href="#" class="highpossibility" onclick="leadmine(this)"
                        @if(isset($fromDate) && isset($toDate))
                        data-date-from="{{$fromDate}}"
@@ -137,9 +142,78 @@
                        data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
                 </td>
             </tr>
+
+
+
+            @endif
+
                 @endforeach
             </tbody>
         </table>
+
+
+<br><br>
+
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Assigned Lead</th>
+                        <th>High Possibility</th>
+                        <th>Lead Mined</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($report as $r)
+
+                        @if($r->type ==4)
+
+
+                            <tr>
+                                <td>{{$r->userName}}</td>
+
+
+                                <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
+                                </td>
+                                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
+                                    </a>
+                                </td>
+
+                                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
+                                </td>
+                            </tr>
+
+
+
+                        @endif
+
+                    @endforeach
+                    </tbody>
+                </table>
+
+
+
+
+
             </div></div>
 
 @endsection
@@ -184,7 +258,7 @@
                 cache: false,
                 success:function(data) {
 
-                    console.log(data);
+//                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
@@ -196,6 +270,8 @@
             });
 
         }
+
+
 
 
         function totalcall(x){
@@ -220,7 +296,7 @@
                 cache: false,
                 success:function(data) {
 
-                    console.log(data);
+//                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
@@ -255,7 +331,7 @@
                 cache: false,
                 success:function(data) {
 
-                    console.log(data);
+//                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Mined');
                     $('#txtHint').html(data);
@@ -441,6 +517,30 @@
 
                 }
             });
+
+        }
+
+
+        function test(x) {
+            id = $(x).data('changeid');
+
+
+            var value=document.getElementById(id).value;
+
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('approval')}}',
+                data:{_token: CSRF_TOKEN,'changeId':id,'value':value},
+                cache: false,
+                success:function(data) {
+                    console.log(data);
+
+                }
+            });
+
 
         }
 

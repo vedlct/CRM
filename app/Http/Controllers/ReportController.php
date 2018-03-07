@@ -243,31 +243,6 @@ class ReportController extends Controller
 
 
 
-        //$dt = Carbon::now();
-//
-//        if ($f->isWeekday()){
-//            return 'true';
-//        }
-//        else{
-//            return 'false';
-//
-//        }
-
-
-
-
-
-
-//        $length = $t->diffInWeeks($f);
-//        if($length==0){
-//            $length = $t->diffInDays($f);
-//            $length++;
-//            $length = $length/5;
-//        }
-//        $length = $t->diffInDays($f);
-//        $length = $length/5;
-
-
 
 
 
@@ -463,11 +438,13 @@ class ReportController extends Controller
                 $u->closing=$closing;
                 $u->test=$test;
                 $u->contacted=$contacted;
+                $u->type=$user->typeId;
                 array_push($report, $u);
         }
 
 
         return view('report.table')->with('report',$report);
+        return $report;
     }
 
     public function individualCall($id){
