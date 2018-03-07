@@ -52,6 +52,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                data-lead-country="'.$lead->countryId.'"
+                                                data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
@@ -74,6 +76,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                 data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
@@ -94,6 +98,8 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
+                                                 data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
                                             ><i class="fa fa-comments"></i></a>';
                 }}
             })
