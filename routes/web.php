@@ -45,6 +45,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::get('/highPossibility', 'HomeController@highPossibility')->name('highPossibility');
 Route::get('/called', 'HomeController@call')->name('called');
+Route::get('/contact','HomeController@contact')->name('contact');
+Route::get('/mine', 'HomeController@mine')->name('mine');
 
 
 Route::get('/test', 'TestController@test');
@@ -212,6 +214,7 @@ Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividua
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
 Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 Route::post('/getContactedIndividual','GetIndividualReportController@getContactedIndividual')->name('getContactedIndividual');
+Route::post('/approval','GetIndividualReportController@approval')->name('approval');
 
 
 

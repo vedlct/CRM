@@ -13,8 +13,6 @@
 @section('content')
 
 
-
-
 <br><br>
     <div class="row" >
 
@@ -49,10 +47,42 @@
     </div>
 
 
+
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"> {{$lastDayContact}} | {{$target->targetContact}}</h2>
+                            <span class="text-muted">Last Day</span>
+                        </div>
+                        @if($target->targetContact>0)
+                            <?php
+                            $lastContactPercent= round(($lastDayContact/$target->targetContact)*100);
+                            if($lastContactPercent > 100){
+                                $lastContactPercent=100;
+                            }
+                            $count++; $total+=$lastContactPercent;
+                            ?>
+
+                            <span class="text-success">{{$lastContactPercent}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetContact>0)
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastContactPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
     <div class="col-lg-3 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Lead Mined</h4>
+                <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
                     <span class="text-muted">Last Day</span>
@@ -99,19 +129,21 @@
                 </div>
             </div>
         </div>
+    </div>
 
+{{--Total Progress--}}
 
-            <div class="col-lg-3 col-md-6">
+    <div class="row text-center"style="text-align: center" >
+            <div class="col-lg-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h4 class="card-title">Total Progress Last Day</h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0"></h2>
-                        <br>&nbsp&nbsp&nbsp<br>
                         @if($count !=0)
                         <span class="text-muted">{{round($total/$count)}}%</span>
                         <div class="progress">
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                             @endif
                     </div>
@@ -122,46 +154,7 @@
 
     </div>
 
-    {{--Graph--}}
-    {{--@php($userType = Session::get('userType'))--}}
 
-    {{--@if($userType=='ADMIN' || $userType=='MANAGER' || $userType=='SUPERVISOR')--}}
-
-        {{--<div class="row">--}}
-
-        {{--<div class="col-md-2">--}}
-    {{--<div class="card">--}}
-        {{--<div class="card-body">--}}
-            {{--<h4 class="card-title">Members</h4>--}}
-            {{--@foreach($teamMembers as $member)--}}
-                {{--<button id="{{$member->id}}" onclick="showGraph(this.id)"> {{$member->firstName}}</button><br><br>--}}
-
-                {{--@endforeach--}}
-
-
-        {{--</div>--}}
-    {{--</div></div>--}}
-
-
-        {{--<div class="col-md-10">--}}
-            {{--<div class="card">--}}
-                {{--<div class="card-body">--}}
-                    {{--<h4 class="card-title">Weekly Graph</h4>--}}
-
-                    {{--<div id="chartContainer" style="height: 370px; width: 100%;"></div>--}}
-
-
-
-                {{--</div>--}}
-            {{--</div></div>--}}
-
-
-
-
-
-
-    {{--</div>--}}
-    {{--@endif--}}
 
 <div class="row">
     <div class="col-md-10">
@@ -205,14 +198,15 @@
                         dataPoints: [
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
+                            { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
 
                             @if($userType=="RA")
                             { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
-
-
-                            @else
-                            { y: {{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($leadMinedThisWeek*25/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($leadMinedThisWeek*25/100))}}%" },
+                                @elseif($userType=="USER")
+                            { y:{{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}}%" },
+                            @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
+                            { y:{{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}}%" },
                             @endif
 
                         ]
@@ -225,58 +219,6 @@
 
 
 
-
-        function showGraph(id){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-
-            $.ajax({
-                type:'POST',
-                url:'{{route('getUserGraph')}}',
-                data:{_token: CSRF_TOKEN,'id':id},
-                cache: false,
-                success:function(data)
-                {
-                   console.log(data);
-
-                    graph(data);
-                }
-            });
-
-
-        }
-
-
-
-        function graph(data) {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2", // "light1", "light2", "dark1", "dark2"
-                title:{
-                    text: "This Week Report"
-                },
-                axisY: {
-                    title: "Limit",
-                    maximum: 80,
-                },
-                data: [{
-                    type: "column",
-                    showInLegend: true,
-                    legendMarkerColor: "grey",
-                    legendText: "Name = "+data.name,
-                    dataPoints: [
-                        { y: data.totalFollowUp, label: "Total Follow Up" },
-                        { y: data.totalFollowUpCalled, label: "Follow Up Called" },
-                        { y: data.calledThisWeek,  label: "Called This Week" },
-                        { y: data.leadMined,  label: "Lead Mined" }
-
-                    ]
-                }]
-            });
-            chart.render();
-
-        }
     </script>
 
 

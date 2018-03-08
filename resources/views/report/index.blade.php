@@ -67,7 +67,7 @@
                 },
 
                 axisY2:{
-                    title: "C-call ,M-lead mined ,P- high possibility",
+                    title: "C-call ,M-lead mined ,P- high possibility,Con- Contact",
                     maximum: 100,
                 },
                 data: [{
@@ -77,11 +77,16 @@
 
                     dataPoints: [
                             @foreach($report as $r)
-                            @if(  $r->typeId==4)
+                            @if($r->typeId==4)
                             { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
-                            @else
-                        { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->leadMined*25/100)+($r->highPosibilities*50/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
-                            @endif
+                            @elseif($r->typeId==5)
+                        { label: "{{$r->userName}}",y:{{(($r->called*20/100)+($r->leadMined*10/100)+($r->highPosibilities*50/100)+($r->contacted*20/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}"},
+
+                            @elseif($r->typeId==3 || $r->typeId==2)
+
+                        { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->highPosibilities*50/100)+($r->contacted*25/100))}},indexLabel:"C:{{$r->called}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}"},
+
+                    @endif
 
                             @endforeach
 

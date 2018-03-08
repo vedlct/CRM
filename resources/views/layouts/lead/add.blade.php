@@ -360,7 +360,7 @@
 
 
 
-    <!-- Modal -->
+    <!--Edit Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%">
 
@@ -432,6 +432,15 @@
                                 @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach
+                            </select>
+                            <br><br><br>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Status:</b></label>
+                            <select class="form-control"  name="status" id="">
+                                <option value="">select one</option>
+                                <option value="5">Rejected</option>
                             </select>
                             <br><br><br>
                         </div>
