@@ -103,8 +103,6 @@
                     <h4 class="modal-title" name="modal-title">Create Lead</h4>
                 </div>
 
-
-
                 <div class="container-fluid">
                     <div class="row">
                         {{csrf_field()}}
@@ -156,7 +154,7 @@
 
                         <div class="form-group col-md-5" style="">
                             <label ><b>Category:</b></label>
-                            <select class="form-control" id="" name="category">
+                            <select class="form-control" id="" name="category" >
                                 @foreach($categories as $cat)
                                     <option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
 
@@ -431,7 +429,7 @@
                         <div class="col-md-4">
                             <label><b>Country:</b></label>
                             <select class="form-control"  name="country" id="country">
-                                @foreach($country as $c)
+                                @foreach($countries as $c)
                                     <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                 @endforeach
                             </select>
