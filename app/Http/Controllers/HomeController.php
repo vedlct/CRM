@@ -47,6 +47,12 @@ class HomeController extends Controller
 
 
 
+        $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
+            ->where('callingReport',5)
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+
 
 
         $day=Carbon::now()->format('l');
@@ -66,6 +72,10 @@ class HomeController extends Controller
             ->whereDate('created_at',$lastDate)->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
+            ->whereDate('created_at',$lastDate)->count();
+
+        $lastDayContact= Workprogress::where('userId',Auth::user()->id)
+            ->where('callingReport',5)
             ->whereDate('created_at',$lastDate)->count();
 
         $User_Type=Session::get('userType');
@@ -142,15 +152,26 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+        if($target->targetContact>0){
+            $contactThisWeek=round(($contactThisWeek/($target->targetContact*5))*100);
+            if($contactThisWeek>100){
+                $contactThisWeek=100;
+            }
+            $countWeek++;
+        }
+
+
 
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
             ->with('highPosibilities',$highPosibilities)
             ->with('lastDayCalled',$lastDayCalled)
+            ->with('lastDayContact',$lastDayContact)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
             ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
+            ->with('contactThisWeek',$contactThisWeek)
             ->with('countWeek',$countWeek);
 
 
@@ -159,12 +180,32 @@ class HomeController extends Controller
 
 
     public  function call(){
+    $date = Carbon::now();
+    $leads=Lead::select('leads.*','workprogress.created_at')
+        ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+        ->where('workprogress.userId',Auth::user()->id)
+        ->where('workprogress.callingReport','!=',null)
+        ->where('workprogress.callingReport','!=',6)
+        ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
+
+    $callReports = Callingreport::get();
+    $possibilities = Possibility::get();
+    $categories=Category::where('type',1)->get();
+
+    return view('report.weekly')
+        ->with('leads', $leads)
+        ->with('callReports', $callReports)
+        ->with('possibilities', $possibilities)
+        ->with('categories',$categories);
+
+}
+
+    public  function contact(){
         $date = Carbon::now();
         $leads=Lead::select('leads.*','workprogress.created_at')
             ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
             ->where('workprogress.userId',Auth::user()->id)
-            ->where('workprogress.callingReport','!=',null)
-            ->where('workprogress.callingReport','!=',6)
+            ->where('workprogress.callingReport',5)
             ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
         $callReports = Callingreport::get();
@@ -179,11 +220,24 @@ class HomeController extends Controller
 
     }
 
+    public function mine(){
+        $date = Carbon::now();
+        $leads=Lead::where('minedBy',Auth::user()->id)
+            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('report.weekly')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+    }
 
  public function highPossibility(){
      $date = Carbon::now();
-
 
      $User_Type=Session::get('userType');
      if($User_Type=='RA'){

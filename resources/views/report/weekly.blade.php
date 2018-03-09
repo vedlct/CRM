@@ -14,6 +14,13 @@
                 @if(Request::url()==route('called'))
                     <h2 class="card-title" align="center"><b>Called This Week</b></h2>
                 @endif
+                @if(Request::url()==route('mine'))
+                    <h2 class="card-title" align="center"><b>Lead Mined This Week</b></h2>
+                @endif
+                @if(Request::url()==route('contact'))
+                    <h2 class="card-title" align="center"><b>Contact This Week</b></h2>
+                @endif
+
 
 
 

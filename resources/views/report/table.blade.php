@@ -47,6 +47,8 @@
                 @else
         <p>Weekly report</p>
          @endif
+
+        @if(Session::get('userType') !='RA')
         <table class="table">
             <thead>
             <tr>
@@ -150,11 +152,11 @@
                 @endforeach
             </tbody>
         </table>
-
+    @endif
 
 <br><br>
 
-
+                @if(Session::get('userType') !='USER')
                 <table class="table">
                     <thead>
                     <tr>
@@ -210,7 +212,7 @@
                     </tbody>
                 </table>
 
-
+@endif
 
 
 

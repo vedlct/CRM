@@ -55,6 +55,10 @@ class ReportController extends Controller
                     ->where('callingReport','!=',6)
                     ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
+                $contacted=Workprogress::where('userId',$user->id)
+                    ->where('callingReport',5)
+                    ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
                 //When user is RA
                 if($user->typeId==4){
 
@@ -108,15 +112,22 @@ class ReportController extends Controller
                     }
                     $t++;
                 }
-                if($t==0){
-                    $t=1;
+
+                if($target->targetContact >0){
+
+                    $contacted=round(($contacted/($target->targetContact*5))*100);
                 }
+
+                if($t==0){
+                    $t=1;}
+
                 $u = new stdClass;
                 $u->userName=$user->firstName;
                 $u->typeId=$user->typeId;
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
+                $u->contacted=$contacted;
                 $u->t=$t;
                 array_push($report, $u);
             }
@@ -207,6 +218,7 @@ class ReportController extends Controller
             $u->assignedLead=$assignedLead;
             $u->closing=$closing;
             $u->test=$test;
+            $u->type=$user->typeId;
             $u->contacted=$contacted;
             array_push($report, $u);
 
@@ -267,6 +279,9 @@ class ReportController extends Controller
             foreach ($users as $user){
                 $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                     ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
+                $contacted=Workprogress::where('userId',$user->id)
+                    ->where('callingReport',5)
+                    ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
                     ->where('callingReport','!=',6)
@@ -311,6 +326,13 @@ class ReportController extends Controller
                     }
                     $t++;
                 }
+                if($target->targetContact >0){
+                    $contacted=round(($contacted/($target->targetContact*5*$length))*100);
+                    if($contacted>100){
+                        $contacted=100;
+                    }
+                    $t++;
+                }
 
                 if($target->targetLeadmine>0){
                     $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5*$length))*100);
@@ -334,6 +356,7 @@ class ReportController extends Controller
                 $u->leadMined=$leadMinedThisWeek;
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
+                $u->contacted=$contacted;
                 $u->t=$t;
                 array_push($report, $u);
             }
@@ -444,7 +467,7 @@ class ReportController extends Controller
 
 
         return view('report.table')->with('report',$report);
-        return $report;
+
     }
 
     public function individualCall($id){
