@@ -116,6 +116,9 @@ class ReportController extends Controller
                 if($target->targetContact >0){
 
                     $contacted=round(($contacted/($target->targetContact*5))*100);
+                    if($contacted>100){
+                        $contacted=100;
+                    }
                 }
 
                 if($t==0){
