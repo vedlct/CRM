@@ -23,6 +23,7 @@ use Redirect;
 
 
 
+
 class FollowupController extends Controller
 {
     /**
@@ -59,6 +60,7 @@ class FollowupController extends Controller
             $lastDate=Carbon::now()->subDay(5)->format('Y-m-d');
 
             $leads=Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                ->groupBy('leads.leadId')
                 ->whereBetween('followUpDate', [$lastDate,$date])
                 ->where('leads.contactedUserId',Auth::user()->id)
                 ->where('followup.workStatus',0)
@@ -93,6 +95,13 @@ class FollowupController extends Controller
 
     public function storeFollowupReport(Request $r){
 
+        $update = Followup::findOrFail($r->followId);
+        $update->workStatus = 1;
+        $update->save();
+        DB::table('followup')
+            ->where('userId',Auth::user()->id)
+            ->where('leadId',$update->leadId)
+            ->update(['workStatus' => 1]);
         if($r->followup !=null) {
 
 
@@ -104,9 +113,7 @@ class FollowupController extends Controller
             $followUp->save();
         }
 
-        $update = Followup::findOrFail($r->followId);
-        $update->workStatus = 1;
-        $update->save();
+
 
         //posssibility Change
         $lead=Lead::findOrFail($r->leadId);
