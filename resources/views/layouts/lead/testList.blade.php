@@ -31,7 +31,7 @@
                         <th>Country</th>
                         <th>Contact Person</th>
                         <th>Contact Number</th>
-                        <th>Action</th>
+                        {{--<th>Action</th>--}}
 
                     </tr>
                     </thead>
@@ -48,27 +48,27 @@
 
 
                             {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
-                            <td>
-                                <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
-                                   data-lead-id="{{$lead->leadId}}"
-                                   data-lead-possibility="{{$lead->possibilityId}}">
-                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                            {{--<td>--}}
+                                {{--<!-- Trigger the modal with a button -->--}}
+                                {{--<a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"--}}
+                                   {{--data-lead-id="{{$lead->leadId}}"--}}
+                                   {{--data-lead-possibility="{{$lead->possibilityId}}">--}}
+                                    {{--<i class="fa fa-phone" aria-hidden="true"></i></a>--}}
 
-                                <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                   data-lead-id="{{$lead->leadId}}"
-                                   data-lead-name="{{$lead->companyName}}"
-                                   data-lead-email="{{$lead->email}}"
-                                   data-lead-number="{{$lead->contactNumber}}"
-                                   data-lead-person="{{$lead->personName}}"
-                                   data-lead-website="{{$lead->website}}"
-                                   data-lead-mined="{{$lead->mined->firstName}}"
-                                   data-lead-category="{{$lead->category->categoryId}}"
-                                >
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                {{--<!-- Trigger the Edit modal with a button -->--}}
+                                {{--<a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"--}}
+                                   {{--data-lead-id="{{$lead->leadId}}"--}}
+                                   {{--data-lead-name="{{$lead->companyName}}"--}}
+                                   {{--data-lead-email="{{$lead->email}}"--}}
+                                   {{--data-lead-number="{{$lead->contactNumber}}"--}}
+                                   {{--data-lead-person="{{$lead->personName}}"--}}
+                                   {{--data-lead-website="{{$lead->website}}"--}}
+                                   {{--data-lead-mined="{{$lead->mined->firstName}}"--}}
+                                   {{--data-lead-category="{{$lead->category->categoryId}}"--}}
+                                {{-->--}}
+                                    {{--<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>--}}
 
-                            </td>
+                            {{--</td>--}}
                         </tr>
 
                     @endforeach
