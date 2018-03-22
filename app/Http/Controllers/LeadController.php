@@ -278,12 +278,20 @@ class LeadController extends Controller
         if($r->designation){
             $lead->designation=$r->designation;
         }
+
         if($r->status==5){
+//         For Report
+            $wp=new Workprogress;
+            $wp->leadId=$lead->leadId;
+            $wp->progress='Reject';
+            $wp->userId=Auth::user()->id;
+            $wp->save();
+
             $lead->statusId=5;
             $lead->contactedUserId=null;
             $lead->leadAssignStatus=0;
-
         }
+
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
         //return back();
@@ -343,6 +351,10 @@ class LeadController extends Controller
                                            data-lead-designation="'.$lead->designation.'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                 <form method="post" action="'.route('rejectStore').'">
+                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                    <button class="btn btn-danger btn-sm">X</button></form>           
                                     ';
                 }
                 else{
@@ -364,7 +376,13 @@ class LeadController extends Controller
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    </form>';}})
+                                    </form>
+                                    <form method="post" action="'.route('rejectStore').'">
+                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                    <button class="btn btn-danger btn-sm">X</button></form>
+                                    
+                                    ';}})
             ->make(true);
     }
     public function assignedLeads(){
@@ -706,15 +724,19 @@ class LeadController extends Controller
     }
     public function rejectStore(Request $r){
         $lead=Lead::findOrFail($r->leadId);
-        if($lead->statusId ==1){
+//        if($lead->statusId ==1){
             $lead->statusId=5;
+            $lead->contactedUserId=null;
+            $lead->leadAssignStatus=0;
             $lead->save();
+
             $work=new Workprogress;
             $work->progress='Reject';
             $work->leadId=$r->leadId;
             $work->userId=Auth::user()->id;
             $work->comments=$r->comment;
-            $work->save();}
+            $work->save();
+//        }
         Session::flash('message', 'Lead Rejected Successfully');
         return back();
     }

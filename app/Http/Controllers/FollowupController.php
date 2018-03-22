@@ -102,8 +102,8 @@ class FollowupController extends Controller
             ->where('userId',Auth::user()->id)
             ->where('leadId',$update->leadId)
             ->update(['workStatus' => 1]);
-        if($r->followup !=null) {
 
+        if($r->followup !=null) {
 
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;

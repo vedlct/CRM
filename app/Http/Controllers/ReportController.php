@@ -137,6 +137,113 @@ class ReportController extends Controller
             return view('report.index')->with('report',$report);
     }
 
+
+    public function reportTable(){
+        $date = Carbon::now();
+        $User_Type=Session::get('userType');
+
+        if( $User_Type =='MANAGER'){
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->where('teamId',Auth::user()->teamId)
+                ->get();
+        }
+        else if($User_Type =='USER' || $User_Type =='RA'){
+            $users=User::select('id','firstName','typeId')
+                ->where('id',Auth::user()->id)
+                ->get();
+
+        }
+        else{
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->get();
+        }
+
+        $report =array();
+
+
+
+        foreach ($users as $user) {
+
+            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            $calledThisWeek=Workprogress::where('userId',$user->id)
+                ->where('workprogress.callingReport','!=',null)
+                ->where('callingReport','!=',6)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+//            $followupThisWeek=Followup::where('userId',$user->id)
+////                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//                ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//                ->count();
+
+            $followupThisWeek=Workprogress::where('callingReport',4)
+                            ->where('userId',$user->id)
+                            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                            ->count();
+
+
+
+            if($user->typeId==4){
+
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                    ->count();
+
+                //                $highPosibilitiesThisWeek=Lead::where('leads.minedBy',$user->id)
+//                    ->where('possibilityId',3)
+//                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            }
+            else{
+                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
+                    ->where('possibilityId',3)
+                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+            }
+
+
+            $assignedLead=Leadassigned::where('assignTo',$user->id)
+//                ->where('leaveDate',null)
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            $closing=Workprogress::where('userId',$user->id)
+                ->where('progress','Closing')
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            $test=Workprogress::where('userId',$user->id)
+                ->where('progress','Test Job')
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+            $contacted=Workprogress::where('userId',$user->id)
+                ->where('callingReport',5)
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+
+
+            $u = new stdClass;
+            $u->id=$user->id;
+            $u->userName=$user->firstName;
+            $u->leadMined=$leadMinedThisWeek;
+            $u->called=$calledThisWeek;
+            $u->highPosibilities=$highPosibilitiesThisWeek;
+            $u->assignedLead=$assignedLead;
+            $u->followupThisWeek=$followupThisWeek;
+            $u->closing=$closing;
+            $u->test=$test;
+            $u->contacted=$contacted;
+            $u->type=$user->typeId;
+            array_push($report, $u);
+        }
+
+
+        return view('report.table')->with('report',$report);
+
+    }
+
     public function searchTableByDate(Request $r){
         $User_Type=Session::get('userType');
         if( $User_Type =='MANAGER'){
@@ -169,9 +276,14 @@ class ReportController extends Controller
                 ->where('callingReport','!=',6)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
-            $followupThisWeek=Followup::where('userId',$user->id)
-//                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])
-                ->whereBetween('followUpDate', [$r->fromDate,$r->toDate])
+//            $followupThisWeek=Followup::where('userId',$user->id)
+////                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate,$r->toDate])
+//                ->whereBetween('followUpDate', [$r->fromDate,$r->toDate])
+//                ->count();
+
+            $followupThisWeek=Workprogress::where('callingReport',4)
+                ->where('userId',$user->id)
+                ->whereBetween('created_at',[$r->fromDate,$r->toDate])
                 ->count();
 
             if($user->typeId==4){
@@ -371,107 +483,7 @@ class ReportController extends Controller
 
     }
 
-    public function reportTable(){
-        $date = Carbon::now();
-        $User_Type=Session::get('userType');
 
-        if( $User_Type =='MANAGER'){
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('teamId',Auth::user()->teamId)
-                ->get();
-        }
-        else if($User_Type =='USER' || $User_Type =='RA'){
-            $users=User::select('id','firstName','typeId')
-                ->where('id',Auth::user()->id)
-                ->get();
-
-        }
-        else{
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->get();
-        }
-
-        $report =array();
-
-
-
-        foreach ($users as $user) {
-
-            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            $calledThisWeek=Workprogress::where('userId',$user->id)
-                ->where('workprogress.callingReport','!=',null)
-                ->where('callingReport','!=',6)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            $followupThisWeek=Followup::where('userId',$user->id)
-//                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                ->whereBetween('followUpDate', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                ->count();
-
-
-
-
-            if($user->typeId==4){
-
-                $highPosibilitiesThisWeek=Lead::select('leads.*')
-//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                    ->where('leads.minedBy',$user->id)
-                    ->where('filteredPossibility',3)
-                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                    ->count();
-
-                //                $highPosibilitiesThisWeek=Lead::where('leads.minedBy',$user->id)
-//                    ->where('possibilityId',3)
-//                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            }
-            else{
-                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                    ->where('possibilityId',3)
-                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-            }
-
-
-            $assignedLead=Leadassigned::where('assignTo',$user->id)
-//                ->where('leaveDate',null)
-                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            $closing=Workprogress::where('userId',$user->id)
-                ->where('progress','Closing')
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            $test=Workprogress::where('userId',$user->id)
-                ->where('progress','Test Job')
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-            $contacted=Workprogress::where('userId',$user->id)
-                ->where('callingReport',5)
-                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
-
-                $u = new stdClass;
-                $u->id=$user->id;
-                $u->userName=$user->firstName;
-                $u->leadMined=$leadMinedThisWeek;
-                $u->called=$calledThisWeek;
-                $u->highPosibilities=$highPosibilitiesThisWeek;
-                $u->assignedLead=$assignedLead;
-                $u->followupThisWeek=$followupThisWeek;
-                $u->closing=$closing;
-                $u->test=$test;
-                $u->contacted=$contacted;
-                $u->type=$user->typeId;
-                array_push($report, $u);
-        }
-
-
-        return view('report.table')->with('report',$report);
-
-    }
 
     public function individualCall($id){
         $report=Workprogress::where('userId',$id)->count();

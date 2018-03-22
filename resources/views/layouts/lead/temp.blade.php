@@ -21,6 +21,7 @@
                     <thead>
                     <tr>
                         <th width="2%">Mined By</th>
+                        <th width="6%">Date</th>
                         <th  width="10%">Company Name</th>
                         <th  width="5%">Category</th>
                         <th  width="5%">Website</th>
@@ -217,6 +218,7 @@
                 },
                 columns: [
                     { data: 'mined.firstName', name: 'mined.firstName' },
+                    { data: 'created_at', name: 'leads.created_at' },
                     { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
