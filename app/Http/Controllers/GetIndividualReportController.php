@@ -54,6 +54,7 @@ class GetIndividualReportController extends Controller
                 ->where('possibilitychanges.userId',$user->id)
                 ->where('possibilitychanges.possibilityId',3)
                 ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+
         }
 
 
@@ -63,6 +64,7 @@ class GetIndividualReportController extends Controller
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
+                 <th>Comment</th>
                  <th>Created_at</th>';
         if(Session::get('userType')=='ADMIN' && $user->typeId!=4){
             $table.='<th>action</th>';
@@ -75,8 +77,11 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
-                    <td>'.$l->country->countryName.'</td>
-                    <td>'.$l->created_at.'</td>';
+                    <td>'.$l->country->countryName.'</td>';
+            $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
+            $table.= '<td>'.$comment->comments.'</td>
+                    </td><td>'.$l->created_at.'</td>';
+            $comment='';
 
 
             if(Session::get('userType')=='ADMIN' && $user->typeId!=4) {
@@ -184,17 +189,17 @@ class GetIndividualReportController extends Controller
         $user=User::findOrFail($r->userid);
 //        $followupThisWeek=Followup::where('userId',$user->id)
 //            ->whereBetween('created_at',[$r->fromDate,$r->toDate])->count();
-        $leads = Lead::select('leads.*','followup.followUpDate','followup.created_at')
+        $leads = Lead::select('leads.*','workprogress.created_at')
             ->with('country','possibility')
-            ->leftJoin('followup', 'leads.leadId', 'followup.leadId')
-            ->where('followup.userId',$user->id)
-            ->whereBetween(DB::raw('DATE(followup.followUpDate)'), [$fromDate,$toDate])->get();
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->where('workprogress.userId',$user->id)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Country</th>
-                <th>Followup Date</th>
+              
                 <th>Created At</th>
       </tr></thead>
     <tbody>';
@@ -203,7 +208,6 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->country->countryName.'</td>
-                    <td>'.$l->followUpDate.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
 
