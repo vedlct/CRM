@@ -514,13 +514,13 @@ class LeadController extends Controller
         $lead->leadAssignStatus=0;
         $lead->save();
         if($r->report !=2) {
-//            if ($currentPossibility != $r->possibility) {
+            if ($currentPossibility != $r->possibility) {
             $log = new Possibilitychange;
             $log->leadId = $r->leadId;
             $log->possibilityId = $r->possibility;
             $log->userId = Auth::user()->id;
             $log->save();
-//            }
+            }
         }
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
