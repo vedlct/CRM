@@ -37,14 +37,12 @@ class GetIndividualReportController extends Controller
         }
 
 
-
         if($user->typeId == 4) {
             $highPosibilitiesThisWeek = Lead::select('leads.*')
                 ->with('country','category','possibility')
                 ->where('minedBy', $user->id)
-                ->where('filteredPossibility', 3)
+                ->where('filteredPossibility',3)
                 ->whereBetween(DB::raw('DATE(created_at)'),[$fromDate,$toDate])->get();
-
         }
 
         else{
@@ -79,8 +77,16 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>';
             $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
-            $table.= '<td>'.$comment->comments.'</td>
+            if(!empty($comment)){
+                $table.= '<td>'.$comment->comments.'</td>
                     </td><td>'.$l->created_at.'</td>';
+            }
+
+            else{
+                $table.= '<td></td>
+                    </td><td>'.$l->created_at.'</td>';
+            }
+
             $comment='';
 
 
@@ -187,19 +193,18 @@ class GetIndividualReportController extends Controller
             $toDate=$r->todate;
         }
         $user=User::findOrFail($r->userid);
-//        $followupThisWeek=Followup::where('userId',$user->id)
-//            ->whereBetween('created_at',[$r->fromDate,$r->toDate])->count();
-        $leads = Lead::select('leads.*','workprogress.created_at')
+        $leads = Lead::select('leads.*','workprogress.comments','workprogress.created_at')
             ->with('country','possibility')
             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
             ->where('workprogress.userId',$user->id)
+            ->where('workprogress.callingReport',4)
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Country</th>
-              
+                 <th>Comment</th>
                 <th>Created At</th>
       </tr></thead>
     <tbody>';
@@ -208,6 +213,7 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->country->countryName.'</td>
+                     <td>'.$l->comments.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
 
