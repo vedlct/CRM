@@ -46,11 +46,13 @@ class GetIndividualReportController extends Controller
         }
 
         else{
-            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
+//            SELECT * FROM `possibilitychanges` LEFT JOIN workprogress ON possibilitychanges.created_at = workprogress.created_at WHERE possibilitychanges.changeId=197
+            $highPosibilitiesThisWeek=Lead::select('leads.*','workprogress.comments','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
                 ->with('country','category','possibility')
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.userId',$user->id)
                 ->where('possibilitychanges.possibilityId',3)
+                ->leftJoin('workprogress', 'possibilitychanges.created_at', 'workprogress.created_at')
                 ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
 
         }
@@ -76,16 +78,16 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>';
-            $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
-            if(!empty($comment)){
-                $table.= '<td>'.$comment->comments.'</td>
-                    </td><td>'.$l->created_at.'</td>';
-            }
+//            $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
+//            if(!empty($comment)){
+//                $table.= '<td>'.$comment->comments.'</td>
+//                    </td><td>'.$l->created_at.'</td>';
+//            }
 
-            else{
-                $table.= '<td></td>
+//            else{
+                $table.= '<td>'.$l->comments.'</td>
                     </td><td>'.$l->created_at.'</td>';
-            }
+//            }
 
             $comment='';
 
