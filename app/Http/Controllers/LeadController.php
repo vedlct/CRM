@@ -518,9 +518,10 @@ class LeadController extends Controller
 
             $chk=Possibilitychange::where('leadId',$lead->leadId)
                                     ->where('userId',Auth::user()->id)
+                                    ->where('possibilityId',3)
                                     ->whereDate('created_at',strftime('%F'))->count();
 
-            if($chk ==0)
+            if($chk ==0 )
             {
             $log = new Possibilitychange;
             $log->leadId = $r->leadId;
