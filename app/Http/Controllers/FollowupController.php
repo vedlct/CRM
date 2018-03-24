@@ -95,6 +95,7 @@ class FollowupController extends Controller
 
     public function storeFollowupReport(Request $r){
 
+
         $update = Followup::findOrFail($r->followId);
         $update->workStatus = 1;
         $update->save();
@@ -122,7 +123,12 @@ class FollowupController extends Controller
         $lead->save();
 
         if($r->report !=2){
-            if($currentPossibility !=$r->possibility){
+//             if($currentPossibility !=$r->possibility){
+            $chk=Possibilitychange::where('leadId',$lead->leadId)
+                ->where('userId',Auth::user()->id)
+                ->whereDate('created_at',strftime('%F'))->count();
+            if($chk ==0)
+            {
             $log=new Possibilitychange;
             $log->leadId=$r->leadId;
             $log->possibilityId=$r->possibility;
