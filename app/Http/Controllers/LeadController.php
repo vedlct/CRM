@@ -515,12 +515,20 @@ class LeadController extends Controller
         $lead->save();
         if($r->report !=2) {
 //            if ($currentPossibility != $r->possibility) {
+
+            $chk=Possibilitychange::where('leadId',$lead->leadId)
+                                    ->where('userId',Auth::user()->id)
+                                    ->where('possibilityId',3)
+                                    ->whereDate('created_at',strftime('%F'))->count();
+
+            if($chk ==0 )
+            {
             $log = new Possibilitychange;
             $log->leadId = $r->leadId;
             $log->possibilityId = $r->possibility;
             $log->userId = Auth::user()->id;
             $log->save();
-//            }
+            }
         }
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
