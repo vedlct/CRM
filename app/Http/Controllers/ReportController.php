@@ -56,7 +56,11 @@ class ReportController extends Controller
                     ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
                 $contacted=Workprogress::where('userId',$user->id)
-                    ->where('callingReport',5)
+//                    ->where('callingReport',5)
+                    ->where(function($q){
+                        $q->orWhere('callingReport',5)
+                            ->orWhere('callingReport',4);
+                    })
                     ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 
                 //When user is RA
@@ -369,11 +373,7 @@ class ReportController extends Controller
         $length = $length/5;
 
 
-
-
-
-
-            if( $User_Type =='MANAGER'){
+        if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
@@ -395,7 +395,11 @@ class ReportController extends Controller
                 $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                     ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
                 $contacted=Workprogress::where('userId',$user->id)
-                    ->where('callingReport',5)
+//                    ->where('callingReport',5)
+                    ->where(function($q){
+                        $q->orWhere('callingReport',5)
+                            ->orWhere('callingReport',4);
+                    })
                     ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)

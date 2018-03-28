@@ -213,7 +213,11 @@ class HomeController extends Controller
         $leads=Lead::select('leads.*','workprogress.created_at')
             ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
             ->where('workprogress.userId',Auth::user()->id)
-            ->where('workprogress.callingReport',5)
+//            ->where('workprogress.callingReport',5)
+            ->where(function($q){
+                $q->orWhere('callingReport',5)
+                    ->orWhere('callingReport',4);
+            })
             ->whereBetween('workprogress.created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->get();
 
         $callReports = Callingreport::get();
