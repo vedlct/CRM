@@ -8,17 +8,17 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('highPossibility'))
-                <h2 class="card-title" align="center"><b>High Possibility This Week</b></h2>
+                <h2 class="card-title" align="center"><b>High Possibility This Month</b></h2>
             @endif
 
                 @if(Request::url()==route('called'))
-                    <h2 class="card-title" align="center"><b>Called This Week</b></h2>
+                    <h2 class="card-title" align="center"><b>Called This Month</b></h2>
                 @endif
                 @if(Request::url()==route('mine'))
-                    <h2 class="card-title" align="center"><b>Lead Mined This Week</b></h2>
+                    <h2 class="card-title" align="center"><b>Lead Mined This Month</b></h2>
                 @endif
                 @if(Request::url()==route('contact'))
-                    <h2 class="card-title" align="center"><b>Contact This Week</b></h2>
+                    <h2 class="card-title" align="center"><b>Contact This Month</b></h2>
                 @endif
 
 

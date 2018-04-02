@@ -160,7 +160,7 @@
     <div class="col-md-10">
     <div class="card">
     <div class="card-body">
-    <h4 class="card-title">Weekly Graph</h4>
+    <h4 class="card-title">Monthly Graph</h4>
 
     <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 

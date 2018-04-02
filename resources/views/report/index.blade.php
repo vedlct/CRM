@@ -26,8 +26,6 @@
 
 
 
-
-
     {{--<div style="padding-top:50px;" >--}}
         <div id="chartContainer" style="height: 600px; width:100%;"></div>
     </div>
@@ -62,7 +60,7 @@
                     text:"Report Of Employee From {{$fromDate}} To {{$toDate}}",
 
                     @else
-                    text:"Weekly Report Of Employee"
+                    text:"Monthly Report Of Employee"
                     @endif
                 },
 
