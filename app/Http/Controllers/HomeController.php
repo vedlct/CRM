@@ -76,10 +76,10 @@ class HomeController extends Controller
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
             ->where('workprogress.callingReport','!=',null)
             ->where('callingReport','!=',6)
-            ->whereDate('created_at',$lastDate)->count();
+            ->whereBetween('created_at', [$start, $end])->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
-            ->whereDate('created_at',$lastDate)->count();
+            ->whereBetween('created_at', [$start, $end])->count();
 
         $lastDayContact= Workprogress::where('userId',Auth::user()->id)
 //            ->where('callingReport',5)
@@ -87,7 +87,7 @@ class HomeController extends Controller
                 $q->orWhere('callingReport',5)
                     ->orWhere('callingReport',4);
             })
-            ->whereDate('created_at',$lastDate)->count();
+            ->whereBetween('created_at', [$start, $end])->count();
 
         $User_Type=Session::get('userType');
         if($User_Type=='RA'){
