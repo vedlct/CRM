@@ -133,26 +133,7 @@
 
 {{--Total Progress--}}
 
-    <div class="row text-center"style="text-align: center" >
-            <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h4 class="card-title">Total Progress This Month</h4>
-                    <div class="text-right">
-                        <h2 class="font-light m-b-0"></h2>
-                        @if($count !=0)
-                        <span class="text-muted">{{round($total/$count)}}%</span>
-                        <div class="progress">
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                            @endif
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
+ 
 
 
 
