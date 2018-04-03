@@ -368,6 +368,10 @@ class ReportController extends Controller
 
         $months=$t->diffInMonths($f);
 
+        if($months==0){
+            $months=1;
+        }
+
 //        $length=0;
 //
 //
