@@ -490,10 +490,12 @@ class LeadController extends Controller
             'report' => 'required',
             'comment' => 'required|max:300',
         ]);
+
         $workStatus=Leadassigned::where('leadId',$r->leadId)
             ->where('assignTo',Auth::user()->id)
             ->where('workStatus',0)
             ->first();
+
         if($workStatus != null){
             $leadAssigned=Leadassigned::findOrFail($workStatus->assignId);
             $leadAssigned->workStatus=1;
@@ -513,7 +515,8 @@ class LeadController extends Controller
         $lead->possibilityId=$r->possibility;
         $lead->leadAssignStatus=0;
         $lead->save();
-        if($r->report !=2) {
+        if($r->report ==1 ||$r->report ==3||$r->report ==4||$r->report ==5) {
+//            $r->report !=2 ||$r->report !=6
 //            if ($currentPossibility != $r->possibility) {
 
             $chk=Possibilitychange::where('leadId',$lead->leadId)

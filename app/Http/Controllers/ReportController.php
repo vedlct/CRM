@@ -26,8 +26,11 @@ class ReportController extends Controller
 
         $User_Type=Session::get('userType');
 
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-            if( $User_Type =='MANAGER'){
+
+        if( $User_Type =='MANAGER'){
                 $users=User::select('id','firstName','typeId')
                     ->where('typeId','!=',1)
                     ->where('teamId',Auth::user()->teamId)
@@ -48,21 +51,19 @@ class ReportController extends Controller
             $report =array();
             foreach ($users as $user){
                 $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                    ->whereBetween('created_at', [$start,$end])->count();
 
                 $calledThisWeek=Workprogress::where('userId',$user->id)
                     ->where('workprogress.callingReport','!=',null)
                     ->where('callingReport','!=',6)
-                    ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
+                    ->whereBetween('created_at', [$start,$end])->count();
                 $contacted=Workprogress::where('userId',$user->id)
 //                    ->where('callingReport',5)
                     ->where(function($q){
                         $q->orWhere('callingReport',5)
                             ->orWhere('callingReport',4);
                     })
-                    ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
-
+                    ->whereBetween('created_at', [$start,$end])->count();
                 //When user is RA
                 if($user->typeId==4){
 
@@ -70,13 +71,14 @@ class ReportController extends Controller
 //                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                         ->where('leads.minedBy',$user->id)
                         ->where('filteredPossibility',3)
-                        ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                        ->count();
+                        ->whereBetween('created_at', [$start,$end])->count();
                 }
                 else{
                     $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
                         ->where('possibilityId',3)
-                        ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();}
+                        ->whereBetween('created_at', [$start,$end])->count();
+
+                }
 
                 try{
                     $target=Usertarget::findOrFail($user->id);
@@ -95,7 +97,7 @@ class ReportController extends Controller
 
                 //Weekly Report
                 if($target->targetCall>0){
-                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*5))*100);
+                    $calledThisWeek=round(($calledThisWeek/($target->targetCall))*100);
                     if($calledThisWeek>100){
                         $calledThisWeek=100;
                     }
@@ -103,7 +105,7 @@ class ReportController extends Controller
                 }
 
                 if($target->targetLeadmine>0){
-                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5))*100);
+                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine))*100);
                     if ($leadMinedThisWeek>100){
                         $leadMinedThisWeek=100;}
                     $t++;
@@ -119,7 +121,7 @@ class ReportController extends Controller
 
                 if($target->targetContact >0){
 
-                    $contacted=round(($contacted/($target->targetContact*5))*100);
+                    $contacted=round(($contacted/($target->targetContact))*100);
                     if($contacted>100){
                         $contacted=100;
                     }
@@ -171,7 +173,8 @@ class ReportController extends Controller
         foreach ($users as $user) {
 
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count();
 
             $calledThisWeek=Workprogress::where('userId',$user->id)
                 ->where('workprogress.callingReport','!=',null)
@@ -249,6 +252,8 @@ class ReportController extends Controller
     }
 
     public function searchTableByDate(Request $r){
+
+
         $User_Type=Session::get('userType');
         if( $User_Type =='MANAGER'){
             $users=User::select('id','firstName','typeId')
@@ -355,22 +360,31 @@ class ReportController extends Controller
 
     public function searchGraphByDate(Request $r){
 
+
         $User_Type=Session::get('userType');
         $f = Carbon::parse($r->fromDate);
         $t = Carbon::parse($r->toDate);
-        $length=0;
+        $t=$t->addDays(1);
 
+        $months=$t->diffInMonths($f);
 
-        $dates = [];
-
-        for($date =  $f; $date->lte( $t); $date->addDay()) {
-            $dates = Carbon::parse($date->format('Y-m-d'));
-            if($dates->isWeekday()){
-                $length++;
-            }
-
+        if($months==0){
+            $months=1;
         }
-        $length = $length/5;
+
+//        $length=0;
+//
+//
+//        $dates = [];
+//
+//        for($date =  $f; $date->lte( $t); $date->addDay()) {
+//            $dates = Carbon::parse($date->format('Y-m-d'));
+//            if($dates->isWeekday()){
+//                $length++;
+//            }
+//
+//        }
+//        $length = $length/5;
 
 
         if( $User_Type =='MANAGER'){
@@ -439,14 +453,14 @@ class ReportController extends Controller
 
                 //Weekly Report
                 if($target->targetCall>0){
-                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*5*$length))*100);
+                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*$months))*100);
                     if($calledThisWeek>100){
                         $calledThisWeek=100;
                     }
                     $t++;
                 }
                 if($target->targetContact >0){
-                    $contacted=round(($contacted/($target->targetContact*5*$length))*100);
+                    $contacted=round(($contacted/($target->targetContact*$months))*100);
                     if($contacted>100){
                         $contacted=100;
                     }
@@ -454,14 +468,14 @@ class ReportController extends Controller
                 }
 
                 if($target->targetLeadmine>0){
-                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*5*$length))*100);
+                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*$months))*100);
                     if ($leadMinedThisWeek>100){
                         $leadMinedThisWeek=100;
                     }
                     $t++;}
 
                 if($target->targetHighPossibility>0){
-                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$length))*100);
+                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$months))*100);
                     if($highPosibilitiesThisWeek>100){
                         $highPosibilitiesThisWeek=100;
                     }

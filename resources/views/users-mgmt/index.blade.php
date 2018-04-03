@@ -89,7 +89,7 @@
                     <input type="hidden" name="userId">
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Set User Target Per Day</h4>
+                            <h4 class="modal-title">Set User Target Per Month</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                     <input type="text" name="name" class="col-md-12" style="text-align: center;" readonly>
@@ -103,7 +103,7 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                <label for="firstName">High Possibility (per week):</label>
+                                <label for="firstName">High Possibility:</label>
                                 <input id="followup" type="number" class="form-control" name="highPossibility" >
                             </div>
 

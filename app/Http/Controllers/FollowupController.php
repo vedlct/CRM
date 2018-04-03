@@ -100,7 +100,7 @@ class FollowupController extends Controller
         $update->workStatus = 1;
         $update->save();
         DB::table('followup')
-            ->where('userId',Auth::user()->id)
+//            ->where('userId',Auth::user()->id)
             ->where('leadId',$update->leadId)
             ->update(['workStatus' => 1]);
 
@@ -122,7 +122,7 @@ class FollowupController extends Controller
         $lead->possibilityId=$r->possibility;
         $lead->save();
 
-        if($r->report !=2){
+        if($r->report ==1 ||$r->report ==3||$r->report ==4||$r->report ==5){
 //             if($currentPossibility !=$r->possibility){
             $chk=Possibilitychange::where('leadId',$lead->leadId)
                 ->where('userId',Auth::user()->id)

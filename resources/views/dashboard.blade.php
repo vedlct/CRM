@@ -24,7 +24,7 @@
                 <h4 class="card-title"><a href="{{route('called')}}">Call</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
-                    <span class="text-muted">Last Day</span>
+                    <span class="text-muted">This Month</span>
                 </div>
                 @if($target->targetCall>0)
                     <?php
@@ -35,7 +35,7 @@
                     $count++; $total+=$lastCallPercent;
                     ?>
 
-                <span class="text-success">{{$lastCallPercent}}%</span>
+                <span class="text-success">{{round($lastCallPercent)}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetCall>0)
@@ -55,7 +55,7 @@
                         <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0"> {{$lastDayContact}} | {{$target->targetContact}}</h2>
-                            <span class="text-muted">Last Day</span>
+                            <span class="text-muted">This Month</span>
                         </div>
                         @if($target->targetContact>0)
                             <?php
@@ -66,7 +66,7 @@
                             $count++; $total+=$lastContactPercent;
                             ?>
 
-                            <span class="text-success">{{$lastContactPercent}}%</span>
+                            <span class="text-success">{{round($lastContactPercent)}}%</span>
                         @endif
                         <div class="progress">
                             @if($target->targetContact>0)
@@ -85,7 +85,7 @@
                 <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
-                    <span class="text-muted">Last Day</span>
+                    <span class="text-muted">This Month</span>
                 </div>
                 @if($target->targetLeadmine>0)
                     <?php $count++;
@@ -97,7 +97,7 @@
 
 
                     ?>
-                <span class="text-info">{{$lastLeadMinedPercent}}%</span>
+                <span class="text-info">{{round($lastLeadMinedPercent)}}%</span>
                 @endif
                 <div class="progress">
                     @if($target->targetLeadmine>0)
@@ -115,11 +115,11 @@
                     <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">This Week</span>
+                        <span class="text-muted">This Month</span>
                     </div>
 
                     @if($target->targetHighPossibility>0)
-                        <span class="text-purple">{{$highPosibilitiesThisWeek}}%</span>
+                        <span class="text-purple">{{round($highPosibilitiesThisWeek)}}%</span>
                     @endif
                     <div class="progress">
                         @if($target->targetHighPossibility>0)
@@ -133,26 +133,7 @@
 
 {{--Total Progress--}}
 
-    <div class="row text-center"style="text-align: center" >
-            <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <h4 class="card-title">Total Progress Last Day</h4>
-                    <div class="text-right">
-                        <h2 class="font-light m-b-0"></h2>
-                        @if($count !=0)
-                        <span class="text-muted">{{round($total/$count)}}%</span>
-                        <div class="progress">
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$total/$count}}%; " aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                            @endif
-                    </div>
 
-                </div>
-            </div>
-        </div>
-
-    </div>
 
 
 
@@ -160,7 +141,7 @@
     <div class="col-md-10">
     <div class="card">
     <div class="card-body">
-    <h4 class="card-title">Weekly Graph</h4>
+    <h4 class="card-title">Monthly Graph</h4>
 
     <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
