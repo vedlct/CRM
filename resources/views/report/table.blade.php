@@ -59,7 +59,7 @@
                 <th>Assigned Lead</th>
                 <th>High Possibility</th>
                 <th>Test Lead</th>
-                <th>Closing Lead</th>
+                <th>H P(Unique)</th>
                 <th>Lead Mined</th>
             </tr>
             </thead>
@@ -98,7 +98,15 @@
                        data-user-name="{{$r->userName}}"
                     >
                         {{$r->contacted}}
-                    </a></td>
+                    </a> | <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
+                              @if(isset($fromDate) && isset($toDate))
+                              data-date-from="{{$fromDate}}"
+                              data-date-to="{{$toDate}}"
+                              @endif
+                                                  data-user-id="{{$r->id}}"
+                              data-user-name="{{$r->userName}}"
+                    > {{$r->contactedUsa}}</a></td>
+
                 <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
                        @if(isset($fromDate) && isset($toDate))
                        data-date-from="{{$fromDate}}"
@@ -126,15 +134,27 @@
                     >{{$r->test}}</a>
                 </td>
 
-                <td><a href="#" class="highpossibility" onclick="closelead(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}">
-                        {{$r->closing}}
-                    </a></td>
+                {{--<td><a href="#" class="highpossibility" onclick="closelead(this)"--}}
+                       {{--@if(isset($fromDate) && isset($toDate))--}}
+                       {{--data-date-from="{{$fromDate}}"--}}
+                       {{--data-date-to="{{$toDate}}"--}}
+                       {{--@endif--}}
+                       {{--data-user-id="{{$r->id}}"--}}
+                       {{--data-user-name="{{$r->userName}}">--}}
+                        {{--{{$r->closing}}--}}
+                    {{--</a></td>--}}
+
+                    <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                           @if(isset($fromDate) && isset($toDate))
+                           data-date-from="{{$fromDate}}"
+                           data-date-to="{{$toDate}}"
+                           @endif
+                           data-user-id="{{$r->id}}"
+                           data-user-name="{{$r->userName}}">
+                            {{$r->uniqueHighPosibilitiesThisWeek}}
+                        </a>
+                    </td>
+
                 <td><a href="#" class="highpossibility" onclick="leadmine(this)"
                        @if(isset($fromDate) && isset($toDate))
                        data-date-from="{{$fromDate}}"
@@ -252,6 +272,41 @@
             $.ajax({
                 type:'POST',
                 url:'{{route('getHighPossibilityIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('High Possibility');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+
+                }
+            });
+
+        }
+
+        function highpossibilityUn(x){
+
+           var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getHighPossibilityUnIndividual')}}',
                 @if(isset($fromDate) && isset($toDate))
                 data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
                 @else
@@ -486,6 +541,42 @@
             });
 
         }
+
+
+        function getContactedUsaIndividual(x){
+
+            var id = $(x).data('user-id');
+
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('getContactedUsaIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Contacted Leads');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+
+                }
+            });
+
+        }
+
 
 
         function followup(x){
