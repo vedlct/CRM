@@ -78,11 +78,11 @@
                             @if($r->typeId==4)
                             { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
                             @elseif($r->typeId==5)
-                        { label: "{{$r->userName}}",y:{{(($r->called*20/100)+($r->leadMined*10/100)+($r->highPosibilities*40/100)+($r->contacted*20/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*20/100)+($r->leadMined*10/100)+($r->highPosibilities*40/100)+($r->contacted*20/100)+($r->contactedUsa*10/100))}},indexLabel:"C:{{$r->called}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}%,US: {{$r->contactedUsa}}%"},
 
                             @elseif($r->typeId==3 || $r->typeId==2)
 
-                        { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->highPosibilities*40/100)+($r->contacted*25/100))}},indexLabel:"C:{{$r->called}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*25/100)+($r->highPosibilities*40/100)+($r->contacted*25/100)+($r->contactedUsa*10/100))}},indexLabel:"C:{{$r->called}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}},US: {{$r->contactedUsa}}%"},
 
                     @endif
 

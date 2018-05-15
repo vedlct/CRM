@@ -332,6 +332,10 @@ class UserManagementController extends Controller
 //               $log->save();
                $target->targetContact=$r->contact;
            }
+           if($r->contactUsa !=null){
+
+               $target->targetUsa=$r->contactUsa;
+           }
 
        }
        catch (ModelNotFoundException $ex) {
@@ -365,6 +369,16 @@ class UserManagementController extends Controller
                $log->save();
                $target->targetLeadmine=$r->lead;
            }
+           if($r->contact){
+
+               $target->targetContact=$r->contact;
+           }
+           if($r->contactUsa ){
+
+               $target->targetUsa=$r->contactUsa;
+           }
+
+
 
        }
 

@@ -64,6 +64,23 @@ class ReportController extends Controller
                             ->orWhere('callingReport',4);
                     })
                     ->whereBetween('created_at', [$start,$end])->count();
+
+                //USA CONTACT TARGET
+                $contactedUsa=Workprogress::where('userId',$user->id)
+                    ->leftJoin('leads','workprogress.leadId','leads.leadId')
+                    ->leftJoin('countries','leads.countryId','countries.countryId')
+                    ->where('countries.countryName','like','%USA%')
+                    ->where(function($q){
+                        $q->orWhere('callingReport',5)
+                            ->orWhere('callingReport',4);
+                    })
+                    ->whereBetween('workprogress.created_at', [$start,$end])->count();
+
+
+
+
+
+
                 //When user is RA
                 if($user->typeId==4){
 
@@ -127,6 +144,16 @@ class ReportController extends Controller
                     }
                 }
 
+                if($target->targetUsa >0){
+
+                    $contactedUsa=round(($contactedUsa/($target->targetUsa))*100);
+                    if($contactedUsa>100){
+                        $contactedUsa=100;
+                    }
+                }
+
+
+
                 if($t==0){
                     $t=1;}
 
@@ -137,6 +164,7 @@ class ReportController extends Controller
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
                 $u->contacted=$contacted;
+                $u->contactedUsa=$contactedUsa;
                 $u->t=$t;
                 array_push($report, $u);
             }
@@ -217,11 +245,14 @@ class ReportController extends Controller
 
             }
 
+
+
             $uniqueHighPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
+                ->distinct('leadId')
                 ->where('possibilityId',3)
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                ->groupBy('possibilitychanges.leadId')
-                ->count();
+                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count('leadId');
+
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
@@ -441,6 +472,21 @@ class ReportController extends Controller
                     })
                     ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
 
+
+                //USA CONTACT TARGET
+                $contactedUsa=Workprogress::where('userId',$user->id)
+                    ->leftJoin('leads','workprogress.leadId','leads.leadId')
+                    ->leftJoin('countries','leads.countryId','countries.countryId')
+                    ->where('countries.countryName','like','%USA%')
+                    ->where(function($q){
+                        $q->orWhere('callingReport',5)
+                            ->orWhere('callingReport',4);
+                    })
+                    ->whereBetween('workprogress.created_at', [$r->fromDate, $r->toDate])->count();
+
+
+
+
                 $calledThisWeek=Workprogress::where('userId',$user->id)
                     ->where('callingReport','!=',6)
                     ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
@@ -492,6 +538,15 @@ class ReportController extends Controller
                     $t++;
                 }
 
+                if($target->targetUsa >0){
+
+                    $contactedUsa=round(($contactedUsa/($target->targetUsa*$months))*100);
+                    if($contactedUsa>100){
+                        $contactedUsa=100;
+                    }
+                    $t++;
+                }
+
                 if($target->targetLeadmine>0){
                     $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*$months))*100);
                     if ($leadMinedThisWeek>100){
@@ -515,6 +570,7 @@ class ReportController extends Controller
                 $u->called=$calledThisWeek;
                 $u->highPosibilities=$highPosibilitiesThisWeek;
                 $u->contacted=$contacted;
+                $u->contactedUsa=$contactedUsa;
                 $u->t=$t;
                 array_push($report, $u);
             }
