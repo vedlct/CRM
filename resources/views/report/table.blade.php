@@ -58,8 +58,8 @@
                 <th>Contacted</th>
                 <th>Assigned Lead</th>
                 <th>High Possibility</th>
-                <th>Test Lead</th>
                 <th>H P(Unique)</th>
+                <th>Test Lead</th>
                 <th>Lead Mined</th>
             </tr>
             </thead>
@@ -124,6 +124,18 @@
                             data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
                     </a>
                 </td>
+
+                    <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                           @if(isset($fromDate) && isset($toDate))
+                           data-date-from="{{$fromDate}}"
+                           data-date-to="{{$toDate}}"
+                           @endif
+                           data-user-id="{{$r->id}}"
+                           data-user-name="{{$r->userName}}">
+                            {{$r->uniqueHighPosibilitiesThisWeek}}
+                        </a>
+                    </td>
+
                 <td><a href="#" class="highpossibility" onclick="testlead(this)"
                        @if(isset($fromDate) && isset($toDate))
                        data-date-from="{{$fromDate}}"
@@ -144,16 +156,6 @@
                         {{--{{$r->closing}}--}}
                     {{--</a></td>--}}
 
-                    <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
-                           @if(isset($fromDate) && isset($toDate))
-                           data-date-from="{{$fromDate}}"
-                           data-date-to="{{$toDate}}"
-                           @endif
-                           data-user-id="{{$r->id}}"
-                           data-user-name="{{$r->userName}}">
-                            {{$r->uniqueHighPosibilitiesThisWeek}}
-                        </a>
-                    </td>
 
                 <td><a href="#" class="highpossibility" onclick="leadmine(this)"
                        @if(isset($fromDate) && isset($toDate))
