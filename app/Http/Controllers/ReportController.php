@@ -152,6 +152,10 @@ class ReportController extends Controller
                     }
                 }
 
+                else{
+                    $contactedUsa=0;
+                }
+
 
 
                 if($t==0){
@@ -545,6 +549,9 @@ class ReportController extends Controller
                         $contactedUsa=100;
                     }
                     $t++;
+                }
+                else{
+                    $contactedUsa=0;
                 }
 
                 if($target->targetLeadmine>0){
