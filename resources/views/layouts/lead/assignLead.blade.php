@@ -49,6 +49,7 @@
 
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
             <div class="form-group">
 
                 {{--<div class="form-group col-md-5">--}}

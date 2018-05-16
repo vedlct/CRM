@@ -200,8 +200,6 @@ class ReportController extends Controller
 
         $report =array();
 
-
-
         foreach ($users as $user) {
 
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
@@ -251,12 +249,14 @@ class ReportController extends Controller
 
 
 
-            $uniqueHighPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                ->distinct('leadId')
-                ->where('possibilityId',3)
-                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                ->count('leadId');
+//            $uniqueHighPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
+//                ->distinct('leadId')
+//                ->where('possibilityId',3)
+//                ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//                ->count('leadId');
+//
 
+            $uniqueHighPosibilitiesThisWeek=0;
 
 
             $assignedLead=Leadassigned::where('assignTo',$user->id)
@@ -275,12 +275,14 @@ class ReportController extends Controller
                 ->where('callingReport',5)
                 ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 //            USA
-            $contactedUsa=Workprogress::where('userId',$user->id)
+          /*  $contactedUsa=Workprogress::where('userId',$user->id)
                 ->leftJoin('leads','workprogress.leadId','leads.leadId')
                 ->leftJoin('countries','leads.countryId','countries.countryId')
                 ->where('countries.countryName','like','%USA%')
                 ->where('callingReport',5)
                 ->whereBetween('workprogress.created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
+*/
+            $contactedUsa = 0;
 
 
 

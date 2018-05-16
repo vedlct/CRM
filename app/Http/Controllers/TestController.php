@@ -40,10 +40,11 @@ class TestController extends Controller
 
         }
         else{
-            $users=User::select('id','firstName','typeId')
+            $users=User::select('id as userid','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->get();
         }
+
 
 
 
@@ -95,7 +96,7 @@ class TestController extends Controller
             ->groupBy('assignTo')
             ->get();
 
-//        return $assignedLead;
+//       return $assignedLead;
 
         $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(leadId) as userUniqueHighPosibilities'))
             ->distinct('leadId')
@@ -137,6 +138,7 @@ class TestController extends Controller
 
 
         return view('test')
+            ->with('users', $users)
             ->with('contactedUsa',$contactedUsa)
             ->with('contacted',$contacted)
             ->with('testLead',$testLead)
