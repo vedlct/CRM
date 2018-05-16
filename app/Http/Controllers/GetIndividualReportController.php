@@ -126,6 +126,113 @@ class GetIndividualReportController extends Controller
         return Response($table);
     }
 
+
+
+    public function getHighPossibilityUnIndividual(Request $r){
+        $user=User::findOrFail($r->userid);
+
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+
+
+        if($user->typeId == 4) {
+            $highPosibilitiesThisWeek = Lead::select('leads.*')
+                ->with('country','category','possibility')
+                ->where('minedBy', $user->id)
+                ->where('filteredPossibility',3)
+                ->whereBetween(DB::raw('DATE(created_at)'),[$fromDate,$toDate])->get();
+        }
+
+        else{
+//            SELECT * FROM `possibilitychanges` LEFT JOIN workprogress ON possibilitychanges.created_at = workprogress.created_at WHERE possibilitychanges.changeId=197
+            $highPosibilitiesThisWeek=Lead::select('leads.*','workprogress.comments','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
+                ->with('country','category','possibility')
+                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
+                ->where('possibilitychanges.userId',$user->id)
+                ->where('possibilitychanges.possibilityId',3)
+                ->groupBy('possibilitychanges.leadId')
+                ->leftJoin('workprogress', 'possibilitychanges.created_at', 'workprogress.created_at')
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+
+        }
+
+
+//        return $highPosibilitiesThisWeek;
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Possibility</th>
+                 <th>Category</th>
+                 <th>Country</th>
+                 <th>Comment</th>
+                 <th>Created_at</th>';
+        if(Session::get('userType')=='ADMIN' && $user->typeId!=4){
+            $table.='<th>action</th>';
+
+        }
+        $table.='</tr></thead><tbody>';
+
+        foreach ($highPosibilitiesThisWeek as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
+                    <td>'.$l->country->countryName.'</td>';
+//            $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
+//            if(!empty($comment)){
+//                $table.= '<td>'.$comment->comments.'</td>
+//                    </td><td>'.$l->created_at.'</td>';
+//            }
+
+//            else{
+            $table.= '<td>'.$l->comments.'</td>
+                    </td><td>'.$l->created_at.'</td>';
+//            }
+
+            $comment='';
+
+
+            if(Session::get('userType')=='ADMIN' && $user->typeId!=4) {
+
+                $table .= '<td><select class="form-control"  name="aprove" id="' . $l->changeId . '" data-changeid="' . $l->changeId . '" onChange="test(this)">';
+                if ($l->approval == 1) {
+                    $table .= '<option value="">select</option> 
+                        <option value="1" selected>Approve</option>
+                        <option value="0">Decline</option>
+                      </td>
+                    </tr>';
+                } else if ($l->approval == 2) {
+                    $table .= '<option value="">select</option> 
+                        <option value="1" >Approve</option>
+                        <option value="0" selected>Decline</option>
+                      </td>
+                    </tr>';
+
+                } else if ($l->approval == null) {
+                    $table .= '<option value="" selected>select</option> 
+                        <option value="1" >Approve</option>
+                        <option value="0">Decline</option>
+                      </td>
+                    </tr>';
+                }
+
+            }
+
+        }
+        $table.='</tbody></table>';
+
+
+
+        return Response($table);
+    }
+
+
+
     public function approval(Request $r){
         $possibilityChanges=Possibilitychange::findOrFail($r->changeId);
         if($r->value==0){
@@ -445,6 +552,48 @@ class GetIndividualReportController extends Controller
     }
 
 
+    public function getContactedUsaIndividual(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+        $user=User::findOrFail($r->userid);
+        $leads = Lead::select('leads.*','workprogress.comments','workprogress.created_at','callingreports.report','countries.countryName')
+            ->with('category','possibility')
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
+            ->leftJoin('countries','leads.countryId','countries.countryId')
+            ->where('countries.countryName','like','%USA%')
+            ->where('workprogress.userId',$user->id)
+            ->where('workprogress.callingReport',5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Possibility</th>
+                 <th>Country</th>
+                 <th>Comment</th>
+                 <th>Report</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($leads as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->countryName.'</td>
+                    <td>'.$l->comments.'</td>
+                    <td>'.$l->report.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
 
 
 

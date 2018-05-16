@@ -207,6 +207,7 @@ Route::post('/searchTableByDateForUser','ReportController@searchTableByDateForUs
 
 //Report Individual from Report Table
 Route::post('/getHighPossibilityIndividual','GetIndividualReportController@getHighPossibilityIndividual')->name('getHighPossibilityIndividual');
+Route::post('/getHighPossibilityUnIndividual','GetIndividualReportController@getHighPossibilityUnIndividual')->name('getHighPossibilityUnIndividual');
 Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividual')->name('getCallIndividual');
 Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
 Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
@@ -214,6 +215,7 @@ Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividua
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');
 Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupIndividual')->name('getFollowupIndividual');
 Route::post('/getContactedIndividual','GetIndividualReportController@getContactedIndividual')->name('getContactedIndividual');
+Route::post('/getContactedUsaIndividual','GetIndividualReportController@getContactedUsaIndividual')->name('getContactedUsaIndividual');
 Route::post('/approval','GetIndividualReportController@approval')->name('approval');
 
 
