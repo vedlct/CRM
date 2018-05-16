@@ -49,8 +49,7 @@ Route::get('/contact','HomeController@contact')->name('contact');
 Route::get('/mine', 'HomeController@mine')->name('mine');
 
 
-Route::get('/test', 'TestController@test');
-Route::post('/tests', 'TestController@anyData')->name('test');
+
 
 /**/
 
@@ -145,7 +144,6 @@ Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
 
 
 
-Route::get('/modal', 'TestController@modal')->name('modal');
 
 
 //Star Lead
