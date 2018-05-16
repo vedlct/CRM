@@ -45,6 +45,10 @@ class TestController extends Controller
                 ->get();
         }
 
+        $usersRa=User::select('id as userid','firstName','typeId')
+            ->where('typeId',4)
+            ->get();
+
 
 
 
@@ -98,8 +102,7 @@ class TestController extends Controller
 
 //       return $assignedLead;
 
-        $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(leadId) as userUniqueHighPosibilities'))
-            ->distinct('leadId')
+        $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
             ->where('possibilityId',3)
             ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
@@ -148,9 +151,8 @@ class TestController extends Controller
             ->with('highPosibilitiesThisWeekRa',$highPosibilitiesThisWeekRa)
             ->with('followupThisWeek',$followupThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
-            ->with('calledThisWeek',$calledThisWeek);
-
-
+            ->with('calledThisWeek',$calledThisWeek)
+            ->with('usersRa',$usersRa);
 
     }
 

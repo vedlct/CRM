@@ -8,6 +8,7 @@
     <th>Contacted</th>
     <th>Assigned Lead</th>
     <th>High Possibility</th>
+    <th>HP(unique)</th>
     <th>Test Lead</th>
     <th>Closing Lead</th>
     <th>Lead Mined</th>
@@ -48,6 +49,13 @@
 
                     @if($hp->userId == $user->userid)
                         {{$hp->userHighPosibilities}}
+                    @endif
+                @endforeach
+            </td>
+            <td>@foreach($uniqueHighPosibilitiesThisWeek as $hp)
+
+                    @if($hp->userId == $user->userid)
+                        {{$hp->userUniqueHighPosibilities}}
                     @endif
                 @endforeach
             </td>
