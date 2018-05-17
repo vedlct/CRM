@@ -476,7 +476,7 @@ class GetIndividualReportController extends Controller
         }
         $user=User::findOrFail($r->userid);
 
-        if($user->typeId){
+        if($user->typeId==4){
             $leads = Lead::select('leads.*','leadassigneds.created_at','leadassigneds.leaveDate','users.firstName')
                 ->with('country','category','possibility')
                 ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
