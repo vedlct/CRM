@@ -237,15 +237,15 @@ public function searchTableByDate(Request $r){
 
 
 
-    $calledThisWeek=Workprogress::select('userId',DB::raw('count(*) as userCall'))
-        ->where('workprogress.callingReport','!=',null)
-        ->where('callingReport','!=',6)
+    $calledThisWeek=Workprogress::select('userId',DB::raw('count(callingReport) as userCall'))
         ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+        ->where('callingReport','!=','6')
+        ->where('callingReport','!=',null)
         ->groupBy('userId')
         ->get();
+       // ->toSql();
 
-
-//        return $calledThisWeek;
+        return $calledThisWeek;
 
     $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
         ->whereBetween('created_at',[$r->fromDate,$r->toDate])
