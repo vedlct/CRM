@@ -322,7 +322,7 @@ class ReportController extends Controller
 
 
 
-        return view('test')
+        return view('report.table')
             ->with('users', $users)
             ->with('contactedUsa',$contactedUsa)
             ->with('contacted',$contacted)

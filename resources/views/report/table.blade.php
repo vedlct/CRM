@@ -29,17 +29,16 @@
     </div>
 
 
-
-
     <div class="card" style="padding:10px;">
         <label><b>Search</b></label>
-        <form method="post" action="{{route('searchTableByDate')}}">
+        <form method="post" action="{{route('test.searchTableByDate')}}">
             {{csrf_field()}}
             <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
             <button type="submit" class="btn btn-success">Search</button>
 
         </form>
+
         <div class="card-body">
             <h2>Report</h2>
             @if(isset($fromDate) && isset($toDate))
@@ -48,126 +47,193 @@
                 <p>Weekly report</p>
             @endif
 
-            @if(Session::get('userType') !='RA')
+
+            @if(Auth::user()->typeId !=4)
+
                 <table class="table">
                     <thead>
                     <tr>
                         <th>Name</th>
                         <th>Total Call</th>
                         <th>Follow up</th>
-                        <th>Contacted</th>
+                        <th>Contacted | Usa</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
-                        <th>H P(Unique)</th>
+                        <th>HP(unique)</th>
                         <th>Test Lead</th>
                         <th>Lead Mined</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($report as $r)
 
-                        @if($r->type !=4)
+                    @foreach( $users as $user)
+                        <tr>
+                            <td>{{$user->firstName}}</td>
+                            <td>@foreach($calledThisWeek as $uc)
+
+                                    @if($uc->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="totalcall(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$uc->userCall}}</a>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>@foreach($followupThisWeek as $fu)
+
+                                    @if($fu->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="followup(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$fu->userFollowup}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>@foreach($contacted as $c)
+
+                                    @if($c->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="getContactedIndividual(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$c->userContacted}}
+                                        </a>
+
+                                        @foreach($contactedUsa as $cUsa)
+                                            @if($cUsa->userId == $user->userid)
+
+                                                <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
+                                                   @if(isset($fromDate) && isset($toDate))
+                                                   data-date-from="{{$fromDate}}"
+                                                   data-date-to="{{$toDate}}"
+                                                   @endif
+                                                   data-user-id="{{$user->userid}}"
+                                                   data-user-name="{{$user->userName}}"
+                                                > |  {{$cUsa->userContactedUsa}}</a>
+                                            @endif
+
+                                        @endforeach
+
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>@foreach($assignedLead as $al)
+
+                                    @if($al->assignTo == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="leadassigned(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$al->userAssignedLead}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>@foreach($highPosibilitiesThisWeekUser as $hp)
+
+                                    @if($hp->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="highpossibility(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$hp->userHighPosibilities}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>@foreach($uniqueHighPosibilitiesThisWeek as $hp)
+
+                                    @if($hp->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$hp->userUniqueHighPosibilities}}
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>@foreach($testLead as $tl)
+
+                                    @if($tl->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="testlead(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        > {{$tl->userTestLead}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>@foreach($leadMinedThisWeek as $lm)
+
+                                    @if($lm->minedBy == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$lm->userLeadMined}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
 
 
-                            <tr>
-                                <td>{{$r->userName}}</td>
-                                <td><a href="#" class="highpossibility" onclick="totalcall(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}"
-                                    >{{$r->called}}</a></td>
-
-                                <td><a href="#" class="highpossibility" onclick="followup(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}"
-                                    >{{$r->followupThisWeek}}</a>
-                                </td>
-                                <td><a href="#" class="highpossibility" onclick="getContactedIndividual(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}"
-                                    >
-                                        {{$r->contacted}}
-                                    </a> | <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
-                                              @if(isset($fromDate) && isset($toDate))
-                                              data-date-from="{{$fromDate}}"
-                                              data-date-to="{{$toDate}}"
-                                              @endif
-                                              data-user-id="{{$r->id}}"
-                                              data-user-name="{{$r->userName}}"
-                                    > {{$r->contactedUsa}}</a></td>
-
-                                <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
-                                </td>
-                                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
-                                    </a>
-                                </td>
-
-                                <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">
-                                        {{$r->uniqueHighPosibilitiesThisWeek}}
-                                    </a>
-                                </td>
-
-                                <td><a href="#" class="highpossibility" onclick="testlead(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}"
-                                    >{{$r->test}}</a>
-                                </td>
-
-                                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
-                                </td>
-                            </tr>
-
-
-
-                        @endif
-
+                        </tr>
                     @endforeach
                     </tbody>
+
                 </table>
             @endif
 
-            <br><br>
 
-            @if(Session::get('userType') !='USER')
+            @if(Auth::user()->typeId !=5)
                 <table class="table">
                     <thead>
                     <tr>
@@ -177,54 +243,79 @@
                         <th>Lead Mined</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    @foreach($report as $r)
+                    @foreach( $usersRa as $user)
+                        <tbody>
+                        <tr>
+                            <td>{{$user->firstName}}</td>
+                            <td>@foreach($assignedLeadRa as $al)
 
-                        @if($r->type ==4)
+                                    @if($al->assignBy == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="leadassigned(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$al->userAssignedLead}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>@foreach($highPosibilitiesThisWeekRa as $hpra)
+
+                                    @if($hpra->minedBy == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="highpossibility(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$hpra->userHighPosibilities}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
+
+                            <td>@foreach($leadMinedThisWeek as $lm)
+
+                                    @if($lm->minedBy == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$lm->userLeadMined}}
+
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                            </td>
 
 
-                            <tr>
-                                <td>{{$r->userName}}</td>
+                        </tr>
+                        </tbody>
 
-
-                                <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
-                                </td>
-                                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
-                                    </a>
-                                </td>
-
-                                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
-                                       @if(isset($fromDate) && isset($toDate))
-                                       data-date-from="{{$fromDate}}"
-                                       data-date-to="{{$toDate}}"
-                                       @endif
-                                       data-user-id="{{$r->id}}"
-                                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
-                                </td>
-                            </tr>
-
-
-
-                        @endif
 
                     @endforeach
-                    </tbody>
+
+
+
                 </table>
-
             @endif
-
 
 
         </div></div>
@@ -246,20 +337,14 @@
             $( "#fromdate" ).datepicker();
             $( "#todate" ).datepicker();
         } );
-
-
-
         function highpossibility(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getHighPossibilityIndividual')}}',
@@ -270,31 +355,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
-
                 }
             });
-
         }
-
         function highpossibilityUn(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getHighPossibilityUnIndividual')}}',
@@ -305,34 +382,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
-
                 }
             });
-
         }
-
-
-
-
         function totalcall(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getCallIndividual')}}',
@@ -343,31 +409,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function leadmine(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getMineIndividual')}}',
@@ -378,32 +436,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Mined');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function leadassigned(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getAssignedLeadIndividual')}}',
@@ -414,32 +463,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function testlead(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getTestIndividual')}}',
@@ -450,32 +490,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function closelead(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getClosingIndividual')}}',
@@ -486,30 +517,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
         function getContactedIndividual(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getContactedIndividual')}}',
@@ -520,31 +544,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function getContactedUsaIndividual(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getContactedUsaIndividual')}}',
@@ -555,32 +571,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function followup(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getFollowupIndividual')}}',
@@ -591,29 +598,19 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function test(x) {
             id = $(x).data('changeid');
-
-
             var value=document.getElementById(id).value;
-
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('approval')}}',
@@ -621,17 +618,9 @@
                 cache: false,
                 success:function(data) {
                     console.log(data);
-
                 }
             });
-
-
         }
-
-
-
-
-
     </script>
 
 
