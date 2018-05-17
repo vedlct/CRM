@@ -31,7 +31,7 @@
 
     <div class="card" style="padding:10px;">
         <label><b>Search</b></label>
-        <form method="post" action="{{route('test.searchTableByDate')}}">
+        <form method="post" action="{{route('searchTableByDate')}}">
             {{csrf_field()}}
             <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
@@ -69,7 +69,9 @@
                     @foreach( $users as $user)
                         <tr>
                             <td>{{$user->firstName}}</td>
-                            <td>@foreach($calledThisWeek as $uc)
+                            <td>
+                                @php($value=0)
+                                @foreach($calledThisWeek as $uc)
 
                                     @if($uc->userId == $user->userid)
 
@@ -80,11 +82,17 @@
                                            @endif
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
-                                        >{{$uc->userCall}}</a>
+                                        >{{$value=$value=$uc->userCall}}</a>
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
-                            <td>@foreach($followupThisWeek as $fu)
+                            <td>
+
+                                @php($value=0)
+                                @foreach($followupThisWeek as $fu)
 
                                     @if($fu->userId == $user->userid)
                                         <a href="#" class="highpossibility" onclick="followup(this)"
@@ -94,13 +102,19 @@
                                            @endif
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
-                                        >{{$fu->userFollowup}}</a>
+                                        >{{$value=$fu->userFollowup}}</a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
-                            <td>@foreach($contacted as $c)
+                            <td>
+
+                                @php($value=0)
+                                @foreach($contacted as $c)
 
                                     @if($c->userId == $user->userid)
 
@@ -112,7 +126,7 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$c->userContacted}}
+                                            {{$value=$c->userContacted}}
                                         </a>
 
                                         @foreach($contactedUsa as $cUsa)
@@ -125,7 +139,7 @@
                                                    @endif
                                                    data-user-id="{{$user->userid}}"
                                                    data-user-name="{{$user->userName}}"
-                                                > |  {{$cUsa->userContactedUsa}}</a>
+                                                > |  {{$value=$cUsa->userContactedUsa}}</a>
                                             @endif
 
                                         @endforeach
@@ -133,8 +147,13 @@
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
-                            <td>@foreach($assignedLead as $al)
+                            <td>
+                                @php($value=0)
+                                @foreach($assignedLead as $al)
 
                                     @if($al->assignTo == $user->userid)
 
@@ -146,13 +165,18 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$al->userAssignedLead}}</a>
+                                            {{$value=$al->userAssignedLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
-                            <td>@foreach($highPosibilitiesThisWeekUser as $hp)
+                            <td>
+                                @php($value=0)
+                                @foreach($highPosibilitiesThisWeekUser as $hp)
 
                                     @if($hp->userId == $user->userid)
 
@@ -164,13 +188,18 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$hp->userHighPosibilities}}
+                                            {{$value=$hp->userHighPosibilities}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
-                            <td>@foreach($uniqueHighPosibilitiesThisWeek as $hp)
+                            <td>
+                                @php($value=0)
+                                @foreach($uniqueHighPosibilitiesThisWeek as $hp)
 
                                     @if($hp->userId == $user->userid)
 
@@ -182,12 +211,17 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$hp->userUniqueHighPosibilities}}
+                                            {{$value=$hp->userUniqueHighPosibilities}}
                                         </a>
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
-                            <td>@foreach($testLead as $tl)
+                            <td>
+                                @php($value=0)
+                                @foreach($testLead as $tl)
 
                                     @if($tl->userId == $user->userid)
 
@@ -198,14 +232,19 @@
                                            @endif
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
-                                        > {{$tl->userTestLead}}
+                                        > {{$value=$tl->userTestLead}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
-                            <td>@foreach($leadMinedThisWeek as $lm)
+                            <td>
+                                @php($value=0)
+                                @foreach($leadMinedThisWeek as $lm)
 
                                     @if($lm->minedBy == $user->userid)
 
@@ -217,11 +256,14 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$lm->userLeadMined}}
+                                            {{$value=$lm->userLeadMined}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
 
@@ -247,7 +289,9 @@
                         <tbody>
                         <tr>
                             <td>{{$user->firstName}}</td>
-                            <td>@foreach($assignedLeadRa as $al)
+                            <td>
+                                @php($value=0)
+                                @foreach($assignedLeadRa as $al)
 
                                     @if($al->assignBy == $user->userid)
 
@@ -259,14 +303,19 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$al->userAssignedLead}}
+                                            {{$value=$al->userAssignedLead}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
-                            <td>@foreach($highPosibilitiesThisWeekRa as $hpra)
+                            <td>
+                                @php($value=0)
+                                @foreach($highPosibilitiesThisWeekRa as $hpra)
 
                                     @if($hpra->minedBy == $user->userid)
 
@@ -278,14 +327,19 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$hpra->userHighPosibilities}}
+                                            {{$value=$hpra->userHighPosibilities}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
-                            <td>@foreach($leadMinedThisWeek as $lm)
+                            <td>
+                                @php($value=0)
+                                @foreach($leadMinedThisWeek as $lm)
 
                                     @if($lm->minedBy == $user->userid)
 
@@ -297,12 +351,15 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$lm->userLeadMined}}
+                                            {{$value=$lm->userLeadMined}}
 
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    0
+                                @endif
                             </td>
 
 
