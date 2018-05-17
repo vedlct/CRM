@@ -56,7 +56,7 @@
                         <th>Name</th>
                         <th>Total Call</th>
                         <th>Follow up</th>
-                        <th>Contacted</th>
+                        <th>Contacted | Usa</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
                         <th>HP(unique)</th>

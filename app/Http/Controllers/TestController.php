@@ -80,6 +80,9 @@ class TestController extends Controller
             ->get();
 
 
+
+
+
 //        return $calledThisWeek;
 
         $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
@@ -237,18 +240,20 @@ public function searchTableByDate(Request $r){
 
 
 
-    $calledThisWeek=Workprogress::select('userId',DB::raw('count(*) as userCall'))
+    $calledThisWeek=Workprogress::select('userId',DB::raw('count(progressId) as userCall'))
         ->where('workprogress.callingReport','!=',null)
         ->where('callingReport','!=',6)
-        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
 
-//        return $calledThisWeek;
+
+
+
 
     $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('minedBy')
         ->get();
 
@@ -257,7 +262,7 @@ public function searchTableByDate(Request $r){
 
     $followupThisWeek=Workprogress::select('userId',DB::raw('count(*) as userFollowup'))
         ->where('callingReport',4)
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
@@ -266,7 +271,7 @@ public function searchTableByDate(Request $r){
 
     $highPosibilitiesThisWeekRa=Lead::select('minedBy',DB::raw('count(*) as userHighPosibilities'))
         ->where('filteredPossibility',3)
-        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('minedBy')
         ->get();
 
@@ -274,21 +279,21 @@ public function searchTableByDate(Request $r){
 
     $highPosibilitiesThisWeekUser=Possibilitychange::select('userId',DB::raw('count(*) as userHighPosibilities'))
         ->where('possibilityId',3)
-        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
 //        return $highPosibilitiesThisWeekUser;
 
     $assignedLead=Leadassigned::select('assignTo',DB::raw('count(*) as userAssignedLead'))
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('assignTo')
         ->get();
 
 //       return $assignedLead;
 
     $assignedLeadRa=Leadassigned::select('assignBy',DB::raw('count(*) as userAssignedLead'))
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('assignBy')
         ->get();
 
@@ -296,7 +301,7 @@ public function searchTableByDate(Request $r){
 
     $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
         ->where('possibilityId',3)
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
@@ -304,14 +309,14 @@ public function searchTableByDate(Request $r){
 
     $testLead=Workprogress::select('userId',DB::raw('count(leadId) as userTestLead'))
         ->where('progress','Test Job')
-        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
 //        return $testLead;
     $contacted=Workprogress::select('userId',DB::raw('count(*) as userContacted'))
         ->where('callingReport',5)
-        ->whereBetween('created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
@@ -323,7 +328,7 @@ public function searchTableByDate(Request $r){
         ->leftJoin('countries','leads.countryId','countries.countryId')
         ->where('countries.countryName','like','%USA%')
         ->where('callingReport',5)
-        ->whereBetween('workprogress.created_at',[$r->fromDate,$r->toDate])
+        ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])
         ->groupBy('userId')
         ->get();
 
