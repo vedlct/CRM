@@ -247,7 +247,11 @@
                         <tbody>
                         <tr>
                             <td>{{$user->firstName}}</td>
-                            <td>@foreach($assignedLeadRa as $al)
+                            <td>
+                                @php
+                                $value=0;
+                                @endphp
+                                @foreach($assignedLeadRa as $al)
 
                                     @if($al->assignBy == $user->userid)
 
@@ -259,14 +263,21 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$al->userAssignedLead}}
+                                            {{$value = $al->userAssignedLead}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    {{"0"}}
+                                    @endif
                             </td>
 
-                            <td>@foreach($highPosibilitiesThisWeekRa as $hpra)
+                            <td>
+                                @php
+                                    $value=0;
+                                @endphp
+                                @foreach($highPosibilitiesThisWeekRa as $hpra)
 
                                     @if($hpra->minedBy == $user->userid)
 
@@ -278,14 +289,21 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$hpra->userHighPosibilities}}
+                                            {{$value = $hpra->userHighPosibilities}}
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    {{"0"}}
+                                @endif
                             </td>
 
-                            <td>@foreach($leadMinedThisWeek as $lm)
+                            <td>
+                                @php
+                                    $value=0;
+                                @endphp
+                                @foreach($leadMinedThisWeek as $lm)
 
                                     @if($lm->minedBy == $user->userid)
 
@@ -297,12 +315,15 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         >
-                                            {{$lm->userLeadMined}}
+                                            {{$value = $lm->userLeadMined}}
 
                                         </a>
                                         @break
                                     @endif
                                 @endforeach
+                                @if($value==0)
+                                    {{"0"}}
+                                @endif
                             </td>
 
 

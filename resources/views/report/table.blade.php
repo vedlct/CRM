@@ -394,20 +394,14 @@
             $( "#fromdate" ).datepicker();
             $( "#todate" ).datepicker();
         } );
-
-
-
         function highpossibility(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getHighPossibilityIndividual')}}',
@@ -418,31 +412,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
-
                 }
             });
-
         }
-
         function highpossibilityUn(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getHighPossibilityUnIndividual')}}',
@@ -453,35 +439,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
-
                 }
             });
-
         }
-
-
-
-
         function totalcall(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
-
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getCallIndividual')}}',
@@ -492,31 +466,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function leadmine(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getMineIndividual')}}',
@@ -527,32 +493,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Mined');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function leadassigned(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getAssignedLeadIndividual')}}',
@@ -563,32 +520,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function testlead(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getTestIndividual')}}',
@@ -599,32 +547,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function closelead(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getClosingIndividual')}}',
@@ -635,30 +574,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
         function getContactedIndividual(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getContactedIndividual')}}',
@@ -669,31 +601,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function getContactedUsaIndividual(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getContactedUsaIndividual')}}',
@@ -704,32 +628,23 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
-
         function followup(x){
-
             var id = $(x).data('user-id');
-
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var userName=$(x).data('user-name');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('getFollowupIndividual')}}',
@@ -740,29 +655,19 @@
                 @endif
                 cache: false,
                 success:function(data) {
-
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     $('#myTable').DataTable();
-
                 }
             });
-
         }
-
-
         function test(x) {
             id = $(x).data('changeid');
-
-
             var value=document.getElementById(id).value;
-
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
             $.ajax({
                 type:'POST',
                 url:'{{route('approval')}}',
@@ -770,21 +675,12 @@
                 cache: false,
                 success:function(data) {
                     console.log(data);
-
                 }
             });
-
-
         }
-
-
-
-
-
     </script>
 
 
 
 
 @endsection
-
