@@ -289,7 +289,7 @@ public function searchTableByDate(Request $r){
 
     $assignedLeadRa=Leadassigned::select('assignBy',DB::raw('count(*) as userAssignedLead'))
         ->whereBetween('created_at',[$r->fromDate,$r->toDate])
-        ->groupBy('assignTo')
+        ->groupBy('assignBy')
         ->get();
 
 //        return $assignedLeadRa;
