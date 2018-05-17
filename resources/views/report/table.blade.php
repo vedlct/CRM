@@ -146,17 +146,6 @@
                                     >{{$r->test}}</a>
                                 </td>
 
-                                {{--<td><a href="#" class="highpossibility" onclick="closelead(this)"--}}
-                                {{--@if(isset($fromDate) && isset($toDate))--}}
-                                {{--data-date-from="{{$fromDate}}"--}}
-                                {{--data-date-to="{{$toDate}}"--}}
-                                {{--@endif--}}
-                                {{--data-user-id="{{$r->id}}"--}}
-                                {{--data-user-name="{{$r->userName}}">--}}
-                                {{--{{$r->closing}}--}}
-                                {{--</a></td>--}}
-
-
                                 <td><a href="#" class="highpossibility" onclick="leadmine(this)"
                                        @if(isset($fromDate) && isset($toDate))
                                        data-date-from="{{$fromDate}}"
