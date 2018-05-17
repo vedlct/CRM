@@ -86,7 +86,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                <a href="#" >0</a>
                                 @endif
                             </td>
                             <td>
@@ -107,7 +107,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -128,7 +128,7 @@
                                         >
                                             {{$value=$c->userContacted}}
                                         </a>
-
+                                        @php($value1=0)
                                         @foreach($contactedUsa as $cUsa)
                                             @if($cUsa->userId == $user->userid)
 
@@ -139,16 +139,19 @@
                                                    @endif
                                                    data-user-id="{{$user->userid}}"
                                                    data-user-name="{{$user->userName}}"
-                                                > |  {{$value=$cUsa->userContactedUsa}}</a>
+                                                > |  {{$value1=$value=$cUsa->userContactedUsa}}</a>
                                             @endif
 
                                         @endforeach
+                                        @if($value1==0)
+                                            <a href="#" >| 0</a>
+                                        @endif
 
                                         @break
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
                             <td>
@@ -170,7 +173,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -194,7 +197,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
                             <td>
@@ -216,7 +219,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
                             <td>
@@ -238,7 +241,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -262,7 +265,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -309,7 +312,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -333,7 +336,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
@@ -358,7 +361,7 @@
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    0
+                                    <a href="#" >0</a>
                                 @endif
                             </td>
 
