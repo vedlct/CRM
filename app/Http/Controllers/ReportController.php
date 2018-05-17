@@ -31,148 +31,148 @@ class ReportController extends Controller
 
 
         if( $User_Type =='MANAGER'){
-                $users=User::select('id','firstName','typeId')
-                    ->where('typeId','!=',1)
-                    ->where('teamId',Auth::user()->teamId)
-                    ->get();
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->where('teamId',Auth::user()->teamId)
+                ->get();
+        }
+        else if($User_Type =='USER' || $User_Type =='RA'){
+            $users=User::select('id','firstName','typeId')
+                ->where('id',Auth::user()->id)->get();
+        }
+
+        else{
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->get();
+        }
+
+        $date = Carbon::now();
+        $report =array();
+        foreach ($users as $user){
+            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
+                ->whereBetween('created_at', [$start,$end])->count();
+
+            $calledThisWeek=Workprogress::where('userId',$user->id)
+                ->where('workprogress.callingReport','!=',null)
+                ->where('callingReport','!=',6)
+                ->whereBetween('created_at', [$start,$end])->count();
+            $contacted=Workprogress::where('userId',$user->id)
+//                    ->where('callingReport',5)
+                ->where(function($q){
+                    $q->orWhere('callingReport',5)
+                        ->orWhere('callingReport',4);
+                })
+                ->whereBetween('created_at', [$start,$end])->count();
+
+            //USA CONTACT TARGET
+            $contactedUsa=Workprogress::where('userId',$user->id)
+                ->leftJoin('leads','workprogress.leadId','leads.leadId')
+                ->leftJoin('countries','leads.countryId','countries.countryId')
+                ->where('countries.countryName','like','%USA%')
+                ->where(function($q){
+                    $q->orWhere('callingReport',5)
+                        ->orWhere('callingReport',4);
+                })
+                ->whereBetween('workprogress.created_at', [$start,$end])->count();
+
+
+
+
+
+
+            //When user is RA
+            if($user->typeId==4){
+
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$start,$end])->count();
             }
-            else if($User_Type =='USER' || $User_Type =='RA'){
-                $users=User::select('id','firstName','typeId')
-                            ->where('id',Auth::user()->id)->get();
+            else{
+                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
+                    ->where('possibilityId',3)
+                    ->whereBetween('created_at', [$start,$end])->count();
+
+            }
+
+            try{
+                $target=Usertarget::findOrFail($user->id);
+            }
+            catch (ModelNotFoundException $ex) {
+                $target=new Usertarget;
+                $target->userId=$user->id;
+                $target->targetCall=0;
+                $target->targetHighPossibility=0;
+                $target->targetLeadmine=0;
+                $target->save();
+            }
+
+
+            $t=0;
+
+            //Weekly Report
+            if($target->targetCall>0){
+                $calledThisWeek=round(($calledThisWeek/($target->targetCall))*100);
+                if($calledThisWeek>100){
+                    $calledThisWeek=100;
+                }
+                $t++;
+            }
+
+            if($target->targetLeadmine>0){
+                $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine))*100);
+                if ($leadMinedThisWeek>100){
+                    $leadMinedThisWeek=100;}
+                $t++;
+            }
+
+            if($target->targetHighPossibility>0){
+                $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
+                if($highPosibilitiesThisWeek>100){
+                    $highPosibilitiesThisWeek=100;
+                }
+                $t++;
+            }
+
+            if($target->targetContact >0){
+
+                $contacted=round(($contacted/($target->targetContact))*100);
+                if($contacted>100){
+                    $contacted=100;
+                }
+            }
+
+            if($target->targetUsa >0){
+
+                $contactedUsa=round(($contactedUsa/($target->targetUsa))*100);
+                if($contactedUsa>100){
+                    $contactedUsa=100;
+                }
             }
 
             else{
-                $users=User::select('id','firstName','typeId')
-                    ->where('typeId','!=',1)
-                    ->get();
+                $contactedUsa=0;
             }
 
-            $date = Carbon::now();
-            $report =array();
-            foreach ($users as $user){
-                $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                    ->whereBetween('created_at', [$start,$end])->count();
-
-                $calledThisWeek=Workprogress::where('userId',$user->id)
-                    ->where('workprogress.callingReport','!=',null)
-                    ->where('callingReport','!=',6)
-                    ->whereBetween('created_at', [$start,$end])->count();
-                $contacted=Workprogress::where('userId',$user->id)
-//                    ->where('callingReport',5)
-                    ->where(function($q){
-                        $q->orWhere('callingReport',5)
-                            ->orWhere('callingReport',4);
-                    })
-                    ->whereBetween('created_at', [$start,$end])->count();
-
-                //USA CONTACT TARGET
-                $contactedUsa=Workprogress::where('userId',$user->id)
-                    ->leftJoin('leads','workprogress.leadId','leads.leadId')
-                    ->leftJoin('countries','leads.countryId','countries.countryId')
-                    ->where('countries.countryName','like','%USA%')
-                    ->where(function($q){
-                        $q->orWhere('callingReport',5)
-                            ->orWhere('callingReport',4);
-                    })
-                    ->whereBetween('workprogress.created_at', [$start,$end])->count();
 
 
+            if($t==0){
+                $t=1;}
 
-
-
-
-                //When user is RA
-                if($user->typeId==4){
-
-                    $highPosibilitiesThisWeek=Lead::select('leads.*')
-//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('leads.minedBy',$user->id)
-                        ->where('filteredPossibility',3)
-                        ->whereBetween('created_at', [$start,$end])->count();
-                }
-                else{
-                    $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                        ->where('possibilityId',3)
-                        ->whereBetween('created_at', [$start,$end])->count();
-
-                }
-
-                try{
-                    $target=Usertarget::findOrFail($user->id);
-                }
-                catch (ModelNotFoundException $ex) {
-                    $target=new Usertarget;
-                    $target->userId=$user->id;
-                    $target->targetCall=0;
-                    $target->targetHighPossibility=0;
-                    $target->targetLeadmine=0;
-                    $target->save();
-                }
-
-
-                $t=0;
-
-                //Weekly Report
-                if($target->targetCall>0){
-                    $calledThisWeek=round(($calledThisWeek/($target->targetCall))*100);
-                    if($calledThisWeek>100){
-                        $calledThisWeek=100;
-                    }
-                    $t++;
-                }
-
-                if($target->targetLeadmine>0){
-                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine))*100);
-                    if ($leadMinedThisWeek>100){
-                        $leadMinedThisWeek=100;}
-                    $t++;
-                }
-
-                if($target->targetHighPossibility>0){
-                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
-                    if($highPosibilitiesThisWeek>100){
-                        $highPosibilitiesThisWeek=100;
-                    }
-                    $t++;
-                }
-
-                if($target->targetContact >0){
-
-                    $contacted=round(($contacted/($target->targetContact))*100);
-                    if($contacted>100){
-                        $contacted=100;
-                    }
-                }
-
-                if($target->targetUsa >0){
-
-                    $contactedUsa=round(($contactedUsa/($target->targetUsa))*100);
-                    if($contactedUsa>100){
-                        $contactedUsa=100;
-                    }
-                }
-
-                else{
-                    $contactedUsa=0;
-                }
-
-
-
-                if($t==0){
-                    $t=1;}
-
-                $u = new stdClass;
-                $u->userName=$user->firstName;
-                $u->typeId=$user->typeId;
-                $u->leadMined=$leadMinedThisWeek;
-                $u->called=$calledThisWeek;
-                $u->highPosibilities=$highPosibilitiesThisWeek;
-                $u->contacted=$contacted;
-                $u->contactedUsa=$contactedUsa;
-                $u->t=$t;
-                array_push($report, $u);
-            }
-            return view('report.index')->with('report',$report);
+            $u = new stdClass;
+            $u->userName=$user->firstName;
+            $u->typeId=$user->typeId;
+            $u->leadMined=$leadMinedThisWeek;
+            $u->called=$calledThisWeek;
+            $u->highPosibilities=$highPosibilitiesThisWeek;
+            $u->contacted=$contacted;
+            $u->contactedUsa=$contactedUsa;
+            $u->t=$t;
+            array_push($report, $u);
+        }
+        return view('report.index')->with('report',$report);
     }
 
 
@@ -217,9 +217,9 @@ class ReportController extends Controller
 //                ->count();
 
             $followupThisWeek=Workprogress::where('callingReport',4)
-                            ->where('userId',$user->id)
-                            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                            ->count();
+                ->where('userId',$user->id)
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->count();
 
 
 
@@ -275,7 +275,7 @@ class ReportController extends Controller
                 ->where('callingReport',5)
                 ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])->count();
 //            USA
-          $contactedUsa=Workprogress::where('userId',$user->id)
+            $contactedUsa=Workprogress::where('userId',$user->id)
                 ->leftJoin('leads','workprogress.leadId','leads.leadId')
                 ->leftJoin('countries','leads.countryId','countries.countryId')
                 ->where('countries.countryName','like','%USA%')
@@ -392,7 +392,7 @@ class ReportController extends Controller
             $test=Workprogress::where('userId',$user->id)
                 ->where('progress','Test Job')
 //                ->whereBetween('created_at', [$r->fromDate,$r->toDate])->count();
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])->count();
 
 
             $contacted=Workprogress::where('userId',$user->id)
@@ -450,143 +450,143 @@ class ReportController extends Controller
 
 
         if( $User_Type =='MANAGER'){
-                $users=User::select('id','firstName','typeId')
-                    ->where('typeId','!=',1)
-                    ->where('teamId',Auth::user()->teamId)
-                    ->get();
-            }
-            else if($User_Type =='USER' || $User_Type =='RA'){
-                $users=User::select('id','firstName','typeId')
-                    ->where('id',Auth::user()->id)->get();
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->where('teamId',Auth::user()->teamId)
+                ->get();
+        }
+        else if($User_Type =='USER' || $User_Type =='RA'){
+            $users=User::select('id','firstName','typeId')
+                ->where('id',Auth::user()->id)->get();
+        }
+        else{
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->get();
+        }
+
+
+        $report=array();
+        foreach ($users as $user){
+            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
+            $contacted=Workprogress::where('userId',$user->id)
+//                    ->where('callingReport',5)
+                ->where(function($q){
+                    $q->orWhere('callingReport',5)
+                        ->orWhere('callingReport',4);
+                })
+                ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
+
+
+            //USA CONTACT TARGET
+            $contactedUsa=Workprogress::where('userId',$user->id)
+                ->leftJoin('leads','workprogress.leadId','leads.leadId')
+                ->leftJoin('countries','leads.countryId','countries.countryId')
+                ->where('countries.countryName','like','%USA%')
+                ->where(function($q){
+                    $q->orWhere('callingReport',5)
+                        ->orWhere('callingReport',4);
+                })
+                ->whereBetween('workprogress.created_at', [$r->fromDate, $r->toDate])->count();
+
+
+
+
+            $calledThisWeek=Workprogress::where('userId',$user->id)
+                ->where('callingReport','!=',6)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
+
+            //When user is RA
+            if($user->typeId==4){
+                $highPosibilitiesThisWeek=Lead::select('leads.*')
+//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
+                    ->where('leads.minedBy',$user->id)
+                    ->where('filteredPossibility',3)
+                    ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                    ->count();
             }
             else{
-                $users=User::select('id','firstName','typeId')
-                    ->where('typeId','!=',1)
-                    ->get();
+                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
+                    ->where('possibilityId',3)
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,  $r->toDate])->count();
+            }
+
+            try{
+                $target=Usertarget::findOrFail($user->id);
+            }
+            catch (ModelNotFoundException $ex) {
+
+                $target=new Usertarget;
+                $target->userId=$user->id;
+                $target->targetCall=0;
+                $target->targetHighPossibility=0;
+                $target->targetLeadmine=0;
+                $target->save();
             }
 
 
-            $report=array();
-            foreach ($users as $user){
-                $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
-                $contacted=Workprogress::where('userId',$user->id)
-//                    ->where('callingReport',5)
-                    ->where(function($q){
-                        $q->orWhere('callingReport',5)
-                            ->orWhere('callingReport',4);
-                    })
-                    ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
+            $t=0;
 
-
-                //USA CONTACT TARGET
-                $contactedUsa=Workprogress::where('userId',$user->id)
-                    ->leftJoin('leads','workprogress.leadId','leads.leadId')
-                    ->leftJoin('countries','leads.countryId','countries.countryId')
-                    ->where('countries.countryName','like','%USA%')
-                    ->where(function($q){
-                        $q->orWhere('callingReport',5)
-                            ->orWhere('callingReport',4);
-                    })
-                    ->whereBetween('workprogress.created_at', [$r->fromDate, $r->toDate])->count();
-
-
-
-
-                $calledThisWeek=Workprogress::where('userId',$user->id)
-                    ->where('callingReport','!=',6)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
-
-                //When user is RA
-                if($user->typeId==4){
-                    $highPosibilitiesThisWeek=Lead::select('leads.*')
-//                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                        ->where('leads.minedBy',$user->id)
-                        ->where('filteredPossibility',3)
-                        ->whereBetween('created_at', [$r->fromDate,$r->toDate])
-                        ->count();
+            //Weekly Report
+            if($target->targetCall>0){
+                $calledThisWeek=round(($calledThisWeek/($target->targetCall*$months))*100);
+                if($calledThisWeek>100){
+                    $calledThisWeek=100;
                 }
-                else{
-                    $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                        ->where('possibilityId',3)
-                        ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,  $r->toDate])->count();
-                }
-
-                try{
-                    $target=Usertarget::findOrFail($user->id);
-                }
-                catch (ModelNotFoundException $ex) {
-
-                    $target=new Usertarget;
-                    $target->userId=$user->id;
-                    $target->targetCall=0;
-                    $target->targetHighPossibility=0;
-                    $target->targetLeadmine=0;
-                    $target->save();
-                }
-
-
-                $t=0;
-
-                //Weekly Report
-                if($target->targetCall>0){
-                    $calledThisWeek=round(($calledThisWeek/($target->targetCall*$months))*100);
-                    if($calledThisWeek>100){
-                        $calledThisWeek=100;
-                    }
-                    $t++;
-                }
-                if($target->targetContact >0){
-                    $contacted=round(($contacted/($target->targetContact*$months))*100);
-                    if($contacted>100){
-                        $contacted=100;
-                    }
-                    $t++;
-                }
-
-                if($target->targetUsa >0){
-
-                    $contactedUsa=round(($contactedUsa/($target->targetUsa*$months))*100);
-                    if($contactedUsa>100){
-                        $contactedUsa=100;
-                    }
-                    $t++;
-                }
-                else{
-                    $contactedUsa=0;
-                }
-
-                if($target->targetLeadmine>0){
-                    $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*$months))*100);
-                    if ($leadMinedThisWeek>100){
-                        $leadMinedThisWeek=100;
-                    }
-                    $t++;}
-
-                if($target->targetHighPossibility>0){
-                    $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$months))*100);
-                    if($highPosibilitiesThisWeek>100){
-                        $highPosibilitiesThisWeek=100;
-                    }
-                    $t++;
-                }
-                if($t==0){
-                    $t=1;}
-                $u = new stdClass;
-                $u->userName=$user->firstName;
-                $u->typeId=$user->typeId;
-                $u->leadMined=$leadMinedThisWeek;
-                $u->called=$calledThisWeek;
-                $u->highPosibilities=$highPosibilitiesThisWeek;
-                $u->contacted=$contacted;
-                $u->contactedUsa=$contactedUsa;
-                $u->t=$t;
-                array_push($report, $u);
+                $t++;
             }
-            return view('report.index')
-                ->with('report',$report)
-                ->with('fromDate',$r->fromDate)
-                ->with('toDate',$r->toDate);
+            if($target->targetContact >0){
+                $contacted=round(($contacted/($target->targetContact*$months))*100);
+                if($contacted>100){
+                    $contacted=100;
+                }
+                $t++;
+            }
+
+            if($target->targetUsa >0){
+
+                $contactedUsa=round(($contactedUsa/($target->targetUsa*$months))*100);
+                if($contactedUsa>100){
+                    $contactedUsa=100;
+                }
+                $t++;
+            }
+            else{
+                $contactedUsa=0;
+            }
+
+            if($target->targetLeadmine>0){
+                $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*$months))*100);
+                if ($leadMinedThisWeek>100){
+                    $leadMinedThisWeek=100;
+                }
+                $t++;}
+
+            if($target->targetHighPossibility>0){
+                $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$months))*100);
+                if($highPosibilitiesThisWeek>100){
+                    $highPosibilitiesThisWeek=100;
+                }
+                $t++;
+            }
+            if($t==0){
+                $t=1;}
+            $u = new stdClass;
+            $u->userName=$user->firstName;
+            $u->typeId=$user->typeId;
+            $u->leadMined=$leadMinedThisWeek;
+            $u->called=$calledThisWeek;
+            $u->highPosibilities=$highPosibilitiesThisWeek;
+            $u->contacted=$contacted;
+            $u->contactedUsa=$contactedUsa;
+            $u->t=$t;
+            array_push($report, $u);
+        }
+        return view('report.index')
+            ->with('report',$report)
+            ->with('fromDate',$r->fromDate)
+            ->with('toDate',$r->toDate);
     }
 
 

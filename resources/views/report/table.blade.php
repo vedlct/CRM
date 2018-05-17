@@ -31,154 +31,154 @@
 
 
 
-        <div class="card" style="padding:10px;">
-            <label><b>Search</b></label>
-            <form method="post" action="{{route('searchTableByDate')}}">
-                {{csrf_field()}}
-                <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
-                <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
-                <button type="submit" class="btn btn-success">Search</button>
+    <div class="card" style="padding:10px;">
+        <label><b>Search</b></label>
+        <form method="post" action="{{route('searchTableByDate')}}">
+            {{csrf_field()}}
+            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
+            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
+            <button type="submit" class="btn btn-success">Search</button>
 
-            </form>
-            <div class="card-body">
-        <h2>Report</h2>
-         @if(isset($fromDate) && isset($toDate))
-                    <p>Report From {{$fromDate}} to {{$toDate}}</p>
-                @else
-        <p>Weekly report</p>
-         @endif
-
-        @if(Session::get('userType') !='RA')
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Total Call</th>
-                <th>Follow up</th>
-                <th>Contacted</th>
-                <th>Assigned Lead</th>
-                <th>High Possibility</th>
-                <th>H P(Unique)</th>
-                <th>Test Lead</th>
-                <th>Lead Mined</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($report as $r)
-
-            @if($r->type !=4)
-
-
-                <tr>
-                <td>{{$r->userName}}</td>
-                <td><a href="#" class="highpossibility" onclick="totalcall(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}"
-                    >{{$r->called}}</a></td>
-
-                <td><a href="#" class="highpossibility" onclick="followup(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}"
-                    >{{$r->followupThisWeek}}</a>
-                </td>
-                <td><a href="#" class="highpossibility" onclick="getContactedIndividual(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}"
-                    >
-                        {{$r->contacted}}
-                    </a> | <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
-                              @if(isset($fromDate) && isset($toDate))
-                              data-date-from="{{$fromDate}}"
-                              data-date-to="{{$toDate}}"
-                              @endif
-                                                  data-user-id="{{$r->id}}"
-                              data-user-name="{{$r->userName}}"
-                    > {{$r->contactedUsa}}</a></td>
-
-                <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
-                </td>
-                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
-                            @if(isset($fromDate) && isset($toDate))
-                            data-date-from="{{$fromDate}}"
-                            data-date-to="{{$toDate}}"
-                            @endif
-                            data-user-id="{{$r->id}}"
-                            data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
-                    </a>
-                </td>
-
-                    <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
-                           @if(isset($fromDate) && isset($toDate))
-                           data-date-from="{{$fromDate}}"
-                           data-date-to="{{$toDate}}"
-                           @endif
-                           data-user-id="{{$r->id}}"
-                           data-user-name="{{$r->userName}}">
-                            {{$r->uniqueHighPosibilitiesThisWeek}}
-                        </a>
-                    </td>
-
-                <td><a href="#" class="highpossibility" onclick="testlead(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}"
-                    >{{$r->test}}</a>
-                </td>
-
-                {{--<td><a href="#" class="highpossibility" onclick="closelead(this)"--}}
-                       {{--@if(isset($fromDate) && isset($toDate))--}}
-                       {{--data-date-from="{{$fromDate}}"--}}
-                       {{--data-date-to="{{$toDate}}"--}}
-                       {{--@endif--}}
-                       {{--data-user-id="{{$r->id}}"--}}
-                       {{--data-user-name="{{$r->userName}}">--}}
-                        {{--{{$r->closing}}--}}
-                    {{--</a></td>--}}
-
-
-                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
-                       @if(isset($fromDate) && isset($toDate))
-                       data-date-from="{{$fromDate}}"
-                       data-date-to="{{$toDate}}"
-                       @endif
-                       data-user-id="{{$r->id}}"
-                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
-                </td>
-            </tr>
-
-
-
+        </form>
+        <div class="card-body">
+            <h2>Report</h2>
+            @if(isset($fromDate) && isset($toDate))
+                <p>Report From {{$fromDate}} to {{$toDate}}</p>
+            @else
+                <p>Weekly report</p>
             @endif
 
-                @endforeach
-            </tbody>
-        </table>
-    @endif
+            @if(Session::get('userType') !='RA')
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Total Call</th>
+                        <th>Follow up</th>
+                        <th>Contacted</th>
+                        <th>Assigned Lead</th>
+                        <th>High Possibility</th>
+                        <th>H P(Unique)</th>
+                        <th>Test Lead</th>
+                        <th>Lead Mined</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($report as $r)
 
-<br><br>
+                        @if($r->type !=4)
 
-                @if(Session::get('userType') !='USER')
+
+                            <tr>
+                                <td>{{$r->userName}}</td>
+                                <td><a href="#" class="highpossibility" onclick="totalcall(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}"
+                                    >{{$r->called}}</a></td>
+
+                                <td><a href="#" class="highpossibility" onclick="followup(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}"
+                                    >{{$r->followupThisWeek}}</a>
+                                </td>
+                                <td><a href="#" class="highpossibility" onclick="getContactedIndividual(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}"
+                                    >
+                                        {{$r->contacted}}
+                                    </a> | <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
+                                              @if(isset($fromDate) && isset($toDate))
+                                              data-date-from="{{$fromDate}}"
+                                              data-date-to="{{$toDate}}"
+                                              @endif
+                                              data-user-id="{{$r->id}}"
+                                              data-user-name="{{$r->userName}}"
+                                    > {{$r->contactedUsa}}</a></td>
+
+                                <td><a href="#" class="highpossibility" onclick="leadassigned(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->assignedLead}}</a>
+                                </td>
+                                <td><a href="#" class="highpossibility" onclick="highpossibility(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->highPosibilities}}
+                                    </a>
+                                </td>
+
+                                <td><a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">
+                                        {{$r->uniqueHighPosibilitiesThisWeek}}
+                                    </a>
+                                </td>
+
+                                <td><a href="#" class="highpossibility" onclick="testlead(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}"
+                                    >{{$r->test}}</a>
+                                </td>
+
+                                {{--<td><a href="#" class="highpossibility" onclick="closelead(this)"--}}
+                                {{--@if(isset($fromDate) && isset($toDate))--}}
+                                {{--data-date-from="{{$fromDate}}"--}}
+                                {{--data-date-to="{{$toDate}}"--}}
+                                {{--@endif--}}
+                                {{--data-user-id="{{$r->id}}"--}}
+                                {{--data-user-name="{{$r->userName}}">--}}
+                                {{--{{$r->closing}}--}}
+                                {{--</a></td>--}}
+
+
+                                <td><a href="#" class="highpossibility" onclick="leadmine(this)"
+                                       @if(isset($fromDate) && isset($toDate))
+                                       data-date-from="{{$fromDate}}"
+                                       data-date-to="{{$toDate}}"
+                                       @endif
+                                       data-user-id="{{$r->id}}"
+                                       data-user-name="{{$r->userName}}">{{$r->leadMined}}</a>
+                                </td>
+                            </tr>
+
+
+
+                        @endif
+
+                    @endforeach
+                    </tbody>
+                </table>
+            @endif
+
+            <br><br>
+
+            @if(Session::get('userType') !='USER')
                 <table class="table">
                     <thead>
                     <tr>
@@ -234,11 +234,11 @@
                     </tbody>
                 </table>
 
-@endif
+            @endif
 
 
 
-            </div></div>
+        </div></div>
 
 @endsection
 
@@ -262,7 +262,7 @@
 
         function highpossibility(x){
 
-           var id = $(x).data('user-id');
+            var id = $(x).data('user-id');
 
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
@@ -297,7 +297,7 @@
 
         function highpossibilityUn(x){
 
-           var id = $(x).data('user-id');
+            var id = $(x).data('user-id');
 
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
@@ -648,4 +648,4 @@
 
 
 
-    @endsection
+@endsection

@@ -476,6 +476,41 @@ class GetIndividualReportController extends Controller
         }
         $user=User::findOrFail($r->userid);
 
+        if($user->typeId){
+            $leads = Lead::select('leads.*','leadassigneds.created_at','leadassigneds.leaveDate','users.firstName')
+                ->with('country','category','possibility')
+                ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
+                ->leftJoin('users','users.id','leadassigneds.assignTo')
+                ->where('leadassigneds.assignBy',$user->id)
+                ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'),[$fromDate,$toDate])->get();
+
+            $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Assign To</th>
+                 <th>CompanyName</th>
+                 <th>Possibility</th>
+                 <th>Category</th>
+                 <th>Country</th>
+                <th>Assign Date</th>
+                 <th>Leave</th>
+      </tr></thead>
+    <tbody>';
+            foreach ($leads as $l){
+                $table.='<tr>
+                    <td>'.$l->firstName.'</td>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
+                    <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->created_at.'</td>
+                    <td>'.$l->leaveDate.'</td>
+                    </tr>';
+            }
+
+            $table.='</tbody></table>';
+            return Response($table);
+
+        }
+
         $leads = Lead::select('leads.*','leadassigneds.created_at','leadassigneds.leaveDate','users.firstName')
             ->with('country','category','possibility')
             ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')

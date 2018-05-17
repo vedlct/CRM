@@ -223,5 +223,6 @@ Route::post('graph/user','ReportController@getUserGraph')->name('getUserGraph');
 
 
 Route::get('/test','TestController@getTable');
+Route::post('/test','TestController@searchTableByDate')->name('test.searchTableByDate');
 
 
