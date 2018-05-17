@@ -330,7 +330,7 @@ public function searchTableByDate(Request $r){
 //        return $contactedUsa;
 
 
-    return view('report.table')
+    return view('test')
         ->with('users', $users)
         ->with('contactedUsa',$contactedUsa)
         ->with('contacted',$contacted)
