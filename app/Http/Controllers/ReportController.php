@@ -320,6 +320,13 @@ class ReportController extends Controller
 
 //        return $contactedUsa;
 
+        $closing=Workprogress::select('userId',DB::raw('count(*) as userClosing'))
+                ->where('progress','Closing')
+                ->groupBy('userId')
+                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->get();
+
+//        return $closing;
 
 
         return view('report.table')
@@ -335,6 +342,7 @@ class ReportController extends Controller
             ->with('followupThisWeek',$followupThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
             ->with('calledThisWeek',$calledThisWeek)
+            ->with('closing',$closing)
             ->with('usersRa',$usersRa);
 
 
@@ -482,6 +490,15 @@ class ReportController extends Controller
 
 //        return $contactedUsa;
 
+        $closing=Workprogress::select('userId',DB::raw('count(*) as userClosing'))
+            ->where('progress','Closing')
+            ->groupBy('userId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->get();
+
+
+//        return $closing;
+
 
         return view('report.table')
             ->with('users', $users)
@@ -496,6 +513,7 @@ class ReportController extends Controller
             ->with('followupThisWeek',$followupThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
             ->with('calledThisWeek',$calledThisWeek)
+            ->with('closing',$closing)
             ->with('usersRa',$usersRa)
             ->with('fromDate',$r->fromDate)
             ->with('toDate',$r->toDate);

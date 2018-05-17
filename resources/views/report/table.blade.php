@@ -6,6 +6,7 @@
 
 
 
+
     <!--High Possibility Modal -->
     <div class="modal fade" id="highPossibility" role="dialog">
         <div class="modal-dialog" style="max-width: 80%">
@@ -62,6 +63,7 @@
                         <th>HP(unique)</th>
                         <th>Test Lead</th>
                         <th>Lead Mined</th>
+                        <th>Closing</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -260,6 +262,31 @@
                                            data-user-name="{{$user->userName}}"
                                         >
                                             {{$value=$lm->userLeadMined}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+                            <td>
+                                @php($value=0)
+                                @foreach($closing as $cl)
+
+                                    @if($cl->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="closelead(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$value=$cl->userClosing}}
                                         </a>
                                         @break
                                     @endif
