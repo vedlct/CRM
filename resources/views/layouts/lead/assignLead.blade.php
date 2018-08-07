@@ -133,7 +133,7 @@
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
                 },
-                {{--ajax: '{!! route('test') !!}',--}}
+
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'companyName', name: 'leads.companyName' },

@@ -217,12 +217,24 @@ Route::post('/getContactedUsaIndividual','GetIndividualReportController@getConta
 Route::post('/approval','GetIndividualReportController@approval')->name('approval');
 
 
-
 //Graph
 Route::post('graph/user','ReportController@getUserGraph')->name('getUserGraph');
 
 
 Route::get('/test','TestController@getTable');
 Route::post('/test','TestController@searchTableByDate')->name('test.searchTableByDate');
+
+
+/* --------------------- LOCAL MARKETING ------------------ */
+
+Route::get('local/lead/', 'LocalLeadController@all')->name('local.allLead');
+Route::post('local/lead/', 'LocalLeadController@getLeadData')->name('local.getLeadData');
+Route::post('local/lead/storeLead', 'LocalLeadController@storeLead')->name('local.storeLead');
+
+Route::get('local/lead/my-lead', 'LocalLeadController@myLead')->name('local.myLead');
+Route::post('local/lead/my-lead', 'LocalLeadController@getMyLead')->name('local.getMyLead');
+Route::post('local/lead/getEditModal', 'LocalLeadController@getEditModal')->name('local.getEditModal');
+Route::get('local/lead/assignLead', 'LocalLeadController@assignLead')->name('local.assignLead');
+Route::post('local/lead/assignLead', 'LocalLeadController@getAssignLead')->name('local.getAssignLead');
 
 
