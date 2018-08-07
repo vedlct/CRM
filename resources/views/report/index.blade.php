@@ -67,6 +67,11 @@
                 axisY2:{
                     title: "C-call ,M-lead mined ,P- high possibility,Con- Contact",
                     maximum: 100,
+
+                },
+                axisX:{
+                    interval: 1,
+
                 },
                 data: [{
                     type: "bar",
@@ -96,10 +101,11 @@
 
         }
 
-        $(function() {
+        $( function() {
             $( "#fromdate" ).datepicker();
             $( "#todate" ).datepicker();
-        });
+        } );
+
 
 
     </script>
