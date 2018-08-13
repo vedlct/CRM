@@ -5,25 +5,34 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Lead;
 use App\Possibility;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\LocalLead;
 use App\Area;
+use App\LocalService;
+use App\LocalLeadServiceRelation;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use Yajra\DataTables\DataTables;
 use App\LocalLeadAssign;
+use DB;
+
 class LocalLeadController extends Controller
 {
     public function all(){
         $cats=Category::where('type', 3)->get();
         $areas=Area::get();
         $possibilities=Possibility::get();
+        $services=LocalService::get();
+
+//        return $services;
 
         return view('local-lead.all')
             ->with('categories',$cats)
             ->with('areas',$areas)
-            ->with('possibilities',$possibilities);
+            ->with('possibilities',$possibilities)
+            ->with('services',$services);
 
     }
 
@@ -41,6 +50,7 @@ class LocalLeadController extends Controller
     }
 
     public function storeLead(Request $r){
+
         if($r->local_leadId){
             $lead=LocalLead::findOrFAil($r->local_leadId);
         }
@@ -70,10 +80,23 @@ class LocalLeadController extends Controller
             $assign->save();
         }
 
+        $serviceRelation=LocalLeadServiceRelation::where('local_leadId',$lead->local_leadId)
+            ->delete();
+
+        foreach ($r->services as $service){
+            $serviceRelation=new LocalLeadServiceRelation();
+            $serviceRelation->local_leadId= $lead->local_leadId;
+            $serviceRelation->serviceId= $service;
+            $serviceRelation->save();
+        }
+
+
         if($r->local_leadId){
+
             Session::flash('message', 'Lead Edited successfully');
         }
         else{
+
             Session::flash('message', 'Lead Added successfully');
         }
 
@@ -107,18 +130,39 @@ class LocalLeadController extends Controller
         $areas=Area::get();
         $possibilities=Possibility::get();
 
+        $localServices=LocalLeadServiceRelation::where('local_leadId',$lead->local_leadId)
+            ->get();
+        $services=LocalService::get();
+
         return view('local-lead.getEditModal')
             ->with('categories',$cats)
             ->with('areas',$areas)
             ->with('possibilities',$possibilities)
-            ->with('lead',$lead);
+            ->with('lead',$lead)
+            ->with('localServices',$localServices)
+            ->with('services',$services);
     }
 
 
     public function assignLead(){
+        $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))->groupBy('local_leadId')->get();
 
 
-        return view('local-lead.assignLead');
+        $leads=LocalLead::select('local_lead.local_leadId','local_lead.companyName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+            ->leftJoin('area','area.areaId','local_lead.areaId')
+            ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
+            ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
+            ->get();
+
+        $users=User::select('id','firstName')->get();
+
+
+
+
+        return view('local-lead.assignLead')
+            ->with('assign',$assign)
+            ->with('leads',$leads)
+            ->with('users',$users);
     }
 
     public function getAssignLead(Request $r){
@@ -131,8 +175,28 @@ class LocalLeadController extends Controller
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
             ->get();
 
+
         $datatables = Datatables::of($lead);
+
         return $datatables->make(true);
+
+
+    }
+
+    public function insertAssign(Request $r){
+        foreach ($r->leadId as $local_leadId){
+            $count=LocalLeadAssign::where('userId',$r->userId)->where('local_leadId',$local_leadId)->count();
+            if($count==0){
+                $assign=new LocalLeadAssign();
+                $assign->local_leadId=$local_leadId;
+                $assign->userId=$r->userId;
+                $assign->assignBy=Auth::user()->id;
+                $assign->save();
+            }
+
+
+        }
+        Session::flash('message', 'Lead Assigned successfully');
 
 
     }

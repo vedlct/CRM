@@ -237,4 +237,6 @@ Route::post('local/lead/getEditModal', 'LocalLeadController@getEditModal')->name
 Route::get('local/lead/assignLead', 'LocalLeadController@assignLead')->name('local.assignLead');
 Route::post('local/lead/assignLead', 'LocalLeadController@getAssignLead')->name('local.getAssignLead');
 
+//Job Assign
+Route::post('local/lead/insertAssign', 'LocalLeadController@insertAssign')->name('local.insertAssign');
 

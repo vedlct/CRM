@@ -62,23 +62,34 @@
                     <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
                 </li>
-                {{--@if($userType =='LOCAL')--}}
-                    {{--Local markater--}}
-                 {{--@endif--}}
                 @if($userType =='ADMIN')
-                <li>
-                    <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Local)</span></a>
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Local Marketing</span>
+                        <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+
+                            <li>
+                                <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Local)</span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Local)</span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Local)</span></a>
+                            </li>
+
+
+
+
+
+                    </ul>
                 </li>
-
-                <li>
-                    <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Local)</span></a>
-                </li>
-
-                <li>
-                    <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Local)</span></a>
-                </li>
-
-
 
                 @endif
 

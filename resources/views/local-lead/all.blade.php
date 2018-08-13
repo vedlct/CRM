@@ -110,14 +110,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-md-5" style="">
-                        <label ><b>Services:</b></label>
-                        <select class="form-control" id="" name="category" >
-                            @foreach($categories as $cat)
-                                <option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+
 
 
 
@@ -163,21 +156,42 @@
 
                         {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
 
-                        {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
 
-                        <textarea name="comment" rows="4"  class="form-control">
-
-
-                </textarea>
+                        <textarea name="comment" rows="4"  class="form-control"></textarea>
                     </div>
 
 
-                    <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Insert</button>
 
-                </div></div>
+
+                </div>
+
+
+
+                <div id="allServices" >
+                    <label ><b>Services:</b></label>
+                    <div class="form-group col-md-6" style="" >
+                        <select class="form-control" id="" name="services[]" required>
+                            <option value="">Select service</option>
+                            @foreach($services as $service)
+                                <option value="{{$service->local_serviceId}}">{{$service->serviceName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+
+
+
+                <button type="button" id="addButton" class="btn btn-info">add more</button>
+                <button type="button" id="removeButton" class="btn btn-danger">remove</button>
+
+                <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Insert</button>
+
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
+
 
         </form>
     </div>
@@ -240,6 +254,60 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+
+    <script>
+
+
+        $(document).ready(function(){
+
+            var arr=[];
+
+            var i;
+
+
+            @foreach($services as $service)
+                arr.push('<option id="s'+i+'" value="{{$service->local_serviceId}}">{{$service->serviceName}}</option>');
+            @endforeach
+
+
+            var counter = 2;
+            $("#addButton").click(function () {
+                if(counter>10){
+                    alert("Only 10 textboxes allow");
+                    return false;
+                }
+
+                var newTextBoxDiv = $(document.createElement('div'))
+                    .attr("id", 'TextBoxDiv' + counter).attr("class", 'row');
+
+                newTextBoxDiv.after().html('<div class="form-group col-md-6" > ' +
+                    '<select class="form-control" id="" name="services[]" required>' +
+                    '<option value="">Select service</option>'+
+                        arr+
+                    '</select> ' +
+                    '</div>'
+                );
+                newTextBoxDiv.appendTo("#allServices");
+                counter++;
+
+            });
+
+
+            $("#removeButton").click(function () {
+                if(counter==2){
+                    alert("nothing to remove");
+                    return false;
+                }
+                counter--;
+                $("#TextBoxDiv" + counter).remove();
+            });
+            function serviceSelected(x){
+                console.log(x);
+
+            }
+        });
+
+    </script>
 
     <script>
         $(function() {

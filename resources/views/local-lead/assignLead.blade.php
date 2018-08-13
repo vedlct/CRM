@@ -18,13 +18,39 @@
                         <th width="10%">Address</th>
                         <th width="5%">Status</th>
                         <th width="8%">Possibility</th>
-                        {{--<th width="10%">Action</th>--}}
-
+                        <th width="5%">Assigned</th>
 
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($leads as $lead)
+                        <tr>
+                            <td><input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="{{$lead->local_leadId}}"></td>
+                            <td>{{$lead->companyName}}</td>
+                            <td>{{$lead->website}}</td>
+                            <td>{{$lead->mobile}}</td>
+                            <td>{{$lead->tnt}}</td>
+                            <td>{{$lead->categoryName}}</td>
+                            <td>{{$lead->areaName}}</td>
+                            <td>{{$lead->address}}</td>
+                            <td>{{$lead->statusId}}</td>
+                            <td>{{$lead->possibilityName}}</td>
+                            <td>
+                                @php($temp=0)
+                                @foreach($assign as $person)
+                                    @if($person->local_leadId ==$lead->local_leadId )
+                                        {{$person->total}}
+                                        @php($temp++)
+                                    @endif
 
+                                @endforeach
+                                @if($temp==0)  0 @endif
+
+                            </td>
+                        </tr>
+
+
+                    @endforeach
 
 
                     </tbody>
@@ -33,12 +59,26 @@
 
 
         </div>
+
+        <div class="form-group col-md-4" >
+            <label>Select User</label>
+            <select class="form-control" id="userId">
+                <option value="">Select User</option>
+                @foreach($users as $user)
+                <option value="{{$user->id}}">{{$user->firstName}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="form-group col-md-10">
+            <button onclick="assign()" class="btn btn-success pull-right">Assign</button>
+        </div>
     </div>
 
 
 
 
-<button onclick="assign()">Send</button>
+
 
 
 @endsection
@@ -55,35 +95,8 @@
 
     <script>
         $(function() {
-            $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                Filter: true,
-                type:"POST",
-                "ajax":{
-                    "url": "{!! route('local.getAssignLead') !!}",
-                    "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
-                },
-                {{--ajax: '{!! route('test') !!}',--}}
-                columns: [
-                    { "data": function(data){
 
-                        return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'+data.local_leadId+'">'
-                            ;},
-                        "orderable": false, "searchable":false, "name":"selected_rows" },
-                    { data: 'companyName', name: 'companyName' },
-                    { data: 'website', name: 'website' },
-                    { data: 'mobile', name: 'mobile'},
-                    { data: 'tnt', name: 'tnt'},
-                    { data: 'categoryName', name: 'categoryName'},
-                    { data: 'areaName', name: 'areaName'},
-                    {data: 'address', name: 'address'},
-                    { data: 'statusId', name: 'statusId'},
-                    { data: 'possibilityName', name: 'possibilityName'}
-                ]
-            });
+            $('#myTable').DataTable();
 
         });
 
@@ -97,17 +110,32 @@
 
         function assign() {
             var chkArray = [];
-//            var userId=$(this).val();
+
             $('.checkboxvar:checked').each(function (i) {
 
                 chkArray[i] = $(this).val();
             });
 
-//
+            var userId=$('#userId').val();
+
 //            jQuery('input:checkbox:checked').parents("tr").remove();
 //            $(this).prop('selectedIndex',0);
 
-            console.log(chkArray);
+
+            if(userId != "" && chkArray !=[]){
+                $.ajax({
+                    type: 'POST',
+                    url: "{!! route('local.insertAssign') !!}",
+                    cache: false,
+                    data: {_token: "{{csrf_token()}}",'userId': userId,'leadId':chkArray},
+                    success: function (data) {
+//                        console.log(data);
+                        location.reload();
+                    }
+                });
+            }
+
+
 
 
 
