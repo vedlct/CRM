@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Lead;
+use App\LocalCompany;
 use App\Possibility;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use App\LocalLead;
 use App\Area;
 use App\LocalService;
 use App\LocalLeadServiceRelation;
+use App\LocalComment;
+use App\LocalFollowup;
 use Illuminate\Support\Facades\Auth;
 use Session;
 use Yajra\DataTables\DataTables;
@@ -25,21 +28,24 @@ class LocalLeadController extends Controller
         $areas=Area::get();
         $possibilities=Possibility::get();
         $services=LocalService::get();
+        $companies=LocalCompany::get();
 
-//        return $services;
+//        return $companies;
 
         return view('local-lead.all')
             ->with('categories',$cats)
             ->with('areas',$areas)
             ->with('possibilities',$possibilities)
-            ->with('services',$services);
+            ->with('services',$services)
+            ->with('companies',$companies);
 
     }
 
     public function getLeadData(Request $r){
-        $lead=LocalLead::select('local_lead.local_leadId','local_lead.companyName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+        $lead=LocalLead::select('local_lead.local_leadId','local_company.companyName','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
             ->leftJoin('area','area.areaId','local_lead.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
             ->get();
 
@@ -58,7 +64,8 @@ class LocalLeadController extends Controller
             $lead=new LocalLead();
         }
 
-        $lead->companyName=$r->companyName;
+        $lead->leadName=$r->leadName;
+        $lead->local_companyId=$r->local_companyId;
         $lead->website=$r->website;
         $lead->contactPerson=$r->personName;
         $lead->email=$r->email;
@@ -105,6 +112,7 @@ class LocalLeadController extends Controller
 
     public function myLead(){
 
+
         return view('local-lead.myLead');
     }
 
@@ -113,6 +121,7 @@ class LocalLeadController extends Controller
         $lead=LocalLead::leftJoin('area','area.areaId','local_lead.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->leftJoin('local_lead_assign','local_lead_assign.local_leadId','local_lead.local_leadId')
             ->where('local_lead_assign.userId',Auth::user()->id)
             ->get();
@@ -124,11 +133,12 @@ class LocalLeadController extends Controller
     }
 
     public function getEditModal(Request $r){
-        $lead=LocalLead::findOrFail($r->leadId);
+        $lead=LocalLead::leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')->findOrFail($r->leadId);
 
         $cats=Category::where('type', 3)->get();
         $areas=Area::get();
         $possibilities=Possibility::get();
+        $companies=LocalCompany::get();
 
         $localServices=LocalLeadServiceRelation::where('local_leadId',$lead->local_leadId)
             ->get();
@@ -140,7 +150,8 @@ class LocalLeadController extends Controller
             ->with('possibilities',$possibilities)
             ->with('lead',$lead)
             ->with('localServices',$localServices)
-            ->with('services',$services);
+            ->with('services',$services)
+            ->with('companies',$companies);
     }
 
 
@@ -148,7 +159,7 @@ class LocalLeadController extends Controller
         $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))->groupBy('local_leadId')->get();
 
 
-        $leads=LocalLead::select('local_lead.local_leadId','local_lead.companyName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+        $leads=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
             ->leftJoin('area','area.areaId','local_lead.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
@@ -166,7 +177,7 @@ class LocalLeadController extends Controller
     }
 
     public function getAssignLead(Request $r){
-        $lead=LocalLead::select('local_lead.local_leadId','local_lead.companyName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+        $lead=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
             ->whereNotIn('local_leadId', function($q){
                 $q->select('local_leadId')->from('local_lead_assign');
             })
@@ -197,7 +208,56 @@ class LocalLeadController extends Controller
 
         }
         Session::flash('message', 'Lead Assigned successfully');
+    }
 
+    public function getAssignedUsers(Request $r){
+        $users=LocalLeadAssign::select('users.firstName as user','u2.firstName as assignBy','local_lead_assign.assignDate as date')->where('local_leadId',$r->leadid)
+            ->leftJoin('users','users.id','local_lead_assign.userId')
+            ->leftJoin('users as u2','u2.id','local_lead_assign.assignBy')
+            ->get();
+
+        return view('local-lead.getAssignedUsers',compact('users'));
+    }
+
+    public function getFollowupModal(Request $r){
+        $comments=LocalComment::select('msg','users.firstName')->where('local_leadId',$r->leadId)
+            ->leftJoin('users','users.id','local_comment.userId')
+            ->orderBy('local_commentId','desc')
+            ->get();
+
+        $followup=LocalFollowup::where('local_leadId',$r->leadId)
+            ->orderBy('local_followupId','desc')
+            ->first();
+
+
+        return view('local-lead.getFollowupModal')
+            ->with('local_leadId',$r->leadId)
+            ->with('comments',$comments)
+            ->with('followup',$followup);
 
     }
+
+    public function insertCallReport(Request $r){
+        if($r->msg !=null){
+            $comment=new LocalComment();
+            $comment->local_leadId=$r->local_leadId;
+            $comment->userId=Auth::user()->id;
+            $comment->msg=$r->msg;
+            $comment->save();
+        }
+
+
+        if($r->followup !=null){
+            $followup=new LocalFollowup();
+            $followup->local_leadId=$r->local_leadId;
+            $followup->date=$r->followup;
+            $followup->userId=Auth::user()->id;
+            $followup->save();
+        }
+
+        Session::flash('message', 'Comment added successfully');
+        return back();
+    }
+
+
 }

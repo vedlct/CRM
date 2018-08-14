@@ -4,11 +4,21 @@
     <input type="hidden" name="local_leadId" value="{{$lead->local_leadId}}">
         <br>
         <div class="form-group col-md-5">
+            <label class="control-label " ><b>Lead Name</b></label>
+
+            {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
+
+            <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="leadName" value="{{$lead->leadName}}" required>
+        </div>
+
+        <div class="form-group col-md-5">
             <label class="control-label " ><b>Company Name</b></label>
-
-            {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
-
-            <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" value="{{$lead->companyName}}" required>
+            <select class="form-control" name="local_companyId" required>
+                <option value="">Select Company</option>
+                @foreach($companies as $company)
+                    <option value="{{$company->local_companyId}}" @if($company->local_companyId == $lead->local_companyId) selected @endif>{{$company->companyName}}</option>
+                @endforeach
+            </select>
         </div>
 
 

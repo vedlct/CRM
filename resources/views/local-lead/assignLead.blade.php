@@ -1,6 +1,44 @@
 @extends('main')
 @section('content')
 
+    {{--Get User Modal--}}
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="userModal">
+
+
+
+
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- End The Modal -->
+
+
+
+
+
+
     <div class="card">
         <div class="card-body">
 
@@ -26,7 +64,7 @@
                     @foreach($leads as $lead)
                         <tr>
                             <td><input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="{{$lead->local_leadId}}"></td>
-                            <td>{{$lead->companyName}}</td>
+                            <td>{{$lead->leadName}}</td>
                             <td>{{$lead->website}}</td>
                             <td>{{$lead->mobile}}</td>
                             <td>{{$lead->tnt}}</td>
@@ -39,7 +77,7 @@
                                 @php($temp=0)
                                 @foreach($assign as $person)
                                     @if($person->local_leadId ==$lead->local_leadId )
-                                        {{$person->total}}
+                                        <a href="#" data-panel-id="{{$lead->local_leadId}}" onclick="showAssignedUsers(this)">{{$person->total}}</a>
                                         @php($temp++)
                                     @endif
 
@@ -100,6 +138,24 @@
 
         });
 
+        function showAssignedUsers(x) {
+            var leadid=$(x).data('panel-id');
+
+//            alert(leadid);
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.getAssignedUsers') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}",'leadid': leadid},
+                success: function (data) {
+//                    console.log(data);
+                    $('#userModal').html(data);
+                    $('#myModal').modal();
+                }
+            });
+
+        }
+
 
         function selectAll(source) {
             checkboxes = document.getElementsByName('checkboxvar[]');
@@ -129,7 +185,6 @@
                     cache: false,
                     data: {_token: "{{csrf_token()}}",'userId': userId,'leadId':chkArray},
                     success: function (data) {
-//                        console.log(data);
                         location.reload();
                     }
                 });

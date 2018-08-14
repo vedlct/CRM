@@ -238,5 +238,12 @@ Route::get('local/lead/assignLead', 'LocalLeadController@assignLead')->name('loc
 Route::post('local/lead/assignLead', 'LocalLeadController@getAssignLead')->name('local.getAssignLead');
 
 //Job Assign
-Route::post('local/lead/insertAssign', 'LocalLeadController@insertAssign')->name('local.insertAssign');
+Route::post('local/lead/insertAssign','LocalLeadController@insertAssign')->name('local.insertAssign');
+Route::post('local/lead/getAssignedUsers', 'LocalLeadController@getAssignedUsers')->name('local.getAssignedUsers');
+
+//Follow up
+Route::post('local/lead/getFollowupModal','LocalLeadController@getFollowupModal')->name('local.getFollowupModal');
+Route::post('local/lead/insertCallReport','LocalLeadController@insertCallReport')->name('local.insertCallReport');
+
+
 

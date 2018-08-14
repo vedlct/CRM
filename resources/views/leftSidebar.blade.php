@@ -62,7 +62,8 @@
                     <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
                 </li>
-                @if($userType =='ADMIN')
+
+                @if($userType =='ADMIN' || $userType =='LOCALMANAGER' )
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Local Marketing</span>
@@ -133,7 +134,7 @@
                     <li class="treeview">
                         <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span class="hide-menu">Report</span>
                             <span class="pull-right-container">
-					  <i class="fa fa-angle-left pull-right"></i>
+					<i class="fa fa-angle-left pull-right"></i>
 					</span>
                         </a>
                         <ul class="treeview-menu">

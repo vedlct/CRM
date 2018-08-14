@@ -1,6 +1,42 @@
 @extends('main')
 @section('content')
 
+    {{--Edit Lead Modal--}}
+
+
+    <div style="text-align: center;" class="modal" id="editLeadModal" >
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content" >
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Lead</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body" id="">
+                    <div id="editLeadModalBody">
+
+
+                    </div>
+
+
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    {{-- End Add Lead Modal--}}
+
 <div class="card">
     <div class="card-body">
         <h3 align="center"><b>My Leads</b></h3>
@@ -8,16 +44,17 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th width="20%">Company Name</th>
-                    <th width="20%">website</th>
-                    <th width="15%">Number</th>
-                    <th width="15%">Tnt Number</th>
+                    <th width="15%">Lead Name</th>
+                    <th width="15%">Company Name</th>
+                    <th width="15%">website</th>
+                    <th width="10%">Number</th>
+                    <th width="10%">Tnt Number</th>
                     <th width="10%">Category</th>
                     <th width="10%">Area</th>
                     <th width="10%">Address</th>
                     <th width="5%">Status</th>
                     <th width="8%">Possibility</th>
-                    {{--<th width="10%">Edit</th>--}}
+                    <th width="5%">Action</th>
 
 
                 </tr>
@@ -63,6 +100,7 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'leadName', name: 'leadName' },
                     { data: 'companyName', name: 'companyName' },
                     { data: 'website', name: 'website' },
                     { data: 'mobile', name: 'mobile'},
@@ -71,11 +109,34 @@
                     { data: 'areaName', name: 'areaName'},
                     {data: 'address', name: 'address'},
                     { data: 'statusId', name: 'statusId'},
-                    { data: 'possibilityName', name: 'possibilityName'}
+                    { data: 'possibilityName', name: 'possibilityName'},
+                    { "data": function(data){
+
+                        return '<button class="btn btn-info" onclick="showReportModal('+data.local_leadId+')"><i class="fa fa-phone"></i></button>'
+                            ;},
+                        "orderable": false, "searchable":false, "name":"selected_rows" },
                 ]
             });
 
         });
+
+
+        function showReportModal(x) {
+
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.getFollowupModal') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}",'leadId': x},
+                success: function (data) {
+                    $("#editLeadModalBody").html(data);
+                    $("#editLeadModal").modal();
+//                    console.log(data);
+                }
+            });
+
+
+        }
 
     </script>
 

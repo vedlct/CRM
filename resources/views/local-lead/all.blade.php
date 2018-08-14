@@ -11,7 +11,7 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th width="20%">Company Name</th>
+                    <th width="20%">Lead Name</th>
                     <th width="20%">website</th>
                     <th width="15%">Number</th>
                     <th width="15%">Tnt Number</th>
@@ -21,7 +21,6 @@
                     <th width="5%">Status</th>
                     <th width="8%">Possibility</th>
                     <th width="10%">Action</th>
-
 
                 </tr>
                 </thead>
@@ -54,11 +53,21 @@
                     {{csrf_field()}}
                     <br>
                     <div class="form-group col-md-5">
+                        <label class="control-label " ><b>Lead Name</b></label>
+
+                        {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
+
+                        <input type="text" class="form-control" id="" placeholder="Enter Lead Name" name="leadName" required>
+                    </div>
+
+                    <div class="form-group col-md-5">
                         <label class="control-label " ><b>Company Name</b></label>
-
-                        {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
-
-                        <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" required>
+                        <select class="form-control" name="local_companyId" required>
+                            <option value="">Select Company</option>
+                            @foreach($companies as $company)
+                                <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
+                            @endforeach
+                        </select>
                     </div>
 
 
@@ -324,7 +333,7 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
-                    { data: 'companyName', name: 'companyName' },
+                    { data: 'leadName', name: 'leadName' },
                     { data: 'website', name: 'website' },
                     { data: 'mobile', name: 'mobile'},
                     { data: 'tnt', name: 'tnt'},
