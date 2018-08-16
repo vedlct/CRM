@@ -244,6 +244,14 @@ Route::post('local/lead/getAssignedUsers', 'LocalLeadController@getAssignedUsers
 //Follow up
 Route::post('local/lead/getFollowupModal','LocalLeadController@getFollowupModal')->name('local.getFollowupModal');
 Route::post('local/lead/insertCallReport','LocalLeadController@insertCallReport')->name('local.insertCallReport');
+Route::get('local/followup/today','LocalLeadController@todaysFollowup')->name('local.todaysFollowup');
+
+//Local Sales
+Route::get('local/sales','LocalSalesController@index')->name('local.sales');
+Route::post('local/sales','LocalSalesController@getLeads')->name('local.getSalesLead');
+Route::post('local/getPaymentInfo','LocalSalesController@getPaymentInfo')->name('local.getPaymentInfo');
+Route::post('local/insertPayment','LocalSalesController@insertPayment')->name('local.insertPayment');
+
 
 
 

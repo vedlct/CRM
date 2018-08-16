@@ -25,7 +25,8 @@
                         <span class="hide-menu">Dashboard</span></a>
                 </li>
 
-                {{--For user --}}
+                {{--Start For Global--}}
+            @if(Auth::user()->crmType !='local')
                 @if($userType =='USER' || $userType=='MANAGER' || $userType=='SUPERVISOR')
 
                 <li>
@@ -63,7 +64,10 @@
 
                 </li>
 
-                @if($userType =='ADMIN' || $userType =='LOCALMANAGER' )
+
+            @endif  {{--End For Global--}}
+
+                @if($userType =='ADMIN' || Auth::user()->crmType =='local' )        {{--Start Local--}}
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Local Marketing</span>
@@ -78,11 +82,19 @@
                             </li>
 
                             <li>
+                                <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Local)</span></a>
+                            </li>
+
+                            <li>
                                 <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Local)</span></a>
                             </li>
 
                             <li>
                                 <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Local)</span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('local.sales')}}"><i class="fa fa-dollar-sign"></i><span class="hide-menu"> Sales</span></a>
                             </li>
 
 
@@ -92,7 +104,9 @@
                     </ul>
                 </li>
 
-                @endif
+                @endif       {{--End Local--}}
+
+            @if(Auth::user()->crmType !='local'){{--Start Global--}}
 
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                 <li class="treeview">
@@ -213,23 +227,11 @@
                     <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i>
                             <span class="hide-menu">System</span></a></li>
 
-                {{--<li class="treeview">--}}
-				  {{--<a href="#"><i class="fa fa-link"></i> <span class="hide-menu">System Manage</span>--}}
-					{{--<span class="pull-right-container">--}}
-					  {{--<i class="fa fa-angle-left pull-right"></i>--}}
-					{{--</span>--}}
-				  {{--</a>--}}
-				  {{--<ul class="treeview-menu">--}}
 
-					{{--<li><a href="{{ url('system-management/country') }}">Country</a></li>--}}
-					{{--<li><a href="{{ url('system-management/category') }}">Category</a></li>--}}
-					{{--<li><a href="{{ url('system-management/usertype') }}">User Type</a></li>--}}
-					{{--<li><a href="{{ url('system-management/possibility') }}">Possibility</a></li>--}}
-
-				  {{--</ul>--}}
-				{{--</li>--}}
 
                 @endif
+
+            @endif    {{--End Global--}}
 
 
 

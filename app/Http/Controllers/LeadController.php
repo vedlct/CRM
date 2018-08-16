@@ -111,6 +111,10 @@ class LeadController extends Controller
             ->make(true);
     }
     public function add(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
+
         $cats=Category::where('type', 1)->get();
         $countries=Country::get();
         $possibilities=Possibility::get();
@@ -326,6 +330,9 @@ class LeadController extends Controller
             return back();
     }
     public function filter(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
         $categories=Category::where('type',1)
             ->get();
         $country=Country::get();
@@ -476,11 +483,7 @@ class LeadController extends Controller
             $lead->filteredPossibility=$r->possibility;
             $lead->statusId=2;
             $lead->save();
-//            $log=new Possibilitychange;
-//            $log->leadId=$r->leadId;
-//            $log->possibilityId=$r->possibility;
-//            $log->userId=Auth::user()->id;
-//            $log->save();
+
             return Response('true');
         }
     }
@@ -711,7 +714,9 @@ class LeadController extends Controller
             ->make(true);
     }
     public function  editcontactmodalshow (Request $r){
-        // return "0";
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
 
         $follow=Followup::select('followUpDate')
             ->where('leadId', $r->leadId)
@@ -725,6 +730,9 @@ class LeadController extends Controller
         return Response($follow);
     }
     public function rejectedLeads(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
         return view('layouts.lead.rejectedLead');
     }
     public function rejectData(Request $request)

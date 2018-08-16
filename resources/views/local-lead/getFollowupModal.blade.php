@@ -16,14 +16,19 @@
             <label>Comment</label>
             <textarea class="form-control" name="msg"></textarea>
         </div>
+
         <div class="form-group col-md-12">
-            <h4 align="center" style="color: #1e7e34">Next Followup Date Is :{{$followup->date}}</h4>
+            @if($followup !=null)
+                <h4 align="center" style="color: #1e7e34">Next Followup Date Is :{{$followup->date}}</h4>
+            @endif
         </div>
 
+        @if($count>0)
         <div class="form-group col-md-12">
             <button type="submit" class="btn btn-success pull-right">Insert</button>
 
         </div>
+        @endif
 
     </div>
     </div>

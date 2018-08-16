@@ -52,7 +52,7 @@
                     <th width="10%">Category</th>
                     <th width="10%">Area</th>
                     <th width="10%">Address</th>
-                    <th width="5%">Status</th>
+                    {{--<th width="5%">Status</th>--}}
                     <th width="8%">Possibility</th>
                     <th width="5%">Action</th>
 
@@ -108,7 +108,7 @@
                     { data: 'categoryName', name: 'categoryName'},
                     { data: 'areaName', name: 'areaName'},
                     {data: 'address', name: 'address'},
-                    { data: 'statusId', name: 'statusId'},
+//                    { data: 'statusId', name: 'statusId'},
                     { data: 'possibilityName', name: 'possibilityName'},
                     { "data": function(data){
 
@@ -131,7 +131,6 @@
                 success: function (data) {
                     $("#editLeadModalBody").html(data);
                     $("#editLeadModal").modal();
-//                    console.log(data);
                 }
             });
 

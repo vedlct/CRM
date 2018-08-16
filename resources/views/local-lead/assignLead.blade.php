@@ -54,7 +54,7 @@
                         <th width="10%">Category</th>
                         <th width="10%">Area</th>
                         <th width="10%">Address</th>
-                        <th width="5%">Status</th>
+                        {{--<th width="5%">Status</th>--}}
                         <th width="8%">Possibility</th>
                         <th width="5%">Assigned</th>
 
@@ -71,7 +71,7 @@
                             <td>{{$lead->categoryName}}</td>
                             <td>{{$lead->areaName}}</td>
                             <td>{{$lead->address}}</td>
-                            <td>{{$lead->statusId}}</td>
+                            {{--<td>{{$lead->statusId}}</td>--}}
                             <td>{{$lead->possibilityName}}</td>
                             <td>
                                 @php($temp=0)

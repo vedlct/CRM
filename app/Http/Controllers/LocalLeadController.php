@@ -30,7 +30,6 @@ class LocalLeadController extends Controller
         $services=LocalService::get();
         $companies=LocalCompany::get();
 
-//        return $companies;
 
         return view('local-lead.all')
             ->with('categories',$cats)
@@ -99,7 +98,6 @@ class LocalLeadController extends Controller
 
 
         if($r->local_leadId){
-
             Session::flash('message', 'Lead Edited successfully');
         }
         else{
@@ -165,9 +163,7 @@ class LocalLeadController extends Controller
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
             ->get();
 
-        $users=User::select('id','firstName')->get();
-
-
+        $users=User::select('id','firstName')->where('crmType','local')->get();
 
 
         return view('local-lead.assignLead')
@@ -222,22 +218,31 @@ class LocalLeadController extends Controller
     public function getFollowupModal(Request $r){
         $comments=LocalComment::select('msg','users.firstName')->where('local_leadId',$r->leadId)
             ->leftJoin('users','users.id','local_comment.userId')
-            ->orderBy('local_commentId','desc')
             ->get();
 
         $followup=LocalFollowup::where('local_leadId',$r->leadId)
+            ->where('userId',Auth::user()->id)
+            ->where('local_followup.workStatus',null)
             ->orderBy('local_followupId','desc')
             ->first();
+
+        $count=LocalLeadAssign::where('local_leadId',$r->leadId)
+            ->where('userId',Auth::user()->id)
+            ->count();
 
 
         return view('local-lead.getFollowupModal')
             ->with('local_leadId',$r->leadId)
             ->with('comments',$comments)
-            ->with('followup',$followup);
+            ->with('followup',$followup)
+            ->with('count',$count);
 
     }
 
     public function insertCallReport(Request $r){
+        LocalFollowup::where('local_followup.userId',Auth::user()->id)
+            ->where('local_leadId',$r->local_leadId)
+            ->update(['workStatus'=>1]);
         if($r->msg !=null){
             $comment=new LocalComment();
             $comment->local_leadId=$r->local_leadId;
@@ -258,6 +263,22 @@ class LocalLeadController extends Controller
         Session::flash('message', 'Comment added successfully');
         return back();
     }
+
+    public function todaysFollowup(){
+
+        $leads=LocalFollowup::where('local_followup.userId',Auth::user()->id)
+            ->where('local_followup.workStatus',null)
+            ->leftJoin('local_lead','local_lead.local_leadId','local_followup.local_leadId')
+            ->where(DB::raw('DATE(local_followup.date)'),date('Y-m-d'))
+            ->leftJoin('area','area.areaId','local_lead.areaId')
+            ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
+            ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
+            ->get();
+
+        return view('local-lead.todaysFollowup',compact('leads'));
+    }
+
 
 
 }

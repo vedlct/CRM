@@ -365,7 +365,6 @@
             success: function (data) {
             $("#editLeadModalBody").html(data);
             $("#editLeadModal").modal();
-//            console.log(data);
             }
             });
 
@@ -375,7 +374,16 @@
         function getLeadComment(x) {
 //            alert(x);
            var leadId=$(x).data('panel-id');
-            alert(leadId);
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.getFollowupModal') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}",'leadId': leadId},
+                success: function (data) {
+                    $("#editLeadModalBody").html(data);
+                    $("#editLeadModal").modal();
+                }
+            });
 
         }
     </script>
