@@ -37,7 +37,6 @@
 </div>
 
      {{--Add Lead Modal--}}
-
 <div class="modal" id="create_temp_modal" style="">
     <div class="modal-dialog" style="max-width: 60%;">
 
@@ -68,6 +67,7 @@
                                 <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
                             @endforeach
                         </select>
+                        <a class="btn btn-info btn-sm pull-right" href="{{route('local.company')}}">add</a>
                     </div>
 
 

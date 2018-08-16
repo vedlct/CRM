@@ -25,7 +25,7 @@ class LocalSalesController extends Controller
     public function getLeads(Request $r){
 
 
-        $leads=LocalLeadAssign::select('local_lead.local_leadId','local_lead.leadName','companyName','website','mobile','tnt','categoryName')
+        $leads=LocalLeadAssign::select('local_lead.local_leadId','local_lead.leadName','companyName','local_lead.website','local_lead.mobile','local_lead.tnt','categoryName')
             ->leftJoin('local_lead','local_lead.local_leadId','local_lead_assign.local_leadId');
 
         if($r->companyId){

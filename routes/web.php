@@ -253,5 +253,9 @@ Route::post('local/getPaymentInfo','LocalSalesController@getPaymentInfo')->name(
 Route::post('local/insertPayment','LocalSalesController@insertPayment')->name('local.insertPayment');
 
 
+//Local Company
+Route::get('local/company','LocalCompanyController@index')->name('local.company');
+
+
 
 

@@ -23,6 +23,10 @@ use DB;
 
 class LocalLeadController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function all(){
         $cats=Category::where('type', 3)->get();
         $areas=Area::get();
@@ -41,7 +45,7 @@ class LocalLeadController extends Controller
     }
 
     public function getLeadData(Request $r){
-        $lead=LocalLead::select('local_lead.local_leadId','local_company.companyName','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+        $lead=LocalLead::select('local_lead.local_leadId','local_company.companyName','local_lead.leadName','local_lead.website','local_lead.mobile','local_lead.tnt','categories.categoryName','area.areaName','local_lead.address','local_lead.statusId','possibilities.possibilityName')
             ->leftJoin('area','area.areaId','local_lead.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
@@ -116,7 +120,8 @@ class LocalLeadController extends Controller
 
     public function getMyLead(Request $r){
 
-        $lead=LocalLead::leftJoin('area','area.areaId','local_lead.areaId')
+        $lead=LocalLead::select('local_lead.local_leadId','local_company.companyName','local_lead.leadName','local_lead.website','local_lead.mobile','local_lead.tnt','categories.categoryName','area.areaName','local_lead.address','possibilities.possibilityName')
+            ->leftJoin('area','area.areaId','local_lead.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
