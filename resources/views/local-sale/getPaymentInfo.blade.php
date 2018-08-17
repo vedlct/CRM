@@ -13,9 +13,13 @@
                 <button class="btn btn-success">Insert</button>
             </div>
 
-
+<br><br>
             <div class="form-group col-md-12">
+                <label>Total Bill  {{$bill}} Tk</label>
+                <br>
                 <label>Total Paid  {{$totalPayment}} Tk</label>
+                <br>
+                <label>Pending  {{$bill-$totalPayment}} Tk</label>
 
             </div>
 

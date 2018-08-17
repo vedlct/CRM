@@ -109,7 +109,7 @@
         </div>
 
         <div class="form-group col-md-10">
-            <button onclick="assign()" class="btn btn-success pull-right">Assign</button>
+            <button onclick="assign()" class="btn btn-success ">Assign</button>
         </div>
     </div>
 

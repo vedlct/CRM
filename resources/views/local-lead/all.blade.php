@@ -51,13 +51,7 @@
                 <div class="row">
                     {{csrf_field()}}
                     <br>
-                    <div class="form-group col-md-5">
-                        <label class="control-label " ><b>Lead Name</b></label>
 
-                        {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
-
-                        <input type="text" class="form-control" id="" placeholder="Enter Lead Name" name="leadName" required>
-                    </div>
 
                     <div class="form-group col-md-5">
                         <label class="control-label " ><b>Company Name</b></label>
@@ -70,41 +64,49 @@
                         <a class="btn btn-info btn-sm pull-right" href="{{route('local.company')}}">add</a>
                     </div>
 
-
                     <div class="form-group col-md-5">
-                        <label class="control-label" ><b>Website</b></label>
-                        {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                        <input type="text" class="form-control" name="website" placeholder="Enter url" >
+                        <label class="control-label " ><b>Lead Name</b></label>
 
-                    </div>
+                        {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
 
-                    <div class="form-group col-md-5" style="">
-                        <label class="control-label" ><b>Contact Person</b></label>
-                        {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
-                        <input type="text" class="form-control" id="" name="personName" placeholder="name" >
-
+                        <input type="text" class="form-control" id="" placeholder="Enter Lead Name" name="leadName" required>
                     </div>
 
 
-                    <div class="form-group col-md-5">
-                        <label class="control-label" ><b> Email:</b></label>
-                        {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+                    {{--<div class="form-group col-md-5">--}}
+                        {{--<label class="control-label" ><b>Website</b></label>--}}
+                        {{--{!! $errors->first('website', '<p class="help-block">:message</p>') !!}--}}
+                        {{--<input type="text" class="form-control" name="website" placeholder="Enter url" >--}}
 
-                    </div>
+                    {{--</div>--}}
 
-                    <div class="form-group col-md-5">
-                        <label class="control-label" ><b>Mobile Number</b></label>
-                        <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
-                        {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
-                        <input type="text" class="form-control numbercheck" id="personNumber" name="mobile" placeholder="Enter Phone Number" required>
-                    </div>
+                    {{--<div class="form-group col-md-5" style="">--}}
+                        {{--<label class="control-label" ><b>Contact Person</b></label>--}}
+                        {{--{!! $errors->first('personName', '<p class="help-block">:message</p>') !!}--}}
+                        {{--<input type="text" class="form-control" id="" name="personName" placeholder="name" >--}}
 
-                    <div class="form-group col-md-5">
-                        <label class="control-label" ><b>Tnt Number</b></label>
+                    {{--</div>--}}
 
-                        <input type="text" class="form-control numbercheck" id="personNumber" name="tnt" placeholder="Enter Phone Number" required>
-                    </div>
+
+                    {{--<div class="form-group col-md-5">--}}
+                        {{--<label class="control-label" ><b> Email:</b></label>--}}
+                        {{--{!! $errors->first('email', '<p class="help-block">:message</p>') !!}--}}
+                        {{--<input type="email" class="form-control" name="email" id="email" placeholder="Enter email">--}}
+
+                    {{--</div>--}}
+
+                    {{--<div class="form-group col-md-5">--}}
+                        {{--<label class="control-label" ><b>Mobile Number</b></label>--}}
+                        {{--<span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>--}}
+                        {{--{!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}--}}
+                        {{--<input type="text" class="form-control numbercheck" id="personNumber" name="mobile" placeholder="Enter Phone Number" required>--}}
+                    {{--</div>--}}
+
+                    {{--<div class="form-group col-md-5">--}}
+                        {{--<label class="control-label" ><b>Tnt Number</b></label>--}}
+
+                        {{--<input type="text" class="form-control numbercheck" id="personNumber" name="tnt" placeholder="Enter Phone Number" required>--}}
+                    {{--</div>--}}
 
 
 
@@ -123,23 +125,23 @@
 
 
 
-                    <div class="form-group col-md-5">
+                    {{--<div class="form-group col-md-5">--}}
 
-                        <label for="sel1"><b>Area:</b></label>
-                        <select class="form-control" id="" name="areaId" required>
-                            <option value="">Select Area</option>
-                            @foreach($areas as $area)
-                                <option value="{{$area->areaId}}">{{$area->areaName}}</option>
+                        {{--<label for="sel1"><b>Area:</b></label>--}}
+                        {{--<select class="form-control" id="" name="areaId" required>--}}
+                            {{--<option value="">Select Area</option>--}}
+                            {{--@foreach($areas as $area)--}}
+                                {{--<option value="{{$area->areaId}}">{{$area->areaName}}</option>--}}
 
-                            @endforeach
-                        </select>
-                    </div>
+                            {{--@endforeach--}}
+                        {{--</select>--}}
+                    {{--</div>--}}
 
-                    <div class="form-group col-md-5">
+                    {{--<div class="form-group col-md-5">--}}
 
-                        <label for="sel1"><b>Address:</b></label>
-                        <textarea name="address" class="form-control"></textarea>
-                    </div>
+                        {{--<label for="sel1"><b>Address:</b></label>--}}
+                        {{--<textarea name="address" class="form-control"></textarea>--}}
+                    {{--</div>--}}
 
                     <div class="form-group col-md-5" style="">
                         <label ><b>Possibility:</b></label>
@@ -169,12 +171,7 @@
                         <textarea name="comment" rows="4"  class="form-control"></textarea>
                     </div>
 
-
-
-
                 </div>
-
-
 
                 <div id="allServices" >
                     <label ><b>Services:</b></label>

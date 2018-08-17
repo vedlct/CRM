@@ -22,40 +22,40 @@
         </div>
 
 
-        <div class="form-group col-md-5">
-            <label class="control-label" ><b>Website</b></label>
-            {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-            <input type="text" class="form-control" value="{{$lead->website}}" name="website" placeholder="Enter url" >
+        {{--<div class="form-group col-md-5">--}}
+            {{--<label class="control-label" ><b>Website</b></label>--}}
+            {{--{!! $errors->first('website', '<p class="help-block">:message</p>') !!}--}}
+            {{--<input type="text" class="form-control" value="{{$lead->website}}" name="website" placeholder="Enter url" >--}}
 
-        </div>
+        {{--</div>--}}
 
-        <div class="form-group col-md-5" style="">
-            <label class="control-label" ><b>Contact Person</b></label>
-            {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
-            <input type="text" class="form-control" value="{{$lead->contactPerson}}" id="" name="personName" placeholder="name" >
+        {{--<div class="form-group col-md-5" style="">--}}
+            {{--<label class="control-label" ><b>Contact Person</b></label>--}}
+            {{--{!! $errors->first('personName', '<p class="help-block">:message</p>') !!}--}}
+            {{--<input type="text" class="form-control" value="{{$lead->contactPerson}}" id="" name="personName" placeholder="name" >--}}
 
-        </div>
+        {{--</div>--}}
 
 
-        <div class="form-group col-md-5">
-            <label class="control-label" ><b> Email:</b></label>
-            {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
-            <input type="email" class="form-control" value="{{$lead->email}}" name="email" id="email" placeholder="Enter email">
+        {{--<div class="form-group col-md-5">--}}
+            {{--<label class="control-label" ><b> Email:</b></label>--}}
+            {{--{!! $errors->first('email', '<p class="help-block">:message</p>') !!}--}}
+            {{--<input type="email" class="form-control" value="{{$lead->email}}" name="email" id="email" placeholder="Enter email">--}}
 
-        </div>
+        {{--</div>--}}
 
-        <div class="form-group col-md-5">
-            <label class="control-label" ><b>Mobile Number</b></label>
-            <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
-            {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
-            <input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->mobile}}" name="mobile" placeholder="Enter Phone Number" required>
-        </div>
+        {{--<div class="form-group col-md-5">--}}
+            {{--<label class="control-label" ><b>Mobile Number</b></label>--}}
+            {{--<span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>--}}
+            {{--{!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}--}}
+            {{--<input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->mobile}}" name="mobile" placeholder="Enter Phone Number" required>--}}
+        {{--</div>--}}
 
-        <div class="form-group col-md-5">
-            <label class="control-label" ><b>Tnt Number</b></label>
+        {{--<div class="form-group col-md-5">--}}
+            {{--<label class="control-label" ><b>Tnt Number</b></label>--}}
 
-            <input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->tnt}}" name="tnt" placeholder="Enter Phone Number" required>
-        </div>
+            {{--<input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->tnt}}" name="tnt" placeholder="Enter Phone Number" required>--}}
+        {{--</div>--}}
 
 
 
@@ -73,23 +73,23 @@
 
 
 
-        <div class="form-group col-md-5">
+        {{--<div class="form-group col-md-5">--}}
 
-            <label for="sel1"><b>Area:</b></label>
-            <select class="form-control" id="" name="areaId" required>
-                <option value="">Select Area</option>
-                @foreach($areas as $area)
-                    <option value="{{$area->areaId}}" @if($lead->areaId == $area->areaId) selected @endif>{{$area->areaName}}</option>
+            {{--<label for="sel1"><b>Area:</b></label>--}}
+            {{--<select class="form-control" id="" name="areaId" required>--}}
+                {{--<option value="">Select Area</option>--}}
+                {{--@foreach($areas as $area)--}}
+                    {{--<option value="{{$area->areaId}}" @if($lead->areaId == $area->areaId) selected @endif>{{$area->areaName}}</option>--}}
 
-                @endforeach
-            </select>
-        </div>
+                {{--@endforeach--}}
+            {{--</select>--}}
+        {{--</div>--}}
 
-        <div class="form-group col-md-5">
+        {{--<div class="form-group col-md-5">--}}
 
-            <label for="sel1"><b>Address:</b></label>
-            <textarea name="address" class="form-control">{{$lead->address}}</textarea>
-        </div>
+            {{--<label for="sel1"><b>Address:</b></label>--}}
+            {{--<textarea name="address" class="form-control">{{$lead->address}}</textarea>--}}
+        {{--</div>--}}
 
         <div class="form-group col-md-5" style="">
             <label ><b>Possibility:</b></label>
@@ -102,18 +102,26 @@
 
         </div>
 
+    <div class="form-group col-md-5">
+        <label class="control-label " ><b>Bill</b></label>
+
+        {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
+
+        <input type="text" class="form-control" id="" placeholder="Enter bill" name="bill" value="{{$lead->bill}}" required>
+    </div>
 
 
 
 
-        <div class="form-group col-md-10">
-            <label class="control-label " ><b>Comments</b></label>
 
-            {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
+        {{--<div class="form-group col-md-10">--}}
+            {{--<label class="control-label " ><b>Comments</b></label>--}}
 
-            <textarea name="comment" rows="4"  class="form-control">{{$lead->comment}}
-            </textarea>
-        </div>
+            {{--{!! $errors->first('comment', '<p class="help-block">:message</p>') !!}--}}
+
+            {{--<textarea name="comment" rows="4"  class="form-control">{{$lead->comment}}--}}
+            {{--</textarea>--}}
+        {{--</div>--}}
 
 
 

@@ -25,7 +25,7 @@ class LocalSalesController extends Controller
     public function getLeads(Request $r){
 
 
-        $leads=LocalLeadAssign::select('local_lead.local_leadId','local_lead.leadName','companyName','local_lead.website','local_lead.mobile','local_lead.tnt','categoryName')
+        $leads=LocalLeadAssign::select('local_lead.local_leadId','local_lead.leadName','companyName','local_company.website','local_company.mobile','local_company.tnt','categoryName')
             ->leftJoin('local_lead','local_lead.local_leadId','local_lead_assign.local_leadId');
 
         if($r->companyId){
@@ -46,6 +46,8 @@ class LocalSalesController extends Controller
         $totalPayment=LocalSales::where('local_leadId',$r->leadId)
             ->sum('total');
 
+        $bill=LocalLead::findorFail($r->leadId)->bill;
+
         $payments=LocalSales::select('firstName','total','local_sales.created_at')
             ->where('local_leadId',$r->leadId)
             ->leftJoin('users','users.id','local_sales.userId')
@@ -54,7 +56,8 @@ class LocalSalesController extends Controller
         return view('local-sale.getPaymentInfo')
             ->with('leadId',$r->leadId)
             ->with('totalPayment',$totalPayment)
-            ->with('payments',$payments);
+            ->with('payments',$payments)
+            ->with('bill',$bill);
     }
 
     public function insertPayment(Request $r){

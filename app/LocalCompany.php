@@ -8,5 +8,5 @@ class LocalCompany extends Model
 {
     public $timestamps = false;
     protected $table = 'local_company';
-    protected $primaryKey = 'local_companyId';
+    protected $primaryKey ='local_companyId';
 }
