@@ -252,12 +252,11 @@ Route::post('local/sales','LocalSalesController@getLeads')->name('local.getSales
 Route::post('local/getPaymentInfo','LocalSalesController@getPaymentInfo')->name('local.getPaymentInfo');
 Route::post('local/insertPayment','LocalSalesController@insertPayment')->name('local.insertPayment');
 
-
 //Local Company
 Route::get('local/company','LocalCompanyController@index')->name('local.company');
 Route::post('local/company/add','LocalCompanyController@addCompany')->name('local.addCompany');
 Route::post('local/company/getCompanyModal','LocalCompanyController@getCompanyModal')->name('local.getCompanyModal');
 
-
-
+//Local Reporting
+Route::get('local/report','LocalReportController@index')->name('local.report');
 
