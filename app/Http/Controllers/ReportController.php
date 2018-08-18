@@ -189,6 +189,7 @@ class ReportController extends Controller
                 ->where('typeId','!=',1)
                 ->where('typeId','!=',4)
                 ->where('teamId',Auth::user()->teamId)
+//                ->where('crmType','!=','local')
                 ->get();
 
             $usersRa=User::select('id as userid','firstName','typeId')
@@ -214,9 +215,13 @@ class ReportController extends Controller
 
         else{
             $users=User::select('id as userid','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('typeId','!=',4)
+//                ->where('typeId','!=',1)
+//                ->where('typeId','!=',4)
+                ->whereNotIn('typeId',[1,4])
+                ->where('users.crmType',null)
                 ->get();
+
+
 
             $usersRa=User::select('id as userid','firstName','typeId')
                 ->where('typeId',4)
@@ -381,9 +386,12 @@ class ReportController extends Controller
 
 
         else{
+
             $users=User::select('id as userid','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('typeId','!=',4)
+//                ->where('typeId','!=',1)
+//                ->where('typeId','!=',4)
+                ->whereNotIn('typeId',[1,4])
+                ->where('users.crmType',null)
                 ->get();
 
             $usersRa=User::select('id as userid','firstName','typeId')
