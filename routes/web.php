@@ -259,4 +259,6 @@ Route::post('local/company/getCompanyModal','LocalCompanyController@getCompanyMo
 
 //Local Reporting
 Route::get('local/report','LocalReportController@index')->name('local.report');
+Route::post('local/revenueClient','LocalReportController@revenueClient')->name('local.revenueClient');
+Route::post('local/employeeReport','LocalReportController@employeeReport')->name('local.employeeReport');
 

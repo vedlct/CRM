@@ -111,6 +111,11 @@ class UserManagementController extends Controller
         }
         // User::create([
 		//return $request;
+        $crmType=null;
+        if($request['typeId']==6 || $request['typeId']==7 || $request['typeId']==8){
+            $crmType='local';
+        }
+
            DB::table('users')->insert([
             'userId' => $request['userId'],
             'typeId' => $request['typeId'],
@@ -121,11 +126,11 @@ class UserManagementController extends Controller
             'lastName' => $request['lastName'],
             'phoneNumber' => $request['phoneNumber'],
             'picture' =>  $filename,
-			//$request['picture'],
             'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
-			
+            'crmType' => $crmType,
+
         ]);
 		
         Session::flash('message', 'User Added successfully');

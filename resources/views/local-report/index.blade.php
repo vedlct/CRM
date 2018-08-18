@@ -13,7 +13,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#result" class="nav-link" data-toggle="tab" >Employee</a>
+                    <a href="#result" class="nav-link" data-toggle="tab" onclick="employeeReport()">Employee</a>
                 </li>
 
             </ul>
@@ -50,9 +50,35 @@
         $('#firstClick').click();
         
         function localrevenue() {
-            
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.revenueClient') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}"},
+                success: function (data) {
+//                    console.log(data);
+                    $("#result").html(data);
+
+                }
+            });
+
+
         }
-        
+
+        function employeeReport() {
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.employeeReport') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}"},
+                success: function (data) {
+//                    console.log(data);
+                    $("#result").html(data);
+
+                }
+            });
+
+        }
         
         
     </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\LocalCompany;
 use App\LocalSales;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -11,6 +12,7 @@ use DB;
 class LocalReportController extends Controller
 {
     public function index(){
+
 
         return view('local-report.index');
     }
@@ -32,5 +34,21 @@ class LocalReportController extends Controller
             ->groupBy('local_lead.local_companyId')
             ->whereBetween(DB::raw('date(local_sales.created_at)'),array([$start,$end]))
             ->get();
+
+        return view('local-report.revenueClient',compact('bills','companies'));
+    }
+
+    public function employeeReport(Request $r){
+        $users=User::select('id','firstName','typeId')
+            ->where('crmType','local')
+            ->get();
+
+        $bills=LocalSales::select('userId',DB::raw('Month(local_sales.created_at) as month'),DB::raw('sum(local_sales.total) as total'))
+            ->groupBy(DB::raw('month(local_sales.created_at)'))
+            ->groupBy('userId')
+            ->get();
+
+        return view('local-report.employeeReport',compact('bills','users'));
+
     }
 }
