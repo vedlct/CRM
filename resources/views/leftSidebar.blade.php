@@ -70,7 +70,7 @@
                 @if($userType =='ADMIN' || Auth::user()->crmType =='local' )        {{--Start Local--}}
 
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Local Marketing</span>
+                    <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Digital Marketing</span>
                         <span class="pull-right-container">
 					  <i class="fa fa-angle-left pull-right"></i>
 					</span>
@@ -78,26 +78,26 @@
                     <ul class="treeview-menu">
 
                             <li>
-                                <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Local)</span></a>
+                                <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Digital)</span></a>
                             </li>
 
                             <li>
-                                <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Local)</span></a>
+                                <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Digital)</span></a>
                             </li>
 
                             <li>
-                                <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Local)</span></a>
+                                <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Digital)</span></a>
                             </li>
 
                             <li>
-                                <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Local)</span></a>
+                                <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Digital)</span></a>
                             </li>
 
                             <li>
                                 <a href="{{route('local.sales')}}"><i class="fa fa-dollar-sign"></i><span class="hide-menu"> Sales</span></a>
                             </li>
                         <li>
-                                <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Local</span></a>
+                                <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Digital</span></a>
                             </li>
 
 

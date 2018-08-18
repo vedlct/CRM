@@ -13,7 +13,6 @@ class LocalReportController extends Controller
 {
     public function index(){
 
-
         return view('local-report.index');
     }
 
