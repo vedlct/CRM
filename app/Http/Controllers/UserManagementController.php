@@ -59,6 +59,7 @@ class UserManagementController extends Controller
             }
 
             $userTypes = Usertype::get();
+
             return view('users-mgmt/index')
                 ->with('users', $users)
                 ->with('userTypes', $userTypes);

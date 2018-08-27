@@ -441,6 +441,9 @@
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
                                 <option value="5">Rejected</option>
+                                {{--@if($userType=="ADMIN")--}}
+                                {{--<option value="8">Close</option>--}}
+                                {{--@endif--}}
                             </select>
                             <br><br><br>
                         </div>

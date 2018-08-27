@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Lead;
 use App\LocalCompany;
+use App\LocalMeeting;
 use App\Possibility;
 use App\User;
 use Illuminate\Http\Request;
@@ -249,12 +250,20 @@ class LocalLeadController extends Controller
             ->where('userId',Auth::user()->id)
             ->count();
 
+        $followupId="";
+        if($r->followupId){
+            $followupId=$r->followupId;
+        }
+
+
+
 
         return view('local-lead.getFollowupModal')
             ->with('local_leadId',$r->leadId)
             ->with('comments',$comments)
             ->with('followup',$followup)
-            ->with('count',$count);
+            ->with('count',$count)
+            ->with('followupId',$followupId);
 
     }
 
@@ -277,6 +286,16 @@ class LocalLeadController extends Controller
             $followup->date=$r->followup;
             $followup->userId=Auth::user()->id;
             $followup->save();
+        }
+
+        if($r->meetingDate !=null){
+            $meeting=new LocalMeeting();
+            if($r->local_followupId) {
+                $meeting->local_followupId = $r->local_followupId;
+            }
+            $meeting->meetingDate=$r->meetingDate;
+            $meeting->userId=Auth::user()->id;
+            $meeting->save();
         }
 
         Session::flash('message', 'Comment added successfully');

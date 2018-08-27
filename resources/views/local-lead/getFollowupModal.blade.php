@@ -9,19 +9,32 @@
 
         <div class="form-group col-md-12">
             <label>Followup Date</label>
-            <input class="form-control"  id="datepicker" name="followup">
+            <input class="form-control datepicker"   name="followup">
         </div>
+        @if($count>0)
+            <div class="form-group col-md-12">
+                @if($followupId!="")
+                    <input type="hidden" name="local_followupId" value="{{$followupId}}">
+                @endif
+                <label>Meeting</label>
+                <input class="form-control datepicker" type="text"  name="meetingDate" placeholder="meeting date">
+            </div>
+
+        @endif
 
         <div class="form-group col-md-12">
             <label>Comment</label>
             <textarea class="form-control" name="msg"></textarea>
         </div>
 
+
         <div class="form-group col-md-12">
             @if($followup !=null)
                 <h4 align="center" style="color: #1e7e34">Next Followup Date Is :{{$followup->date}}</h4>
             @endif
         </div>
+
+
 
         @if($count>0)
         <div class="form-group col-md-12">
@@ -56,6 +69,6 @@
 
 <script>
     $( function() {
-        $( "#datepicker" ).datepicker();
+        $( ".datepicker" ).datepicker();
     } );
 </script>

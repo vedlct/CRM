@@ -39,7 +39,7 @@
 
     <div class="card">
         <div class="card-body">
-            <h3 align="center"><b>My Leads</b></h3>
+            <h3 align="center"><b>Todays Followup</b></h3>
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -71,7 +71,7 @@
                             <td>{{$lead->areaName}}</td>
                             <td>{{$lead->address}}</td>
                             <td>{{$lead->possibilityName}}</td>
-                            <td><button class="btn btn-info" onclick="showReportModal({{$lead->local_leadId}})"><i class="fa fa-phone"></i></button></td>
+                            <td><button class="btn btn-info" onclick="showReportModal({{$lead->local_leadId}},{{$lead->local_followupId}})"><i class="fa fa-phone"></i></button></td>
 
 
 
@@ -106,13 +106,14 @@
         });
 
 
-        function showReportModal(x) {
+        function showReportModal(x,y) {
+
 
             $.ajax({
                 type: 'POST',
                 url: "{!! route('local.getFollowupModal') !!}",
                 cache: false,
-                data: {_token: "{{csrf_token()}}",'leadId': x},
+                data: {_token: "{{csrf_token()}}",'leadId': x,'followupId':y},
                 success: function (data) {
                     $("#editLeadModalBody").html(data);
                     $("#editLeadModal").modal();

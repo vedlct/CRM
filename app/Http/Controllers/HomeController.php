@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+use App\LocalFollowup;
+use App\LocalMeeting;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,6 +17,7 @@ use App\Usertarget;
 use App\Callingreport;
 use App\Possibility;
 use App\Category;
+use DB;
 class HomeController extends Controller
 {
     /**
@@ -33,6 +36,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(Auth::user()->crmType=='local'){
+            return $this->digitalMarketing();
+        }
 
         $date = Carbon::now();
 
@@ -183,6 +189,30 @@ class HomeController extends Controller
             ->with('contactThisWeek',$contactThisWeek)
             ->with('countWeek',$countWeek);
 
+
+    }
+
+
+    public function digitalMarketing(){
+        $date = Carbon::now();
+
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+
+        $meeting=LocalMeeting::where('userId',Auth::user()->id)->whereBetween(DB::raw('DATE(created_at)'),[$start,$end])
+            ->count();
+
+
+        $followup=LocalFollowup::where('userId',Auth::user()->id)
+            ->where('workStatus',1)
+            ->whereBetween(DB::raw('DATE(created_at)'),[$start,$end])
+            ->count();
+
+
+        return view('dashboardDigital')
+            ->with('followup',$followup)
+            ->with('meeting',$meeting);
 
     }
 

@@ -59,6 +59,11 @@
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     @endif
 
+
+                                    @if($user->crmType =='local')
+
+                                    @else
+
                                     <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                        data-id="{{$user->id}}"
                                        data-first-name="{{$user->userId}}"
@@ -67,9 +72,10 @@
                                        data-target-lead="{{$user->target['targetLeadmine']}}"
                                        data-target-contact="{{$user->target['targetContact']}}"
                                        data-target-contactusa="{{$user->target['targetUsa']}}"
+                                       {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
-
+                                    @endif
 
                                 </td>
                             </tr>
@@ -414,7 +420,6 @@
                                     <div class="form-group col-md-6">
                                         <label for="phoneNumber">Phone Number:</label>
                                         <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
-
                                         @if ($errors->has('phoneNumber'))
                                             <span class="help-block">
 											<strong>{{ $errors->first('phoneNumber') }}</strong>
@@ -558,20 +563,23 @@
             var lead = $(e.relatedTarget).data('target-lead');
             var contact = $(e.relatedTarget).data('target-contact');
             var contactUsa = $(e.relatedTarget).data('target-contactusa');
+            var type = $(e.relatedTarget).data('target-type');
+
+
+
+
+                $(e.currentTarget).find('input[name="userId"]').val(id);
+                $(e.currentTarget).find('input[name="name"]').val(name);
+                $(e.currentTarget).find('input[name="call"]').val(call);
+                $(e.currentTarget).find('input[name="highPossibility"]').val(high);
+                $(e.currentTarget).find('input[name="lead"]').val(lead);
+                $(e.currentTarget).find('input[name="contact"]').val(contact);
+                $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
 
 
 
 
 
-
-
-            $(e.currentTarget).find('input[name="userId"]').val(id);
-            $(e.currentTarget).find('input[name="name"]').val(name);
-            $(e.currentTarget).find('input[name="call"]').val(call);
-            $(e.currentTarget).find('input[name="highPossibility"]').val(high);
-            $(e.currentTarget).find('input[name="lead"]').val(lead);
-            $(e.currentTarget).find('input[name="contact"]').val(contact);
-            $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
 
         });
 
