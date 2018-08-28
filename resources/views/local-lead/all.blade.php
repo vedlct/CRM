@@ -1,8 +1,44 @@
 @extends('main')
 
 @section('content')
-
+<br>
 <div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-3">
+                <select class="form-control" id="companyFilter" onchange="refreshTable()">
+                    <option value="">Select Company</option>
+                    @foreach($companies as $company)
+                        <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="areaFilter" onchange="refreshTable()">
+                    <option value="">Select Area</option>
+                    @foreach($areas as $area)
+                        <option value="{{$area->areaId}}">{{$area->areaName}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="categoryFilter" onchange="refreshTable()">
+                    <option value="">Select Category</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="serviceFilter" onchange="refreshTable()">
+                    <option value="">Select Service</option>
+                    @foreach($services as $service)
+                        <option value="{{$service->local_serviceId}}">{{$service->serviceName}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
 
         <a href="#create_temp_modal" data-toggle="modal" class="btn btn-info btn-md" style="border-radius: 50%; float: right;"><i class="fa fa-plus"></i></a>
@@ -11,15 +47,15 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th width="20%">Lead Name</th>
-                    <th width="20%">website</th>
-                    <th width="15%">Number</th>
-                    <th width="15%">Tnt Number</th>
+                    <th width="15%">Lead Name</th>
+                    <th width="15%">Company Name</th>
+                    <th width="15%">website</th>
+                    <th width="10%">Number</th>
+                    <th width="10%">Tnt Number</th>
                     <th width="10%">Category</th>
                     <th width="10%">Area</th>
-                    <th width="10%">Address</th>
-                    <th width="5%">Status</th>
-                    <th width="8%">Possibility</th>
+                    {{--<th width="10%">Address</th>--}}
+                    <th width="5%">Possibility</th>
                     <th width="10%">Action</th>
 
                 </tr>
@@ -53,7 +89,7 @@
                     <br>
 
 
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-12" id="companyDiv">
                         <label class="control-label " ><b>Company Name</b></label>
                         <select class="form-control" name="local_companyId" required>
                             <option value="">Select Company</option>
@@ -61,7 +97,7 @@
                                 <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
                             @endforeach
                         </select>
-                        <a class="btn btn-info btn-sm pull-right" href="{{route('local.company')}}">add</a>
+                        <button class="btn btn-info btn-sm pull-right" type="button" onclick="addCompany()">add</button>
                     </div>
 
                     <div class="form-group col-md-5">
@@ -71,42 +107,6 @@
 
                         <input type="text" class="form-control" id="" placeholder="Enter Lead Name" name="leadName" required>
                     </div>
-
-
-                    {{--<div class="form-group col-md-5">--}}
-                        {{--<label class="control-label" ><b>Website</b></label>--}}
-                        {{--{!! $errors->first('website', '<p class="help-block">:message</p>') !!}--}}
-                        {{--<input type="text" class="form-control" name="website" placeholder="Enter url" >--}}
-
-                    {{--</div>--}}
-
-                    {{--<div class="form-group col-md-5" style="">--}}
-                        {{--<label class="control-label" ><b>Contact Person</b></label>--}}
-                        {{--{!! $errors->first('personName', '<p class="help-block">:message</p>') !!}--}}
-                        {{--<input type="text" class="form-control" id="" name="personName" placeholder="name" >--}}
-
-                    {{--</div>--}}
-
-
-                    {{--<div class="form-group col-md-5">--}}
-                        {{--<label class="control-label" ><b> Email:</b></label>--}}
-                        {{--{!! $errors->first('email', '<p class="help-block">:message</p>') !!}--}}
-                        {{--<input type="email" class="form-control" name="email" id="email" placeholder="Enter email">--}}
-
-                    {{--</div>--}}
-
-                    {{--<div class="form-group col-md-5">--}}
-                        {{--<label class="control-label" ><b>Mobile Number</b></label>--}}
-                        {{--<span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>--}}
-                        {{--{!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}--}}
-                        {{--<input type="text" class="form-control numbercheck" id="personNumber" name="mobile" placeholder="Enter Phone Number" required>--}}
-                    {{--</div>--}}
-
-                    {{--<div class="form-group col-md-5">--}}
-                        {{--<label class="control-label" ><b>Tnt Number</b></label>--}}
-
-                        {{--<input type="text" class="form-control numbercheck" id="personNumber" name="tnt" placeholder="Enter Phone Number" required>--}}
-                    {{--</div>--}}
 
 
 
@@ -122,26 +122,6 @@
                     </div>
 
 
-
-
-
-                    {{--<div class="form-group col-md-5">--}}
-
-                        {{--<label for="sel1"><b>Area:</b></label>--}}
-                        {{--<select class="form-control" id="" name="areaId" required>--}}
-                            {{--<option value="">Select Area</option>--}}
-                            {{--@foreach($areas as $area)--}}
-                                {{--<option value="{{$area->areaId}}">{{$area->areaName}}</option>--}}
-
-                            {{--@endforeach--}}
-                        {{--</select>--}}
-                    {{--</div>--}}
-
-                    {{--<div class="form-group col-md-5">--}}
-
-                        {{--<label for="sel1"><b>Address:</b></label>--}}
-                        {{--<textarea name="address" class="form-control"></textarea>--}}
-                    {{--</div>--}}
 
                     <div class="form-group col-md-5" style="">
                         <label ><b>Possibility:</b></label>
@@ -263,6 +243,51 @@
 
     <script>
 
+        function addCompany() {
+            var options=[];
+            @foreach($areas as $area)
+                options.push('<option value="{{$area->areaId}}">{{$area->areaName}}</option>')
+            @endforeach
+            var body='<h4 align="center">Add Company</h4>'+
+            '<div class="row"> ' +
+            '<div class="form-group col-md-4"> ' +
+            '<label>Company Name</label> '+
+           '<input class="form-control" name="companyName" placeholder="name"> ' +
+            '</div> ' +
+            '<div class="form-group col-md-4"> ' +
+            '<label>Website</label> ' +
+            '<input class="form-control" name="website" placeholder="www"> ' +
+            '</div> ' +
+            '<div class="form-group col-md-4"> ' +
+            '<label>Contact Person</label> ' +
+            '<input class="form-control" name="contactPerson" placeholder="person name"> ' +
+            '</div> ' +
+            '<div class="form-group col-md-4"> ' +
+            '<label>Email</label> ' +
+            '<input class="form-control" name="email" placeholder="email"> ' +
+            '</div> ' +
+                '<div class="form-group col-md-4"> ' +
+                '<label>Contact Number</label> ' +
+                '<input class="form-control" name="mobile" placeholder="mobile"> ' +
+                '</div> ' +
+                '<div class="form-group col-md-4"> ' +
+                '<label>Tnt Number</label> ' +
+                '<input class="form-control" name="tnt" placeholder="tnt"> ' +
+                '</div> ' +
+                '<div class="form-group col-md-4"> ' +
+                '<label>Area</label> ' +
+                '<select class="form-control" name="areaId" required>' +
+                    options+
+                '</select>'+
+                '</div>'+
+                '<div class="form-group col-md-4">' +
+                '<label>Address</label> ' +
+                '<textarea class="form-control" name="address" placeholder="address..." rows="5"></textarea> ' +
+                '</div>';
+
+            $('#companyDiv').html(body);
+        }
+
 
         $(document).ready(function(){
 
@@ -317,7 +342,7 @@
 
     <script>
         $(function() {
-            $('#myTable').DataTable({
+            dataTable=$('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 stateSave: true,
@@ -326,18 +351,24 @@
                 "ajax":{
                     "url": "{!! route('local.getLeadData') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    data:function (d){
+                        d._token="{{csrf_token()}}";
+                        d.companyFilter=$('#companyFilter').val();
+                        d.areaFilter=$('#areaFilter').val();
+                        d.categoryFilter=$('#categoryFilter').val();
+                        d.serviceFilter=$('#serviceFilter').val();
+
+                    }
                 },
-                {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'leadName', name: 'leadName' },
+                    { data: 'companyName', name: 'companyName' },
                     { data: 'website', name: 'website' },
                     { data: 'mobile', name: 'mobile'},
                     { data: 'tnt', name: 'tnt'},
                     { data: 'categoryName', name: 'categoryName'},
                     { data: 'areaName', name: 'areaName'},
-                    {data: 'address', name: 'address'},
-                    { data: 'statusId', name: 'statusId'},
+//                    {data: 'address', name: 'address'},
                     { data: 'possibilityName', name: 'possibilityName'},
                     { "data": function(data){
 
@@ -349,6 +380,10 @@
             });
 
         });
+        
+        function refreshTable() {
+            dataTable.ajax.reload();
+        }
 
 
         function editLead(x) {

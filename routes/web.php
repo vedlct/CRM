@@ -261,4 +261,11 @@ Route::post('local/company/getCompanyModal','LocalCompanyController@getCompanyMo
 Route::get('local/report','LocalReportController@index')->name('local.report');
 Route::post('local/revenueClient','LocalReportController@revenueClient')->name('local.revenueClient');
 Route::post('local/employeeReport','LocalReportController@employeeReport')->name('local.employeeReport');
+Route::post('local/leadAssignReport','LocalReportController@leadAssignReport')->name('local.leadAssignReport');
+Route::post('local/getUserRevenueLog','LocalReportController@getUserRevenueLog')->name('local.getUserRevenueLog');
+
+
+//Local User
+Route::post('local/getUserTarget','UserManagementController@getLocalUserTarget')->name('local.getUserTarget');
+Route::post('local/setUserTarget','UserManagementController@setLocalUserTarget')->name('local.setUserTarget');
 

@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 use App\LocalFollowup;
 use App\LocalMeeting;
+use App\LocalSales;
+use App\LocalUserTarget;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -194,6 +196,18 @@ class HomeController extends Controller
 
 
     public function digitalMarketing(){
+        $userId=Auth::user()->id;
+        try{
+            $target=LocalUserTarget::findOrFail($userId);
+        }
+        catch (ModelNotFoundException $ex) {
+            $target=new LocalUserTarget();
+            $target->local_user_targetId=$userId;
+            $target->earn=0;
+            $target->meeting=0;
+            $target->followup=0;
+            $target->save();
+        }
         $date = Carbon::now();
 
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -209,10 +223,18 @@ class HomeController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'),[$start,$end])
             ->count();
 
+        $revenue=LocalSales::where('userId',$userId)
+            ->whereBetween(DB::raw('DATE(created_at)'),[$start,$end])
+            ->sum('total');
+
+
+
 
         return view('dashboardDigital')
             ->with('followup',$followup)
-            ->with('meeting',$meeting);
+            ->with('meeting',$meeting)
+            ->with('target',$target)
+            ->with('revenue',$revenue);
 
     }
 

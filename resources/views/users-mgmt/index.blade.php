@@ -61,7 +61,10 @@
 
 
                                     @if($user->crmType =='local')
+                                        <button class="btn btn-success btn-sm"
+                                           data-id="{{$user->id}}" onclick="setLocalUserTarget(this)"
 
+                                        ><i class="fa fa-angle-double-up"></i></button>
                                     @else
 
                                     <a href="#target_user_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -140,9 +143,34 @@
 
                     </div></div></div>
 
+            {{--Set Local Target Modal--}}
 
 
 
+
+            <div class="modal fade" id="target_local_modal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Set User Target Per Month</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body" id="target_local_modalBody">
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -545,6 +573,22 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
     <script>
+        function setLocalUserTarget(x) {
+            var userId=$(x).data('id');
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.getUserTarget') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}",userId:userId},
+                success: function (data) {
+//                    console.log(data);
+                    $("#target_local_modalBody").html(data);
+                    $('#target_local_modal').modal('show');
+                }
+            });
+
+
+        }
         $(document).ready(function() {
             $('#myTable').DataTable();
         });

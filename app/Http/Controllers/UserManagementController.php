@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LocalUserTarget;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +43,38 @@ class UserManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getLocalUserTarget(Request $r){
+
+        $userName=User::findOrFail($r->userId)->firstName;
+        try{
+            $target=LocalUserTarget::findOrFail($r->userId);
+        }
+        catch (ModelNotFoundException $ex) {
+            $target=new LocalUserTarget();
+            $target->local_user_targetId=$r->userId;
+            $target->earn=0;
+            $target->meeting=0;
+            $target->followup=0;
+            $target->save();
+        }
+
+
+        return view('users-mgmt.getLocalUserTarget',compact('target','userName'));
+
+
+    }
+    public function setLocalUserTarget(Request $r){
+        $target=LocalUserTarget::findOrFail($r->userId);
+        $target->earn= $r->earn;
+        $target->meeting=$r->meeting;
+        $target->followup=$r->followup;
+        $target->save();
+        Session::flash('message', 'Taeget Updated Successfully');
+        return redirect()->route('user-management.index');
+
+
+    }
     public function index()
     {
         $User_Type=Session::get('userType');

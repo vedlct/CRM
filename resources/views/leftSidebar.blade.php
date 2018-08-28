@@ -67,7 +67,7 @@
 
             @endif  {{--End For Global--}}
 
-                @if($userType =='ADMIN' || Auth::user()->crmType =='local' )        {{--Start Local--}}
+                @if($userType =='ADMIN' )        {{--Start Local--}}
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span class="hide-menu">Digital Marketing</span>
@@ -76,9 +76,14 @@
 					</span>
                     </a>
                     <ul class="treeview-menu">
+                @endif
+                        @if($userType =='ADMIN' || Auth::user()->crmType =='local' )
 
-                            <li>
+                        <li>
                                 <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Digital)</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('local.company')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Company (Digital)</span></a>
                             </li>
 
                             <li>
@@ -99,10 +104,10 @@
                         <li>
                                 <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Digital</span></a>
                             </li>
+                        @endif
 
 
-
-
+                        @if($userType =='ADMIN' )
 
                     </ul>
                 </li>

@@ -50,8 +50,24 @@ class LocalLeadController extends Controller
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->leftJoin('area','area.areaId','local_company.areaId')
-            ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
-            ->get();
+            ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId');
+            if($r->companyFilter){
+                $lead=$lead->where('local_lead.local_companyId',$r->companyFilter);
+            }
+            if($r->areaFilter){
+                $lead=$lead->where('local_company.areaId',$r->areaFilter);
+            }
+            if($r->categoryFilter){
+                $lead=$lead->where('local_lead.categoryId',$r->categoryFilter);
+            }
+            if($r->serviceFilter){
+                $lead=$lead->whereIn('local_lead.local_leadId', function($query) use ($r){
+                    $query->select('local_leadId')
+                        ->from('local_lead_service_relation')
+                        ->where('serviceId', $r->serviceFilter);
+                });
+            }
+            $lead=$lead->get();
 
         $datatables = Datatables::of($lead);
         return $datatables->make(true);
@@ -61,6 +77,7 @@ class LocalLeadController extends Controller
 
     public function storeLead(Request $r){
 
+
         if($r->local_leadId){
             $lead=LocalLead::findOrFAil($r->local_leadId);
         }
@@ -69,21 +86,37 @@ class LocalLeadController extends Controller
         }
 
         $lead->leadName=$r->leadName;
-        $lead->local_companyId=$r->local_companyId;
-//        $lead->website=$r->website;
-//        $lead->contactPerson=$r->personName;
-//        $lead->email=$r->email;
-//        $lead->mobile=$r->mobile;
-//        $lead->tnt=$r->tnt;
+
+        //If Company Exists
+        if($r->local_companyId){
+            $lead->local_companyId=$r->local_companyId;
+        }
+        //Else New Company
+        else{
+            $company=new LocalCompany();
+            $company->companyName=$r->companyName;
+            $company->website=$r->website;
+            $company->contactPerson=$r->contactPerson;
+            $company->email=$r->email;
+            $company->mobile=$r->mobile;
+            $company->tnt=$r->tnt;
+            $company->areaId=$r->areaId;
+            $company->address=$r->address;
+            $company->save();
+
+            $lead->local_companyId=$company->local_companyId;
+        }
+
+
+
+
+
         $lead->categoryId=$r->category;
-//        $lead->areaId=$r->areaId;
         $lead->possibilityId=$r->possibility;
         if($r->bill){
             $lead->bill=$r->bill;
         }
 
-
-//        $lead->address=$r->address;
         $lead->createdBy=Auth::user()->id;
         $lead->save();
         if($r->comment){
