@@ -15,14 +15,18 @@
                         <h2 class="font-light m-b-0"> {{$revenue}} | {{$target->earn}} </h2>
                         <span class="text-muted">This Month</span>
                     </div>
-
+                    @if($target->earn==0)
+                        <span class="text-success">0 %</span>
+                    @else
                         <span class="text-success">{{round($revenue*100/$target->earn)}}%</span>
 
-                    <div class="progress">
-                        {{--@if($target->targetCall>0)--}}
+                        <div class="progress">
+                            {{--@if($target->targetCall>0)--}}
                             <div class="progress-bar bg-success" role="progressbar" style="width: {{round($revenue*100/$target->earn)}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        {{--@endif--}}
-                    </div>
+                            {{--@endif--}}
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -34,7 +38,9 @@
                         <h2 class="font-light m-b-0"> {{$meeting}} | {{$target->meeting}} </h2>
                         <span class="text-muted">This Month</span>
                     </div>
-
+                    @if($target->meeting==0)
+                        <span class="text-success">0 %</span>
+                    @else
                         <span class="text-success">{{round($meeting*100/$target->meeting)}}%</span>
 
                     <div class="progress">
@@ -42,6 +48,7 @@
                             <div class="progress-bar bg-success" role="progressbar" style="width: {{round($meeting*100/$target->meeting)}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         {{--@endif--}}
                     </div>
+                        @endif
                 </div>
             </div>
         </div>
@@ -53,6 +60,9 @@
                             <h2 class="font-light m-b-0"> {{$followup}} | {{$target->followup}}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
+                        @if($target->followup==0)
+                            <span class="text-success">0 %</span>
+                        @else
 
                         <span class="text-success">{{round($followup*100/$target->followup)}}%</span>
 
@@ -61,6 +71,8 @@
                             <div class="progress-bar bg-success" role="progressbar" style="width: {{round($followup*100/$target->followup)}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             {{--@endif--}}
                         </div>
+
+                         @endif
                     </div>
                 </div>
             </div>
