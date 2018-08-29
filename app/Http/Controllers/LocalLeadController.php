@@ -221,26 +221,29 @@ class LocalLeadController extends Controller
 
 
     public function assignLead(){
-        $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))
-            ->groupBy('local_leadId')
-            ->get();
+        if(Auth::user()->typeId==1 || Auth::user()->typeId==6 ||Auth::user()->typeId==7){
+            $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))
+                ->groupBy('local_leadId')
+                ->get();
 
 
-        $leads=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
-            ->where('local_lead.statusId',1)
-            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
-            ->leftJoin('area','area.areaId','local_company.areaId')
-            ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
-            ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
-            ->get();
+            $leads=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+                ->where('local_lead.statusId',1)
+                ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
+                ->leftJoin('area','area.areaId','local_company.areaId')
+                ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
+                ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId')
+                ->get();
 
-        $users=User::select('id','firstName')->where('crmType','local')->get();
+            $users=User::select('id','firstName')->where('crmType','local')->get();
 
 
-        return view('local-lead.assignLead')
-            ->with('assign',$assign)
-            ->with('leads',$leads)
-            ->with('users',$users);
+            return view('local-lead.assignLead')
+                ->with('assign',$assign)
+                ->with('leads',$leads)
+                ->with('users',$users);
+        }
+
     }
 
     public function getAssignLead(Request $r){

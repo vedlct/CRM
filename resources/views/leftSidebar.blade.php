@@ -93,10 +93,11 @@
                             <li>
                                 <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Digital)</span></a>
                             </li>
-
+                            @if(Auth::user()->typeId==1 || Auth::user()->typeId==6 ||Auth::user()->typeId==7)
                             <li>
                                 <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Digital)</span></a>
                             </li>
+                            @endif
 
                             <li>
                                 <a href="{{route('local.sales')}}"><i class="fa fa-dollar-sign"></i><span class="hide-menu"> Sales</span></a>
