@@ -49,14 +49,14 @@
                 <tr>
                     <th width="15%">Lead Name</th>
                     <th width="15%">Company Name</th>
-                    <th width="15%">website</th>
+                    <th width="10%">website</th>
                     <th width="10%">Number</th>
                     <th width="10%">Tnt Number</th>
                     <th width="10%">Category</th>
                     <th width="10%">Area</th>
-                    {{--<th width="10%">Address</th>--}}
+                    <th width="10%">Status</th>
                     <th width="5%">Possibility</th>
-                    <th width="10%">Action</th>
+                    <th width="5%">Action</th>
 
                 </tr>
                 </thead>
@@ -137,6 +137,16 @@
                     <div class="form-group col-md-5">
                         <br><br>
                         <label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">
+                    </div>
+                    <div class="form-group col-md-5">
+
+                        <label for="sel1"><b>Status:</b></label>
+                        <select class="form-control" id="" name="statusId" required>
+                            <option value="">Select Status</option>
+                            @foreach($status as $s)
+                                <option value="{{$s->local_statusId}}" >{{$s->statusName}}</option>
+                            @endforeach
+                        </select>
                     </div>
 
 
@@ -368,7 +378,7 @@
                     { data: 'tnt', name: 'tnt'},
                     { data: 'categoryName', name: 'categoryName'},
                     { data: 'areaName', name: 'areaName'},
-//                    {data: 'address', name: 'address'},
+                    {data: 'statusName', name: 'statusName'},
                     { data: 'possibilityName', name: 'possibilityName'},
                     { "data": function(data){
 

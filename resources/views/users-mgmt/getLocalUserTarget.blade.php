@@ -11,7 +11,7 @@
     </div>
 
     <div class="col-md-4">
-        <label>Revenue</label>
+        <label>Sales</label>
         <input type="number" class="form-control" name="earn" value="{{$target->earn}}">
     </div>
 

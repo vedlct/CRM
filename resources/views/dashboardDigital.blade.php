@@ -10,7 +10,7 @@
         <div class="col-lg-3 col-md-6">
                 <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title"><a href="#">Revenue</a></h4>
+                    <h4 class="card-title"><a href="#">Sales</a></h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0"> {{$revenue}} | {{$target->earn}} </h2>
                         <span class="text-muted">This Month</span>

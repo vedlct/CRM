@@ -6,6 +6,7 @@ use App\Category;
 use App\Lead;
 use App\LocalCompany;
 use App\LocalMeeting;
+use App\LocalStatus;
 use App\Possibility;
 use App\User;
 use Illuminate\Http\Request;
@@ -34,6 +35,8 @@ class LocalLeadController extends Controller
         $possibilities=Possibility::get();
         $services=LocalService::get();
         $companies=LocalCompany::get();
+        $status=LocalStatus::get();
+
 
 
         return view('local-lead.all')
@@ -41,15 +44,17 @@ class LocalLeadController extends Controller
             ->with('areas',$areas)
             ->with('possibilities',$possibilities)
             ->with('services',$services)
-            ->with('companies',$companies);
+            ->with('companies',$companies)
+            ->with('status',$status);
 
     }
 
     public function getLeadData(Request $r){
-        $lead=LocalLead::select('local_lead.local_leadId','local_company.companyName','local_lead.leadName','local_company.website','local_company.mobile','local_company.tnt','categories.categoryName','area.areaName','local_company.address','local_lead.statusId','possibilities.possibilityName')
+        $lead=LocalLead::select('local_status.statusName','local_lead.local_leadId','local_company.companyName','local_lead.leadName','local_company.website','local_company.mobile','local_company.tnt','categories.categoryName','area.areaName','local_company.address','local_lead.statusId','possibilities.possibilityName')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->leftJoin('area','area.areaId','local_company.areaId')
+            ->leftJoin('local_status','local_status.local_statusId','local_lead.statusId')
             ->leftJoin('possibilities','possibilities.possibilityId','local_lead.possibilityId');
             if($r->companyFilter){
                 $lead=$lead->where('local_lead.local_companyId',$r->companyFilter);
@@ -118,6 +123,12 @@ class LocalLeadController extends Controller
         }
 
         $lead->createdBy=Auth::user()->id;
+        if($r->statusId){
+            $lead->statusId=$r->statusId;
+
+        }
+
+
         $lead->save();
         if($r->comment){
             $comment=new LocalComment();
@@ -173,6 +184,7 @@ class LocalLeadController extends Controller
             ->leftJoin('area','area.areaId','local_company.areaId')
             ->leftJoin('local_lead_assign','local_lead_assign.local_leadId','local_lead.local_leadId')
             ->where('local_lead_assign.userId',Auth::user()->id)
+            ->where('local_lead.statusId',1)
             ->get();
 
         $datatables = Datatables::of($lead);
@@ -184,6 +196,8 @@ class LocalLeadController extends Controller
     public function getEditModal(Request $r){
         $lead=LocalLead::leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->findOrFail($r->leadId);
+
+        $status=LocalStatus::get();
 
         $cats=Category::where('type', 3)->get();
         $areas=Area::get();
@@ -201,15 +215,19 @@ class LocalLeadController extends Controller
             ->with('lead',$lead)
             ->with('localServices',$localServices)
             ->with('services',$services)
-            ->with('companies',$companies);
+            ->with('companies',$companies)
+            ->with('status',$status);
     }
 
 
     public function assignLead(){
-        $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))->groupBy('local_leadId')->get();
+        $assign=LocalLeadAssign::select('local_leadId',DB::raw('Count(local_leadId) as total'))
+            ->groupBy('local_leadId')
+            ->get();
 
 
         $leads=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
+            ->where('local_lead.statusId',1)
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->leftJoin('area','area.areaId','local_company.areaId')
             ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
@@ -327,6 +345,7 @@ class LocalLeadController extends Controller
                 $meeting->local_followupId = $r->local_followupId;
             }
             $meeting->meetingDate=$r->meetingDate;
+            $meeting->local_leadId=$r->local_leadId;
             $meeting->userId=Auth::user()->id;
             $meeting->save();
         }

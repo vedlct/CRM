@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\LocalCompany;
+use App\LocalFollowup;
 use App\LocalLeadAssign;
+use App\LocalMeeting;
 use App\LocalSales;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use Auth;
 
 class LocalReportController extends Controller
 {
@@ -44,9 +47,13 @@ class LocalReportController extends Controller
     }
 
     public function employeeReport(Request $r){
+
         $users=User::select('id','firstName','typeId')
-            ->where('crmType','local')
-            ->get();
+            ->where('crmType','local');
+             if(Auth::user()->typeId==8){
+                 $users=$users->where('id',Auth::user()->id);
+             }
+        $users=$users->get();
 
         $bills=LocalSales::select('userId',DB::raw('Month(local_sales.created_at) as month'),DB::raw('sum(local_sales.total) as total'))
             ->groupBy(DB::raw('month(local_sales.created_at)'))
@@ -86,5 +93,87 @@ class LocalReportController extends Controller
             ->get();
 
         return  view('local-report.getUserRevenueLog',compact('bills'));
+    }
+
+    public function workReportUser(Request $r){
+        $users=User::select('id','firstName','typeId')
+            ->where('crmType','local');
+             if(Auth::user()->typeId==8){
+                 $users=$users->where('id',Auth::user()->id);
+             }
+          $users=$users->get();
+
+        $sales=LocalSales::select('userId',DB::raw('sum(local_sales.total) as total'))
+            ->groupBy('userId');
+             if($r->startDate && $r->endDate){
+                 $sales=$sales->whereBetween(DB::raw('DATE(created_at)'),array($r->startDate,$r->endDate));
+             }
+
+        $sales=$sales->get();
+
+        $meeting=LocalMeeting::select('userId',DB::raw('count(meetingDate) as total'))->groupBy('userId');
+
+        if($r->startDate && $r->endDate){
+            $meeting=$meeting->whereBetween(DB::raw('DATE(meetingDate)'),array($r->startDate,$r->endDate));
+        }
+        $meeting=$meeting->get();
+
+
+        $followup=LocalFollowup::select('userId',DB::raw('count(userId) as total'))
+            ->where('workStatus',1)->groupBy('userId');
+        if($r->startDate && $r->endDate){
+            $followup=$followup->whereBetween(DB::raw('DATE(date)'),array($r->startDate,$r->endDate));
+
+            $startDate=$r->startDate;
+            $endDate=$r->endDate;
+            $followup=$followup->get();
+            return view('local-report.workReportUser',compact('users','sales','meeting','followup','startDate','endDate'));
+        }
+        $followup=$followup->get();
+
+        return view('local-report.workReportUser',compact('users','sales','meeting','followup'));
+    }
+
+    public function getUserSales(Request $r){
+        $sales=LocalSales::select('local_sales.created_at','local_sales.total','local_lead.leadName','companyName')
+            ->where('userId',$r->userId)
+            ->leftJoin('local_lead','local_lead.local_leadId','local_sales.local_leadId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId');
+        if($r->startDate && $r->endDate){
+            $sales=$sales->whereBetween(DB::raw('DATE(local_sales.created_at)'),array($r->startDate,$r->endDate));
+        }
+
+        $sales=$sales->get();
+
+        return view('local-report.getUserSales',compact('sales'));
+    }
+
+    public function getUserMeeting(Request $r){
+        $meeting=LocalMeeting::select('local_meeting.meetingDate','local_lead.leadName','companyName')
+            ->where('userId',$r->userId)
+            ->leftJoin('local_lead','local_lead.local_leadId','local_meeting.local_leadId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId');
+        if($r->startDate && $r->endDate){
+            $meeting=$meeting->whereBetween(DB::raw('DATE(local_meeting.meetingDate)'),array($r->startDate,$r->endDate));
+        }
+
+        $meeting=$meeting->get();
+
+        return view('local-report.getUserMeeting',compact('meeting'));
+    }
+
+    public function getUserFollowup(Request $r){
+        $followup=LocalFollowup::select('local_followup.date','local_lead.leadName','companyName')
+            ->where('userId',$r->userId)
+            ->where('workStatus',1)
+            ->leftJoin('local_lead','local_lead.local_leadId','local_followup.local_leadId')
+            ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId');
+        if($r->startDate && $r->endDate){
+            $followup=$followup->whereBetween(DB::raw('DATE(local_followup.date)'),array($r->startDate,$r->endDate));
+        }
+
+        $followup=$followup->get();
+
+        return view('local-report.getUserFollowup',compact('followup'));
     }
 }

@@ -22,42 +22,6 @@
         </div>
 
 
-        {{--<div class="form-group col-md-5">--}}
-            {{--<label class="control-label" ><b>Website</b></label>--}}
-            {{--{!! $errors->first('website', '<p class="help-block">:message</p>') !!}--}}
-            {{--<input type="text" class="form-control" value="{{$lead->website}}" name="website" placeholder="Enter url" >--}}
-
-        {{--</div>--}}
-
-        {{--<div class="form-group col-md-5" style="">--}}
-            {{--<label class="control-label" ><b>Contact Person</b></label>--}}
-            {{--{!! $errors->first('personName', '<p class="help-block">:message</p>') !!}--}}
-            {{--<input type="text" class="form-control" value="{{$lead->contactPerson}}" id="" name="personName" placeholder="name" >--}}
-
-        {{--</div>--}}
-
-
-        {{--<div class="form-group col-md-5">--}}
-            {{--<label class="control-label" ><b> Email:</b></label>--}}
-            {{--{!! $errors->first('email', '<p class="help-block">:message</p>') !!}--}}
-            {{--<input type="email" class="form-control" value="{{$lead->email}}" name="email" id="email" placeholder="Enter email">--}}
-
-        {{--</div>--}}
-
-        {{--<div class="form-group col-md-5">--}}
-            {{--<label class="control-label" ><b>Mobile Number</b></label>--}}
-            {{--<span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>--}}
-            {{--{!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}--}}
-            {{--<input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->mobile}}" name="mobile" placeholder="Enter Phone Number" required>--}}
-        {{--</div>--}}
-
-        {{--<div class="form-group col-md-5">--}}
-            {{--<label class="control-label" ><b>Tnt Number</b></label>--}}
-
-            {{--<input type="text" class="form-control numbercheck" id="personNumber" value="{{$lead->tnt}}" name="tnt" placeholder="Enter Phone Number" required>--}}
-        {{--</div>--}}
-
-
 
 
         <div class="form-group col-md-5" style="">
@@ -73,23 +37,6 @@
 
 
 
-        {{--<div class="form-group col-md-5">--}}
-
-            {{--<label for="sel1"><b>Area:</b></label>--}}
-            {{--<select class="form-control" id="" name="areaId" required>--}}
-                {{--<option value="">Select Area</option>--}}
-                {{--@foreach($areas as $area)--}}
-                    {{--<option value="{{$area->areaId}}" @if($lead->areaId == $area->areaId) selected @endif>{{$area->areaName}}</option>--}}
-
-                {{--@endforeach--}}
-            {{--</select>--}}
-        {{--</div>--}}
-
-        {{--<div class="form-group col-md-5">--}}
-
-            {{--<label for="sel1"><b>Address:</b></label>--}}
-            {{--<textarea name="address" class="form-control">{{$lead->address}}</textarea>--}}
-        {{--</div>--}}
 
         <div class="form-group col-md-5" style="">
             <label ><b>Possibility:</b></label>
@@ -102,13 +49,30 @@
 
         </div>
 
+    @if(Auth::user()->typeId == 1 ||Auth::user()->typeId == 6)
+
+        <div class="form-group col-md-5">
+            <label class="control-label " ><b>Bill</b></label>
+
+            {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
+
+            <input type="text" class="form-control" id="" placeholder="Enter bill" name="bill" value="{{$lead->bill}}" required>
+        </div>
+
+
+
     <div class="form-group col-md-5">
-        <label class="control-label " ><b>Bill</b></label>
 
-        {!! $errors->first('leadName', '<p class="help-block">:message</p>') !!}
-
-        <input type="text" class="form-control" id="" placeholder="Enter bill" name="bill" value="{{$lead->bill}}" required>
+        <label for="sel1"><b>Status:</b></label>
+        <select class="form-control" id="" name="statusId" required>
+            <option value="">Select Status</option>
+            @foreach($status as $s)
+                <option value="{{$s->local_statusId}}" @if($s->local_statusId == $lead->statusId) selected @endif>{{$s->statusName}}</option>
+            @endforeach
+        </select>
     </div>
+
+    @endif
 
 
 

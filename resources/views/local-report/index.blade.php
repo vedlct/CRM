@@ -35,6 +35,10 @@
                     <a href="#" class="nav-link" data-toggle="tab" onclick="leadAssignReport()">Lead Assign</a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-toggle="tab" onclick="workReportUser()">User Report</a>
+                </li>
+
             </ul>
 
             <div class="tab-content">
@@ -86,6 +90,25 @@
                 }
             });
 
+
+        }
+        
+        function workReportUser() {
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.workReportUser') !!}",
+                cache: false,
+                @if(isset($startDate) && isset($endDate))
+                data: {_token: "{{csrf_token()}}",startDate:"{{$startDate}}",endDate:"{{$endDate}}"},
+                @else
+                data: {_token: "{{csrf_token()}}"},
+                @endif
+                success: function (data) {
+                    $("#result").html(data);
+//                    console.log(data);
+
+                }
+            });
 
         }
 
