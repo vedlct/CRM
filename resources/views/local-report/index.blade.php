@@ -88,7 +88,9 @@
                 data: {_token: "{{csrf_token()}}"},
                 @endif
                 success: function (data) {
+//                    console.log(data);
                     $("#result").html(data);
+
 
                 }
             });

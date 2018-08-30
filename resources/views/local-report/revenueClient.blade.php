@@ -23,100 +23,230 @@
             <tr>
                 <td>{{$company->companyName}}</td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==1)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==1)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==2)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==2)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==3)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==3)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==4)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==4)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==5)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==5)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==6)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==6)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==7)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==7)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==8)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==8)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==9)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==9)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==10)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==10)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==11)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==11)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
                 <td>
+                    @php($tempBill=0)
                     @foreach($bills as $bill)
                         @if($bill->local_companyId == $company->local_companyId && $bill->month==12)
-                            {{$bill->total}}
+                            @php($tempBill+=$bill->total)
                             @php($grandTotal+=$bill->total)
+                            @break
                         @endif
                     @endforeach
+                    @foreach($oldBills as $bill)
+                        @if($bill->local_companyId == $company->local_companyId && $bill->month==12)
+                            @php($tempBill+=$bill->total)
+                            @php($grandTotal+=$bill->total)
+                            @break
+                        @endif
+                    @endforeach
+                    {{$tempBill}}
+
                 </td>
 
                 <td>

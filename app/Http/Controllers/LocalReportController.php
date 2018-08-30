@@ -6,6 +6,7 @@ use App\LocalCompany;
 use App\LocalFollowup;
 use App\LocalLeadAssign;
 use App\LocalMeeting;
+use App\LocalOldSalesDetails;
 use App\LocalSales;
 use App\User;
 use Illuminate\Http\Request;
@@ -43,7 +44,16 @@ class LocalReportController extends Controller
             ->whereBetween(DB::raw('date(local_sales.created_at)'),array([$start,$end]))
             ->get();
 
-        return view('local-report.revenueClient',compact('bills','companies'));
+        $oldBills=LocalOldSalesDetails::select('local_company.local_companyId',DB::raw('Month(local_old_sale_details.date) as month'),DB::raw('sum(local_old_sale_details.total) as total'))
+            ->leftJoin('local_old_sales','local_old_sales.local_old_salesId','local_old_sale_details.local_old_saleId')
+            ->leftJoin('local_company','local_company.local_companyId','local_old_sales.local_companyId')
+            ->groupBy(DB::raw('month(local_old_sale_details.date)'))
+            ->groupBy('local_old_sales.local_companyId')
+            ->whereBetween(DB::raw('date(local_old_sale_details.date)'),array([$start,$end]))
+            ->get();
+
+
+        return view('local-report.revenueClient',compact('bills','companies','oldBills'));
     }
 
     public function employeeReport(Request $r){
@@ -108,6 +118,9 @@ class LocalReportController extends Controller
              if($r->startDate && $r->endDate){
                  $sales=$sales->whereBetween(DB::raw('DATE(created_at)'),array($r->startDate,$r->endDate));
              }
+             else{
+                 $sales=$sales->where(DB::raw('DATE(created_at)'),date('Y-m-d'));
+             }
 
         $sales=$sales->get();
 
@@ -115,6 +128,9 @@ class LocalReportController extends Controller
 
         if($r->startDate && $r->endDate){
             $meeting=$meeting->whereBetween(DB::raw('DATE(meetingDate)'),array($r->startDate,$r->endDate));
+        }
+        else{
+            $meeting=$meeting->where(DB::raw('DATE(meetingDate)'),date('Y-m-d'));
         }
         $meeting=$meeting->get();
 
@@ -129,6 +145,9 @@ class LocalReportController extends Controller
             $followup=$followup->get();
             return view('local-report.workReportUser',compact('users','sales','meeting','followup','startDate','endDate'));
         }
+        else{
+            $followup=$followup->where(DB::raw('DATE(date)'),date('Y-m-d'));
+        }
         $followup=$followup->get();
 
         return view('local-report.workReportUser',compact('users','sales','meeting','followup'));
@@ -141,6 +160,9 @@ class LocalReportController extends Controller
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId');
         if($r->startDate && $r->endDate){
             $sales=$sales->whereBetween(DB::raw('DATE(local_sales.created_at)'),array($r->startDate,$r->endDate));
+        }
+        else{
+            $sales=$sales->where(DB::raw('DATE(created_at)'),date('Y-m-d'));
         }
 
         $sales=$sales->get();
@@ -156,7 +178,9 @@ class LocalReportController extends Controller
         if($r->startDate && $r->endDate){
             $meeting=$meeting->whereBetween(DB::raw('DATE(local_meeting.meetingDate)'),array($r->startDate,$r->endDate));
         }
-
+        else{
+            $meeting=$meeting->where(DB::raw('DATE(local_meeting.meetingDate)'),date('Y-m-d'));
+        }
         $meeting=$meeting->get();
 
         return view('local-report.getUserMeeting',compact('meeting'));
@@ -171,6 +195,10 @@ class LocalReportController extends Controller
         if($r->startDate && $r->endDate){
             $followup=$followup->whereBetween(DB::raw('DATE(local_followup.date)'),array($r->startDate,$r->endDate));
         }
+        else{
+            $followup=$followup->where(DB::raw('DATE(local_followup.date)'),date('Y-m-d'));
+        }
+
 
         $followup=$followup->get();
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\LocalOldSales;
+use App\LocalOldSalesDetails;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -18,6 +20,9 @@ class LocalSalesController extends Controller
     public function index(){
         $companies=LocalCompany::select('local_companyId','companyName')
             ->get();
+
+
+
 
         return view('local-sale.index',compact('companies'));
     }
@@ -39,8 +44,15 @@ class LocalSalesController extends Controller
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->get();
 
-//        return $leads;
         $datatables = Datatables::of($leads);
+        return $datatables->make(true);
+    }
+
+    public function getOldSalesData(Request $r){
+        $oldSales= LocalOldSales::select('local_old_sales.local_old_salesId','local_old_sales.title','companyName','bill')
+            ->leftJoin('local_company','local_company.local_companyId','local_old_sales.local_companyId')
+            ->get();
+        $datatables = Datatables::of($oldSales);
         return $datatables->make(true);
     }
 
@@ -71,5 +83,46 @@ class LocalSalesController extends Controller
         Session::flash('message', 'Payment Added successfully');
 
         return back();
+    }
+
+    public function insertOldSale(Request $r){
+        $sales=new LocalOldSales();
+        $sales->title=$r->title;
+        $sales->local_companyId=$r->local_companyId;
+        $sales->bill=$r->bill;
+        $sales->userId=Auth::user()->id;
+        $sales->save();
+        Session::flash('message', 'Sales Added successfully');
+        return redirect()->route('local.sales');
+    }
+
+    public function getOldPaymentInfo(Request $r){
+        $sales=LocalOldSales::findOrFail($r->leadId);
+
+        $leadId=$r->leadId;
+
+        $payments=LocalOldSalesDetails::select('users.firstName','local_old_sale_details.total','local_old_sale_details.date')
+            ->where('local_old_sale_details.local_old_saleId',$r->leadId)
+            ->leftJoin('local_old_sales','local_old_sales.local_old_salesId','local_old_sale_details.local_old_saleId')
+            ->leftJoin('local_company','local_company.local_companyId','local_old_sales.local_companyId')
+            ->leftJoin('users','users.id','local_old_sale_details.userId')
+            ->get();
+
+        $totalPayment=LocalOldSalesDetails::where('local_old_saleId',$r->leadId)
+            ->sum('total');
+
+        return view('local-sale.getOldPaymentInfo',compact('sales','payments','leadId','totalPayment'));
+    }
+
+    public function insertOldSalePayment(Request $r){
+        $sale=new LocalOldSalesDetails();
+        $sale->userId=Auth::user()->id;
+        $sale->local_old_saleId=$r->leadId;
+        $sale->total=$r->total;
+        $sale->date=$r->date;
+        $sale->save();
+
+        Session::flash('message', 'Payment Added successfully');
+        return redirect()->route('local.sales');
     }
 }

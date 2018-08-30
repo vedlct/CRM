@@ -251,6 +251,10 @@ Route::get('local/sales','LocalSalesController@index')->name('local.sales');
 Route::post('local/sales','LocalSalesController@getLeads')->name('local.getSalesLead');
 Route::post('local/getPaymentInfo','LocalSalesController@getPaymentInfo')->name('local.getPaymentInfo');
 Route::post('local/insertPayment','LocalSalesController@insertPayment')->name('local.insertPayment');
+Route::post('local/insertOldSale','LocalSalesController@insertOldSale')->name('local.insertOldSale');
+Route::post('local/getOldSalesData','LocalSalesController@getOldSalesData')->name('local.getOldSalesData');
+Route::post('local/getOldPaymentInfo','LocalSalesController@getOldPaymentInfo')->name('local.getOldPaymentInfo');
+Route::post('local/insertOldSalePayment','LocalSalesController@insertOldSalePayment')->name('local.insertOldSalePayment');
 
 //Local Company
 Route::get('local/company','LocalCompanyController@index')->name('local.company');

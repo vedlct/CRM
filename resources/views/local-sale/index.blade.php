@@ -42,10 +42,12 @@
 
             <!-- Modal body -->
             <div class="modal-body">
+                <form method="post" action="{{route('local.insertOldSale')}}">
+                    {{csrf_field()}}
                <div class="row">
                    <div class="form-group col-md-4">
                        <label>Select Company</label>
-                       <select class="form-control"  >
+                       <select class="form-control"  name="local_companyId">
                            <option value="">Select Company</option>
                            @foreach($companies as $company)
                                <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
@@ -56,18 +58,22 @@
 
                    <div class="form-group col-md-4">
                        <label>Title</label>
-                       <input type="text" class="form-control" placeholder="title">
+                       <input type="text" class="form-control" placeholder="title" name="title">
                    </div>
 
                    <div class="form-group col-md-4">
                        <label>Bill</label>
-                       <input type="number" class="form-control" placeholder="TK">
+                       <input type="number" class="form-control" placeholder="TK" name="bill">
+                   </div>
+
+                   <div class="form-group col-md-4">
+                       <button type="submit" class="btn btn-success">Submit</button>
                    </div>
 
 
 
-
                </div>
+                </form>
             </div>
 
             <!-- Modal footer -->
@@ -101,6 +107,29 @@
             add old sales
         </button>
 
+
+        <h4 align="center">Old Sales</h4>
+        <div class="table-responsive m-t-40">
+            <table id="oldsales" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th width="20%">Title</th>
+                    <th width="20%">Company Name</th>
+                    <th width="15%">Bill</th>
+                    <th width="10%">Action</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+
+
+                </tbody>
+            </table>
+        </div>
+<hr>
+        <h4 align="center">New Sales</h4>
+
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
@@ -111,7 +140,6 @@
                     <th width="15%">Number</th>
                     <th width="15%">Tnt Number</th>
                     <th width="10%">Category</th>
-                    {{--<th width="5%">Status</th>--}}
                     <th width="10%">Action</th>
 
                 </tr>
@@ -173,10 +201,53 @@
                       "orderable": false, "searchable":false, "name":"selected_rows" },
               ]
           });
+
+          oldsales= $('#oldsales').DataTable({
+              processing: true,
+              serverSide: true,
+              stateSave: true,
+              Filter: true,
+              type:"POST",
+              "ajax":{
+                  "url": "{!! route('local.getOldSalesData') !!}",
+                  "type": "POST",
+                  data:function (d){
+                      d._token="{{csrf_token()}}";
+
+                      d.companyId=$('#companyId').val();
+
+                  }
+              },
+              columns: [
+                  { data: 'title', name: 'title' },
+                  { data: 'companyName', name: 'companyName' },
+                  { data: 'bill', name: 'bill'},
+                  { "data": function(data){
+
+                      return '<a class="btn btn-default btn-sm" data-panel-id="'+data.local_old_salesId+'" onclick="showOldPaymentModal(this)"><i class="fa fa-shopping-cart"></i></a>'
+                          ;},
+                      "orderable": false, "searchable":false, "name":"selected_rows" },
+              ]
+          });
       });
       function getLeadFromCompany(){
 
           table.ajax.reload();
+
+      }
+
+      function showOldPaymentModal(x) {
+          var leadId=$(x).data('panel-id');
+          $.ajax({
+              type: 'POST',
+              url: "{!! route('local.getOldPaymentInfo') !!}",
+              cache: false,
+              data: {_token: "{{csrf_token()}}",'leadId': leadId},
+              success: function (data) {
+                  $("#editLeadModalBody").html(data);
+                  $("#editLeadModal").modal();
+              }
+          });
 
       }
 
