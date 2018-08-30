@@ -65,12 +65,13 @@ class UserManagementController extends Controller
 
     }
     public function setLocalUserTarget(Request $r){
+
         $target=LocalUserTarget::findOrFail($r->userId);
         $target->earn= $r->earn;
         $target->meeting=$r->meeting;
         $target->followup=$r->followup;
         $target->save();
-        Session::flash('message', 'Taeget Updated Successfully');
+        Session::flash('message', 'Target Updated Successfully');
         return redirect()->route('user-management.index');
 
 
@@ -340,6 +341,7 @@ class UserManagementController extends Controller
         
        try{
            $target=Usertarget::findOrFail($r->userId);
+           $target->targetTest=$r->targetTest;
            if($r->call !=null){
                $log=new Targetlog;
                $log->userId=$r->userId;
@@ -380,6 +382,7 @@ class UserManagementController extends Controller
        catch (ModelNotFoundException $ex) {
            $target=new Usertarget;
            $target->userId=$r->userId;
+           $target->targetTest=0;
 
 
           //Target Type: 1. call, 2.HighPossibility , 3. Lead Mined, 4. Contact

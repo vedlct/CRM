@@ -75,6 +75,7 @@
                                        data-target-lead="{{$user->target['targetLeadmine']}}"
                                        data-target-contact="{{$user->target['targetContact']}}"
                                        data-target-contactusa="{{$user->target['targetUsa']}}"
+                                       data-target-test="{{$user->target['targetTest']}}"
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
@@ -132,6 +133,11 @@
                             <div class="form-group col-md-2">
                                 <label for="firstName">Contacted(usa):</label>
                                 <input id="contactUsa" type="number" class="form-control" name="contactUsa" >
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="firstName">Test:</label>
+                                <input id="targetTest" type="number" class="form-control" name="targetTest" >
                             </div>
 
                             <div class="form-group col-md-2">
@@ -607,6 +613,7 @@
             var lead = $(e.relatedTarget).data('target-lead');
             var contact = $(e.relatedTarget).data('target-contact');
             var contactUsa = $(e.relatedTarget).data('target-contactusa');
+            var targetTest = $(e.relatedTarget).data('target-test');
             var type = $(e.relatedTarget).data('target-type');
 
 
@@ -619,6 +626,7 @@
                 $(e.currentTarget).find('input[name="lead"]').val(lead);
                 $(e.currentTarget).find('input[name="contact"]').val(contact);
                 $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
+                $(e.currentTarget).find('input[name="targetTest"]').val(targetTest);
 
 
 

@@ -86,13 +86,15 @@
                                 <a href="{{route('local.company')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Company (Digital)</span></a>
                             </li>
 
-                            <li>
-                                <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Digital)</span></a>
-                            </li>
 
+                            @if(!(Auth::user()->typeId ==1 || Auth::user()->typeId==9))
+                                <li>
+                                    <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Digital)</span></a>
+                                </li>
                             <li>
                                 <a href="{{route('local.myLead')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Lead (Digital)</span></a>
                             </li>
+                            @endif
                             @if(Auth::user()->typeId==1 || Auth::user()->typeId==6 ||Auth::user()->typeId==7)
                             <li>
                                 <a href="{{route('local.assignLead')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead (Digital)</span></a>
@@ -100,7 +102,7 @@
                             @endif
 
                             <li>
-                                <a href="{{route('local.sales')}}"><i class="fa fa-dollar-sign"></i><span class="hide-menu"> Sales</span></a>
+                                <a href="{{route('local.sales')}}"><i class="fa fa-money"></i><span class="hide-menu"> Sales</span></a>
                             </li>
                         <li>
                                 <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Digital</span></a>

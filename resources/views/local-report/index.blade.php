@@ -31,7 +31,7 @@
                 <li class="nav-item">
                         <a href="#" class="nav-link" data-toggle="tab" onclick="employeeReport()">Employee Revenue</a>
                 </li>
-                @if(Auth::user()->typeId==1 || Auth::user()->typeId==6)
+                @if(Auth::user()->typeId==1 || Auth::user()->typeId==6 || Auth::user()->typeId==9)
                     <li class="nav-item">
                         <a  class="nav-link" href=""  data-toggle="tab" onclick="localrevenue()">Client Revenue</a>
                     </li>

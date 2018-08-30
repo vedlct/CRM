@@ -97,7 +97,8 @@
                                 <option value="{{$company->local_companyId}}">{{$company->companyName}}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-info btn-sm pull-right" type="button" onclick="addCompany()">add</button>
+                        <br>
+                        <button class="btn btn-info btn-sm pull-left" type="button" onclick="addCompany()">Add New Company</button>
                     </div>
 
                     <div class="form-group col-md-5">

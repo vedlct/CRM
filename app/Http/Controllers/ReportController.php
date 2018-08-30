@@ -78,6 +78,9 @@ class ReportController extends Controller
 
 
 
+            $testLead=Workprogress::where('progress','Test Job')
+                ->whereBetween('created_at', [$start,$end])
+                ->count();
 
 
 
@@ -106,6 +109,7 @@ class ReportController extends Controller
                 $target->targetCall=0;
                 $target->targetHighPossibility=0;
                 $target->targetLeadmine=0;
+                $target->targetTest=0;
                 $target->save();
             }
 
@@ -117,6 +121,14 @@ class ReportController extends Controller
                 $calledThisWeek=round(($calledThisWeek/($target->targetCall))*100);
                 if($calledThisWeek>100){
                     $calledThisWeek=100;
+                }
+                $t++;
+            }
+
+            if($target->targetTest>0){
+                $testLead=round(($testLead/($target->targetTest))*100);
+                if($testLead>100){
+                    $testLead=100;
                 }
                 $t++;
             }
@@ -169,6 +181,7 @@ class ReportController extends Controller
             $u->highPosibilities=$highPosibilitiesThisWeek;
             $u->contacted=$contacted;
             $u->contactedUsa=$contactedUsa;
+            $u->testLead=$testLead;
             $u->t=$t;
             array_push($report, $u);
         }
@@ -573,6 +586,10 @@ class ReportController extends Controller
                 })
                 ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
 
+            $testLead=Workprogress::where('progress','Test Job')
+                ->whereBetween('created_at', [$r->fromDate, $r->toDate])
+                ->count();
+
 
             //USA CONTACT TARGET
             $contactedUsa=Workprogress::where('userId',$user->id)
@@ -631,6 +648,13 @@ class ReportController extends Controller
                 }
                 $t++;
             }
+            if($target->targetTest>0){
+                $testLead=round(($testLead/($target->targetTest))*100);
+                if($testLead>100){
+                    $testLead=100;
+                }
+                $t++;
+            }
             if($target->targetContact >0){
                 $contacted=round(($contacted/($target->targetContact*$months))*100);
                 if($contacted>100){
@@ -675,6 +699,7 @@ class ReportController extends Controller
             $u->highPosibilities=$highPosibilitiesThisWeek;
             $u->contacted=$contacted;
             $u->contactedUsa=$contactedUsa;
+            $u->testLead=$testLead;
             $u->t=$t;
             array_push($report, $u);
         }

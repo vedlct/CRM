@@ -49,7 +49,7 @@
 
         </div>
 
-    @if(Auth::user()->typeId == 1 ||Auth::user()->typeId == 6)
+    @if(Auth::user()->typeId == 1 ||Auth::user()->typeId == 6 || Auth::user()->typeId == 9)
 
         <div class="form-group col-md-5">
             <label class="control-label " ><b>Bill</b></label>
