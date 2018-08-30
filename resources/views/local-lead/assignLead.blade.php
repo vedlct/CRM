@@ -134,7 +134,9 @@
     <script>
         $(function() {
 
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "order": [[9, 'asc']],
+            });
 
         });
 

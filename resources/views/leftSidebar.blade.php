@@ -77,7 +77,7 @@
                     </a>
                     <ul class="treeview-menu">
                 @endif
-                        @if($userType =='ADMIN' || Auth::user()->crmType =='local' )
+                        @if( Auth::user()->crmType =='local' )
 
                         <li>
                                 <a href="{{route('local.allLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead (Digital)</span></a>
@@ -87,7 +87,7 @@
                             </li>
 
 
-                            @if(!(Auth::user()->typeId ==1 || Auth::user()->typeId==9))
+                            @if(!(Auth::user()->typeId==9))
                                 <li>
                                     <a href="{{route('local.todaysFollowup')}}"><i class="fa fa-calendar-o"></i><span class="hide-menu">Todays Followup (Digital)</span></a>
                                 </li>
@@ -104,13 +104,18 @@
                             <li>
                                 <a href="{{route('local.sales')}}"><i class="fa fa-money"></i><span class="hide-menu"> Sales</span></a>
                             </li>
-                        <li>
+
+
+                            <li>
                                 <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Digital</span></a>
                             </li>
                         @endif
 
 
                         @if($userType =='ADMIN' )
+                            <li>
+                                <a href="{{route('local.report')}}"><i class="fa fa-flag-checkered"></i><span class="hide-menu"> Report Digital</span></a>
+                            </li>
 
                     </ul>
                 </li>
