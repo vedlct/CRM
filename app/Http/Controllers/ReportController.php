@@ -79,6 +79,7 @@ class ReportController extends Controller
 
 
             $testLead=Workprogress::where('progress','Test Job')
+                ->where('userId',$user->id)
                 ->whereBetween('created_at', [$start,$end])
                 ->count();
 
@@ -185,6 +186,7 @@ class ReportController extends Controller
             $u->t=$t;
             array_push($report, $u);
         }
+       // return $report;
         return view('report.index')->with('report',$report);
     }
 
