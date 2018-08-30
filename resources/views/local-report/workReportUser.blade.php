@@ -29,23 +29,16 @@
 <table class="table table-bordered table-striped">
     <thead>
         <th>User</th>
-        <th>Sales</th>
         <th>Meeting</th>
         <th>Followup</th>
+        <th>Sales</th>
 
     </thead>
     <tbody>
     @foreach($users as $user)
         <tr>
             <td>{{$user->firstName}}</td>
-            <td>
-                @foreach($sales as $sale)
-                    @if($sale->userId == $user->id)
-                        <a href="#" data-panel-id="{{$user->id}}" onclick="getUserSales(this)">{{$sale->total}}</a>
-                        @break
-                    @endif
-                @endforeach
-            </td>
+
 
             <td>
                 @foreach($meeting as $meet)
@@ -60,6 +53,14 @@
                 @foreach($followup as $follow)
                     @if($follow->userId == $user->id)
                         <a href="#" data-panel-id="{{$user->id}}" onclick="getUserFollowup(this)">{{$follow->total}}</a>
+                        @break
+                    @endif
+                @endforeach
+            </td>
+            <td>
+                @foreach($sales as $sale)
+                    @if($sale->userId == $user->id)
+                        <a href="#" data-panel-id="{{$user->id}}" onclick="getUserSales(this)">{{$sale->total}}</a>
                         @break
                     @endif
                 @endforeach

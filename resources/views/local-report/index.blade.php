@@ -22,23 +22,25 @@
 
         <div id="exTab2">
             <ul class="nav nav-tabs">
-                @if(Auth::user()->typeId==1 || Auth::user()->typeId==6)
-                <li class="nav-item">
-                    <a  class="nav-link" href="" id="firstClick" data-toggle="tab" onclick="localrevenue()">Revenue</a>
-                </li>
-                @endif
+
+
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-toggle="tab" onclick="employeeReport()">Employee Revenue</a>
+                    <a href="#" class="nav-link" id="firstClick" data-toggle="tab" onclick="workReportUser()">User Report</a>
                 </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link" data-toggle="tab" onclick="employeeReport()">Employee Revenue</a>
+                </li>
+                @if(Auth::user()->typeId==1 || Auth::user()->typeId==6)
+                    <li class="nav-item">
+                        <a  class="nav-link" href=""  data-toggle="tab" onclick="localrevenue()">Client Revenue</a>
+                    </li>
+                @endif
 
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-toggle="tab" onclick="leadAssignReport()">Lead Assign</a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-toggle="tab" onclick="workReportUser()">User Report</a>
-                </li>
 
             </ul>
 

@@ -146,7 +146,7 @@ class UserManagementController extends Controller
         // User::create([
 		//return $request;
         $crmType=null;
-        if($request['typeId']==6 || $request['typeId']==7 || $request['typeId']==8){
+        if($request['typeId']==6 || $request['typeId']==7 || $request['typeId']==8 || $request['typeId']==9){
             $crmType='local';
         }
 
