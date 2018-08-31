@@ -296,6 +296,18 @@ class LeadController extends Controller
             $lead->leadAssignStatus=0;
         }
 
+        if($r->status==6){
+            $wp=new Workprogress;
+            $wp->leadId=$lead->leadId;
+            $wp->progress='Closing';
+            $wp->userId=Auth::user()->id;
+            $wp->save();
+
+            $lead->statusId=$r->status;
+            $lead->contactedUserId=null;
+            $lead->leadAssignStatus=0;
+        }
+
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
         //return back();

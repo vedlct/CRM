@@ -105,6 +105,8 @@ class LocalReportController extends Controller
         return  view('local-report.getUserRevenueLog',compact('bills'));
     }
 
+    //User Report
+
     public function workReportUser(Request $r){
         $users=User::select('id','firstName','typeId')
             ->where('crmType','local');
@@ -123,6 +125,8 @@ class LocalReportController extends Controller
              }
 
         $sales=$sales->get();
+
+
 
         $meeting=LocalMeeting::select('userId',DB::raw('count(meetingDate) as total'))->groupBy('userId');
 
@@ -162,7 +166,7 @@ class LocalReportController extends Controller
             $sales=$sales->whereBetween(DB::raw('DATE(local_sales.created_at)'),array($r->startDate,$r->endDate));
         }
         else{
-            $sales=$sales->where(DB::raw('DATE(created_at)'),date('Y-m-d'));
+            $sales=$sales->where(DB::raw('DATE(local_sales.created_at)'),date('Y-m-d'));
         }
 
         $sales=$sales->get();

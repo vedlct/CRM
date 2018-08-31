@@ -143,9 +143,6 @@ Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
 Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
 
 
-
-
-
 //Star Lead
 Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 
