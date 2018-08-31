@@ -13,7 +13,6 @@
             <div class="modal-body" id="userReportModalBody">
 
             </div>
-
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -29,16 +28,33 @@
 <table class="table table-bordered table-striped">
     <thead>
         <th>User</th>
+        <th>Old Sales</th>
+        <th>Sales</th>
         <th>Meeting</th>
         <th>Followup</th>
-        <th>Sales</th>
+
 
     </thead>
     <tbody>
     @foreach($users as $user)
         <tr>
             <td>{{$user->firstName}}</td>
-
+            <td>
+                @foreach($oldSales as $osale)
+                    @if($osale->userId == $user->id)
+                        <a href="#" data-panel-id="{{$user->id}}" onclick="getUserOldSales(this)">{{$osale->total}}</a>
+                        @break
+                    @endif
+                @endforeach
+            </td>
+            <td>
+                @foreach($sales as $sale)
+                    @if($sale->userId == $user->id)
+                        <a href="#" data-panel-id="{{$user->id}}" onclick="getUserSales(this)">{{$sale->total}}</a>
+                        @break
+                    @endif
+                @endforeach
+            </td>
 
             <td>
                 @foreach($meeting as $meet)
@@ -53,14 +69,6 @@
                 @foreach($followup as $follow)
                     @if($follow->userId == $user->id)
                         <a href="#" data-panel-id="{{$user->id}}" onclick="getUserFollowup(this)">{{$follow->total}}</a>
-                        @break
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($sales as $sale)
-                    @if($sale->userId == $user->id)
-                        <a href="#" data-panel-id="{{$user->id}}" onclick="getUserSales(this)">{{$sale->total}}</a>
                         @break
                     @endif
                 @endforeach
@@ -96,6 +104,29 @@
             }
         });
     }
+        function getUserOldSales(x) {
+        var userId=$(x).data('panel-id');
+
+        $.ajax({
+            type: 'POST',
+            url: "{!! route('local.getUserOldSales') !!}",
+            cache: false,
+            @if(isset($startDate) && isset($endDate))
+            data: {_token: "{{csrf_token()}}",startDate:"{{$startDate}}",endDate:"{{$endDate}}",userId:userId},
+            @else
+            data: {_token: "{{csrf_token()}}",userId:userId},
+            @endif
+            success: function (data) {
+//                console.log(data);
+                $('#userReportModalBody').html(data);
+                $('#userReportModalHead').html('Sales');
+                $('#userReportModal').modal();
+
+            }
+        });
+    }
+
+
 
     function getUserMeeting(x) {
         var userId=$(x).data('panel-id');

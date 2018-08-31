@@ -267,6 +267,7 @@ Route::post('local/getUserRevenueLog','LocalReportController@getUserRevenueLog')
 
 Route::post('local/workReportUser','LocalReportController@workReportUser')->name('local.workReportUser');
 Route::post('local/getUserSales','LocalReportController@getUserSales')->name('local.getUserSales');
+Route::post('local/getUserOldSales','LocalReportController@getUserOldSales')->name('local.getUserOldSales');
 Route::post('local/getUserMeeting','LocalReportController@getUserMeeting')->name('local.getUserMeeting');
 Route::post('local/getUserFollowup','LocalReportController@getUserFollowup')->name('local.getUserFollowup');
 

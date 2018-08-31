@@ -17,12 +17,13 @@ use Session;
 use DB;
 class LocalSalesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(){
         $companies=LocalCompany::select('local_companyId','companyName')
             ->get();
-
-
-
 
         return view('local-sale.index',compact('companies'));
     }

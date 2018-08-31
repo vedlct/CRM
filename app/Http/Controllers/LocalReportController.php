@@ -16,7 +16,12 @@ use Auth;
 
 class LocalReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $r){
+
         if($r->startDate && $r->endDate){
             return view('local-report.index')
                 ->with('startDate',$r->startDate)
@@ -126,6 +131,16 @@ class LocalReportController extends Controller
 
         $sales=$sales->get();
 
+        $oldSales=LocalOldSalesDetails::select('local_old_sale_details.userId',DB::raw('sum(local_old_sale_details.total) as total'))
+            ->leftJoin('local_old_sales','local_old_sales.local_old_salesId','local_old_sale_details.local_old_saleId')
+            ->groupBy('local_old_sale_details.userId');
+        if($r->startDate && $r->endDate){
+            $oldSales=$oldSales->whereBetween(DB::raw('DATE(local_old_sale_details.date)'),array($r->startDate,$r->endDate));
+        }
+        else{
+            $oldSales=$oldSales->where(DB::raw('DATE(local_old_sale_details.date)'),date('Y-m-d'));
+        }
+        $oldSales=$oldSales->get();
 
 
         $meeting=LocalMeeting::select('userId',DB::raw('count(meetingDate) as total'))->groupBy('userId');
@@ -147,14 +162,14 @@ class LocalReportController extends Controller
             $startDate=$r->startDate;
             $endDate=$r->endDate;
             $followup=$followup->get();
-            return view('local-report.workReportUser',compact('users','sales','meeting','followup','startDate','endDate'));
+            return view('local-report.workReportUser',compact('users','sales','meeting','followup','startDate','endDate','oldSales'));
         }
         else{
             $followup=$followup->where(DB::raw('DATE(date)'),date('Y-m-d'));
         }
         $followup=$followup->get();
 
-        return view('local-report.workReportUser',compact('users','sales','meeting','followup'));
+        return view('local-report.workReportUser',compact('users','sales','meeting','followup','oldSales'));
     }
 
     public function getUserSales(Request $r){
@@ -172,6 +187,25 @@ class LocalReportController extends Controller
         $sales=$sales->get();
 
         return view('local-report.getUserSales',compact('sales'));
+    }
+
+    public function getUserOldSales(Request $r){
+        $sales=LocalOldSalesDetails::select('local_old_sale_details.date as created_at','local_old_sale_details.total','local_old_sales.title as leadName','companyName')
+            ->where('local_old_sale_details.userId',$r->userId)
+            ->leftJoin('local_old_sales','local_old_sales.local_old_salesId','local_old_sale_details.local_old_saleId')
+            ->leftJoin('local_company','local_company.local_companyId','local_old_sales.local_companyId');
+        if($r->startDate && $r->endDate){
+            $sales=$sales->whereBetween(DB::raw('DATE(local_old_sale_details.date)'),array($r->startDate,$r->endDate));
+        }
+        else{
+            $sales=$sales->where(DB::raw('DATE(local_old_sale_details.date)'),date('Y-m-d'));
+        }
+
+        $sales=$sales->get();
+
+        return view('local-report.getUserSales',compact('sales'));
+
+
     }
 
     public function getUserMeeting(Request $r){
