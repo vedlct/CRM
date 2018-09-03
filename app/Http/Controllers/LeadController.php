@@ -529,6 +529,9 @@ class LeadController extends Controller
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
         $lead->leadAssignStatus=0;
+        if($r->progress=="Closing"){
+            $lead->statusId=6;
+        }
         $lead->save();
         if($r->report ==1 ||$r->report ==3||$r->report ==4||$r->report ==5) {
 //            $r->report !=2 ||$r->report !=6
@@ -555,6 +558,7 @@ class LeadController extends Controller
         $progress->userId=Auth::user()->id;
         $progress->comments=$r->comment;
         $progress->save();
+
         Session::flash('message', 'Report Updated Successfully');
         return back();
     }

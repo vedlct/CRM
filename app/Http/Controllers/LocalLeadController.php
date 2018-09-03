@@ -184,7 +184,7 @@ class LocalLeadController extends Controller
             ->leftJoin('area','area.areaId','local_company.areaId')
             ->leftJoin('local_lead_assign','local_lead_assign.local_leadId','local_lead.local_leadId')
             ->where('local_lead_assign.userId',Auth::user()->id)
-            ->where('local_lead.statusId',1)
+            ->where('local_lead.statusId','!=',4)
             ->get();
 
         $datatables = Datatables::of($lead);
@@ -228,7 +228,7 @@ class LocalLeadController extends Controller
 
 
             $leads=LocalLead::select('local_lead.local_leadId','local_lead.leadName','website','mobile','tnt','categories.categoryName','area.areaName','address','local_lead.statusId','possibilities.possibilityName')
-                ->where('local_lead.statusId',1)
+                ->where('local_lead.statusId','!=',4)
                 ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
                 ->leftJoin('area','area.areaId','local_company.areaId')
                 ->leftJoin('categories','categories.categoryId','local_lead.categoryId')
@@ -266,7 +266,11 @@ class LocalLeadController extends Controller
 
     public function insertAssign(Request $r){
         foreach ($r->leadId as $local_leadId){
-            $count=LocalLeadAssign::where('userId',$r->userId)->where('local_leadId',$local_leadId)->count();
+            $count=LocalLeadAssign::where('userId',$r->userId)->where('local_leadId',$local_leadId)
+                ->count();
+            $lead=LocalLead::findOrFail($local_leadId);
+            $lead->statusId=3;
+            $lead->save();
             if($count==0){
                 $assign=new LocalLeadAssign();
                 $assign->local_leadId=$local_leadId;
