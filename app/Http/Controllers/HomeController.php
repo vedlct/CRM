@@ -97,6 +97,11 @@ class HomeController extends Controller
             })
             ->whereBetween('created_at', [$start, $end])->count();
 
+        $testLeadCount=Workprogress::where('progress','Test Job')
+            ->where('userId',Auth::user()->id)
+            ->whereBetween('created_at', [$start,$end])
+            ->count();
+
         $User_Type=Session::get('userType');
         if($User_Type=='RA'){
             $highPosibilities=Lead::select('leads.*')
@@ -135,6 +140,7 @@ class HomeController extends Controller
             $target->targetCall=0;
             $target->targetHighPossibility=0;
             $target->targetLeadmine=0;
+            $target->targetTest = 0;
             $target->save();
 
 
@@ -179,6 +185,15 @@ class HomeController extends Controller
 
 
 
+        $testLead = 0;
+        if($target->targetTest>0){
+            $testLead=round(($testLeadCount/($target->targetTest))*100);
+            if($testLead>100){
+                $testLead=100;
+            }
+            $countWeek++;
+        }
+
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
@@ -187,6 +202,8 @@ class HomeController extends Controller
             ->with('lastDayContact',$lastDayContact)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
+            ->with('testLead', $testLead)
+            ->with('testLeadCount', $testLeadCount)
             ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
             ->with('contactThisWeek',$contactThisWeek)
             ->with('countWeek',$countWeek);

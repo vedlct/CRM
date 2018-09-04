@@ -112,7 +112,8 @@
                     { data: 'possibilityName', name: 'possibilityName'},
                     { "data": function(data){
 
-                        return '<button class="btn btn-info" onclick="showReportModal('+data.local_leadId+')"><i class="fa fa-phone"></i></button>'
+                        return '<a class="btn btn-default btn-sm" data-panel-id="'+data.local_leadId+'" onclick="editLead(this)"><i class="fa fa-edit"></i></a>'+
+                        '<button class="btn btn-info" onclick="showReportModal('+data.local_leadId+')"><i class="fa fa-phone"></i></button>'
                             ;},
                         "orderable": false, "searchable":false, "name":"selected_rows" },
                 ]
@@ -133,6 +134,24 @@
                     $("#editLeadModal").modal();
                 }
             });
+
+
+        }
+
+        function editLead(x) {
+            var leadId=$(x).data('panel-id');
+
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('local.getEditModal') !!}",
+                cache: false,
+                data: {_token: "{{csrf_token()}}",'leadId': leadId},
+                success: function (data) {
+                    $("#editLeadModalBody").html(data);
+                    $("#editLeadModal").modal();
+                }
+            });
+
 
 
         }

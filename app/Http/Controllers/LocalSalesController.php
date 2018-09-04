@@ -32,7 +32,8 @@ class LocalSalesController extends Controller
         $User_Type=Session::get('userType');
 
         $leads=LocalLeadAssign::select('local_lead.local_leadId','local_lead.leadName','companyName','local_company.website','local_company.mobile','local_company.tnt','categoryName')
-            ->leftJoin('local_lead','local_lead.local_leadId','local_lead_assign.local_leadId');
+            ->leftJoin('local_lead','local_lead.local_leadId','local_lead_assign.local_leadId')
+            ->where('local_lead.statusId','!=',4);
 
         if($r->companyId){
             $leads=$leads->where('local_lead.local_companyId',$r->companyId);

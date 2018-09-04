@@ -18,7 +18,7 @@
 
         <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><a href="{{route('called')}}">Call</a></h4>
@@ -49,7 +49,7 @@
 
 
 
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-2 col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
@@ -79,7 +79,7 @@
 
 
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-2 col-md-6">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
@@ -108,8 +108,28 @@
         </div>
     </div>
 
+            <div class="col-lg-2 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('highPossibility')}}">Test Lead</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$testLeadCount}} | {{$target->targetTest}}</h2>
+                            <span class="text-muted">This Month</span>
+                        </div>
 
-            <div class="col-lg-3 col-md-6">
+                        @if($target->targetTest>0)
+                            <span class="text-purple">{{round($testLead)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetTest>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$testLead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
@@ -181,6 +201,7 @@
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
                             { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
+                            { y: {{$testLead}},  label: "Test Lead",indexLabel: "{{$testLead}}%" },
 
                             @if($userType=="RA")
                             { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
