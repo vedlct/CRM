@@ -63,7 +63,8 @@ class ReportController extends Controller
                     $q->orWhere('callingReport',5)
                         ->orWhere('callingReport',4);
                 })
-                ->whereBetween('created_at', [$start,$end])->count();
+                ->whereBetween('created_at', [$start,$end])
+                ->count();
 
             //USA CONTACT TARGET
             $contactedUsa=Workprogress::where('userId',$user->id)

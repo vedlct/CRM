@@ -90,12 +90,27 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$start, $end])->count();
 
         $lastDayContact= Workprogress::where('userId',Auth::user()->id)
-//            ->where('callingReport',5)
             ->where(function($q){
                 $q->orWhere('callingReport',5)
                     ->orWhere('callingReport',4);
             })
-            ->whereBetween('created_at', [$start, $end])->count();
+            ->whereBetween('created_at', [$start, $end])
+            ->count();
+
+
+        //USA CONTACT TARGET
+        $contactedUsaCount=Workprogress::where('userId',Auth::user()->id)
+            ->leftJoin('leads','workprogress.leadId','leads.leadId')
+            ->leftJoin('countries','leads.countryId','countries.countryId')
+            ->where('countries.countryName','like','%USA%')
+            ->where(function($q){
+                $q->orWhere('callingReport',5)
+                    ->orWhere('callingReport',4);
+            })
+            ->whereBetween('workprogress.created_at', [$start,$end])
+            ->count();
+
+
 
         $testLeadCount=Workprogress::where('progress','Test Job')
             ->where('userId',Auth::user()->id)
@@ -183,6 +198,18 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+        if($target->targetUsa >0){
+
+            $contactedUsa=round(($contactedUsaCount/($target->targetUsa))*100);
+            if($contactedUsa>100){
+                $contactedUsa=100;
+            }
+        }
+
+        else{
+            $contactedUsa=0;
+        }
+
 
 
         $testLead = 0;
@@ -206,6 +233,8 @@ class HomeController extends Controller
             ->with('testLeadCount', $testLeadCount)
             ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
             ->with('contactThisWeek',$contactThisWeek)
+            ->with('contactedUsa',$contactedUsa)
+            ->with('contactedUsaCount',$contactedUsaCount)
             ->with('countWeek',$countWeek);
 
 
@@ -307,6 +336,38 @@ class HomeController extends Controller
 
     }
 
+
+    public function contactUsa(){
+        $date = Carbon::now();
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+
+
+        $leads=Lead::select('leads.*')
+            ->leftJoin('workprogress','workprogress.leadId','leads.leadId')
+            ->leftJoin('countries','leads.countryId','countries.countryId')
+            ->where('userId',Auth::user()->id)
+            ->where('countries.countryName','like','%USA%')
+            ->where(function($q){
+                $q->orWhere('callingReport',5)
+                    ->orWhere('callingReport',4);
+            })
+            ->whereBetween('workprogress.created_at', [$start,$end])
+            ->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('report.weekly')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+
+    }
+
     public function mine(){
         $date = Carbon::now();
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -361,6 +422,31 @@ class HomeController extends Controller
          ->with('categories',$categories);
 
 
+
+ }
+
+ public function testLead(){
+     $date = Carbon::now();
+     $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+     $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+     $leads=Workprogress::select('leads.*')
+         ->where('progress','Test Job')
+         ->where('userId',Auth::user()->id)
+         ->leftJoin('leads','leads.leadId','workprogress.leadId')
+         ->whereBetween('workprogress.created_at', [$start,$end])
+         ->get();
+
+//     $leads=Lead::select('leads.*')
+//         ->where('leads.minedBy',Auth::user()->id)
+//         ->where('filteredPossibility',3)
+//         ->whereBetween('created_at', [$start,$end])
+//         ->get();
+
+
+
+     return view('report.weekly')
+         ->with('leads', $leads);
 
  }
 

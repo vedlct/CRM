@@ -77,6 +77,33 @@
                 </div>
             </div>
 
+            <div class="col-lg-2 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('contactUsa')}}">USA</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"> {{$contactedUsaCount}} | {{$target->targetUsa}}</h2>
+                            <span class="text-muted">This Month</span>
+                        </div>
+                        @if($target->targetUsa>0)
+<!--                            --><?php
+//                            $lastContactPercent= round(($lastDayContact/$target->targetContact)*100);
+//                            if($lastContactPercent > 100){
+//                                $lastContactPercent=100;
+//                            }
+//                            $count++; $total+=$lastContactPercent;
+//                            ?>
+
+                            <span class="text-success">{{round($contactedUsa)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetContact>0)
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{$contactedUsa}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
     <div class="col-lg-2 col-md-6">
@@ -111,7 +138,7 @@
             <div class="col-lg-2 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('highPossibility')}}">Test Lead</a></h4>
+                        <h4 class="card-title"><a href="{{route('testLead')}}">Test Lead</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$testLeadCount}} | {{$target->targetTest}}</h2>
                             <span class="text-muted">This Month</span>
@@ -158,7 +185,7 @@
 
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
     <div class="card">
     <div class="card-body">
     <h4 class="card-title">Monthly Graph</h4>
@@ -200,15 +227,16 @@
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                             { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
                             { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
+                            { y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
                             { y: {{$testLead}},  label: "Test Lead",indexLabel: "{{$testLead}}%" },
 
                             @if($userType=="RA")
                             { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
                                 @elseif($userType=="USER")
-                            { y:{{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}}%" },
+                            { y:{{(($highPosibilitiesThisWeek*20/100)+($testLead*20/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactedUsa*10/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}}%" },
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
-                            { y:{{(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}}%" },
+                            { y:{{(($highPosibilitiesThisWeek*20/100)+($testLead*20/100)+($calledThisWeek*25/100)+($contactedUsa*10/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}}%" },
                             @endif
 
                         ]
