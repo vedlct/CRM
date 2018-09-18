@@ -47,15 +47,27 @@ class GetIndividualReportController extends Controller
 
         else{
 //            SELECT * FROM `possibilitychanges` LEFT JOIN workprogress ON possibilitychanges.created_at = workprogress.created_at WHERE possibilitychanges.changeId=197
-            $highPosibilitiesThisWeek=Lead::select('leads.*','workprogress.comments','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
+//            $highPosibilitiesThisWeek=Lead::select('leads.*','workprogress.comments','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
+//                ->with('country','category','possibility')
+//                ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
+//                ->where('possibilitychanges.userId',$user->id)
+//                ->where('possibilitychanges.possibilityId',3)
+//                ->leftJoin('workprogress', 'possibilitychanges.created_at', 'workprogress.created_at')
+//                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+            $highPosibilitiesThisWeek=Lead::select('leads.*','possibilitychanges.created_at','possibilitychanges.changeId','possibilitychanges.approval')
                 ->with('country','category','possibility')
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('possibilitychanges.userId',$user->id)
                 ->where('possibilitychanges.possibilityId',3)
-                ->leftJoin('workprogress', 'possibilitychanges.created_at', 'workprogress.created_at')
-                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])
+                ->get();
+
+
 
         }
+        $comments=Workprogress::where('userId',$user->id)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])
+            ->get();
 
 
 //        return $highPosibilitiesThisWeek;
@@ -78,16 +90,22 @@ class GetIndividualReportController extends Controller
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>';
-//            $comment=Workprogress::select('comments')->where('leadId',$l->leadId)->orderBy('progressId','desc')->first();
-//            if(!empty($comment)){
-//                $table.= '<td>'.$comment->comments.'</td>
-//                    </td><td>'.$l->created_at.'</td>';
-//            }
 
-//            else{
-                $table.= '<td>'.$l->comments.'</td>
-                    </td><td>'.$l->created_at.'</td>';
-//            }
+               $check=false;
+                foreach ($comments as $comment)
+                {
+                    if($comment->created_at ==$l->created_at ){
+                        $table.= '<td>'.$comment->comments.'</td>';
+                        $check=true;
+                        break;
+
+                    }
+                }
+                if($check==false){
+                    $table.= '<td></td>';
+                }
+                $table.= '</td><td>'.$l->created_at.'</td>';
+
 
             $comment='';
 
