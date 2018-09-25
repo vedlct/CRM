@@ -137,7 +137,7 @@ class LeadController extends Controller
             'website' => 'max:100',
             'email' => 'max:100',
             'personName' => 'max:100',
-            'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
+            'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
             'designation'=>'max:100'
         ]);
         //Inserting Data To Leads TAble
@@ -184,7 +184,7 @@ class LeadController extends Controller
             'website' => 'max:100',
             'email' => 'max:100',
             'personName' => 'max:100',
-            'personNumber' => 'required|max:15|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
+            'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
             'designation'=>'max:100'
         ]);
         //Inserting Data To Leads TAble
