@@ -289,11 +289,15 @@
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+            var createdAt=$(e.relatedTarget).data('lead-created');
+
+            // alert(createdAt);
 
 
             //populate the textbox
             $('#category').val(category);
-            $('div.mined').text(minedBy);
+            // $('div.mined').text(minedBy);
+            $('div.mined').text(minedBy+' _'+createdAt);
             $('#country').val(country);
 //            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);

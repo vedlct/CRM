@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Status;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Auth;
@@ -50,6 +51,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
@@ -75,7 +77,8 @@ class LeadController extends Controller
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
-                                                data-lead-designation="'.$lead->designation.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
@@ -98,8 +101,10 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
-                                            data-lead-country="'.$lead->countryId.'"
-                                                data-lead-designation="'.$lead->designation.'">
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
+                                           data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
@@ -426,6 +431,7 @@ class LeadController extends Controller
                 ->with('status',$status);
         }
         return Redirect()->route('home');}
+
     public function getComments(Request $r){
         if($r->ajax()){
             $comments=Workprogress::select(['users.firstName','comments','workprogress.created_at'])
@@ -720,6 +726,7 @@ class LeadController extends Controller
                                    data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
                                    data-lead-designation="'.$lead->designation.'"
+                                   data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             })

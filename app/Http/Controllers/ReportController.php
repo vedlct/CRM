@@ -51,19 +51,20 @@ class ReportController extends Controller
         $report =array();
         foreach ($users as $user){
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                ->whereBetween('created_at', [$start,$end])->count();
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
             $calledThisWeek=Workprogress::where('userId',$user->id)
                 ->where('workprogress.callingReport','!=',null)
                 ->where('callingReport','!=',6)
-                ->whereBetween('created_at', [$start,$end])->count();
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+
             $contacted=Workprogress::where('userId',$user->id)
 //                    ->where('callingReport',5)
                 ->where(function($q){
                     $q->orWhere('callingReport',5)
                         ->orWhere('callingReport',4);
                 })
-                ->whereBetween('created_at', [$start,$end])
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
                 ->count();
 
             //USA CONTACT TARGET
@@ -75,13 +76,13 @@ class ReportController extends Controller
                     $q->orWhere('callingReport',5)
                         ->orWhere('callingReport',4);
                 })
-                ->whereBetween('workprogress.created_at', [$start,$end])->count();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$start,$end])->count();
 
 
 
             $testLead=Workprogress::where('progress','Test Job')
                 ->where('userId',$user->id)
-                ->whereBetween('created_at', [$start,$end])
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
                 ->count();
 
 
@@ -93,12 +94,12 @@ class ReportController extends Controller
 //                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                     ->where('leads.minedBy',$user->id)
                     ->where('filteredPossibility',3)
-                    ->whereBetween('created_at', [$start,$end])->count();
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
             }
             else{
                 $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
                     ->where('possibilityId',3)
-                    ->whereBetween('created_at', [$start,$end])->count();
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
             }
 
@@ -231,14 +232,14 @@ class ReportController extends Controller
                     $q->orWhere('callingReport',5)
                         ->orWhere('callingReport',4);
                 })
-                ->whereBetween('created_at',[$r->fromDate, $r->toDate])->count();
+                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate, $r->toDate])->count();
 
 //            $testLead=Workprogress::where('progress','Test Job')
 //                ->whereBetween('created_at', [$r->fromDate, $r->toDate])
 //                ->count();
             $testLead=Workprogress::where('progress','Test Job')
                 ->where('userId',$user->id)
-                ->whereBetween('created_at', [$r->fromDate, $r->toDate])
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
                 ->count();
 
 
@@ -251,7 +252,7 @@ class ReportController extends Controller
                     $q->orWhere('callingReport',5)
                         ->orWhere('callingReport',4);
                 })
-                ->whereBetween('workprogress.created_at', [$r->fromDate, $r->toDate])->count();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])->count();
 
 
 
@@ -266,7 +267,7 @@ class ReportController extends Controller
 //                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
                     ->where('leads.minedBy',$user->id)
                     ->where('filteredPossibility',3)
-                    ->whereBetween('created_at', [$r->fromDate,$r->toDate])
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
                     ->count();
             }
             else{
@@ -420,7 +421,7 @@ class ReportController extends Controller
         $calledThisWeek=Workprogress::select('userId',DB::raw('count(*) as userCall'))
             ->where('workprogress.callingReport','!=',null)
             ->where('callingReport','!=',6)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
@@ -431,7 +432,7 @@ class ReportController extends Controller
 //        return $calledThisWeek;
 
         $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('minedBy')
             ->get();
 
@@ -440,7 +441,7 @@ class ReportController extends Controller
 
         $followupThisWeek=Workprogress::select('userId',DB::raw('count(*) as userFollowup'))
             ->where('callingReport',4)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
@@ -449,7 +450,7 @@ class ReportController extends Controller
 
         $highPosibilitiesThisWeekRa=Lead::select('minedBy',DB::raw('count(*) as userHighPosibilities'))
             ->where('filteredPossibility',3)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('minedBy')
             ->get();
 
@@ -457,21 +458,21 @@ class ReportController extends Controller
 
         $highPosibilitiesThisWeekUser=Possibilitychange::select('userId',DB::raw('count(*) as userHighPosibilities'))
             ->where('possibilityId',3)
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $highPosibilitiesThisWeekUser;
 
         $assignedLead=Leadassigned::select('assignTo',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('assignTo')
             ->get();
 
 //       return $assignedLead;
 
         $assignedLeadRa=Leadassigned::select('assignBy',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('assignBy')
             ->get();
 
@@ -479,7 +480,7 @@ class ReportController extends Controller
 
         $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
             ->where('possibilityId',3)
-            ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
@@ -487,14 +488,14 @@ class ReportController extends Controller
 
         $testLead=Workprogress::select('userId',DB::raw('count(leadId) as userTestLead'))
             ->where('progress','Test Job')
-            ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $testLead;
         $contacted=Workprogress::select('userId',DB::raw('count(*) as userContacted'))
             ->where('callingReport',5)
-            ->whereBetween('created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
@@ -506,7 +507,7 @@ class ReportController extends Controller
             ->leftJoin('countries','leads.countryId','countries.countryId')
             ->where('countries.countryName','like','%USA%')
             ->where('callingReport',5)
-            ->whereBetween('workprogress.created_at',[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
@@ -515,7 +516,7 @@ class ReportController extends Controller
         $closing=Workprogress::select('userId',DB::raw('count(*) as userClosing'))
                 ->where('progress','Closing')
                 ->groupBy('userId')
-                ->whereBetween('created_at', [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
                 ->get();
 
 //        return $closing;
