@@ -378,6 +378,11 @@ class UserManagementController extends Controller
                $target->targetUsa=$r->contactUsa;
            }
 
+           if($r->targetFile !=null){
+
+               $target->targetFile=$r->targetFile;
+           }
+
        }
        catch (ModelNotFoundException $ex) {
            $target=new Usertarget;

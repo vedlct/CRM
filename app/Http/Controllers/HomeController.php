@@ -4,6 +4,7 @@ use App\LocalFollowup;
 use App\LocalMeeting;
 use App\LocalSales;
 use App\LocalUserTarget;
+use App\NewFile;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -97,6 +98,10 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$start, $end])
             ->count();
 
+        $fileCount=NewFile::where('userId',Auth::user()->id)->sum('fileCount');
+
+
+
 
         //USA CONTACT TARGET
         $contactedUsaCount=Workprogress::where('userId',Auth::user()->id)
@@ -156,6 +161,7 @@ class HomeController extends Controller
             $target->targetHighPossibility=0;
             $target->targetLeadmine=0;
             $target->targetTest = 0;
+            $target->targetFile = 0;
             $target->save();
 
 
@@ -221,6 +227,16 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+
+        $targetNewFile=0;
+        if($target->targetFile>0){
+            $targetNewFile=round(($fileCount/($target->targetFile))*100);
+            if($targetNewFile>100){
+                $targetNewFile=100;
+            }
+            $countWeek++;
+        }
+
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
@@ -235,7 +251,9 @@ class HomeController extends Controller
             ->with('contactThisWeek',$contactThisWeek)
             ->with('contactedUsa',$contactedUsa)
             ->with('contactedUsaCount',$contactedUsaCount)
-            ->with('countWeek',$countWeek);
+            ->with('countWeek',$countWeek)
+            ->with('targetNewFile',$targetNewFile)
+            ->with('fileCount',$fileCount);
 
 
     }
@@ -430,23 +448,42 @@ class HomeController extends Controller
      $start = Carbon::now()->startOfMonth()->format('Y-m-d');
      $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-     $leads=Workprogress::select('leads.*')
+
+     $leads=Lead::select('leads.*')
+         ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+         ->whereBetween('workprogress.created_at', [$start,$end])
          ->where('progress','Test Job')
          ->where('userId',Auth::user()->id)
-         ->leftJoin('leads','leads.leadId','workprogress.leadId')
-         ->whereBetween('workprogress.created_at', [$start,$end])
          ->get();
 
-//     $leads=Lead::select('leads.*')
-//         ->where('leads.minedBy',Auth::user()->id)
-//         ->where('filteredPossibility',3)
-//         ->whereBetween('created_at', [$start,$end])
-//         ->get();
 
-
+     $callReports = Callingreport::get();
+     $possibilities = Possibility::get();
+     $categories=Category::where('type',1)->get();
 
      return view('report.weekly')
-         ->with('leads', $leads);
+         ->with('leads', $leads)
+         ->with('callReports', $callReports)
+         ->with('possibilities', $possibilities)
+         ->with('categories',$categories);
+
+ }
+
+ public function newFile(){
+     $date = Carbon::now();
+     $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+     $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+     $newFiles=NewFile::select('new_file.*','leads.companyName','users.firstName','users.lastName')
+         ->leftJoin('leads','leads.leadId','new_file.leadId')
+         ->leftJoin('users','users.id','new_file.userId')
+         ->where('new_file.userId',Auth::user()->id)
+         ->whereBetween(DB::raw('date(new_file.created_at)'), [$start,$end])
+         ->get();
+
+
+    return view('report.newFile',compact('newFiles'));
+//     return $newFiles;
 
  }
 

@@ -49,6 +49,7 @@ Route::get('/called', 'HomeController@call')->name('called');
 Route::get('/contact','HomeController@contact')->name('contact');
 Route::get('/contactUsa','HomeController@contactUsa')->name('contactUsa');
 Route::get('/mine', 'HomeController@mine')->name('mine');
+Route::get('/files', 'HomeController@newFile')->name('files');
 
 
 

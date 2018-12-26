@@ -118,21 +118,23 @@
                         </div>
                     </form>
                     <br><br>
-                    <form method="post" action="{{route('leaveLead')}}">
+                    <form method="post" action="{{route('leaveLead')}}" id="leaveLeadForm">
                         <div class="row">
                             {{csrf_field()}}
 
-                            <div class=" form-group col-md-6">
-                                <input type="hidden" name="leadId">
+                            <input type="hidden" name="leadId">
+                            <div class="form-group col-md-6">
+
                                 <label><b>Status:</b></label>
-                                <select class="form-control"  name="Status" id="Status" required>
+                                <select class="form-control"  name="Status" id="Status" onchange="changeLeadStatus(this)" required>
                                     <option value="">Please Select</option>
                                     @foreach($status as $s)
                                         <option value="{{$s->statusId}}">{{$s->statusName}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class=" form-group col-md-6" style="margin-top: 3.2%">
+                            <div class="form-group col-md-6" id="newFileField"></div>
+                            <div class="form-group col-md-6" style="margin-top: 3.2%">
                                 <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
                             </div>
                         </div>
@@ -275,6 +277,18 @@
     <script>
 
         //for Edit modal
+        function changeLeadStatus(x){
+            var value=$(x).val();
+
+
+            if(value == 6){
+                // alert(value);
+                $('#newFileField').html('<label><b>New Files :</b></labe><input type="number" class="form-control" name="newFile" required>');
+            }
+            else {
+                $('#newFileField').html('');
+            }
+        }
 
         $('#edit_modal').on('show.bs.modal', function(e) {
 //            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

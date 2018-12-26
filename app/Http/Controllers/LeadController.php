@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\NewFile;
 use App\Status;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
@@ -783,6 +784,15 @@ class LeadController extends Controller
         return back();
     }
     public function leaveLead(Request $r){
+
+        if($r->Status==6){
+            $newFile=new NewFile();
+            $newFile->leadId=$r->leadId;
+            $newFile->fileCount=$r->newFile;
+            $newFile->userId=Auth::user()->id;
+            $newFile->save();
+        }
+
         $assignId=Leadassigned::select('assignId')
             ->where('leadId',$r->leadId)
             ->where('assignTo',Auth::user()->id)
@@ -805,8 +815,12 @@ class LeadController extends Controller
             return back();
         }
         $lead->save();
+
+
         Session::flash('message', 'You have Leave The Lead successfully');
-        return back();}
+        return back();
+
+    }
     public function destroy($id){
         $lead=Lead::findOrFail($id);
         $lead->delete();
