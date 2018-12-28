@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\NewCall;
 use App\NewFile;
 use App\Status;
 use Carbon\Carbon;
@@ -513,6 +514,8 @@ class LeadController extends Controller
             'comment' => 'required|max:300',
         ]);
 
+
+
         $workStatus=Leadassigned::where('leadId',$r->leadId)
             ->where('assignTo',Auth::user()->id)
             ->where('workStatus',0)
@@ -547,7 +550,8 @@ class LeadController extends Controller
             $chk=Possibilitychange::where('leadId',$lead->leadId)
                                     ->where('userId',Auth::user()->id)
                                     ->where('possibilityId',3)
-                                    ->whereDate('created_at',strftime('%F'))->count();
+                                    ->whereDate('created_at',strftime('%F'))
+                                    ->count();
 
             if($chk ==0 )
             {
@@ -565,6 +569,22 @@ class LeadController extends Controller
         $progress->userId=Auth::user()->id;
         $progress->comments=$r->comment;
         $progress->save();
+
+
+
+
+        $countNewCall=Workprogress::where('userId',Auth::user()->id)
+            ->where('leadId',$r->leadId)
+            ->whereNotIn('callingReport',[2,6])
+            ->count();
+
+        if($countNewCall==1){
+            $newCalll=new NewCall();
+            $newCalll->leadId=$r->leadId;
+            $newCalll->userId=Auth::user()->id;
+            $newCalll->progressId=$progress->id;
+            $newCalll->save();
+        }
 
         Session::flash('message', 'Report Updated Successfully');
         return back();

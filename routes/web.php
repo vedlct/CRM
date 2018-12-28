@@ -208,6 +208,9 @@ Route::post('/getHighPossibilityIndividual','GetIndividualReportController@getHi
 Route::post('/getHighPossibilityUnIndividual','GetIndividualReportController@getHighPossibilityUnIndividual')->name('getHighPossibilityUnIndividual');
 Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividual')->name('getCallIndividual');
 Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
+Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
+Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
+
 Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
 Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
 Route::post('/getClosingIndividual','GetIndividualReportController@getClosingIndividual')->name('getClosingIndividual');

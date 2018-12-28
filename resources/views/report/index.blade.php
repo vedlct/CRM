@@ -65,7 +65,7 @@
                 },
 
                 axisY2:{
-                    title: "C-call ,M-lead mined ,P- high possibility,Con- Contact",
+                    title: "C-new call ,M-lead mined ,P- high possibility,Con- Contact",
                     maximum: 100,
 
                 },
@@ -83,13 +83,13 @@
                             @if($r->typeId==4)
                             { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
                             @elseif($r->typeId==5)
-                        { label: "{{$r->userName}}",y:{{(($r->called*30/100)+($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*15/100)+($r->contactedUsa*15/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%, M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}}%,US: {{$r->contactedUsa}}%"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*30/100)+($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*10/100)+($r->targetFile*30/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%"},
 
                             @elseif($r->typeId==3 || $r->typeId==2)
 
-                        { label: "{{$r->userName}}",y:{{(($r->called*30/100)+($r->testLead*30/100)+($r->contacted*15/100)+($r->contactedUsa*15/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%,P:{{$r->highPosibilities}}%,Con: {{$r->contacted}},US: {{$r->contactedUsa}}%"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*30/100)+($r->testLead*30/100)+($r->contacted*10/100)+($r->targetFile*30/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}"},
 
-                    @endif
+                            @endif
 
                             @endforeach
 

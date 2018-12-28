@@ -98,7 +98,8 @@ class HomeController extends Controller
             ->whereBetween('created_at', [$start, $end])
             ->count();
 
-        $fileCount=NewFile::where('userId',Auth::user()->id)->sum('fileCount');
+        $fileCount=NewFile::where('userId',Auth::user()->id)->whereBetween(DB::raw('date(created_at)'), [$start, $end])
+            ->sum('fileCount');
 
 
 

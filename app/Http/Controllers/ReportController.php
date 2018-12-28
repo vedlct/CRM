@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers;
+use App\NewCall;
+use App\NewFile;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Session;
@@ -53,10 +55,16 @@ class ReportController extends Controller
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
-            $calledThisWeek=Workprogress::where('userId',$user->id)
-                ->where('workprogress.callingReport','!=',null)
-                ->where('callingReport','!=',6)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+//            $calledThisWeek=Workprogress::where('userId',$user->id)
+//                ->where('workprogress.callingReport','!=',null)
+//                ->where('callingReport','!=',6)
+//                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+
+            $calledThisWeek=NewCall::where('userId',$user->id)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
+                ->count();
+
+
 
             $contacted=Workprogress::where('userId',$user->id)
 //                    ->where('callingReport',5)
@@ -121,7 +129,7 @@ class ReportController extends Controller
 
             //Weekly Report
             if($target->targetCall>0){
-                $calledThisWeek=round(($calledThisWeek/($target->targetCall))*100);
+                $calledThisWeek=ceil(($calledThisWeek/($target->targetCall))*100);
                 if($calledThisWeek>100){
                     $calledThisWeek=100;
                 }
@@ -171,6 +179,23 @@ class ReportController extends Controller
                 $contactedUsa=0;
             }
 
+            $targetFile=NewFile::where('userId',Auth::user()->id)
+                ->whereBetween(DB::raw('date(created_at)'), [$start, $end])
+                ->sum('fileCount');
+
+            if($target->targetFile >0){
+
+                $targetFile=round(($targetFile/($target->targetFile))*100);
+                if($targetFile>100){
+                    $targetFile=100;
+                }
+            }
+
+            else{
+                $targetFile=0;
+            }
+
+
 
 
             if($t==0){
@@ -185,10 +210,11 @@ class ReportController extends Controller
             $u->contacted=$contacted;
             $u->contactedUsa=$contactedUsa;
             $u->testLead=$testLead;
+            $u->targetFile=$targetFile;
             $u->t=$t;
             array_push($report, $u);
         }
-       // return $report;
+//        return $report;
         return view('report.index')->with('report',$report);
     }
     public function searchGraphByDate(Request $r){
@@ -256,10 +282,14 @@ class ReportController extends Controller
 
 
 
+//
+//            $calledThisWeek=Workprogress::where('userId',$user->id)
+//                ->where('callingReport','!=',6)
+//                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
-            $calledThisWeek=Workprogress::where('userId',$user->id)
-                ->where('callingReport','!=',6)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
+            $calledThisWeek=NewCall::where('userId',$user->id)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+                ->count();
 
             //When user is RA
             if($user->typeId==4){
@@ -341,6 +371,25 @@ class ReportController extends Controller
                 }
                 $t++;
             }
+
+
+            $targetFile=NewFile::where('userId',Auth::user()->id)
+                ->whereBetween(DB::raw('date(created_at)'), [$start, $end])
+                ->sum('fileCount');
+
+            if($target->targetFile >0){
+
+                $targetFile=round(($targetFile/($target->targetFile))*100);
+                if($targetFile>100){
+                    $targetFile=100;
+                }
+            }
+
+            else{
+                $targetFile=0;
+            }
+
+
             if($t==0){
                 $t=1;}
             $u = new stdClass;
@@ -352,6 +401,7 @@ class ReportController extends Controller
             $u->contacted=$contacted;
             $u->contactedUsa=$contactedUsa;
             $u->testLead=$testLead;
+            $u->targetFile=$targetFile;
             $u->t=$t;
             array_push($report, $u);
         }
@@ -425,6 +475,11 @@ class ReportController extends Controller
             ->groupBy('userId')
             ->get();
 
+
+        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                ->get();
+
+//        return $newFiles;
 
 
 
@@ -520,6 +575,9 @@ class ReportController extends Controller
                 ->get();
 
 //        return $closing;
+        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                    ->get();
+
 
 
         return view('report.table')
@@ -536,7 +594,9 @@ class ReportController extends Controller
             ->with('leadMinedThisWeek',$leadMinedThisWeek)
             ->with('calledThisWeek',$calledThisWeek)
             ->with('closing',$closing)
-            ->with('usersRa',$usersRa);
+            ->with('usersRa',$usersRa)
+            ->with('newCall',$newCall)
+            ->with('newFiles',$newFiles);
 
 
     }
@@ -693,7 +753,12 @@ class ReportController extends Controller
             ->get();
 
 
-//        return $closing;
+        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->get();
+
+        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->get();
+
 
 
         return view('report.table')
@@ -712,7 +777,9 @@ class ReportController extends Controller
             ->with('closing',$closing)
             ->with('usersRa',$usersRa)
             ->with('fromDate',$r->fromDate)
-            ->with('toDate',$r->toDate);
+            ->with('toDate',$r->toDate)
+            ->with('newFiles',$newFiles)
+            ->with('newCall',$newCall);
 
 
     }

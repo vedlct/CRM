@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\NewCall;
+use App\NewFile;
 use Illuminate\Http\Request;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -448,6 +450,46 @@ class GetIndividualReportController extends Controller
     }
 
 
+    public function getFileCountIndividual(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+
+        $leads = Lead::select('leads.*')
+            ->with('country','category','possibility')
+            ->where('minedBy',$r->userid)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
+
+        $newFile=NewFile::select('new_file.*','leads.companyName')
+            ->where('userId',$r->userid)
+            ->whereBetween(DB::raw('DATE(new_file.created_at)'), [$fromDate,$toDate])
+            ->leftJoin('leads','leads.leadId','new_file.leadId')
+            ->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>File Count</th>
+                 <th>Created_at</th>
+      </tr></thead>
+    <tbody>';
+
+        foreach ($newFile as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->fileCount.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+
+    }
 
 
 
@@ -658,6 +700,38 @@ class GetIndividualReportController extends Controller
         return Response($table);
     }
 
+
+    public function getNewCallIndividual(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+
+        $newCAll=NewCall::select('new_call.*','leads.companyName')
+            ->where('new_call.userId',$r->userid)
+            ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+            ->leftJoin('leads','leads.leadId','workprogress.leadId')
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$fromDate,$toDate])->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($newCAll as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+
+    }
 
 
 

@@ -62,8 +62,8 @@
                         <th>High Possibility</th>
                         <th>HP(unique)</th>
                         <th>Test Lead</th>
-                        <th>Close Lead</th>
-                        <th>Lead Mined</th>
+                        <th>New Call</th>
+                        <th>New File</th>
 
                     </tr>
                     </thead>
@@ -249,51 +249,54 @@
                             </td>
 
                             <td>
-                                @php($value=0)
-                                @foreach($closing as $cl)
+                                <a href="#" class="highpossibility" onclick="newCall(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$newCall->where('userId',$user->userid)->count()}}
+                                </a>
 
-                                    @if($cl->userId == $user->userid)
 
-                                        <a href="#" class="highpossibility" onclick="closelead(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$cl->userClosing}}
-                                        </a>
-                                        @break
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
                             </td>
 
                             <td>
-                                @php($value=0)
-                                @foreach($leadMinedThisWeek as $lm)
+                                {{--@php($value=0)--}}
+                                {{--@foreach($leadMinedThisWeek as $lm)--}}
 
-                                    @if($lm->minedBy == $user->userid)
+                                    {{--@if($lm->minedBy == $user->userid)--}}
 
-                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$lm->userLeadMined}}
-                                        </a>
-                                        @break
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
+                                        {{--<a href="#" class="highpossibility" onclick="leadmine(this)"--}}
+                                           {{--@if(isset($fromDate) && isset($toDate))--}}
+                                           {{--data-date-from="{{$fromDate}}"--}}
+                                           {{--data-date-to="{{$toDate}}"--}}
+                                           {{--@endif--}}
+                                           {{--data-user-id="{{$user->userid}}"--}}
+                                           {{--data-user-name="{{$user->userName}}"--}}
+                                        {{-->--}}
+                                            {{--{{$value=$lm->userLeadMined}}--}}
+                                        {{--</a>--}}
+                                        {{--@break--}}
+                                    {{--@endif--}}
+                                {{--@endforeach--}}
+                                {{--@if($value==0)--}}
+                                    {{--<a href="#" >0</a>--}}
+                                {{--@endif--}}
+
+
+                                <a href="#" class="highpossibility" onclick="newFile(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$newFiles->where('userId',$user->userid)->sum('fileCount')}}
+                                </a>
                             </td>
 
 
@@ -376,7 +379,7 @@
 
                                     @if($lm->minedBy == $user->userid)
 
-                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                        <a href="#" class="highpossibility" onclick="newFile(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
@@ -535,6 +538,36 @@
                 }
             });
         }
+
+        function newFile(x) {
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+            $.ajax({
+                type:'POST',
+                url:'{{route('getFileCountIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+//                    console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('File Count');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+                }
+            });
+
+        }
+
         function leadassigned(x){
             var id = $(x).data('user-id');
                     @if(isset($fromDate) && isset($toDate))
@@ -697,6 +730,37 @@
                 }
             });
         }
+
+        function newCall(x) {
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+            $.ajax({
+                type:'POST',
+                url:'{{route('getNewCallIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+                   // console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('New Call');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+                }
+            });
+
+        }
+
+
         function test(x) {
             id = $(x).data('changeid');
             var value=document.getElementById(id).value;
