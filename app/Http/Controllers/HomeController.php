@@ -71,6 +71,8 @@ class HomeController extends Controller
 
 
 
+
+
         $day=Carbon::now()->format('l');
 
         $lastDate=Carbon::now()->subDay()->format('Y-m-d');

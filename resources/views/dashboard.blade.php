@@ -77,33 +77,26 @@
                 </div>
             </div>
 
-            <div class="col-lg-2 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('contactUsa')}}">USA</a></h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0"> {{$contactedUsaCount}} | {{$target->targetUsa}}</h2>
-                            <span class="text-muted">This Month</span>
-                        </div>
-                        @if($target->targetUsa>0)
-<!--                            --><?php
-//                            $lastContactPercent= round(($lastDayContact/$target->targetContact)*100);
-//                            if($lastContactPercent > 100){
-//                                $lastContactPercent=100;
-//                            }
-//                            $count++; $total+=$lastContactPercent;
-//                            ?>
+            {{--<div class="col-lg-2 col-md-6">--}}
+                {{--<div class="card">--}}
+                    {{--<div class="card-body">--}}
+                        {{--<h4 class="card-title"><a href="{{route('contactUsa')}}">USA</a></h4>--}}
+                        {{--<div class="text-right">--}}
+                            {{--<h2 class="font-light m-b-0"> {{$contactedUsaCount}} | {{$target->targetUsa}}</h2>--}}
+                            {{--<span class="text-muted">This Month</span>--}}
+                        {{--</div>--}}
+                        {{--@if($target->targetUsa>0)--}}
 
-                            <span class="text-success">{{round($contactedUsa)}}%</span>
-                        @endif
-                        <div class="progress">
-                            @if($target->targetContact>0)
-                                <div class="progress-bar bg-success" role="progressbar" style="width: {{$contactedUsa}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            {{--<span class="text-success">{{round($contactedUsa)}}%</span>--}}
+                        {{--@endif--}}
+                        {{--<div class="progress">--}}
+                            {{--@if($target->targetContact>0)--}}
+                                {{--<div class="progress-bar bg-success" role="progressbar" style="width: {{$contactedUsa}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>--}}
+                            {{--@endif--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
 
     <div class="col-lg-2 col-md-6">
@@ -156,26 +149,26 @@
                 </div>
             </div>
 
-            <div class="col-lg-2 col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
-                    <div class="text-right">
-                        <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">This Month</span>
-                    </div>
+            {{--<div class="col-lg-2 col-md-6">--}}
+            {{--<div class="card">--}}
+                {{--<div class="card-body">--}}
+                    {{--<h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>--}}
+                    {{--<div class="text-right">--}}
+                        {{--<h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>--}}
+                        {{--<span class="text-muted">This Month</span>--}}
+                    {{--</div>--}}
 
-                    @if($target->targetHighPossibility>0)
-                        <span class="text-purple">{{round($highPosibilitiesThisWeek)}}%</span>
-                    @endif
-                    <div class="progress">
-                        @if($target->targetHighPossibility>0)
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$highPosibilitiesThisWeek}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
+                    {{--@if($target->targetHighPossibility>0)--}}
+                        {{--<span class="text-purple">{{round($highPosibilitiesThisWeek)}}%</span>--}}
+                    {{--@endif--}}
+                    {{--<div class="progress">--}}
+                        {{--@if($target->targetHighPossibility>0)--}}
+                        {{--<div class="progress-bar bg-purple" role="progressbar" style="width:{{$highPosibilitiesThisWeek}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>--}}
+                        {{--@endif--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
 
 
 
@@ -251,19 +244,20 @@
                         legendMarkerColor: "grey",
                         legendText: "{{Auth::user()->firstName}}",
                         dataPoints: [
-                            { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
-                            { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
+                            {{--{ y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},--}}
+                              { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
+                              { y: {{ $fileCount}},  label: "New File",indexLabel: "{{$fileCount}}%" },
                             { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
-                            { y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },
+                            {{--{ y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },--}}
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
                             { y: {{$testLead}},  label: "Test Lead",indexLabel: "{{$testLead}}%" },
 
                             @if($userType=="RA")
                             { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
                                 @elseif($userType=="USER")
-                            { y:{{(($highPosibilitiesThisWeek*20/100)+($testLead*20/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactedUsa*10/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}}%" },
+                            { y:{{(($fileCount*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*20/100)+($leadMinedThisWeek*10/100)+($contactThisWeek*20/100))}}%" },
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
-                            { y:{{(($highPosibilitiesThisWeek*20/100)+($testLead*20/100)+($calledThisWeek*25/100)+($contactedUsa*10/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}}%" },
+                            { y:{{(($fileCount*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($calledThisWeek*25/100)+($contactThisWeek*25/100))}}%" },
                             @endif
 
                         ]
