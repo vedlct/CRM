@@ -4,6 +4,7 @@ use App\LocalFollowup;
 use App\LocalMeeting;
 use App\LocalSales;
 use App\LocalUserTarget;
+use App\NewCall;
 use App\NewFile;
 use Illuminate\Http\Request;
 
@@ -58,16 +59,16 @@ class HomeController extends Controller
 
 
 
+//
+//        $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
+////            ->where('callingReport',5)
+//            ->where(function($q){
+//                $q->orWhere('callingReport',5)
+//                    ->orWhere('callingReport',4);
+//            })
+//            ->whereBetween('created_at', [$start, $end])->count();
 
-        $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
-//            ->where('callingReport',5)
-            ->where(function($q){
-                $q->orWhere('callingReport',5)
-                    ->orWhere('callingReport',4);
-            })
-            ->whereBetween('created_at', [$start, $end])->count();
-
-
+        $contactThisWeek=NewCall::where('userId',Auth::user()->id)->whereBetween('created_at', [$start, $end])->count();
 
 
 
