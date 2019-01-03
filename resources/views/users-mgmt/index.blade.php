@@ -131,10 +131,10 @@
                                 <input id="contact" type="number" class="form-control" name="contact" >
                             </div>
 
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Contacted(usa):</label>
-                                <input id="contactUsa" type="number" class="form-control" name="contactUsa" >
-                            </div>
+                            {{--<div class="form-group col-md-2">--}}
+                                {{--<label for="firstName">Contacted(usa):</label>--}}
+                                {{--<input id="contactUsa" type="number" class="form-control" name="contactUsa" >--}}
+                            {{--</div>--}}
 
                             <div class="form-group col-md-2">
                                 <label for="firstName">Test:</label>
@@ -635,7 +635,7 @@
                 $(e.currentTarget).find('input[name="highPossibility"]').val(high);
                 $(e.currentTarget).find('input[name="lead"]').val(lead);
                 $(e.currentTarget).find('input[name="contact"]').val(contact);
-                $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
+                // $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
                 $(e.currentTarget).find('input[name="targetTest"]').val(targetTest);
                 $(e.currentTarget).find('input[name="targetFile"]').val(targetFile);
 

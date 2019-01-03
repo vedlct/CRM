@@ -374,7 +374,7 @@ class ReportController extends Controller
 
 
             $targetFile=NewFile::where('userId',Auth::user()->id)
-                ->whereBetween(DB::raw('date(created_at)'), [$start, $end])
+                ->whereBetween(DB::raw('date(created_at)'), [$r->fromDate,$r->toDate])
                 ->sum('fileCount');
 
             if($target->targetFile >0){
