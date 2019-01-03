@@ -314,11 +314,12 @@ class HomeController extends Controller
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
         $leads=Lead::select('leads.*','workprogress.created_at')
-        ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-        ->where('workprogress.userId',Auth::user()->id)
-        ->where('workprogress.callingReport','!=',null)
-        ->where('workprogress.callingReport','!=',6)
-        ->whereBetween('workprogress.created_at', [$start,$end])->get();
+            ->leftJoin('new_call','new_call.leadId','leads.leadId')
+            ->leftJoin('workprogress','new_call.leadId','workprogress.leadId')
+            ->where('workprogress.userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
+            ->where('workprogress.callingReport','!=',6)
+            ->whereBetween('workprogress.created_at', [$start,$end])->get();
 
     $callReports = Callingreport::get();
     $possibilities = Possibility::get();

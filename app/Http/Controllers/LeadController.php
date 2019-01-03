@@ -536,6 +536,7 @@ class LeadController extends Controller
         }
         //posssibility Change
         $lead=Lead::findOrFail($r->leadId);
+        $leadPrevStatus= $lead->statusId;
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
         $lead->leadAssignStatus=0;
@@ -575,10 +576,10 @@ class LeadController extends Controller
 
         $countNewCall=Workprogress::where('userId',Auth::user()->id)
             ->where('leadId',$r->leadId)
-            ->whereNotIn('callingReport',[2,6])
+//            ->whereNotIn('callingReport',[2,6])
             ->count();
 
-        if($countNewCall==1){
+        if($countNewCall==1 || $leadPrevStatus==2){
             $newCalll=new NewCall();
             $newCalll->leadId=$r->leadId;
             $newCalll->userId=Auth::user()->id;
