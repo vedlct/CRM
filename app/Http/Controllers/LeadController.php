@@ -574,18 +574,41 @@ class LeadController extends Controller
 
 
 
-        $countNewCall=Workprogress::where('userId',Auth::user()->id)
-            ->where('leadId',$r->leadId)
-//            ->whereNotIn('callingReport',[2,6])
-            ->count();
 
-        if($countNewCall==1 || $leadPrevStatus==2){
-            $newCalll=new NewCall();
-            $newCalll->leadId=$r->leadId;
-            $newCalll->userId=Auth::user()->id;
-            $newCalll->progressId=$progress->id;
-            $newCalll->save();
+
+
+
+        if($r->report ==2 ||$r->report ==6 ){
+            $countNewCall=Workprogress::where('userId',Auth::user()->id)
+                ->where('leadId',$r->leadId)
+                ->whereIn('callingReport',[2,6])
+                ->count();
+            if($countNewCall<3 ){
+                $newCalll=new NewCall();
+                $newCalll->leadId=$r->leadId;
+                $newCalll->userId=Auth::user()->id;
+                $newCalll->progressId=$progress->id;
+                $newCalll->save();
+            }
+
         }
+        else{
+            $countNewCallContact=Workprogress::where('userId',Auth::user()->id)
+                ->where('leadId',$r->leadId)
+                ->where('callingReport',5)
+                ->count();
+
+            if($countNewCallContact<2){
+                $newCalll=new NewCall();
+                $newCalll->leadId=$r->leadId;
+                $newCalll->userId=Auth::user()->id;
+                $newCalll->progressId=$progress->id;
+                $newCalll->save();
+            }
+
+        }
+
+
 
         Session::flash('message', 'Report Updated Successfully');
         return back();

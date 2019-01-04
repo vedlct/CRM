@@ -85,9 +85,12 @@ class HomeController extends Controller
         }
 
 
-        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
-            ->where('workprogress.callingReport','!=',null)
-            ->where('callingReport','!=',6)
+//        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+//            ->where('workprogress.callingReport','!=',null)
+//            ->where('callingReport','!=',6)
+//            ->whereBetween('created_at', [$start, $end])->count();
+
+        $lastDayCalled=NewCall::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$start, $end])->count();
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
@@ -313,13 +316,13 @@ class HomeController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-        $leads=Lead::select('leads.*','workprogress.created_at')
+        $leads=Lead::select('leads.*','new_call.created_at')
             ->leftJoin('new_call','new_call.leadId','leads.leadId')
-            ->leftJoin('workprogress','new_call.leadId','workprogress.leadId')
-            ->where('workprogress.userId',Auth::user()->id)
-            ->where('workprogress.callingReport','!=',null)
-            ->where('workprogress.callingReport','!=',6)
-            ->whereBetween('workprogress.created_at', [$start,$end])->get();
+//            ->leftJoin('workprogress','new_call.leadId','workprogress.leadId')
+            ->where('new_call.userId',Auth::user()->id)
+//            ->where('workprogress.callingReport','!=',null)
+//            ->where('workprogress.callingReport','!=',6)
+            ->whereBetween('new_call.created_at', [$start,$end])->get();
 
     $callReports = Callingreport::get();
     $possibilities = Possibility::get();
