@@ -319,6 +319,7 @@
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
                         <th>Lead Mined</th>
+                        <th>Test Lead</th>
                     </tr>
                     </thead>
                     @foreach( $usersRa as $user)
@@ -379,7 +380,7 @@
 
                                     @if($lm->minedBy == $user->userid)
 
-                                        <a href="#" class="highpossibility" onclick="newFile(this)"
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
@@ -396,6 +397,23 @@
                                 @if($value==0)
                                     <a href="#" >0</a>
                                 @endif
+                            </td>
+
+                            <td>
+
+
+
+                                <a href="#" class="highpossibility" onclick="testFileRa(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$testLeadForRa->where('minedBy',$user->userid)->count()}}
+
+                                </a>
                             </td>
 
 
@@ -774,6 +792,39 @@
                     console.log(data);
                 }
             });
+        }
+
+
+        function testFileRa(x) {
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+
+            // alert(id);
+            $.ajax({
+                type:'POST',
+                url:'{{route('getTestFileRaIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
+                    // console.log(data);
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Test Call');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    $('#myTable').DataTable();
+                }
+            });
+
+
         }
     </script>
 

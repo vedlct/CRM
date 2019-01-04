@@ -210,6 +210,7 @@ Route::post('/getCallIndividual','GetIndividualReportController@getCallIndividua
 Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividual')->name('getMineIndividual');
 Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
+Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
 
 Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
 Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
