@@ -734,5 +734,42 @@ class GetIndividualReportController extends Controller
     }
 
 
+    public function getTestFileRaIndividual(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+
+
+        $testLeadForRa=Workprogress::select('leads.companyName','workprogress.created_at')
+            ->where('progress','Test Job')
+            ->leftJoin('leads','leads.leadId','workprogress.leadId')
+            ->leftJoin('users','users.id','leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])
+            ->where('users.id',$r->userid)
+            ->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+
+        foreach ($testLeadForRa as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+
+    }
+
+
 
 }

@@ -418,16 +418,13 @@ class ReportController extends Controller
         $date = Carbon::now();
         $User_Type=Session::get('userType');
 
-//        return $date->startOfWeek()->format('Y-m-d').' '.$date->endOfWeek()->format('Y-m-d');
 
-//        $date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')
 
         if( $User_Type =='MANAGER'){
             $users=User::select('id as userid','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->where('typeId','!=',4)
                 ->where('teamId',Auth::user()->teamId)
-//                ->where('crmType','!=','local')
                 ->get();
 
             $usersRa=User::select('id as userid','firstName','typeId')
@@ -479,12 +476,7 @@ class ReportController extends Controller
         $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
                 ->get();
 
-//        return $newFiles;
 
-
-
-
-//        return $calledThisWeek;
 
         $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
@@ -492,7 +484,6 @@ class ReportController extends Controller
             ->get();
 
 
-//        return $leadMinedThisWeek;
 
         $followupThisWeek=Workprogress::select('userId',DB::raw('count(*) as userFollowup'))
             ->where('callingReport',4)
@@ -501,7 +492,7 @@ class ReportController extends Controller
             ->get();
 
 
-//        return $followupThisWeek;
+
 
         $highPosibilitiesThisWeekRa=Lead::select('minedBy',DB::raw('count(*) as userHighPosibilities'))
             ->where('filteredPossibility',3)
@@ -509,7 +500,7 @@ class ReportController extends Controller
             ->groupBy('minedBy')
             ->get();
 
-//        return $highPosibilitiesThisWeekRa;
+
 
         $highPosibilitiesThisWeekUser=Possibilitychange::select('userId',DB::raw('count(*) as userHighPosibilities'))
             ->where('possibilityId',3)
@@ -575,9 +566,19 @@ class ReportController extends Controller
                 ->get();
 
 //        return $closing;
-        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                    ->get();
 
+        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+                            ->get();
+
+
+        $testLeadForRa=Workprogress::select('minedBy')
+            ->where('progress','Test Job')
+            ->leftJoin('leads','leads.leadId','workprogress.leadId')
+            ->leftJoin('users','users.id','leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
+
+//        return $testLeadForRa;
 
 
         return view('report.table')
@@ -596,7 +597,8 @@ class ReportController extends Controller
             ->with('closing',$closing)
             ->with('usersRa',$usersRa)
             ->with('newCall',$newCall)
-            ->with('newFiles',$newFiles);
+            ->with('newFiles',$newFiles)
+            ->with('testLeadForRa',$testLeadForRa);
 
 
     }
@@ -760,6 +762,14 @@ class ReportController extends Controller
             ->get();
 
 
+        $testLeadForRa=Workprogress::select('minedBy')
+            ->where('progress','Test Job')
+            ->leftJoin('leads','leads.leadId','workprogress.leadId')
+            ->leftJoin('users','users.id','leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])
+            ->get();
+
+
 
         return view('report.table')
             ->with('users', $users)
@@ -779,7 +789,8 @@ class ReportController extends Controller
             ->with('fromDate',$r->fromDate)
             ->with('toDate',$r->toDate)
             ->with('newFiles',$newFiles)
-            ->with('newCall',$newCall);
+            ->with('newCall',$newCall)
+            ->with('testLeadForRa',$testLeadForRa);
 
 
     }
