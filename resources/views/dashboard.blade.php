@@ -54,16 +54,16 @@
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
                         <div class="text-right">
-                            <h2 class="font-light m-b-0"> {{$lastDayContact}} | {{$target->targetContact}}</h2>
+                            <h2 class="font-light m-b-0"> {{$contactThisWeek}} | {{$target->targetContact}}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
                         @if($target->targetContact>0)
                             <?php
-                            $lastContactPercent= round(($lastDayContact/$target->targetContact)*100);
+                            $lastContactPercent= round(($contactThisWeek/$target->targetContact)*100);
                             if($lastContactPercent > 100){
                                 $lastContactPercent=100;
                             }
-                            $count++; $total+=$lastContactPercent;
+                            $count++; $total+=$contactThisWeek;
                             ?>
 
                             <span class="text-success">{{round($lastContactPercent)}}%</span>
@@ -255,7 +255,9 @@
                               { y: {{ $targetNewFile}},  label: "New File",indexLabel: "{{$targetNewFile}}%" },
                             { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
                             {{--{ y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },--}}
+                                @if(Auth::user()->typeId==4)
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
+                                @endif
                             { y: {{$testLead}},  label: "Test Lead",indexLabel: "{{$testLead}}%" },
 
                             @if($userType=="RA")

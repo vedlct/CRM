@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\NewCall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -148,13 +149,42 @@ class FollowupController extends Controller
         $progress->comments=$r->comment;
         $progress->save();
 
+        if($r->report ==2 ||$r->report ==6 ){
+            $countNewCall=Workprogress::where('userId',Auth::user()->id)
+                ->where('leadId',$r->leadId)
+                ->whereIn('callingReport',[2,6])
+                ->count();
+            if($countNewCall<3 ){
+                $newCalll=new NewCall();
+                $newCalll->leadId=$r->leadId;
+                $newCalll->userId=Auth::user()->id;
+                $newCalll->progressId=$progress->id;
+                $newCalll->save();
+            }
+
+        }
+        else{
+            $countNewCallContact=Workprogress::where('userId',Auth::user()->id)
+                ->where('leadId',$r->leadId)
+                ->where('callingReport',5)
+                ->count();
+
+            if($countNewCallContact<2){
+                $newCalll=new NewCall();
+                $newCalll->leadId=$r->leadId;
+                $newCalll->userId=Auth::user()->id;
+                $newCalll->progressId=$progress->id;
+                $newCalll->save();
+            }
+
+        }
+
+
         Session::flash('message', 'Report Updated Successfully');
 
 
 
 
-//        return redirect()->route('follow-up.index',['fromDate'=>$r->fromdate,'toDate'=> $r->todate]);
-//        return redirect()->route('follow-up.search' , ['fromdate'=>'2018-02-12','todate'=>'2018-02-14']);
 
         ////this is for back to search result///////////
         if($r->fromDate!= null && $r->toDate){
