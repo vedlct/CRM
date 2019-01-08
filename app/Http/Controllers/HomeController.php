@@ -60,17 +60,18 @@ class HomeController extends Controller
 
 
 //
-//        $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
-////            ->where('callingReport',5)
+        $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
+            ->where('callingReport',5)
 //            ->where(function($q){
-//                $q->orWhere('callingReport',5)
-//                    ->orWhere('callingReport',4);
+//                $q->orWhere('callingReport',5);
+////                    ->orWhere('callingReport',4);
 //            })
-//            ->whereBetween('created_at', [$start, $end])->count();
+            ->whereBetween('created_at', [$start, $end])->count();
 
-        $contactThisWeek=NewCall::where('userId',Auth::user()->id)->whereBetween('created_at', [$start, $end])->count();
+//        $contactThisWeek=NewCall::where('userId',Auth::user()->id)->whereBetween('created_at', [$start, $end])->count();
 
 
+//        return $contactThisWeek;
 
 
 
@@ -345,11 +346,11 @@ class HomeController extends Controller
         $leads=Lead::select('leads.*','workprogress.created_at')
             ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
             ->where('workprogress.userId',Auth::user()->id)
-//            ->where('workprogress.callingReport',5)
-            ->where(function($q){
-                $q->orWhere('callingReport',5)
-                    ->orWhere('callingReport',4);
-            })
+            ->where('workprogress.callingReport',5)
+//            ->where(function($q){
+//                $q->orWhere('callingReport',5)
+//                    ->orWhere('callingReport',4);
+//            })
             ->whereBetween('workprogress.created_at', [$start,$end])->get();
 
         $callReports = Callingreport::get();

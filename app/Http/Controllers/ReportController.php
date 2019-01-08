@@ -67,11 +67,11 @@ class ReportController extends Controller
 
 
             $contacted=Workprogress::where('userId',$user->id)
-//                    ->where('callingReport',5)
-                ->where(function($q){
-                    $q->orWhere('callingReport',5)
-                        ->orWhere('callingReport',4);
-                })
+                    ->where('callingReport',5)
+//                ->where(function($q){
+//                    $q->orWhere('callingReport',5)
+//                        ->orWhere('callingReport',4);
+//                })
                 ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
                 ->count();
 
@@ -253,11 +253,11 @@ class ReportController extends Controller
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
             $contacted=Workprogress::where('userId',$user->id)
-//                    ->where('callingReport',5)
-                ->where(function($q){
-                    $q->orWhere('callingReport',5)
-                        ->orWhere('callingReport',4);
-                })
+                    ->where('callingReport',5)
+//                ->where(function($q){
+//                    $q->orWhere('callingReport',5)
+//                        ->orWhere('callingReport',4);
+//                })
                 ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate, $r->toDate])->count();
 
 //            $testLead=Workprogress::where('progress','Test Job')

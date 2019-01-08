@@ -149,6 +149,12 @@ Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
 //Star Lead
 Route::get('lead/starleads', 'LeadController@starLeads')->name('starLeads');
 
+//Client Lead
+Route::get('lead/clientleads', 'ClientLeadController@index')->name('clientLeads');
+Route::post('lead/clientleads/edit', 'ClientLeadController@edit')->name('clientLeads.edit');
+Route::post('lead/clientleads/add', 'ClientLeadController@add')->name('clientLeads.add');
+Route::post('lead/clientleads/insert', 'ClientLeadController@insert')->name('clientLeads.insert');
+
 //Contacted Lead
 Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
