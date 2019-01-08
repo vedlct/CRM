@@ -244,6 +244,8 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+//        return $targetNewFile;
+
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
