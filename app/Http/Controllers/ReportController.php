@@ -619,7 +619,7 @@ class ReportController extends Controller
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
-        else if($User_Type =='USER' ){
+        else if($User_Type =='USER'){
             $users=User::select('id as userid','firstName','typeId')
                 ->where('id',Auth::user()->id)
                 ->get();

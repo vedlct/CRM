@@ -21,7 +21,7 @@
     <div class="col-lg-2 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title"><a href="{{route('called')}}">Call</a></h4>
+                <h4 class="card-title"><a href="{{route('called')}}">New Call</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
                     <span class="text-muted">This Month</span>
@@ -54,12 +54,12 @@
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
                         <div class="text-right">
-                            <h2 class="font-light m-b-0"> {{$contactThisWeek}} | {{$target->targetContact}}</h2>
+                            <h2 class="font-light m-b-0"> {{$contactCall}} | {{$target->targetContact}}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
                         @if($target->targetContact>0)
                             <?php
-                            $lastContactPercent= round(($contactThisWeek/$target->targetContact)*100);
+                            $lastContactPercent= round(($contactCall/$target->targetContact)*100);
                             if($lastContactPercent > 100){
                                 $lastContactPercent=100;
                             }
@@ -251,7 +251,7 @@
                                 @if(Auth::user()->typeId==4)
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                                 @endif
-                              { y: {{ $calledThisWeek}},  label: "Called This Week",indexLabel: "{{$calledThisWeek}}%" },
+                              { y: {{ $calledThisWeek}},  label: "New Call",indexLabel: "{{$calledThisWeek}}%" },
                               { y: {{ $targetNewFile}},  label: "New File",indexLabel: "{{$targetNewFile}}%" },
                             { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
                             {{--{ y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },--}}
