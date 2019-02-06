@@ -179,7 +179,7 @@ class ReportController extends Controller
                 $contactedUsa=0;
             }
 
-            $targetFile=NewFile::where('userId',Auth::user()->id)
+            $targetFile=NewFile::where('userId',$user->id)
                 ->whereBetween(DB::raw('date(created_at)'), [$start, $end])
                 ->sum('fileCount');
 
@@ -373,7 +373,7 @@ class ReportController extends Controller
             }
 
 
-            $targetFile=NewFile::where('userId',Auth::user()->id)
+            $targetFile=NewFile::where('userId',$user->id)
                 ->whereBetween(DB::raw('date(created_at)'), [$r->fromDate,$r->toDate])
                 ->sum('fileCount');
 
