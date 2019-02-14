@@ -47,10 +47,15 @@
                     </li>
                 @endif
 
+
+                @if(Auth::user()->typeId !=10)
+
                 <li>
                     <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                 </li>
+                @endif
+
 
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN')
 
@@ -59,10 +64,13 @@
                 </li>
                 @endif
 
+                    @if(Auth::user()->typeId !=10)
+
                 <li>
                     <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
                 </li>
+                    @endif
 
 
             @endif  {{--End For Global--}}
@@ -77,6 +85,7 @@
                     </a>
                     <ul class="treeview-menu">
                 @endif
+
                         @if( Auth::user()->crmType =='local' )
 
                         <li>
@@ -235,10 +244,14 @@
                 </li>
                 @endif
 
+                @if(Auth::user()->typeId !=10)
+
                 <li>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
                         <span class="hide-menu">Notice</span></a>
                 </li>
+
+                @endif
 
 
                 @if($userType =='ADMIN' )
