@@ -49,9 +49,15 @@ class HomeController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-        $calledThisWeek=Workprogress::where('userId',Auth::user()->id)
-            ->where('callingReport','!=',6)
-            ->whereBetween('created_at', [$start, $end])->count();
+//
+
+//        $calledThisWeek=Workprogress::select('userId',Auth::user()->id)
+//            ->where('workprogress.callingReport','!=',null)
+//            ->where('callingReport','!=',6)
+//            ->whereBetween('created_at', [$start, $end])
+//            ->count();
+
+//        return $calledThisWeek;
 
 
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
@@ -71,7 +77,7 @@ class HomeController extends Controller
 //        $contactThisWeek=NewCall::where('userId',Auth::user()->id)->whereBetween('created_at', [$start, $end])->count();
 
 
-//        return $contactThisWeek;
+         $contactCall= $contactThisWeek;
 
 
 
@@ -93,6 +99,8 @@ class HomeController extends Controller
 
         $lastDayCalled=NewCall::where('userId',Auth::user()->id)
             ->whereBetween('created_at', [$start, $end])->count();
+
+        $calledThisWeek=$lastDayCalled;
 
         $lastDayLeadMined=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$start, $end])->count();
@@ -263,7 +271,8 @@ class HomeController extends Controller
             ->with('contactedUsaCount',$contactedUsaCount)
             ->with('countWeek',$countWeek)
             ->with('targetNewFile',$targetNewFile)
-            ->with('fileCount',$fileCount);
+            ->with('fileCount',$fileCount)
+            ->with('contactCall',$contactCall);
 
 
     }
