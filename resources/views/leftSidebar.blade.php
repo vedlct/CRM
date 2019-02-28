@@ -235,7 +235,7 @@
 
 
 
-                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
 
                 <li>
 				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>

@@ -79,7 +79,7 @@ class UserManagementController extends Controller
     public function index()
     {
         $User_Type=Session::get('userType');
-		if($User_Type=='ADMIN' || $User_Type=='SUPERVISOR' || $User_Type=='MANAGER') {
+		if($User_Type=='ADMIN' || $User_Type=='SUPERVISOR' || $User_Type=='MANAGER' || $User_Type=='HR') {
 
 		    //Manager have ony access to his team
 		    if($User_Type=='MANAGER'){
