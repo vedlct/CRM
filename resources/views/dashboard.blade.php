@@ -77,26 +77,6 @@
                 </div>
             </div>
 
-            {{--<div class="col-lg-2 col-md-6">--}}
-                {{--<div class="card">--}}
-                    {{--<div class="card-body">--}}
-                        {{--<h4 class="card-title"><a href="{{route('contactUsa')}}">USA</a></h4>--}}
-                        {{--<div class="text-right">--}}
-                            {{--<h2 class="font-light m-b-0"> {{$contactedUsaCount}} | {{$target->targetUsa}}</h2>--}}
-                            {{--<span class="text-muted">This Month</span>--}}
-                        {{--</div>--}}
-                        {{--@if($target->targetUsa>0)--}}
-
-                            {{--<span class="text-success">{{round($contactedUsa)}}%</span>--}}
-                        {{--@endif--}}
-                        {{--<div class="progress">--}}
-                            {{--@if($target->targetContact>0)--}}
-                                {{--<div class="progress-bar bg-success" role="progressbar" style="width: {{$contactedUsa}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>--}}
-                            {{--@endif--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
-            {{--</div>--}}
 
 
     <div class="col-lg-2 col-md-6">
@@ -233,6 +213,10 @@
 
 
         window.onload = function () {
+            {{--@if($newCallTargetAchievedLastDay <=80)--}}
+                {{--$('#myModal').modal();--}}
+
+            {{--@endif--}}
 
 
                 var chart = new CanvasJS.Chart("chartContainer", {

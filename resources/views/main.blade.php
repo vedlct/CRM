@@ -67,6 +67,48 @@
     @include('topbar')
 
     @include('leftSidebar')
+    <!-- The Modal -->
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Why you can not fullfill at least 80% of your call target</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form method="post" action="{{route('check.lastdayCall.comment')}}">
+                            {{csrf_field()}}
+                        <div class="row container-fluid">
+                            <div class="form-group col-md-12">
+                                <label>Type</label>
+                                <select class="form-control" name="type">
+                                    <option value="" disabled selected hidden>Please Choose...</option>
+                                    <option>Close</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <label>Comment</label>
+                                <textarea class="form-control" name="comment"></textarea>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-sm btn-success">Submit</button>
+                            </div>
+                        </div>
+                        </form>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
 
     <div class="page-wrapper">
 
@@ -116,7 +158,31 @@
 <script src="{{url('date/script.js')}}"></script>
 
 
+<script>
 
+
+    $(document).ready(function () {
+        // alert('asdsd');
+        // $('#myModal').modal();
+        $.ajax({
+            type: 'POST',
+            url: "{!! route('check.lastdayCall') !!}",
+            cache: false,
+            data: {_token: "{{csrf_token()}}"},
+            success: function (data) {
+                 // console.log(data);
+                if(data.target <=80 && data.report==0){
+                    $('#myModal').modal();
+                }
+
+            }
+
+        });
+
+
+
+    });
+</script>
 
 
 @yield('bottom')

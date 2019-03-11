@@ -428,8 +428,37 @@
                 </table>
             @endif
 
+            <hr>
+            <h4 align="center"><b>Comment</b></h4>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Comment</th>
+                    <th>Date</th>
+                </thead>
+                <tbody>
+                    @foreach($failReport as $r)
+                        <tr>
 
-        </div></div>
+                            <td>{{$r->firstName}}</td>
+                            <td>{{$r->type}}</td>
+                            <td>{{$r->comment}}</td>
+                            <td>{{$r->created_at}}</td>
+
+                        </tr>
+
+                    @endforeach
+                </tbody>
+            </table>
+            {{--{{$failReport}}--}}
+
+
+
+        </div>
+
+
+    </div>
 
 @endsection
 
