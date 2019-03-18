@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Failreport;
 use App\NewCall;
 use App\NewFile;
 use GuzzleHttp\Psr7\Response;
@@ -464,6 +465,13 @@ class ReportController extends Controller
         }
 
 
+        $failReport=Failreport::select('failreport.*','users.firstName')
+            ->leftJoin('users','users.id','failreport.userId')
+            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->orderBy('failreport.id','desc')
+            ->get();
+
+//        return $failReport;
 
         $calledThisWeek=Workprogress::select('userId',DB::raw('count(*) as userCall'))
             ->where('workprogress.callingReport','!=',null)
@@ -598,7 +606,8 @@ class ReportController extends Controller
             ->with('usersRa',$usersRa)
             ->with('newCall',$newCall)
             ->with('newFiles',$newFiles)
-            ->with('testLeadForRa',$testLeadForRa);
+            ->with('testLeadForRa',$testLeadForRa)
+            ->with('failReport',$failReport);
 
 
     }
@@ -606,6 +615,8 @@ class ReportController extends Controller
     public function searchTableByDate(Request $r){
 
         $User_Type=Session::get('userType');
+
+
 
         if( $User_Type =='MANAGER'){
             $users=User::select('id as userid','firstName','typeId')
@@ -651,7 +662,13 @@ class ReportController extends Controller
 
 
 
+        $failReport=Failreport::select('failreport.*','users.firstName')
+            ->leftJoin('users','users.id','failreport.userId')
+            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$r->fromDate,$r->toDate])
+            ->orderBy('failreport.id','desc')
+            ->get();
 
+//        return $failReport;
 
 
         $calledThisWeek=Workprogress::select('userId',DB::raw('count(progressId) as userCall'))
@@ -790,7 +807,8 @@ class ReportController extends Controller
             ->with('toDate',$r->toDate)
             ->with('newFiles',$newFiles)
             ->with('newCall',$newCall)
-            ->with('testLeadForRa',$testLeadForRa);
+            ->with('testLeadForRa',$testLeadForRa)
+            ->with('failReport',$failReport);
 
 
     }

@@ -73,7 +73,8 @@ Route::get('follow-up','FollowupController@index')->name('follow-up.index');
 Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
 
-
+Route::post('call/check/lastday','HomeController@checkLastDayCall')->name('check.lastdayCall');
+Route::post('call/check/lastday/comment','HomeController@checkLastDayCallComment')->name('check.lastdayCall.comment');
 //Route::resource('follow-up', 'FollowupController');
 
 

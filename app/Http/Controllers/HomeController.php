@@ -6,6 +6,7 @@ use App\LocalSales;
 use App\LocalUserTarget;
 use App\NewCall;
 use App\NewFile;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,6 +22,7 @@ use App\Usertarget;
 use App\Callingreport;
 use App\Possibility;
 use App\Category;
+use App\Failreport;
 use DB;
 class HomeController extends Controller
 {
@@ -49,15 +51,9 @@ class HomeController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-//
 
-//        $calledThisWeek=Workprogress::select('userId',Auth::user()->id)
-//            ->where('workprogress.callingReport','!=',null)
-//            ->where('callingReport','!=',6)
-//            ->whereBetween('created_at', [$start, $end])
-//            ->count();
 
-//        return $calledThisWeek;
+
 
 
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
@@ -98,7 +94,8 @@ class HomeController extends Controller
 //            ->whereBetween('created_at', [$start, $end])->count();
 
         $lastDayCalled=NewCall::where('userId',Auth::user()->id)
-            ->whereBetween('created_at', [$start, $end])->count();
+            ->whereBetween('created_at', [$start, $end])
+            ->count();
 
         $calledThisWeek=$lastDayCalled;
 
@@ -253,7 +250,9 @@ class HomeController extends Controller
             $countWeek++;
         }
 
-//        return $targetNewFile;
+
+
+
 
         return view('dashboard')
             ->with('target',$target)
@@ -277,6 +276,35 @@ class HomeController extends Controller
 
     }
 
+
+    public function checkLastDayCall(){
+
+        $prevCalled=NewCall::where('userId',Auth::user()->id)
+            ->whereDate('created_at', Carbon::now()->subDay()->format('Y-m-d'))
+            ->count();
+        $target=Usertarget::findOrFail(Auth::user()->id);
+
+        $newCallTargetAchievedLastDay=round($prevCalled*100/($target->targetCall/22));
+
+        $report=Failreport::where('userId',Auth::user()->id)->whereDate('created_at',date('Y-m-d'))
+            ->count();
+
+        return response()->json(['target'=>$newCallTargetAchievedLastDay,'report'=>$report]);
+
+//        return $newCallTargetAchievedLastDay;
+    }
+
+    public function checkLastDayCallComment(Request $r){
+        $failReport = new Failreport();
+        $failReport->comment = $r->comment;
+        $failReport->type = $r->type;
+        $failReport->userId = Auth::user()->id;
+        $failReport->save();
+
+        Session::flash('message', 'Comment Submitted.');
+
+        return back();
+    }
 
     public function digitalMarketing(){
         $userId=Auth::user()->id;
