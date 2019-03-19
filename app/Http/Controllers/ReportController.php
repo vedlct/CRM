@@ -181,7 +181,7 @@ class ReportController extends Controller
             }
 
             $targetFile=NewFile::where('userId',$user->id)
-                ->whereBetween(DB::raw('date(created_at)'), [$start, $end])
+                ->whereBetween(DB::raw('date(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
                 ->sum('fileCount');
 
             if($target->targetFile >0){
@@ -375,7 +375,7 @@ class ReportController extends Controller
 
 
             $targetFile=NewFile::where('userId',$user->id)
-                ->whereBetween(DB::raw('date(created_at)'), [$r->fromDate,$r->toDate])
+                ->whereBetween(DB::raw('date(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'),$r->toDate])
                 ->sum('fileCount');
 
             if($target->targetFile >0){
