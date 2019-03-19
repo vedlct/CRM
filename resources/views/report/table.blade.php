@@ -504,6 +504,40 @@
                 }
             });
         }
+
+
+        function listenForDoubleClick(element) {
+
+            element.contentEditable = true;
+            setTimeout(function() {
+                if (document.activeElement !== element) {
+                    element.contentEditable = false;
+                }
+            }, 300);
+
+        }
+
+        function changeQuantity(x) {
+            var id=$(x).data('panel-id');
+            var rate=$(x).html();
+
+
+
+            $.ajax({
+                type:'POST',
+                url:'{{route('update.newFile')}}',
+                data:{_token: "{{csrf_token()}}",'id':id,'rate':rate},
+
+                cache: false,
+                success:function(data) {
+                   // console.log(data);
+
+                }
+            });
+
+
+        }
+
         function highpossibilityUn(x){
             var id = $(x).data('user-id');
                     @if(isset($fromDate) && isset($toDate))

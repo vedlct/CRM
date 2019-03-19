@@ -218,6 +218,8 @@ Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividua
 Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
+Route::post('new-file/update','GetIndividualReportController@updateNewFile')->name('update.newFile');
+
 
 Route::post('/getAssignedLeadIndividual','GetIndividualReportController@getAssignedLeadIndividual')->name('getAssignedLeadIndividual');
 Route::post('/getTestIndividual','GetIndividualReportController@getTestIndividual')->name('getTestIndividual');
