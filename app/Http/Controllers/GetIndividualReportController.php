@@ -452,11 +452,15 @@ class GetIndividualReportController extends Controller
 
     public function getFileCountIndividual(Request $r){
         $date = Carbon::now();
-        $fromDate=$date->startOfWeek()->format('Y-m-d');
-        $toDate=$date->endOfWeek()->format('Y-m-d');
+//        $fromDate=$date->startOfWeek()->format('Y-m-d');
+//        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        $fromDate=Carbon::now()->subDays(30);
+        $toDate=date('Y-m-d');
 
         if($r->fromdate !=null && $r->todate !=null){
-            $fromDate=$r->fromdate;
+
+            $fromDate=Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d');
             $toDate=$r->todate;
         }
 
@@ -465,11 +469,13 @@ class GetIndividualReportController extends Controller
             ->where('minedBy',$r->userid)
             ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
 
-        $newFile=NewFile::select('new_file.*','leads.companyName')
+        $newFile=NewFile::select('new_file.*','leads.companyName','new_file.new_fileId as fid')
             ->where('userId',$r->userid)
             ->whereBetween(DB::raw('DATE(new_file.created_at)'), [$fromDate,$toDate])
             ->leftJoin('leads','leads.leadId','new_file.leadId')
             ->get();
+
+//        return $newFile;
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -481,7 +487,7 @@ class GetIndividualReportController extends Controller
         foreach ($newFile as $l){
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
-                    <td>'.$l->fileCount.'</td>
+                    <td data-panel-id="'.$l->fid.'" onclick="listenForDoubleClick(this);" onblur="this.contentEditable=false;" onfocusout="changeQuantity(this)">'.$l->fileCount.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
 
@@ -491,6 +497,10 @@ class GetIndividualReportController extends Controller
 
     }
 
+    public function updateNewFile(Request $r){
+        NewFile::where('new_fileId',$r->id)->update(['fileCount'=>$r->rate]);
+        return $r;
+    }
 
 
 
