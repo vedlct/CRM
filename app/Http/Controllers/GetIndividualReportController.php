@@ -498,7 +498,14 @@ class GetIndividualReportController extends Controller
     }
 
     public function updateNewFile(Request $r){
-        NewFile::where('new_fileId',$r->id)->update(['fileCount'=>$r->rate]);
+
+        $file=NewFile::findOrFail($r->id);
+        $newFile=new NewFile();
+        $newFile->leadId=$file->leadId;
+        $newFile->fileCount=$r->rate;
+//        $newFile->userId=Auth::user()->id;
+        $newFile->userId=$file->userId;
+        $newFile->save();
         return $r;
     }
 

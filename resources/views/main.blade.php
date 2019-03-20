@@ -87,7 +87,9 @@
                                 <label>Type</label>
                                 <select class="form-control" name="type">
                                     <option value="" disabled selected hidden>Please Choose...</option>
-                                    <option>Close</option>
+                                    <option>Absent</option>
+                                    <option>Leave</option>
+                                    <option>Holiday</option>
                                     <option>Other</option>
                                 </select>
                             </div>
