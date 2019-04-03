@@ -772,7 +772,7 @@ class ReportController extends Controller
             ->get();
 
 
-        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'),$r->toDate])
             ->get();
 
         $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])

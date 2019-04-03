@@ -574,39 +574,37 @@ class LeadController extends Controller
 
 
 
+        $countNewCallContact=Workprogress::where('userId',Auth::user()->id)
+            ->where('leadId',$r->leadId)
+            ->where('callingReport',5)
+            ->count();
 
-
-
-
-        if($r->report ==2 ||$r->report ==6 ){
-            $countNewCall=Workprogress::where('userId',Auth::user()->id)
-                ->where('leadId',$r->leadId)
-                ->whereIn('callingReport',[2,6])
-                ->count();
-            if($countNewCall<3 ){
-                $newCalll=new NewCall();
-                $newCalll->leadId=$r->leadId;
-                $newCalll->userId=Auth::user()->id;
-                $newCalll->progressId=$progress->id;
-                $newCalll->save();
-            }
-
+        if($countNewCallContact<2){
+            $newCalll=new NewCall();
+            $newCalll->leadId=$r->leadId;
+            $newCalll->userId=Auth::user()->id;
+            $newCalll->progressId=$progress->id;
+            $newCalll->save();
         }
         else{
-            $countNewCallContact=Workprogress::where('userId',Auth::user()->id)
-                ->where('leadId',$r->leadId)
-                ->where('callingReport',5)
-                ->count();
+            if($r->report ==2 ||$r->report ==6 ){
+                $countNewCall=Workprogress::where('userId',Auth::user()->id)
+                    ->where('leadId',$r->leadId)
+                    ->whereIn('callingReport',[2,6])
+                    ->count();
+                if($countNewCall<4 ){
+                    $newCalll=new NewCall();
+                    $newCalll->leadId=$r->leadId;
+                    $newCalll->userId=Auth::user()->id;
+                    $newCalll->progressId=$progress->id;
+                    $newCalll->save();
+                }
 
-            if($countNewCallContact<2){
-                $newCalll=new NewCall();
-                $newCalll->leadId=$r->leadId;
-                $newCalll->userId=Auth::user()->id;
-                $newCalll->progressId=$progress->id;
-                $newCalll->save();
             }
-
         }
+
+
+
 
 
 
