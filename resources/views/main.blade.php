@@ -74,7 +74,13 @@
 
                     <!-- Modal Header -->
                     <div class="modal-header">
+                        @if(Auth::user()->typeId==4)
+                            <h4 class="modal-title">Why you can not fullfill at least 60% of your mine target</h4>
+                        @else
                         <h4 class="modal-title">Why you can not fullfill at least 80% of your call target</h4>
+
+                        @endif
+
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
 
@@ -172,10 +178,16 @@
             cache: false,
             data: {_token: "{{csrf_token()}}"},
             success: function (data) {
-                 // console.log(data);
-                if(data.target <=80 && data.report==0){
-                    $('#myModal').modal();
-                }
+                 @if(Auth::user()->typeId==4)
+                 if(data.target <=60 && data.report==0){
+                     $('#myModal').modal();
+                 }
+                @else
+                 if(data.target <=80 && data.report==0){
+                     $('#myModal').modal();
+                 }
+
+                @endif
 
             }
 

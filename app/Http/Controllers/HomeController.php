@@ -278,16 +278,34 @@ class HomeController extends Controller
 
 
     public function checkLastDayCall(){
+//        return "adfsdf";
+        if(Auth::user()->typeId==4){
 
-        $prevCalled=NewCall::where('userId',Auth::user()->id)
-            ->whereDate('created_at', Carbon::now()->subDay()->format('Y-m-d'))
-            ->count();
-        $target=Usertarget::findOrFail(Auth::user()->id);
+            $prevCalled=Lead::where('minedBy',Auth::user()->id)
+                ->whereDate('created_at',Carbon::now()->subDay()->format('Y-m-d'))
+                ->count();
 
-        $newCallTargetAchievedLastDay=round($prevCalled*100/($target->targetCall/22));
+            $target=Usertarget::findOrFail(Auth::user()->id);
 
-        $report=Failreport::where('userId',Auth::user()->id)->whereDate('created_at',date('Y-m-d'))
-            ->count();
+            $newCallTargetAchievedLastDay=round($prevCalled*100/($target->targetLeadmine/22));
+
+            $report=Failreport::where('userId',Auth::user()->id)->whereDate('created_at',date('Y-m-d'))
+                ->count();
+        }
+
+        else{
+            $prevCalled=NewCall::where('userId',Auth::user()->id)
+                ->whereDate('created_at', Carbon::now()->subDay()->format('Y-m-d'))
+                ->count();
+            $target=Usertarget::findOrFail(Auth::user()->id);
+
+            $newCallTargetAchievedLastDay=round($prevCalled*100/($target->targetCall/22));
+
+            $report=Failreport::where('userId',Auth::user()->id)->whereDate('created_at',date('Y-m-d'))
+                ->count();
+        }
+
+
 
         return response()->json(['target'=>$newCallTargetAchievedLastDay,'report'=>$report]);
 

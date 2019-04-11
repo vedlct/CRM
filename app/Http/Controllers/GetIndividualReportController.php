@@ -512,8 +512,6 @@ class GetIndividualReportController extends Controller
 
 
     public function getMineIndividual(Request $r){
-
-
         $date = Carbon::now();
         $fromDate=$date->startOfWeek()->format('Y-m-d');
         $toDate=$date->endOfWeek()->format('Y-m-d');
