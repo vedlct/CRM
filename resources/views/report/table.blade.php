@@ -62,6 +62,7 @@
                         <th>High Possibility</th>
                         <th>HP(unique)</th>
                         <th>Test Lead</th>
+                        <th>Close Lead</th>
                         <th>New Call</th>
                         <th>New File</th>
 
@@ -239,6 +240,30 @@
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
                                         > {{$value=$tl->userTestLead}}
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+                            <td>
+                                @php($value=0)
+                                @foreach($closing as $cl)
+
+                                    @if($cl->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="closelead(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$value=$cl->userClosing}}
                                         </a>
                                         @break
                                     @endif
@@ -705,6 +730,7 @@
             });
         }
         function closelead(x){
+
             var id = $(x).data('user-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');

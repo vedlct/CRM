@@ -218,6 +218,7 @@ class ReportController extends Controller
 //        return $report;
         return view('report.index')->with('report',$report);
     }
+    
     public function searchGraphByDate(Request $r){
 
         $User_Type=Session::get('userType');
