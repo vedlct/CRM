@@ -537,12 +537,16 @@
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -604,12 +608,16 @@
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -636,12 +644,16 @@
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -668,12 +680,16 @@
                     $('#label').html('Lead Mined');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -701,12 +717,16 @@
                     $('#label').html('File Count');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
 
@@ -735,12 +755,16 @@
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -767,12 +791,16 @@
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -800,12 +828,16 @@
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -832,12 +864,16 @@
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -864,12 +900,16 @@
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
         }
@@ -896,12 +936,19 @@
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
+                    
+
                 }
             });
         }
@@ -929,12 +976,16 @@
                     $('#label').html('New Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
 
@@ -982,12 +1033,16 @@
                     $('#label').html('Test Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
                         ]
                     });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
                 }
             });
 
