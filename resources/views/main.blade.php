@@ -178,6 +178,7 @@
             cache: false,
             data: {_token: "{{csrf_token()}}"},
             success: function (data) {
+                // console.log(data);
                  @if(Auth::user()->typeId==4)
                  if(data.target <=60 && data.report==0){
                      $('#myModal').modal();

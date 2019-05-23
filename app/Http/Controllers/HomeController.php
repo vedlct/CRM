@@ -279,10 +279,21 @@ class HomeController extends Controller
 
     public function checkLastDayCall(){
 //        return "adfsdf";
+        $date=Carbon::now();
+        $date->format('l');
+        if($date->format('l')=="Monday"){
+            $date=Carbon::now()->subDay(3)->format('Y-m-d');
+        }
+        else{
+            $date=Carbon::now()->subDay()->format('Y-m-d');
+        }
+
+
+
         if(Auth::user()->typeId==4){
 
             $prevCalled=Lead::where('minedBy',Auth::user()->id)
-                ->whereDate('created_at',Carbon::now()->subDay()->format('Y-m-d'))
+                ->whereDate('created_at',$date)
                 ->count();
 
             $target=Usertarget::findOrFail(Auth::user()->id);
@@ -295,7 +306,7 @@ class HomeController extends Controller
 
         else{
             $prevCalled=NewCall::where('userId',Auth::user()->id)
-                ->whereDate('created_at', Carbon::now()->subDay()->format('Y-m-d'))
+                ->whereDate('created_at', $date)
                 ->count();
             $target=Usertarget::findOrFail(Auth::user()->id);
 
