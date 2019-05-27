@@ -579,29 +579,38 @@ class LeadController extends Controller
             ->where('callingReport',5)
             ->count();
 
-        if($countNewCallContact<2){
+        if($countNewCallContact==0){
             $newCalll=new NewCall();
             $newCalll->leadId=$r->leadId;
             $newCalll->userId=Auth::user()->id;
             $newCalll->progressId=$progress->id;
             $newCalll->save();
         }
-        else{
-            if($r->report ==2 ||$r->report ==6 ){
-                $countNewCall=Workprogress::where('userId',Auth::user()->id)
-                    ->where('leadId',$r->leadId)
-                    ->whereIn('callingReport',[2,6])
-                    ->count();
-                if($countNewCall<4 ){
-                    $newCalll=new NewCall();
-                    $newCalll->leadId=$r->leadId;
-                    $newCalll->userId=Auth::user()->id;
-                    $newCalll->progressId=$progress->id;
-                    $newCalll->save();
-                }
 
-            }
-        }
+//        if($countNewCallContact<2){
+//            $newCalll=new NewCall();
+//            $newCalll->leadId=$r->leadId;
+//            $newCalll->userId=Auth::user()->id;
+//            $newCalll->progressId=$progress->id;
+//            $newCalll->save();
+//        }
+//        else{
+//            if($r->report ==2 ||$r->report ==6 ){
+//                $countNewCall=Workprogress::where('userId',Auth::user()->id)
+//                    ->where('leadId',$r->leadId)
+//                    ->whereIn('callingReport',[2,6])
+//                    ->count();
+//
+//                if($countNewCall<4 ){
+//                    $newCalll=new NewCall();
+//                    $newCalll->leadId=$r->leadId;
+//                    $newCalll->userId=Auth::user()->id;
+//                    $newCalll->progressId=$progress->id;
+//                    $newCalll->save();
+//                }
+//
+//            }
+//        }
 
 
 
