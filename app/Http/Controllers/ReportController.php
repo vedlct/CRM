@@ -558,9 +558,27 @@ class ReportController extends Controller
             ->groupBy('userId')
             ->get();
 
-//        return $contacted;
 
-//            USA
+        $emailed=Workprogress::select('userId',DB::raw('count(*) as userEmailed'))
+            ->where('callingReport',3)
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+        $other=Workprogress::select('userId',DB::raw('count(*) as userOther'))
+            ->where('callingReport',6)
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $notAvailable=Workprogress::select('userId',DB::raw('count(*) as userNotAvialable'))
+            ->where('callingReport',2)
+            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
         $contactedUsa=Workprogress::select('userId',DB::raw('count(*) as userContactedUsa'))
             ->leftJoin('leads','workprogress.leadId','leads.leadId')
             ->leftJoin('countries','leads.countryId','countries.countryId')
@@ -614,7 +632,10 @@ class ReportController extends Controller
             ->with('newCall',$newCall)
             ->with('newFiles',$newFiles)
             ->with('testLeadForRa',$testLeadForRa)
-            ->with('failReport',$failReport);
+            ->with('failReport',$failReport)
+            ->with('emailed',$emailed)
+            ->with('other',$other)
+            ->with('notAvailable',$notAvailable);
 
 
     }
@@ -758,7 +779,23 @@ class ReportController extends Controller
             ->groupBy('userId')
             ->get();
 
-//        return $contacted;
+        $emailed=Workprogress::select('userId',DB::raw('count(*) as userEmailed'))
+            ->where('callingReport',3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->groupBy('userId')
+            ->get();
+
+        $other=Workprogress::select('userId',DB::raw('count(*) as userOther'))
+            ->where('callingReport',6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->groupBy('userId')
+            ->get();
+
+        $notAvailable=Workprogress::select('userId',DB::raw('count(*) as userNotAvialable'))
+            ->where('callingReport',2)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->groupBy('userId')
+            ->get();
 
 //            USA
         $contactedUsa=Workprogress::select('userId',DB::raw('count(*) as userContactedUsa'))
@@ -817,7 +854,10 @@ class ReportController extends Controller
             ->with('newFiles',$newFiles)
             ->with('newCall',$newCall)
             ->with('testLeadForRa',$testLeadForRa)
-            ->with('failReport',$failReport);
+            ->with('failReport',$failReport)
+            ->with('emailed',$emailed)
+            ->with('other',$other)
+            ->with('notAvailable',$notAvailable);
 
 
     }
