@@ -62,7 +62,9 @@ class ReportController extends Controller
 //                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
             $calledThisWeek=NewCall::where('userId',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
+                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+                ->where('workprogress.callingReport',5)
+                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$start,$end])
                 ->count();
 
 
@@ -290,7 +292,9 @@ class ReportController extends Controller
 //                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
             $calledThisWeek=NewCall::where('userId',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+                ->where('workprogress.callingReport',5)
+                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
                 ->count();
 
             //When user is RA
@@ -576,7 +580,9 @@ class ReportController extends Controller
 
 //        return $closing;
 
-        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $newCall=NewCall::leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+            ->where('workprogress.callingReport',5)
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
                             ->get();
 
 
@@ -776,7 +782,9 @@ class ReportController extends Controller
         $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'),$r->toDate])
             ->get();
 
-        $newCall=NewCall::whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $newCall=NewCall::leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+            ->where('workprogress.callingReport',5)
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate,$r->toDate])
             ->get();
 
 

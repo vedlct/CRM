@@ -730,6 +730,7 @@ class GetIndividualReportController extends Controller
             ->where('new_call.userId',$r->userid)
             ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
             ->leftJoin('leads','leads.leadId','workprogress.leadId')
+            ->where('workprogress.callingReport',5)
             ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
