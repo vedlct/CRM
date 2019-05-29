@@ -56,17 +56,18 @@
                     <tr>
                         <th>Name</th>
                         <th>Total Call</th>
-                        <th>Total Email</th>
-                        <th>Total Other</th>
-                        <th>Total Not Available</th>
+                        <th>New Call</th>
+                        <th>Email</th>
+                        <th>Other</th>
+                        <th>Not Available</th>
                         <th>Follow up</th>
-                        <th>Contacted | Usa</th>
+                        <th>Contacted</th>
+                        <th>Usa</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
                         <th>HP(unique)</th>
                         <th>Test Lead</th>
                         <th>Close Lead</th>
-                        <th>New Call</th>
                         <th>New File</th>
 
                     </tr>
@@ -97,7 +98,20 @@
                                 @endif
                             </td>
 
+                            <td>
+                                <a href="#" class="highpossibility" onclick="newCall(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$newCall->where('userId',$user->userid)->count()}}
+                                </a>
 
+
+                            </td>
 
 
                             <td>
@@ -188,6 +202,9 @@
                                 @endif
                             </td>
 
+
+
+
                             <td>
 
                                 @php($value=0)
@@ -206,6 +223,27 @@
                                             {{$value=$c->userContacted}}
                                         </a>
                                         @php($value1=0)
+
+
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+
+                            <td>
+
+
+
+
+
+
+
+                                        @php($value1=0)
                                         @foreach($contactedUsa as $cUsa)
                                             @if($cUsa->userId == $user->userid)
 
@@ -216,21 +254,22 @@
                                                    @endif
                                                    data-user-id="{{$user->userid}}"
                                                    data-user-name="{{$user->userName}}"
-                                                > |  {{$value1=$value=$cUsa->userContactedUsa}}</a>
+                                                > {{$value1=$value=$cUsa->userContactedUsa}}</a>
                                             @endif
 
                                         @endforeach
                                         @if($value1==0)
-                                            <a href="#" >| 0</a>
+                                            <a href="#" > 0</a>
                                         @endif
 
-                                        @break
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
+
+
+
                             </td>
+
+
+
+
                             <td>
                                 @php($value=0)
                                 @foreach($assignedLead as $al)
@@ -346,20 +385,7 @@
                                 @endif
                             </td>
 
-                            <td>
-                                <a href="#" class="highpossibility" onclick="newCall(this)"
-                                   @if(isset($fromDate) && isset($toDate))
-                                   data-date-from="{{$fromDate}}"
-                                   data-date-to="{{$toDate}}"
-                                   @endif
-                                   data-user-id="{{$user->userid}}"
-                                   data-user-name="{{$user->userName}}"
-                                >
-                                    {{$newCall->where('userId',$user->userid)->count()}}
-                                </a>
 
-
-                            </td>
 
                             <td>
 
