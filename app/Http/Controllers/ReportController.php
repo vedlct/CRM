@@ -61,7 +61,7 @@ class ReportController extends Controller
 //                ->where('callingReport','!=',6)
 //                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
-            $calledThisWeek=NewCall::where('userId',$user->id)
+            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
                 ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
                 ->where('workprogress.callingReport',5)
                 ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$start,$end])
@@ -291,7 +291,7 @@ class ReportController extends Controller
 //                ->where('callingReport','!=',6)
 //                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
-            $calledThisWeek=NewCall::where('userId',$user->id)
+            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
                 ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
                 ->where('workprogress.callingReport',5)
                 ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
