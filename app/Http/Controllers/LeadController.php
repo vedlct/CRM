@@ -579,7 +579,7 @@ class LeadController extends Controller
             ->where('callingReport',5)
             ->count();
 
-        if($countNewCallContact==0){
+        if($countNewCallContact==0 && $r->report ==5){
             $newCalll=new NewCall();
             $newCalll->leadId=$r->leadId;
             $newCalll->userId=Auth::user()->id;
