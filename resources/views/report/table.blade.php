@@ -60,7 +60,8 @@
                         <th>Total Other</th>
                         <th>Total Not Available</th>
                         <th>Follow up</th>
-                        <th>Contacted | Usa</th>
+                        <th>Contacted</th>
+                        <th>Usa</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
                         <th>HP(unique)</th>
@@ -188,6 +189,9 @@
                                 @endif
                             </td>
 
+
+
+
                             <td>
 
                                 @php($value=0)
@@ -206,6 +210,27 @@
                                             {{$value=$c->userContacted}}
                                         </a>
                                         @php($value1=0)
+
+
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+
+                            <td>
+
+
+
+
+
+
+
+                                        @php($value1=0)
                                         @foreach($contactedUsa as $cUsa)
                                             @if($cUsa->userId == $user->userid)
 
@@ -216,21 +241,22 @@
                                                    @endif
                                                    data-user-id="{{$user->userid}}"
                                                    data-user-name="{{$user->userName}}"
-                                                > |  {{$value1=$value=$cUsa->userContactedUsa}}</a>
+                                                > {{$value1=$value=$cUsa->userContactedUsa}}</a>
                                             @endif
 
                                         @endforeach
                                         @if($value1==0)
-                                            <a href="#" >| 0</a>
+                                            <a href="#" > 0</a>
                                         @endif
 
-                                        @break
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
+
+
+
                             </td>
+
+
+
+
                             <td>
                                 @php($value=0)
                                 @foreach($assignedLead as $al)
