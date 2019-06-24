@@ -56,9 +56,10 @@
                     <tr>
                         <th>Name</th>
                         <th>Total Call</th>
-                        <th>Total Email</th>
-                        <th>Total Other</th>
-                        <th>Total Not Available</th>
+                        <th>New Call</th>
+                        <th>Email</th>
+                        <th>Other</th>
+                        <th>Not Available</th>
                         <th>Follow up</th>
                         <th>Contacted</th>
                         <th>Usa</th>
@@ -67,7 +68,6 @@
                         <th>HP(unique)</th>
                         <th>Test Lead</th>
                         <th>Close Lead</th>
-                        <th>New Call</th>
                         <th>New File</th>
 
                     </tr>
@@ -98,7 +98,20 @@
                                 @endif
                             </td>
 
+                            <td>
+                                <a href="#" class="highpossibility" onclick="newCall(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$newCall->where('userId',$user->userid)->count()}}
+                                </a>
 
+
+                            </td>
 
 
                             <td>
@@ -372,20 +385,7 @@
                                 @endif
                             </td>
 
-                            <td>
-                                <a href="#" class="highpossibility" onclick="newCall(this)"
-                                   @if(isset($fromDate) && isset($toDate))
-                                   data-date-from="{{$fromDate}}"
-                                   data-date-to="{{$toDate}}"
-                                   @endif
-                                   data-user-id="{{$user->userid}}"
-                                   data-user-name="{{$user->userName}}"
-                                >
-                                    {{$newCall->where('userId',$user->userid)->count()}}
-                                </a>
 
-
-                            </td>
 
                             <td>
 
