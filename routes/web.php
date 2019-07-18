@@ -134,6 +134,7 @@ Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assigned
 //Route::get('lead/report/{id}', 'LeadController@report')->name('report');
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
+Route::post('lead/callReports','LeadController@getCallingReport')->name('getCallingReport');
 
 
 //Leave Lead

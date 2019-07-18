@@ -226,12 +226,12 @@
                 <div class="col-md-6">
                             <div class="form-group">
                             <label ><b>Calling Report : </b></label>
-                            <select class="form-control" name="report" required>
-                                <option value=""><b>(select one)</b></option>
+                            <select class="form-control" name="report" id="reporttest" required>
+                                {{--<option value=""><b>(select one)</b></option>--}}
 
-                                @foreach($callReports as $report)
-                                    <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-                                @endforeach
+                                {{--@foreach($callReports as $report)--}}
+                                    {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
+                                {{--@endforeach--}}
                             </select>
                             </div>
 
@@ -384,6 +384,18 @@
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
                 }
             });
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getCallingReport')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+
+                    document.getElementById("reporttest").innerHTML = data;
+
+                }
+            });
+
 
         });
 

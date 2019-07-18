@@ -175,12 +175,22 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label ><b>Calling Report : </b></label>
-                                <select class="form-control" name="report" required>
+                                <select class="form-control" id="reporttest" name="report" required>
                                     <option value=""><b>(select one)</b></option>
 
-                                    @foreach($callReports as $report)
-                                        <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-                                    @endforeach
+                                        {{--@foreach($callReports as $report)--}}
+
+{{--                                            @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
+
+                                        {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
+
+                                        {{--@else--}}
+
+
+                                        {{--@endif--}}
+
+                                    {{--@endforeach--}}
+
                                 </select>
                             </div>
 
@@ -364,6 +374,16 @@
                 success : function(data){
                     $('#comment').html(data);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
+                }
+            });
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getCallingReport')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+
+                    document.getElementById("reporttest").innerHTML = data;
+
                 }
             });
 

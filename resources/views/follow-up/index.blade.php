@@ -230,16 +230,16 @@
 							  <div class="col-md-6">
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label ><b>Calling Report : </b></label>
-									  <select class="form-control" name="report" required>
+									  <select class="form-control" name="report" id="reporttest" required>
 										  {{--<option value="4"><b>Follow Up</b></option>--}}
 
-										  @foreach($callReports as $report)
-											  @if($report->callingReportId == '4')
-											  <option value="{{$report->callingReportId}}" selected>{{$report->report}}</option>
-											  @else
-												  <option value="{{$report->callingReportId}}" >{{$report->report}}</option>
-											  @endif
-										  @endforeach
+										  {{--@foreach($callReports as $report)--}}
+											  {{--@if($report->callingReportId == '4')--}}
+											  {{--<option value="{{$report->callingReportId}}" selected>{{$report->report}}</option>--}}
+											  {{--@else--}}
+												  {{--<option value="{{$report->callingReportId}}" >{{$report->report}}</option>--}}
+											  {{--@endif--}}
+										  {{--@endforeach--}}
 									  </select>
 								  </div>
 
@@ -458,6 +458,17 @@
 
                 }
             });
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getCallingReport')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+
+                    document.getElementById("reporttest").innerHTML = data;
+
+                }
+            });
+
 
         });
 

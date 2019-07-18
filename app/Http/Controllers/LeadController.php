@@ -440,11 +440,56 @@ class LeadController extends Controller
                 ->where('workprogress.leadId',$r->leadId)
                 ->leftJoin('users','users.id','workprogress.userId')
                 ->get();
+
             $text='';
+
             foreach ($comments as $comment){
                 $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
             return Response($text);
+        }
+    }
+    public function getCallingReport(Request $r){
+        if($r->ajax()){
+
+            $workprocess = Workprogress::where('callingReport' , '5')
+                ->where('userId',Auth::user()->id )
+                ->where('leadId',$r->leadId )
+                ->get();
+            $text='';
+            $callReports = Callingreport::get();
+            if ($workprocess->isEmpty()){
+
+
+
+                echo "<option value=''><b>(select one)</b></option>";
+
+                foreach ($callReports as $clR){
+
+
+                    echo  "<option value=".$clR->callingReportId.">".$clR->report."</option>";
+
+
+
+
+
+
+                }
+
+            }else{
+                echo "<option value=''><b>(select one)</b></option>";
+                foreach ($callReports as $clR){
+
+                    if ($clR->callingReportId !=5){
+
+                        echo  "<option value=".$clR->callingReportId.">".$clR->report."</option>";
+                    }
+
+
+                }
+            }
+
+          //  return Response($text);
         }
     }
     public function tempLeads(){
@@ -747,6 +792,8 @@ class LeadController extends Controller
         if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
+
+
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
@@ -759,6 +806,7 @@ class LeadController extends Controller
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country);
+
         }
         return Redirect()->route('home');
     }
