@@ -43,7 +43,7 @@
                      <span class="hide-menu">Todays Follow-up</span></a>
                 </li>
                     <li>
-                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Contacts</span></a>
+                    <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Mylead</span></a>
                     </li>
                 @endif
 

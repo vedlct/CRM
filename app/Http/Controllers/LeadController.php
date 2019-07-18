@@ -740,6 +740,8 @@ class LeadController extends Controller
     }
 
     public function contacted(){
+
+
         //For user
         $User_Type=Session::get('userType');
         if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
@@ -750,6 +752,7 @@ class LeadController extends Controller
                 ->where('statusId','!=',1)
                 ->get();
             $country=Country::get();
+
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
@@ -761,33 +764,57 @@ class LeadController extends Controller
     }
     public function getContacedData(Request $r){
         $leads=Lead::with('mined','category','country','possibility')
-            ->where('contactedUserId',Auth::user()->id)
-            ->orderBy('leadId','desc');
+        ->where('contactedUserId',Auth::user()->id)
+        ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
+         ////for modal view/////////
             ->addColumn('action', function ($lead) {
                 return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-possibility="'.$lead->possibilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                   data-lead-id="'.$lead->leadId.'"
-                                   data-lead-name="'.$lead->companyName.'"
-                                   data-lead-email="'.$lead->email.'"
-                                   data-lead-number="'.$lead->contactNumber.'"
-                                   data-lead-person="'.$lead->personName.'"
-                                   data-lead-website="'.$lead->website.'"
-                                   data-lead-mined="'.$lead->mined->firstName.'"
-                                   data-lead-category="'.$lead->category->categoryId.'"
+                                    <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+                                    data-lead-email="'.$lead->email.'"
+                                    data-lead-number="'.$lead->contactNumber.'"
+                                    data-lead-person="'.$lead->personName.'"
+                                    data-lead-website="'.$lead->website.'"
+                                    data-lead-mined="'.$lead->mined->firstName.'"
+                                    data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
-                                   data-lead-designation="'.$lead->designation.'"
-                                   data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
-                                >
+                                    data-lead-designation="'.$lead->designation.'"
+                                    data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                    >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             })
             ->addColumn('call', function ($lead){
                 return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
             })
+
+            ->addColumn('callreport', function ($lead){
+                $callingreport = DB::table('workprogress')
+                ->select('report')
+                ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingreport')
+                ->where('workprogress.leadId',$lead->leadId)
+                ->groupBy('workprogress.leadId')
+                ->orderBy('created_at', 'DESC')
+                ->get();
+                if (($callingreport->isEmpty())) {
+
+                return $test="New Lead";
+                }else{
+
+                return $test=$callingreport->first()->report;
+                }
+            })
+
             ->rawColumns(['call', 'action'])
+            ->filterColumn('callreport',function ($query,$keyword){
+
+                return $query->where('callreport','like', '%'.$keyword. '%');
+
+            })
             ->make(true);
     }
     public function  editcontactmodalshow (Request $r){

@@ -12,7 +12,7 @@
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>Contacted</b></h2>
+                <h2 class="card-title" align="center"><b>My Lead</b></h2>
             @endif
 
             <div class="table-responsive m-t-40">
@@ -24,14 +24,15 @@
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
-                        <th width="8%">Contact Person</th>
                         <th width="8%">Contact Number</th>
+                        <th width="8%">Status</th>
                         <th width="10%">Action</th>
 
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
+
                 </table>
             </div>
         </div>
@@ -412,7 +413,7 @@
 
 
         $(function() {
-            $('#myTable').DataTable({
+            var table=$('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 Filter: true,
@@ -429,13 +430,17 @@
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'personName', name: 'leads.personName'},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
+                    { data: 'callreport', name: 'callreport',searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
-                ]
+                ],
+
             });
+
+
+
         });
 
 
