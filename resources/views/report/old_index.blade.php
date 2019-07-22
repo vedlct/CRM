@@ -16,19 +16,19 @@
         <div class="card-body">
             <label><b>Search</b></label>
 
-        <form method="post" action="{{route('searchGraphByDate')}}">
-            {{csrf_field()}}
-            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
-            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
-            <button type="submit" class="btn btn-success">Search</button>
+            <form method="post" action="{{route('searchGraphByDate')}}">
+                {{csrf_field()}}
+                <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" required>
+                <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
+                <button type="submit" class="btn btn-success">Search</button>
 
-        </form>
+            </form>
 
 
 
-    {{--<div style="padding-top:50px;" >--}}
-        <div id="chartContainer" style="height: 600px; width:100%;"></div>
-    </div>
+            {{--<div style="padding-top:50px;" >--}}
+            <div id="chartContainer" style="height: 600px; width:100%;"></div>
+        </div>
     </div>
     {{--</div>--}}
 
@@ -65,7 +65,7 @@
                 },
 
                 axisY2:{
-                    title: "M-lead mined ,P- high possibility,Con- Contact",
+                    title: "C-new call ,M-lead mined ,P- high possibility,Con- Contact",
                     maximum: 100,
 
                 },
@@ -81,17 +81,17 @@
                     dataPoints: [
                             @foreach($report as $r)
                             @if($r->typeId==4)
-                            { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+                        { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
                             @elseif($r->typeId==5)
-                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*40/100)+($r->targetFile*30/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*10/100)+($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*30/100)+($r->targetFile*30/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%"},
 
                             @elseif($r->typeId==3 || $r->typeId==2)
 
-                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->contacted*40/100)+($r->targetFile*30/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}"},
+                        { label: "{{$r->userName}}",y:{{(($r->called*10/100)+($r->testLead*30/100)+($r->contacted*30/100)+($r->targetFile*30/100))}},indexLabel:"C:{{$r->called}}%,T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}"},
 
-                            @endif
+                        @endif
 
-                            @endforeach
+                        @endforeach
 
                     ]
                 }]
@@ -112,7 +112,7 @@
 
 
 
-    @endsection
+@endsection
 
 
 

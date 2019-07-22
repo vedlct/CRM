@@ -55,28 +55,20 @@
                     <thead>
                     <tr>
                         <th>Name</th>
-                        <th>New Contact</th>
-                        <th>Follow up</th>
-                        <th>Email</th>
-                        <th>Not Available</th>
                         <th>Total Call</th>
+                        <th>New Call</th>
+                        <th>Email</th>
+                        <th>Other</th>
+                        <th>Not Available</th>
+                        <th>Follow up</th>
+                        <th>Contacted</th>
+                        <th>Usa</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
+                        <th>HP(unique)</th>
                         <th>Test Lead</th>
                         <th>Close Lead</th>
                         <th>New File</th>
-                        {{--<th>New Call</th>--}}
-                        {{--<th>Email</th>--}}
-                        {{--<th>Other</th>--}}
-                        {{--<th>Not Available</th>--}}
-                        {{--<th>Follow up</th>--}}
-                        {{--<th>Usa</th>--}}
-                        {{--<th>Assigned Lead</th>--}}
-                        {{--<th>High Possibility</th>--}}
-                        {{--<th>HP(unique)</th>--}}
-                        {{--<th>Test Lead</th>--}}
-                        {{--<th>Close Lead</th>--}}
-                        {{--<th>New File</th>--}}
 
                     </tr>
                     </thead>
@@ -84,8 +76,134 @@
 
                     @foreach( $users as $user)
                         <tr>
-
                             <td>{{$user->firstName}}</td>
+                            <td>
+                                @php($value=0)
+                                @foreach($calledThisWeek as $uc)
+
+                                    @if($uc->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="totalcall(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$value=$value=$uc->userCall}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+                            <td>
+                                <a href="#" class="highpossibility" onclick="newCall(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}"
+                                >
+                                    {{$newCall->where('userId',$user->userid)->count()}}
+                                </a>
+
+
+                            </td>
+
+
+                            <td>
+                                @php($value=0)
+                                @foreach($emailed as $uc)
+                                    @if($uc->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="totalEmail(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$value=$uc->userEmailed}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+
+                            <td>
+                                @php($value=0)
+                                @foreach($other as $uc)
+                                    @if($uc->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="totalOther(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$value=$uc->userOther}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+                            <td>
+                                @php($value=0)
+                                @foreach($notAvailable as $uc)
+                                    @if($uc->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="totalNotAvailable(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$value=$uc->userNotAvialable}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+
+
+
+                            <td>
+
+                                @php($value=0)
+                                @foreach($followupThisWeek as $fu)
+
+                                    @if($fu->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="followup(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >{{$value=$fu->userFollowup}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+
 
                             <td>
 
@@ -115,88 +233,43 @@
                                 @endif
                             </td>
 
+
+
                             <td>
 
-                                @php($value=0)
-                                @foreach($followupThisWeek as $fu)
 
-                                    @if($fu->userId == $user->userid)
-                                        <a href="#" class="highpossibility" onclick="followup(this)"
+
+
+
+
+
+                                @php($value1=0)
+                                @foreach($contactedUsa as $cUsa)
+                                    @if($cUsa->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
-                                        >{{$value=$fu->userFollowup}}</a>
-                                        @break
+                                        > {{$value1=$value=$cUsa->userContactedUsa}}</a>
                                     @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
-                            </td>
 
-                            <td>
-                                @php($value=0)
-                                @foreach($emailed as $uc)
-                                    @if($uc->userId == $user->userid)
-
-                                        <a href="#" class="highpossibility" onclick="totalEmail(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$uc->userEmailed}}</a>
-                                    @endif
                                 @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
+                                @if($value1==0)
+                                    <a href="#" > 0</a>
                                 @endif
-                            </td>
-                            <td>
-                                @php($value=0)
-                                @foreach($notAvailable as $uc)
-                                    @if($uc->userId == $user->userid)
 
-                                        <a href="#" class="highpossibility" onclick="totalNotAvailable(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$uc->userNotAvialable}}</a>
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
+
+
+
                             </td>
 
 
-                            <td>
-                                @php($value=0)
-                                @foreach($calledThisWeek as $uc)
 
-                                    @if($uc->userId == $user->userid)
 
-                                        <a href="#" class="highpossibility" onclick="totalcall(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$value=$uc->userCall}}</a>
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                <a href="#" >0</a>
-                                @endif
-                            </td>
                             <td>
                                 @php($value=0)
                                 @foreach($assignedLead as $al)
@@ -219,6 +292,7 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
+
                             <td>
                                 @php($value=0)
                                 @foreach($highPosibilitiesThisWeekUser as $hp)
@@ -236,6 +310,28 @@
                                             {{$value=$hp->userHighPosibilities}}
                                         </a>
                                         @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+                            <td>
+                                @php($value=0)
+                                @foreach($uniqueHighPosibilitiesThisWeek as $hp)
+
+                                    @if($hp->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$value=$hp->userUniqueHighPosibilities}}
+                                        </a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -264,6 +360,7 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
+
                             <td>
                                 @php($value=0)
                                 @foreach($closing as $cl)
@@ -288,6 +385,8 @@
                                 @endif
                             </td>
 
+
+
                             <td>
 
 
@@ -302,116 +401,10 @@
                                 >
                                     {{$newFiles->where('userId',$user->userid)->sum('fileCount')}}
                                 </a>
-
                             </td>
 
-                            {{--<td>--}}
-                                {{--<a href="#" class="highpossibility" onclick="newCall(this)"--}}
-                                   {{--@if(isset($fromDate) && isset($toDate))--}}
-                                   {{--data-date-from="{{$fromDate}}"--}}
-                                   {{--data-date-to="{{$toDate}}"--}}
-                                   {{--@endif--}}
-                                   {{--data-user-id="{{$user->userid}}"--}}
-                                   {{--data-user-name="{{$user->userName}}"--}}
-                                {{-->--}}
-                                    {{--{{$newCall->where('userId',$user->userid)->count()}}--}}
-                                {{--</a>--}}
 
 
-                            {{--</td>--}}
-
-                            {{--<td>--}}
-                                {{--@php($value=0)--}}
-                                {{--@foreach($other as $uc)--}}
-                                    {{--@if($uc->userId == $user->userid)--}}
-
-                                        {{--<a href="#" class="highpossibility" onclick="totalOther(this)"--}}
-                                           {{--@if(isset($fromDate) && isset($toDate))--}}
-                                           {{--data-date-from="{{$fromDate}}"--}}
-                                           {{--data-date-to="{{$toDate}}"--}}
-                                           {{--@endif--}}
-                                           {{--data-user-id="{{$user->userid}}"--}}
-                                           {{--data-user-name="{{$user->userName}}"--}}
-                                        {{-->{{$value=$uc->userOther}}</a>--}}
-                                    {{--@endif--}}
-                                {{--@endforeach--}}
-                                {{--@if($value==0)--}}
-                                    {{--<a href="#" >0</a>--}}
-                                {{--@endif--}}
-                            {{--</td>--}}
-
-                            {{----}}
-
-
-
-
-
-                            {{----}}
-
-
-
-
-
-
-
-
-                            {{--<td>--}}
-
-                                        {{--@php($value1=0)--}}
-                                        {{--@foreach($contactedUsa as $cUsa)--}}
-                                            {{--@if($cUsa->userId == $user->userid)--}}
-
-                                                {{--<a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"--}}
-                                                   {{--@if(isset($fromDate) && isset($toDate))--}}
-                                                   {{--data-date-from="{{$fromDate}}"--}}
-                                                   {{--data-date-to="{{$toDate}}"--}}
-                                                   {{--@endif--}}
-                                                   {{--data-user-id="{{$user->userid}}"--}}
-                                                   {{--data-user-name="{{$user->userName}}"--}}
-                                                {{--> {{$value1=$value=$cUsa->userContactedUsa}}</a>--}}
-                                            {{--@endif--}}
-
-                                        {{--@endforeach--}}
-                                        {{--@if($value1==0)--}}
-                                            {{--<a href="#" > 0</a>--}}
-                                        {{--@endif--}}
-
-
-
-
-                            {{--</td>--}}
-
-
-
-
-                            {{----}}
-
-                            {{----}}
-                            {{--<td>--}}
-                                {{--@php($value=0)--}}
-                                {{--@foreach($uniqueHighPosibilitiesThisWeek as $hp)--}}
-
-                                    {{--@if($hp->userId == $user->userid)--}}
-
-                                        {{--<a href="#" class="highpossibility" onclick="highpossibilityUn(this)"--}}
-                                           {{--@if(isset($fromDate) && isset($toDate))--}}
-                                           {{--data-date-from="{{$fromDate}}"--}}
-                                           {{--data-date-to="{{$toDate}}"--}}
-                                           {{--@endif--}}
-                                           {{--data-user-id="{{$user->userid}}"--}}
-                                           {{--data-user-name="{{$user->userName}}"--}}
-                                        {{-->--}}
-                                            {{--{{$value=$hp->userUniqueHighPosibilities}}--}}
-                                        {{--</a>--}}
-                                    {{--@endif--}}
-                                {{--@endforeach--}}
-                                {{--@if($value==0)--}}
-                                    {{--<a href="#" >0</a>--}}
-                                {{--@endif--}}
-                            {{--</td>--}}
-                            {{----}}
-
-                            {{----}}
 
 
                         </tr>
@@ -542,23 +535,23 @@
             <h4 align="center"><b>Comment</b></h4>
             <table class="table table-bordered table-striped">
                 <thead>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Comment</th>
-                    <th>Date</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Comment</th>
+                <th>Date</th>
                 </thead>
                 <tbody>
-                    @foreach($failReport as $r)
-                        <tr>
+                @foreach($failReport as $r)
+                    <tr>
 
-                            <td>{{$r->firstName}}</td>
-                            <td>{{$r->type}}</td>
-                            <td>{{$r->comment}}</td>
-                            <td>{{$r->created_at}}</td>
+                        <td>{{$r->firstName}}</td>
+                        <td>{{$r->type}}</td>
+                        <td>{{$r->comment}}</td>
+                        <td>{{$r->created_at}}</td>
 
-                        </tr>
+                    </tr>
 
-                    @endforeach
+                @endforeach
                 </tbody>
             </table>
             {{--{{$failReport}}--}}
@@ -587,9 +580,9 @@
     <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 
-{{--    --}}
+    {{--    --}}
 
-    
+
 
 
 
@@ -601,118 +594,118 @@
         } );
 
 
-       function totalEmail(x){
-           var id = $(x).data('user-id');
-                   @if(isset($fromDate) && isset($toDate))
-           var from=$(x).data('date-from');
-           var to=$(x).data('date-to');
-                   @endif
-           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
-           $.ajax({
-               type:'POST',
-               url:'{{route('getEmailIndividual')}}',
-               @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
-               @else
-               data:{_token: CSRF_TOKEN,'userid':id},
-               @endif
-               cache: false,
-               success:function(data) {
+        function totalEmail(x){
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+            $.ajax({
+                type:'POST',
+                url:'{{route('getEmailIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
 //                    console.log(data);
-                   $('#highPossibility').modal({show:true});
-                   $('#label').html('Emailed');
-                   $('#txtHint').html(data);
-                   $('#name').html(userName);
-                   @if(Auth::user()->typeId ==10)
-                   $('#myTable').DataTable({
-                       dom:'Bfrtip',
-                       buttons:[
-                           'excel'
-                       ]
-                   });
-                   @else
-                   $('#myTable').DataTable();
-                   @endif
-               }
-           });
-       }
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Emailed');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
+                    $('#myTable').DataTable({
+                        dom:'Bfrtip',
+                        buttons:[
+                            'excel'
+                        ]
+                    });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
+                }
+            });
+        }
 
-       function totalOther(x){
-           var id = $(x).data('user-id');
-                   @if(isset($fromDate) && isset($toDate))
-           var from=$(x).data('date-from');
-           var to=$(x).data('date-to');
-                   @endif
-           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
-           $.ajax({
-               type:'POST',
-               url:'{{route('getOtherIndividual')}}',
-               @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
-               @else
-               data:{_token: CSRF_TOKEN,'userid':id},
-               @endif
-               cache: false,
-               success:function(data) {
+        function totalOther(x){
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
+            $.ajax({
+                type:'POST',
+                url:'{{route('getOtherIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
 //                    console.log(data);
-                   $('#highPossibility').modal({show:true});
-                   $('#label').html('Other');
-                   $('#txtHint').html(data);
-                   $('#name').html(userName);
-                   @if(Auth::user()->typeId ==10)
-                   $('#myTable').DataTable({
-                       dom:'Bfrtip',
-                       buttons:[
-                           'excel'
-                       ]
-                   });
-                   @else
-                   $('#myTable').DataTable();
-                   @endif
-               }
-           });
-       }
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Other');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
+                    $('#myTable').DataTable({
+                        dom:'Bfrtip',
+                        buttons:[
+                            'excel'
+                        ]
+                    });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
+                }
+            });
+        }
 
-       function totalNotAvailable(x){
-           var id = $(x).data('user-id');
-                   @if(isset($fromDate) && isset($toDate))
-           var from=$(x).data('date-from');
-           var to=$(x).data('date-to');
-                   @endif
-           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
+        function totalNotAvailable(x){
+            var id = $(x).data('user-id');
+                    @if(isset($fromDate) && isset($toDate))
+            var from=$(x).data('date-from');
+            var to=$(x).data('date-to');
+                    @endif
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var userName=$(x).data('user-name');
 
-           $.ajax({
-               type:'POST',
-               url:'{{route('getNotAvailableIndividual')}}',
-               @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
-               @else
-               data:{_token: CSRF_TOKEN,'userid':id},
-               @endif
-               cache: false,
-               success:function(data) {
+            $.ajax({
+                type:'POST',
+                url:'{{route('getNotAvailableIndividual')}}',
+                @if(isset($fromDate) && isset($toDate))
+                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                @else
+                data:{_token: CSRF_TOKEN,'userid':id},
+                @endif
+                cache: false,
+                success:function(data) {
 //                    console.log(data);
-                   $('#highPossibility').modal({show:true});
-                   $('#label').html('Not Available');
-                   $('#txtHint').html(data);
-                   $('#name').html(userName);
-                   @if(Auth::user()->typeId ==10)
-                   $('#myTable').DataTable({
-                       dom:'Bfrtip',
-                       buttons:[
-                           'excel'
-                       ]
-                   });
-                   @else
-                   $('#myTable').DataTable();
-                   @endif
-               }
-           });
+                    $('#highPossibility').modal({show:true});
+                    $('#label').html('Not Available');
+                    $('#txtHint').html(data);
+                    $('#name').html(userName);
+                    @if(Auth::user()->typeId ==10)
+                    $('#myTable').DataTable({
+                        dom:'Bfrtip',
+                        buttons:[
+                            'excel'
+                        ]
+                    });
+                    @else
+                    $('#myTable').DataTable();
+                    @endif
+                }
+            });
 
-       }
+        }
 
         function highpossibility(x){
             var id = $(x).data('user-id');
@@ -776,7 +769,7 @@
 
                 cache: false,
                 success:function(data) {
-                   // console.log(data);
+                    // console.log(data);
                     location.reload();
 
                 }
@@ -1147,7 +1140,7 @@
                     @else
                     $('#myTable').DataTable();
                     @endif
-                    
+
 
                 }
             });
@@ -1171,13 +1164,13 @@
                 @endif
                 cache: false,
                 success:function(data) {
-                   // console.log(data);
+                    // console.log(data);
                     $('#highPossibility').modal({show:true});
                     $('#label').html('New Call');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
-                     @if(Auth::user()->typeId ==10)
-                    $('#myTable').DataTable({
+                    @if(Auth::user()->typeId ==10)
+                   $('#myTable').DataTable({
                         dom:'Bfrtip',
                         buttons:[
                             'excel'
