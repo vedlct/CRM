@@ -162,7 +162,11 @@ Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
 Route::post('/addContactedTemp','LeadController@addContactedTemp')->name('addContactedTemp');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
+
 Route::post('/editcontactmodalshow','LeadController@editcontactmodalshow')->name('editcontactmodalshow');
+
+Route::get('/Mycontacted', 'LeadController@Mycontacted')->name('Mycontacted');
+Route::post('/getMyContacedData','LeadController@getMyContacedData')->name('getMyContacedData');
 
 //Reject Leads rejectedLeads
 Route::get('leads/rejected','LeadController@rejectedLeads')->name('rejectedLeads');

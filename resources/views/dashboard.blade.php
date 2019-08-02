@@ -21,7 +21,7 @@
     <div class="col-lg-2 col-md-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title"><a href="{{route('called')}}">New Call</a></h4>
+                <h4 class="card-title"><a href="{{route('called')}}">Total Call</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
                     <span class="text-muted">This Month</span>
@@ -52,7 +52,7 @@
             <div class="col-lg-2 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('contact')}}">Contact</a></h4>
+                        <h4 class="card-title"><a href="{{route('contact')}}"> New Contact</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0"> {{$contactCall}} | {{$target->targetContact}}</h2>
                             <span class="text-muted">This Month</span>
@@ -235,9 +235,9 @@
                                 @if(Auth::user()->typeId==4)
                             { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                                 @endif
-                              { y: {{ $calledThisWeek}},  label: "New Call",indexLabel: "{{$calledThisWeek}}%" },
+                              { y: {{ $calledThisWeek}},  label: "Total Call",indexLabel: "{{$calledThisWeek}}%" },
                               { y: {{ $targetNewFile}},  label: "New File",indexLabel: "{{$targetNewFile}}%" },
-                            { y: {{$contactThisWeek}},  label: "Contact",indexLabel: "{{$contactThisWeek}}%" },
+                            { y: {{$contactThisWeek}},  label: "New Contact",indexLabel: "{{$contactThisWeek}}%" },
                             {{--{ y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },--}}
                                 @if(Auth::user()->typeId==4)
                             { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },

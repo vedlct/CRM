@@ -88,14 +88,15 @@ class HomeController extends Controller
         }
 
 
-//        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
-//            ->where('workprogress.callingReport','!=',null)
-//            ->where('callingReport','!=',6)
-//            ->whereBetween('created_at', [$start, $end])->count();
+        $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
+            ->where('workprogress.callingReport','!=',null)
+            ->where('callingReport','!=',6)
+            ->whereBetween('created_at', [$start, $end])->count();
+       // return $lastDayCalled;
 
-        $lastDayCalled=NewCall::where('userId',Auth::user()->id)
-            ->whereBetween('created_at', [$start, $end])
-            ->count();
+//        $lastDayCalled=NewCall::where('userId',Auth::user()->id)
+//            ->whereBetween('created_at', [$start, $end])
+//            ->count();
 
         $calledThisWeek=$lastDayCalled;
 
@@ -112,6 +113,7 @@ class HomeController extends Controller
 
         $fileCount=NewFile::where('userId',Auth::user()->id)->whereBetween(DB::raw('date(created_at)'), [$start, $end])
             ->sum('fileCount');
+
 
 
 
@@ -179,8 +181,6 @@ class HomeController extends Controller
 
 
         }
-
-
 
         $countWeek=0;
 

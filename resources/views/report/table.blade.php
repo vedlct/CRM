@@ -65,6 +65,7 @@
                         <th>Test Lead</th>
                         <th>Close Lead</th>
                         <th>New File</th>
+                        <th>Lead Mined</th>
                         {{--<th>New Call</th>--}}
                         {{--<th>Email</th>--}}
                         {{--<th>Other</th>--}}
@@ -303,6 +304,31 @@
                                     {{$newFiles->where('userId',$user->userid)->sum('fileCount')}}
                                 </a>
 
+                            </td>
+
+                            <td>
+                                @php($value=0)
+                                @foreach($leadMinedThisWeek as $lm)
+
+                                    @if($lm->minedBy == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$value=$lm->userLeadMined}}
+
+                                        </a>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
                             </td>
 
                             {{--<td>--}}

@@ -83,11 +83,11 @@
                             @if($r->typeId==4)
                             { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
                             @elseif($r->typeId==5)
-                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*40/100)+($r->targetFile*30/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%"},
+                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->leadMined*10/100)+($r->contacted*30/100)+($r->targetFile*30/100)+($r->called*10/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%,Call: {{$r->called}}%"},
 
                             @elseif($r->typeId==3 || $r->typeId==2)
 
-                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->contacted*40/100)+($r->targetFile*30/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}"},
+                        { label: "{{$r->userName}}",y:{{(($r->testLead*30/100)+($r->contacted*40/100)+($r->targetFile*30/100)+($r->called*10/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}},Call: {{$r->called}}% "},
 
                             @endif
 

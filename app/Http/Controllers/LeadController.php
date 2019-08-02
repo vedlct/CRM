@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\DB;
 use League\Flysystem\Exception;
 use Session;
 use Psy\Exception\ErrorException;
@@ -21,7 +22,6 @@ use App\Callingreport;
 use App\Workprogress;
 use App\Followup;
 use App\Leadstatus;
-use DB;
 use DataTables;
 
 class LeadController extends Controller
@@ -810,6 +810,44 @@ class LeadController extends Controller
         }
         return Redirect()->route('home');
     }
+
+    public function Mycontacted(){
+        //For user
+    //   $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
+
+//
+//        $leads=Lead::with('mined','category','country','possibility')
+//            ->where('contactedUserId',Auth::user()->id)
+//            ->whereIn('leads.leadId', $workprogress)
+//            ->orderBy('leadId','desc')->get();
+//
+      //  return count($workprogress);
+
+
+        $User_Type=Session::get('userType');
+        if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
+            $categories=Category::where('type',1)->get();
+            $callReports=Callingreport::get();
+
+
+            $possibilities=Possibility::get();
+            $status=Leadstatus::where('statusId','!=',7)
+                ->where('statusId','!=',1)
+                ->get();
+            $country=Country::get();
+
+            return view('layouts.lead.mycontactlead')
+                ->with('callReports',$callReports)
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories)
+                ->with('status',$status)
+                ->with('country',$country);
+
+        }
+        return Redirect()->route('home');
+    }
+
+
     public function getContacedData(Request $r){
         $leads=Lead::with('mined','category','country','possibility')
         ->where('contactedUserId',Auth::user()->id)
@@ -865,6 +903,69 @@ class LeadController extends Controller
             })
             ->make(true);
     }
+
+    public function getMyContacedData(){
+//        $workprogress = DB::table('workprogress')->select('leadId')->get()->toArray();
+        $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
+
+        $leads=Lead::with('mined','category','country','possibility')
+            ->where('contactedUserId',Auth::user()->id)
+            ->whereIn('leads.leadId', $workprogress)
+            ->orderBy('leadId','desc');
+        return DataTables::eloquent($leads)
+            ////for modal view/////////
+            ->addColumn('action', function ($lead) {
+                return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                                    <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+                                    data-lead-email="'.$lead->email.'"
+                                    data-lead-number="'.$lead->contactNumber.'"
+                                    data-lead-person="'.$lead->personName.'"
+                                    data-lead-website="'.$lead->website.'"
+                                    data-lead-mined="'.$lead->mined->firstName.'"
+                                    data-lead-category="'.$lead->category->categoryId.'"
+                                    data-lead-country="'.$lead->countryId.'"
+                                    data-lead-designation="'.$lead->designation.'"
+                                    data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                    >
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            })
+            ->addColumn('call', function ($lead){
+                return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
+            })
+
+            ->addColumn('callreport', function ($lead){
+                $callingreport = DB::table('workprogress')
+                    ->select('report')
+                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingreport')
+                    ->where('workprogress.leadId',$lead->leadId)
+                    ->where('workprogress.callingReport','5')
+                    ->groupBy('workprogress.leadId')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+//                if (($callingreport->isEmpty())) {
+//
+//                    return $test="New Lead";
+//                }else{
+
+                    return $test=$callingreport->first()->report;
+             //   }
+            })
+
+            ->rawColumns(['call', 'action'])
+            ->filterColumn('callreport',function ($query,$keyword){
+
+                return $query->where('callreport','like', '%'.$keyword. '%');
+
+            })
+            ->make(true);
+    }
+
+
     public function  editcontactmodalshow (Request $r){
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');

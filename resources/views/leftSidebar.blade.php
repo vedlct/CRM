@@ -45,6 +45,9 @@
                     <li>
                     <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Mylead</span></a>
                     </li>
+                        <li>
+                            <a href="{{route('Mycontacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Contacted lead</span></a>
+                        </li>
                 @endif
 
 

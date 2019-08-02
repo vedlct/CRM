@@ -56,16 +56,18 @@ class ReportController extends Controller
             $leadMinedThisWeek=Lead::where('minedBy',$user->id)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
-//            $calledThisWeek=Workprogress::where('userId',$user->id)
-//                ->where('workprogress.callingReport','!=',null)
-//                ->where('callingReport','!=',6)
-//                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+            $calledThisWeek=Workprogress::where('userId',$user->id)
+                ->where('workprogress.callingReport','!=',null)
+                ->where('callingReport','!=',6)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
-            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
-                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
-                ->where('workprogress.callingReport',5)
-                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$start,$end])
-                ->count();
+            return $calledThisWeek;
+
+//            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
+//                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+//                ->where('workprogress.callingReport',5)
+//                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$start,$end])
+//                ->count();
 
 
 
@@ -199,8 +201,6 @@ class ReportController extends Controller
             }
 
 
-
-
             if($t==0){
                 $t=1;}
 
@@ -286,16 +286,16 @@ class ReportController extends Controller
 
 
 
-//
-//            $calledThisWeek=Workprogress::where('userId',$user->id)
-//                ->where('callingReport','!=',6)
-//                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
-            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
-                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
-                ->where('workprogress.callingReport',5)
-                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
-                ->count();
+            $calledThisWeek=Workprogress::where('userId',$user->id)
+                ->where('callingReport','!=',6)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
+
+//            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
+//                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
+//                ->where('workprogress.callingReport',5)
+//                ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
+//                ->count();
 
             //When user is RA
             if($user->typeId==4){

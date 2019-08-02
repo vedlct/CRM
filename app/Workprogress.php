@@ -8,7 +8,7 @@ class Workprogress extends Model
 {
     protected $table = 'workprogress';
     public $timestamps = false;
-
+    protected $primaryKey = 'progressId';
 
     public function user(){
         return $this->belongsTo(User::class,'userId','id');
