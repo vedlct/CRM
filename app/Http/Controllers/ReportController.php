@@ -61,7 +61,7 @@ class ReportController extends Controller
                 ->where('callingReport','!=',6)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
 
-            return $calledThisWeek;
+
 
 //            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
 //                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')

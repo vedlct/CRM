@@ -168,37 +168,37 @@
 
 <script>
 
-@if(Auth::user()->typeId !=1)
-    $(document).ready(function () {
-        // alert('asdsd');
-        // $('#myModal').modal();
-        $.ajax({
-            type: 'POST',
-            url: "{!! route('check.lastdayCall') !!}",
-            cache: false,
-            data: {_token: "{{csrf_token()}}"},
-            success: function (data) {
-                // console.log(data);
-                 @if(Auth::user()->typeId==4)
-                 if(data.target <=60 && data.report==0){
-                     $('#myModal').modal();
-                 }
-                @else
-                 if(data.target <=80 && data.report==0){
-                     $('#myModal').modal();
-                 }
+{{--@if(Auth::user()->typeId !=1)--}}
+    {{--$(document).ready(function () {--}}
+        {{--// alert('asdsd');--}}
+        {{--// $('#myModal').modal();--}}
+        {{--$.ajax({--}}
+            {{--type: 'POST',--}}
+            {{--url: "{!! route('check.lastdayCall') !!}",--}}
+            {{--cache: false,--}}
+            {{--data: {_token: "{{csrf_token()}}"},--}}
+            {{--success: function (data) {--}}
+                {{--// console.log(data);--}}
+                 {{--@if(Auth::user()->typeId==4)--}}
+                 {{--if(data.target <=60 && data.report==0){--}}
+                     {{--$('#myModal').modal();--}}
+                 {{--}--}}
+                {{--@else--}}
+                 {{--if(data.target <=80 && data.report==0){--}}
+                     {{--$('#myModal').modal();--}}
+                 {{--}--}}
 
-                @endif
+                {{--@endif--}}
 
-            }
+            {{--}--}}
 
-        });
+        {{--});--}}
 
 
 
-    });
+    {{--});--}}
 
-@endif
+{{--@endif--}}
 </script>
 
 

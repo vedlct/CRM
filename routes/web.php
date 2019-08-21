@@ -175,6 +175,7 @@ Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
 
+
 //My Team
 Route::get('/myteam', 'TeamController@myTeam')->name('myTeam');
 
