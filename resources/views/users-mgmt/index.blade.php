@@ -164,7 +164,6 @@
             <div class="modal fade" id="target_local_modal">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-
                         <!-- Modal Header -->
                         <div class="modal-header">
                             <h4 class="modal-title">Set User Target Per Month</h4>
@@ -172,20 +171,13 @@
                         </div>
 
                         <!-- Modal body -->
-                        <div class="modal-body" id="target_local_modalBody">
-
-                        </div>
+                        <div class="modal-body" id="target_local_modalBody"></div>
 
                         <!-- Modal footer -->
-                        <div class="modal-footer">
-
-                        </div>
-
+                        <div class="modal-footer"></div>
                     </div>
                 </div>
             </div>
-
-
 
             <!-- Create User Modal -->
             <div class="modal fade" id="myModal" >
@@ -196,7 +188,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title">Create New User</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                     </div>
+                        </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
@@ -366,18 +358,6 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
             <!-- Edit Modal -->
             <div class="modal fade" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">

@@ -239,11 +239,13 @@
 
 
                 @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
-
                 <li>
-				 <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
+                    <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
                      <span class="hide-menu">User Management</span></a>
-
+                </li>
+                    <li>
+                    <a href="{{route('user-management.target')}}"><i class="fa fa-user" aria-hidden="true"></i>
+                     <span class="hide-menu">User Target</span></a>
                 </li>
                 @endif
 

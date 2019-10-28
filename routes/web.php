@@ -12,7 +12,7 @@
 */
 
 
-Route::view('/main', 'layouts.index')->name('main');
+    Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
 
@@ -98,7 +98,8 @@ Route::post('system-management/status/search', 'statusController@search')->name(
 Route::resource('showchart', 'HighChartsController');
 Route::post('showchart', 'HighChartsController@search')->name('showchart.search');
 
-//Route::view('/user-management', 'user-management.index');
+Route::get('/user-target-management', 'UserManagementController@targetManagement')->name('user-management.target');
+Route::post('/user-target-management', 'UserManagementController@targetManagementGet')->name('user-management.target.Get');
 
 //Search bettween dates
 

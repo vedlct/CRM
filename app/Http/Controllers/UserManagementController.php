@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\LocalUserTarget;
+use App\UsertargetByMonth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,34 +16,17 @@ use App\User;
 use App\Usertype;
 use App\Usertarget;
 use App\Targetlog;
+use Yajra\DataTables\DataTables;
 
 
 class UserManagementController extends Controller
 {
-	
-	
-	
-       /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/user-management';
 
-         /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     public function getLocalUserTarget(Request $r){
 
@@ -59,11 +43,9 @@ class UserManagementController extends Controller
             $target->save();
         }
 
-
         return view('users-mgmt.getLocalUserTarget',compact('target','userName'));
-
-
     }
+
     public function setLocalUserTarget(Request $r){
 
         $target=LocalUserTarget::findOrFail($r->userId);
@@ -73,9 +55,8 @@ class UserManagementController extends Controller
         $target->save();
         Session::flash('message', 'Target Updated Successfully');
         return redirect()->route('user-management.index');
-
-
     }
+
     public function index()
     {
         $User_Type=Session::get('userType');
@@ -86,8 +67,7 @@ class UserManagementController extends Controller
                 $users = User::with('target')
                     ->where('teamId',Auth::user()->teamId)
                     ->get();
-            }
-            else{
+            }else{
                 $users = User::with('target')
                     ->get();
             }
@@ -101,11 +81,6 @@ class UserManagementController extends Controller
         return Redirect()->route('home');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $User_Type=Session::get('userType');
@@ -120,12 +95,6 @@ class UserManagementController extends Controller
         return Redirect()->route('home');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 	//return $request;
@@ -172,23 +141,11 @@ class UserManagementController extends Controller
         return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $User_Type=Session::get('userType');
@@ -205,14 +162,6 @@ class UserManagementController extends Controller
         return view('users-mgmt/edit', ['user' => $user, 'userTypes' => $userTypes]);}
         return Redirect()->route('home');
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     public function update(Request $request)
     {
@@ -245,24 +194,12 @@ class UserManagementController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         User::where('id', $id)->delete();
          return redirect()->intended('/user-management');
     }
 
-    /**
-     * Search user from database base on some specific constraints
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *  @return \Illuminate\Http\Response
-     */
     public function search(Request $request) {
         $constraints = [
             'userId' => $request['userId'],
@@ -286,12 +223,6 @@ class UserManagementController extends Controller
         return $query->paginate(5);
     }
 
-    /**
-     * Load image resource.
-     *
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
     public function load($name) {
         $path = storage_path().'/app/avatars/'.$name;
         if (file_exists($path)) {
@@ -326,9 +257,6 @@ class UserManagementController extends Controller
         return $queryInput;
     }
 
-
-
-
     public function settings(){
         $user=User::findOrFail(Auth::user()->id);
 
@@ -336,9 +264,8 @@ class UserManagementController extends Controller
                 ->with('user',$user);
     }
 
-
     public function setTarget(Request $r){
-        
+//        echo $r->userId;exit();
        try{
            $target=Usertarget::findOrFail($r->userId);
            $target->targetTest=$r->targetTest;
@@ -379,18 +306,13 @@ class UserManagementController extends Controller
            }
 
            if($r->targetFile !=null){
-
                $target->targetFile=$r->targetFile;
            }
 
-       }
-       catch (ModelNotFoundException $ex) {
+       }catch (ModelNotFoundException $ex) {
            $target=new Usertarget;
            $target->userId=$r->userId;
            $target->targetTest=0;
-
-
-          //Target Type: 1. call, 2.HighPossibility , 3. Lead Mined, 4. Contact
 
            if($r->call){
                $log=new Targetlog;
@@ -424,21 +346,80 @@ class UserManagementController extends Controller
 
                $target->targetUsa=$r->contactUsa;
            }
-
-
-
        }
 
+       $target->save();
 
+       /*UserTargetByMonth*/
 
+        $targetMonthlyGet = UsertargetByMonth::where('userId',$r->userId)->first();
+        if (!empty($targetMonthlyGet)){
+            if (empty($targetMonthlyGet->date) || date('m',strtotime($targetMonthlyGet->date)) != date('m')){
+                $targetMonthly = new UsertargetByMonth;
+                $targetMonthly->userId = $r->userId;
+                $targetMonthly->date=date("Y-m-d");
+            }else{
+                $targetMonthly = $targetMonthlyGet;
+            }
+        }else{
+            $targetMonthly = new UsertargetByMonth;
+            $targetMonthly->userId = $r->userId;
+            $targetMonthly->date=date("Y-m-d");
+        }
+        $targetMonthly->targetTest=$r->targetTest;
+        if($r->call !=null){
+            $targetMonthly->targetCall=$r->call;
+        }
+        if($r->highPossibility !=null){
+            $targetMonthly->targetHighPossibility=$r->highPossibility;
+        }
+        if($r->lead !=null){
+            $targetMonthly->targetLeadmine=$r->lead;
+        }
+        if($r->contact !=null){
+            $targetMonthly->targetContact=$r->contact;
+        }
+        if($r->contactUsa !=null){
+            $targetMonthly->targetUsa=$r->contactUsa;
+        }
+        if($r->targetFile !=null){
+            $targetMonthly->targetFile=$r->targetFile;
+        }
+        $targetMonthly->save();
 
-
-        $target->save();
-
-        Session::flash('message', 'Target Set successfully');
-        return back();
+       Session::flash('message', 'Target Set successfully');
+       return back();
     }
 
+    public function targetManagement(){
+        return view('users-mgmt.targetManage');
+    }
+
+    public function targetManagementGet(Request $data){
+        $model = UsertargetByMonth::select('usertargetsbymonth.*','users.userId as username')->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+        if(!empty($data->month)){
+            $model = $model->whereMonth('date', '=', $data->month);
+        }
+//        else{
+//            $model = $model->whereMonth('date', '=', date('m'));
+//        }
+        if(!empty($data->year)){
+            $model = $model->whereYear('date', '=', $data->year);
+        }
+//        else{
+//            $model = $model->whereYear('date', '=', date('Y'));
+//        }
+        return (new \Yajra\DataTables\DataTables)->eloquent($model)
+            ->orderColumn('targetId', '-targetId $1')
+//            ->addColumn('status', function(user $user) {
+//                if($user->banned == "N"){
+//                    return "<label class='label label-primary'>Active</label>";
+//                }elseif($user->banned == "Y"){
+//                    return "<label class='label label-danger'>Deactive</label>";
+//                }
+//            })
+            ->toJson();
+    }
 
     public function changePass(Request $r){
 
@@ -456,10 +437,7 @@ class UserManagementController extends Controller
             Session::flash('message', 'Password Changed successfully');
             return back();
         }
-
         Session::flash('message', 'Password did not match');
         return back();
     }
-	
-	
 }
