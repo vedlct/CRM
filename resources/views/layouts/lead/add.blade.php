@@ -31,6 +31,7 @@
                         <th width="4%">Category</th>
                         <th width="4%">Country</th>
                         <th width="4%">Marketier</th>
+                        <th width="4%">Contact</th>
                         <th width="4%">Status</th>
                         <th width="4%">Possib</th>
                         <th width="4%">Date</th>
@@ -655,6 +656,7 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
+                    {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
                     { data: 'created_at', name: 'created_at',defaultContent: ''},

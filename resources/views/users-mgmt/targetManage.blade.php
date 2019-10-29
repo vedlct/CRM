@@ -93,7 +93,7 @@
                     },
                 },
                 columns: [
-                    { title:'User Name', data: 'username', name: 'username',"orderable": false, "searchable":true },
+                    { title:'User Name', data: 'username', name: 'users.userId',"orderable": false, "searchable":true },
                     { title:'Call', data: 'targetCall', name: 'targetCall', "orderable": true, "searchable":true },
                     { title:'Contact', data: 'targetContact', name: 'targetContact', "orderable": true, "searchable":true },
                     { title:'High Possibility', data: 'targetHighPossibility', name: 'targetHighPossibility', "orderable": true, "searchable":true },
