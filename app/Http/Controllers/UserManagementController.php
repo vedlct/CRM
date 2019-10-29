@@ -400,25 +400,10 @@ class UserManagementController extends Controller
         if(!empty($data->month)){
             $model = $model->whereMonth('date', '=', $data->month);
         }
-//        else{
-//            $model = $model->whereMonth('date', '=', date('m'));
-//        }
         if(!empty($data->year)){
             $model = $model->whereYear('date', '=', $data->year);
         }
-//        else{
-//            $model = $model->whereYear('date', '=', date('Y'));
-//        }
-        return (new \Yajra\DataTables\DataTables)->eloquent($model)
-            ->orderColumn('targetId', '-targetId $1')
-//            ->addColumn('status', function(user $user) {
-//                if($user->banned == "N"){
-//                    return "<label class='label label-primary'>Active</label>";
-//                }elseif($user->banned == "Y"){
-//                    return "<label class='label label-danger'>Deactive</label>";
-//                }
-//            })
-            ->toJson();
+        return (new \Yajra\DataTables\DataTables)->eloquent($model)->orderColumn('targetId', '-targetId $1')->toJson();
     }
 
     public function changePass(Request $r){

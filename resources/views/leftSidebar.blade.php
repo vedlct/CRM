@@ -244,8 +244,8 @@
                      <span class="hide-menu">User Management</span></a>
                 </li>
                     <li>
-                    <a href="{{route('user-management.target')}}"><i class="fa fa-user" aria-hidden="true"></i>
-                     <span class="hide-menu">User Target</span></a>
+                    <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i>
+                     <span class="hide-menu">Monthly Target Log</span></a>
                 </li>
                 @endif
 
