@@ -24,6 +24,7 @@
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
+                        <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
                         <th width="8%">Status</th>
                         <th width="10%">Action</th>
@@ -450,6 +451,7 @@
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     { data: 'callreport', name: 'callreport',searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},

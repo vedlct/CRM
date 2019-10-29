@@ -19,6 +19,7 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
+                        <th>Date</th>
 
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
@@ -186,6 +187,7 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+                    { data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]

@@ -30,9 +30,10 @@
                         <th width="4%">Number</th>
                         <th width="4%">Category</th>
                         <th width="4%">Country</th>
-                        <th width="4%">Cont</th>
+                        <th width="4%">Marketier</th>
                         <th width="4%">Status</th>
                         <th width="4%">Possib</th>
+                        <th width="4%">Date</th>
                         <th width="10%">Edit</th>
 
 
@@ -448,7 +449,10 @@
                             <br><br><br>
                         </div>
 
-
+                        <div class="col-md-8">
+                            <label><b>Comment:</b></label>
+                            <textarea class="form-control" id="comments" name="comments"></textarea>
+                        </div>
 
                         <div class="col-md-8">
                             <button class="btn btn-success" type="submit">Update</button>
@@ -653,6 +657,7 @@
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
+                    { data: 'created_at', name: 'created_at',defaultContent: ''},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
 
@@ -694,10 +699,11 @@
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+            var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
 
             // alert(createdAt);
-
+            console.log(comments);
 
             //populate the textbox
             $('#country').val(country);
@@ -711,6 +717,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $('#comments').val(comments);
 
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
