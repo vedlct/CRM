@@ -53,6 +53,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -80,6 +81,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -379,6 +381,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
+                                           data-lead-comments="'.$lead->comments.'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                  <form method="post" action="'.route('rejectStore').'">
@@ -403,6 +406,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
+                                           data-lead-comments="'.$lead->comments.'"
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -537,6 +541,7 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
+                                           data-lead-comments="'.$lead->comments.'"
                                            
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -874,6 +879,7 @@ class LeadController extends Controller
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
                                     data-lead-designation="'.$lead->designation.'"
+                                    data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
@@ -934,6 +940,7 @@ class LeadController extends Controller
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
                                     data-lead-designation="'.$lead->designation.'"
+                                    data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';

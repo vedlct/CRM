@@ -25,6 +25,7 @@
 
                         <th>Select</th>
                         <th>Company Name</th>
+                        <th>Date</th>
                         <th>Mined By</th>
                         {{--<th>Category</th>--}}
                         <th>Website</th>
@@ -137,6 +138,7 @@
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'companyName', name: 'leads.companyName' },
+                    { data: 'created_at', name: 'leads.created_at' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'leads.website' },
 //                    { data: 'email', name: 'leads.email' },

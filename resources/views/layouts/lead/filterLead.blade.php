@@ -49,8 +49,8 @@
             <div class="modal-content">
                 <form class="" method="post" action="{{route('leadUpdate')}}">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                         <h4 class="modal-title" name="modal-title">Edit Temp Lead</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     </div>
                     <div class="modal-body">
 
@@ -115,6 +115,10 @@
                                 </select>
                                 <br><br><br>
                             </div>
+                            <div class="col-md-8">
+                                <label><b>Comment:</b></label>
+                                <textarea class="form-control" id="comments" name="comments"></textarea>
+                            </div>
 
                             <div class="col-md-8">
                                 <button class="btn btn-success" type="submit">Update</button>
@@ -167,8 +171,11 @@
         //<th>Category</th>
         //<th>Country</th>
         $(function() {
-            $('#myTable').DataTable({
-
+            $('#myTable').DataTable({aLengthMenu: [
+                    [25, 50, 100, 200, 1000, -1],
+                    [25, 50, 100, 200, 1000]
+                ],
+                "iDisplayLength": 1000,
                 processing: true,
                 serverSide: true,
                 Filter: true,
@@ -208,6 +215,7 @@
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+            var comments=$(e.relatedTarget).data('lead-comments');
 
 
 
@@ -224,6 +232,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $('#comments').val(comments);
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
         });

@@ -114,6 +114,10 @@
                                 <br><br><br>
 
                             </div>
+                            <div class="col-md-8">
+                                <label><b>Comment:</b></label>
+                                <textarea class="form-control" id="comments" name="comments"></textarea>
+                            </div>
 
                             <div class="col-md-8">
                                 <button class="btn btn-success" type="submit">Update</button>
@@ -191,6 +195,7 @@
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+            var comments=$(e.relatedTarget).data('lead-comments');
             //populate the textbox
             $('#country').val(country);
             $('#category').val(category);
@@ -202,6 +207,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $('#comments').val(comments);
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
         });
         $(function() {

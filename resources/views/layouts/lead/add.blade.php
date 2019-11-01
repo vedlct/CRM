@@ -637,7 +637,12 @@
 
 
         $(function() {
-            $('#myTable').DataTable({
+            $('#myTable').dataTable({
+                aLengthMenu: [
+                    [25, 50, 100, 200, 1000, -1],
+                    [25, 50, 100, 200, 1000]
+                ],
+                "iDisplayLength": 1000,
                 processing: true,
                 serverSide: true,
                 stateSave: true,

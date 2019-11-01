@@ -113,6 +113,10 @@
                                 </select>
                                 <br><br><br>
                             </div>
+                            <div class="col-md-8">
+                                <label><b>Comment:</b></label>
+                                <textarea class="form-control" id="comments" name="comments"></textarea>
+                            </div>
 
                             <div class="col-md-6">
                                 <button class="btn btn-success" type="submit">Update</button>
@@ -316,6 +320,7 @@
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
             var createdAt=$(e.relatedTarget).data('lead-created');
+            var comments=$(e.relatedTarget).data('lead-comments');
 
             // alert(createdAt);
 
@@ -333,7 +338,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
-
+            $('#comments').val(comments);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
 
