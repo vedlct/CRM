@@ -21,6 +21,16 @@
             </div>
 
         @endif
+        @if($count>0)
+            <div class="form-group col-md-12">
+                @if($followupId!="")
+                    <input type="hidden" name="local_followupId" value="{{$followupId}}">
+                @endif
+                <label>Meeting Time</label>
+                <input id="time" class="form-control " type="time"  name="meetingTime" placeholder="meeting time">
+            </div>
+
+        @endif
 
         <div class="form-group col-md-12">
             <label>Comment</label>
@@ -70,5 +80,7 @@
 <script>
     $( function() {
         $( ".datepicker" ).datepicker();
+        $("#time").datetimepicker({format: 'HH:mm:ss', pickDate:false });
+
     } );
 </script>

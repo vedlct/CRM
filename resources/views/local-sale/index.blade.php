@@ -140,6 +140,7 @@
                     <th width="15%">Number</th>
                     <th width="15%">Tnt Number</th>
                     <th width="10%">Category</th>
+                    <th width="10%">Pending</th>
                     <th width="10%">Action</th>
 
                 </tr>
@@ -194,6 +195,7 @@
                   { data: 'mobile', name: 'mobile'},
                   { data: 'tnt', name: 'tnt'},
                   { data: 'categoryName', name: 'categoryName'},
+                  { data: 'pending', name: 'pending'},
                   { "data": function(data){
 
                       return '<a class="btn btn-default btn-sm" data-panel-id="'+data.local_leadId+'" onclick="showPaymentModal(this)"><i class="fa fa-shopping-cart"></i></a>'

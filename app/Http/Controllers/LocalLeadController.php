@@ -352,6 +352,7 @@ class LocalLeadController extends Controller
                 $meeting->local_followupId = $r->local_followupId;
             }
             $meeting->meetingDate=$r->meetingDate;
+            $meeting->meetingTime=$r->meetingTime;
             $meeting->local_leadId=$r->local_leadId;
             $meeting->userId=Auth::user()->id;
             $meeting->save();

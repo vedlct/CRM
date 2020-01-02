@@ -45,9 +45,17 @@ class LocalSalesController extends Controller
         $leads=$leads->leftJoin('categories','categories.categoryId','local_lead.categoryId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId')
             ->get();
+        return $datatables = Datatables::of($leads)
+        ->addColumn('pending', function($leads){
+            $totalPayment=LocalSales::where('local_leadId',$leads->local_leadId)
+                ->sum('total');
 
-        $datatables = Datatables::of($leads);
-        return $datatables->make(true);
+            $bill=LocalLead::findorFail($leads->local_leadId)->bill;
+            return $bill-$totalPayment  ;
+
+        })
+        ->rawColumns(['pending', 'pending'])
+            ->toJson();
     }
 
     public function getOldSalesData(Request $r){

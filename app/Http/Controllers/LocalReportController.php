@@ -209,7 +209,7 @@ class LocalReportController extends Controller
     }
 
     public function getUserMeeting(Request $r){
-        $meeting=LocalMeeting::select('local_meeting.meetingDate','local_lead.leadName','companyName')
+        $meeting=LocalMeeting::select('local_meeting.meetingDate','local_meeting.meetingTime','local_lead.leadName','companyName')
             ->where('userId',$r->userId)
             ->leftJoin('local_lead','local_lead.local_leadId','local_meeting.local_leadId')
             ->leftJoin('local_company','local_company.local_companyId','local_lead.local_companyId');
