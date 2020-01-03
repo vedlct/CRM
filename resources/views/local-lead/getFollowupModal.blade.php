@@ -27,7 +27,8 @@
                     <input type="hidden" name="local_followupId" value="{{$followupId}}">
                 @endif
                 <label>Meeting Time</label>
-                <input id="time" class="form-control " type="time"  name="meetingTime" placeholder="meeting time">
+                    <input id="timepicker" class="form-control" type="time"  name="meetingTime" placeholder="meeting time" />
+{{--                <input id="time" class="form-control" type="time"  name="meetingTime" placeholder="meeting time">--}}
             </div>
 
         @endif
@@ -80,7 +81,13 @@
 <script>
     $( function() {
         $( ".datepicker" ).datepicker();
-        $("#time").datetimepicker({format: 'HH:mm:ss', pickDate:false });
+        // $("#time").datetimepicker({format: 'HH:mm:ss', pickDate:false });
 
     } );
+</script>
+
+<script>
+    $('#timepicker').timepicker({
+        uiLibrary: 'bootstrap4'
+    });
 </script>
