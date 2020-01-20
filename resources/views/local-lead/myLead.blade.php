@@ -132,11 +132,15 @@
                 success: function (data) {
                     $("#editLeadModalBody").html(data);
                     $("#editLeadModal").modal();
+
                 }
             });
 
 
         }
+        $('#editLeadModal').on('hidden.bs.modal', function () {
+            location.reload();
+        });
 
         function editLead(x) {
             var leadId=$(x).data('panel-id');
