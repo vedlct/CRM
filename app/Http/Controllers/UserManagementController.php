@@ -265,7 +265,6 @@ class UserManagementController extends Controller
     }
 
     public function setTarget(Request $r){
-//        echo $r->userId;exit();
        try{
            $target=Usertarget::findOrFail($r->userId);
            $target->targetTest=$r->targetTest;
@@ -352,7 +351,7 @@ class UserManagementController extends Controller
 
        /*UserTargetByMonth*/
 
-        $targetMonthlyGet = UsertargetByMonth::where('userId',$r->userId)->first();
+        $targetMonthlyGet = UsertargetByMonth::where('userId',$r->userId)->whereMonth('date', date('m'))->first();
         if (!empty($targetMonthlyGet)){
             if (empty($targetMonthlyGet->date) || date('m',strtotime($targetMonthlyGet->date)) != date('m')){
                 $targetMonthly = new UsertargetByMonth;

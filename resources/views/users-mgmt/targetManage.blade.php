@@ -68,9 +68,13 @@
             minViewMode: "months"
         });
 
+        function zerofill(i) {
+            return (i < 10 ? '0' : '') + i;
+        }
+
         $(document).ready( function () {
             var d = new Date();
-            var month = d.getMonth() + 1;
+            var month = zerofill(d.getMonth()+1);
             var year = d.getFullYear();
 
             $("#month").val(month).css("background-color", "#7c9").css('color', 'white');
