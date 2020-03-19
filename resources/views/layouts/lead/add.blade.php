@@ -190,6 +190,15 @@
                             <label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">
                         </div>
 
+                        <div class="form-group col-md-5">
+                            <label><b>user </b>&nbsp; </label>
+                            <select name="user" class="form-control">
+                                <option>Select a User</option>
+                                @foreach($user as $usr)
+                                <option value="{{$usr->id}}">{{$usr->userId}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
 
 
 
@@ -642,7 +651,7 @@
                     [25, 50, 100, 200, 1000, -1],
                     [25, 50, 100, 200, 1000]
                 ],
-                "iDisplayLength": 1000,
+                "iDisplayLength": 100,
                 processing: true,
                 serverSide: true,
                 stateSave: true,

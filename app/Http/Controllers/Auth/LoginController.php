@@ -176,6 +176,37 @@ class LoginController extends Controller
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
 
+            }elseif ($user->typeId == "2" && substr($ip,0,8) != "192.168."){
+
+                if ($user->active && $this->attemptLogin($request)) {
+                    // Send the normal successful login response
+                    $type = strtoupper(Auth::user()->userType->typeName);
+                    Session::put('userType', $type);
+                    return $this->sendLoginResponse($request);
+                } else {
+                    // Increment the failed login attempts and redirect back to the
+                    // login form with an error message.
+                    $this->incrementLoginAttempts($request);
+                    return redirect()
+                        ->back()
+                        ->withInput($request->only($this->username(), 'remember'))
+                        ->withErrors(['active' => 'You must be active to login.']);
+                }
+            }elseif ($user->typeId == "3" && substr($ip,0,8) != "192.168."){
+                if ($user->active && $this->attemptLogin($request)) {
+                    // Send the normal successful login response
+                    $type = strtoupper(Auth::user()->userType->typeName);
+                    Session::put('userType', $type);
+                    return $this->sendLoginResponse($request);
+                } else {
+                    // Increment the failed login attempts and redirect back to the
+                    // login form with an error message.
+                    $this->incrementLoginAttempts($request);
+                    return redirect()
+                        ->back()
+                        ->withInput($request->only($this->username(), 'remember'))
+                        ->withErrors(['active' => 'You must be active to login.']);
+                }
             }
         }
 

@@ -129,12 +129,14 @@ class LeadController extends Controller
         $countries=Country::get();
         $possibilities=Possibility::get();
         $callReports = Callingreport::get();
+        $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
         return view('layouts.lead.add')
             ->with('categories',$cats)
             ->with('countries',$countries)
             ->with('possibilities',$possibilities)
-            ->with('callReports',$callReports);
+            ->with('callReports',$callReports)
+            ->with('user',$user);
     }
     public function numberCheck(Request $r){
         $number=Lead::where('contactNumber',$r->number)->count();
@@ -151,6 +153,14 @@ class LeadController extends Controller
             'designation'=>'max:100'
         ]);
         //Inserting Data To Leads TAble
+
+
+        if(isset($r->user)){
+            $userId = $r->user;
+        }else{
+            $userId = Auth::user()->id;
+        }
+
         $l=new Lead;
 
         $l->possibilityId=$r->possibility;
@@ -165,7 +175,7 @@ class LeadController extends Controller
         $l->comments=$r->comment;
         //getting Loggedin User id
         $l->statusId = 1;
-        $l->minedBy = Auth::user()->id;
+        $l->minedBy = $userId;
         $l->save();
 
         if($r->contact){
@@ -204,6 +214,13 @@ class LeadController extends Controller
 //            $l->contactedUserId=Auth::user()->id;
 //        }
 //        else{
+
+        if(isset($r->user)){
+            $userId = $r->user;
+        }else{
+            $userId = Auth::user()->id;
+        }
+
         $l->statusId = 6;
 //        }
         $l->possibilityId=$r->possibility;
@@ -217,7 +234,7 @@ class LeadController extends Controller
         $l->countryId = $r->country;
         $l->comments=$r->comment;
         //getting Loggedin User id
-        $l->minedBy = Auth::user()->id;
+        $l->minedBy = $userId;
         $l->save();
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
@@ -279,6 +296,13 @@ class LeadController extends Controller
             'personName' => 'max:100',
             'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
         ]);
+
+        if(isset($r->user)){
+            $userId = $r->user;
+        }else{
+            $userId = Auth::user()->id;
+        }
+
         $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
@@ -301,7 +325,7 @@ class LeadController extends Controller
             $wp=new Workprogress;
             $wp->leadId=$lead->leadId;
             $wp->progress='Reject';
-            $wp->userId=Auth::user()->id;
+            $wp->userId=$userId;
             $wp->save();
 
             $lead->statusId=5;
