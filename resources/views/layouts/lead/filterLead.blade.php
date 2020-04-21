@@ -171,11 +171,12 @@
         //<th>Category</th>
         //<th>Country</th>
         $(function() {
-            $('#myTable').DataTable({aLengthMenu: [
+            $('#myTable').DataTable({
+                aLengthMenu: [
                     [25, 50, 100, 200, 1000, -1],
                     [25, 50, 100, 200, 1000]
                 ],
-                "iDisplayLength": 1000,
+                "iDisplayLength": 100,
                 processing: true,
                 serverSide: true,
                 Filter: true,
