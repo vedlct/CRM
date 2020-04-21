@@ -36,17 +36,28 @@ class ReportController extends Controller
         if( $User_Type =='MANAGER'){
             $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
+                ->where('active', 1)
+                ->where('teamId',Auth::user()->teamId)
+                ->get();
+        }
+        else if( $User_Type =='SUPERVISOR'){
+            $users=User::select('id','firstName','typeId')
+                ->where('typeId','!=',1)
+                ->where('active', 1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
         else if($User_Type =='USER' || $User_Type =='RA'){
             $users=User::select('id','firstName','typeId')
+                ->where('active', 1)
                 ->where('id',Auth::user()->id)->get();
+
         }
 
         else{
             $users=User::select('id','firstName','typeId')
                 ->where('typeId','!=',1)
+                ->where('active', 1)
                 ->get();
         }
 
@@ -430,16 +441,19 @@ class ReportController extends Controller
             $users=User::select('id as userid','firstName','typeId')
                 ->where('typeId','!=',1)
                 ->where('typeId','!=',4)
+                ->where ('active', 1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
 
             $usersRa=User::select('id as userid','firstName','typeId')
                 ->where('typeId',4)
+                ->where ('active', 1)
                 ->where('teamId',Auth::user()->teamId)
                 ->get();
         }
         else if($User_Type =='USER' ){
             $users=User::select('id as userid','firstName','typeId')
+                ->where ('active', 1)
                 ->where('id',Auth::user()->id)
                 ->get();
             $usersRa=[];
@@ -448,6 +462,7 @@ class ReportController extends Controller
         else if($User_Type =='RA'){
             $users=[];
             $usersRa=User::select('id as userid','firstName','typeId')
+                ->where ('active', 1)
                 ->where('id',Auth::user()->id)
                 ->get();
 
@@ -460,12 +475,14 @@ class ReportController extends Controller
 //                ->where('typeId','!=',4)
                 ->whereNotIn('typeId',[1,4])
                 ->where('users.crmType',null)
+                ->where ('active', 1)
                 ->get();
 
 
 
             $usersRa=User::select('id as userid','firstName','typeId')
                 ->where('typeId',4)
+                ->where ('active', 1)
                 ->get();
         }
 
