@@ -272,6 +272,13 @@
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('#leave').attr('href', 'leave/'+leadId);
 
+            @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
+
+            $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
+            $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
+
+            @endif
+
         });
 
         $( function() {

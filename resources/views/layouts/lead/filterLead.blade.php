@@ -237,16 +237,9 @@
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
 
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
+
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
-            $('#country').attr('readonly', true);
-            $('#category').attr('readonly', true);
-            $(e.currentTarget).find('input[name="leadId"]').attr('readonly', true);
-            $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
-            $(e.currentTarget).find('input[name="email"]').attr('readonly', true);
-            $(e.currentTarget).find('input[name="number"]').attr('readonly', true);
-            $(e.currentTarget).find('input[name="personName"]').attr('readonly', true);
             $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
-            $(e.currentTarget).find('input[name="designation"]').attr('readonly', true);
 
             @endif
 
