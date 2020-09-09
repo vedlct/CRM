@@ -106,6 +106,7 @@ Route::post('/user-target-management', 'UserManagementController@targetManagemen
 
 //Lead
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
+Route::get('/lead/addNightShift', 'LeadController@addNightShift')->name('addNightShift');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
 Route::post('lead/storeLeadAdmin', 'LeadController@storeLeadAdmin')->name('storeLeadAdmin');
 
@@ -129,6 +130,11 @@ Route::post('lead/changepossibility','LeadController@changePossibility')->name('
 Route::post('lead/update','LeadController@update')->name('leadUpdate');
 Route::post('lead/testPost','LeadController@testPost')->name('testPost');
 Route::post('lead/ajax','LeadController@ajax')->name('ajax');
+
+//Release Lead
+Route::get('/lead/Release', 'LeadController@showRelease')->name('showrelease');
+Route::post('/lead/getRelease', 'LeadController@getallrelease')->name('getallrelease');
+
 
 //My List Lead
 Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assignedLeads');

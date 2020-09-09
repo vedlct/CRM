@@ -53,7 +53,7 @@
 
                 @if(Auth::user()->typeId !=10)
 
-                <li>
+                <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
                     <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                 </li>
@@ -62,17 +62,33 @@
 
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='USER')
 
-                <li>
+                <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
                     <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
                 </li>
                 @endif
 
-                    @if(Auth::user()->typeId !=10)
+                    @if(Auth::user()->typeId !=10  )
 
-                <li>
-                    <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
+                            <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
+                            <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span class="hide-menu">All Lead</span></a>
 
-                </li>
+                            </li>
+
+                    @endif
+                    @if(Auth::user()->id == 19)
+
+                        <li>
+                            <a href="{{route('showrelease')}}"><i class="fa fa-adjust"></i><span class="hide-menu">Release Lead</span></a>
+
+                        </li>
+                    @endif
+
+                    @if(Auth::user()->id == 21 || Auth::user()->id == 40)
+
+                        <li>
+                            <a href="{{route('addNightShift')}}"><i class="fa fa-adjust"></i><span class="hide-menu">Add Lead</span></a>
+
+                        </li>
                     @endif
 
 
@@ -167,7 +183,7 @@
 
                 @if($userType =='USER' || $userType =='MANAGER')
 
-                <li>
+                <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
                     <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
                         <span class="hide-menu">My Team</span></a>
                 </li>
@@ -251,7 +267,7 @@
 
                 @if(Auth::user()->typeId !=10)
 
-                <li>
+                    <li  @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
                     <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
                         <span class="hide-menu">Notice</span></a>
                 </li>

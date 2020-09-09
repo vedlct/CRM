@@ -59,6 +59,9 @@ class Lead extends Model
     public function mined(){
         return $this->belongsTo(User::class,'minedBy','id');
     }
+    public function release(){
+        return $this->belongsTo(User::class,'releaselead','id');
+    }
 
     public function contact(){
 
