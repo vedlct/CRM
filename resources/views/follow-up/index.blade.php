@@ -76,6 +76,7 @@
 										 data-lead-category="{{$lead->category->categoryId}}"
 										 data-lead-country="{{$lead->countryId}}"
 										 data-lead-designation="{{$lead->designation}}"
+										 data-lead-comments="{{$lead->comments}}"
 
 									  >
 										  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -158,7 +159,10 @@
 										  @endforeach
 									  </select>
 									  <br><br><br>
-
+								  </div>
+								  <div class="col-md-8">
+									  <label><b>Comment:</b></label>
+									  <textarea class="form-control" id="comments" name="comments"></textarea>
 								  </div>
 
 
@@ -361,6 +365,7 @@
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
             var designation=$(e.relatedTarget).data('lead-designation');
+            var comments=$(e.relatedTarget).data('lead-comments');
 
 
 
@@ -375,6 +380,7 @@
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $('#comments').val(comments);
 
 //            $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 

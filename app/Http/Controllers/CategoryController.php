@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Category;
+use App\Subcategory;
 use Session;
 
 class CategoryController extends Controller
@@ -49,15 +50,43 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateInput($request);
-        // Category::create([
-        DB::table('categories')->insert([
-            'categoryName' => $request['categoryName'],
-            'type' => $request['type']
+        $this->validate($request, [
+            'categoryName' => 'required',
+            'type' => 'required'
         ]);
 
-        Session::flash('message', 'Category successfully created');
-        return back();
+        if($request->parentCategoryId){
+            $subcategory = new Subcategory();
+            $subcategory->subcategoryName = $request->categoryName;
+            $subcategory->parentCategoryId = $request->parentCategoryId;
+            $subcategory->type = $request->type;
+            $subcategory->save();
+            Session::flash('message', 'Category successfully created');
+            return back();
+        }else{
+            $category = new Category();
+            $category->categoryName = $request->categoryName;
+            $category->type = $request->type;
+            $category->save();
+            Session::flash('message', 'Category successfully created');
+            return back();
+        }
+
+
+
+
+//        $this->validateInput($request);
+//        // Category::create([
+//        DB::table('categories')->insert([
+//            'categoryName' => $request['categoryName'],
+//            'type' => $request['type']
+//        ]);
+
+
+
+
+
+
     }
 
     public function edit($id)

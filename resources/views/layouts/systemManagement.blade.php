@@ -258,7 +258,7 @@
                                         <a href="#edit_category_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-category-id="{{$category->categoryId}}"
                                            data-category-name="{{$category->categoryName}}"
-                                           data-category-type="{{$category->type}}"">
+                                           data-category-type="{{$category->type}}">
                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
 
@@ -318,6 +318,25 @@
                                     <span class="help-block">
 										<strong>{{ $errors->first('type') }}</strong>
 									</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row{{ $errors->has('parentCategoryId') ? ' has-error' : '' }}">
+                            <label for="parentCategoryId" class="col-sm-4 control-label">Subcategory</label>
+                            <div class="col-sm-8">
+
+                                <select name="parentCategoryId" class="form-control form-control-warning">
+                                    <option selected disabled>Select Parent Category</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->categoryId }}">{{ $category->categoryName }}</option>
+                                    @endforeach
+                                </select>
+
+                                @if ($errors->has('parentCategoryId'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('type') }}</strong>
+                                    </span>
                                 @endif
                             </div>
                         </div>

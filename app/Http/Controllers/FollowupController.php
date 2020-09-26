@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\NewCall;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -27,32 +28,70 @@ use Redirect;
 
 class FollowupController extends Controller
 {
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
+
     protected $redirectTo = '/follow-up';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
 
+//        test workprogress avg update time
+//        $wp = Workprogress::all('leadId', 48793)->get();
+        /*$maxDate =collect(DB::select(DB::raw("SELECT MAX(created_at) as maxdate FROM workprogress WHERE leadId = 48793  GROUP BY userId")));
+        $minDate = collect(DB::select(DB::raw("SELECT MIN(created_at) as mindate FROM workprogress WHERE leadId = 48793 GROUP BY userId")));
+        $avgTime = collect(DB::select(DB::raw("SELECT AVG(TIME_TO_SEC(TIMEDIFF('".$maxDate[0]->maxdate."', '".$minDate[0]->mindate."'))) as timediff FROM workprogress")));
+        $averageUpdateTime = CarbonInterval::seconds((int)$avgTime[0]->timediff)->cascade()->forHumans();
+        dd($averageUpdateTime);*/
 
+//        $startTime = Carbon::parse('2020-02-11 04:04:26');
+//        $endTime = Carbon::parse('2020-02-11 04:36:56');
+//
+//        $totalDuration =  $startTime->diff($endTime)->format('%H:%I:%S')." Minutes";
+////                $wp = Workprogress::all();
+///
+       $test[]=collect(DB::select(DB::raw("SELECT created_at as time FROM workprogress WHERE date(created_at) = '2020-09-21' AND userId = 21")));
+
+//           $a1[]= current($test) . "<br>";
+//          $a2[]= next($test);
+//           echo array_diff(current($test), next($test));
+////        echo current($test)->diff(next($test))->format('%H:%i:%s')." Minutes";
+//        echo $startTime = Carbon::parse(current($test)->first()->time);
+//        echo $endTime = Carbon::parse(next($test));
+
+//        return;
+//                   $endTime = Carbon::parse($test[$j]->time);
+//return;
+//        $totalDuration = "";
+//dd($test->count());
+//           for($i=0; $i<=$test->count(); $i++){
+////               dd($test[$i]->time);
+//               for($j=$i; $j<$i+1; $j++){
+////               dd($test[$j]->time);
+//                   $startTime = Carbon::parse($test[$i]->time);
+//                   $endTime = Carbon::parse($test[$j]->time);
+//                   $totalDuration =  $startTime->diff($endTime)->format('%H:%i:%s')." Minutes";
+//
+//               }
+//
+//              // dd($totalDuration);
+//               echo $totalDuration;
+//
+//           }
+
+           //print_r($totalDuration);
+
+//           var_dump($totalDuration);
+
+
+
+
+
+
+//        end test
         //access for user
         $User_Type=Session::get('userType');
         if($User_Type=='USER' || $User_Type=='MANAGER' ||$User_Type=='SUPERVISOR') {
@@ -67,8 +106,6 @@ class FollowupController extends Controller
                 ->where('followup.workStatus',0)
                 ->orderBy('followup.followUpDate','desc')
                 ->get();
-
-
 
             $country=Country::get();
             $callReports=Callingreport::get();
@@ -90,9 +127,6 @@ class FollowupController extends Controller
 
         return $followup;
     }
-
-
-
 
     public function storeFollowupReport(Request $r){
 

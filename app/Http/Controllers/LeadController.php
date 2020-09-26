@@ -957,7 +957,6 @@ class LeadController extends Controller
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
 
-
             $possibilities=Possibility::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
@@ -1046,7 +1045,7 @@ class LeadController extends Controller
             ->addColumn('callreport', function ($lead){
                 $callingreport = DB::table('workprogress')
                 ->select('report')
-                ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingreport')
+                ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                 ->where('workprogress.leadId',$lead->leadId)
                 ->groupBy('workprogress.leadId')
                 ->orderBy('created_at', 'DESC')
@@ -1059,13 +1058,13 @@ class LeadController extends Controller
                 return $test=$callingreport->first()->report;
                 }
             })
-
-            ->rawColumns(['call', 'action'])
-            ->filterColumn('callreport',function ($query,$keyword){
-
-                return $query->where('callreport','like', '%'.$keyword. '%');
+            ->filterColumn('callreport', function ($query,$keyword){
+                return $query->where('callreport','like', '%'.$keyword.'%');
 
             })
+            ->rawColumns(['call', 'action'])
+
+
             ->make(true);
     }
 
