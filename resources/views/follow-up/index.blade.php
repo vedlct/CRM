@@ -23,6 +23,22 @@
 				  {{--<input id="todate" name="toDate" placeholder="to">--}}
 				  {{--<button onclick="search()">Search</button>--}}
 
+				  <div class="row">
+					  <table class="table table-bordered table-striped">
+						  <thead>
+						  <tr>
+							  <th>time diff</th>
+						  </tr>
+						  </thead>
+						  <tbody>
+						  @foreach($totalDuration as $t)
+							  <tr>
+								  <td>{{ $t }}</td>
+							  </tr>
+						  @endforeach
+						  </tbody>
+					  </table>
+				  </div>
 
 				  <div class="table-responsive m-t-40">
 					  <table id="myTable" class="table table-bordered table-striped">
