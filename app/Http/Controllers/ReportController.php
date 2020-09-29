@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Failreport;
 use App\NewCall;
 use App\NewFile;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Workprogress;
 use App\User;
 use Auth;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Followup;
 use App\Lead;
 use App\Usertarget;
@@ -18,6 +20,7 @@ use App\Possibilitychange;
 use App\Leadassigned;
 use Carbon\Carbon;
 use stdClass;
+
 class ReportController extends Controller
 {
     public function __construct()
@@ -25,53 +28,93 @@ class ReportController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function hourReport()
+    {
+       /* //workprogress avg update time
+        $today = date('Y-m-d');
 
-        $User_Type=Session::get('userType');
+//        $workProgress = collect(DB::select(DB::raw("SELECT (users.id) as userid, users.userId,  (workprogress.created_at) as time FROM workprogress LEFT JOIN users ON users.id = workprogress.userId WHERE date(workprogress.created_at) = '2020-09-21' AND users.typeId = 5")));
+        $wp = collect(DB::select(DB::raw("SELECT id, userId FROM users where typeId = 5")));
+        for ($u = 0; $u < $wp->count(); $u++) {
+//echo $wp[$u]->id;
+            $timeDiff = [];
+            $workProgress = collect(DB::select(DB::raw("SELECT userId,  created_at as time FROM workprogress WHERE date(created_at) = '2020-09-21' AND userId = '" . $wp[$u]->id . "'")));
+
+            $totalWorkprogress = $workProgress->count();
+
+            for ($i = 0; $i < $totalWorkprogress; $i++) {
+                if ($i != ($totalWorkprogress - 1)) {
+                    for ($j = $i + 1; $j == $i + 1; $j++) {
+                        $startTime = Carbon::parse($workProgress[$i]->time);
+                        $endTime = Carbon::parse($workProgress[$j]->time);
+
+                        $timeDiff[] = $startTime->diff($endTime)->format('%H:%i:%s') . " Minutes";
+
+                    }
+                }
+            }
+
+        //end
+       //            $workProgress = collect(DB::select(DB::raw("SELECT users.userId as userid, w.created_at as createdate FROM workprogress w left join users ON users.id = w.userId WHERE date(w.created_at) = '2020-09-21' AND w.userId = '" . $user->id . "'")));
+
+    }*/
+        $today = date('Y-m-d');
+        $wp = User::where('typeId', 5)->select('id','userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '".$today."'")));
+        return view('hourReport', compact('work', 'wp'));
+
+    }
+
+    public function hourReport_filter(Request $r){
+        $selectedDay = $r->selectedDay;
+        $wp = User::where('typeId', 5)->select('id','userId')->get();
+        $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '".$selectedDay."'")));
+        return view('hourReport-filter', compact('work', 'wp'));
+}
+
+    public function index()
+    {
+
+        $User_Type = Session::get('userType');
 
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
 
-        if( $User_Type =='MANAGER'){
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
+        if ($User_Type == 'MANAGER') {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
                 ->where('active', 1)
-                ->where('teamId',Auth::user()->teamId)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
-        }
-        else if( $User_Type =='SUPERVISOR'){
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
+        } else if ($User_Type == 'SUPERVISOR') {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
                 ->where('active', 1)
-                ->where('teamId',Auth::user()->teamId)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
-        }
-        else if($User_Type =='USER' || $User_Type =='RA'){
-            $users=User::select('id','firstName','typeId')
+        } else if ($User_Type == 'USER' || $User_Type == 'RA') {
+            $users = User::select('id', 'firstName', 'typeId')
                 ->where('active', 1)
-                ->where('id',Auth::user()->id)->get();
+                ->where('id', Auth::user()->id)->get();
 
-        }
-
-        else{
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
+        } else {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
                 ->where('active', 1)
                 ->get();
         }
 
         $date = Carbon::now();
-        $report =array();
-        foreach ($users as $user){
-            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+        $report = array();
+        foreach ($users as $user) {
+            $leadMinedThisWeek = Lead::where('minedBy', $user->id)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->count();
 
-            $calledThisWeek=Workprogress::where('userId',$user->id)
-                ->where('workprogress.callingReport','!=',null)
-                ->where('callingReport','!=',6)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
-
+            $calledThisWeek = Workprogress::where('userId', $user->id)
+                ->where('workprogress.callingReport', '!=', null)
+                ->where('callingReport', '!=', 6)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->count();
 
 
 //            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
@@ -81,225 +124,215 @@ class ReportController extends Controller
 //                ->count();
 
 
-
-            $contacted=Workprogress::where('userId',$user->id)
-                    ->where('callingReport',5)
+            $contacted = Workprogress::where('userId', $user->id)
+                ->where('callingReport', 5)
 //                ->where(function($q){
 //                    $q->orWhere('callingReport',5)
 //                        ->orWhere('callingReport',4);
 //                })
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])
                 ->count();
 
             //USA CONTACT TARGET
-            $contactedUsa=Workprogress::where('userId',$user->id)
-                ->leftJoin('leads','workprogress.leadId','leads.leadId')
-                ->leftJoin('countries','leads.countryId','countries.countryId')
-                ->where('countries.countryName','like','%USA%')
-                ->where(function($q){
-                    $q->orWhere('callingReport',5)
-                        ->orWhere('callingReport',4);
+            $contactedUsa = Workprogress::where('userId', $user->id)
+                ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                ->where('countries.countryName', 'like', '%USA%')
+                ->where(function ($q) {
+                    $q->orWhere('callingReport', 5)
+                        ->orWhere('callingReport', 4);
                 })
-                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$start,$end])->count();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$start, $end])->count();
 
 
-
-            $testLead=Workprogress::where('progress','Test Job')
-                ->where('userId',$user->id)
-                ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])
+            $testLead = Workprogress::where('progress', 'Test Job')
+                ->where('userId', $user->id)
+                ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])
                 ->count();
 
 
-
             //When user is RA
-            if($user->typeId==4){
+            if ($user->typeId == 4) {
 
-                $highPosibilitiesThisWeek=Lead::select('leads.*')
+                $highPosibilitiesThisWeek = Lead::select('leads.*')
 //                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                    ->where('leads.minedBy',$user->id)
-                    ->where('filteredPossibility',3)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
-            }
-            else{
-                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                    ->where('possibilityId',3)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$start,$end])->count();
+                    ->where('leads.minedBy', $user->id)
+                    ->where('filteredPossibility', 3)
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->count();
+            } else {
+                $highPosibilitiesThisWeek = Possibilitychange::where('userId', $user->id)
+                    ->where('possibilityId', 3)
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->count();
 
             }
 
-            try{
-                $target=Usertarget::findOrFail($user->id);
-            }
-            catch (ModelNotFoundException $ex) {
-                $target=new Usertarget;
-                $target->userId=$user->id;
-                $target->targetCall=0;
-                $target->targetHighPossibility=0;
-                $target->targetLeadmine=0;
-                $target->targetTest=0;
+            try {
+                $target = Usertarget::findOrFail($user->id);
+            } catch (ModelNotFoundException $ex) {
+                $target = new Usertarget;
+                $target->userId = $user->id;
+                $target->targetCall = 0;
+                $target->targetHighPossibility = 0;
+                $target->targetLeadmine = 0;
+                $target->targetTest = 0;
                 $target->save();
             }
 
 
-            $t=0;
+            $t = 0;
 
             //Weekly Report
-            if($target->targetCall>0){
-                $calledThisWeek=ceil(($calledThisWeek/($target->targetCall))*100);
-                if($calledThisWeek>100){
-                    $calledThisWeek=100;
+            if ($target->targetCall > 0) {
+                $calledThisWeek = ceil(($calledThisWeek / ($target->targetCall)) * 100);
+                if ($calledThisWeek > 100) {
+                    $calledThisWeek = 100;
                 }
                 $t++;
             }
 
-            if($target->targetTest>0){
-                $testLead=round(($testLead/($target->targetTest))*100);
-                if($testLead>100){
-                    $testLead=100;
+            if ($target->targetTest > 0) {
+                $testLead = round(($testLead / ($target->targetTest)) * 100);
+                if ($testLead > 100) {
+                    $testLead = 100;
                 }
                 $t++;
             }
 
-            if($target->targetLeadmine>0){
-                $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine))*100);
-                if ($leadMinedThisWeek>100){
-                    $leadMinedThisWeek=100;}
-                $t++;
-            }
-
-            if($target->targetHighPossibility>0){
-                $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility))*100);
-                if($highPosibilitiesThisWeek>100){
-                    $highPosibilitiesThisWeek=100;
+            if ($target->targetLeadmine > 0) {
+                $leadMinedThisWeek = round(($leadMinedThisWeek / ($target->targetLeadmine)) * 100);
+                if ($leadMinedThisWeek > 100) {
+                    $leadMinedThisWeek = 100;
                 }
                 $t++;
             }
 
-            if($target->targetContact >0){
+            if ($target->targetHighPossibility > 0) {
+                $highPosibilitiesThisWeek = round(($highPosibilitiesThisWeek / ($target->targetHighPossibility)) * 100);
+                if ($highPosibilitiesThisWeek > 100) {
+                    $highPosibilitiesThisWeek = 100;
+                }
+                $t++;
+            }
 
-                $contacted=round(($contacted/($target->targetContact))*100);
-                if($contacted>100){
-                    $contacted=100;
+            if ($target->targetContact > 0) {
+
+                $contacted = round(($contacted / ($target->targetContact)) * 100);
+                if ($contacted > 100) {
+                    $contacted = 100;
                 }
             }
 
-            if($target->targetUsa >0){
+            if ($target->targetUsa > 0) {
 
-                $contactedUsa=round(($contactedUsa/($target->targetUsa))*100);
-                if($contactedUsa>100){
-                    $contactedUsa=100;
+                $contactedUsa = round(($contactedUsa / ($target->targetUsa)) * 100);
+                if ($contactedUsa > 100) {
+                    $contactedUsa = 100;
                 }
+            } else {
+                $contactedUsa = 0;
             }
 
-            else{
-                $contactedUsa=0;
-            }
-
-            $targetFile=NewFile::where('userId',$user->id)
+            $targetFile = NewFile::where('userId', $user->id)
                 ->whereBetween(DB::raw('date(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
                 ->sum('fileCount');
 
-            if($target->targetFile >0){
+            if ($target->targetFile > 0) {
 
-                $targetFile=round(($targetFile/($target->targetFile))*100);
-                if($targetFile>100){
-                    $targetFile=100;
+                $targetFile = round(($targetFile / ($target->targetFile)) * 100);
+                if ($targetFile > 100) {
+                    $targetFile = 100;
                 }
+            } else {
+                $targetFile = 0;
             }
 
-            else{
-                $targetFile=0;
+
+            if ($t == 0) {
+                $t = 1;
             }
-
-
-            if($t==0){
-                $t=1;}
 
             $u = new stdClass;
-            $u->userName=$user->firstName;
-            $u->typeId=$user->typeId;
-            $u->leadMined=$leadMinedThisWeek;
-            $u->called=$calledThisWeek;
-            $u->highPosibilities=$highPosibilitiesThisWeek;
-            $u->contacted=$contacted;
-            $u->contactedUsa=$contactedUsa;
-            $u->testLead=$testLead;
-            $u->targetFile=$targetFile;
-            $u->t=$t;
+            $u->userName = $user->firstName;
+            $u->typeId = $user->typeId;
+            $u->leadMined = $leadMinedThisWeek;
+            $u->called = $calledThisWeek;
+            $u->highPosibilities = $highPosibilitiesThisWeek;
+            $u->contacted = $contacted;
+            $u->contactedUsa = $contactedUsa;
+            $u->testLead = $testLead;
+            $u->targetFile = $targetFile;
+            $u->t = $t;
             array_push($report, $u);
         }
 //        return $report;
-        return view('report.index')->with('report',$report);
+        return view('report.index')->with('report', $report);
     }
-    
-    public function searchGraphByDate(Request $r){
 
-        $User_Type=Session::get('userType');
+    public function searchGraphByDate(Request $r)
+    {
+
+        $User_Type = Session::get('userType');
         $f = Carbon::parse($r->fromDate);
         $t = Carbon::parse($r->toDate);
-        $t=$t->addDays(1);
+        $t = $t->addDays(1);
 
-        $months=$t->diffInMonths($f);
+        $months = $t->diffInMonths($f);
 
-        if($months==0){
-            $months=1;
+        if ($months == 0) {
+            $months = 1;
         }
 
 
-        if( $User_Type =='MANAGER'){
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('teamId',Auth::user()->teamId)
+        if ($User_Type == 'MANAGER') {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
+                ->where('teamId', Auth::user()->teamId)
+                ->get();
+        } else if ($User_Type == 'USER' || $User_Type == 'RA') {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('id', Auth::user()->id)->get();
+        } else {
+            $users = User::select('id', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
                 ->get();
         }
-        else if($User_Type =='USER' || $User_Type =='RA'){
-            $users=User::select('id','firstName','typeId')
-                ->where('id',Auth::user()->id)->get();
-        }
-        else{
-            $users=User::select('id','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->get();
-        }
 
 
-        $report=array();
-        foreach ($users as $user){
-            $leadMinedThisWeek=Lead::where('minedBy',$user->id)
+        $report = array();
+        foreach ($users as $user) {
+            $leadMinedThisWeek = Lead::where('minedBy', $user->id)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
-            $contacted=Workprogress::where('userId',$user->id)
-                    ->where('callingReport',5)
+            $contacted = Workprogress::where('userId', $user->id)
+                ->where('callingReport', 5)
 //                ->where(function($q){
 //                    $q->orWhere('callingReport',5)
 //                        ->orWhere('callingReport',4);
 //                })
-                ->whereBetween(DB::raw('DATE(created_at)'),[$r->fromDate, $r->toDate])->count();
+                ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
 //            $testLead=Workprogress::where('progress','Test Job')
 //                ->whereBetween('created_at', [$r->fromDate, $r->toDate])
 //                ->count();
-            $testLead=Workprogress::where('progress','Test Job')
-                ->where('userId',$user->id)
+            $testLead = Workprogress::where('progress', 'Test Job')
+                ->where('userId', $user->id)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
                 ->count();
 
 
             //USA CONTACT TARGET
-            $contactedUsa=Workprogress::where('userId',$user->id)
-                ->leftJoin('leads','workprogress.leadId','leads.leadId')
-                ->leftJoin('countries','leads.countryId','countries.countryId')
-                ->where('countries.countryName','like','%USA%')
-                ->where(function($q){
-                    $q->orWhere('callingReport',5)
-                        ->orWhere('callingReport',4);
+            $contactedUsa = Workprogress::where('userId', $user->id)
+                ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                ->where('countries.countryName', 'like', '%USA%')
+                ->where(function ($q) {
+                    $q->orWhere('callingReport', 5)
+                        ->orWhere('callingReport', 4);
                 })
                 ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])->count();
 
 
-
-
-            $calledThisWeek=Workprogress::where('userId',$user->id)
-                ->where('callingReport','!=',6)
+            $calledThisWeek = Workprogress::where('userId', $user->id)
+                ->where('callingReport', '!=', 6)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
 
 //            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
@@ -309,322 +342,306 @@ class ReportController extends Controller
 //                ->count();
 
             //When user is RA
-            if($user->typeId==4){
-                $highPosibilitiesThisWeek=Lead::select('leads.*')
+            if ($user->typeId == 4) {
+                $highPosibilitiesThisWeek = Lead::select('leads.*')
 //                    ->leftJoin('possibilitychanges','leads.leadId','possibilitychanges.leadId')
-                    ->where('leads.minedBy',$user->id)
-                    ->where('filteredPossibility',3)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+                    ->where('leads.minedBy', $user->id)
+                    ->where('filteredPossibility', 3)
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
                     ->count();
-            }
-            else{
-                $highPosibilitiesThisWeek=Possibilitychange::where('userId',$user->id)
-                    ->where('possibilityId',3)
-                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,  $r->toDate])->count();
+            } else {
+                $highPosibilitiesThisWeek = Possibilitychange::where('userId', $user->id)
+                    ->where('possibilityId', 3)
+                    ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])->count();
             }
 
-            try{
-                $target=Usertarget::findOrFail($user->id);
-            }
-            catch (ModelNotFoundException $ex) {
+            try {
+                $target = Usertarget::findOrFail($user->id);
+            } catch (ModelNotFoundException $ex) {
 
-                $target=new Usertarget;
-                $target->userId=$user->id;
-                $target->targetCall=0;
-                $target->targetHighPossibility=0;
-                $target->targetLeadmine=0;
+                $target = new Usertarget;
+                $target->userId = $user->id;
+                $target->targetCall = 0;
+                $target->targetHighPossibility = 0;
+                $target->targetLeadmine = 0;
                 $target->save();
             }
 
 
-            $t=0;
+            $t = 0;
 
             //Weekly Report
-            if($target->targetCall>0){
-                $calledThisWeek=round(($calledThisWeek/($target->targetCall*$months))*100);
-                if($calledThisWeek>100){
-                    $calledThisWeek=100;
+            if ($target->targetCall > 0) {
+                $calledThisWeek = round(($calledThisWeek / ($target->targetCall * $months)) * 100);
+                if ($calledThisWeek > 100) {
+                    $calledThisWeek = 100;
                 }
                 $t++;
             }
-            if($target->targetTest>0){
-                $testLead=round(($testLead/($target->targetTest))*100);
-                if($testLead>100){
-                    $testLead=100;
+            if ($target->targetTest > 0) {
+                $testLead = round(($testLead / ($target->targetTest)) * 100);
+                if ($testLead > 100) {
+                    $testLead = 100;
                 }
                 $t++;
             }
-            if($target->targetContact >0){
-                $contacted=round(($contacted/($target->targetContact*$months))*100);
-                if($contacted>100){
-                    $contacted=100;
-                }
-                $t++;
-            }
-
-            if($target->targetUsa >0){
-
-                $contactedUsa=round(($contactedUsa/($target->targetUsa*$months))*100);
-                if($contactedUsa>100){
-                    $contactedUsa=100;
-                }
-                $t++;
-            }
-            else{
-                $contactedUsa=0;
-            }
-
-            if($target->targetLeadmine>0){
-                $leadMinedThisWeek=round(($leadMinedThisWeek/($target->targetLeadmine*$months))*100);
-                if ($leadMinedThisWeek>100){
-                    $leadMinedThisWeek=100;
-                }
-                $t++;}
-
-            if($target->targetHighPossibility>0){
-                $highPosibilitiesThisWeek=round(($highPosibilitiesThisWeek/($target->targetHighPossibility*$months))*100);
-                if($highPosibilitiesThisWeek>100){
-                    $highPosibilitiesThisWeek=100;
+            if ($target->targetContact > 0) {
+                $contacted = round(($contacted / ($target->targetContact * $months)) * 100);
+                if ($contacted > 100) {
+                    $contacted = 100;
                 }
                 $t++;
             }
 
+            if ($target->targetUsa > 0) {
 
-            $targetFile=NewFile::where('userId',$user->id)
-                ->whereBetween(DB::raw('date(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'),$r->toDate])
+                $contactedUsa = round(($contactedUsa / ($target->targetUsa * $months)) * 100);
+                if ($contactedUsa > 100) {
+                    $contactedUsa = 100;
+                }
+                $t++;
+            } else {
+                $contactedUsa = 0;
+            }
+
+            if ($target->targetLeadmine > 0) {
+                $leadMinedThisWeek = round(($leadMinedThisWeek / ($target->targetLeadmine * $months)) * 100);
+                if ($leadMinedThisWeek > 100) {
+                    $leadMinedThisWeek = 100;
+                }
+                $t++;
+            }
+
+            if ($target->targetHighPossibility > 0) {
+                $highPosibilitiesThisWeek = round(($highPosibilitiesThisWeek / ($target->targetHighPossibility * $months)) * 100);
+                if ($highPosibilitiesThisWeek > 100) {
+                    $highPosibilitiesThisWeek = 100;
+                }
+                $t++;
+            }
+
+
+            $targetFile = NewFile::where('userId', $user->id)
+                ->whereBetween(DB::raw('date(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'), $r->toDate])
                 ->sum('fileCount');
 
-            if($target->targetFile >0){
+            if ($target->targetFile > 0) {
 
-                $targetFile=round(($targetFile/($target->targetFile))*100);
-                if($targetFile>100){
-                    $targetFile=100;
+                $targetFile = round(($targetFile / ($target->targetFile)) * 100);
+                if ($targetFile > 100) {
+                    $targetFile = 100;
                 }
+            } else {
+                $targetFile = 0;
             }
 
-            else{
-                $targetFile=0;
+
+            if ($t == 0) {
+                $t = 1;
             }
-
-
-            if($t==0){
-                $t=1;}
             $u = new stdClass;
-            $u->userName=$user->firstName;
-            $u->typeId=$user->typeId;
-            $u->leadMined=$leadMinedThisWeek;
-            $u->called=$calledThisWeek;
-            $u->highPosibilities=$highPosibilitiesThisWeek;
-            $u->contacted=$contacted;
-            $u->contactedUsa=$contactedUsa;
-            $u->testLead=$testLead;
-            $u->targetFile=$targetFile;
-            $u->t=$t;
+            $u->userName = $user->firstName;
+            $u->typeId = $user->typeId;
+            $u->leadMined = $leadMinedThisWeek;
+            $u->called = $calledThisWeek;
+            $u->highPosibilities = $highPosibilitiesThisWeek;
+            $u->contacted = $contacted;
+            $u->contactedUsa = $contactedUsa;
+            $u->testLead = $testLead;
+            $u->targetFile = $targetFile;
+            $u->t = $t;
             array_push($report, $u);
         }
         return view('report.index')
-            ->with('report',$report)
-            ->with('fromDate',$r->fromDate)
-            ->with('toDate',$r->toDate);
+            ->with('report', $report)
+            ->with('fromDate', $r->fromDate)
+            ->with('toDate', $r->toDate);
     }
 
 
-
-
-    public function reportTable(){
+    public function reportTable()
+    {
         $date = Carbon::now();
-        $User_Type=Session::get('userType');
+        $User_Type = Session::get('userType');
 
 
-
-        if( $User_Type =='MANAGER'){
-            $users=User::select('id as userid','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('typeId','!=',4)
-                ->where ('active', 1)
-                ->where('teamId',Auth::user()->teamId)
+        if ($User_Type == 'MANAGER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
+                ->where('typeId', '!=', 4)
+                ->where('active', 1)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
 
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where('typeId',4)
-                ->where ('active', 1)
-                ->where('teamId',Auth::user()->teamId)
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
+                ->where('active', 1)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
-        }
-        else if($User_Type =='USER' ){
-            $users=User::select('id as userid','firstName','typeId')
-                ->where ('active', 1)
-                ->where('id',Auth::user()->id)
+        } else if ($User_Type == 'USER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('active', 1)
+                ->where('id', Auth::user()->id)
                 ->get();
-            $usersRa=[];
+            $usersRa = [];
 
-        }
-        else if($User_Type =='RA'){
-            $users=[];
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where ('active', 1)
-                ->where('id',Auth::user()->id)
+        } else if ($User_Type == 'RA') {
+            $users = [];
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('active', 1)
+                ->where('id', Auth::user()->id)
                 ->get();
 
-        }
-
-
-        else{
-            $users=User::select('id as userid','firstName','typeId')
+        } else {
+            $users = User::select('id as userid', 'firstName', 'typeId')
 //                ->where('typeId','!=',1)
 //                ->where('typeId','!=',4)
-                ->whereNotIn('typeId',[1,4])
-                ->where('users.crmType',null)
-                ->where ('active', 1)
+                ->whereNotIn('typeId', [1, 4])
+                ->where('users.crmType', null)
+                ->where('active', 1)
                 ->get();
 
 
-
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where('typeId',4)
-                ->where ('active', 1)
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
+                ->where('active', 1)
                 ->get();
         }
 
 
-        $failReport=Failreport::select('failreport.*','users.firstName')
-            ->leftJoin('users','users.id','failreport.userId')
+        $failReport = Failreport::select('failreport.*', 'users.firstName')
+            ->leftJoin('users', 'users.id', 'failreport.userId')
             ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-            ->orderBy('failreport.id','desc')
+            ->orderBy('failreport.id', 'desc')
             ->get();
 
 //        return $failReport;
 
-        $calledThisWeek=Workprogress::select('userId',DB::raw('count(*) as userCall'))
-            ->where('workprogress.callingReport','!=',null)
-            ->where('callingReport','!=',6)
+        $calledThisWeek = Workprogress::select('userId', DB::raw('count(*) as userCall'))
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('callingReport', '!=', 6)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 
-        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
-                ->get();
+        $newFiles = NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
+            ->get();
 
 
-
-        $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
+        $leadMinedThisWeek = Lead::select('minedBy', DB::raw('count(*) as userLeadMined'))
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('minedBy')
             ->get();
 
 
-
-        $followupThisWeek=Workprogress::select('userId',DB::raw('count(*) as userFollowup'))
-            ->where('callingReport',4)
+        $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
+            ->where('callingReport', 4)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 
-
-
-        $highPosibilitiesThisWeekRa=Lead::select('minedBy',DB::raw('count(*) as userHighPosibilities'))
-            ->where('filteredPossibility',3)
+        $highPosibilitiesThisWeekRa = Lead::select('minedBy', DB::raw('count(*) as userHighPosibilities'))
+            ->where('filteredPossibility', 3)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('minedBy')
             ->get();
 
 
-
-        $highPosibilitiesThisWeekUser=Possibilitychange::select('userId',DB::raw('count(*) as userHighPosibilities'))
-            ->where('possibilityId',3)
+        $highPosibilitiesThisWeekUser = Possibilitychange::select('userId', DB::raw('count(*) as userHighPosibilities'))
+            ->where('possibilityId', 3)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $highPosibilitiesThisWeekUser;
 
-        $assignedLead=Leadassigned::select('assignTo',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $assignedLead = Leadassigned::select('assignTo', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('assignTo')
             ->get();
 
 //       return $assignedLead;
 
-        $assignedLeadRa=Leadassigned::select('assignBy',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $assignedLeadRa = Leadassigned::select('assignBy', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('assignBy')
             ->get();
 
 //        return $assignedLeadRa;
 
-        $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
-            ->where('possibilityId',3)
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $uniqueHighPosibilitiesThisWeek = Possibilitychange::select('userId', DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
+            ->where('possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $uniqueHighPosibilitiesThisWeek;
 
-        $testLead=Workprogress::select('userId',DB::raw('count(leadId) as userTestLead'))
-            ->where('progress','Test Job')
+        $testLead = Workprogress::select('userId', DB::raw('count(leadId) as userTestLead'))
+            ->where('progress', 'Test Job')
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $testLead;
-        $contacted=Workprogress::select('userId',DB::raw('count(*) as userContacted'))
-            ->where('callingReport',5)
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $contacted = Workprogress::select('userId', DB::raw('count(*) as userContacted'))
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 
-        $emailed=Workprogress::select('userId',DB::raw('count(*) as userEmailed'))
-            ->where('callingReport',3)
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $emailed = Workprogress::select('userId', DB::raw('count(*) as userEmailed'))
+            ->where('callingReport', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
-        $other=Workprogress::select('userId',DB::raw('count(*) as userOther'))
-            ->where('callingReport',6)
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-            ->groupBy('userId')
-            ->get();
-
-
-        $notAvailable=Workprogress::select('userId',DB::raw('count(*) as userNotAvialable'))
-            ->where('callingReport',2)
-            ->whereBetween(DB::raw('DATE(created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
+            ->where('callingReport', 6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 
-        $contactedUsa=Workprogress::select('userId',DB::raw('count(*) as userContactedUsa'))
-            ->leftJoin('leads','workprogress.leadId','leads.leadId')
-            ->leftJoin('countries','leads.countryId','countries.countryId')
-            ->where('countries.countryName','like','%USA%')
-            ->where('callingReport',5)
-            ->whereBetween(DB::raw('DATE(workprogress.created_at)'),[$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+        $notAvailable = Workprogress::select('userId', DB::raw('count(*) as userNotAvialable'))
+            ->where('callingReport', 2)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $contactedUsa = Workprogress::select('userId', DB::raw('count(*) as userContactedUsa'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('countries.countryName', 'like', '%USA%')
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
 
 //        return $contactedUsa;
 
-        $closing=Workprogress::select('userId',DB::raw('count(*) as userClosing'))
-                ->where('progress','Closing')
-                ->groupBy('userId')
-                ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                ->get();
+        $closing = Workprogress::select('userId', DB::raw('count(*) as userClosing'))
+            ->where('progress', 'Closing')
+            ->groupBy('userId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
 
 //        return $closing;
 
-        $newCall=NewCall::leftJoin('workprogress','workprogress.progressId','new_call.progressId')
-            ->where('workprogress.callingReport',5)
+        $newCall = NewCall::leftJoin('workprogress', 'workprogress.progressId', 'new_call.progressId')
+            ->where('workprogress.callingReport', 5)
             ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-                            ->get();
+            ->get();
 
 
-        $testLeadForRa=Workprogress::select('minedBy')
-            ->where('progress','Test Job')
-            ->leftJoin('leads','leads.leadId','workprogress.leadId')
-            ->leftJoin('users','users.id','leads.minedBy')
+        $testLeadForRa = Workprogress::select('minedBy')
+            ->where('progress', 'Test Job')
+            ->leftJoin('leads', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('users', 'users.id', 'leads.minedBy')
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->get();
 
@@ -633,260 +650,247 @@ class ReportController extends Controller
 
         return view('report.table')
             ->with('users', $users)
-            ->with('contactedUsa',$contactedUsa)
-            ->with('contacted',$contacted)
-            ->with('testLead',$testLead)
-            ->with('uniqueHighPosibilitiesThisWeek',$uniqueHighPosibilitiesThisWeek)
-            ->with('assignedLead',$assignedLead)
-            ->with('assignedLeadRa',$assignedLeadRa)
-            ->with('highPosibilitiesThisWeekUser',$highPosibilitiesThisWeekUser)
-            ->with('highPosibilitiesThisWeekRa',$highPosibilitiesThisWeekRa)
-            ->with('followupThisWeek',$followupThisWeek)
-            ->with('leadMinedThisWeek',$leadMinedThisWeek)
-            ->with('calledThisWeek',$calledThisWeek)
-            ->with('closing',$closing)
-            ->with('usersRa',$usersRa)
-            ->with('newCall',$newCall)
-            ->with('newFiles',$newFiles)
-            ->with('testLeadForRa',$testLeadForRa)
-            ->with('failReport',$failReport)
-            ->with('emailed',$emailed)
-            ->with('other',$other)
-            ->with('notAvailable',$notAvailable);
+            ->with('contactedUsa', $contactedUsa)
+            ->with('contacted', $contacted)
+            ->with('testLead', $testLead)
+            ->with('uniqueHighPosibilitiesThisWeek', $uniqueHighPosibilitiesThisWeek)
+            ->with('assignedLead', $assignedLead)
+            ->with('assignedLeadRa', $assignedLeadRa)
+            ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
+            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
+            ->with('followupThisWeek', $followupThisWeek)
+            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('calledThisWeek', $calledThisWeek)
+            ->with('closing', $closing)
+            ->with('usersRa', $usersRa)
+            ->with('newCall', $newCall)
+            ->with('newFiles', $newFiles)
+            ->with('testLeadForRa', $testLeadForRa)
+            ->with('failReport', $failReport)
+            ->with('emailed', $emailed)
+            ->with('other', $other)
+            ->with('notAvailable', $notAvailable);
 
 
     }
 
-    public function searchTableByDate(Request $r){
+    public function searchTableByDate(Request $r)
+    {
 
-        $User_Type=Session::get('userType');
+        $User_Type = Session::get('userType');
 
 
-
-        if( $User_Type =='MANAGER'){
-            $users=User::select('id as userid','firstName','typeId')
-                ->where('typeId','!=',1)
-                ->where('typeId','!=',4)
-                ->where('teamId',Auth::user()->teamId)
+        if ($User_Type == 'MANAGER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
+                ->where('typeId', '!=', 4)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
 
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where('typeId',4)
-                ->where('teamId',Auth::user()->teamId)
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
+                ->where('teamId', Auth::user()->teamId)
                 ->get();
-        }
-        else if($User_Type =='USER'){
-            $users=User::select('id as userid','firstName','typeId')
-                ->where('id',Auth::user()->id)
+        } else if ($User_Type == 'USER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('id', Auth::user()->id)
                 ->get();
-            $usersRa=[];
+            $usersRa = [];
 
-        }
-        else if($User_Type =='RA'){
-            $users=[];
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where('id',Auth::user()->id)
+        } else if ($User_Type == 'RA') {
+            $users = [];
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('id', Auth::user()->id)
                 ->get();
 
-        }
+        } else {
 
-
-        else{
-
-            $users=User::select('id as userid','firstName','typeId')
+            $users = User::select('id as userid', 'firstName', 'typeId')
 //                ->where('typeId','!=',1)
 //                ->where('typeId','!=',4)
-                ->whereNotIn('typeId',[1,4])
-                ->where('users.crmType',null)
+                ->whereNotIn('typeId', [1, 4])
+                ->where('users.crmType', null)
                 ->get();
 
-            $usersRa=User::select('id as userid','firstName','typeId')
-                ->where('typeId',4)
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
                 ->get();
         }
 
 
-
-        $failReport=Failreport::select('failreport.*','users.firstName')
-            ->leftJoin('users','users.id','failreport.userId')
-            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$r->fromDate,$r->toDate])
-            ->orderBy('failreport.id','desc')
+        $failReport = Failreport::select('failreport.*', 'users.firstName')
+            ->leftJoin('users', 'users.id', 'failreport.userId')
+            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$r->fromDate, $r->toDate])
+            ->orderBy('failreport.id', 'desc')
             ->get();
 
 //        return $failReport;
 
 
-        $calledThisWeek=Workprogress::select('userId',DB::raw('count(progressId) as userCall'))
-            ->where('workprogress.callingReport','!=',null)
-            ->where('callingReport','!=',6)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $calledThisWeek = Workprogress::select('userId', DB::raw('count(progressId) as userCall'))
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('callingReport', '!=', 6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 
-
-
-
-
-        $leadMinedThisWeek=Lead::select('minedBy',DB::raw('count(*) as userLeadMined'))
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $leadMinedThisWeek = Lead::select('minedBy', DB::raw('count(*) as userLeadMined'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('minedBy')
             ->get();
 
 
 //        return $leadMinedThisWeek;
 
-        $followupThisWeek=Workprogress::select('userId',DB::raw('count(*) as userFollowup'))
-            ->where('callingReport',4)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
+            ->where('callingReport', 4)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 
 //        return $followupThisWeek;
 
-        $highPosibilitiesThisWeekRa=Lead::select('minedBy',DB::raw('count(*) as userHighPosibilities'))
-            ->where('filteredPossibility',3)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $highPosibilitiesThisWeekRa = Lead::select('minedBy', DB::raw('count(*) as userHighPosibilities'))
+            ->where('filteredPossibility', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('minedBy')
             ->get();
 
 //        return $highPosibilitiesThisWeekRa;
 
-        $highPosibilitiesThisWeekUser=Possibilitychange::select('userId',DB::raw('count(*) as userHighPosibilities'))
-            ->where('possibilityId',3)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $highPosibilitiesThisWeekUser = Possibilitychange::select('userId', DB::raw('count(*) as userHighPosibilities'))
+            ->where('possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 //        return $highPosibilitiesThisWeekUser;
 
-        $assignedLead=Leadassigned::select('assignTo',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $assignedLead = Leadassigned::select('assignTo', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('assignTo')
             ->get();
 
 //       return $assignedLead;
 
-        $assignedLeadRa=Leadassigned::select('assignBy',DB::raw('count(*) as userAssignedLead'))
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $assignedLeadRa = Leadassigned::select('assignBy', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('assignBy')
             ->get();
 
 //        return $assignedLeadRa;
 
-        $uniqueHighPosibilitiesThisWeek=Possibilitychange::select('userId',DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
-            ->where('possibilityId',3)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $uniqueHighPosibilitiesThisWeek = Possibilitychange::select('userId', DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
+            ->where('possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 //        return $uniqueHighPosibilitiesThisWeek;
 
-        $testLead=Workprogress::select('userId',DB::raw('count(leadId) as userTestLead'))
-            ->where('progress','Test Job')
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $testLead = Workprogress::select('userId', DB::raw('count(leadId) as userTestLead'))
+            ->where('progress', 'Test Job')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 //        return $testLead;
-        $contacted=Workprogress::select('userId',DB::raw('count(*) as userContacted'))
-            ->where('callingReport',5)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $contacted = Workprogress::select('userId', DB::raw('count(*) as userContacted'))
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
-        $emailed=Workprogress::select('userId',DB::raw('count(*) as userEmailed'))
-            ->where('callingReport',3)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $emailed = Workprogress::select('userId', DB::raw('count(*) as userEmailed'))
+            ->where('callingReport', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
-        $other=Workprogress::select('userId',DB::raw('count(*) as userOther'))
-            ->where('callingReport',6)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
+            ->where('callingReport', 6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
-        $notAvailable=Workprogress::select('userId',DB::raw('count(*) as userNotAvialable'))
-            ->where('callingReport',2)
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+        $notAvailable = Workprogress::select('userId', DB::raw('count(*) as userNotAvialable'))
+            ->where('callingReport', 2)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 //            USA
-        $contactedUsa=Workprogress::select('userId',DB::raw('count(*) as userContactedUsa'))
-            ->leftJoin('leads','workprogress.leadId','leads.leadId')
-            ->leftJoin('countries','leads.countryId','countries.countryId')
-            ->where('countries.countryName','like','%USA%')
-            ->where('callingReport',5)
-            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])
+        $contactedUsa = Workprogress::select('userId', DB::raw('count(*) as userContactedUsa'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('countries.countryName', 'like', '%USA%')
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
 
 //        return $contactedUsa;
 
-        $closing=Workprogress::select('userId',DB::raw('count(*) as userClosing'))
-            ->where('progress','Closing')
+        $closing = Workprogress::select('userId', DB::raw('count(*) as userClosing'))
+            ->where('progress', 'Closing')
             ->groupBy('userId')
-            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate,$r->toDate])
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->get();
 
 
-        $newFiles=NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'),$r->toDate])
+        $newFiles = NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::parse($r->fromdate)->subDays(30)->format('Y-m-d'), $r->toDate])
             ->get();
 
-        $newCall=NewCall::leftJoin('workprogress','workprogress.progressId','new_call.progressId')
-            ->where('workprogress.callingReport',5)
-            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate,$r->toDate])
+        $newCall = NewCall::leftJoin('workprogress', 'workprogress.progressId', 'new_call.progressId')
+            ->where('workprogress.callingReport', 5)
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
             ->get();
 
 
-        $testLeadForRa=Workprogress::select('minedBy')
-            ->where('progress','Test Job')
-            ->leftJoin('leads','leads.leadId','workprogress.leadId')
-            ->leftJoin('users','users.id','leads.minedBy')
-            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate,$r->toDate])
+        $testLeadForRa = Workprogress::select('minedBy')
+            ->where('progress', 'Test Job')
+            ->leftJoin('leads', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('users', 'users.id', 'leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
             ->get();
-
 
 
         return view('report.table')
             ->with('users', $users)
-            ->with('contactedUsa',$contactedUsa)
-            ->with('contacted',$contacted)
-            ->with('testLead',$testLead)
-            ->with('uniqueHighPosibilitiesThisWeek',$uniqueHighPosibilitiesThisWeek)
-            ->with('assignedLead',$assignedLead)
-            ->with('assignedLeadRa',$assignedLeadRa)
-            ->with('highPosibilitiesThisWeekUser',$highPosibilitiesThisWeekUser)
-            ->with('highPosibilitiesThisWeekRa',$highPosibilitiesThisWeekRa)
-            ->with('followupThisWeek',$followupThisWeek)
-            ->with('leadMinedThisWeek',$leadMinedThisWeek)
-            ->with('calledThisWeek',$calledThisWeek)
-            ->with('closing',$closing)
-            ->with('usersRa',$usersRa)
-            ->with('fromDate',$r->fromDate)
-            ->with('toDate',$r->toDate)
-            ->with('newFiles',$newFiles)
-            ->with('newCall',$newCall)
-            ->with('testLeadForRa',$testLeadForRa)
-            ->with('failReport',$failReport)
-            ->with('emailed',$emailed)
-            ->with('other',$other)
-            ->with('notAvailable',$notAvailable);
+            ->with('contactedUsa', $contactedUsa)
+            ->with('contacted', $contacted)
+            ->with('testLead', $testLead)
+            ->with('uniqueHighPosibilitiesThisWeek', $uniqueHighPosibilitiesThisWeek)
+            ->with('assignedLead', $assignedLead)
+            ->with('assignedLeadRa', $assignedLeadRa)
+            ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
+            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
+            ->with('followupThisWeek', $followupThisWeek)
+            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('calledThisWeek', $calledThisWeek)
+            ->with('closing', $closing)
+            ->with('usersRa', $usersRa)
+            ->with('fromDate', $r->fromDate)
+            ->with('toDate', $r->toDate)
+            ->with('newFiles', $newFiles)
+            ->with('newCall', $newCall)
+            ->with('testLeadForRa', $testLeadForRa)
+            ->with('failReport', $failReport)
+            ->with('emailed', $emailed)
+            ->with('other', $other)
+            ->with('notAvailable', $notAvailable);
 
 
     }
 
 
-
-    public function individualCall($id){
-        $report=Workprogress::where('userId',$id)->count();
+    public function individualCall($id)
+    {
+        $report = Workprogress::where('userId', $id)->count();
         return $report;
     }
-
-
 
 
 }

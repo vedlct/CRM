@@ -129,6 +129,8 @@
                             </li>
                             @endif
 
+
+
                             <li>
                                 <a href="{{route('local.sales')}}"><i class="fa fa-money"></i><span class="hide-menu"> Sales</span></a>
                             </li>
@@ -149,6 +151,11 @@
                 </li>
 
                 @endif       {{--End Local--}}
+                @if(Auth::user()->typeId==1 || Auth::user()->typeId==2)
+                    <li>
+                        <a href="{{ route('hour.report') }}"><i class="fa fa-file"></i><span class="hide-menu">Hourly Report</span></a>
+                    </li>
+                @endif
 
             @if(Auth::user()->crmType !='local'){{--Start Global--}}
 

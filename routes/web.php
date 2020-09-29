@@ -52,7 +52,8 @@ Route::get('/mine', 'HomeController@mine')->name('mine');
 Route::get('/files', 'HomeController@newFile')->name('files');
 
 
-
+Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
+Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
 
 /**/
 

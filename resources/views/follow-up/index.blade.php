@@ -23,7 +23,7 @@
 				  {{--<input id="todate" name="toDate" placeholder="to">--}}
 				  {{--<button onclick="search()">Search</button>--}}
 
-				  <div class="row">
+				{{--  <div class="row">
 					  <table class="table table-bordered table-striped">
 						  <thead>
 						  <tr>
@@ -38,7 +38,7 @@
 						  @endforeach
 						  </tbody>
 					  </table>
-				  </div>
+				  </div>--}}
 
 				  <div class="table-responsive m-t-40">
 					  <table id="myTable" class="table table-bordered table-striped">

@@ -51,6 +51,7 @@ class FollowupController extends Controller
             }
         }
 //      end test*/
+
         //access for user
         $User_Type = Session::get('userType');
         if ($User_Type == 'USER' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
