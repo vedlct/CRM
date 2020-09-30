@@ -234,6 +234,7 @@ Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallInd
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
 
 Route::post('/getEmailIndividual','GetIndividualReportController@getEmailIndividual')->name('getEmailIndividual');
+Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
 

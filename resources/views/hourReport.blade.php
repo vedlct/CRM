@@ -20,39 +20,25 @@
                     <table id="managerDaily" class="table table-bordered table-striped">
                         <thead>
                         <td>Name</td>
-                        {{--                        <tr>--}}
-                        {{--                            @foreach($wp as $user)--}}
-                        {{--                            <th>{{ $user->userId }}</th>--}}
-                        {{--                            @endforeach--}}
-                        {{--                            <th>Time</th>--}}
-                        {{--                        </tr>--}}
                         </thead>
                         <tbody>
-
-                        {{-- @foreach($wp as $user)
-                         <tr>
-                             <td>{{ $user->userId }}</td>
-                             @foreach($timeDiff as $t)
-                             <td>
-                                     {{ $t }}
-                                 </td>
-                             @endforeach
-                         </tr>
-                         @endforeach--}}
-
                         @foreach($wp as $user)
                             <tr>
                                 <td>
                                     {{ $user->userId }}
                                 </td>
                                 @foreach($work->where('userid', $user->id) as $s)
-                                <td>{{ $s->createtime }}</td>
+                                <td>
+
+                                    {{ $s->createtime }}</td>
                             @endforeach
                             </tr>
                         @endforeach
 
                         </tbody>
                     </table>
+
+
                     <div id="hourFilter"></div>
 
                 </div>

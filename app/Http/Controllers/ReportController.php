@@ -47,15 +47,12 @@ class ReportController extends Controller
                     for ($j = $i + 1; $j == $i + 1; $j++) {
                         $startTime = Carbon::parse($workProgress[$i]->time);
                         $endTime = Carbon::parse($workProgress[$j]->time);
-
                         $timeDiff[] = $startTime->diff($endTime)->format('%H:%i:%s') . " Minutes";
-
                     }
                 }
             }
 
         //end
-       //            $workProgress = collect(DB::select(DB::raw("SELECT users.userId as userid, w.created_at as createdate FROM workprogress w left join users ON users.id = w.userId WHERE date(w.created_at) = '2020-09-21' AND w.userId = '" . $user->id . "'")));
 
     }*/
         $today = date('Y-m-d');
@@ -808,6 +805,11 @@ class ReportController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
+        $coldemailed = Workprogress::select('userId', DB::raw('count(*) as usercoldEmailed'))
+            ->where('callingReport', 8)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+            ->groupBy('userId')
+            ->get();
 
         $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
             ->where('callingReport', 6)
@@ -879,6 +881,7 @@ class ReportController extends Controller
             ->with('testLeadForRa', $testLeadForRa)
             ->with('failReport', $failReport)
             ->with('emailed', $emailed)
+            ->with('coldemailed', $coldemailed)
             ->with('other', $other)
             ->with('notAvailable', $notAvailable);
 
