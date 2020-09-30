@@ -596,6 +596,12 @@ class ReportController extends Controller
             ->groupBy('userId')
             ->get();
 
+        $coldemailed = Workprogress::select('userId', DB::raw('count(*) as usercoldEmailed'))
+            ->where('callingReport', 8)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
         $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
             ->where('callingReport', 6)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
@@ -665,6 +671,7 @@ class ReportController extends Controller
             ->with('testLeadForRa', $testLeadForRa)
             ->with('failReport', $failReport)
             ->with('emailed', $emailed)
+            ->with('coldemailed', $coldemailed)
             ->with('other', $other)
             ->with('notAvailable', $notAvailable);
 
@@ -810,7 +817,6 @@ class ReportController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
-
         $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
             ->where('callingReport', 6)
             ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
