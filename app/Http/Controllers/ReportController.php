@@ -69,7 +69,7 @@ class ReportController extends Controller
         return view('hourReport-filter', compact('work', 'wp'));
 }
 
-    public function index()
+    public function reportGraph()
     {
 
         $User_Type = Session::get('userType');
@@ -262,7 +262,7 @@ class ReportController extends Controller
             array_push($report, $u);
         }
 //        return $report;
-        return view('report.index')->with('report', $report);
+        return view('report.graph')->with('report', $report);
     }
 
     public function searchGraphByDate(Request $r)
@@ -456,8 +456,9 @@ class ReportController extends Controller
     }
 
 
-    public function reportTable()
+    public function reportTable(Request $r)
     {
+
         $date = Carbon::now();
         $User_Type = Session::get('userType');
 
@@ -678,9 +679,12 @@ class ReportController extends Controller
 
     }
 
+    public function reportTab(){
+        return view('report.tab');
+    }
+
     public function searchTableByDate(Request $r)
     {
-
         $User_Type = Session::get('userType');
 
 

@@ -214,11 +214,15 @@ Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
 Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
 
 //Report
-Route::get('/report','ReportController@index')->name('report');
+Route::post('/reportGraph','ReportController@reportGraph')->name('reportGraph');
 Route::get('report/user/{id}','ReportController@individualCall');
-Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
+Route::post('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
+//tab
+Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
+Route::get('/report', 'ReportController@index')->name('report');
+//endtab
 
 Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');

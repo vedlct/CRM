@@ -1,6 +1,7 @@
 
-@extends('main')
-@section('header')
+{{--@extends('main')--}}
+{{--@section('header')--}}
+
     <style>
         .canvasjs-chart-credit
         {
@@ -8,13 +9,13 @@
         }
 
     </style>
+{{--@endsection--}}
 
-@endsection
+{{--@section('content')--}}
+{{--    <div class="card">--}}
+{{--        <div class="card-body">--}}
 
-@section('content')
-    <div class="card">
-        <div class="card-body">
-            <label><b>Search</b></label>
+            {{--<label><b>Search</b></label>
 
         <form method="post" action="{{route('searchGraphByDate')}}">
             {{csrf_field()}}
@@ -22,27 +23,43 @@
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
             <button type="submit" class="btn btn-success">Search</button>
 
-        </form>
+        </form>--}}
+
+            <div class="card-header">
+                <label><b>Search</b></label>
+                <input type="text" placeholder=" From" id="fromDate" name="fromDate" style="border-radius: 50px;" >
+                <input type="text" placeholder=" To" id="toDate" name="toDate" style="border-radius: 50px;" >
+                <a href="" data-toggle="tab" class="btn btn-success" onclick="dategraph()">Search</a>
+            </div>
+
 
 
 
     {{--<div style="padding-top:50px;" >--}}
         <div id="chartContainer" style="height: 600px; width:100%;"></div>
-    </div>
-    </div>
+{{--    </div>--}}
+{{--    </div>--}}
     {{--</div>--}}
 
-@endsection
+{{--@endsection--}}
 
-@section('foot-js')
-
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+{{--    <meta name="csrf-token" content="{{ csrf_token() }}" />--}}
     {{--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>--}}
-    <script src="{{url('js/chart.js')}}"></script>
+{{--    <script src="{{url('js/chart.js')}}"></script>--}}
 
 
 
     <script>
+
+        // $( function() {
+        //     $( "#fromdate" ).datepicker();
+        //     $( "#todate" ).datepicker();
+        // } );
+
+        $( function() {
+            $( "#fromDate" ).datepicker();
+            $( "#toDate" ).datepicker();
+        });
         window.onload = function () {
             function compareDataPointYAscend(dataPoint1, dataPoint2) {
                 return dataPoint1.y - dataPoint2.y;
@@ -81,7 +98,7 @@
                     dataPoints: [
                             @foreach($report as $r)
                             @if($r->typeId==4)
-                            { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
+                        { label: "{{$r->userName}}",y:{{($r->leadMined*50/100)+($r->highPosibilities*50/100)}},indexLabel:"M:{{$r->leadMined}}%,P:{{$r->highPosibilities}}%"},
                             @elseif($r->typeId==5)
                         { label: "{{$r->userName}}",y:{{(($r->testLead*20/100)+($r->leadMined*10/100)+($r->contacted*30/100)+($r->targetFile*30/100)+($r->called*10/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}}%,Call: {{$r->called}}%"},
 
@@ -89,9 +106,9 @@
 
                         { label: "{{$r->userName}}",y:{{(($r->testLead*20/100)+($r->contacted*40/100)+($r->targetFile*30/100)+($r->called*10/100))}},indexLabel:"T:{{$r->testLead}}%,F:{{$r->targetFile}}%,Con: {{$r->contacted}},Call: {{$r->called}}% "},
 
-                            @endif
+                        @endif
 
-                            @endforeach
+                        @endforeach
 
                     ]
                 }]
@@ -100,19 +117,9 @@
             chart.render();
 
         }
-
-        $( function() {
-            $( "#fromdate" ).datepicker();
-            $( "#todate" ).datepicker();
-        } );
-
-
-
     </script>
 
 
-
-    @endsection
 
 
 

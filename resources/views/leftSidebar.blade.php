@@ -207,6 +207,9 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Reports</span></a>
+                            </li>
+                            <li>
                                 <a href="{{route('report')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
                             </li>
                             <li>
