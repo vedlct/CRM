@@ -1,40 +1,32 @@
-@extends('main')
-@section('header')
-    <style>
-        .canvasjs-chart-credit {
-            display: none;
-        }
-    </style>
-@endsection
-@section('content')
-    <div class="card">
-        <div class="card-body">
-            <label><b>Search</b></label>
-            <label><b>Search</b></label>
-            <form method="post" action="{{route('searchGraphByDate')}}">
-                {{csrf_field()}}
-                <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;"
-                       required>
-                <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" required>
-                <button type="submit" class="btn btn-success">Search</button>
-            </form>
+{{--<style>
+    .canvasjs-chart-credit {
+        display: none;
+    }
 
-            <div id="chartContainer" style="height: 600px; width:100%;"></div>
-        </div>
-    </div>
+</style>--}}
+<div class="card">
+<div class="card-header">
+    <label><b>Search</b></label>
+    <input type="text" placeholder=" From" id="fromDate" name="fromDate" style="border-radius: 50px;">
+    <input type="text" placeholder=" To" id="toDate" name="toDate" style="border-radius: 50px;">
+    <a href="" data-toggle="tab" class="btn btn-success" onclick="dategraph()">Search</a>
+</div>
 
-@endsection
+<div class="card-body">
+    <div id="chartContainer" style="height: 600px; width:100%;"></div>
+</div>
+</div>
 
-@section('foot-js')
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{{--@endsection--}}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="{{url('js/chart.js')}}"></script>
 
 
 <script>
     $(function () {
-        $("#fromdate").datepicker();
-        $("#todate").datepicker();
+        $("#fromDate").datepicker();
+        $("#toDate").datepicker();
     });
     window.onload = function () {
         function compareDataPointYAscend(dataPoint1, dataPoint2) {
@@ -106,7 +98,7 @@
     }
 </script>
 
-@endsection
+
 
 
 

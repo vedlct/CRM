@@ -449,14 +449,14 @@ class ReportController extends Controller
             $u->t = $t;
             array_push($report, $u);
         }
-        return view('report.index')
+        return view('report.graph')
             ->with('report', $report)
             ->with('fromDate', $r->fromDate)
             ->with('toDate', $r->toDate);
     }
 
 
-    public function reportTable(Request $r)
+    public function reportTable()
     {
 
         $date = Carbon::now();
@@ -675,8 +675,6 @@ class ReportController extends Controller
             ->with('coldemailed', $coldemailed)
             ->with('other', $other)
             ->with('notAvailable', $notAvailable);
-
-
     }
 
     public function reportTab(){

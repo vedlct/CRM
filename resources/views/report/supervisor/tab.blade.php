@@ -16,7 +16,7 @@
                 <a  class="nav-link" href="" id="firstClick" data-toggle="tab" onclick="value()">Value</a>
               </li>
               <li class="nav-item">
-                <a href="#g" class="nav-link" data-toggle="tab" onclick="graphy()">Graph</a>
+                <a href="" class="nav-link" data-toggle="tab" onclick="graphy()">Graph</a>
               </li>
               <li class="nav-item">
                 <a href="#3" class="nav-link" data-toggle="tab" onclick="fileTypeDay()">Status</a>
@@ -48,6 +48,7 @@
 
 
             <div class="tab-content">
+
                 <div class="tab-pane active" id="result">
                 </div>
             </div>
@@ -58,6 +59,8 @@
 @endsection
 
 @section('foot-js')
+
+
 
 <script>
     $('#firstClick').click();
@@ -92,7 +95,6 @@
     }
 
     function graphy() {
-
         $.ajax({
             type: 'POST',
             url: "{!! route('reportGraph') !!}",

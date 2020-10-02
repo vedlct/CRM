@@ -214,18 +214,18 @@ Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
 Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
 
 //Report
-Route::post('/reportGraph','ReportController@reportGraph')->name('reportGraph');
+Route::get('/reportGraph','ReportController@reportGraph')->name('reportGraph');
+Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
+Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
+Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
-Route::post('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
 //tab
-Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
-Route::get('/report', 'ReportController@index')->name('report');
+//Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
+//Route::get('/report', 'ReportController@index')->name('report');
 //endtab
 
-Route::post('/searchGraphByDate','ReportController@searchGraphByDate')->name('searchGraphByDate');
-Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::post('/searchTableByDateForUser','ReportController@searchTableByDateForUser')->name('searchTableByDateForUser');
 
 //Report Individual from Report Table
