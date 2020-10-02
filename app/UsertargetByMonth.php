@@ -8,5 +8,5 @@ class UsertargetByMonth extends Model
 {
     protected $table = 'usertargetsbymonth';
     public $timestamps = false;
-    protected $primaryKey = 'userId';
+    protected $primaryKey = 'targetId';
 }

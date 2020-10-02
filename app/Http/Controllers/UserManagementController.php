@@ -348,12 +348,10 @@ class UserManagementController extends Controller
        }
 
        $target->save();
-
        /*UserTargetByMonth*/
-
-        $targetMonthlyGet = UsertargetByMonth::where('userId',$r->userId)->whereMonth('date', date('m'))->first();
+        $targetMonthlyGet = UsertargetByMonth::where('userId',$r->userId)->whereYear('date', date('Y'))->whereMonth('date', date('m'))->first();
         if (!empty($targetMonthlyGet)){
-            if (empty($targetMonthlyGet->date) || date('m',strtotime($targetMonthlyGet->date)) != date('m')){
+            if (empty($targetMonthlyGet->date)){
                 $targetMonthly = new UsertargetByMonth;
                 $targetMonthly->userId = $r->userId;
                 $targetMonthly->date=date("Y-m-d");
