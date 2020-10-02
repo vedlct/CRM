@@ -323,7 +323,7 @@
                         </div>
 
                         <div class="form-group row{{ $errors->has('parentCategoryId') ? ' has-error' : '' }}">
-                            <label for="parentCategoryId" class="col-sm-4 control-label">Subcategory</label>
+                            <label for="parentCategoryId" class="col-sm-4 control-label">Parent Category <small>(optional)</small> </label>
                             <div class="col-sm-8">
 
                                 <select name="parentCategoryId" class="form-control form-control-warning">

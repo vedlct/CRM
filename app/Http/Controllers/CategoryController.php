@@ -72,9 +72,6 @@ class CategoryController extends Controller
             return back();
         }
 
-
-
-
 //        $this->validateInput($request);
 //        // Category::create([
 //        DB::table('categories')->insert([

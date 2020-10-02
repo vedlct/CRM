@@ -15,34 +15,31 @@
                         <input type="date" onchange="day()" id="selectedDay" class="form-control ">
                     </div>
                 </div>
-
                 <div class="table-responsive">
-                    <table id="managerDaily" class="table table-bordered table-striped">
-                        <thead>
-                        <td>Name</td>
-                        </thead>
-                        <tbody>
-                        @foreach($wp as $user)
-                            <tr>
-                                <td>
-                                    {{ $user->userId }}
-                                </td>
+                <table id="managerDaily" class="table table-bordered table-responsive table-striped">
+                    <thead>
+                    <th>Name</th>
+                    <th>Times</th>
+                    </thead>
+                    <tbody>
+                    @foreach($wp as $user)
+                        <tr>
+                            <td>
+                                {{ $user->userId }}
+                            </td>
+                            <td>
                                 @foreach($work->where('userid', $user->id) as $s)
-                                <td>
+                                    {{ $s->createtime." || "  }}
+                                @endforeach
+                            </td>
+                        </tr>
+                    @endforeach
 
-                                    {{ $s->createtime }}</td>
-                            @endforeach
-                            </tr>
-                        @endforeach
-
-                        </tbody>
-                    </table>
-
-
-                    <div id="hourFilter"></div>
-
+                    </tbody>
+                </table>
                 </div>
 
+                <div id="hourFilter"></div>
             </div>
         </div>
     </div>
@@ -63,14 +60,14 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-{{--    <script>--}}
-{{--        $(document).ready(function () {--}}
-{{--            $('#managerDaily').DataTable({--}}
-{{--                "bSort": false--}}
-{{--            });--}}
+    {{--    <script>--}}
+    {{--        $(document).ready(function () {--}}
+    {{--            $('#managerDaily').DataTable({--}}
+    {{--                "bSort": false--}}
+    {{--            });--}}
 
-{{--        });--}}
-{{--    </script>--}}
+    {{--        });--}}
+    {{--    </script>--}}
     <script>
         function day() {
             $("#managerDaily").hide();

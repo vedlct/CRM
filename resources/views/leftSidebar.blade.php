@@ -151,11 +151,9 @@
                 </li>
 
                 @endif       {{--End Local--}}
-                @if(Auth::user()->typeId==1 || Auth::user()->typeId==2)
-                    <li>
-                        <a href="{{ route('hour.report') }}"><i class="fa fa-file"></i><span class="hide-menu">Hourly Report</span></a>
-                    </li>
-                @endif
+{{--                @if(Auth::user()->typeId==1 || Auth::user()->typeId==2)--}}
+{{--                    --}}
+{{--                @endif--}}
 
             @if(Auth::user()->crmType !='local'){{--Start Global--}}
 
@@ -217,6 +215,18 @@
                                     <span class="hide-menu">Value</span></a>
 
                             </li>
+                            @if($userType =='SUPERVISOR' || $userType == 'MANAGER')
+                                <li>
+                                    <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
+                                        <span class="hide-menu">Hourly</span></a>
+                                </li>
+                            @endif
+                            @if($userType =='SUPERVISOR')
+{{--                                <li>--}}
+{{--                                    <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>--}}
+{{--                                        <span class="hide-menu">Category</span></a>--}}
+{{--                                </li>--}}
+                            @endif
 
                         </ul>
                     </li>

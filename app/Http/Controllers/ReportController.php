@@ -28,45 +28,58 @@ class ReportController extends Controller
         $this->middleware('auth');
     }
 
+    public function reportCategory(){
+      Lead::where('categoryId', 60)->get()->dd();
+    }
+
     public function hourReport()
     {
-       /* //workprogress avg update time
-        $today = date('Y-m-d');
+        /* //workprogress avg update time
+         $today = date('Y-m-d');
 
-//        $workProgress = collect(DB::select(DB::raw("SELECT (users.id) as userid, users.userId,  (workprogress.created_at) as time FROM workprogress LEFT JOIN users ON users.id = workprogress.userId WHERE date(workprogress.created_at) = '2020-09-21' AND users.typeId = 5")));
-        $wp = collect(DB::select(DB::raw("SELECT id, userId FROM users where typeId = 5")));
-        for ($u = 0; $u < $wp->count(); $u++) {
-//echo $wp[$u]->id;
-            $timeDiff = [];
-            $workProgress = collect(DB::select(DB::raw("SELECT userId,  created_at as time FROM workprogress WHERE date(created_at) = '2020-09-21' AND userId = '" . $wp[$u]->id . "'")));
+ //        $workProgress = collect(DB::select(DB::raw("SELECT (users.id) as userid, users.userId,  (workprogress.created_at) as time FROM workprogress LEFT JOIN users ON users.id = workprogress.userId WHERE date(workprogress.created_at) = '2020-09-21' AND users.typeId = 5")));
+         $wp = collect(DB::select(DB::raw("SELECT id, userId FROM users where typeId = 5")));
+         for ($u = 0; $u < $wp->count(); $u++) {
+ //echo $wp[$u]->id;
+             $timeDiff = [];
+             $workProgress = collect(DB::select(DB::raw("SELECT userId,  created_at as time FROM workprogress WHERE date(created_at) = '2020-09-21' AND userId = '" . $wp[$u]->id . "'")));
 
-            $totalWorkprogress = $workProgress->count();
+             $totalWorkprogress = $workProgress->count();
 
-            for ($i = 0; $i < $totalWorkprogress; $i++) {
-                if ($i != ($totalWorkprogress - 1)) {
-                    for ($j = $i + 1; $j == $i + 1; $j++) {
-                        $startTime = Carbon::parse($workProgress[$i]->time);
-                        $endTime = Carbon::parse($workProgress[$j]->time);
-                        $timeDiff[] = $startTime->diff($endTime)->format('%H:%i:%s') . " Minutes";
-                    }
-                }
-            }
+             for ($i = 0; $i < $totalWorkprogress; $i++) {
+                 if ($i != ($totalWorkprogress - 1)) {
+                     for ($j = $i + 1; $j == $i + 1; $j++) {
+                         $startTime = Carbon::parse($workProgress[$i]->time);
+                         $endTime = Carbon::parse($workProgress[$j]->time);
+                         $timeDiff[] = $startTime->diff($endTime)->format('%H:%i:%s') . " Minutes";
+                     }
+                 }
+             }
 
-        //end
+         //end
 
-    }*/
-        $today = date('Y-m-d');
-        $wp = User::where('typeId', 5)->select('id','userId')->get();
-            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '".$today."'")));
+     }*/
+
+        $User_Type = Session::get('userType');
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $today = date('Y-m-d');
+            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $today . "'")));
+
         return view('hourReport', compact('work', 'wp'));
+    }
 
     }
 
     public function hourReport_filter(Request $r){
-        $selectedDay = $r->selectedDay;
-        $wp = User::where('typeId', 5)->select('id','userId')->get();
-        $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '".$selectedDay."'")));
-        return view('hourReport-filter', compact('work', 'wp'));
+        $User_Type = Session::get('userType');
+        if($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $selectedDay = $r->selectedDay;
+            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
+
+            return view('hourReport-filter', compact('work', 'wp'));
+        }
 }
 
     public function reportGraph()

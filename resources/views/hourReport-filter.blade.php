@@ -1,6 +1,7 @@
-    <table id="managerDaily" class="table table-bordered table-responsive table-striped">
+    <table id="managerDaily" class="table table-bordered table-striped">
         <thead>
-        <td>Name</td>
+        <th>Name</th>
+        <th>Times</th>
         </thead>
         <tbody>
         @foreach($wp as $user)

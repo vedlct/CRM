@@ -55,8 +55,6 @@ Route::get('/files', 'HomeController@newFile')->name('files');
 Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
 Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
 
-/**/
-
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
@@ -220,6 +218,10 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+
+//supervisor report
+Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
+
 
 //tab
 //Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
