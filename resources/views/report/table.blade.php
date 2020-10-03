@@ -653,7 +653,7 @@
                    $('#highPossibility').modal({show:true});
                    $('#label').html('Emailed');
                    $('#txtHint').html(data);
-                   $('#name').html(userName);
+                   // $('#name').html(userName);
                    @if(Auth::user()->typeId ==10)
                    $('#myTable').DataTable({
                        dom:'Bfrtip',

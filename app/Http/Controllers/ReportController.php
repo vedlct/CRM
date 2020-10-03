@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Failreport;
 use App\NewCall;
 use App\NewFile;
+use App\Possibility;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Session;
@@ -28,8 +30,22 @@ class ReportController extends Controller
         $this->middleware('auth');
     }
 
-    public function reportCategory(){
-      Lead::where('categoryId', 60)->get()->dd();
+//count(*) as total,
+    public function reportCategory()
+    {
+        $possibilities = Possibility::orderBy('possibilityId', 'ASC')->pluck('possibilityId');
+
+//        dd($possibilities);
+        $categories = collect(DB::select(DB::raw("SELECT categories.categoryId, categories.categoryName FROM leads left join categories on categories.categoryId = leads.categoryId group by leads.categoryId")));
+      /*  foreach($categories as $cat){
+            $leads = Lead::where('categoryId', $cat->categoryId)->groupBy('categoryId')->get();
+        }*/
+
+        $leads = collect(DB::select(DB::raw("SELECT count(*) as total, leadId, companyName, comments, possibilities.possibilityName, possibilities.possibilityId, categories.categoryName, categories.categoryId FROM leads left join categories on categories.categoryId = leads.categoryId left join possibilities on possibilities.possibilityId = leads.possibilityId WHERE leads.possibilityId != 'null' group by possibilities.possibilityId, categories.categoryId")));
+        return view('report.supervisor.category')
+            ->with('categories', $categories)
+            ->with('possibilities', $possibilities)
+            ->with('leads', $leads);
     }
 
     public function hourReport()
@@ -66,21 +82,22 @@ class ReportController extends Controller
             $wp = User::where('typeId', 5)->select('id', 'userId')->get();
             $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $today . "'")));
 
-        return view('hourReport', compact('work', 'wp'));
-    }
+            return view('hourReport', compact('work', 'wp'));
+        }
 
     }
 
-    public function hourReport_filter(Request $r){
+    public function hourReport_filter(Request $r)
+    {
         $User_Type = Session::get('userType');
-        if($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
             $selectedDay = $r->selectedDay;
             $wp = User::where('typeId', 5)->select('id', 'userId')->get();
             $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
 
             return view('hourReport-filter', compact('work', 'wp'));
         }
-}
+    }
 
     public function reportGraph()
     {
@@ -690,7 +707,8 @@ class ReportController extends Controller
             ->with('notAvailable', $notAvailable);
     }
 
-    public function reportTab(){
+    public function reportTab()
+    {
         return view('report.tab');
     }
 

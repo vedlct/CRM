@@ -222,10 +222,10 @@
                                 </li>
                             @endif
                             @if($userType =='SUPERVISOR')
-{{--                                <li>--}}
-{{--                                    <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>--}}
-{{--                                        <span class="hide-menu">Category</span></a>--}}
-{{--                                </li>--}}
+                                <li>
+                                    <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>
+                                        <span class="hide-menu">Category</span></a>
+                                </li>
                             @endif
 
                         </ul>

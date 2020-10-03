@@ -221,6 +221,7 @@ Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('r
 
 //supervisor report
 Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
+//Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
 
 
 //tab
@@ -240,6 +241,7 @@ Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallInd
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
 
 Route::post('/getEmailIndividual','GetIndividualReportController@getEmailIndividual')->name('getEmailIndividual');
+Route::post('/getHighLead','GetIndividualReportController@getHighLead')->name('getHighLead');
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
