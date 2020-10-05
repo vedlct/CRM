@@ -31,7 +31,6 @@
             <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" >
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" >
             <button type="submit" class="btn btn-success">Search</button>
-
         </form>
       {{--  <div class="card-header">
             <label><b>Search</b></label>
@@ -52,7 +51,7 @@
 
             @if(Auth::user()->typeId !=4)
 
-                <table class="table">
+                <table class="table table-striped table-bordered valueReport">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -108,8 +107,6 @@
                                             {{$value=$c->userContacted}}
                                         </a>
                                         @php($value1=0)
-
-
                                         @break
                                     @endif
                                 @endforeach
@@ -470,7 +467,8 @@
 
 
             @if(Auth::user()->typeId !=5)
-                <table class="table">
+                <div class="mt-5">
+                <table class="table table-striped table-bordered valueReport">
                     <thead>
                     <tr>
                         <th>Name</th>
@@ -583,11 +581,13 @@
 
 
                 </table>
+                </div>
             @endif
 
+            <div class="mt-5">
             <hr>
             <h4 align="center"><b>Comment</b></h4>
-            <table class="table table-bordered table-striped">
+            <table class="table table-bordered table-striped valueReport">
                 <thead>
                     <th>Name</th>
                     <th>Type</th>
@@ -608,6 +608,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 @endsection
@@ -629,6 +630,7 @@
         $( function() {
             $( "#fromdate" ).datepicker();
             $( "#todate" ).datepicker();
+            $(".valueReport").DataTable();
         });
 
        function totalEmail(x){
@@ -1215,7 +1217,7 @@
                     @else
                     $('#myTable').DataTable();
                     @endif
-                    
+
 
                 }
             });

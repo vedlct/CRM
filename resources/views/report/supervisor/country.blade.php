@@ -22,33 +22,16 @@
     </div>
 
     <div class="card" style="padding:10px;">
-        {{--<label><b>Search</b></label>
-        <form method="post" action="{{route('searchTableByDate')}}">
-            {{csrf_field()}}
-            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;">
-            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;">
-            <button type="submit" class="btn btn-success">Search</button>
-        </form>--}}
-
-        {{-- <div class="card-header">
-             <label><b>Search</b></label>
-             <input type="text" placeholder=" From" id="fromDate" name="fromDate" style="border-radius: 50px;">
-             <input type="text" placeholder=" To" id="toDate" name="toDate" style="border-radius: 50px;">
-             <a href="" data-toggle="tab" class="btn btn-success" onclick="dateval()">Search</a>
-         </div>--}}
 
         <div class="card-body">
             <h2>Report</h2>
-           {{-- @if(isset($fromDate) && isset($toDate))
-                <p>Report From {{$fromDate}} to {{$toDate}}</p>
-            @else--}}
-                <p>Category report</p>
-{{--            @endif--}}
 
-            <table id="categoryReport" class="table table-bordered table-striped ">
+            <p>Country report</p>
+
+            <table id="countryReport" class="table table-bordered table-striped ">
                 <thead>
                 <tr>
-                    <th>Category</th>
+                    <th>Country</th>
                     @foreach($possibilities as $possibility)
                         <th>{{ $possibility->possibilityName }}</th>
                     @endforeach
@@ -56,20 +39,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach( $categories as $category)
+                @foreach( $countries as $country)
                     @php
                         $total = 0;
                     @endphp
                     <tr>
-                        <td>{{$category->categoryName}}</td>
+                        <td>{{$country->countryName}}</td>
                         @foreach($possibilities as $possibility)
-                            <td><a href="#" onclick="getHighLead(this)" data-category-id="{{$category->categoryId}}"
-                                   data-possibility-id="{{$possibility->possibilityId}}"
-                                   @if(isset($fromDate) && isset($toDate))
-                                   data-date-from="{{$fromDate}}"
-                                   data-date-to="{{$toDate}}"
-                                   @endif>
-                                    @foreach($leads->where('categoryId', $category->categoryId)->where('possibilityId', $possibility->possibilityId) as $lead)
+                            <td><a href="#" onclick="getHighLead(this)" data-country-id="{{$country->countryId}}"
+                                   data-possibility-id="{{$possibility->possibilityId}}">
+                                    @foreach($leads->where('countryId', $country->countryId)->where('possibilityId', $possibility->possibilityId) as $lead)
                                         {{ $lead->total }}
                                         @php
                                             $total += $lead->total;
@@ -100,27 +79,19 @@
         $(function () {
             $("#fromdate").datepicker();
             $("#todate").datepicker();
-            $('#categoryReport').DataTable();
-
+            $('#countryReport').DataTable();
         });
 
 
         function getHighLead(x) {
-            var catid = $(x).data('category-id');
+            var catid = $(x).data('country-id');
             var posid = $(x).data('possibility-id');
-            @if(isset($fromDate) && isset($toDate))
-            var from=$(x).data('date-from');
-            var to=$(x).data('date-to');
-            @endif
+
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 type: 'POST',
-                url: '{{route('getCategoryLead')}}',
-                @if(isset($fromDate) && isset($toDate))
-                data: {_token: CSRF_TOKEN, 'fromdate':from,'todate':to, 'categoryid': catid, 'possibilityid': posid},
-                @else
-                data: {_token: CSRF_TOKEN, 'categoryid': catid, 'possibilityid': posid},
-                @endif
+                url: '{{route('getCountryLead')}}',
+                data: {_token: CSRF_TOKEN, 'countryid': catid, 'possibilityid': posid},
                 cache: false,
                 success: function (data) {
                     // console.log(data);

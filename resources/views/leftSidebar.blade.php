@@ -226,6 +226,14 @@
                                     <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>
                                         <span class="hide-menu">Category</span></a>
                                 </li>
+                                <li>
+                                    <a href="{{route('reportStatus')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>
+                                        <span class="hide-menu">Status</span></a>
+                                </li>
+                                <li>
+                                    <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start" aria-hidden="true"></i>
+                                        <span class="hide-menu">Country</span></a>
+                                </li>
                             @endif
 
                         </ul>

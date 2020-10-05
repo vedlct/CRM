@@ -221,6 +221,9 @@ Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('r
 
 //supervisor report
 Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
+Route::get('/reportStatus','ReportController@reportStatus')->name('reportStatus');
+Route::get('/reportCountry','ReportController@reportCountry')->name('reportCountry');
+//Route::post('/searchCategoryByDate','ReportController@searchCategoryByDate')->name('searchCategoryByDate');
 //Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
 
 
@@ -241,7 +244,9 @@ Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallInd
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
 
 Route::post('/getEmailIndividual','GetIndividualReportController@getEmailIndividual')->name('getEmailIndividual');
-Route::post('/getHighLead','GetIndividualReportController@getHighLead')->name('getHighLead');
+Route::post('/getCategoryLead','GetIndividualReportController@getCategoryLead')->name('getCategoryLead');
+Route::post('/getStatusLead','GetIndividualReportController@getStatusLead')->name('getStatusLead');
+Route::post('/getCountryLead','GetIndividualReportController@getCountryLead')->name('getCountryLead');
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');

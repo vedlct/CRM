@@ -876,28 +876,21 @@ GetIndividualReportController extends Controller
 
     }
 
-    public function getHighLead(Request $r){
-        return $r;
-        $date = Carbon::now();
+    public function getCategoryLead(Request $r){
+        $category =  $r->categoryid;
+        $possibility =  $r->possibilityid;
+       /* $date = Carbon::now();
         $fromDate=$date->startOfWeek()->format('Y-m-d');
-        $toDate=$date->endOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');*/
 
-        if($r->fromdate !=null && $r->todate !=null){
+        /*if($r->fromdate !=null && $r->todate !=null){
             $fromDate=$r->fromdate;
             $toDate=$r->todate;
-        }
-        $user=User::findOrFail($r->userid);
-        $leads = Lead::select('leads.*','workprogress.comments','workprogress.created_at','callingreports.report')
-            ->with('country','category','possibility')
-            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-            ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
-            ->where('workprogress.userId',$user->id)
-            ->where('workprogress.callingReport',3)
-            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
+        }*/
+        $leads = Lead::where('categoryId', $category)->where('possibilityId', $possibility)->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
-                 <th>Possibility</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -907,7 +900,6 @@ GetIndividualReportController extends Controller
         foreach ($leads as $l){
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
-                    <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -919,6 +911,71 @@ GetIndividualReportController extends Controller
 
     }
 
+    public function getStatusLead(Request $r){
+        $status =  $r->statusid;
+        $possibility =  $r->possibilityid;
+        /* $date = Carbon::now();
+         $fromDate=$date->startOfWeek()->format('Y-m-d');
+         $toDate=$date->endOfWeek()->format('Y-m-d');*/
+
+        /*if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }*/
+        $leads = Lead::where('statusId', $status)->where('possibilityId', $possibility)->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Country</th>
+                 <th>Comment</th>
+                 <th>Report</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($leads as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->comments.'</td>
+                    <td>'.$l->report.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
+
+    public function getCountryLead(Request $r){
+        $country =  $r->countryid;
+        $possibility =  $r->possibilityid;
+        /* $date = Carbon::now();
+         $fromDate=$date->startOfWeek()->format('Y-m-d');
+         $toDate=$date->endOfWeek()->format('Y-m-d');*/
+
+        /*if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }*/
+        $leads = Lead::where('countryId', $country)->where('possibilityId', $possibility)->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Comment</th>
+                 <th>Report</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($leads as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->comments.'</td>
+                    <td>'.$l->report.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
 
     public function getOtherIndividual(Request $r){
         $date = Carbon::now();
