@@ -228,8 +228,11 @@ Route::get('/reportCountry','ReportController@reportCountry')->name('reportCount
 
 
 //tab
-//Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
-//Route::get('/report', 'ReportController@index')->name('report');
+Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
+Route::post('/reportTabCategory','ReportController@reportTabCategory')->name('reportTabCategory');
+Route::post('/reportTabCountry','ReportController@reportTabCountry')->name('reportTabCountry');
+Route::post('/reportTabStatus','ReportController@reportTabStatus')->name('reportTabStatus');
+
 //endtab
 
 Route::post('/searchTableByDateForUser','ReportController@searchTableByDateForUser')->name('searchTableByDateForUser');

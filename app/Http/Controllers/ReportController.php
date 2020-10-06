@@ -507,7 +507,6 @@ class ReportController extends Controller
             ->with('toDate', $r->toDate);
     }
 
-
     public function reportTable()
     {
 
@@ -729,11 +728,6 @@ class ReportController extends Controller
             ->with('notAvailable', $notAvailable);
     }
 
-    public function reportTab()
-    {
-        return view('report.tab');
-    }
-
     public function searchTableByDate(Request $r)
     {
         $User_Type = Session::get('userType');
@@ -948,7 +942,6 @@ class ReportController extends Controller
 
 
     }
-
 
     public function searchCategoryByDate(Request $r)
     {
@@ -1172,4 +1165,271 @@ class ReportController extends Controller
     }
 
 
+
+//    Tab Report
+    public function reportTab()
+    {
+        return view('report.supervisor.tab');
+    }
+
+    public function reportTabCategory(Request $r)
+    {
+        $possibilities = Possibility::orderBy('possibilityId', 'ASC')->get();
+
+        $categories = collect(DB::select(DB::raw("SELECT categories.categoryId, categories.categoryName FROM leads left join categories on categories.categoryId = leads.categoryId group by leads.categoryId")));
+
+        $leads = collect(DB::select(DB::raw("SELECT count(*) as total, leadId, companyName, comments, possibilities.possibilityName, possibilities.possibilityId, categories.categoryName, categories.categoryId FROM leads left join categories on categories.categoryId = leads.categoryId left join possibilities on possibilities.possibilityId = leads.possibilityId WHERE leads.possibilityId != 'null' group by categories.categoryId, possibilities.possibilityId")));
+        return view('report.supervisor.tab.category')
+            ->with('categories', $categories)
+            ->with('possibilities', $possibilities)
+            ->with('leads', $leads);
+    }
+
+    public function reportTabCountry(Request $r)
+    {
+//        $check = Lead::where('statusId', 6)->where('possibilityId', 4)->get();
+        $possibilities = Possibility::orderBy('possibilityId', 'ASC')->get();
+
+        $countries = collect(DB::select(DB::raw("SELECT countries.countryId, countries.countryName FROM leads left join countries on countries.countryId = leads.countryId group by leads.countryId")));
+        $leads = collect(DB::select(DB::raw("SELECT count(*) as total, leadId, companyName, comments, possibilities.possibilityName, possibilities.possibilityId, countries.countryId, countries.countryName FROM leads left join countries on countries.countryId = leads.countryId left join possibilities on possibilities.possibilityId = leads.possibilityId WHERE leads.possibilityId != 'null' group by countries.countryId, possibilities.possibilityId")));
+        return view('report.supervisor.tab.country')
+            ->with('countries', $countries)
+            ->with('possibilities', $possibilities)
+            ->with('leads', $leads);
+    }
+
+    public function reportTabStatus(Request $r)
+    {
+        $possibilities = Possibility::orderBy('possibilityId', 'ASC')->get();
+
+        $statuses = collect(DB::select(DB::raw("SELECT leadstatus.statusId, leadstatus.statusName FROM leads left join leadstatus on leadstatus.statusId = leads.statusId group by leads.statusId")));
+        $leads = collect(DB::select(DB::raw("SELECT count(*) as total, leadId, companyName, comments, possibilities.possibilityName, possibilities.possibilityId, leadstatus.statusId, leadstatus.statusName FROM leads left join leadstatus on leadstatus.statusId = leads.statusId left join possibilities on possibilities.possibilityId = leads.possibilityId WHERE leads.possibilityId != 'null' group by leadstatus.statusId, possibilities.possibilityId")));
+        return view('report.supervisor.tab.status')
+            ->with('statuses', $statuses)
+            ->with('possibilities', $possibilities)
+            ->with('leads', $leads);
+    }
+
+    /*public function reportValue(Request $r)
+    {
+
+        $date = Carbon::now();
+        $User_Type = Session::get('userType');
+
+
+        if ($User_Type == 'MANAGER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', '!=', 1)
+                ->where('typeId', '!=', 4)
+                ->where('active', 1)
+                ->where('teamId', Auth::user()->teamId)
+                ->get();
+
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
+                ->where('active', 1)
+                ->where('teamId', Auth::user()->teamId)
+                ->get();
+        } else if ($User_Type == 'USER') {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+                ->where('active', 1)
+                ->where('id', Auth::user()->id)
+                ->get();
+            $usersRa = [];
+
+        } else if ($User_Type == 'RA') {
+            $users = [];
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('active', 1)
+                ->where('id', Auth::user()->id)
+                ->get();
+
+        } else {
+            $users = User::select('id as userid', 'firstName', 'typeId')
+//                ->where('typeId','!=',1)
+//                ->where('typeId','!=',4)
+                ->whereNotIn('typeId', [1, 4])
+                ->where('users.crmType', null)
+                ->where('active', 1)
+                ->get();
+
+
+            $usersRa = User::select('id as userid', 'firstName', 'typeId')
+                ->where('typeId', 4)
+                ->where('active', 1)
+                ->get();
+        }
+
+
+        $failReport = Failreport::select('failreport.*', 'users.firstName')
+            ->leftJoin('users', 'users.id', 'failreport.userId')
+            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->orderBy('failreport.id', 'desc')
+            ->get();
+
+//        return $failReport;
+
+        $calledThisWeek = Workprogress::select('userId', DB::raw('count(*) as userCall'))
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('callingReport', '!=', 6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $newFiles = NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
+            ->get();
+
+
+        $leadMinedThisWeek = Lead::select('minedBy', DB::raw('count(*) as userLeadMined'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('minedBy')
+            ->get();
+
+
+        $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
+            ->where('callingReport', 4)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $highPosibilitiesThisWeekRa = Lead::select('minedBy', DB::raw('count(*) as userHighPosibilities'))
+            ->where('filteredPossibility', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('minedBy')
+            ->get();
+
+
+        $highPosibilitiesThisWeekUser = Possibilitychange::select('userId', DB::raw('count(*) as userHighPosibilities'))
+            ->where('possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+//        return $highPosibilitiesThisWeekUser;
+
+        $assignedLead = Leadassigned::select('assignTo', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('assignTo')
+            ->get();
+
+//       return $assignedLead;
+
+        $assignedLeadRa = Leadassigned::select('assignBy', DB::raw('count(*) as userAssignedLead'))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('assignBy')
+            ->get();
+
+//        return $assignedLeadRa;
+
+        $uniqueHighPosibilitiesThisWeek = Possibilitychange::select('userId', DB::raw('count(DISTINCT leadId) as userUniqueHighPosibilities'))
+            ->where('possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+//        return $uniqueHighPosibilitiesThisWeek;
+
+        $testLead = Workprogress::select('userId', DB::raw('count(leadId) as userTestLead'))
+            ->where('progress', 'Test Job')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+//        return $testLead;
+        $contacted = Workprogress::select('userId', DB::raw('count(*) as userContacted'))
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $emailed = Workprogress::select('userId', DB::raw('count(*) as userEmailed'))
+            ->where('callingReport', 3)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+        $coldemailed = Workprogress::select('userId', DB::raw('count(*) as usercoldEmailed'))
+            ->where('callingReport', 8)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+        $other = Workprogress::select('userId', DB::raw('count(*) as userOther'))
+            ->where('callingReport', 6)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $notAvailable = Workprogress::select('userId', DB::raw('count(*) as userNotAvialable'))
+            ->where('callingReport', 2)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+
+        $contactedUsa = Workprogress::select('userId', DB::raw('count(*) as userContactedUsa'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('countries.countryName', 'like', '%USA%')
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->groupBy('userId')
+            ->get();
+
+//        return $contactedUsa;
+
+        $closing = Workprogress::select('userId', DB::raw('count(*) as userClosing'))
+            ->where('progress', 'Closing')
+            ->groupBy('userId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
+
+//        return $closing;
+
+        $newCall = NewCall::leftJoin('workprogress', 'workprogress.progressId', 'new_call.progressId')
+            ->where('workprogress.callingReport', 5)
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
+
+
+        $testLeadForRa = Workprogress::select('minedBy')
+            ->where('progress', 'Test Job')
+            ->leftJoin('leads', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('users', 'users.id', 'leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
+
+//        return $testLeadForRa;
+
+
+        return view('report.supervisor.value')
+            ->with('users', $users)
+            ->with('contactedUsa', $contactedUsa)
+            ->with('contacted', $contacted)
+            ->with('testLead', $testLead)
+            ->with('uniqueHighPosibilitiesThisWeek', $uniqueHighPosibilitiesThisWeek)
+            ->with('assignedLead', $assignedLead)
+            ->with('assignedLeadRa', $assignedLeadRa)
+            ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
+            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
+            ->with('followupThisWeek', $followupThisWeek)
+            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('calledThisWeek', $calledThisWeek)
+            ->with('closing', $closing)
+            ->with('usersRa', $usersRa)
+            ->with('newCall', $newCall)
+            ->with('newFiles', $newFiles)
+            ->with('testLeadForRa', $testLeadForRa)
+            ->with('failReport', $failReport)
+            ->with('emailed', $emailed)
+            ->with('coldemailed', $coldemailed)
+            ->with('other', $other)
+            ->with('notAvailable', $notAvailable);
+    }*/
+
+//End Tab
 }

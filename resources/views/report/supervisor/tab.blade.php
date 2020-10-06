@@ -13,37 +13,14 @@
         <div id="exTab2">
             <ul class="nav nav-tabs">
               <li class="nav-item">
-                <a  class="nav-link" href="" id="firstClick" data-toggle="tab" onclick="value()">Value</a>
+                <a  class="nav-link" href="#category" id="firstClick" data-toggle="tab" onclick="category()">Category</a>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link" data-toggle="tab" onclick="graphy()">Graph</a>
+                <a href="#country" class="nav-link" data-toggle="tab" onclick="country()">Country</a>
               </li>
               <li class="nav-item">
-                <a href="#3" class="nav-link" data-toggle="tab" onclick="fileTypeDay()">Status</a>
+                <a href="#status" class="nav-link" data-toggle="tab" onclick="status()">Status</a>
               </li>
-
-                {{--<li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" onclick="fileProcessHour()">File Process / Hour</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" onclick="fileCountMonth()">File Count / Month</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" id="firstClick"  onclick="employeeWorkDay()">Employee's Work / Day</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" onclick="employeeWorkMonth()">Employee's Work / Month</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" onclick="revenueMonth()">Revenue / Month</a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#4" class="nav-link" data-toggle="tab" onclick="revenueClient()">Revenue / Client</a>
-                </li>--}}
-
             </ul>
 
 
@@ -59,15 +36,55 @@
 @endsection
 
 @section('foot-js')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js"></script>
 
 
 
 <script>
     $('#firstClick').click();
-    function value() {
+    function category() {
         $.ajax({
             type: 'POST',
-            url: "{!! route('reportTable') !!}",
+            url: "{!! route('reportTabCategory') !!}",
+            cache: false,
+            data: {_token:"{{csrf_token()}}"},
+            success: function (data) {
+                $('#result').html(data);
+            }
+
+        });
+
+    }
+
+    function country() {
+        $.ajax({
+            type: 'POST',
+            url: "{!! route('reportTabCountry') !!}",
+            cache: false,
+            data: {_token:"{{csrf_token()}}"},
+            success: function (data) {
+                $('#result').html(data);
+            }
+
+        });
+
+    }
+
+    function status() {
+        $.ajax({
+            type: 'POST',
+            url: "{!! route('reportTabStatus') !!}",
             cache: false,
             data: {_token:"{{csrf_token()}}"},
             success: function (data) {
