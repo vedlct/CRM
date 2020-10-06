@@ -79,7 +79,7 @@
             success: function (data) {
                 // console.log(data);
                 $('#highPossibility').modal({show: true});
-                $('#label').html('High Possibility');
+                $('#label').html('Possibility');
                 $('#txtHint').html(data);
                 $('#myTable').DataTable();
 

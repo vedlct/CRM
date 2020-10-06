@@ -225,7 +225,7 @@
                         @endif
                         @if($userType =='SUPERVISOR')
                             <li>
-                                <a href="{{route('report.tab')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Others</span></a>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>
                             </li>
                             {{--<li>
                                 <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"

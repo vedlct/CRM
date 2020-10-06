@@ -20,9 +20,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
 
     <div class="card" style="padding:10px;">
         <label><b>Search</b></label>
