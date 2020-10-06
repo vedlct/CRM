@@ -13,7 +13,10 @@
         <div id="exTab2">
             <ul class="nav nav-tabs">
               <li class="nav-item">
-                <a  class="nav-link" href="#category" id="firstClick" data-toggle="tab" onclick="category()">Category</a>
+                <a href="#hourly" class="nav-link" id="firstClick" data-toggle="tab" onclick="hourly()">Hourly</a>
+              </li>
+              <li class="nav-item">
+                <a href="#category" class="nav-link" data-toggle="tab" onclick="category()">Category</a>
               </li>
               <li class="nav-item">
                 <a href="#country" class="nav-link" data-toggle="tab" onclick="country()">Country</a>
@@ -53,6 +56,21 @@
 
 <script>
     $('#firstClick').click();
+
+    function hourly() {
+        $.ajax({
+            type: 'POST',
+            url: "{!! route('reportTabHourly') !!}",
+            cache: false,
+            data: {_token:"{{csrf_token()}}"},
+            success: function (data) {
+                $('#result').html(data);
+            }
+
+        });
+
+    }
+
     function category() {
         $.ajax({
             type: 'POST',

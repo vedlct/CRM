@@ -51,10 +51,6 @@ Route::get('/contactUsa','HomeController@contactUsa')->name('contactUsa');
 Route::get('/mine', 'HomeController@mine')->name('mine');
 Route::get('/files', 'HomeController@newFile')->name('files');
 
-
-Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
-Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
-
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
@@ -223,16 +219,18 @@ Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('r
 Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
 Route::get('/reportStatus','ReportController@reportStatus')->name('reportStatus');
 Route::get('/reportCountry','ReportController@reportCountry')->name('reportCountry');
+Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
+Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
 //Route::post('/searchCategoryByDate','ReportController@searchCategoryByDate')->name('searchCategoryByDate');
 //Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
 
 
-//tab
+//Supervisor report Tab
 Route::get('/report/tab','ReportController@reportTab')->name('report.tab');
+Route::post('/reportTabHourly','ReportController@reportTabHourly')->name('reportTabHourly');
 Route::post('/reportTabCategory','ReportController@reportTabCategory')->name('reportTabCategory');
 Route::post('/reportTabCountry','ReportController@reportTabCountry')->name('reportTabCountry');
 Route::post('/reportTabStatus','ReportController@reportTabStatus')->name('reportTabStatus');
-
 //endtab
 
 Route::post('/searchTableByDateForUser','ReportController@searchTableByDateForUser')->name('searchTableByDateForUser');

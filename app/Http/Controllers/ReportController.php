@@ -1169,7 +1169,7 @@ class ReportController extends Controller
 //    Tab Report
     public function reportTab()
     {
-        return view('report.supervisor.tab');
+        return view('report.supervisor.tab.tab');
     }
 
     public function reportTabCategory(Request $r)
@@ -1210,6 +1210,18 @@ class ReportController extends Controller
             ->with('leads', $leads);
     }
 
+    public function reportTabHourly(Request $r)
+    {
+        $User_Type = Session::get('userType');
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $today = date('Y-m-d');
+            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $today . "'")));
+
+            return view('report.supervisor.tab.hourly', compact('work', 'wp'));
+        }
+
+    }
     /*public function reportValue(Request $r)
     {
 

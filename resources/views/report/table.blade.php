@@ -32,13 +32,13 @@
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" >
             <button type="submit" class="btn btn-success">Search</button>
         </form>
+
       {{--  <div class="card-header">
             <label><b>Search</b></label>
             <input type="text" placeholder=" From" id="fromDate" name="fromDate" style="border-radius: 50px;" >
             <input type="text" placeholder=" To" id="toDate" name="toDate" style="border-radius: 50px;" >
             <a href="" data-toggle="tab" class="btn btn-success" onclick="dateval()">Search</a>
         </div>--}}
-
 
         <div class="card-body">
             <h2>Report</h2>
@@ -48,9 +48,7 @@
                 <p>Weekly report</p>
             @endif
 
-
             @if(Auth::user()->typeId !=4)
-
                 <table class="table table-striped table-bordered valueReport">
                     <thead>
                     <tr>
@@ -67,45 +65,23 @@
                         <th>Close Lead</th>
                         <th>New File</th>
                         <th>Lead Mined</th>
-                        {{--<th>New Call</th>--}}
-                        {{--<th>Email</th>--}}
-                        {{--<th>Other</th>--}}
-                        {{--<th>Not Available</th>--}}
-                        {{--<th>Follow up</th>--}}
-                        {{--<th>Usa</th>--}}
-                        {{--<th>Assigned Lead</th>--}}
-                        {{--<th>High Possibility</th>--}}
-                        {{--<th>HP(unique)</th>--}}
-                        {{--<th>Test Lead</th>--}}
-                        {{--<th>Close Lead</th>--}}
-                        {{--<th>New File</th>--}}
-
                     </tr>
                     </thead>
                     <tbody>
-
                     @foreach( $users as $user)
                         <tr>
-
                             <td>{{$user->firstName}}</td>
-
                             <td>
-
                                 @php($value=0)
                                 @foreach($contacted as $c)
-
                                     @if($c->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="getContactedIndividual(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$c->userContacted}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$c->userContacted}}</a>
                                         @php($value1=0)
                                         @break
                                     @endif
@@ -114,12 +90,9 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
                             <td>
-
                                 @php($value=0)
                                 @foreach($followupThisWeek as $fu)
-
                                     @if($fu->userId == $user->userid)
                                         <a href="#" class="highpossibility" onclick="followup(this)"
                                            @if(isset($fromDate) && isset($toDate))
@@ -127,8 +100,7 @@
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$fu->userFollowup}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$fu->userFollowup}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -136,20 +108,17 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
                             <td>
                                 @php($value=0)
                                 @foreach($emailed as $uc)
                                     @if($uc->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="totalEmail(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$uc->userEmailed}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$uc->userEmailed}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -160,15 +129,13 @@
                                 @php($value=0)
                                 @foreach($coldemailed as $uc)
                                     @if($uc->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="totalcoldEmail(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$uc->usercoldEmailed}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$uc->usercoldEmailed}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -179,37 +146,30 @@
                                 @php($value=0)
                                 @foreach($notAvailable as $uc)
                                     @if($uc->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="totalNotAvailable(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$uc->userNotAvialable}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$uc->userNotAvialable}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
-
                             <td>
                                 @php($value=0)
                                 @foreach($calledThisWeek as $uc)
-
                                     @if($uc->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="totalcall(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >{{$value=$value=$uc->userCall}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$value=$uc->userCall}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -219,18 +179,14 @@
                             <td>
                                 @php($value=0)
                                 @foreach($assignedLead as $al)
-
                                     @if($al->assignTo == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="leadassigned(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$al->userAssignedLead}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$al->userAssignedLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -241,19 +197,14 @@
                             <td>
                                 @php($value=0)
                                 @foreach($highPosibilitiesThisWeekUser as $hp)
-
                                     @if($hp->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="highpossibility(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$hp->userHighPosibilities}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$hp->userHighPosibilities}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -264,18 +215,14 @@
                             <td>
                                 @php($value=0)
                                 @foreach($testLead as $tl)
-
                                     @if($tl->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="testlead(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        > {{$value=$tl->userTestLead}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}"> {{$value=$tl->userTestLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -286,19 +233,41 @@
                             <td>
                                 @php($value=0)
                                 @foreach($closing as $cl)
-
                                     @if($cl->userId == $user->userid)
-
                                         <a href="#" class="highpossibility" onclick="closelead(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$cl->userClosing}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$cl->userClosing}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="#" class="highpossibility" onclick="newFile(this)"
+                                   @if(isset($fromDate) && isset($toDate))
+                                   data-date-from="{{$fromDate}}"
+                                   data-date-to="{{$toDate}}"
+                                   @endif
+                                   data-user-id="{{$user->userid}}"
+                                   data-user-name="{{$user->userName}}">{{$newFiles->where('userId',$user->userid)->sum('fileCount')}}</a>
+                            </td>
+                            <td>
+                                @php($value=0)
+                                @foreach($leadMinedThisWeek as $lm)
+                                    @if($lm->minedBy == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}">{{$value=$lm->userLeadMined}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -307,11 +276,8 @@
                                 @endif
                             </td>
 
-                            <td>
-
-
-
-                                <a href="#" class="highpossibility" onclick="newFile(this)"
+                          {{--  <td>
+                                <a href="#" class="highpossibility" onclick="newCall(this)"
                                    @if(isset($fromDate) && isset($toDate))
                                    data-date-from="{{$fromDate}}"
                                    data-date-to="{{$toDate}}"
@@ -319,29 +285,25 @@
                                    data-user-id="{{$user->userid}}"
                                    data-user-name="{{$user->userName}}"
                                 >
-                                    {{$newFiles->where('userId',$user->userid)->sum('fileCount')}}
+                                    {{$newCall->where('userId',$user->userid)->count()}}
                                 </a>
+
 
                             </td>
 
                             <td>
                                 @php($value=0)
-                                @foreach($leadMinedThisWeek as $lm)
+                                @foreach($other as $uc)
+                                    @if($uc->userId == $user->userid)
 
-                                    @if($lm->minedBy == $user->userid)
-
-                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                        <a href="#" class="highpossibility" onclick="totalOther(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
                                            data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$lm->userLeadMined}}
-
-                                        </a>
-                                        @break
+                                        >{{$value=$uc->userOther}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -349,48 +311,6 @@
                                 @endif
                             </td>
 
-                            {{--<td>--}}
-                                {{--<a href="#" class="highpossibility" onclick="newCall(this)"--}}
-                                   {{--@if(isset($fromDate) && isset($toDate))--}}
-                                   {{--data-date-from="{{$fromDate}}"--}}
-                                   {{--data-date-to="{{$toDate}}"--}}
-                                   {{--@endif--}}
-                                   {{--data-user-id="{{$user->userid}}"--}}
-                                   {{--data-user-name="{{$user->userName}}"--}}
-                                {{-->--}}
-                                    {{--{{$newCall->where('userId',$user->userid)->count()}}--}}
-                                {{--</a>--}}
-
-
-                            {{--</td>--}}
-
-                            {{--<td>--}}
-                                {{--@php($value=0)--}}
-                                {{--@foreach($other as $uc)--}}
-                                    {{--@if($uc->userId == $user->userid)--}}
-
-                                        {{--<a href="#" class="highpossibility" onclick="totalOther(this)"--}}
-                                           {{--@if(isset($fromDate) && isset($toDate))--}}
-                                           {{--data-date-from="{{$fromDate}}"--}}
-                                           {{--data-date-to="{{$toDate}}"--}}
-                                           {{--@endif--}}
-                                           {{--data-user-id="{{$user->userid}}"--}}
-                                           {{--data-user-name="{{$user->userName}}"--}}
-                                        {{-->{{$value=$uc->userOther}}</a>--}}
-                                    {{--@endif--}}
-                                {{--@endforeach--}}
-                                {{--@if($value==0)--}}
-                                    {{--<a href="#" >0</a>--}}
-                                {{--@endif--}}
-                            {{--</td>--}}
-
-                            {{----}}
-
-
-
-
-
-                            {{----}}
 
 
 
@@ -399,64 +319,70 @@
 
 
 
-                            {{--<td>--}}
-
-                                        {{--@php($value1=0)--}}
-                                        {{--@foreach($contactedUsa as $cUsa)--}}
-                                            {{--@if($cUsa->userId == $user->userid)--}}
-
-                                                {{--<a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"--}}
-                                                   {{--@if(isset($fromDate) && isset($toDate))--}}
-                                                   {{--data-date-from="{{$fromDate}}"--}}
-                                                   {{--data-date-to="{{$toDate}}"--}}
-                                                   {{--@endif--}}
-                                                   {{--data-user-id="{{$user->userid}}"--}}
-                                                   {{--data-user-name="{{$user->userName}}"--}}
-                                                {{--> {{$value1=$value=$cUsa->userContactedUsa}}</a>--}}
-                                            {{--@endif--}}
-
-                                        {{--@endforeach--}}
-                                        {{--@if($value1==0)--}}
-                                            {{--<a href="#" > 0</a>--}}
-                                        {{--@endif--}}
 
 
 
 
-                            {{--</td>--}}
+
+
+
+                            <td>
+
+                                        @php($value1=0)
+                                        @foreach($contactedUsa as $cUsa)
+                                            @if($cUsa->userId == $user->userid)
+
+                                                <a href="#" class="highpossibility" onclick="getContactedUsaIndividual(this)"
+                                                   @if(isset($fromDate) && isset($toDate))
+                                                   data-date-from="{{$fromDate}}"
+                                                   data-date-to="{{$toDate}}"
+                                                   @endif
+                                                   data-user-id="{{$user->userid}}"
+                                                   data-user-name="{{$user->userName}}"
+                                                > {{$value1=$value=$cUsa->userContactedUsa}}</a>
+                                            @endif
+
+                                        @endforeach
+                                        @if($value1==0)
+                                            <a href="#" > 0</a>
+                                        @endif
 
 
 
 
-                            {{----}}
+                            </td>
 
-                            {{----}}
-                            {{--<td>--}}
-                                {{--@php($value=0)--}}
-                                {{--@foreach($uniqueHighPosibilitiesThisWeek as $hp)--}}
 
-                                    {{--@if($hp->userId == $user->userid)--}}
 
-                                        {{--<a href="#" class="highpossibility" onclick="highpossibilityUn(this)"--}}
-                                           {{--@if(isset($fromDate) && isset($toDate))--}}
-                                           {{--data-date-from="{{$fromDate}}"--}}
-                                           {{--data-date-to="{{$toDate}}"--}}
-                                           {{--@endif--}}
-                                           {{--data-user-id="{{$user->userid}}"--}}
-                                           {{--data-user-name="{{$user->userName}}"--}}
-                                        {{-->--}}
-                                            {{--{{$value=$hp->userUniqueHighPosibilities}}--}}
-                                        {{--</a>--}}
-                                    {{--@endif--}}
-                                {{--@endforeach--}}
-                                {{--@if($value==0)--}}
-                                    {{--<a href="#" >0</a>--}}
-                                {{--@endif--}}
-                            {{--</td>--}}
-                            {{----}}
 
-                            {{----}}
 
+
+
+                            <td>
+                                @php($value=0)
+                                @foreach($uniqueHighPosibilitiesThisWeek as $hp)
+
+                                    @if($hp->userId == $user->userid)
+
+                                        <a href="#" class="highpossibility" onclick="highpossibilityUn(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}"
+                                        >
+                                            {{$value=$hp->userUniqueHighPosibilities}}
+                                        </a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+
+
+                            --}}
 
                         </tr>
                     @endforeach
@@ -493,10 +419,7 @@
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$al->userAssignedLead}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$al->userAssignedLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -504,7 +427,6 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
                             <td>
                                 @php($value=0)
                                 @foreach($highPosibilitiesThisWeekRa as $hpra)
@@ -517,10 +439,7 @@
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$hpra->userHighPosibilities}}
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$hpra->userHighPosibilities}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -528,7 +447,6 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
                             <td>
                                 @php($value=0)
                                 @foreach($leadMinedThisWeek as $lm)
@@ -541,11 +459,7 @@
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}"
-                                        >
-                                            {{$value=$lm->userLeadMined}}
-
-                                        </a>
+                                           data-user-name="{{$user->userName}}">{{$value=$lm->userLeadMined}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -553,37 +467,22 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-
                             <td>
-
-
-
                                 <a href="#" class="highpossibility" onclick="testFileRa(this)"
                                    @if(isset($fromDate) && isset($toDate))
                                    data-date-from="{{$fromDate}}"
                                    data-date-to="{{$toDate}}"
                                    @endif
                                    data-user-id="{{$user->userid}}"
-                                   data-user-name="{{$user->userName}}"
-                                >
-                                    {{$testLeadForRa->where('minedBy',$user->userid)->count()}}
-
-                                </a>
+                                   data-user-name="{{$user->userName}}">{{$testLeadForRa->where('minedBy',$user->userid)->count()}}</a>
                             </td>
-
-
                         </tr>
                         </tbody>
-
-
                     @endforeach
-
-
-
                 </table>
                 </div>
-            @endif
 
+            @endif
             <div class="mt-5">
             <hr>
             <h4 align="center"><b>Comment</b></h4>
@@ -597,14 +496,11 @@
                 <tbody>
                     @foreach($failReport as $r)
                         <tr>
-
                             <td>{{$r->firstName}}</td>
                             <td>{{$r->type}}</td>
                             <td>{{$r->comment}}</td>
                             <td>{{$r->created_at}}</td>
-
                         </tr>
-
                     @endforeach
                 </tbody>
             </table>

@@ -166,9 +166,7 @@
 
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span>
-                            <span class="pull-right-container">
-					  <i class="fa fa-angle-left pull-right"></i>
+                        <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
 					</span>
                         </a>
                         <ul class="treeview-menu">
@@ -192,20 +190,17 @@
 
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                     <li>
-                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span
-                                    class="hide-menu">Assign Lead</span></a>
+                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                     </li>
                 @endif
 
                 @if($userType =='USER' || $userType =='MANAGER')
-
                     <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
                         <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
                             <span class="hide-menu">My Team</span></a>
                     </li>
 
                 @endif
-
 
                 <li class="treeview">
                     <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
@@ -215,9 +210,6 @@
 					</span>
                     </a>
                     <ul class="treeview-menu">
-                        {{--                            <li>--}}
-                        {{--                                <a href="{{route('report.tab')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Reports</span></a>--}}
-                        {{--                            </li>--}}
                         <li>
                             <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
                         </li>
@@ -226,14 +218,16 @@
                                 <span class="hide-menu">Value</span></a>
 
                         </li>
-                        @if($userType =='SUPERVISOR' || $userType == 'MANAGER')
+                        @if($userType == 'MANAGER')
                             <li>
-                                <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
-                                    <span class="hide-menu">Hourly</span></a>
+                                <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
                             </li>
                         @endif
                         @if($userType =='SUPERVISOR')
                             <li>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Others</span></a>
+                            </li>
+                            {{--<li>
                                 <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
                                                                          aria-hidden="true"></i>
                                     <span class="hide-menu">Category</span></a>
@@ -247,61 +241,10 @@
                                 <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start"
                                                                         aria-hidden="true"></i>
                                     <span class="hide-menu">Country</span></a>
-                            </li>
+                            </li>--}}
                         @endif
-
                     </ul>
                 </li>
-
-{{--            Get Report in TAB--}}
-                @if($userType =='SUPERVISOR')
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
-                                class="hide-menu">Tab Report</span>
-                        <span class="pull-right-container">
-					<i class="fa fa-angle-left pull-right"></i>
-					</span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="{{route('report.tab')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Reports</span></a>
-                        </li>
-                        <li>
-                            <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
-                        </li>
-                        <li>
-                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu">Value</span></a>
-
-                        </li>
-                        @if($userType =='SUPERVISOR' || $userType == 'MANAGER')
-                            <li>
-                                <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
-                                    <span class="hide-menu">Hourly</span></a>
-                            </li>
-                        @endif
-                        @if($userType =='SUPERVISOR')
-                            <li>
-                                <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
-                                                                         aria-hidden="true"></i>
-                                    <span class="hide-menu">Category</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportStatus')}}"><i class="fa fa-hourglass-start"
-                                                                       aria-hidden="true"></i>
-                                    <span class="hide-menu">Status</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start"
-                                                                        aria-hidden="true"></i>
-                                    <span class="hide-menu">Country</span></a>
-                            </li>
-                        @endif
-
-                    </ul>
-                </li>
-                @endif
-{{--            End Report Tab--}}
 
                 @if($userType =='SUPERVISOR')
 
@@ -326,58 +269,39 @@
                     </li>
                 @endif
 
-
-
-
-
-
-
                 {{--@if($userType =='RA' )--}}
 
                 {{--@endif--}}
 
                 @if($userType=='MANAGER')
                     <li>
-                        <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span
-                                    class="hide-menu">Detach Lead</span></a>
+                        <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
 
                     </li>
                 @endif
 
-
-
                 @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
                     <li>
-                        <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i>
-                            <span class="hide-menu">User Management</span></a>
+                        <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">User Management</span></a>
                     </li>
                     <li>
-                        <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i>
-                            <span class="hide-menu">Monthly Target Log</span></a>
+                        <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i><span class="hide-menu">Monthly Target Log</span></a>
                     </li>
                 @endif
 
                 @if(Auth::user()->typeId !=10)
 
                     <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>
-                        <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i>
-                            <span class="hide-menu">Notice</span></a>
+                        <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i><span class="hide-menu">Notice</span></a>
                     </li>
 
                 @endif
 
-
                 @if($userType =='ADMIN' )
-
-                    <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i>
-                            <span class="hide-menu">System</span></a></li>
-
-
-
+                    <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i><span class="hide-menu">System</span></a></li>
                 @endif
 
                 @endif    {{--End Global--}}
-
 
                 <li class="nav-devider"></li>
 
