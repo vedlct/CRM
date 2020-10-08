@@ -109,6 +109,21 @@ class ReportController extends Controller
 
     }
 
+    /*public function followupReport()
+    {
+        $User_Type = Session::get('userType');
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $today = date('Y-m-d');
+            $followup = collect(DB::select(DB::raw("SELECT FROM ")))
+            dd($followup);
+            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $today . "'")));
+
+            return view('followupReport', compact('work', 'wp'));
+        }
+
+    }*/
+
     public function hourReport_filter(Request $r)
     {
         $User_Type = Session::get('userType');
