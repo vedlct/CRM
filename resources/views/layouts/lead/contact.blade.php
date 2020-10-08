@@ -14,8 +14,21 @@
             @if(Request::url()==route('contacted'))
                 <h2 class="card-title" align="center"><b>My Lead</b></h2>
             @endif
+                <div class="form-group col-md-2" style="float: right">
+                    <label>Lead Status</label>
+                    <select class="form-control" onchange="leadstatussearch()">
 
+                        <option value="">select lead status</option>
+                        <option value="">Contact</option>
+                        <option value="">Not Available</option>
+                        <option value="">Others</option>
+                        <option value="">Emailed</option>
+                        <option value="">New Lead</option>
+
+                    </select>
+                </div>
             <div class="table-responsive m-t-40">
+
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -381,8 +394,8 @@
                 }
             });
         });
-        $(function() {
-            $('#myTable').DataTable({
+        $(document).ready(function () {
+            dataTable =  $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 Filter: true,
@@ -405,7 +418,13 @@
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });
+
         });
+        function leadstatussearch(){
+
+            dataTable.ajax.reload();
+        }
+
         {{--function edtcontactmodal(x) {--}}
         {{--leadId = $(x).data('lead-id');--}}
         {{--var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
