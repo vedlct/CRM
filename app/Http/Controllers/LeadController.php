@@ -94,7 +94,7 @@ class LeadController extends Controller
 
                     }
                     else{
-                    return '<a href="#" class="btn btn-danger btn-sm" >
+                        return '<a href="#" class="btn btn-danger btn-sm" >
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                        
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -117,7 +117,7 @@ class LeadController extends Controller
                                                 data-lead-name="'.$lead->companyName.'"
                                               
                                          ><i class="fa fa-comments"></i></a>';
-                }}
+                    }}
             })
             ->make(true);
     }
@@ -652,7 +652,7 @@ class LeadController extends Controller
                 }
             }
 
-          //  return Response($text);
+            //  return Response($text);
         }
     }
     public function tempLeads(){
@@ -758,18 +758,18 @@ class LeadController extends Controller
 //            if ($currentPossibility != $r->possibility) {
 
             $chk=Possibilitychange::where('leadId',$lead->leadId)
-                                    ->where('userId',Auth::user()->id)
-                                    ->where('possibilityId',3)
+                ->where('userId',Auth::user()->id)
+                ->where('possibilityId',3)
 //                                    ->whereDate('created_at',strftime('%F'))
-                                    ->count();
+                ->count();
 
             if($chk ==0 )
             {
-            $log = new Possibilitychange;
-            $log->leadId = $r->leadId;
-            $log->possibilityId = $r->possibility;
-            $log->userId = Auth::user()->id;
-            $log->save();
+                $log = new Possibilitychange;
+                $log->leadId = $r->leadId;
+                $log->possibilityId = $r->possibility;
+                $log->userId = Auth::user()->id;
+                $log->save();
             }
         }
         $progress=New Workprogress;
@@ -927,7 +927,7 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
         return Redirect()->route('home');}
 
-        //ADD Contacted
+    //ADD Contacted
     public function addContacted(Request $r){
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
@@ -976,7 +976,7 @@ class LeadController extends Controller
 
     public function Mycontacted(){
         //For user
-    //   $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
+        //   $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
 
 //
 //        $leads=Lead::with('mined','category','country','possibility')
@@ -984,7 +984,7 @@ class LeadController extends Controller
 //            ->whereIn('leads.leadId', $workprogress)
 //            ->orderBy('leadId','desc')->get();
 //
-      //  return count($workprogress);
+        //  return count($workprogress);
 
 
         $User_Type=Session::get('userType');
@@ -1013,10 +1013,10 @@ class LeadController extends Controller
 
     public function getContacedData(Request $r){
         $leads=Lead::with('mined','category','country','possibility')
-        ->where('contactedUserId',Auth::user()->id)
-        ->orderBy('leadId','desc');
+            ->where('contactedUserId',Auth::user()->id)
+            ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
-         ////for modal view/////////
+            ////for modal view/////////
             ->addColumn('action', function ($lead) {
                 return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
@@ -1044,24 +1044,24 @@ class LeadController extends Controller
 
             ->addColumn('callreport', function ($lead){
                 $callingreport = DB::table('workprogress')
-                ->select('report')
-                ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
-                ->where('workprogress.leadId',$lead->leadId)
-                ->groupBy('workprogress.leadId')
-                ->orderBy('created_at', 'DESC')
-                ->get();
+                    ->select('report')
+                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
+                    ->where('workprogress.leadId',$lead->leadId)
+                    ->groupBy('workprogress.leadId')
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
                 if (($callingreport->isEmpty())) {
 
-                return $test="New Lead";
+                    return $test="New Lead";
                 }else{
 
-                return $test=$callingreport->first()->report;
+                    return $test=$callingreport->first()->report;
                 }
             })
-            ->filterColumn('callreport', function ($query,$keyword){
-                return $query->where('callreport','like', '%'.$keyword.'%');
-
-            })
+//            ->filterColumn('callreport', function ($query,$keyword){
+//                return $query->where('callreport','like', '%'.$keyword.'%');
+//
+//            })
             ->rawColumns(['call', 'action'])
 
 
@@ -1117,8 +1117,8 @@ class LeadController extends Controller
 //                    return $test="New Lead";
 //                }else{
 
-                    return $test=$callingreport->first()->report;
-             //   }
+                return $test=$callingreport->first()->report;
+                //   }
             })
 
             ->rawColumns(['call', 'action'])
@@ -1162,17 +1162,17 @@ class LeadController extends Controller
     public function rejectStore(Request $r){
         $lead=Lead::findOrFail($r->leadId);
 //        if($lead->statusId ==1){
-            $lead->statusId=5;
-            $lead->contactedUserId=null;
-            $lead->leadAssignStatus=0;
-            $lead->save();
+        $lead->statusId=5;
+        $lead->contactedUserId=null;
+        $lead->leadAssignStatus=0;
+        $lead->save();
 
-            $work=new Workprogress;
-            $work->progress='Reject';
-            $work->leadId=$r->leadId;
-            $work->userId=Auth::user()->id;
-            $work->comments=$r->comment;
-            $work->save();
+        $work=new Workprogress;
+        $work->progress='Reject';
+        $work->leadId=$r->leadId;
+        $work->userId=Auth::user()->id;
+        $work->comments=$r->comment;
+        $work->save();
 //        }
         Session::flash('message', 'Lead Rejected Successfully');
         return back();
