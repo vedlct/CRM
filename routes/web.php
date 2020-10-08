@@ -215,11 +215,12 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
-//supervisor report
+//supervisor OR Manager report
 Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
 Route::get('/reportStatus','ReportController@reportStatus')->name('reportStatus');
 Route::get('/reportCountry','ReportController@reportCountry')->name('reportCountry');
 Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
+Route::get('follow-up/report', 'ReportController@followupReport')->name('follow-up.report');
 Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
 //Route::post('/searchCategoryByDate','ReportController@searchCategoryByDate')->name('searchCategoryByDate');
 //Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
