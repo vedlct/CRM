@@ -221,6 +221,8 @@ Route::get('/reportStatus','ReportController@reportStatus')->name('reportStatus'
 Route::get('/reportCountry','ReportController@reportCountry')->name('reportCountry');
 Route::get('hour/report', 'ReportController@hourReport')->name('hour.report');
 Route::get('follow-up/report', 'ReportController@followupReport')->name('follow-up.report');
+Route::post('/searchFollowupByDate','ReportController@searchFollowupByDate')->name('searchFollowupByDate');
+Route::get('follow-up/report', 'ReportController@followupReport')->name('follow-up.report');
 Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
 //Route::post('/searchCategoryByDate','ReportController@searchCategoryByDate')->name('searchCategoryByDate');
 //Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
