@@ -16,13 +16,12 @@
             @endif
                 <div class="form-group col-md-2" style="float: right">
                     <label>Lead Status</label>
-                    <select class="form-control" onchange="leadstatussearch()">
+                    <select id="statuschanges" class="form-control" onchange="leadstatussearch()">
 
                         <option value="">select lead status</option>
-                        <option value="">Contact</option>
-                        <option value="">Not Available</option>
-                        <option value="">Others</option>
-                        <option value="">Emailed</option>
+                       @foreach($callReports as $cr)
+                        <option value="{{$cr->callingReportId }}">{{$cr->report}}</option>
+                        @endforeach
                         <option value="">New Lead</option>
 
                     </select>
@@ -395,6 +394,7 @@
             });
         });
         $(document).ready(function () {
+            var status = document.getElementById("statuschanges").value;
             dataTable =  $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -404,7 +404,14 @@
                 "ajax":{
                     "url": "{!! route('getContacedData') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"},
+                    data:function (d){
+                        d._token="{{csrf_token()}}";
+                        if ($("#statuschanges").val() != '') {
+                            d.status=$("#statuschanges").val();
+                        }
+                    },
+
+
                 },
                 columns: [
                     { data: 'companyName', name: 'leads.companyName'},

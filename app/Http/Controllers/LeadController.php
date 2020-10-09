@@ -1014,7 +1014,18 @@ class LeadController extends Controller
     public function getContacedData(Request $r){
         $leads=Lead::with('mined','category','country','possibility')
             ->where('contactedUserId',Auth::user()->id)
-            ->orderBy('leadId','desc');
+            ->orderBy('leads.leadId','desc');
+
+        if ($r->status){
+            $leads->whereHas('workprogress', function ($query) use ($r) {
+                return $query->where('callingReport', '=', $r->status)
+                    ->groupBy('workprogress.leadId')
+                    ->orderBy('created_at', 'DESC');
+
+            });
+
+        }
+
         return DataTables::eloquent($leads)
             ////for modal view/////////
             ->addColumn('action', function ($lead) {
@@ -1058,8 +1069,14 @@ class LeadController extends Controller
                     return $test=$callingreport->first()->report;
                 }
             })
-//            ->filterColumn('callreport', function ($query,$keyword){
-//                return $query->where('callreport','like', '%'.$keyword.'%');
+//            ->filterColumn('callreport', function ($query,$keyword ,$lead){
+//                return $query->leftjoin('workprogress','leads.leadId','workprogress.leadId')
+//                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
+//
+//                    //->where('workprogress.leadId',$lead->leadId)
+//
+//                    //->orderBy('created_at', 'DESC')
+//                    ->where('callreport','like', '%'.$keyword.'%');
 //
 //            })
             ->rawColumns(['call', 'action'])

@@ -98,4 +98,7 @@ class Lead extends Model
     }
 
 
+    public function workprogress(){
+        return $this->hasMany(Workprogress::class,'leadId','leadId');
+    }
 }
