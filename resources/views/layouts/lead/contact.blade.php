@@ -14,8 +14,20 @@
             @if(Request::url()==route('contacted'))
                 <h2 class="card-title" align="center"><b>My Lead</b></h2>
             @endif
+                <div class="form-group col-md-2" style="float: right">
+                    <label>Lead Status</label>
+                    <select id="statuschanges" class="form-control" onchange="leadstatussearch()">
 
+                        <option value="">select lead status</option>
+                       @foreach($callReports as $cr)
+                        <option value="{{$cr->callingReportId }}">{{$cr->report}}</option>
+                        @endforeach
+                        <option value="">New Lead</option>
+
+                    </select>
+                </div>
             <div class="table-responsive m-t-40">
+
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -162,16 +174,16 @@
                                 <select class="form-control" id="reporttest" name="report" required>
                                     <option value=""><b>(select one)</b></option>
 
-                                        {{--@foreach($callReports as $report)--}}
+                                    {{--@foreach($callReports as $report)--}}
 
-{{--                                            @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
+                                    {{--                                            @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
 
-                                        {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
+                                    {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
 
-                                        {{--@else--}}
+                                    {{--@else--}}
 
 
-                                        {{--@endif--}}
+                                    {{--@endif--}}
 
                                     {{--@endforeach--}}
 
@@ -270,12 +282,9 @@
 
 
     <script>
-
         //for Edit modal
         function changeLeadStatus(x){
             var value=$(x).val();
-
-
             if(value == 6){
                 // alert(value);
                 $('#newFileField').html('<label><b>New Files :</b></labe><input type="number" class="form-control" name="newFile" required>');
@@ -284,7 +293,6 @@
                 $('#newFileField').html('');
             }
         }
-
         $('#edit_modal').on('show.bs.modal', function(e) {
 //            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             //get data-id attribute of the clicked element
@@ -300,10 +308,7 @@
             var designation=$(e.relatedTarget).data('lead-designation');
             var createdAt=$(e.relatedTarget).data('lead-created');
             var comments=$(e.relatedTarget).data('lead-comments');
-
             // alert(createdAt);
-
-
             //populate the textbox
             $('#category').val(category);
             // $('div.mined').text(minedBy);
@@ -321,43 +326,21 @@
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
-
             $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
-
-
             @endif
-
-
-
         });
-
         $( function() {
             $( "#datepicker" ).datepicker();
         } );
-
-
-
-
-
         //for Call Modal
-
         $('#my_modal').on('show.bs.modal', function(e) {
-
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
-
-
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
-
-
-
             $('#possibility').val(possibility);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
-
             $.ajax({
                 type : 'post' ,
                 url : '{{route('getComments')}}',
@@ -372,12 +355,9 @@
                 url : '{{route('getCallingReport')}}',
                 data : {_token: CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
-
                     document.getElementById("reporttest").innerHTML = data;
-
                 }
             });
-
             $.ajax({
                 type : 'post' ,
                 url : '{{route('editcontactmodalshow')}}',
@@ -388,19 +368,11 @@
 //                    $('#follow-show').val(data.followUpDate);
                     if(data !=''){
                         $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
-
                 }
             });
-
-
         });
         //seted followup date
-
-
-
-
         //        check followup date count
-
         $('.changedate').on('change',function(){
             var currentdate = $('.changedate').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -421,20 +393,25 @@
                 }
             });
         });
-
-
-        $(function() {
-            $('#myTable').DataTable({
+        $(document).ready(function () {
+            var status = document.getElementById("statuschanges").value;
+            dataTable =  $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 Filter: true,
                 stateSave: true,
-
                 type:"POST",
                 "ajax":{
                     "url": "{!! route('getContacedData') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"},
+                    data:function (d){
+                        d._token="{{csrf_token()}}";
+                        if ($("#statuschanges").val() != '') {
+                            d.status=$("#statuschanges").val();
+                        }
+                    },
+
+
                 },
                 columns: [
                     { data: 'companyName', name: 'leads.companyName'},
@@ -444,43 +421,35 @@
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
-                    { data: 'callreport', name: 'callreport', searchable: true},
+                    { data: 'callreport', name: 'callreport', searchable: false},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
-
                 ],
-
             });
 
-
-
         });
+        function leadstatussearch(){
 
+            dataTable.ajax.reload();
+        }
 
         {{--function edtcontactmodal(x) {--}}
-
         {{--leadId = $(x).data('lead-id');--}}
         {{--var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
         {{--// alert(leadId);--}}
-
         {{--$.ajax({--}}
         {{--type : 'post' ,--}}
         {{--url : '{{route('editcontactmodalshow')}}',--}}
         {{--data : {_token: CSRF_TOKEN,'leadId':leadId} ,--}}
         {{--success : function(data){--}}
         {{--$('#txtHint').html(data);--}}
-
         {{--}--}}
         {{--});--}}
-
         {{--// document.getElementById("edit_modal").style.display = "block";--}}
         {{--$('#edit_modal').modal('show');--}}
         {{--$(".custom-close").on('click', function() {--}}
         {{--$('#edit_modal').modal('hide');--}}
         {{--});--}}
         {{--}--}}
-
-
-
     </script>
 
 

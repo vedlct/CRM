@@ -18,4 +18,9 @@ class Workprogress extends Model
         return $this->belongsTo(Possibility::class,'possibilityId','possibilityId');
     }
 
+
+
+
+
+
 }
