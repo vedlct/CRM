@@ -109,20 +109,48 @@ class ReportController extends Controller
 
     }
 
-    /*public function followupReport()
+    public function followupReport()
     {
-        $User_Type = Session::get('userType');
-        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
-            $today = date('Y-m-d');
-            $followup = collect(DB::select(DB::raw("SELECT FROM ")))
-            dd($followup);
-            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
-            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $today . "'")));
+        $users = User::all();
+        /*$followups = collect(DB::select(DB::raw("SELECT count(*) as total, wp.callingReport, fu.followId, l.companyName, l.leadId, fu.followUpDate, fu.userId, DATE(wp.created_at) as wpcreatedate FROM leads l LEFT JOIN followup fu ON fu.leadId = l.leadId LEFT JOIN workprogress wp ON wp.leadId = l.leadId WHERE fu.followUpDate = '2020-09-10' AND fu.leadId = wp.leadId AND fu.followUpDate = DATE(wp.created_at) GROUP BY fu.userId")));*/
 
-            return view('followupReport', compact('work', 'wp'));
-        }
+     $followups = collect(DB::select(DB::raw("SELECT count(*) as total FROM followup WHERE followup.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) = '2020-09-10' AND userId= 6) AND followUpDate = '2020-09-10' AND userId = 6 group by leadId, followUpDate")));
+    dd($followups);
+        return view('report.followupReport')->with('followups', $followups)->with('users', $users);
+    }
 
-    }*/
+    public function searchFollowupByDate(Request $r)
+    {
+        $users = User::all();
+        $from = $r->fromDate;
+        $to = $r->toDate;
+        $followups = collect(DB::select(DB::raw("SELECT count(*) as total, wp.callingReport, fu.followId, l.companyName, l.leadId, fu.followUpDate, fu.userId, DATE(wp.created_at) as wpcreatedate FROM leads l LEFT JOIN followup fu ON fu.leadId = l.leadId LEFT JOIN workprogress wp ON wp.leadId = l.leadId WHERE fu.followUpDate BETWEEN '" . $from . "' AND '$to' AND fu.leadId = wp.leadId AND fu.followUpDate = DATE(wp.created_at) GROUP BY fu.userId")));
+
+        /*$followups = collect(DB::select(DB::raw("SELECT wp.callingReport, l.leadId, fu.followUpDate, fu.userId, DATE(wp.created_at) as wpcreatedate FROM leads l LEFT JOIN followup fu ON fu.leadId = l.leadId LEFT JOIN workprogress wp ON wp.leadId = l.leadId WHERE fu.followUpDate BETWEEN '2020-09-10' AND '2020-09-11' AND fu.leadId = wp.leadId AND fu.followUpDate = DATE(wp.created_at)")));
+
+        $followups = Lead::select('leads.companyName', 'followup.followId', 'possibilities.possibilityName', 'leadstatus.statusName')
+            ->leftJoin('followup', 'followup.leadId', 'leads.leadId')
+            ->leftJoin('possibilities', 'possibilities.possibilityId', 'leads.possibilityId')
+            ->leftJoin('leadstatus', 'leadstatus.statusId', 'leads.statusId')
+            ->whereBetween(DB::raw('followup.followUpDate'), [$r->fromDate, $r->toDate])
+            ->where('followup.workStatus', 0)
+            ->get();*/
+
+        /* $followups = Followup::select('followId', DB::raw('count(*) as userContactedUsa'))
+             ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+             ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+             ->where('countries.countryName', 'like', '%USA%')
+             ->where('callingReport', 5)
+             ->whereBetween(DB::raw(DATE('workprogress.created_at)'), [$r->fromDate, $r->toDate])
+             ->groupBy('userId')
+             ->get();*/
+
+        return view('report.followupReport')
+            ->with('followups', $followups)
+            ->with('fromDate', $r->fromDate)
+            ->with('toDate', $r->toDate)
+            ->with('users', $users);
+    }
 
     public function hourReport_filter(Request $r)
     {
@@ -179,7 +207,6 @@ class ReportController extends Controller
                 ->where('workprogress.callingReport', '!=', null)
                 ->where('callingReport', '!=', 6)
                 ->whereBetween(DB::raw('DATE(created_at)'), [$start, $end])->count();
-
 
 //            $calledThisWeek=NewCall::where('new_call.userId',$user->id)
 //                ->leftJoin('workprogress','workprogress.progressId','new_call.progressId')
@@ -1180,7 +1207,6 @@ class ReportController extends Controller
     }
 
 
-
 //    Tab Report
     public function reportTab()
     {
@@ -1237,6 +1263,7 @@ class ReportController extends Controller
         }
 
     }
+
     /*public function reportValue(Request $r)
     {
 
