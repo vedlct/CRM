@@ -216,7 +216,6 @@
                         <li>
                             <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
                                 <span class="hide-menu">Value</span></a>
-
                         </li>
                         @if($userType == 'MANAGER')
                             <li>
