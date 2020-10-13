@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class Lead extends Model
@@ -12,32 +13,35 @@ class Lead extends Model
     protected $primaryKey = 'leadId';
     protected $table = 'leads';
 
-    public function category(){
-        return $this->belongsTo(Category::class,'categoryId','categoryId');
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'categoryId', 'categoryId');
     }
 
 
-    public function myLeads(){
+    public function myLeads()
+    {
 
-        $leads=Lead::select('leads.*')
-            ->leftJoin('leadassigneds','leadassigneds.leadId','=','leads.leadId')
-            ->where('leadassigneds.assignTo',Auth::user()->id)
-            ->where('leadassigneds.leaveDate',null)
-            ->where('leadassigneds.workStatus',0)
+        $leads = Lead::select('leads.*')
+            ->leftJoin('leadassigneds', 'leadassigneds.leadId', '=', 'leads.leadId')
+            ->where('leadassigneds.assignTo', Auth::user()->id)
+            ->where('leadassigneds.leaveDate', null)
+            ->where('leadassigneds.workStatus', 0)
             ->get();
 
         return $leads;
     }
 
-    public function showNotAssignedLeads(){
+    public function showNotAssignedLeads()
+    {
 
-        $leads=Lead::with('mined','category','country','possibility')
-            ->where('statusId',2)
-            ->where(function($q){
-                $q->orWhere('contactedUserId',0)
-                    ->orWhere('contactedUserId',null);
-                })
-            ->where('leadAssignStatus',0)
+        $leads = Lead::with('mined', 'category', 'country', 'possibility')
+            ->where('statusId', 2)
+            ->where(function ($q) {
+                $q->orWhere('contactedUserId', 0)
+                    ->orWhere('contactedUserId', null);
+            })
+            ->where('leadAssignStatus', 0)
             ->select('leads.*');
 
 
@@ -45,60 +49,79 @@ class Lead extends Model
     }
 
 
-
-
-    public function possibility(){
-        return $this->belongsTo(Possibility::class,'possibilityId','possibilityId');
+    public function possibility()
+    {
+        return $this->belongsTo(Possibility::class, 'possibilityId', 'possibilityId');
     }
 
-    public function country(){
-        return $this->belongsTo(Country::class,'countryId','countryId');
-    }
-
-
-    public function mined(){
-        return $this->belongsTo(User::class,'minedBy','id');
-    }
-    public function release(){
-        return $this->belongsTo(User::class,'releaselead','id');
-    }
-
-    public function contact(){
-
-        return $this->belongsTo(User::class,'contactedUserId','id');
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'countryId', 'countryId');
     }
 
 
-    public function getTempLead(){
+    public function mined()
+    {
+        return $this->belongsTo(User::class, 'minedBy', 'id');
+    }
 
-        $leads=Lead::with('mined','category','country','possibility')
-            ->where('statusId',1)
-            ->orderBy('leadId','desc')
+    public function release()
+    {
+        return $this->belongsTo(User::class, 'releaselead', 'id');
+    }
+
+    public function contact()
+    {
+
+        return $this->belongsTo(User::class, 'contactedUserId', 'id');
+    }
+
+
+    public function getTempLead()
+    {
+
+        $leads = Lead::with('mined', 'category', 'country', 'possibility')
+            ->where('statusId', 1)
+            ->orderBy('leadId', 'desc')
             ->select('leads.*');
         return $leads;
 
-        }
-
-
-    public function status(){
-
-        return $this->belongsTo(Leadstatus::class,'statusId','statusId');
     }
 
 
-    public function getFilteredLead(){
-        $lead=Lead::where('statusId', 2)
+    public function status()
+    {
+
+        return $this->belongsTo(Leadstatus::class, 'statusId', 'statusId');
+    }
+
+
+    public function getFilteredLead()
+    {
+        $lead = Lead::where('statusId', 2)
             ->get();
         return $lead;
     }
 
 
-    public function assigned(){
-        return $this->hasOne(Leadassigned::class,'leadId','leadId');
+    public function assigned()
+    {
+        return $this->hasOne(Leadassigned::class, 'leadId', 'leadId');
     }
 
 
-    public function workprogress(){
-        return $this->hasMany(Workprogress::class,'leadId','leadId');
+    public function workprogress()
+    {
+        return $this->hasMany(Workprogress::class, 'leadId', 'leadId');
+    }
+
+    public function lastCallingReport()
+    {
+        return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
+            ->leftjoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
+            ->select('callingreports.report as callingReport')
+            ->orderBy('workprogress.created_at', 'DESC')
+            ->limit(1);
+
     }
 }

@@ -11,8 +11,7 @@
 |
 */
 
-
-    Route::view('/main', 'layouts.index')->name('main');
+Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
 

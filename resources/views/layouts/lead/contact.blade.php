@@ -22,7 +22,7 @@
                        @foreach($callReports as $cr)
                         <option value="{{$cr->callingReportId }}">{{$cr->report}}</option>
                         @endforeach
-                        <option value="">New Lead</option>
+                        <option value="newlead">New Lead</option>
 
                     </select>
                 </div>

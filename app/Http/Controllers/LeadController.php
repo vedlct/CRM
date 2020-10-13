@@ -949,7 +949,15 @@ class LeadController extends Controller
     }
 
     public function contacted(){
-
+//        $leads=Lead::with('mined','category','country','possibility')
+////            ->select('workprogress.callreport','leads.*')
+//            ->where('contactedUserId',Auth::user()->id)
+//            ->whereNOTIn('leads.leadId',function($query){
+//                $query->select('leadId')->from('workprogress')
+//                    ->where('workprogress.userId', Auth::user()->id);
+//            })
+//            ->orderBy('leads.leadId','desc')->get();
+//       return count($leads);
 
         //For user
         $User_Type=Session::get('userType');
@@ -1013,17 +1021,28 @@ class LeadController extends Controller
 
     public function getContacedData(Request $r){
         $leads=Lead::with('mined','category','country','possibility')
+//            ->select('workprogress.callreport','leads.*')
             ->where('contactedUserId',Auth::user()->id)
             ->orderBy('leads.leadId','desc');
 
         if ($r->status){
-            $leads->whereHas('workprogress', function ($query) use ($r) {
-                return $query->where('callingReport', '=', $r->status)
-                    ->groupBy('workprogress.leadId')
-                    ->orderBy('created_at', 'DESC');
+            if ($r->status == "newlead"){
 
-            });
+                $leads=$leads->whereNOTIn('leads.leadId',function($query){
+                        $query->select('leadId')->from('workprogress')
+                        ->where('workprogress.userId', Auth::user()->id);
+                    });
 
+            }else {
+                $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
+                    return $query->where('callingReport', '=', $r->status);
+//                    ->orderBy('created_at', 'DESC')
+//                    ->groupBy('workprogress.leadId')
+//                    ->limit(1);
+                });
+            }
+
+          //  return $leads = $leads->where('callingReport', '=', $r->status);
         }
 
         return DataTables::eloquent($leads)
@@ -1053,21 +1072,26 @@ class LeadController extends Controller
                 return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
             })
 
-            ->addColumn('callreport', function ($lead){
+            ->addColumn('callreport', function ($lead) use($r){
                 $callingreport = DB::table('workprogress')
                     ->select('report')
                     ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                     ->where('workprogress.leadId',$lead->leadId)
-                    ->groupBy('workprogress.leadId')
                     ->orderBy('created_at', 'DESC')
-                    ->get();
+                    ->limit(1);
+                    if ($r->status){
+                        $callingreport = $callingreport->where('workprogress.callingReport', '=', $r->status);
+                    }
+
+                $callingreport = $callingreport->get();
                 if (($callingreport->isEmpty())) {
 
                     return $test="New Lead";
-                }else{
 
-                    return $test=$callingreport->first()->report;
+                }else{
+                    return $test= collect($callingreport)[0]->report;
                 }
+
             })
 //            ->filterColumn('callreport', function ($query,$keyword ,$lead){
 //                return $query->leftjoin('workprogress','leads.leadId','workprogress.leadId')
