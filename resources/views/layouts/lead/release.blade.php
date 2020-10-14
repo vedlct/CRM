@@ -25,17 +25,18 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Company Name</th>
-                        <th width="5%">website</th>
-                        <th width="4%">Number</th>
-                        <th width="4%">Category</th>
-                        <th width="4%">Country</th>
-                        <th width="4%">Marketier</th>
-                        <th width="4%">Contact</th>
-                        <th width="4%">Status</th>
-                        <th width="4%">Possib</th>
-                        <th width="4%">Date</th>
-                        <th width="10%">Edit</th>
+                        <th >Company Name</th>
+                        <th >website</th>
+                        <th >Number</th>
+                        <th >Category</th>
+                        <th >Country</th>
+                        <th >Marketier</th>
+                        <th >Contact</th>
+                        <th >Status</th>
+                        <th >Possib</th>
+                        <th >Probability</th>
+                        <th >Date</th>
+                        <th >Edit</th>
 
                     </tr>
                     </thead>
@@ -183,6 +184,14 @@
                             </select>
 
                         </div>
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Probability:</b></label>
+                            <select class="form-control" id="" name="probability">
+                                @foreach($probabilities as $probability)
+                                    <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="form-group col-md-5">
                             <br><br>
@@ -327,6 +336,14 @@
                                 @endforeach
                             </select>
 
+                        </div>
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Probability:</b></label>
+                            <select class="form-control" id="" name="probability">
+                                @foreach($probabilities as $probability)
+                                    <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                @endforeach
+                            </select>
                         </div>
 
                         {{--<div class="form-group col-md-5">--}}
@@ -536,6 +553,14 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group col-md-5" style="">
+                                <label ><b>Probability:</b></label>
+                                <select class="form-control" id="" name="probability">
+                                    @foreach($probabilities as $probability)
+                                        <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <label class=""><b>Comment : </b></label>
@@ -565,26 +590,12 @@
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 
 
 
 @section('bottom')
-
-
-
 
     <script src="{{url('js/select2.min.js')}}"></script>
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -672,6 +683,17 @@
                     {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'created_at', name: 'created_at',defaultContent: ''},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
@@ -753,6 +775,7 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var probability=$(e.relatedTarget).data('lead-probability');
 
 
 
@@ -763,6 +786,7 @@
 
 
             $('#possibility').val(possibility);
+            $('#probability').val(probability);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({

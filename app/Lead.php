@@ -35,7 +35,7 @@ class Lead extends Model
     public function showNotAssignedLeads()
     {
 
-        $leads = Lead::with('mined', 'category', 'country', 'possibility')
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
             ->where('statusId', 2)
             ->where(function ($q) {
                 $q->orWhere('contactedUserId', 0)
@@ -52,6 +52,11 @@ class Lead extends Model
     public function possibility()
     {
         return $this->belongsTo(Possibility::class, 'possibilityId', 'possibilityId');
+    }
+
+    public function probability()
+    {
+        return $this->belongsTo(Probability::class, 'probabilityId', 'probabilityId');
     }
 
     public function country()
@@ -80,7 +85,7 @@ class Lead extends Model
     public function getTempLead()
     {
 
-        $leads = Lead::with('mined', 'category', 'country', 'possibility')
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
             ->where('statusId', 1)
             ->orderBy('leadId', 'desc')
             ->select('leads.*');

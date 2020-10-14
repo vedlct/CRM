@@ -27,6 +27,7 @@
                         <th  width="5%">Website</th>
                         <th  width="5%">Number</th>
                         <th  width="5%">Country</th>
+                        <th  width="4%">Probability</th>
                         <th  width="4%">Possibility</th>
                         <th  width="10%">Set Possibility</th>
                         <th  width="7%">Action</th>
@@ -237,6 +238,17 @@
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
                     // { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
