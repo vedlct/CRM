@@ -221,13 +221,14 @@
                             <li>
                                 <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
                             </li>
-                            <li>
-                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Follow-up</span></a>
-                            </li>
+
                         @endif
                         @if($userType =='SUPERVISOR')
                             <li>
                                 <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Follow-up</span></a>
                             </li>
                             {{--<li>
                                 <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
