@@ -19,6 +19,7 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
+                        <th>Probability</th>
                         <th>Date</th>
 
 
@@ -195,6 +196,17 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 

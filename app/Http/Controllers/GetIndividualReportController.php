@@ -787,11 +787,6 @@ GetIndividualReportController extends Controller
 
     }
 
-
-
-
-
-
     public function getEmailIndividual(Request $r){
         $date = Carbon::now();
         $fromDate=$date->startOfWeek()->format('Y-m-d');
@@ -939,6 +934,76 @@ GetIndividualReportController extends Controller
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
                     <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
+
+    public function getNotDoneFollowup(Request $r){
+        $userId = $r->userId;
+
+        if($r->fromdate && $r->todate){
+            $fromdate = $r->fromdate;
+            $todate = $r->todate;
+
+            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) BETWEEN '".$fromdate."' AND '".$todate."') AND fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND fl.userId = '".$userId."' group by fl.followId")));
+        }
+
+        else{
+            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) = '2020-09-10') AND fl.followUpDate = '2020-09-10' AND fl.userId = '".$userId."' group by fl.followId")));
+        }
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Lead ID</th>
+                 <th>Company Name</th>
+                 <th>Possibility</th>
+                 <th>Category</th>
+                 <th>Follow-Up Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($followupDetails as $lead){
+            $table.='<tr>
+                    <td>'.$lead->leadId.'</td>
+                    <td>'.$lead->companyName.'</td>
+                    <td>'.$lead->possibilityName.'</td>
+                    <td>'.$lead->categoryName.'</td>
+                    <td>'.$lead->followUpDate.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
+    }
+
+    public function getAllFollowup(Request $r){
+        $userId = $r->userId;
+
+        if($r->fromdate && $r->todate){
+            $fromdate = $r->fromdate;
+            $todate = $r->todate;
+
+            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND userId = '".$userId."' group by fl.followId")));
+        }
+
+        else{
+            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate = '2020-09-10' AND userId = '".$userId."' group by fl.followId")));
+        }
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Lead ID</th>
+                 <th>Company Name</th>
+                 <th>Possibility</th>
+                 <th>Category</th>
+                 <th>Follow-Up Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($followupDetails as $lead){
+            $table.='<tr>
+                    <td>'.$lead->leadId.'</td>
+                    <td>'.$lead->companyName.'</td>
+                    <td>'.$lead->possibilityName.'</td>
+                    <td>'.$lead->categoryName.'</td>
+                    <td>'.$lead->followUpDate.'</td>
                     </tr>';
         }
         $table.='</tbody></table>';

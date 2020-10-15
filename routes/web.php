@@ -246,6 +246,12 @@ Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCoun
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
 
+
+//followup report
+Route::post('/getNotDoneFollowup','GetIndividualReportController@getNotDoneFollowup')->name('getNotDoneFollowup');
+Route::post('/getAllFollowup','GetIndividualReportController@getAllFollowup')->name('getAllFollowup');
+
+
 Route::post('/getEmailIndividual','GetIndividualReportController@getEmailIndividual')->name('getEmailIndividual');
 Route::post('/getCategoryLead','GetIndividualReportController@getCategoryLead')->name('getCategoryLead');
 Route::post('/getStatusLead','GetIndividualReportController@getStatusLead')->name('getStatusLead');

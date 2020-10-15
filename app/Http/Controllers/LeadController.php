@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\NewCall;
 use App\NewFile;
+use App\Probability;
 use App\Status;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
@@ -34,7 +35,7 @@ class LeadController extends Controller
     }
 
     public function allLeads(Request $r){
-        $leads=Lead::with('country','category','mined','status','contact','possibility')
+        $leads=Lead::with('country','category','mined','status','contact','possibility', 'probability')
             ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
@@ -68,7 +69,8 @@ class LeadController extends Controller
                     if($lead->contactedUserId==Auth::user()->id){
                         return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
-                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                        
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -129,6 +131,7 @@ class LeadController extends Controller
         $cats=Category::where('type', 1)->get();
         $countries=Country::get();
         $possibilities=Possibility::get();
+        $probabilities=Probability::get();
         $callReports = Callingreport::get();
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
@@ -136,6 +139,7 @@ class LeadController extends Controller
             ->with('categories',$cats)
             ->with('countries',$countries)
             ->with('possibilities',$possibilities)
+            ->with('probabilities',$probabilities)
             ->with('callReports',$callReports)
             ->with('user',$user);
     }
@@ -167,6 +171,7 @@ class LeadController extends Controller
         $cats=Category::where('type', 1)->get();
         $countries=Country::get();
         $possibilities=Possibility::get();
+        $probabilities=Probability::get();
         $callReports = Callingreport::get();
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
@@ -174,12 +179,13 @@ class LeadController extends Controller
             ->with('categories',$cats)
             ->with('countries',$countries)
             ->with('possibilities',$possibilities)
+            ->with('probabilities',$probabilities)
             ->with('callReports',$callReports)
             ->with('user',$user);
     }
     public function getallrelease(Request $r){
 
-        $leads=Lead::with('country','category','mined','status','contact','possibility' , 'release')
+        $leads=Lead::with('country','category','mined','status','contact','possibility', 'probability', 'release')
             ->where('releaselead', '!=' ,"")
             ->orderBy('leadId','desc');
         return DataTables::eloquent($leads)
@@ -214,7 +220,8 @@ class LeadController extends Controller
                     if($lead->contactedUserId==Auth::user()->id){
                         return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
-                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                        
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
@@ -295,6 +302,7 @@ class LeadController extends Controller
         $l=new Lead;
 
         $l->possibilityId=$r->possibility;
+        $l->probabilityId=$r->probability;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -355,6 +363,7 @@ class LeadController extends Controller
         $l->statusId = 6;
 //        }
         $l->possibilityId=$r->possibility;
+        $l->probabilityId=$r->probability;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
         $l->personName= $r->personName;
@@ -495,6 +504,7 @@ class LeadController extends Controller
             /// return $callReports;
             $categories=Category::where('type',1)->get();
             $possibilities=Possibility::get();
+            $probabilities=Probability::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->get();
 
@@ -503,7 +513,7 @@ class LeadController extends Controller
             Session::flash('message', 'From '.$r->fromDate.' To '.$r->toDate.'');
 
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$r->fromDate,'toDate'=> $r->toDate,'country'=>$country]);
+                'possibilities' => $possibilities,  'probabilities' => $probabilities,'categories'=>$categories,'status'=>$status,'fromDate'=>$r->fromDate,'toDate'=> $r->toDate,'country'=>$country]);
 
         }
         else
@@ -582,6 +592,7 @@ class LeadController extends Controller
             $leads = (new Lead())->myLeads();
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
+            $probabilities = Probability::get();
             $categories=Category::where('type',1)->get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
@@ -591,6 +602,7 @@ class LeadController extends Controller
                 ->with('leads', $leads)
                 ->with('callReports', $callReports)
                 ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
                 ->with('categories',$categories)
                 ->with('country',$country)
                 ->with('status',$status);
@@ -748,6 +760,7 @@ class LeadController extends Controller
         $leadPrevStatus= $lead->statusId;
         $currentPossibility=$lead->possibilityId;
         $lead->possibilityId=$r->possibility;
+        $lead->probabilityId=$r->probability;
         $lead->leadAssignStatus=0;
         if($r->progress=="Closing"){
             $lead->statusId=6;
@@ -768,6 +781,7 @@ class LeadController extends Controller
                 $log = new Possibilitychange;
                 $log->leadId = $r->leadId;
                 $log->possibilityId = $r->possibility;
+                $log->probabilityId = $r->probability;
                 $log->userId = Auth::user()->id;
                 $log->save();
             }
@@ -966,6 +980,8 @@ class LeadController extends Controller
             $callReports=Callingreport::get();
 
             $possibilities=Possibility::get();
+            $probabilities = Probability::get();
+
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
                 ->get();
@@ -974,6 +990,7 @@ class LeadController extends Controller
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
+                ->with('probabilities',$probabilities)
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country);
@@ -1002,6 +1019,7 @@ class LeadController extends Controller
 
 
             $possibilities=Possibility::get();
+            $probabilities=Probability::get();
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
                 ->get();
@@ -1010,6 +1028,7 @@ class LeadController extends Controller
             return view('layouts.lead.mycontactlead')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
+                ->with('probabilities',$probabilities)
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country);
@@ -1020,7 +1039,7 @@ class LeadController extends Controller
 
 
     public function getContacedData(Request $r){
-        $leads=Lead::with('mined','category','country','possibility')
+        $leads=Lead::with('mined','category','country','possibility', 'probability')
 //            ->select('workprogress.callreport','leads.*')
             ->where('contactedUserId',Auth::user()->id)
             ->orderBy('leads.leadId','desc');
@@ -1051,7 +1070,8 @@ class LeadController extends Controller
             ->addColumn('action', function ($lead) {
                 return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
-                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                     <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                     data-lead-id="'.$lead->leadId.'"
@@ -1114,7 +1134,7 @@ class LeadController extends Controller
 //        $workprogress = DB::table('workprogress')->select('leadId')->get()->toArray();
         $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
 
-        $leads=Lead::with('mined','category','country','possibility')
+        $leads=Lead::with('mined','category','country','possibility', 'probability')
             ->where('contactedUserId',Auth::user()->id)
             ->whereIn('leads.leadId', $workprogress)
             ->orderBy('leadId','desc');
@@ -1123,7 +1143,8 @@ class LeadController extends Controller
             ->addColumn('action', function ($lead) {
                 return '<a href="#my_modal" data-toggle="modal"  class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
-                                   data-lead-possibility="'.$lead->possibilityId.'">
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                     <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                     data-lead-id="'.$lead->leadId.'"

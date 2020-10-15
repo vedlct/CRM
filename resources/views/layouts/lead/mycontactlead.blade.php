@@ -23,6 +23,7 @@
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
+                        <th width="8%">Probability</th>
                         <th width="5%">Country</th>
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
@@ -38,19 +39,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
@@ -152,7 +140,7 @@
                 </div>
             </div>
         </div>
-    </div> </div>
+    </div>
     <!-- Call Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
@@ -230,6 +218,16 @@
                                 <select class="form-control"  name="possibility" id="possibility">
                                     @foreach($possibilities as $p)
                                         <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=""><b>Probability : </b></label>
+                                <select class="form-control"  name="probability" id="probability">
+                                    @foreach($probabilities as $p)
+                                        <option value="{{$p->probabilityId}}">{{$p->probabilityName}}</option>
                                     @endforeach
 
                                 </select>
@@ -357,6 +355,7 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var probability=$(e.relatedTarget).data('lead-probability');
 
 
 
@@ -367,6 +366,7 @@
 
 
             $('#possibility').val(possibility);
+            $('#probability').val(probability);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({
@@ -451,6 +451,17 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},

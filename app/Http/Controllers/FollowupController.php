@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\NewCall;
+use App\Probability;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,10 +86,11 @@ class FollowupController extends Controller
             $callReports = Callingreport::get();
             $categories = Category::where('type', 1)->get();
             $possibilities = Possibility::get();
+            $probabilities = Probability::get();
             $status = Leadstatus::where('statusId', '!=', 7)
                 ->get();
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities, 'categories' => $categories, 'status' => $status, 'country' => $country, 'totalDuration' => $totalDuration]);
+                'possibilities' => $possibilities, 'probabilities' => $probabilities, 'categories' => $categories, 'status' => $status, 'country' => $country, 'totalDuration' => $totalDuration]);
         }
         return Redirect()->route('home');
 
@@ -204,6 +206,7 @@ class FollowupController extends Controller
             /// return $callReports;
             $categories = Category::where('type', 1)->get();
             $possibilities = Possibility::get();
+            $probabilities = Probability::get();
             $status = Leadstatus::where('statusId', '!=', 7)
                 ->get();
 
@@ -212,7 +215,7 @@ class FollowupController extends Controller
             Session::flash('message', 'From ' . $r->fromDate . ' To ' . $r->toDate . '');
 
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities, 'categories' => $categories, 'status' => $status, 'fromDate' => $r->fromDate, 'toDate' => $r->toDate, 'country' => $country]);
+                'possibilities' => $possibilities, 'probabilities' => $probabilities, 'categories' => $categories, 'status' => $status, 'fromDate' => $r->fromDate, 'toDate' => $r->toDate, 'country' => $country]);
 
         } else
             return back();
@@ -258,6 +261,7 @@ class FollowupController extends Controller
         /// return $callReports;
         $categories = Category::where('type', 1)->get();
         $possibilities = Possibility::get();
+        $probabilities = Probability::get();
         $status = Leadstatus::where('statusId', '!=', 7)
             ->get();
         $country = Country::get();
@@ -265,7 +269,7 @@ class FollowupController extends Controller
         Session::flash('message', 'From ' . $request->fromdate . ' To ' . $request->todate . '');
 
         return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-            'possibilities' => $possibilities, 'categories' => $categories, 'status' => $status, 'fromDate' => $request->fromdate, 'toDate' => $request->todate, 'country' => $country]);
+            'possibilities' => $possibilities, 'probabilities' => $probabilities,  'categories' => $categories, 'status' => $status, 'fromDate' => $request->fromdate, 'toDate' => $request->todate, 'country' => $country]);
     }
 
 }

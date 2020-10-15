@@ -35,6 +35,7 @@
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
+                        <th width="8%">Probability</th>
                         <th width="5%">Country</th>
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
@@ -176,7 +177,7 @@
 
                                     {{--@foreach($callReports as $report)--}}
 
-                                    {{--                                            @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
+                                    {{-- @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
 
                                     {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
 
@@ -210,8 +211,9 @@
                                     <label class=""><b>Time: </b> </label>
                                     <input class="form-control" name="time" placeholder="pick Time">
                                 </div>
-                                <div class="col-md-12" style="text-align: center; font-weight: bold;">
-                                    <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>
+                                <div class="col-md-12" style="text-align: center; font-size: 14px; font-weight: bold;">
+                                    <span id="exceed" style="color: red; display: none"><i>Already Exceed the limit 10</i></span>
+                                    <span id="total" style="color: #00aa88; display: none"></span>
                                 </div>
                             </div>
 
@@ -236,6 +238,16 @@
                                 </select>
                             </div>
 
+                            <div class="form-group">
+                                <label class=""><b>Closing Probability : </b></label>
+                                <select class="form-control"  name="probability" id="probability">
+                                    @foreach($probabilities as $p)
+                                        <option value="{{$p->probabilityId}}">{{$p->probabilityName}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
 
                             <div class="form-group">
                                 <label class=""><b>Comment : </b></label>
@@ -254,8 +266,6 @@
                             <button class="btn btn-success">Submit</button>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -337,9 +347,11 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var probability=$(e.relatedTarget).data('lead-probability');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $('#possibility').val(possibility);
+            $('#probability').val(probability);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
             $.ajax({
                 type : 'post' ,
@@ -384,11 +396,14 @@
                 {
                     if(data >= 10)
                     {
+                        document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
                         document.getElementById('exceed').style.display="inline";
                     }
                     else
                     {
                         document.getElementById('exceed').style.display="none";
+                        document.getElementById('total').style.display="inline";
+                        document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
                     }
                 }
             });
@@ -418,6 +433,18 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},

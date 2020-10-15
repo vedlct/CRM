@@ -25,16 +25,17 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Company Name</th>
-                        <th width="5%">website</th>
+                        <th width="3%">Company Name</th>
+                        <th width="3%">website</th>
                         <th width="4%">Number</th>
-                        <th width="4%">Category</th>
+                        <th width="3%">Category</th>
                         <th width="4%">Country</th>
                         <th width="4%">Marketier</th>
                         <th width="4%">Contact</th>
                         <th width="4%">Status</th>
                         <th width="4%">Possib</th>
-                        <th width="4%">Date</th>
+                        <th width="4%">Probability</th>
+                        <th width="10%">Date</th>
                         <th width="10%">Edit</th>
 
 
@@ -86,7 +87,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div></div>
             </div>
-        </div></div>
+        </div>
 
 
 
@@ -179,11 +180,19 @@
                             <select class="form-control" id="" name="possibility">
                                 @foreach($possibilities as $possibility)
                                     <option value="{{$possibility->possibilityId}}">{{$possibility->possibilityName}}</option>
-
                                 @endforeach
                             </select>
-
                         </div>
+
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Probability:</b></label>
+                            <select class="form-control" id="" name="probability">
+                                @foreach($probabilities as $probability)
+                                    <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <div class="form-group col-md-5">
                             <br><br>
@@ -226,13 +235,6 @@
             </form>
         </div>
     </div>
-
-
-
-
-
-
-
 
     {{--Add Lead Modal For Admin--}}
 
@@ -330,13 +332,19 @@
 
                         </div>
 
+                        <div class="form-group col-md-5" style="">
+                            <label ><b>Probability:</b></label>
+                            <select class="form-control" id="" name="probability">
+                                @foreach($probabilities as $probability)
+                                    <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         {{--<div class="form-group col-md-5">--}}
                             {{--<br><br>--}}
                             {{--<label><b>Contact: </b>&nbsp; </label><input type="checkbox" name="contact">--}}
                         {{--</div>--}}
-
-
-
 
                         <div class="form-group col-md-10">
                             <label class="control-label " ><b>Comments</b></label>
@@ -345,12 +353,8 @@
 
                             {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
 
-                            <textarea name="comment" rows="4"  class="form-control">
-
-
-                </textarea>
+                            <textarea name="comment" rows="4"  class="form-control"></textarea>
                         </div>
-
 
                         <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Insert</button>
 
@@ -362,13 +366,6 @@
             </form>
         </div>
     </div>
-
-
-
-
-
-
-
 
 
     <!--Edit Modal -->
@@ -538,6 +535,15 @@
                                 </select>
                             </div>
 
+                            <div class="form-group col-md-5" style="">
+                                <label ><b>Probability:</b></label>
+                                <select class="form-control" id="" name="probability">
+                                    @foreach($probabilities as $probability)
+                                        <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <label class=""><b>Comment : </b></label>
                                 <textarea class="form-control" rows="3" name="comment" required></textarea>
@@ -565,27 +571,9 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
-
-
-
 @section('bottom')
-
-
-
 
     <script src="{{url('js/select2.min.js')}}"></script>
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
@@ -593,7 +581,6 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-
 
     <script>
 
@@ -673,6 +660,17 @@
                     {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
+
+                        },
+                    },
                     { data: 'created_at', name: 'created_at',defaultContent: ''},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
@@ -754,6 +752,7 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var probability=$(e.relatedTarget).data('lead-probability');
 
 
 
@@ -764,6 +763,7 @@
 
 
             $('#possibility').val(possibility);
+            $('#probability').val(probability);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({

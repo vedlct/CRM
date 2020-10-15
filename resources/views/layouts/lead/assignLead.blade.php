@@ -33,6 +33,7 @@
                         <th>Country</th>
                         <th>Category</th>
                         <th>Possibility</th>
+                        <th>Probability</th>
 
 
                     </tr>
@@ -145,8 +146,17 @@
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'category.categoryName', name: 'category.categoryName' },
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
 
-
+                        },
+                    },
                 ]
             });
         });

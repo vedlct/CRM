@@ -47,6 +47,7 @@
 							  <th width="15%">Company Name</th>
 							  <th>Category</th>
 							  <th>Possibility</th>
+							  <th>Probability</th>
 							  <th>Country</th>
 							  <th width="5%">Contact Person</th>
 							  <th>Contact Number</th>
@@ -67,6 +68,7 @@
 								  <td width="15%">{{$lead->companyName}}</td>
 								  <td>{{$lead->category->categoryName}}</td>
 								  <td>{{$lead->possibility->possibilityName}}</td>
+								  <td>{{$lead->probability->probabilityName}}</td>
 								  <td>{{$lead->country->countryName}}</td>
 								  <td width="5%">{{$lead->personName}}</td>
 									  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
@@ -77,6 +79,7 @@
 									  <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
 										 data-lead-id="{{$lead->leadId}}"
 										 data-lead-possibility="{{$lead->possibilityId}}"
+										 data-lead-probability="{{$lead->probabilityId}}"
 										 data-follow-id="{{$lead->followId}}">
 										  <i class="fa fa-phone" aria-hidden="true"></i></a>
 
@@ -214,12 +217,7 @@
 					  </div>
 				  </div>
 			  </div>
-		  </div> </div>
-
-
-
-
-
+		  </div>
 
 
 
@@ -301,6 +299,15 @@
 											  <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
 										  @endforeach
 
+									  </select>
+								  </div>
+
+								  <div class="form-group col-md-5" style="">
+									  <label ><b>Probability:</b></label>
+									  <select class="form-control" id="probability" name="probability">
+										  @foreach($probabilities as $probability)
+											  <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
+										  @endforeach
 									  </select>
 								  </div>
 
@@ -443,6 +450,7 @@
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
+            var probability=$(e.relatedTarget).data('lead-probability');
             var followup=$(e.relatedTarget).data('follow-id');
 
 
@@ -455,6 +463,7 @@
 
 
             $('#possibility').val(possibility);
+            $('#probability').val(probability);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({
