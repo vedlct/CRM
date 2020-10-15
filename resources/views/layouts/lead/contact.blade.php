@@ -156,6 +156,7 @@
 
 
     <!-- Call Modal -->
+
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
