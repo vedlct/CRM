@@ -186,8 +186,6 @@ Route::post('/team/add', 'TeamController@insertTeam')->name('insertTeam');
 Route::delete('/team/delete/{id}', 'TeamController@deleteTeam')->name('deleteTeam');
 Route::put('/team/update','TeamController@teamUpdate')->name('teamUpdate');
 
-
-
 //Assign member to the Team
 Route::get('/teammanagement','TeamController@teamManagement')->name('teamManagement');
 Route::post('/teammanagement','TeamController@teamAssign')->name('teamAssign');
@@ -199,8 +197,6 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 //Account Setting
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
-
-
 
 //Detached Lead From Team Member
 Route::get('/lead/detached','DetachedLeadController@index')->name('detached');

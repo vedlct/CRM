@@ -225,7 +225,12 @@
 		  <!-- Call Modal -->
 		  <div class="modal" id="my_modal" style="">
 			  <div class="modal-dialog" style="max-width: 60%;">
-
+				  <style>
+					  th.ui-datepicker-week-end,
+					  td.ui-datepicker-week-end {
+						  display: none;
+					  }
+				  </style>
 				  <form class="modal-content" action="{{route('storeFollowupReport')}}" method="post">
 					  <div class="modal-header">
 						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
