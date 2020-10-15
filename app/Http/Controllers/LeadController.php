@@ -1026,6 +1026,7 @@ class LeadController extends Controller
             ->orderBy('leads.leadId','desc');
 
         if ($r->status){
+
             if ($r->status == "newlead"){
 
                 $leads=$leads->whereNOTIn('leads.leadId',function($query){
