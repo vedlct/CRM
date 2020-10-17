@@ -844,7 +844,7 @@ GetIndividualReportController extends Controller
             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('workprogress.userId',$user->id)
-            ->where('workprogress.callingReport',3)
+            ->where('workprogress.callingReport',8)
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
