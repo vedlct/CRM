@@ -186,7 +186,7 @@
 
                         <div class="form-group col-md-5" style="">
                             <label ><b>Probability:</b></label>
-                            <select class="form-control" id="" name="probability">
+                            <select class="form-control" id="probability" name="probability">
                                 @foreach($probabilities as $probability)
                                     <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
                                 @endforeach
@@ -334,7 +334,7 @@
 
                         <div class="form-group col-md-5" style="">
                             <label ><b>Probability:</b></label>
-                            <select class="form-control" id="" name="probability">
+                            <select class="form-control" id="probability" name="probability">
                                 @foreach($probabilities as $probability)
                                     <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
                                 @endforeach
@@ -536,8 +536,8 @@
                             </div>
 
                             <div class="form-group col-md-5" style="">
-                                <label ><b>Probability:</b></label>
-                                <select class="form-control" id="" name="probability">
+                                <label ><b>Probability :</b></label>
+                                <select class="form-control" id="probability2" name="probability">
                                     @foreach($probabilities as $probability)
                                         <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
                                     @endforeach
@@ -763,8 +763,10 @@
 
 
             $('#possibility').val(possibility);
-            $('#probability').val(probability);
-            //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
+
+
+            $('#probability2').val(probability);
+           // $(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
             $.ajax({
                 type : 'post' ,

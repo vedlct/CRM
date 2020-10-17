@@ -4,7 +4,7 @@
 
 
 
-		  <div class="card" style="padding:10px;">
+		  <div class="card" style="padding: 20px">
 
 			  <div class="card-body">
 				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
@@ -68,7 +68,7 @@
 								  <td width="15%">{{$lead->companyName}}</td>
 								  <td>{{$lead->category->categoryName}}</td>
 								  <td>{{$lead->possibility->possibilityName}}</td>
-								  <td>{{$lead->probability->probabilityName}}</td>
+								  <td>@if(!empty($lead->probability->probabilityName)){{$lead->probability->probabilityName}}@endif</td>
 								  <td>{{$lead->country->countryName}}</td>
 								  <td width="5%">{{$lead->personName}}</td>
 									  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
