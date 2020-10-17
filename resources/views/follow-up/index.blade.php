@@ -300,17 +300,19 @@
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label class=""><b>Possibility : </b></label>
 									  <select class="form-control"  name="possibility" id="possibility">
-										  @foreach($possibilities as $p)
+										  <option value=""><b>(select one)</b></option>
+									  @foreach($possibilities as $p)
 											  <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
 										  @endforeach
 
 									  </select>
 								  </div>
 
-								  <div class="form-group col-md-5" style="">
+								  <div class="form-group" style="margin-bottom: 5px">
 									  <label ><b>Probability:</b></label>
 									  <select class="form-control" id="probability" name="probability">
-										  @foreach($probabilities as $probability)
+										  <option value=""><b>(select one)</b></option>
+									  @foreach($probabilities as $probability)
 											  <option value="{{$probability->probabilityId}}">{{$probability->probabilityName}}</option>
 										  @endforeach
 									  </select>
