@@ -206,7 +206,12 @@
     <!-- Call Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
-
+            <style>
+                th.ui-datepicker-week-end,
+                td.ui-datepicker-week-end {
+                    display: none;
+                }
+            </style>
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span
@@ -242,15 +247,17 @@
 
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label class=""><b>Follow Up Date : </b> <span id="exceed"
-                                                                                   style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
-                                    <input class="form-control changedate" id="datepicker" rows="3" name="followup"
-                                           placeholder="pick Date">
+                                    <label class=""><b>Follow Up Date : </b> {{--<span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>--}}</label>
+                                    <input class="form-control changedate" id="datepicker" rows="3" name="followup" placeholder="pick Date">
                                 </div>
 
                                 <div class="form-group col-md-6">
                                     <label class=""><b>Time: </b> </label>
                                     <input class="form-control" name="time" placeholder="pick Time">
+                                </div>
+                                <div class="col-md-12" style="text-align: center; font-size: 14px; font-weight: bold;">
+                                    <span id="exceed" style="color: red; display: none"><i>Already Exceed the limit 10</i></span>
+                                    <span id="total" style="color: #00aa88; display: none"></span>
                                 </div>
                             </div>
 
@@ -410,7 +417,7 @@
 
         //check followup date count
 
-        $('.changedate').on('change', function () {
+       /* $('.changedate').on('change', function () {
             var currentdate = $('.changedate').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -422,6 +429,30 @@
                         document.getElementById('exceed').style.display = "inline";
                     } else {
                         document.getElementById('exceed').style.display = "none";
+                    }
+                }
+            });
+        });*/
+
+        $('.changedate').on('change',function(){
+            var currentdate = $('.changedate').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('followupCheck')}}',
+                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+                success : function(data)
+                {
+                    if(data >= 10)
+                    {
+                        document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
+                        document.getElementById('exceed').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceed').style.display="none";
+                        document.getElementById('total').style.display="inline";
+                        document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
                     }
                 }
             });
