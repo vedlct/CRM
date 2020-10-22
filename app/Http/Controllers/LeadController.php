@@ -1207,7 +1207,6 @@ class LeadController extends Controller
 //            ->limit(1)
             ->first();
 
-
         return Response($follow);
     }
     public function rejectedLeads(){

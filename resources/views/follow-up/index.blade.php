@@ -288,6 +288,7 @@
 									  </div>
 									  <div class="col-md-12" style="text-align: center; font-weight: bold;">
 										  <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>
+										  <span id="total" style="color: #00aa88; display: none"></span>
 									  </div>
 								  </div>
 
@@ -317,7 +318,6 @@
 										  @endforeach
 									  </select>
 								  </div>
-
 
 								  <div class="form-group" style=" margin-bottom: 5px;">
 									  <label class=""><b>Comment : </b></label>
@@ -428,7 +428,7 @@
 
 		// check followup limit
 
-        $('.changedate').on('change',function(){
+       /* $('.changedate').on('change',function(){
             var currentdate = $('.changedate').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -448,7 +448,32 @@
                 }
             });
         });
+*/
 
+
+		$('.changedate').on('change',function(){
+			var currentdate = $('.changedate').val();
+			var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+			$.ajax({
+				type:'post',
+				url:'{{route('followupCheck')}}',
+				data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+				success : function(data)
+				{
+					if(data >= 10)
+					{
+						document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
+						document.getElementById('exceed').style.display="inline";
+					}
+					else
+					{
+						document.getElementById('exceed').style.display="none";
+						document.getElementById('total').style.display="inline";
+						document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
+					}
+				}
+			});
+		});
 
         //for Call Modal
 
@@ -461,13 +486,9 @@
             var followup=$(e.relatedTarget).data('follow-id');
 
 
-
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="followId"]').val(followup);
-
-
 
             $('#possibility').val(possibility);
             $('#probability').val(probability);
