@@ -66,7 +66,6 @@ Route::get('follow-up','FollowupController@index')->name('follow-up.index');
 //Route::get('follow-up/search/{fromdate}/{todate}', 'FollowupController@search')->name('follow-up.search');
 Route::post('follow-up/search', 'FollowupController@search')->name('follow-up.search');
 
-
 Route::post('call/check/lastday','HomeController@checkLastDayCall')->name('check.lastdayCall');
 Route::post('call/check/lastday/comment','HomeController@checkLastDayCallComment')->name('check.lastdayCall.comment');
 //Route::resource('follow-up', 'FollowupController');
@@ -209,6 +208,10 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+
+//supervisor OR Manager OR Admin report
+Route::get('/reportTableCountry','ReportController@reportTableCountry')->name('reportcountryTable');
+
 
 //supervisor OR Manager report
 Route::get('/reportCategory','ReportController@reportCategory')->name('reportCategory');
