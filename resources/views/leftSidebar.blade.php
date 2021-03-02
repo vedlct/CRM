@@ -223,6 +223,14 @@
                             </li>
 
                         @endif
+
+                        @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
+                            <li>
+                                <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu">Country</span></a>
+                            </li>
+
+                        @endif
+
                         @if($userType =='SUPERVISOR')
                             <li>
                                 <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>

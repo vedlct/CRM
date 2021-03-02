@@ -1,9 +1,5 @@
 @extends('main')
-
-
-
 @section('content')
-
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
@@ -422,6 +418,7 @@
                 processing: true,
                 serverSide: true,
                 Filter: true,
+                className: 'select-checkbox',
                 stateSave: true,
                 type:"POST",
                 "ajax":{
@@ -433,8 +430,6 @@
                             d.status=$("#statuschanges").val();
                         }
                     },
-
-
                 },
                 columns: [
                     { data: 'companyName', name: 'leads.companyName'},
@@ -486,6 +481,5 @@
         {{--});--}}
         {{--}--}}
     </script>
-
-
+    <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 @endsection
