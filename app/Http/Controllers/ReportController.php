@@ -1395,6 +1395,229 @@ class ReportController extends Controller
             ->with('notAvailable', $notAvailable);
     }
 
+
+    public function searchCountryTableByDate(Request $r)
+    {
+        $User_Type = Session::get('userType');
+
+
+
+        $countries = Country::all();
+
+//        $failReport = Failreport::select('failreport.*', 'users.firstName')
+//            ->leftJoin('users', 'users.id', 'failreport.userId')
+//            ->whereBetween(DB::raw('DATE(failreport.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//            ->orderBy('failreport.id', 'desc')
+//            ->get();
+
+//        return $failReport;
+
+        $calledThisWeek = Workprogress::select('leads.countryId', DB::raw('count(*) as userCall'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('callingReport', '!=', 6)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+        $newFiles = NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
+            ->get();
+
+
+//        $leadMinedThisWeek = Lead::select('minedBy', DB::raw('count(*) as userLeadMined'))
+//            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//            ->groupBy('minedBy')
+//            ->get();
+
+
+        $followupThisWeek = Workprogress::select('leads.countryId', DB::raw('count(*) as userFollowup'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 4)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+//        $highPosibilitiesThisWeekRa = Lead::select('minedBy', DB::raw('count(*) as userHighPosibilities'))
+//            ->where('filteredPossibility', 3)
+//            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//            ->groupBy('minedBy')
+//            ->get();
+
+
+        $highPosibilitiesThisWeekUser = Possibilitychange::select('leads.countryId', DB::raw('count(*) as userHighPosibilities'))
+            ->leftJoin('leads', 'possibilitychanges.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('possibilitychanges.possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+//        return $highPosibilitiesThisWeekUser;
+
+        $assignedLead = Leadassigned::select('assignTo', 'leads.countryId', DB::raw('count(*) as userAssignedLead'))
+            ->leftJoin('leads', 'leadassigneds.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('assignTo', 'leads.countryId')
+            ->get();
+
+//       return $assignedLead;
+
+//        $assignedLeadRa = Leadassigned::select('assignBy', DB::raw('count(*) as userAssignedLead'))
+//            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+//            ->groupBy('assignBy')
+//            ->get();
+
+//        return $assignedLeadRa;
+
+        $uniqueHighPosibilitiesThisWeek = Possibilitychange::select('leads.countryId', DB::raw('count(DISTINCT possibilitychanges.leadId) as userUniqueHighPosibilities'))
+            ->leftJoin('leads', 'possibilitychanges.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('possibilitychanges.possibilityId', 3)
+            ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+//        return $uniqueHighPosibilitiesThisWeek;
+
+        $testLead = Workprogress::select('leads.countryId', DB::raw('count(workprogress.leadId) as userTestLead'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('progress', 'Test Job')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+//        return $testLead;
+        $contacted = Workprogress::select('leads.countryId', DB::raw('count(*) as userContacted'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+        $emailed = Workprogress::select('leads.countryId', DB::raw('count(*) as userEmailed'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 3)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+        $coldemailed = Workprogress::select('leads.countryId', DB::raw('count(*) as usercoldEmailed'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 8)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+        $other = Workprogress::select('leads.countryId', DB::raw('count(*) as userOther'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 6)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+        $notAvailable = Workprogress::select('leads.countryId', DB::raw('count(*) as userNotAvialable'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('callingReport', 2)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+        $contactedUsa = Workprogress::select('leads.countryId', DB::raw('count(*) as userContactedUsa'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->where('countries.countryName', 'like', '%USA%')
+            ->where('callingReport', 5)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+//        return $contactedUsa;
+
+        $closing = Workprogress::select('leads.countryId', DB::raw('count(*) as userClosing'))
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->where('progress', 'Closing')
+            ->groupBy('leads.countryId')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->get();
+
+//        return $closing;
+
+        $newCall = NewCall::leftJoin('workprogress', 'workprogress.progressId', 'new_call.progressId')
+            ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+            ->leftJoin('countries', 'countries.countryId', 'leads.countryId')
+            ->where('workprogress.callingReport', 5)
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$r->fromDate, $r->toDate])
+
+            ->groupBy('leads.countryId')
+            ->get();
+
+
+        $testLeadForRa = Workprogress::select('minedBy')
+            ->where('progress', 'Test Job')
+            ->leftJoin('leads', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('users', 'users.id', 'leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$r->fromDate, $r->toDate])
+            ->get();
+
+
+        return view('report.countryTable')
+            ->with('countries', $countries)
+            ->with('contactedUsa', $contactedUsa)
+            ->with('contacted', $contacted)
+            ->with('testLead', $testLead)
+            ->with('uniqueHighPosibilitiesThisWeek', $uniqueHighPosibilitiesThisWeek)
+            ->with('assignedLead', $assignedLead)
+//            ->with('assignedLeadRa', $assignedLeadRa)
+            ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
+//            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
+            ->with('followupThisWeek', $followupThisWeek)
+//            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('calledThisWeek', $calledThisWeek)
+            ->with('closing', $closing)
+//            ->with('usersRa', $usersRa)
+            ->with('newCall', $newCall)
+            ->with('newFiles', $newFiles)
+            ->with('testLeadForRa', $testLeadForRa)
+//            ->with('failReport', $failReport)
+            ->with('emailed', $emailed)
+            ->with('coldemailed', $coldemailed)
+            ->with('other', $other)
+            ->with('fromDate', $r->fromDate)
+            ->with('toDate', $r->toDate)
+            ->with('notAvailable', $notAvailable);
+
+
+    }
+
+
+
     public function individualCall($id)
     {
         $report = Workprogress::where('userId', $id)->count();

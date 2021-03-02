@@ -24,7 +24,7 @@
 
     <div class="card" style="padding:10px;">
         <label><b>Search</b></label>
-        <form method="post" action="{{route('searchTableByDate')}}">
+        <form method="post" action="{{route('searchCountryTableByDate')}}">
             {{csrf_field()}}
             <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" >
             <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" >
