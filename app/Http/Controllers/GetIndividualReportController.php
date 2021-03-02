@@ -117,20 +117,20 @@ GetIndividualReportController extends Controller
 
                 $table .= '<td><select class="form-control"  name="aprove" id="' . $l->changeId . '" data-changeid="' . $l->changeId . '" onChange="test(this)">';
                 if ($l->approval == 1) {
-                    $table .= '<option value="">select</option> 
+                    $table .= '<option value="">select</option>
                         <option value="1" selected>Approve</option>
                         <option value="0">Decline</option>
                       </td>
                     </tr>';
                 } else if ($l->approval == 2) {
-                    $table .= '<option value="">select</option> 
+                    $table .= '<option value="">select</option>
                         <option value="1" >Approve</option>
                         <option value="0" selected>Decline</option>
                       </td>
                     </tr>';
 
                 } else if ($l->approval == null) {
-                    $table .= '<option value="" selected>select</option> 
+                    $table .= '<option value="" selected>select</option>
                         <option value="1" >Approve</option>
                         <option value="0">Decline</option>
                       </td>
@@ -222,7 +222,7 @@ GetIndividualReportController extends Controller
                 $table.= '<td></td>';
             }
             $table.= '</td><td>'.$l->created_at.'</td>';
-         
+
 //            }
 
             $comment='';
@@ -232,20 +232,20 @@ GetIndividualReportController extends Controller
 
                 $table .= '<td><select class="form-control"  name="aprove" id="' . $l->changeId . '" data-changeid="' . $l->changeId . '" onChange="test(this)">';
                 if ($l->approval == 1) {
-                    $table .= '<option value="">select</option> 
+                    $table .= '<option value="">select</option>
                         <option value="1" selected>Approve</option>
                         <option value="0">Decline</option>
                       </td>
                     </tr>';
                 } else if ($l->approval == 2) {
-                    $table .= '<option value="">select</option> 
+                    $table .= '<option value="">select</option>
                         <option value="1" >Approve</option>
                         <option value="0" selected>Decline</option>
                       </td>
                     </tr>';
 
                 } else if ($l->approval == null) {
-                    $table .= '<option value="" selected>select</option> 
+                    $table .= '<option value="" selected>select</option>
                         <option value="1" >Approve</option>
                         <option value="0">Decline</option>
                       </td>
@@ -1122,6 +1122,47 @@ GetIndividualReportController extends Controller
         $table.='</tbody></table>';
         return Response($table);
 
+    }
+
+    public function getGateKeeper(Request $r){
+        $date = Carbon::now();
+        $fromDate=$date->startOfWeek()->format('Y-m-d');
+        $toDate=$date->endOfWeek()->format('Y-m-d');
+
+        if($r->fromdate !=null && $r->todate !=null){
+            $fromDate=$r->fromdate;
+            $toDate=$r->todate;
+        }
+        $user=User::findOrFail($r->userid);
+        $leads = Lead::select('leads.*','workprogress.comments','workprogress.created_at','callingreports.report')
+            ->with('country','category','possibility')
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
+            ->where('workprogress.userId',$user->id)
+            ->where('workprogress.callingReport',9)
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
+
+        $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>CompanyName</th>
+                 <th>Possibility</th>
+                 <th>Country</th>
+                 <th>Comment</th>
+                 <th>Report</th>
+                 <th>Call Date</th>
+      </tr></thead>
+    <tbody>';
+        foreach ($leads as $l){
+            $table.='<tr>
+                    <td>'.$l->companyName.'</td>
+                    <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->comments.'</td>
+                    <td>'.$l->report.'</td>
+                    <td>'.$l->created_at.'</td>
+                    </tr>';
+        }
+        $table.='</tbody></table>';
+        return Response($table);
     }
 
 

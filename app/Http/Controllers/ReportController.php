@@ -606,6 +606,7 @@ class ReportController extends Controller
             ->get();
 
 
+
         $newFiles = NewFile::whereBetween(DB::raw('DATE(created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
             ->get();
 
@@ -724,6 +725,13 @@ class ReportController extends Controller
             ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->get();
 
+        $gatekeeper = Workprogress::select('userId', DB::raw('count(*) as gatekeeper'))
+            ->where('callingReport', 9)
+            ->groupBy('userId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            ->get();
+
+
 
         $testLeadForRa = Workprogress::select('minedBy')
             ->where('progress', 'Test Job')
@@ -757,11 +765,13 @@ class ReportController extends Controller
             ->with('emailed', $emailed)
             ->with('coldemailed', $coldemailed)
             ->with('other', $other)
-            ->with('notAvailable', $notAvailable);
+            ->with('notAvailable', $notAvailable)
+            ->with('gatekeeper', $gatekeeper);
     }
 
     public function searchTableByDate(Request $r)
     {
+
         $User_Type = Session::get('userType');
 
 
@@ -909,6 +919,13 @@ class ReportController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->groupBy('userId')
             ->get();
+        $gatekeeper = Workprogress::select('userId', DB::raw('count(*) as gatekeeper'))
+            ->where('callingReport', 9)
+            ->groupBy('userId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+            ->get();
+
+
 
 //            USA
         $contactedUsa = Workprogress::select('userId', DB::raw('count(*) as userContactedUsa'))
@@ -970,7 +987,8 @@ class ReportController extends Controller
             ->with('emailed', $emailed)
             ->with('coldemailed', $coldemailed)
             ->with('other', $other)
-            ->with('notAvailable', $notAvailable);
+            ->with('notAvailable', $notAvailable)
+            ->with('gatekeeper', $gatekeeper);
 
 
     }

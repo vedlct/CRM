@@ -255,6 +255,7 @@ Route::post('/getCountryLead','GetIndividualReportController@getCountryLead')->n
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
+Route::post('/getGateKeeper','GetIndividualReportController@getGateKeeper')->name('getgatekeeper');
 
 
 
