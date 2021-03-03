@@ -63,7 +63,7 @@ GetIndividualCountryReportController extends Controller
                 ->leftJoin('possibilitychanges', 'leads.leadId', 'possibilitychanges.leadId')
                 ->where('leads.countryId',$country->countryId)
                 ->where('possibilitychanges.possibilityId',3)
-                ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])
                 ->get();
 
 
@@ -179,7 +179,7 @@ GetIndividualCountryReportController extends Controller
                 ->where('leads.countryId',$country->countryId)
                 ->where('possibilitychanges.possibilityId',3)
                 ->groupBy('possibilitychanges.leadId')
-                ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(possibilitychanges.created_at)'), [$fromDate,$toDate])->get();
 
 //        }
 
@@ -298,7 +298,7 @@ GetIndividualCountryReportController extends Controller
                 ->where('leads.countryId',$country->countryId)
                 ->where('workprogress.callingReport','!=',null)
                 ->where('workprogress.callingReport','!=',6)
-                ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+                ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -339,7 +339,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',4)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -381,7 +381,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.progress','Test Job')
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -425,7 +425,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.progress','Closing')
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -604,7 +604,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
             ->leftJoin('users','users.id','leadassigneds.assignBy')
             ->where('leads.countryId',$country->countryId)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'),[$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'),[$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>Assign By</th>
@@ -649,7 +649,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',5)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -693,7 +693,7 @@ GetIndividualCountryReportController extends Controller
             ->where('countries.countryName','like','%USA%')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',5)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -735,7 +735,7 @@ GetIndividualCountryReportController extends Controller
             ->where('leads.countryId',$r->countryid)
 
             ->where('workprogress.callingReport',5)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(new_call.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -769,8 +769,8 @@ GetIndividualCountryReportController extends Controller
             ->where('progress','Test Job')
             ->leftJoin('leads','leads.leadId','workprogress.leadId')
             ->leftJoin('users','users.id','leads.minedBy')
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])
             ->where('leads.countryId',$r->countryid)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])
             ->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
@@ -806,7 +806,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',3)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -848,7 +848,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',8)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -1062,7 +1062,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',6)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
@@ -1102,7 +1102,7 @@ GetIndividualCountryReportController extends Controller
             ->leftJoin('callingreports', 'callingreports.callingReportId', 'workprogress.callingReport')
             ->where('leads.countryId',$country->countryId)
             ->where('workprogress.callingReport',2)
-            ->whereBetween(DB::raw('DATE(leads.created_at)'), [$fromDate,$toDate])->get();
+            ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
