@@ -1484,7 +1484,7 @@ class ReportController extends Controller
             ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
             ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'), [$r->fromDate, $r->toDate])
 
-            ->groupBy('assignTo', 'leads.countryId')
+            ->groupBy('leads.countryId')
             ->get();
 
 //       return $assignedLead;

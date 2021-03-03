@@ -78,8 +78,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$c->userContacted}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$c->userContacted}}</a>
                                         @php($value1=0)
                                         @break
                                     @endif
@@ -97,8 +97,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$fu->userFollowup}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$fu->userFollowup}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -115,8 +115,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$uc->userEmailed}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$uc->userEmailed}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -132,8 +132,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$uc->usercoldEmailed}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$uc->usercoldEmailed}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -149,8 +149,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$uc->userNotAvialable}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$uc->userNotAvialable}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -166,8 +166,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$value=$uc->userCall}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$value=$uc->userCall}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -176,15 +176,17 @@
                             </td>
                             <td>
                                 @php($value=0)
+
                                 @foreach($assignedLead as $al)
+
                                     @if($al->countryId == $country->countryId)
                                         <a href="#" class="highpossibility" onclick="leadassigned(this)"
                                            @if(isset($fromDate) && isset($toDate))
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$al->userAssignedLead}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$al->userAssignedLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -201,8 +203,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}">{{$value=$hp->userHighPosibilities}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$hp->userHighPosibilities}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -219,8 +221,8 @@
                                            data-date-from="{{$fromDate}}"
                                            data-date-to="{{$toDate}}"
                                            @endif
-                                           data-user-id="{{$country->countryId}}"
-                                           data-user-name="{{$country->countryName}}"> {{$value=$tl->userTestLead}}</a>
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}"> {{$value=$tl->userTestLead}}</a>
                                         @break
                                     @endif
                                 @endforeach
@@ -385,20 +387,20 @@
         });
 
        function totalEmail(x){
-           var id = $(x).data('user-id');
+           var id = $(x).data('country-id');
                    @if(isset($fromDate) && isset($toDate))
            var from=$(x).data('date-from');
            var to=$(x).data('date-to');
                    @endif
            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
+           var countryName=$(x).data('country-name');
            $.ajax({
                type:'POST',
-               url:'{{route('getEmailIndividual')}}',
+               url:'{{route('getEmailIndividualCountry')}}',
                @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+               data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                @else
-               data:{_token: CSRF_TOKEN,'userid':id},
+               data:{_token: CSRF_TOKEN,'countryid':id},
                @endif
                cache: false,
                success:function(data) {
@@ -422,20 +424,20 @@
        }
 
         function totalcoldEmail(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
             @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
             @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getcoldEmailIndividual')}}',
+                url:'{{route('getcoldEmailIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -443,7 +445,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Emailed');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -460,20 +462,20 @@
 
 
         function totalOther(x){
-           var id = $(x).data('user-id');
+           var id = $(x).data('country-id');
                    @if(isset($fromDate) && isset($toDate))
            var from=$(x).data('date-from');
            var to=$(x).data('date-to');
                    @endif
            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
+           var countryName=$(x).data('country-name');
            $.ajax({
                type:'POST',
-               url:'{{route('getOtherIndividual')}}',
+               url:'{{route('getOtherIndividualCountry')}}',
                @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+               data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                @else
-               data:{_token: CSRF_TOKEN,'userid':id},
+               data:{_token: CSRF_TOKEN,'countryid':id},
                @endif
                cache: false,
                success:function(data) {
@@ -481,7 +483,7 @@
                    $('#highPossibility').modal({show:true});
                    $('#label').html('Other');
                    $('#txtHint').html(data);
-                   $('#name').html(userName);
+                   $('#name').html(countryName);
                    @if(Auth::user()->typeId ==10)
                    $('#myTable').DataTable({
                        dom:'Bfrtip',
@@ -497,21 +499,21 @@
        }
 
        function totalNotAvailable(x){
-           var id = $(x).data('user-id');
+           var id = $(x).data('country-id');
                    @if(isset($fromDate) && isset($toDate))
            var from=$(x).data('date-from');
            var to=$(x).data('date-to');
                    @endif
            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-           var userName=$(x).data('user-name');
+           var countryName=$(x).data('country-name');
 
            $.ajax({
                type:'POST',
-               url:'{{route('getNotAvailableIndividual')}}',
+               url:'{{route('getNotAvailableIndividualCountry')}}',
                @if(isset($fromDate) && isset($toDate))
-               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+               data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                @else
-               data:{_token: CSRF_TOKEN,'userid':id},
+               data:{_token: CSRF_TOKEN,'countryid':id},
                @endif
                cache: false,
                success:function(data) {
@@ -519,7 +521,7 @@
                    $('#highPossibility').modal({show:true});
                    $('#label').html('Not Available');
                    $('#txtHint').html(data);
-                   $('#name').html(userName);
+                   $('#name').html(countryName);
                    @if(Auth::user()->typeId ==10)
                    $('#myTable').DataTable({
                        dom:'Bfrtip',
@@ -536,20 +538,20 @@
        }
 
         function highpossibility(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getHighPossibilityIndividual')}}',
+                url:'{{route('getHighPossibilityIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -557,7 +559,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -607,20 +609,20 @@
         }
 
         function highpossibilityUn(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getHighPossibilityUnIndividual')}}',
+                url:'{{route('getHighPossibilityUnIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -628,7 +630,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('High Possibility');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -643,20 +645,20 @@
             });
         }
         function totalcall(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getCallIndividual')}}',
+                url:'{{route('getCallIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -664,7 +666,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Total Call');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -679,20 +681,20 @@
             });
         }
         function leadmine(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getMineIndividual')}}',
+                url:'{{route('getMineIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -700,7 +702,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Mined');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -716,20 +718,20 @@
         }
 
         function newFile(x) {
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getFileCountIndividual')}}',
+                url:'{{route('getFileCountIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -737,7 +739,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('File Count');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -754,20 +756,20 @@
         }
 
         function leadassigned(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getAssignedLeadIndividual')}}',
+                url:'{{route('getAssignedLeadIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -775,7 +777,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -790,20 +792,20 @@
             });
         }
         function testlead(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getTestIndividual')}}',
+                url:'{{route('getTestIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -811,7 +813,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -827,20 +829,20 @@
         }
         function closelead(x){
 
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getClosingIndividual')}}',
+                url:'{{route('getClosingIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -848,7 +850,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -863,20 +865,20 @@
             });
         }
         function getContactedIndividual(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getContactedIndividual')}}',
+                url:'{{route('getContactedIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -884,7 +886,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -899,20 +901,20 @@
             });
         }
         function getContactedUsaIndividual(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getContactedUsaIndividual')}}',
+                url:'{{route('getContactedUsaIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -920,7 +922,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Contacted Leads');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -935,20 +937,20 @@
             });
         }
         function followup(x){
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getFollowupIndividual')}}',
+                url:'{{route('getFollowupIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -956,7 +958,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Lead Assigned');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
 
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
@@ -975,20 +977,20 @@
         }
 
         function newCall(x) {
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
             $.ajax({
                 type:'POST',
-                url:'{{route('getNewCallIndividual')}}',
+                url:'{{route('getNewCallIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -996,7 +998,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('New Call');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                      @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
@@ -1030,22 +1032,22 @@
 
 
         function testFileRa(x) {
-            var id = $(x).data('user-id');
+            var id = $(x).data('country-id');
                     @if(isset($fromDate) && isset($toDate))
             var from=$(x).data('date-from');
             var to=$(x).data('date-to');
                     @endif
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var userName=$(x).data('user-name');
+            var countryName=$(x).data('country-name');
 
             // alert(id);
             $.ajax({
                 type:'POST',
-                url:'{{route('getTestFileRaIndividual')}}',
+                url:'{{route('getTestFileRaIndividualCountry')}}',
                 @if(isset($fromDate) && isset($toDate))
-                data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+                data:{_token: CSRF_TOKEN,'countryid':id,'fromdate':from,'todate':to},
                 @else
-                data:{_token: CSRF_TOKEN,'userid':id},
+                data:{_token: CSRF_TOKEN,'countryid':id},
                 @endif
                 cache: false,
                 success:function(data) {
@@ -1053,7 +1055,7 @@
                     $('#highPossibility').modal({show:true});
                     $('#label').html('Test Call');
                     $('#txtHint').html(data);
-                    $('#name').html(userName);
+                    $('#name').html(countryName);
                     @if(Auth::user()->typeId ==10)
                     $('#myTable').DataTable({
                         dom:'Bfrtip',
