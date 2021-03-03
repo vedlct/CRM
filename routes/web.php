@@ -261,9 +261,6 @@ Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmai
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
 
-
-
-
 Route::post('new-file/update','GetIndividualReportController@updateNewFile')->name('update.newFile');
 
 
@@ -274,6 +271,45 @@ Route::post('/getFollowupIndividual','GetIndividualReportController@getFollowupI
 Route::post('/getContactedIndividual','GetIndividualReportController@getContactedIndividual')->name('getContactedIndividual');
 Route::post('/getContactedUsaIndividual','GetIndividualReportController@getContactedUsaIndividual')->name('getContactedUsaIndividual');
 Route::post('/approval','GetIndividualReportController@approval')->name('approval');
+
+
+
+//Report Individual Country from Report Table
+Route::post('/getHighPossibilityIndividualCountry','GetIndividualCountryReportController@getHighPossibilityIndividualCountry')->name('getHighPossibilityIndividualCountry');
+Route::post('/getHighPossibilityUnIndividualCountry','GetIndividualCountryReportController@getHighPossibilityUnIndividualCountry')->name('getHighPossibilityUnIndividualCountry');
+Route::post('/getCallIndividualCountry','GetIndividualCountryReportController@getCallIndividualCountry')->name('getCallIndividualCountry');
+Route::post('/getMineIndividualCountry','GetIndividualCountryReportController@getMineIndividualCountry')->name('getMineIndividualCountry');
+Route::post('/getFileCountIndividualCountry','GetIndividualCountryReportController@getFileCountIndividualCountry')->name('getFileCountIndividualCountry');
+Route::post('/getNewCallIndividualCountry','GetIndividualCountryReportController@getNewCallIndividualCountry')->name('getNewCallIndividualCountry');
+Route::post('/getTestFileRaIndividualCountry','GetIndividualCountryReportController@getTestFileRaIndividualCountry')->name('getTestFileRaIndividualCountry');
+
+
+//followup report
+Route::post('/getNotDoneFollowupCountry','GetIndividualCountryReportController@getNotDoneFollowupCountry')->name('getNotDoneFollowupCountry');
+Route::post('/getAllFollowupCountry','GetIndividualCountryReportController@getAllFollowupCountry')->name('getAllFollowupCountry');
+
+
+Route::post('/getEmailIndividualCountry','GetIndividualCountryReportController@getEmailIndividualCountry')->name('getEmailIndividualCountry');
+Route::post('/getCategoryLeadCountry','GetIndividualCountryReportController@getCategoryLeadCountry')->name('getCategoryLeadCountry');
+Route::post('/getStatusLeadCountry','GetIndividualCountryReportController@getStatusLeadCountry')->name('getStatusLeadCountry');
+Route::post('/getCountryLeadCountry','GetIndividualCountryReportController@getCountryLeadCountry')->name('getCountryLeadCountry');
+Route::post('/getcoldEmailIndividualCountry','GetIndividualCountryReportController@getcoldEmailIndividualCountry')->name('getcoldEmailIndividualCountry');
+Route::post('/getOtherIndividualCountry','GetIndividualCountryReportController@getOtherIndividualCountry')->name('getOtherIndividualCountry');
+Route::post('/getNotAvailableIndividualCountry','GetIndividualCountryReportController@getNotAvailableIndividualCountry')->name('getNotAvailableIndividualCountry');
+
+
+
+
+Route::post('new-file/updateCountry','GetIndividualCountryReportController@updateNewFile')->name('update.newFile');
+
+
+Route::post('/getAssignedLeadIndividualCountry','GetIndividualCountryReportController@getAssignedLeadIndividualCountry')->name('getAssignedLeadIndividualCountry');
+Route::post('/getTestIndividualCountry','GetIndividualCountryReportController@getTestIndividualCountry')->name('getTestIndividualCountry');
+Route::post('/getClosingIndividualCountry','GetIndividualCountryReportController@getClosingIndividualCountry')->name('getClosingIndividualCountry');
+Route::post('/getFollowupIndividualCountry','GetIndividualCountryReportController@getFollowupIndividualCountry')->name('getFollowupIndividualCountry');
+Route::post('/getContactedIndividualCountry','GetIndividualCountryReportController@getContactedIndividualCountry')->name('getContactedIndividualCountry');
+Route::post('/getContactedUsaIndividualCountry','GetIndividualCountryReportController@getContactedUsaIndividualCountry')->name('getContactedUsaIndividualCountry');
+Route::post('/approvalCountry','GetIndividualCountryReportController@approval')->name('approval');
 
 
 //Graph
