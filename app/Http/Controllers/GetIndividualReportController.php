@@ -302,6 +302,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -312,6 +313,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -343,6 +345,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                 <th>Created At</th>
@@ -352,6 +355,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                      <td>'.$l->comments.'</td>
                     <td>'.$l->created_at.'</td>
@@ -385,6 +389,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -395,6 +400,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -429,6 +435,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -439,6 +446,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -652,6 +660,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -662,6 +671,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -696,6 +706,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -706,6 +717,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -808,6 +820,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -818,6 +831,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -850,6 +864,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -860,6 +875,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
@@ -1103,6 +1119,7 @@ GetIndividualReportController extends Controller
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
                  <th>Possibility</th>
+                 <th>Category</th>
                  <th>Country</th>
                  <th>Comment</th>
                  <th>Report</th>
@@ -1113,6 +1130,7 @@ GetIndividualReportController extends Controller
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
                     <td>'.$l->report.'</td>
