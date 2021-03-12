@@ -37,9 +37,16 @@ class LeadController extends Controller
     public function allLeads(Request $r){
         $leads=Lead::with('country','category','mined','status','contact','possibility', 'probability')
             ->orderBy('leadId','desc');
+
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
+//                    if (empty($lead->mined->firstName )){
+//                        $minedby = "";
+//                    }else{
+//                        $minedby =  $lead->mined->firstName;
+//                    }
+
                     return ' <form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
@@ -51,7 +58,9 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
-                                           data-lead-mined="'.$lead->mined->firstName.'"
+
+                                            data-lead-mined="'. $lead->mined->firstName  .' "
+
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
@@ -62,17 +71,19 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                      
+
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
+
+
                     if($lead->contactedUserId==Auth::user()->id){
                         return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="'.$lead->leadId.'"
                                    data-lead-possibility="'.$lead->possibilityId.'"
                                    data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -91,14 +102,15 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                 
+
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
                     else{
+
                         return '<a href="#" class="btn btn-danger btn-sm" >
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -117,7 +129,7 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                              
+
                                          ><i class="fa fa-comments"></i></a>';
                     }}
             })
@@ -134,7 +146,6 @@ class LeadController extends Controller
         $probabilities=Probability::get();
         $callReports = Callingreport::get();
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
-
         return view('layouts.lead.add')
             ->with('categories',$cats)
             ->with('countries',$countries)
@@ -213,7 +224,7 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                      
+
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
@@ -223,7 +234,7 @@ class LeadController extends Controller
                                    data-lead-possibility="'.$lead->possibilityId.'"
                                    data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -242,14 +253,14 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                 
+
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
                     else{
                         return '<a href="#" class="btn btn-danger btn-sm" >
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -268,7 +279,7 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                              
+
                                          ><i class="fa fa-comments"></i></a>';
                     }}
             })
@@ -280,6 +291,15 @@ class LeadController extends Controller
         $number=Lead::where('contactNumber',$r->number)->count();
         return Response($number);
     }
+    public function websiteCheck(Request $r){
+        $website=Lead::where('website',$r->website)->count();
+        return Response($website);
+    }
+    public function comapanyNameCheck(Request $r){
+        $comapanyname=Lead::where('companyName',$r->companyName)->count();
+        return Response($comapanyname);
+    }
+
     public function store(Request $r){
         //Validating The input Filed
         $this->validate($r,[
@@ -552,7 +572,7 @@ class LeadController extends Controller
                                  <form method="post" action="'.route('rejectStore').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                    <button class="btn btn-danger btn-sm">X</button></form>           
+                                    <button class="btn btn-danger btn-sm">X</button></form>
                                     ';
                 }
                 else{
@@ -572,7 +592,7 @@ class LeadController extends Controller
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
                                            data-lead-comments="'.$lead->comments.'"
-                                           
+
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     </form>
@@ -580,7 +600,7 @@ class LeadController extends Controller
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                     <button class="btn btn-danger btn-sm">X</button></form>
-                                    
+
                                     ';}})
             ->make(true);
     }
@@ -709,7 +729,7 @@ class LeadController extends Controller
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
                                            data-lead-comments="'.$lead->comments.'"
-                                           
+
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     </form>';
@@ -943,6 +963,7 @@ class LeadController extends Controller
 
     //ADD Contacted
     public function addContacted(Request $r){
+
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
         $lead->statusId=7;

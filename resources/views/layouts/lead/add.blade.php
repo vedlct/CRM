@@ -111,18 +111,19 @@
                         {{csrf_field()}}
                         <div class="form-group col-md-5">
                             <label class="control-label " ><b>Company Name</b></label>
-
+                            <span id="exceedcompany" style="color:red;display: none"><i>This Company Name already exist</i></span></label>
                             {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
 
-                            <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" required>
+                            <input type="text" class="form-control companyNamecheck" id="" placeholder="Enter Company Name" name="companyName" required>
 
                         </div>
 
 
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Website</b></label>
+                            <span id="exceedwebsite" style="color:red;display: none"><i>This Website already exist</i></span></label>
                             {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="website" placeholder="Enter url" >
+                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" >
 
                         </div>
 
@@ -255,18 +256,19 @@
                         {{csrf_field()}}
                         <div class="form-group col-md-5">
                             <label class="control-label " ><b>Company Name</b></label>
-
+                            <span id="exceedcompany" style="color:red;display: none"><i>This number already exist</i></span></label>
                             {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
 
-                            <input type="text" class="form-control" id="" placeholder="Enter Company Name" name="companyName" required>
+                            <input type="text" class="form-control companyNamecheck" id="" placeholder="Enter Company Name" name="companyName" required>
 
                         </div>
 
 
                         <div class="form-group col-md-5">
                             <label class="control-label" ><b>Website</b></label>
+                            <span id="exceedwebsite" style="color:red;display: none"><i>This number already exist</i></span></label>
                             {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control" name="website" placeholder="Enter url" >
+                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" >
 
                         </div>
 
@@ -626,6 +628,48 @@
                     else
                     {
                         document.getElementById('exceed').style.display="none";
+                    }
+                }
+            });
+        });
+        $('.websitecheck').bind('input propertychange',function(){
+            var website = $('.websitecheck').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('websiteCheck')}}',
+                data:{_token: CSRF_TOKEN,'website':website},
+                success : function(data)
+                {
+
+                    if(data >0)
+                    {
+                        document.getElementById('exceedwebsite').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceedwebsite').style.display="none";
+                    }
+                }
+            });
+        });
+        $('.companyNamecheck').bind('input propertychange',function(){
+            var companyName = $('.companyNamecheck').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type:'post',
+                url:'{{route('comapanyNameCheck')}}',
+                data:{_token: CSRF_TOKEN,'companyName':companyName},
+                success : function(data)
+                {
+
+                    if(data >0)
+                    {
+                        document.getElementById('exceedcompany').style.display="inline";
+                    }
+                    else
+                    {
+                        document.getElementById('exceedcompany').style.display="none";
                     }
                 }
             });

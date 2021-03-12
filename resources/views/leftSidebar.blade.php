@@ -189,9 +189,11 @@
 
 
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
+                    @if(Auth::user()->areaType != "usa" )
                     <li>
                         <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                     </li>
+                    @endif
                 @endif
 
                 @if($userType =='USER' || $userType =='MANAGER')
@@ -218,17 +220,20 @@
                                 <span class="hide-menu">Value</span></a>
                         </li>
                         @if($userType == 'MANAGER')
+                            @if(Auth::user()->areaType != "usa" )
                             <li>
                                 <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
                             </li>
+                            @endif
 
                         @endif
 
                         @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
+                            @if(Auth::user()->areaType != "usa" )
                             <li>
                                 <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu">Country</span></a>
                             </li>
-
+                            @endif
                         @endif
 
                         @if($userType =='SUPERVISOR')
@@ -258,7 +263,7 @@
                 </li>
 
                 @if($userType =='SUPERVISOR')
-
+                    @if(Auth::user()->areaType != "usa" )
                     <li class="treeview">
                         <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
                             <span class="pull-right-container">
@@ -278,6 +283,7 @@
 
                         </ul>
                     </li>
+                    @endif
                 @endif
 
                 {{--@if($userType =='RA' )--}}
@@ -285,19 +291,23 @@
                 {{--@endif--}}
 
                 @if($userType=='MANAGER')
+                    @if(Auth::user()->areaType != "usa" )
                     <li>
                         <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
 
                     </li>
+                    @endif
                 @endif
 
                 @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
+                    @if(Auth::user()->areaType != "usa" )
                     <li>
                         <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">User Management</span></a>
                     </li>
                     <li>
                         <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i><span class="hide-menu">Monthly Target Log</span></a>
                     </li>
+                @endif
                 @endif
 
                 @if(Auth::user()->typeId !=10)

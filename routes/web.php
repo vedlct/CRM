@@ -37,6 +37,8 @@ Route::get('/system','SystemManagementController@index')->name('system');
 Route::view('/lead', 'layouts.lead.add');
 
 Route::post('/numberCheck','LeadController@numberCheck')->name('numberCheck');
+Route::post('/websiteCheck','LeadController@websiteCheck')->name('websiteCheck');
+Route::post('/comapanyNameCheck','LeadController@comapanyNameCheck')->name('comapanyNameCheck');
 
 Auth::routes();
 
