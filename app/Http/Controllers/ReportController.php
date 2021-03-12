@@ -1275,7 +1275,7 @@ class ReportController extends Controller
             ->leftJoin('leads', 'leadassigneds.leadId', 'leads.leadId')
             ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
             ->whereBetween(DB::raw('DATE(leadassigneds.created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-            ->groupBy('assignTo', 'leads.countryId')
+            ->groupBy('leads.countryId')
             ->get();
 
 //       return $assignedLead;

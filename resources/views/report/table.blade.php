@@ -980,7 +980,7 @@
                 success:function(data) {
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
-                    $('#label').html('Lead Assigned');
+                    $('#label').html('Test Lead');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     @if(Auth::user()->typeId ==10)
@@ -1017,7 +1017,7 @@
                 success:function(data) {
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
-                    $('#label').html('Lead Assigned');
+                    $('#label').html('Close Lead');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
                     @if(Auth::user()->typeId ==10)
@@ -1125,7 +1125,7 @@
                 success:function(data) {
 //                    console.log(data);
                     $('#highPossibility').modal({show:true});
-                    $('#label').html('Lead Assigned');
+                    $('#label').html('Followup Lead');
                     $('#txtHint').html(data);
                     $('#name').html(userName);
 
