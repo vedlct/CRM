@@ -160,6 +160,7 @@ Route::post('lead/clientleads/insert', 'ClientLeadController@insert')->name('cli
 //Contacted Lead
 Route::get('/contacted', 'LeadController@contacted')->name('contacted');
 Route::post('/contacted','LeadController@addContacted')->name('addContacted');
+Route::post('contacted/status','LeadController@contactedStatus')->name('contactedStatus');
 Route::post('/addContactedTemp','LeadController@addContactedTemp')->name('addContactedTemp');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
 

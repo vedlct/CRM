@@ -63,7 +63,6 @@
 
                     @endforeach
 
-
                 </select>
             </div>
 
@@ -180,6 +179,7 @@
 
                 chkArray[i] = $(this).val();
             });
+            //alert(chkArray)
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             // $("#inp").val(JSON.stringify(chkArray));
             // $( "#assign-form" ).submit();

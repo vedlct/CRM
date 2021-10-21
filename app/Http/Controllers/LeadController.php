@@ -530,6 +530,51 @@ class LeadController extends Controller
             ->with('categories',$categories)
             ->with('country',$country);
     }
+
+
+    public function contactedStatus(Request $r){
+
+        if($r->ajax()){
+            foreach ($r->leadId as $lead){
+
+
+                
+                $l=Lead::findOrFail($lead);
+                $l->statusId=$r->status;
+                if($l->contactedUserId == Auth::user()->id){
+                    $l->contactedUserId =null;
+                    //$lead->save();
+                   
+                }
+                $l->save();
+
+                $assignId=Leadassigned::select('assignId')
+                ->where('leadId',$lead)
+                ->where('assignTo',Auth::user()->id)
+                ->where('leaveDate',null)
+                ->get();
+
+
+                foreach ($assignId as $assignId){
+
+          
+                $leave=Leadassigned::find($assignId->assignId);
+                $leave->leaveDate=date('Y-m-d');
+                $leave->save();
+                $l=Lead::findOrFail($leave->leadId);
+                $l->leadAssignStatus=0;
+                $l->save();
+            }
+           
+            }
+
+            return Response('true');
+        }
+    }
+
+
+
+
     public function getFilterLeads(Request $request){
         $leads=(new Lead())->showNotAssignedLeads();
         return DataTables::eloquent($leads)
@@ -984,6 +1029,7 @@ class LeadController extends Controller
 
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
+                ->where('statusId','!=',6)
                 ->get();
             $country=Country::get();
 
@@ -1092,8 +1138,11 @@ class LeadController extends Controller
             ->addColumn('call', function ($lead){
                 return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
             })
-
-            ->addColumn('callreport', function ($lead) use($r){
+            ->addColumn('check', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })
+          
+           ->addColumn('callreport', function ($lead) use($r){
                 $callingreport = DB::table('workprogress')
                     ->select('report')
                     ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
@@ -1114,6 +1163,7 @@ class LeadController extends Controller
                 }
 
             })
+            
 //            ->filterColumn('callreport', function ($query,$keyword ,$lead){
 //                return $query->leftjoin('workprogress','leads.leadId','workprogress.leadId')
 //                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
@@ -1124,7 +1174,8 @@ class LeadController extends Controller
 //                    ->where('callreport','like', '%'.$keyword.'%');
 //
 //            })
-            ->rawColumns(['call', 'action'])
+            ->rawColumns(['call', 'action','check'])
+            
 
 
             ->make(true);

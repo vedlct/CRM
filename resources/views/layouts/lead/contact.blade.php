@@ -1,4 +1,8 @@
 @extends('main')
+
+@section('header')
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
+    @endsection
 @section('content')
 
     <div class="card" style="padding:10px;">
@@ -27,6 +31,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th >Select</th>
                         <th width="15%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
@@ -44,8 +49,33 @@
 
                 </table>
             </div>
+
+            <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
+            <div class="form-group">
+
+                {{--<div class="form-group col-md-5">--}}
+                <label ><b>Select Status:</b></label>
+                <select class="form-control"  name="status" id="otherCatches" style="width: 30%">
+                    <option value="">select</option>
+                    @foreach($status as $s)
+                        <option value="{{$s->statusId}}">{{$s->statusName}} </option>
+
+                    @endforeach
+
+
+                </select>
+            </div>
+
+            <input type="hidden" class="form-control" id="inp" name="leadId">
+
+
+
+            
         </div>
     </div>
+
+    
 
     <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
@@ -291,11 +321,88 @@
 
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    
+    <script src="{{url('js/jconfirm.js')}}"></script>
+
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    
+        
 
 
 
     <script>
+
+
+
+
+function selectAll(source) {
+            checkboxes = document.getElementsByName('checkboxvar[]');
+            for(var i in checkboxes)
+                checkboxes[i].checked = source.checked;
+        }
+
+
+
+
+        $("#otherCatches").change(function() {
+
+       
+            
+
+            var chkArray = [];
+            var status=$(this).val();
+            $('.checkboxvar:checked').each(function (i) {
+
+                chkArray[i] = $(this).val();
+            });
+            alert(chkArray)
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            
+
+            
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('contactedStatus')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray,'status':status} ,
+                beforeSend:function(){
+     return confirm("Are you sure?");
+},
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+                        $('#alert').html(' <strong>Success!</strong> Status Changed');
+                        $('#alert').show();
+
+                    }
+                    
+                }
+            });
+
+        });
+
+
+
+
+
+
+
+
+
+
+
         //for Edit modal
         function changeLeadStatus(x){
             var value=$(x).val();
@@ -417,8 +524,6 @@
             dataTable =  $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                Filter: true,
-                className: 'select-checkbox',
                 stateSave: true,
                 type:"POST",
                 "ajax":{
@@ -432,6 +537,9 @@
                     },
                 },
                 columns: [
+
+                    {data: 'check', name: 'check', orderable: false, searchable: false},
+                    
                     { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
@@ -456,7 +564,36 @@
                 ],
             });
 
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
         });
+
+
+
+
+
+
+
+
+
+
+
+
+
         function leadstatussearch(){
 
             dataTable.ajax.reload();
