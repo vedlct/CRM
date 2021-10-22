@@ -48,6 +48,22 @@ class Lead extends Model
         return $leads;
     }
 
+    public function showNotAssignedAllLeads()
+    {
+
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
+        ->where(function ($q) {
+            $q->orWhere('contactedUserId', 0)
+                ->orWhere('contactedUserId', null);
+        })
+        ->where('leadAssignStatus', 0)
+        ->select('leads.*');
+
+
+        return $leads;
+    }
+
+
 
     public function possibility()
     {

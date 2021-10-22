@@ -404,6 +404,32 @@ class LeadController extends Controller
                 ->with('users',$users);}
         return Redirect()->route('home');
     }
+
+
+    public function assignAllShow(){
+        $User_Type=Session::get('userType');
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+            //getting only first name of users
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
+                $users=User::select('id','firstName','lastName')
+                    ->where('id','!=',Auth::user()->id)
+                    ->where('typeId',5)
+                    ->orWhere('typeId',2)
+                    ->orWhere('typeId',3)
+                    ->get();
+            }
+            else{
+                $users=User::select('id','firstName','lastName')
+                    ->where('teamId',Auth::user()->teamId)
+                    ->where('teamId','!=',null)
+                    ->get();
+            }
+            return view('layouts.lead.assignAllLead')
+                ->with('users',$users);}
+        return Redirect()->route('home');
+    }
+
+
     public function getAssignLeadData(){
         $leads=(new Lead())->showNotAssignedLeads();
         return DataTables::eloquent($leads)
@@ -412,6 +438,19 @@ class LeadController extends Controller
             })
             ->make(true);
     }
+
+    public function getAllAssignLeadData(Request $r){
+       
+        $leads=Lead::with('mined','category','country','possibility', 'probability')
+            ->where('contactedUserId',$r->userId);
+        // $leads=(new Lead())->showNotAssignedAllLeads()->where('contactedUserId',$r->userId);
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })
+            ->make(true);
+    }
+
     public function assignStore(Request $r){
         if($r->ajax()){
             foreach ($r->leadId as $lead){

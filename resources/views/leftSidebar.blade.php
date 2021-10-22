@@ -193,6 +193,11 @@
                         <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                     </li>
                 @endif
+                @if( $userType =='MANAGER' )
+                <li>
+                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Released Lead</span></a>
+                </li>
+            @endif
 
                 @if($userType =='USER' || $userType =='MANAGER')
                     <li @if(Auth::user()->id == 21 || Auth::user()->id == 40 ) style="display: none" @endif>

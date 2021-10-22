@@ -110,6 +110,12 @@ Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
 
+Route::get('lead/assign-lead','LeadController@assignAllShow')->name('assignAllShow');
+Route::post('lead/getAllAssignLeadData','LeadController@getAllAssignLeadData')->name('getAllAssignLeadData'); 
+//Route::post('lead/getFilteredAssignLeadData','LeadController@getAssignLeadData')->name('getFilteredAssignLeadData');
+
+
+
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
 Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData');
