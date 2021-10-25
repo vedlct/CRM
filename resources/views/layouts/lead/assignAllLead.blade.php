@@ -16,6 +16,23 @@
             <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
 
 
+            <div class="form-group">
+
+                {{--<div class="form-group col-md-5">--}}
+                    <h4>Filter By Marketier</h4>
+                {{-- <label ><b>Select Marketier:</b></label> --}}
+                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 30%">
+                    <option value="">select</option>
+                 
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+
+                    @endforeach
+
+                </select>
+            </div>
+
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -99,6 +116,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script>
+        $(document).ready(function(){
 
 //        var datatable;
 //
@@ -122,18 +140,30 @@
 //<th>Country</th>
 //<th>Comments</th>
 //<th>Created At</th>
-
+fill_datatable();
+function fill_datatable(userId='')
+    {
         $(function() {
+
+           
+
+
+
+            //var userId=$("#otherCatches2").val();
+            //alert(userId)
+
+
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 stateSave: true,
                 type:"POST",
                 "ajax":{
-                    "url": "{!! route('getAssignLeadData') !!}",
+                    "url": "{!! route('getAllAssignLeadData') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data":{ _token: "{{csrf_token()}}",'userId':userId}
                 },
+                
 
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -159,6 +189,8 @@
                 ]
             });
         });
+
+    }
 
 
 
@@ -212,7 +244,40 @@
 
 
 
+        
+        $("#otherCatches2").change(function() {
 
+          
+          
+        var userId = $(this).val();
+        //var filter_country = $('#filter_country').val();
+
+        if(userId != '')
+        {
+            //alert(userId)
+            $('#myTable').DataTable().destroy();
+            fill_datatable(userId);
+        }
+        else
+        {
+            alert('Select Both filter option');
+        }
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+        });
 
     </script>
 

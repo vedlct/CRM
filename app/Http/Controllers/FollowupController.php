@@ -90,7 +90,9 @@ class FollowupController extends Controller
             $status = Leadstatus::where('statusId', '!=', 7)
                 ->get();
             return view('follow-up/index', ['leads' => $leads, 'callReports' => $callReports,
-                'possibilities' => $possibilities, 'probabilities' => $probabilities, 'categories' => $categories, 'status' => $status, 'country' => $country, 'totalDuration' => $totalDuration]);
+                'possibilities' => $possibilities, 'probabilities' => $probabilities, 'categories' => $categories, 'status' => $status, 'country' => $country, 
+                //'totalDuration' => $totalDuration
+            ]);
         }
         return Redirect()->route('home');
 

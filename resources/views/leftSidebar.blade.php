@@ -195,6 +195,11 @@
                     </li>
                     @endif
                 @endif
+                @if( $userType =='MANAGER' )
+                <li>
+                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Released Lead</span></a>
+                </li>
+            @endif
 
                 @if($userType =='USER' || $userType =='MANAGER')
                     <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>

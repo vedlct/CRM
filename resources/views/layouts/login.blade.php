@@ -50,6 +50,7 @@
             @endif
 
 
+            
 
                 <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
                     {!! csrf_field() !!}
@@ -72,6 +73,7 @@
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                         @endif
+                        
                     </div>
 
                     <div class="form-group">
