@@ -357,7 +357,7 @@ function selectAll(source) {
 
                 chkArray[i] = $(this).val();
             });
-            alert(chkArray)
+            //alert(chkArray)
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             // $("#inp").val(JSON.stringify(chkArray));
             // $( "#assign-form" ).submit();

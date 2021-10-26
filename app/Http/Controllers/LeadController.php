@@ -428,7 +428,7 @@ class LeadController extends Controller
 
     public function assignAllShow(){
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' ){
             //getting only first name of users
             if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
                 $users=User::select('id','firstName','lastName')
@@ -444,7 +444,13 @@ class LeadController extends Controller
                     ->where('teamId','!=',null)
                     ->get();
             }
-            return view('layouts.lead.assignAllLead')
+
+            $cats=Category::where('type', 1)->get();
+            $countries=Country::get();
+            $possibilities=Possibility::get();
+            $probabilities=Probability::get();
+            $callReports = Callingreport::get();
+            return view('layouts.lead.assignAllLead',compact('cats','countries','possibilities','probabilities','callReports','User_Type'))
                 ->with('users',$users);}
         return Redirect()->route('home');
     }
@@ -457,6 +463,7 @@ class LeadController extends Controller
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })
             ->make(true);
+          
     }
 
     public function getAllAssignLeadData(Request $r){
@@ -467,7 +474,90 @@ class LeadController extends Controller
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })->addColumn('check', function ($lead) {
+                if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
+                    return ' <form method="post" action="'.route('addContacted').'">
+                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                    <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                      
+                                            ><i class="fa fa-comments"></i></a></form>';
+                }
+                else{
+                    if($lead->contactedUserId==Auth::user()->id){
+                        return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                       
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                                 
+                                            ><i class="fa fa-comments"></i></a>';
+
+                    }
+                    else{
+                        return '<a href="#" class="btn btn-danger btn-sm" >
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+                       
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
+                                           data-lead-comments="'.$lead->comments.'"
+                                           data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+                                              
+                                         ><i class="fa fa-comments"></i></a>';
+                    }}
             })
+            ->rawColumns(['action','check'])
             ->make(true);
     }
 
