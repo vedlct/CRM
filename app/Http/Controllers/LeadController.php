@@ -408,7 +408,7 @@ class LeadController extends Controller
 
     public function assignAllShow(){
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' ){
             //getting only first name of users
             if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
                 $users=User::select('id','firstName','lastName')

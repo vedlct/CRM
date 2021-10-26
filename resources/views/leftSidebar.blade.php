@@ -193,7 +193,7 @@
                         <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
                     </li>
                 @endif
-                @if( $userType =='MANAGER' )
+                @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' )
                 <li>
                     <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Released Lead</span></a>
                 </li>

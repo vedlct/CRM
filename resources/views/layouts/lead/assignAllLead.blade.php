@@ -407,7 +407,7 @@ function fill_datatable(userId='')
                     { data: 'website', name: 'leads.website' },
 //                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'category.categoryName', name: 'category.categoryName' ,defaultContent: ""},
+                    { data: 'category.categoryName', name: 'category.categoryName' ,orderable: false,defaultContent: ""},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
                     { data: 'probability.probabilityName',
                         render: function(data) {
