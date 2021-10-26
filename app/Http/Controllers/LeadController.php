@@ -416,7 +416,6 @@ class LeadController extends Controller
                     ->where('typeId',5)
                     ->orWhere('typeId',2)
                     ->orWhere('typeId',3)
-                    ->orWhere('typeId',1)
                     ->get();
             }
             else{
