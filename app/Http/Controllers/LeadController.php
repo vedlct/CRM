@@ -430,7 +430,7 @@ class LeadController extends Controller
         $User_Type=Session::get('userType');
         if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' ){
             //getting only first name of users
-            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' || $User_Type == 'MANAGER'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
                     ->where('typeId',5)
@@ -566,6 +566,8 @@ class LeadController extends Controller
             foreach ($r->leadId as $lead){
                 $l=Lead::findOrFail($lead);
                 $l->leadAssignStatus=1;
+                $l->statusId=2;
+                $l->contactedUserId='';
                 $l->save();
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
