@@ -561,7 +561,7 @@ class LeadController extends Controller
                 $l=Lead::findOrFail($lead);
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
-                $l->contactedUserId=NULL;
+                // $l->contactedUserId=null;
                 $l->save();
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
