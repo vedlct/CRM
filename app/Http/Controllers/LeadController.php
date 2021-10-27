@@ -447,9 +447,23 @@ class LeadController extends Controller
     }
 
     public function getAllAssignLeadData(Request $r){
+        
+        if($r->userId!=null){
+
+        
        
         $leads=Lead::with('mined','category','country','possibility', 'probability')
             ->where('contactedUserId',$r->userId);
+
+        }else{
+
+            $leads=Lead::with('mined','category','country','possibility', 'probability')->where('leadAssignStatus','!=',1);
+
+
+        }
+
+
+
         // $leads=(new Lead())->showNotAssignedAllLeads()->where('contactedUserId',$r->userId);
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
@@ -547,7 +561,7 @@ class LeadController extends Controller
                 $l=Lead::findOrFail($lead);
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
-                $l->contactedUserId=null;
+                $l->contactedUserId=NULL;
                 $l->save();
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
