@@ -58,7 +58,7 @@
                 <label ><b>Select Status:</b></label>
                 <select class="form-control"  name="status" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
-                    @foreach($status as $s)
+                    @foreach($outstatus as $s)
                         <option value="{{$s->statusId}}">{{$s->statusName}} </option>
 
                     @endforeach

@@ -1174,6 +1174,10 @@ class LeadController extends Controller
 
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
+                ->get();
+
+                $outstatus=Leadstatus::where('statusId','!=',7)
+                ->where('statusId','!=',1)
                 ->where('statusId','!=',6)
                 ->get();
             $country=Country::get();
@@ -1184,7 +1188,8 @@ class LeadController extends Controller
                 ->with('probabilities',$probabilities)
                 ->with('categories',$categories)
                 ->with('status',$status)
-                ->with('country',$country);
+                ->with('country',$country)
+                ->with('outstatus',$outstatus);
 
         }
         return Redirect()->route('home');
