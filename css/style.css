@@ -6643,3 +6643,21 @@ File: scss
     -webkit-flex-wrap: wrap !important; }
   .chat-list li .chat-content {
     width: calc(100% - 80px); } }
+
+
+  @media (max-width: 767px) {
+    .topbar {
+      position: fixed;
+      top: 0 !important;
+      right: 0 !important;
+      left: 0 !important;
+      bottom: auto !important;
+      width: 100%;
+    }
+    .left-sidebar {
+      padding-top: 110px;
+    }
+    .topbar ul.dropdown-user {
+      width: 100%;
+    }
+  }
