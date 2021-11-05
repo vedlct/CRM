@@ -47,6 +47,7 @@
             @endif
 
             @if(Auth::user()->typeId !=4)
+                <div class="table-responsive">
                 <table class="table table-striped table-bordered valueReport">
                     <thead>
                     <tr>
@@ -359,11 +360,13 @@
                     </tbody>
 
                 </table>
+                </div>
             @endif
 
 
             @if(Auth::user()->typeId !=5)
                 <div class="mt-5">
+                <div class="table-responsive">
                 <table class="table table-striped table-bordered valueReport">
                     <thead>
                     <tr>
@@ -451,11 +454,13 @@
                     @endforeach
                 </table>
                 </div>
+                </div>
 
             @endif
             <div class="mt-5">
             <hr>
             <h4 align="center"><b>Comment</b></h4>
+            <div class="table-responsive">
             <table class="table table-bordered table-striped valueReport">
                 <thead>
                     <th>Name</th>
@@ -474,6 +479,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             </div>
         </div>
     </div>
