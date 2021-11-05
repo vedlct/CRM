@@ -453,11 +453,11 @@ class LeadController extends Controller
         
        
         $leads=Lead::with('mined','category','country','possibility', 'probability')
-            ->where('contactedUserId',$r->userId);
+            ->where('contactedUserId',$r->userId)->where('statusId','!=',6);
 
         }else{
 
-            $leads=Lead::with('mined','category','country','possibility', 'probability')->where('leadAssignStatus','!=',1);
+            $leads=Lead::with('mined','category','country','possibility', 'probability')->where('leadAssignStatus','!=',1)->where('statusId','!=',6);
 
 
         }
