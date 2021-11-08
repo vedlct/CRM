@@ -52,7 +52,12 @@
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
 
-            <div class="form-group">
+
+            <div class="row">
+
+            
+
+            <div class="form-group col-md-8">
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Status:</b></label>
@@ -66,6 +71,22 @@
 
                 </select>
             </div>
+
+
+            <div class="form-group col-md-4">
+
+                {{--<div class="form-group col-md-5">--}}
+                <label ><b>Assign To:</b></label>
+                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 50%">
+                    <option value="">select</option>
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+
+                    @endforeach
+
+                </select>
+            </div>
+        </div>
 
             <input type="hidden" class="form-control" id="inp" name="leadId">
 
@@ -563,6 +584,51 @@ function selectAll(source) {
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });
+
+
+
+
+
+
+
+
+$("#otherCatches2").change(function() {
+
+var chkArray = [];
+var userId=$(this).val();
+$('.checkboxvar:checked').each(function (i) {
+
+    chkArray[i] = $(this).val();
+});
+//alert(chkArray)
+var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+// $("#inp").val(JSON.stringify(chkArray));
+// $( "#assign-form" ).submit();
+jQuery('input:checkbox:checked').parents("tr").remove();
+$(this).prop('selectedIndex',0);
+
+$.ajax({
+    type : 'post' ,
+    url : '{{route('assignStore')}}',
+    data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+    success : function(data){
+        console.log(data);
+        if(data == 'true'){
+            // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+            $('#alert').html(' <strong>Success!</strong> Assigned');
+            $('#alert').show();
+
+        }
+    }
+});
+
+
+
+});
 
 
 

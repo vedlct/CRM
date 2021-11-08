@@ -1141,6 +1141,18 @@ class LeadController extends Controller
         return back();
     }
 
+
+    public function addmyContacted(Request $r){
+        foreach ($r->leadId as $lead){
+        $lead=Lead::findOrFail($lead);
+        $lead->contactedUserId=Auth::user()->id;
+        $lead->statusId=7;
+        $lead->save();
+        }
+        return Response('true');
+        
+    }
+
 // Add Contacted From Temp
     public function addContactedTemp(Request $r){
         $lead=Lead::findOrFail($r->leadId);
@@ -1166,6 +1178,22 @@ class LeadController extends Controller
         //For user
         $User_Type=Session::get('userType');
         if($User_Type=='SUPERVISOR' || $User_Type=='USER' || $User_Type=='MANAGER'){
+
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' || $User_Type == 'MANAGER'){
+                $users=User::select('id','firstName','lastName')
+                    ->where('id','!=',Auth::user()->id)
+                    ->where('typeId',5)
+                    ->orWhere('typeId',2)
+                    ->orWhere('typeId',3)
+                    ->get();
+            }
+            else{
+                $users=User::select('id','firstName','lastName')
+                    ->where('teamId',Auth::user()->teamId)
+                    ->where('teamId','!=',null)
+                    ->get();
+            }
+
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
 
@@ -1189,7 +1217,8 @@ class LeadController extends Controller
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country)
-                ->with('outstatus',$outstatus);
+                ->with('outstatus',$outstatus)
+                ->with('users',$users);
 
         }
         return Redirect()->route('home');

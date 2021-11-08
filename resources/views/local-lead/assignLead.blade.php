@@ -98,6 +98,10 @@
 
         </div>
 
+        <div class="row">
+
+      
+
         <div class="form-group col-md-4" >
             <label>Select User</label>
             <select class="form-control" id="userId">
@@ -112,6 +116,7 @@
             <button onclick="assign()" class="btn btn-success ">Assign</button>
         </div>
     </div>
+</div>
 
 
 
