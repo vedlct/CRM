@@ -70,7 +70,7 @@
             </div>
             <div class="col-md-2"> 
 
-            <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
+            {{-- <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/> --}}
 
             <input type="hidden" class="form-control" id="inp" name="leadId">
 
