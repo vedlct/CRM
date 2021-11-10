@@ -90,6 +90,8 @@
                     </tbody>
                 </table>
 
+                <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
                 <div class="mt-2">
                     <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
 
