@@ -26,9 +26,17 @@
         <label><b>Search</b></label>
         <form method="post" action="{{route('searchTableByDate')}}">
             {{csrf_field()}}
-            <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" >
-            <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" >
-            <button type="submit" class="btn btn-success">Search</button>
+            <div class="row">
+                <div class="col-auto mb-2">
+                    <input type="text" placeholder=" From" id="fromdate" name="fromDate" style="border-radius: 50px;" >
+                </div>
+                <div class="col-auto mb-2">
+                    <input type="text" placeholder=" To" id="todate" name="toDate" style="border-radius: 50px;" >
+                </div>
+                <div class="col-md-5">
+                    <button type="submit" class="btn btn-success">Search</button>
+                </div>
+            </div>
         </form>
 
       {{--  <div class="card-header">

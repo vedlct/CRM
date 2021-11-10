@@ -5,11 +5,11 @@
 <div class="card-body">
     <form method="get" action="{{route('local.report')}}">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <input placeholder="Start Date" name="startDate"  @if(isset($startDate)) value="{{$startDate}}" @endif class="form-control datepicker" >
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <input placeholder="End Date" name="endDate" class="form-control datepicker" @if(isset($endDate)) value="{{$endDate}}" @endif >
         </div>
         <div class="col-md-4">
@@ -46,6 +46,7 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="result">
+                    
                 </div>
 
             </div>

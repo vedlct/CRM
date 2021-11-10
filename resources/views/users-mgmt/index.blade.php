@@ -4,13 +4,13 @@
     <div class="box-body">
         <div class="card" style="padding: 2px;">
             <div class="card-body">
-                <h2 style="display: inline-block; margin: 0px 200px;">List of users</h2>
+                <h2 style="display: inline-block;">List of users</h2>
                 {{--<a class="btn btn-primary" href="{{ route('user-management.create') }}">Add new user</a>--}}
                 @php($userType = Session::get('userType'))
 
                 @if($userType=='ADMIN')
 
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal">
                     Add new user
                 </button>
                 @endif

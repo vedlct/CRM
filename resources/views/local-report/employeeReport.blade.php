@@ -29,138 +29,140 @@
 
 
 
-<table class="table table-bordered table-striped">
-    <thead>
-    <th>User</th>
-    <th>Jan</th>
-    <th>Feb</th>
-    <th>Mar</th>
-    <th>Apr</th>
-    <th>May</th>
-    <th>Jun</th>
-    <th>Jul</th>
-    <th>Aug</th>
-    <th>Sep</th>
-    <th>Oct</th>
-    <th>Nov</th>
-    <th>Dec</th>
-    <th>Total</th>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <th>User</th>
+        <th>Jan</th>
+        <th>Feb</th>
+        <th>Mar</th>
+        <th>Apr</th>
+        <th>May</th>
+        <th>Jun</th>
+        <th>Jul</th>
+        <th>Aug</th>
+        <th>Sep</th>
+        <th>Oct</th>
+        <th>Nov</th>
+        <th>Dec</th>
+        <th>Total</th>
 
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
 
-    @foreach($users as $user)
-        @php($grandTotal=0)
-        <tr>
-            <td>{{$user->firstName}}</td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==1)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==2)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==3)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==4)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==5)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==6)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==7)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==8)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==9)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==10)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==11)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+        @foreach($users as $user)
+            @php($grandTotal=0)
+            <tr>
+                <td>{{$user->firstName}}</td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==1)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==2)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==3)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==4)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==5)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==6)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==7)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==8)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==9)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==10)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==11)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
 
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
-            <td>
-                @foreach($bills as $bill)
-                    @if($bill->userId == $user->id && $bill->month==12)
-                        <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($bills as $bill)
+                        @if($bill->userId == $user->id && $bill->month==12)
+                            <a href="#" data-user="{{$bill->userId }}" data-month="{{$bill->month }}" onclick="getReportLog(this)">{{$bill->total}}</a>
 
-                        @php($grandTotal+=$bill->total)
-                    @endif
-                @endforeach
-            </td>
+                            @php($grandTotal+=$bill->total)
+                        @endif
+                    @endforeach
+                </td>
 
-            <td>
-                {{$grandTotal}}
-            </td>
+                <td>
+                    {{$grandTotal}}
+                </td>
 
 
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
 
 
 <script>
