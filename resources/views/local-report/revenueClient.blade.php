@@ -1,3 +1,4 @@
+<div class="table-responsive">
 <table class="table table-bordered table-striped">
     <thead>
     <th>Company</th>
@@ -258,3 +259,4 @@
         @endforeach
     </tbody>
 </table>
+</div>

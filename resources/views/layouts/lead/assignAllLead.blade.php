@@ -15,24 +15,25 @@
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
 
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
 
-            <div class="form-group">
+                        {{--<div class="form-group col-md-5">--}}
+                            <h4>Filter By Marketier</h4>
+                        {{-- <label ><b>Select Marketier:</b></label> --}}
+                        <select class="form-control"  name="assignTo" id="otherCatches2">
+                            <option value="">select</option>
+                        
+                            @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
 
-                {{--<div class="form-group col-md-5">--}}
-                    <h4>Filter By Marketier</h4>
-                {{-- <label ><b>Select Marketier:</b></label> --}}
-                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 30%">
-                    <option value="">select</option>
-                 
-                    @foreach($users as $user)
-                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+                            @endforeach
 
-                    @endforeach
-
-                </select>
+                        </select>
+                    </div>
+                </div>
             </div>
-
-
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -83,6 +84,9 @@
 
                 </select>
             </div>
+
+
+          
 
             <input type="hidden" class="form-control" id="inp" name="leadId">
 
@@ -426,6 +430,12 @@ function fill_datatable(userId='')
         });
 
     }
+
+
+
+
+
+
 
 
 

@@ -51,8 +51,11 @@
 
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+            <div class="row">
 
-            <div class="form-group">
+         
+
+            <div class="col-md-10">
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Name:</b></label>
@@ -65,10 +68,13 @@
 
                 </select>
             </div>
+            <div class="col-md-2"> 
+
+            <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
 
             <input type="hidden" class="form-control" id="inp" name="leadId">
 
-
+        </div>
         </div>
 
 
@@ -98,6 +104,60 @@
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+
+    <script>
+
+$(document).ready(function() {
+    $("#makemy").click(function(){
+        var chkArray = [];
+        //var userId=$(this).val();
+        $('.checkboxvar:checked').each(function (i) {
+
+            chkArray[i] = $(this).val();
+            });
+
+            //alert(chkArray)
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('addmyContacted')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+                        $('#alert').html(' <strong>Success!</strong> Contacted');
+                        $('#alert').show();
+
+                    }
+                }
+            });
+    }); 
+})
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
     <script>
 
 //        var datatable;
@@ -209,6 +269,8 @@
 
 
         });
+
+
 
 
 
