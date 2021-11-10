@@ -19,6 +19,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th> Select</th>
                         <th width="15%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
@@ -35,6 +36,7 @@
 
                     @foreach($leads as $lead)
                         <tr>
+                            <td><input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
                             <td width="15%">{{$lead->companyName}}</td>
                             <td width="8%">{{$lead->category->categoryName}}</td>
                             <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
@@ -87,6 +89,15 @@
 
                     </tbody>
                 </table>
+
+                <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
+                <div class="mt-2">
+                    <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
+
+                </div>
+
+               
             </div>
         </div>
     </div>
@@ -328,6 +339,76 @@
 
 
     <script>
+
+
+
+        
+function selectAll(source) {
+            checkboxes = document.getElementsByName('checkboxvar[]');
+            for(var i in checkboxes)
+                checkboxes[i].checked = source.checked;
+        }
+
+
+
+    $(document).ready(function() {
+    $("#makemy").click(function(){
+        var chkArray = [];
+        //var userId=$(this).val();
+        $('.checkboxvar:checked').each(function (i) {
+
+            chkArray[i] = $(this).val();
+            });
+
+            //alert(chkArray)
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('addmyContacted')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+                        $('#alert').html(' <strong>Success!</strong> Contacted');
+                        $('#alert').show();
+
+                    }
+                }
+            });
+    }); 
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //for Edit modal
 
