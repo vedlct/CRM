@@ -1182,7 +1182,7 @@ class LeadController extends Controller
             if($User_Type == 'RA' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' || $User_Type == 'MANAGER'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
-                    ->where('typeId',5)
+                    ->orwhere('typeId',5)
                     ->orWhere('typeId',2)
                     ->orWhere('typeId',3)
                     ->get();
