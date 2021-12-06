@@ -109,6 +109,8 @@ Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
+Route::post('lead/assignn','LeadController@assignStore2')->name('assignStore2');
+
 
 Route::get('lead/assign-lead','LeadController@assignAllShow')->name('assignAllShow');
 Route::post('lead/getAllAssignLeadData','LeadController@getAllAssignLeadData')->name('getAllAssignLeadData'); 

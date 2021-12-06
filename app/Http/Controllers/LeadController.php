@@ -573,6 +573,52 @@ class LeadController extends Controller
             // return Response($r->leadId);
         }
     }
+
+
+
+    public function assignStore2(Request $r){
+        if($r->ajax()){
+            foreach ($r->leadId as $lead){
+                $l=Lead::findOrFail($lead);
+                $l->leadAssignStatus=1;
+                $l->statusId=2;
+                $l->contactedUserId=null;
+                $l->save();
+
+                // $leadAssigned=Leadassigned::where($lead);
+                // $leadAssigned->assignBy=Auth::user()->id;
+                // $leadAssigned->assignTo=
+                // $leadAssigned->leadId=$lead;
+                // $leadAssigned->save();
+
+
+                Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
+                ->update(['assignTo' => $r->userId,'assignBy'=>Auth::user()->id]);
+
+
+
+                
+                
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            }
+            return Response('true');
+            // return Response($r->leadId);
+        }
+    }
+
+
+
+
+
     public function update(Request $r){
         $this->validate($r,[
             'companyName' => 'max:100',
@@ -779,7 +825,7 @@ class LeadController extends Controller
         //for user
         $User_Type=Session::get('userType');
         if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR') {
-            $leads = (new Lead())->myLeads()->where('contactedUserId',null);
+            $leads = (new Lead())->myLeads2()->where('contactedUserId',null);
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
             $probabilities = Probability::get();
@@ -787,6 +833,19 @@ class LeadController extends Controller
             $status=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
                 ->get();
+
+                $users=User::select('id','firstName','lastName')
+                ->where('id','!=',Auth::user()->id)
+                ->orwhere('typeId',5)
+                ->orWhere('typeId',2)
+                ->orWhere('typeId',3)
+                ->get();
+
+                $outstatus=Leadstatus::where('statusId','!=',7)
+                ->where('statusId','!=',1)
+                ->where('statusId','!=',6)
+                ->get();
+        
             $country=Country::get();
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
@@ -795,7 +854,9 @@ class LeadController extends Controller
                 ->with('probabilities', $probabilities)
                 ->with('categories',$categories)
                 ->with('country',$country)
-                ->with('status',$status);
+                ->with('status',$status)
+                ->with('users',$users)
+                ->with('outstatus',$outstatus);
         }
         return Redirect()->route('home');}
 
