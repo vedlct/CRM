@@ -779,7 +779,7 @@ class LeadController extends Controller
         //for user
         $User_Type=Session::get('userType');
         if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR') {
-            $leads = (new Lead())->myLeads();
+            $leads = (new Lead())->myLeads()->where('contactedUserId',null);
             $callReports = Callingreport::get();
             $possibilities = Possibility::get();
             $probabilities = Probability::get();
