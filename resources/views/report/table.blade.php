@@ -65,6 +65,7 @@
                         <th>Email</th>
                         <th>Cold Email</th>
                         <th>Not Available</th>
+                        <th>Not Interested</th>
                         <th>Total Call</th>
                         <th>Assigned Lead</th>
                         <th>High Possibility</th>
@@ -165,6 +166,30 @@
                                 @if($value==0)
                                     <a href="#" >0</a>
                                 @endif
+                            </td>
+                            <td>
+
+                                {{-- not interested --}}
+
+                                @php($value=0)
+                                @foreach($notInterested as $uc)
+                                    @if($uc->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="totalNotInterested(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}">{{$value=$uc->userNotAvialable}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+
+
+
+
                             </td>
                             <td>
                                 @php($value=0)
@@ -663,6 +688,80 @@
            });
 
        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+       function totalNotInterested(x){
+           var id = $(x).data('user-id');
+                   @if(isset($fromDate) && isset($toDate))
+           var from=$(x).data('date-from');
+           var to=$(x).data('date-to');
+                   @endif
+           var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+           var userName=$(x).data('user-name');
+
+           $.ajax({
+               type:'POST',
+               url:'{{route('getNotInterestedIndividual')}}',
+               @if(isset($fromDate) && isset($toDate))
+               data:{_token: CSRF_TOKEN,'userid':id,'fromdate':from,'todate':to},
+               @else
+               data:{_token: CSRF_TOKEN,'userid':id},
+               @endif
+               cache: false,
+               success:function(data) {
+//                    console.log(data);
+                   $('#highPossibility').modal({show:true});
+                   $('#label').html('Not Available');
+                   $('#txtHint').html(data);
+                   $('#name').html(userName);
+                   @if(Auth::user()->typeId ==10)
+                   $('#myTable').DataTable({
+                       dom:'Bfrtip',
+                       buttons:[
+                           'excel'
+                       ]
+                   });
+                   @else
+                   $('#myTable').DataTable();
+                   @endif
+               }
+           });
+
+       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         function highpossibility(x){
             var id = $(x).data('user-id');

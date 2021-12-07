@@ -270,6 +270,7 @@ Route::post('/getCountryLead','GetIndividualReportController@getCountryLead')->n
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
+Route::post('/getNotInterestedIndividual','GetIndividualReportController@getNotInterestedIndividual')->name('getNotInterestedIndividual');
 
 Route::post('new-file/update','GetIndividualReportController@updateNewFile')->name('update.newFile');
 
