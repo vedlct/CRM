@@ -168,6 +168,24 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
+                           
+                            <td>
+                                @php($value=0)
+                                @foreach($gatekeeper as $gk)
+                                    @if($gk->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="totalgatekeeper(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}">{{$value=$gk->gatekeeper}}</a>
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
                             <td>
 
                                 {{-- not interested --}}
@@ -191,23 +209,6 @@
 
 
 
-                            </td>
-                            <td>
-                                @php($value=0)
-                                @foreach($gatekeeper as $gk)
-                                    @if($gk->userId == $user->userid)
-                                        <a href="#" class="highpossibility" onclick="totalgatekeeper(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}">{{$value=$gk->gatekeeper}}</a>
-                                    @endif
-                                @endforeach
-                                @if($value==0)
-                                    <a href="#" >0</a>
-                                @endif
                             </td>
                             <td>
                                 @php($value=0)

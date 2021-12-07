@@ -703,7 +703,7 @@ class ReportController extends Controller
 
 
             $notInterested = Workprogress::select('userId', DB::raw('count(*) as userNotAvialable'))
-            ->where('callingReport', 13)
+            ->where('callingReport', 10)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
             ->get();
