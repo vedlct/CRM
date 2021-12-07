@@ -111,9 +111,11 @@ Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
+Route::post('lead/assignn','LeadController@assignStore2')->name('assignStore2');
+
 
 Route::get('lead/assign-lead','LeadController@assignAllShow')->name('assignAllShow');
-Route::post('lead/getAllAssignLeadData','LeadController@getAllAssignLeadData')->name('getAllAssignLeadData'); 
+Route::post('lead/getAllAssignLeadData','LeadController@getAllAssignLeadData')->name('getAllAssignLeadData');
 //Route::post('lead/getFilteredAssignLeadData','LeadController@getAssignLeadData')->name('getFilteredAssignLeadData');
 
 
@@ -270,7 +272,10 @@ Route::post('/getCountryLead','GetIndividualReportController@getCountryLead')->n
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
+
 Route::post('/getGateKeeper','GetIndividualReportController@getGateKeeper')->name('getgatekeeper');
+
+Route::post('/getNotInterestedIndividual','GetIndividualReportController@getNotInterestedIndividual')->name('getNotInterestedIndividual');
 
 Route::post('new-file/update','GetIndividualReportController@updateNewFile')->name('update.newFile');
 

@@ -23,10 +23,23 @@ class Lead extends Model
     {
 
         $leads = Lead::select('leads.*')
-            ->leftJoin('leadassigneds', 'leadassigneds.leadId', '=', 'leads.leadId')
+        ->leftJoin('leadassigneds', 'leadassigneds.leadId', '=', 'leads.leadId')
             ->where('leadassigneds.assignTo', Auth::user()->id)
             ->where('leadassigneds.leaveDate', null)
             ->where('leadassigneds.workStatus', 0)
+            ->get();
+
+        return $leads;
+    }
+
+    public function myLeads2()
+    {
+
+        $leads = Lead::Join('leadassigneds', 'leadassigneds.leadId', '=', 'leads.leadId')
+            ->where('leadassigneds.assignTo', Auth::user()->id)
+            ->where('leadassigneds.leaveDate', null)
+            ->where('leadassigneds.workStatus', 0)
+            ->select('leads.*','leadassigneds.assignId as iid')
             ->get();
 
         return $leads;

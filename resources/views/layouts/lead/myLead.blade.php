@@ -21,6 +21,7 @@
                     <tr>
                         <th> Select</th>
                         <th width="15%">Company Name</th>
+                       
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
@@ -36,8 +37,9 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td><input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="{{$lead->leadId}}"></td>
+                            <td><input type="checkbox" class="checkboxvar"   name="checkboxvar[]" value="{{$lead->leadId}}"></td>
                             <td width="15%">{{$lead->companyName}}</td>
+                           
                             <td width="8%">{{$lead->category->categoryName}}</td>
                             <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
@@ -97,9 +99,46 @@
 
                 </div>
 
+
+              
+
                
             </div>
         </div>
+
+        <div class="row">
+            <div class="form-group col-md-8">
+
+                {{--<div class="form-group col-md-5">--}}
+                <label ><b>Select Status:</b></label>
+                <select class="form-control"  name="status" id="otherCatches" style="width: 30%">
+                    <option value="">select</option>
+                    @foreach($outstatus as $s)
+                        <option value="{{$s->statusId}}">{{$s->statusName}} </option>
+    
+                    @endforeach
+    
+    
+                </select>
+            </div>
+    
+    
+            <div class="form-group col-md-4">
+    
+                {{--<div class="form-group col-md-5">--}}
+                <label ><b>Assign To:</b></label>
+                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 50%">
+                    <option value="">select</option>
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+    
+                    @endforeach
+    
+                </select>
+            </div>
+
+        </div>
+       
     </div>
 
     <!-- Edit Modal -->
@@ -547,6 +586,104 @@ function selectAll(source) {
             });
 
         });
+
+
+
+
+        $("#otherCatches").change(function() {
+
+       
+            
+
+var chkArray = [];
+var status=$(this).val();
+$('.checkboxvar:checked').each(function (i) {
+
+    chkArray[i] = $(this).val();
+});
+//alert(chkArray)
+var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+// $("#inp").val(JSON.stringify(chkArray));
+// $( "#assign-form" ).submit();
+jQuery('input:checkbox:checked').parents("tr").remove();
+$(this).prop('selectedIndex',0);
+
+
+
+
+
+$.ajax({
+    type : 'post' ,
+    url : '{{route('contactedStatus')}}',
+    data : {_token: CSRF_TOKEN,'leadId':chkArray,'status':status} ,
+    beforeSend:function(){
+return confirm("Are you sure?");
+},
+    success : function(data){
+        console.log(data);
+        if(data == 'true'){
+            // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+            $('#alert').html(' <strong>Success!</strong> Status Changed');
+            $('#alert').show();
+
+        }
+        
+    }
+});
+
+});
+
+
+
+
+
+
+
+$("#otherCatches2").change(function(e) {
+  
+var chkArray = [];
+
+var userId=$(this).val();
+$('.checkboxvar:checked').each(function (i) {
+
+    chkArray[i] = $(this).val();
+    
+});
+//alert(iid)
+//alert(chkArray)
+var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+// $("#inp").val(JSON.stringify(chkArray));
+// $( "#assign-form" ).submit();
+jQuery('input:checkbox:checked').parents("tr").remove();
+$(this).prop('selectedIndex',0);
+
+$.ajax({
+    type : 'post' ,
+    url : '{{route('assignStore2')}}',
+    data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+    success : function(data){
+        console.log(data);
+        if(data == 'true'){
+            // $('#myTable').load(document.URL +  ' #myTable');
+//                        $.alert({
+//                            title: 'Success!',
+//                            content: 'successfully assigned!',
+//                        });
+            $('#alert').html(' <strong>Success!</strong> Assigned');
+            $('#alert').show();
+
+        }
+    }
+});
+
+
+
+});
+
 
 
     </script>
