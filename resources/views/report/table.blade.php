@@ -199,7 +199,7 @@
                                            data-date-to="{{$toDate}}"
                                            @endif
                                            data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}">{{$value=$uc->userNotAvialable}}</a>
+                                           data-user-name="{{$user->userName}}">{{$value=$uc->userNotInterested}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
