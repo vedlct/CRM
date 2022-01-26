@@ -702,7 +702,7 @@ class ReportController extends Controller
             ->get();
 
 
-            $notInterested = Workprogress::select('userId', DB::raw('count(*) as userNotAvialable'))
+            $notInterested = Workprogress::select('userId', DB::raw('count(*) as userNotInterested'))
             ->where('callingReport', 10)
             ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
             ->groupBy('userId')
@@ -936,7 +936,11 @@ class ReportController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
             ->get();
 
-
+        $notInterested = Workprogress::select('userId', DB::raw('count(*) as userNotInterested'))
+            ->where('callingReport', 10)
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+            ->groupBy('userId')
+            ->get();
 
 //            USA
         $contactedUsa = Workprogress::select('userId', DB::raw('count(*) as userContactedUsa'))
@@ -999,8 +1003,8 @@ class ReportController extends Controller
             ->with('coldemailed', $coldemailed)
             ->with('other', $other)
             ->with('notAvailable', $notAvailable)
-            ->with('gatekeeper', $gatekeeper);
-
+            ->with('gatekeeper', $gatekeeper)
+            ->with('notInterested', $notInterested);
 
     }
 
