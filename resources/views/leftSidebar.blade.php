@@ -67,8 +67,7 @@
                         </li>
                     @endif
 
-                    @if(Auth::user()->typeId !=10  )
-
+                    @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='HR'    )
                         <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
                             <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span
                                         class="hide-menu">All Lead</span></a>

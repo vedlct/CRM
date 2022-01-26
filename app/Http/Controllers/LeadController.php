@@ -41,11 +41,11 @@ class LeadController extends Controller
         return DataTables::eloquent($leads)
             ->addColumn('action', function ($lead) {
                 if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
-//                    if (empty($lead->mined->firstName )){
-//                        $minedby = "";
-//                    }else{
-//                        $minedby =  $lead->mined->firstName;
-//                    }
+                //    if (empty($lead->mined->firstName )){
+                //        $minedby = "";
+                //    }else{
+                //        $minedby =  $lead->mined->firstName;
+                //    }
 
                     return ' <form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
@@ -59,7 +59,7 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
 
-                                            data-lead-mined="'. $lead->mined->firstName  .' "
+                                            
 
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
@@ -91,7 +91,7 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
-                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                          
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
@@ -118,7 +118,7 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
-                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                         
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
@@ -605,29 +605,8 @@ class LeadController extends Controller
                 $l->contactedUserId=null;
                 $l->save();
 
-                // $leadAssigned=Leadassigned::where($lead);
-                // $leadAssigned->assignBy=Auth::user()->id;
-                // $leadAssigned->assignTo=
-                // $leadAssigned->leadId=$lead;
-                // $leadAssigned->save();
-
-
                 Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
                 ->update(['assignTo' => $r->userId,'assignBy'=>Auth::user()->id]);
-
-
-
-                
-                
-
-
-            
-            
-            
-            
-            
-            
-            
             
             }
             return Response('true');
