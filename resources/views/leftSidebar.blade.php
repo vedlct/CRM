@@ -75,6 +75,13 @@
                         </li>
 
                     @endif
+
+
+                    <li >
+                        <a href="{{route('verifylead')}}"><i class="fa fa-plus"></i><span
+                                    class="hide-menu">Verify Lead</span></a>
+
+                    </li>
                     @if(Auth::user()->id == 19)
 
                         <li>

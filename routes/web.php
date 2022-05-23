@@ -107,6 +107,13 @@ Route::post('lead/storeLeadAdmin', 'LeadController@storeLeadAdmin')->name('store
 
 Route::post('lead/all','LeadController@allLeads')->name('allLeads');
 
+
+//verify lead
+Route::get('/verify-lead', 'LeadController@verifylead')->name('verifylead');
+Route::post('verifyleads','LeadController@verifyallLeads')->name('verifyallLeads');
+
+
+
 Route::get('lead/assign','LeadController@assignShow')->name('assignShow');
 Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('getAssignLeadData');  //Get Data using Data Table
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');

@@ -1574,4 +1574,129 @@ class LeadController extends Controller
         Session::flash('message', 'Lead deleted successfully');
         return back();
     }
+
+
+    public function verifylead(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
+
+        $cats=Category::where('type', 1)->get();
+        $countries=Country::get();
+        $possibilities=Possibility::get();
+        $probabilities=Probability::get();
+        $callReports = Callingreport::get();
+        $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
+        return view('layouts.lead.verify')
+            ->with('categories',$cats)
+            ->with('countries',$countries)
+            ->with('possibilities',$possibilities)
+            ->with('probabilities',$probabilities)
+            ->with('callReports',$callReports)
+            ->with('user',$user);
+    }
+
+    
+
+    public function verifyallLeads(Request $r){
+        $leads=Lead::with('country','category','mined','status','contact','possibility', 'probability')
+            ->orderBy('leadId','desc');
+
+        return DataTables::eloquent($leads)
+            ->addColumn('action', function ($lead) {
+                if($lead->leadAssignStatus == 0 && ($lead->statusId==2 ||  $lead->statusId==1) && Session::get('userType')!='RA'){
+                //    if (empty($lead->mined->firstName )){
+                //        $minedby = "";
+                //    }else{
+                //        $minedby =  $lead->mined->firstName;
+                //    }
+
+                    return ' <form method="post" action="'.route('addContacted').'">
+                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                    <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+
+                                            
+
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+
+                                            ><i class="fa fa-comments"></i></a></form>';
+                }
+                else{
+
+
+                    if($lead->contactedUserId==Auth::user()->id){
+                        return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                   data-lead-id="'.$lead->leadId.'"
+                                   data-lead-possibility="'.$lead->possibilityId.'"
+                                   data-lead-probability="'.$lead->probabilityId.'">
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                          
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                            data-lead-country="'.$lead->countryId.'"
+                                            data-lead-designation="'.$lead->designation.'"
+                                            data-lead-comments="'.$lead->comments.'"
+                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+
+                                            ><i class="fa fa-comments"></i></a>';
+
+                    }
+                    else{
+
+                        return '<a href="#" class="btn btn-danger btn-sm" >
+                                    <i class="fa fa-phone" aria-hidden="true"></i></a>
+
+                            <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                           data-lead-id="'.$lead->leadId.'"
+                                           data-lead-name="'.$lead->companyName.'"
+                                           data-lead-email="'.$lead->email.'"
+                                           data-lead-number="'.$lead->contactNumber.'"
+                                           data-lead-person="'.$lead->personName.'"
+                                           data-lead-website="'.$lead->website.'"
+                                         
+                                           data-lead-category="'.$lead->category->categoryId.'"
+                                           data-lead-country="'.$lead->countryId.'"
+                                           data-lead-designation="'.$lead->designation.'"
+                                           data-lead-comments="'.$lead->comments.'"
+                                           data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
+                                           >
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+
+                                         ><i class="fa fa-comments"></i></a>';
+                    }}
+            })
+            ->make(true);
+    }
 }
