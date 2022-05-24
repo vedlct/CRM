@@ -16,9 +16,9 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <a href="#create_temp_modal" data-toggle="modal" class="btn btn-info btn-md" style="border-radius: 50%; float: right;"><i class="fa fa-plus"></i></a>
-            @if($userType =='ADMIN')
+            {{-- @if($userType =='ADMIN')
             <a href="#admin_create_temp_modal" title="Client!" data-toggle="modal" class="btn btn-success btn-md" style="border-radius: 50%; float: right; margin-right: 10px;"><i class="fa fa-plus"></i></a>
-            @endif
+            @endif --}}
             <h2 class="card-title" align="center"><b>Verify Leads</b></h2>
 
             <div class="table-responsive m-t-40">
