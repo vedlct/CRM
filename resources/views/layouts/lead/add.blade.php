@@ -759,8 +759,7 @@
             var designation=$(e.relatedTarget).data('lead-designation');
             var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
-
-            // alert(createdAt);
+           
             console.log(comments);
 
             //populate the textbox
