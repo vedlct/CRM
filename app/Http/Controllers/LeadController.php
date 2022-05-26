@@ -58,6 +58,8 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
+                                           
 
                                             
 
@@ -91,6 +93,7 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
                                           
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
@@ -118,6 +121,7 @@ class LeadController extends Controller
                                            data-lead-number="'.$lead->contactNumber.'"
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
+                                           data-lead-mined="'.$lead->mined->firstName.'"
                                          
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
@@ -1469,7 +1473,7 @@ class LeadController extends Controller
 //                if (($callingreport->isEmpty())) {
 //
 //                    return $test="New Lead";
-//                }else{
+//                }else{  
 
                 return $test=$callingreport->first()->report;
                 //   }
