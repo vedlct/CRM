@@ -59,9 +59,9 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                           
 
-                                            
+
+
 
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
@@ -94,7 +94,7 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                          
+
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
@@ -122,7 +122,7 @@ class LeadController extends Controller
                                            data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
-                                         
+
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
@@ -467,15 +467,15 @@ class LeadController extends Controller
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })
             ->make(true);
-          
+
     }
 
     public function getAllAssignLeadData(Request $r){
-        
+
         if($r->userId!=null){
 
-        
-       
+
+
         $leads=Lead::with('mined','category','country','possibility', 'probability')
             ->where('contactedUserId',$r->userId)->where('statusId','!=',6);
 
@@ -516,7 +516,7 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                      
+
                                             ><i class="fa fa-comments"></i></a></form>';
                 }
                 else{
@@ -526,7 +526,7 @@ class LeadController extends Controller
                                    data-lead-possibility="'.$lead->possibilityId.'"
                                    data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -545,14 +545,14 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                                 
+
                                             ><i class="fa fa-comments"></i></a>';
 
                     }
                     else{
                         return '<a href="#" class="btn btn-danger btn-sm" >
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                       
+
                             <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
@@ -571,7 +571,7 @@ class LeadController extends Controller
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
-                                              
+
                                          ><i class="fa fa-comments"></i></a>';
                     }}
             })
@@ -611,7 +611,7 @@ class LeadController extends Controller
 
                 Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
                 ->update(['assignTo' => $r->userId,'assignBy'=>Auth::user()->id]);
-            
+
             }
             return Response('true');
             // return Response($r->leadId);
@@ -732,13 +732,13 @@ class LeadController extends Controller
             foreach ($r->leadId as $lead){
 
 
-                
+
                 $l=Lead::findOrFail($lead);
                 $l->statusId=$r->status;
                 if($l->contactedUserId == Auth::user()->id){
                     $l->contactedUserId =null;
                     //$lead->save();
-                   
+
                 }
                 $l->save();
 
@@ -751,7 +751,7 @@ class LeadController extends Controller
 
                 foreach ($assignId as $assignId){
 
-          
+
                 $leave=Leadassigned::find($assignId->assignId);
                 $leave->leaveDate=date('Y-m-d');
                 $leave->save();
@@ -759,7 +759,7 @@ class LeadController extends Controller
                 $l->leadAssignStatus=0;
                 $l->save();
             }
-           
+
             }
 
             return Response('true');
@@ -848,7 +848,7 @@ class LeadController extends Controller
                 ->where('statusId','!=',1)
                 ->where('statusId','!=',6)
                 ->get();
-        
+
             $country=Country::get();
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
@@ -1215,7 +1215,7 @@ class LeadController extends Controller
         $lead->save();
         }
         return Response('true');
-        
+
     }
 
 // Add Contacted From Temp
@@ -1251,13 +1251,21 @@ class LeadController extends Controller
                     ->orWhere('typeId',2)
                     ->orWhere('typeId',3)
                     ->get();
+
             }
             else{
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
                     ->where('teamId','!=',null)
                     ->get();
+
             }
+            $assignto=User::select('id','firstName','lastName')
+                ->where('active', 1)
+                ->where('typeId',5)
+                ->OrWhere('typeId',2)
+                ->OrWhere('typeId',3)
+                ->get();
 
             $categories=Category::where('type',1)->get();
             $callReports=Callingreport::get();
@@ -1283,7 +1291,8 @@ class LeadController extends Controller
                 ->with('status',$status)
                 ->with('country',$country)
                 ->with('outstatus',$outstatus)
-                ->with('users',$users);
+                ->with('users',$users)
+                ->with('assignto',$assignto);
 
         }
         return Redirect()->route('home');
@@ -1385,7 +1394,7 @@ class LeadController extends Controller
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })
-          
+
            ->addColumn('callreport', function ($lead) use($r){
                 $callingreport = DB::table('workprogress')
                     ->select('report')
@@ -1407,7 +1416,7 @@ class LeadController extends Controller
                 }
 
             })
-            
+
 //            ->filterColumn('callreport', function ($query,$keyword ,$lead){
 //                return $query->leftjoin('workprogress','leads.leadId','workprogress.leadId')
 //                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
@@ -1419,7 +1428,7 @@ class LeadController extends Controller
 //
 //            })
             ->rawColumns(['call', 'action','check'])
-            
+
 
 
             ->make(true);
@@ -1473,7 +1482,7 @@ class LeadController extends Controller
 //                if (($callingreport->isEmpty())) {
 //
 //                    return $test="New Lead";
-//                }else{  
+//                }else{
 
                 return $test=$callingreport->first()->report;
                 //   }
@@ -1600,7 +1609,7 @@ class LeadController extends Controller
             ->with('user',$user);
     }
 
-    
+
 
     public function verifyallLeads(Request $r){
         $leads=Lead::with('country','category','mined','contact')

@@ -23,6 +23,64 @@
                     <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
                         <span class="hide-menu">Dashboard</span></a>
                 </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
+                            class="hide-menu">Report</span>
+                        <span class="pull-right-container">
+					<i class="fa fa-angle-left pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
+                                <span class="hide-menu">Value</span></a>
+                        </li>
+                        @if($userType == 'MANAGER')
+                            @if(Auth::user()->areaType != "usa" )
+                                <li>
+                                    <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
+                                </li>
+                            @endif
+
+                        @endif
+
+                        @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
+                            @if(Auth::user()->areaType != "usa" )
+                                <li>
+                                    <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu">Country</span></a>
+                                </li>
+                            @endif
+                        @endif
+
+                        @if($userType =='SUPERVISOR')
+                            <li>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Follow-up</span></a>
+                            </li>
+                            {{--<li>
+                                <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
+                                                                         aria-hidden="true"></i>
+                                    <span class="hide-menu">Category</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('reportStatus')}}"><i class="fa fa-hourglass-start"
+                                                                       aria-hidden="true"></i>
+                                    <span class="hide-menu">Status</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start"
+                                                                        aria-hidden="true"></i>
+                                    <span class="hide-menu">Country</span></a>
+                            </li>--}}
+                        @endif
+                    </ul>
+                </li>
+
 
                 {{--Start For Global--}}
                 @if(Auth::user()->crmType !='local')
@@ -215,63 +273,6 @@
 
                 @endif
 
-                <li class="treeview">
-                    <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
-                                class="hide-menu">Report</span>
-                        <span class="pull-right-container">
-					<i class="fa fa-angle-left pull-right"></i>
-					</span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
-                        </li>
-                        <li>
-                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu">Value</span></a>
-                        </li>
-                        @if($userType == 'MANAGER')
-                            @if(Auth::user()->areaType != "usa" )
-                            <li>
-                                <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
-                            </li>
-                            @endif
-
-                        @endif
-
-                        @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
-                            @if(Auth::user()->areaType != "usa" )
-                            <li>
-                                <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu">Country</span></a>
-                            </li>
-                            @endif
-                        @endif
-
-                        @if($userType =='SUPERVISOR')
-                            <li>
-                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Follow-up</span></a>
-                            </li>
-                            {{--<li>
-                                <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
-                                                                         aria-hidden="true"></i>
-                                    <span class="hide-menu">Category</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportStatus')}}"><i class="fa fa-hourglass-start"
-                                                                       aria-hidden="true"></i>
-                                    <span class="hide-menu">Status</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start"
-                                                                        aria-hidden="true"></i>
-                                    <span class="hide-menu">Country</span></a>
-                            </li>--}}
-                        @endif
-                    </ul>
-                </li>
 
                 @if($userType =='SUPERVISOR')
                     @if(Auth::user()->areaType != "usa" )

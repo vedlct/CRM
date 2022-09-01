@@ -12,7 +12,7 @@
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>My Lead</b></h2>
+                <h2 class="card-title" align="center"><b>My Lead </b></h2>
             @endif
                 <div class="form-group col-md-2" style="float: right">
                     <label>Lead Status</label>
@@ -55,7 +55,7 @@
 
             <div class="row">
 
-            
+
 
             <div class="form-group col-md-8">
 
@@ -79,7 +79,7 @@
                 <label ><b>Assign To:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 50%">
                     <option value="">select</option>
-                    @foreach($users as $user)
+                    @foreach($assignto as $user)
                         <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
 
                     @endforeach
@@ -92,11 +92,11 @@
 
 
 
-            
+
         </div>
     </div>
 
-    
+
 
     <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
@@ -342,14 +342,14 @@
 
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
-    
+
     <script src="{{url('js/jconfirm.js')}}"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-   
-    
-        
+
+
+
 
 
 
@@ -369,8 +369,8 @@ function selectAll(source) {
 
         $("#otherCatches").change(function() {
 
-       
-            
+
+
 
             var chkArray = [];
             var status=$(this).val();
@@ -385,9 +385,9 @@ function selectAll(source) {
             jQuery('input:checkbox:checked').parents("tr").remove();
             $(this).prop('selectedIndex',0);
 
-            
 
-            
+
+
 
             $.ajax({
                 type : 'post' ,
@@ -408,7 +408,7 @@ function selectAll(source) {
                         $('#alert').show();
 
                     }
-                    
+
                 }
             });
 
@@ -560,7 +560,7 @@ function selectAll(source) {
                 columns: [
 
                     {data: 'check', name: 'check', orderable: false, searchable: false},
-                    
+
                     { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
@@ -634,7 +634,7 @@ $.ajax({
 
 
 
-            
+
 
 
 

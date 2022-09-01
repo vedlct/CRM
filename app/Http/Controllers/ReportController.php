@@ -8,6 +8,7 @@ use App\Failreport;
 use App\NewCall;
 use App\NewFile;
 use App\Possibility;
+use App\UserType;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Session;
@@ -545,6 +546,8 @@ class ReportController extends Controller
 
         $date = Carbon::now();
         $User_Type = Session::get('userType');
+
+  //      $User_Type = UserType::select('typeName')->Where('typeId',Auth::user()->typeId)->first();
 
 
         if ($User_Type == 'MANAGER') {
