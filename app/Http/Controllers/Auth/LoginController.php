@@ -159,7 +159,7 @@ class LoginController extends Controller
 
 
                 return $this->sendLoginResponse($request);
-            } elseif ($user->typeId == "1" && substr($ip,0,8) != "192.168.") {
+            } elseif ($user->typeId == "1" && substr($ip,0,8) != "192.168." && $user->whitelist == 1) {
 
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
@@ -176,7 +176,7 @@ class LoginController extends Controller
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
 
-            }elseif ($user->typeId == "2" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "2" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
 
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
@@ -192,7 +192,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "3" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "3" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -207,7 +207,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "4" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "4" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -222,7 +222,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "5" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "5" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -237,7 +237,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "6" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "6" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -252,7 +252,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "7" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "7" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -267,7 +267,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "8" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "8" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -282,7 +282,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "9" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "9" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);
@@ -297,7 +297,7 @@ class LoginController extends Controller
                         ->withInput($request->only($this->username(), 'remember'))
                         ->withErrors(['active' => 'You must be active to login.']);
                 }
-            }elseif ($user->typeId == "10" && substr($ip,0,8) != "192.168."){
+            }elseif ($user->typeId == "10" && substr($ip,0,8) != "192.168." && $user->whitelist == 1){
                 if ($user->active && $this->attemptLogin($request)) {
                     // Send the normal successful login response
                     $type = strtoupper(Auth::user()->userType->typeName);

@@ -6,7 +6,7 @@
 			<form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.update', ['id' => $user->id]) }}" enctype="multipart/form-data">
 				<input type="hidden" name="_method" value="PATCH">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
-						
+
             <div class="row">
 				<div class="form-group col-md-6">
 					<div class="form-group row{{ $errors->has('userId') ? ' has-error' : '' }}">
@@ -121,7 +121,7 @@
 									<strong>{{ $errors->first('dob') }}</strong>
 								</span>
 							@endif
-					</div>	
+					</div>
 				</div>
 
 
@@ -142,7 +142,7 @@
 									<strong>{{ $errors->first('gender') }}</strong>
 								</span>
 							@endif
-					</div>	
+					</div>
 				</div>
 
 
@@ -160,6 +160,21 @@
 							</select>
 					</div>
 				</div>
+
+                <div class="form-group col-md-6">
+                    <div class="form-group row{{ $errors->has('active	') ? ' has-error' : '' }}">
+                        <label class="form-control-label">Whitelist</label>
+                        <select name="active" class="form-control form-control-warning">
+                            @if(($user->whitelist)=='0')
+                                <option value="0">Black</option>
+                            @elseif(($user->whitelist)=='1')
+                                <option value="1">White</option>
+                            @endif
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                </div>
 
 
 				<div class="form-group col-md-6">
@@ -197,16 +212,16 @@
 							@endif
 					</div>
 					<a href="{{ asset('img/'.$user->picture) }}" target="_blank"><img src="{{asset('img/'.$user->picture)}}" width="50px" height="50px"/></a>
-						
+
 				</div>
-				
-				
+
+
 				<div class="form-group col-md-12">
 					<div class="form-group row">
 						<button type="submit" class="btn btn-primary">Update</button>
 					</div>
 				</div>
-				
+
 			</div>
 			</form>
 	</div>

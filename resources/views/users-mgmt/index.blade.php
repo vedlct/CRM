@@ -10,7 +10,7 @@
 
                 @if($userType=='ADMIN')
 
-                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal">
+                <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal1">
                     Add new user
                 </button>
                 @endif
@@ -180,7 +180,7 @@
             </div>
 
             <!-- Create User Modal -->
-            <div class="modal fade" id="myModal" >
+            <div class="modal fade" id="myModal1" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
@@ -304,6 +304,17 @@
 
                                             <option value="1">Active</option>
                                             <option value="0">Inactive</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="active">WhiteList:</label>
+
+                                        <select name="whitelist" class="form-control form-control-warning">
+
+                                            <option value="1">Black</option>
+                                            <option value="0">White</option>
                                         </select>
 
                                     </div>
@@ -499,6 +510,17 @@
                                     </div>
 
                                     <div class="form-group col-md-6">
+                                        <label for="active">Whitelist:</label>
+
+                                        <select id="whitelist" name="whitelist" class="form-control form-control-warning">
+
+                                            <option value="1">Black</option>
+                                            <option value="0">white</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-6">
                                         <label for="password">Password:</label>
                                         <input id="password" type="password" class="form-control" name="password">
                                         @if ($errors->has('password'))
@@ -624,6 +646,7 @@
 
 
 
+
         });
 
 
@@ -644,6 +667,8 @@
             var dob = $(e.relatedTarget).data('dob');
             var gender = $(e.relatedTarget).data('gender');
             var active = $(e.relatedTarget).data('active');
+            var whitelist = $(e.relatedTarget).data('whitelist');
+
             //alert(userId);
             //populate the textbox
             $(e.currentTarget).find('#id').val(id);
@@ -658,6 +683,7 @@
             $(e.currentTarget).find('#dob').val(dob);
             $(e.currentTarget).find('#gender').val(gender);
             $(e.currentTarget).find('#active').val(active);
+            $(e.currentTarget).find('#whitelist').val(whitelist);
 
         });
 
