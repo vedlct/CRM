@@ -55,7 +55,8 @@
                                        data-phone-number="{{$user->phoneNumber}}"
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
-                                       data-active="{{$user->active}}">
+                                       data-active="{{$user->active}}"
+                                       data-whitelist="{{$user->whitelist}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                     @endif
 
@@ -313,8 +314,8 @@
 
                                         <select name="whitelist" class="form-control form-control-warning">
 
-                                            <option value="1">Black</option>
-                                            <option value="0">White</option>
+                                            <option value="0">Black</option>
+                                            <option value="1">White</option>
                                         </select>
 
                                     </div>
@@ -514,8 +515,8 @@
 
                                         <select id="whitelist" name="whitelist" class="form-control form-control-warning">
 
-                                            <option value="1">Black</option>
-                                            <option value="0">white</option>
+                                            <option value="0">Black</option>
+                                            <option value="1">white</option>
                                         </select>
 
                                     </div>

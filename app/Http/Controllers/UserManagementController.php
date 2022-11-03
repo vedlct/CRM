@@ -133,6 +133,7 @@ class UserManagementController extends Controller
             'dob' => date('Y-m-d',strtotime($request['dob'])),
             'gender' => $request['gender'],
             'active' => $request['active'],
+            'whitelist' => $request['whitelist'],
             'crmType' => $crmType,
 
         ]);
@@ -170,7 +171,7 @@ class UserManagementController extends Controller
         $this->validateInput($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'active'];
+            'phoneNumber', 'dob', 'gender', 'active', 'whitelist'];
         $input = $this->createQueryInput($keys, $request);
 
         if ($request['password'] != null && strlen($request['password']) > 0) {
