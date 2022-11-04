@@ -159,8 +159,8 @@
                         <div class="form-group col-md-5" style="">
                             <label ><b>Category:</b></label>
                             <select class="form-control" id="" name="category" >
-                                @foreach($categories as $cat)
-                                    <option value="{{$cat->categoryId}}">{{$cat->categoryName}}</option>
+                                @foreach($categories as $cat2)
+                                    <option value="{{$cat2->categoryId}}">{{$cat2->categoryName}}</option>
 
                                 @endforeach
                             </select>
@@ -398,7 +398,6 @@
                                 @foreach($categories as $category)
                                     <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
                                 @endforeach
-
                             </select>
                         </div>
 
@@ -759,7 +758,9 @@
             var designation=$(e.relatedTarget).data('lead-designation');
             var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
-           
+
+            alert(category);
+
             console.log(comments);
 
             //populate the textbox

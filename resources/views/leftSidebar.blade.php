@@ -302,14 +302,14 @@
 
                 {{--@endif--}}
 
-                @if($userType=='MANAGER')
-                    @if(Auth::user()->areaType != "usa" )
-                    <li>
-                        <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>
+{{--                @if($userType=='MANAGER')--}}
+{{--                    @if(Auth::user()->areaType != "usa" )--}}
+{{--                    <li>--}}
+{{--                        <a href="{{route('detached')}}"><i class="fa fa-eject" aria-hidden="true"></i><span class="hide-menu">Detach Lead</span></a>--}}
 
-                    </li>
-                    @endif
-                @endif
+{{--                    </li>--}}
+{{--                    @endif--}}
+{{--                @endif--}}
 
                 @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
                     @if(Auth::user()->areaType != "usa" )
