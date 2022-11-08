@@ -428,15 +428,6 @@ function selectAll(source) {
         });
 
 
-
-
-
-
-
-
-
-
-
         //for Edit modal
         function changeLeadStatus(x){
             var value=$(x).val();
@@ -569,7 +560,8 @@ function selectAll(source) {
                             d.status=$("#statuschanges").val();
                         }
                         if ($("#minedby").val() != '') {
-                            d.status=$("#minedby").val();
+                            d.minedby=$("#minedby").val();
+
                         }
                     },
                 },
