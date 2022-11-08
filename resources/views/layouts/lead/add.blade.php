@@ -759,7 +759,7 @@
             var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
 
-            alert(category);
+
 
             console.log(comments);
 

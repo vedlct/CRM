@@ -26,6 +26,18 @@
 
                     </select>
                 </div>
+                <div class="form-group col-md-2" style="float: right">
+                    <label>Mined By</label>
+                    <select id="minedby" class="form-control" name="minedby" onchange="mindbychanged()">
+
+                        <option value="">select Mined By</option>
+                        @foreach($usersforminded as $urs)
+                            <option value="{{$urs->id }}">{{$urs->firstName}}</option>
+                        @endforeach
+
+
+                    </select>
+                </div>
             <div class="table-responsive m-t-40">
 
                 <table id="myTable" class="table table-bordered table-striped">
@@ -41,6 +53,7 @@
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
                         <th width="8%">Status</th>
+                        <th width="8%">Mined By</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -555,6 +568,9 @@ function selectAll(source) {
                         if ($("#statuschanges").val() != '') {
                             d.status=$("#statuschanges").val();
                         }
+                        if ($("#minedby").val() != '') {
+                            d.status=$("#minedby").val();
+                        }
                     },
                 },
                 columns: [
@@ -581,6 +597,7 @@ function selectAll(source) {
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     { data: 'callreport', name: 'callreport', searchable: false},
+                    { data: 'minedby', name: 'minedby', searchable: false},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });
@@ -633,35 +650,14 @@ $.ajax({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         });
-
-
-
-
-
-
-
-
-
-
-
 
 
         function leadstatussearch(){
 
+            dataTable.ajax.reload();
+        }
+        function mindbychanged(){
             dataTable.ajax.reload();
         }
 

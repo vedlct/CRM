@@ -341,7 +341,7 @@ class LeadController extends Controller
         $l->minedBy = $userId;
         $l->save();
 
-        if($r->contact){
+       // if($r->contact){
             $l->statusId = 7;
             $l->contactedUserId=Auth::user()->id;
 
@@ -349,7 +349,7 @@ class LeadController extends Controller
             $pChange->leadId=$l->leadId;
             $pChange->userId=Auth::user()->id;
             $pChange->possibilityId= $l->possibilityId;
-        }
+        //}
 
         $l->save();
         //for Flash Meassage
@@ -1263,6 +1263,8 @@ class LeadController extends Controller
                 $users=User::select('id','firstName','lastName')
                     ->where('teamId',Auth::user()->teamId)
                     ->where('teamId','!=',null)
+                    ->where('active','1')
+                    ->where('crmType','!=','local')
                     ->get();
 
             }
@@ -1289,6 +1291,15 @@ class LeadController extends Controller
                 ->get();
             $country=Country::get();
 
+            $usersforminded=User::select('id','firstName','lastName')
+                ->where('active','1')
+                ->where('typeId',5)
+                ->OrWhere('typeId',2)
+                ->OrWhere('typeId',3)
+                ->get();
+
+
+
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
@@ -1298,7 +1309,8 @@ class LeadController extends Controller
                 ->with('country',$country)
                 ->with('outstatus',$outstatus)
                 ->with('users',$users)
-                ->with('assignto',$assignto);
+                ->with('assignto',$assignto)
+                ->with('usersforminded',$usersforminded);
 
         }
         return Redirect()->route('home');
@@ -1330,6 +1342,7 @@ class LeadController extends Controller
                 ->get();
             $country=Country::get();
 
+
             return view('layouts.lead.mycontactlead')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
@@ -1337,6 +1350,7 @@ class LeadController extends Controller
                 ->with('categories',$categories)
                 ->with('status',$status)
                 ->with('country',$country);
+
 
         }
         return Redirect()->route('home');
@@ -1368,6 +1382,9 @@ class LeadController extends Controller
             }
 
           //  return $leads = $leads->where('callingReport', '=', $r->status);
+        }
+        if ($r->minedby){
+            $leads = $leads->where('minedBy', $r->minedby);
         }
 
         return DataTables::eloquent($leads)
@@ -1422,6 +1439,9 @@ class LeadController extends Controller
                 }
 
             })
+            ->addColumn('minedby', function ($lead){
+                return $lead->mined->firstName;
+            })
 
 //            ->filterColumn('callreport', function ($query,$keyword ,$lead){
 //                return $query->leftjoin('workprogress','leads.leadId','workprogress.leadId')
@@ -1433,7 +1453,7 @@ class LeadController extends Controller
 //                    ->where('callreport','like', '%'.$keyword.'%');
 //
 //            })
-            ->rawColumns(['call', 'action','check'])
+            ->rawColumns(['call', 'action','check','minedby'])
 
 
 
