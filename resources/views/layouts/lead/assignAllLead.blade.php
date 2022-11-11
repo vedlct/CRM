@@ -24,7 +24,7 @@
                         {{-- <label ><b>Select Marketier:</b></label> --}}
                         <select class="form-control"  name="assignTo" id="otherCatches2">
                             <option value="">select</option>
-                        
+
                             @foreach($users as $user)
                                 <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
 
@@ -43,6 +43,7 @@
 
                         <th>Select</th>
                         <th>Company Name</th>
+                        <th>Phone</th>
                         <th>Date</th>
                         <th>Mined By</th>
                         {{--<th>Category</th>--}}
@@ -86,7 +87,7 @@
             </div>
 
 
-          
+
 
             <input type="hidden" class="form-control" id="inp" name="leadId">
 
@@ -378,8 +379,8 @@ function selectAll(source) {
 
         $(document).ready(function(){
 
-            
-        
+
+
 
 
 fill_datatable();
@@ -401,11 +402,12 @@ function fill_datatable(userId='')
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}",'userId':userId}
                 },
-                
+
 
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'companyName', name: 'leads.companyName' },
+                    { data: 'contactNumber', name: 'leads.contactNumber' },
                     { data: 'created_at', name: 'leads.created_at' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'leads.website' },
@@ -484,11 +486,11 @@ function fill_datatable(userId='')
 
 
 
-        
+
         $("#otherCatches2").change(function() {
 
-          
-          
+
+
         var userId = $(this).val();
         //var filter_country = $('#filter_country').val();
 

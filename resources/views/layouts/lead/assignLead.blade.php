@@ -25,6 +25,7 @@
 
                         <th>Select</th>
                         <th>Company Name</th>
+                        <th>Phone</th>
                         <th>Date</th>
                         <th>Mined By</th>
                         {{--<th>Category</th>--}}
@@ -53,7 +54,7 @@
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
             <div class="row">
 
-         
+
 
             <div class="col-md-10">
 
@@ -68,7 +69,7 @@
 
                 </select>
             </div>
-            <div class="col-md-2"> 
+            <div class="col-md-2">
 
             {{-- <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/> --}}
 
@@ -143,7 +144,7 @@ $(document).ready(function() {
                     }
                 }
             });
-    }); 
+    });
 })
 
 
@@ -198,6 +199,7 @@ $(document).ready(function() {
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'companyName', name: 'leads.companyName' },
+                    { data: 'contactNumber', name: 'leads.contactNumber' },
                     { data: 'created_at', name: 'leads.created_at' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'leads.website' },
@@ -216,7 +218,7 @@ $(document).ready(function() {
 
                         },
                     },
-                    
+
                 ]
             });
         });
