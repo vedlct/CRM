@@ -352,6 +352,7 @@ class LeadController extends Controller
         //}
 
         $l->save();
+        $pChange->save();
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
         return back();
