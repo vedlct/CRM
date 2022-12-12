@@ -232,18 +232,18 @@
                             </td>
                             <td>
                                 @php($value=0)
-{{--                                @foreach($closing as $cl)--}}
-{{--                                    @if($cl->userId == $user->userid)--}}
-{{--                                        <a href="#" class="highpossibility" onclick="closelead(this)"--}}
-{{--                                           @if(isset($fromDate) && isset($toDate))--}}
-{{--                                           data-date-from="{{$fromDate}}"--}}
-{{--                                           data-date-to="{{$toDate}}"--}}
-{{--                                           @endif--}}
-{{--                                           data-user-id="{{$user->userid}}"--}}
-{{--                                           data-user-name="{{$user->userName}}">{{$value=$cl->userClosing}}</a>--}}
-{{--                                        @break--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
+                                @foreach($closing as $cl)
+                                    @if($cl->countryId == $country->countryId)
+                                        <a href="#" class="highpossibility" onclick="closelead(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$cl->userClosing}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
                                 @if($value==0)
                                     <a href="#" >0</a>
                                 @endif
@@ -259,18 +259,18 @@
                             </td>
                             <td>
                                 @php($value=0)
-{{--                                @foreach($leadMinedThisWeek as $lm)--}}
-{{--                                    @if($lm->minedBy == $user->userid)--}}
-{{--                                        <a href="#" class="highpossibility" onclick="leadmine(this)"--}}
-{{--                                           @if(isset($fromDate) && isset($toDate))--}}
-{{--                                           data-date-from="{{$fromDate}}"--}}
-{{--                                           data-date-to="{{$toDate}}"--}}
-{{--                                           @endif--}}
-{{--                                           data-user-id="{{$user->userid}}"--}}
-{{--                                           data-user-name="{{$user->userName}}">{{$value=$lm->userLeadMined}}</a>--}}
-{{--                                        @break--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
+                                @foreach($leadMinedThisWeek as $lm)
+                                    @if($lm->countryId == $country->countryId)
+                                        <a href="#" class="highpossibility" onclick="leadmine(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-country-id="{{$country->countryId}}"
+                                           data-country-name="{{$country->countryName}}">{{$value=$lm->userLeadMined}}</a>
+                                        @break
+                                    @endif
+                                @endforeach
                                 @if($value==0)
                                     <a href="#" >0</a>
                                 @endif

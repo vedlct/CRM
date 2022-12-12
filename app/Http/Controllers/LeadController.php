@@ -1580,19 +1580,19 @@ class LeadController extends Controller
             $newFile->save();
         }
 
-        $assignId=Leadassigned::select('assignId')
-            ->where('leadId',$r->leadId)
-            ->where('assignTo',Auth::user()->id)
-            ->where('leaveDate',null)
-            ->limit(1)->first();
-        if ($assignId){
-            $leave=Leadassigned::find($assignId->assignId);
-            $leave->leaveDate=date('Y-m-d');
-            $leave->save();
-            $l=Lead::findOrFail($leave->leadId);
-            $l->leadAssignStatus=0;
-            $l->save();
-        }
+//        $assignId=Leadassigned::select('assignId')
+////            ->where('leadId',$r->leadId)
+////            ->where('assignTo',Auth::user()->id)
+////            ->where('leaveDate',null)
+////            ->limit(1)->first();
+////        if ($assignId){
+////            $leave=Leadassigned::find($assignId->assignId);
+////            $leave->leaveDate=date('Y-m-d');
+////            $leave->save();
+////            $l=Lead::findOrFail($leave->leadId);
+////            $l->leadAssignStatus=0;
+////            $l->save();
+////        }
         $lead=Lead::findOrFail($r->leadId);
         $lead->statusId=$r->Status;
         if($lead->contactedUserId == Auth::user()->id){
