@@ -1404,6 +1404,12 @@ class ReportController extends Controller
 
 //        return $testLeadForRa;
 
+        $leadMinedThisWeek = Lead::select('leads.countryId', DB::raw('count(*) as userLeadMined'))
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->whereBetween(DB::raw('DATE(created_at)'),  [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            //->groupBy('minedBy')
+            ->groupBy('leads.countryId')
+            ->get();
 
         return view('report.countryTable')
             ->with('countries', $countries)
@@ -1416,7 +1422,7 @@ class ReportController extends Controller
             ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
 //            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
             ->with('followupThisWeek', $followupThisWeek)
-//            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+           ->with('leadMinedThisWeek', $leadMinedThisWeek)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('closing', $closing)
 //            ->with('usersRa', $usersRa)
