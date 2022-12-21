@@ -1404,6 +1404,12 @@ class ReportController extends Controller
 
 //        return $testLeadForRa;
 
+        $leadMinedThisWeek = Lead::select('leads.countryId', DB::raw('count(*) as userLeadMined'))
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->whereBetween(DB::raw('DATE(created_at)'),  [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
+            //->groupBy('minedBy')
+            ->groupBy('leads.countryId')
+            ->get();
 
         return view('report.countryTable')
             ->with('countries', $countries)
@@ -1416,7 +1422,7 @@ class ReportController extends Controller
             ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
 //            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
             ->with('followupThisWeek', $followupThisWeek)
-//            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+           ->with('leadMinedThisWeek', $leadMinedThisWeek)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('closing', $closing)
 //            ->with('usersRa', $usersRa)
@@ -1462,10 +1468,12 @@ class ReportController extends Controller
             ->get();
 
 
-//        $leadMinedThisWeek = Lead::select('minedBy', DB::raw('count(*) as userLeadMined'))
-//            ->whereBetween(DB::raw('DATE(created_at)'), [$date->startOfWeek()->format('Y-m-d'), $date->endOfWeek()->format('Y-m-d')])
-//            ->groupBy('minedBy')
-//            ->get();
+        $leadMinedThisWeek = Lead::select('leads.countryId', DB::raw('count(*) as userLeadMined'))
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->whereBetween(DB::raw('DATE(created_at)'), [$r->fromDate, $r->toDate])
+            //->groupBy('minedBy')
+            ->groupBy('leads.countryId')
+            ->get();
 
 
         $followupThisWeek = Workprogress::select('leads.countryId', DB::raw('count(*) as userFollowup'))
@@ -1633,7 +1641,7 @@ class ReportController extends Controller
             ->with('highPosibilitiesThisWeekUser', $highPosibilitiesThisWeekUser)
 //            ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
             ->with('followupThisWeek', $followupThisWeek)
-//            ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('leadMinedThisWeek', $leadMinedThisWeek)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('closing', $closing)
 //            ->with('usersRa', $usersRa)
