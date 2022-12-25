@@ -261,7 +261,7 @@
                 @endif
                 @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' )
                 <li>
-                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Released Lead</span></a>
+                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Random Lead</span></a>
                 </li>
                  @endif
 
