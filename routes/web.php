@@ -277,6 +277,7 @@ Route::post('/getCategoryLead','GetIndividualReportController@getCategoryLead')-
 Route::post('/getStatusLead','GetIndividualReportController@getStatusLead')->name('getStatusLead');
 Route::post('/getCountryLead','GetIndividualReportController@getCountryLead')->name('getCountryLead');
 Route::post('/getcoldEmailIndividual','GetIndividualReportController@getcoldEmailIndividual')->name('getcoldEmailIndividual');
+Route::post('/getconversationIndividual','GetIndividualReportController@getconversationIndividual')->name('getconversationIndividual');
 Route::post('/getOtherIndividual','GetIndividualReportController@getOtherIndividual')->name('getOtherIndividual');
 Route::post('/getNotAvailableIndividual','GetIndividualReportController@getNotAvailableIndividual')->name('getNotAvailableIndividual');
 

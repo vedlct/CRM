@@ -1380,7 +1380,7 @@ class LeadController extends Controller
             }else {
                 $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
                     return $query->where('callingReport', '=', $r->status);
-//                    ->orderBy('created_at', 'DESC')
+//                    ->orderBy('created_at', 'DESC');
 //                    ->groupBy('workprogress.leadId')
 //                    ->limit(1);
                 });
