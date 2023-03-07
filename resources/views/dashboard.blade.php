@@ -48,24 +48,25 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('contact')}}"> New Contact</a></h4>
+                        <h4 class="card-title"><a href="{{route('contact')}}"> Conversation</a></h4>
                         <div class="text-right">
-                            <h2 class="font-light m-b-0"> {{$contactCall}} | {{$target->targetContact}}</h2>
+                            <h2 class="font-light m-b-0"> {{$conversation}} | {{$target->conversation}}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
-                        @if($target->targetContact>0)
+                        @if($target->conversation>0)
                             <?php
-                            $lastContactPercent= round(($contactCall/$target->targetContact)*100);
+                            $lastContactPercent= round(($conversation/$target->conversation)*100);
                             if($lastContactPercent > 100){
                                 $lastContactPercent=100;
                             }
-                            $count++; $total+=$contactThisWeek;
+                            $count++;
+                            $total+=$conversation;
                             ?>
 
                             <span class="text-success">{{round($lastContactPercent)}}%</span>
                         @endif
                         <div class="progress">
-                            @if($target->targetContact>0)
+                            @if($target->conversation>0)
                                 <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastContactPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             @endif
                         </div>

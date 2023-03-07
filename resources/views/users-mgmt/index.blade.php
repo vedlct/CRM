@@ -78,6 +78,8 @@
                                        data-target-contactusa="{{$user->target['targetUsa']}}"
                                        data-target-test="{{$user->target['targetTest']}}"
                                        data-target-file="{{$user->target['targetFile']}}"
+                                       data-target-conversation="{{$user->target['conversation']}}"
+                                       data-target-closelead="{{$user->target['closelead']}}"
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
@@ -145,6 +147,16 @@
                             <div class="form-group col-md-2">
                                 <label for="firstName">File:</label>
                                 <input id="targetFile" type="number" class="form-control" name="targetFile" >
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="firstName">Conversation:</label>
+                                <input id="conversation" type="number" class="form-control" name="conversation" >
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="firstName">Close Lead:</label>
+                                <input id="closelead" type="number" class="form-control" name="closelead" >
                             </div>
 
 
@@ -626,6 +638,8 @@
             var targetTest = $(e.relatedTarget).data('target-test');
             var targetFile = $(e.relatedTarget).data('target-file');
             var type = $(e.relatedTarget).data('target-type');
+            var conversation = $(e.relatedTarget).data('target-conversation');
+            var closelead = $(e.relatedTarget).data('target-closelead');
 
 
             // alert(targetFile);
@@ -641,6 +655,8 @@
                 // $(e.currentTarget).find('input[name="contactUsa"]').val(contactUsa);
                 $(e.currentTarget).find('input[name="targetTest"]').val(targetTest);
                 $(e.currentTarget).find('input[name="targetFile"]').val(targetFile);
+                $(e.currentTarget).find('input[name="conversation"]').val(conversation);
+                $(e.currentTarget).find('input[name="closelead"]').val(closelead);
 
 
 

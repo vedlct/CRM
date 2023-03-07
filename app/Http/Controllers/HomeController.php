@@ -76,6 +76,14 @@ class HomeController extends Controller
          $contactCall= $contactThisWeek;
 
 
+        $conversation = Workprogress::where('userId',Auth::user()->id)
+            ->where('callingReport',11)
+//            ->where(function($q){
+//                $q->orWhere('callingReport',5);
+////                    ->orWhere('callingReport',4);
+//            })
+            ->whereBetween('created_at', [$start, $end])->count();
+
 
         $day=Carbon::now()->format('l');
 
@@ -271,7 +279,8 @@ class HomeController extends Controller
             ->with('countWeek',$countWeek)
             ->with('targetNewFile',$targetNewFile)
             ->with('fileCount',$fileCount)
-            ->with('contactCall',$contactCall);
+            ->with('contactCall',$contactCall)
+            ->with('conversation',$conversation);
 
 
     }
