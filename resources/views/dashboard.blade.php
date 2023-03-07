@@ -14,11 +14,11 @@
 
 
 <br><br>
-    <div class="row" >
+    <div class="seven-columns-row" >
 
         <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
 
-    <div class="col-lg-2 col-md-6">
+    <div class="svn-col">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><a href="{{route('called')}}">Total Call</a></h4>
@@ -45,11 +45,7 @@
             </div>
         </div>
     </div>
-
-
-
-
-            <div class="col-lg-2 col-md-6">
+            <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('contact')}}"> New Contact</a></h4>
@@ -79,7 +75,7 @@
 
 
 
-    <div class="col-lg-2 col-md-6">
+    <div class="svn-col">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
@@ -108,7 +104,7 @@
         </div>
     </div>
 
-            <div class="col-lg-2 col-md-6">
+            <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('testLead')}}">Test Lead</a></h4>
@@ -131,7 +127,7 @@
 
             @if(Auth::user()->typeId==4)
 
-            <div class="col-lg-2 col-md-6">
+            <div class="svn-col">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
@@ -157,7 +153,47 @@
 
 
 
-            <div class="col-lg-2 col-md-6">
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
+                            <span class="text-muted">This Month</span>
+                        </div>
+
+                        @if($target->targetFile>0)
+                            <span class="text-purple">{{round($targetNewFile)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetFile>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
+                            <span class="text-muted">This Month</span>
+                        </div>
+
+                        @if($target->targetFile>0)
+                            <span class="text-purple">{{round($targetNewFile)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetFile>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
