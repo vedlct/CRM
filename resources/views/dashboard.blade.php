@@ -177,18 +177,18 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
+                        <h4 class="card-title"><a href="{{route('files')}}">Close Lead</a></h4>
                         <div class="text-right">
-                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
+                            <h2 class="font-light m-b-0">{{$closelead}} | {{$target->closelead }}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
 
-                        @if($target->targetFile>0)
-                            <span class="text-purple">{{round($targetNewFile)}}%</span>
+                        @if($target->closelead>0)
+                            <span class="text-purple">{{round($targetCloselead)}}%</span>
                         @endif
                         <div class="progress">
-                            @if($target->targetFile>0)
-                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @if($target->closelead>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetCloselead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             @endif
                         </div>
                     </div>

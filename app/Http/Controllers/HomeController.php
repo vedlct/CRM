@@ -78,10 +78,10 @@ class HomeController extends Controller
 
         $conversation = Workprogress::where('userId',Auth::user()->id)
             ->where('callingReport',11)
-//            ->where(function($q){
-//                $q->orWhere('callingReport',5);
-////                    ->orWhere('callingReport',4);
-//            })
+            ->whereBetween('created_at', [$start, $end])->count();
+
+        $closelead = Workprogress::where('userId',Auth::user()->id)
+            ->where('progress','Closing')
             ->whereBetween('created_at', [$start, $end])->count();
 
 
@@ -258,6 +258,15 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+        $targetCloselead=0;
+        if($target->closelead>0){
+            $targetCloselead=round(($closelead/($target->closelead))*100);
+            if($targetCloselead>100){
+                $targetCloselead=100;
+            }
+            $countWeek++;
+        }
+
 
 
 
@@ -280,7 +289,9 @@ class HomeController extends Controller
             ->with('targetNewFile',$targetNewFile)
             ->with('fileCount',$fileCount)
             ->with('contactCall',$contactCall)
-            ->with('conversation',$conversation);
+            ->with('conversation',$conversation)
+            ->with('closelead',$closelead)
+            ->with('targetCloselead',$targetCloselead);
 
 
     }
