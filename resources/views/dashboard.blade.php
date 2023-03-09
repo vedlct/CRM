@@ -197,7 +197,7 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
+                        <h4 class="card-title"><a href="{{route('files')}}">Follow up</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
                             <span class="text-muted">This Month</span>
