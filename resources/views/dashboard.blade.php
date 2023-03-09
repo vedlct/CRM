@@ -48,7 +48,7 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('contact')}}"> Conversation</a></h4>
+                        <h4 class="card-title"><a href="{{route('conversation')}}"> Conversation</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0"> {{$conversation}} | {{$target->conversation}}</h2>
                             <span class="text-muted">This Month</span>
@@ -177,7 +177,7 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('files')}}">Close Lead</a></h4>
+                        <h4 class="card-title"><a href="{{route('closeLead')}}">Close Lead</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$closelead}} | {{$target->closelead }}</h2>
                             <span class="text-muted">This Month</span>
@@ -197,7 +197,7 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('files')}}">Follow up</a></h4>
+                        <h4 class="card-title"><a href="{{route('followup')}}">Follow up</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
                             <span class="text-muted">This Month</span>

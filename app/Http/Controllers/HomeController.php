@@ -400,7 +400,7 @@ class HomeController extends Controller
 
 
 
-    public  function call(){
+    public function call(){
     $date = Carbon::now();
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
@@ -423,7 +423,72 @@ class HomeController extends Controller
         ->with('possibilities', $possibilities)
         ->with('categories',$categories);
 
-}
+    }
+
+    public  function conversation(){
+        $date = Carbon::now();
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        $leads=Lead::select('leads.*', 'workprogress.created_at')
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('workprogress.callingReport', 11)
+            ->whereBetween('workprogress.created_at', [$start,$end])->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('layouts.lead.conversation')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+    }
+
+    public  function closeLead(){
+        $date = Carbon::now();
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        $leads=Lead::select('leads.*', 'workprogress.created_at')
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->where('workprogress.progress', 'Closing')
+            ->whereBetween('workprogress.created_at', [$start,$end])->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('layouts.lead.closeLead')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+    }
+
+    public  function followup(){
+        $date = Carbon::now();
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        $leads=Lead::select('leads.*', 'workprogress.created_at')
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->where('workprogress.callingReport', '!=', null)
+            ->where('workprogress.callingReport', 4)
+            ->whereBetween('workprogress.created_at', [$start,$end])->get();
+
+        $callReports = Callingreport::get();
+        $possibilities = Possibility::get();
+        $categories=Category::where('type',1)->get();
+
+        return view('layouts.lead.followup')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('categories',$categories);
+    }
 
     public  function contact(){
         $date = Carbon::now();

@@ -875,15 +875,16 @@ class LeadController extends Controller
 
     public function getComments(Request $r){
         if($r->ajax()){
-            $comments=Workprogress::select(['users.firstName','comments','workprogress.created_at'])
+            $comments=Workprogress::select(['users.firstName','callingreports.report','comments','workprogress.created_at'])
                 ->where('workprogress.leadId',$r->leadId)
                 ->leftJoin('users','users.id','workprogress.userId')
+                ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                 ->get();
 
             $text='';
 
             foreach ($comments as $comment){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'('.$comment->report.')</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
             return Response($text);
         }

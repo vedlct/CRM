@@ -80,6 +80,7 @@
                                        data-target-file="{{$user->target['targetFile']}}"
                                        data-target-conversation="{{$user->target['conversation']}}"
                                        data-target-closelead="{{$user->target['closelead']}}"
+                                       data-target-followup="{{$user->target['followup']}}"
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
@@ -157,6 +158,11 @@
                             <div class="form-group col-md-2">
                                 <label for="firstName">Close Lead:</label>
                                 <input id="closelead" type="number" class="form-control" name="closelead" >
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="firstName">Followup:</label>
+                                <input id="followup" type="number" class="form-control" name="followup" >
                             </div>
 
 
@@ -640,6 +646,7 @@
             var type = $(e.relatedTarget).data('target-type');
             var conversation = $(e.relatedTarget).data('target-conversation');
             var closelead = $(e.relatedTarget).data('target-closelead');
+            var followup = $(e.relatedTarget).data('target-followup');
 
 
             // alert(targetFile);
@@ -657,6 +664,7 @@
                 $(e.currentTarget).find('input[name="targetFile"]').val(targetFile);
                 $(e.currentTarget).find('input[name="conversation"]').val(conversation);
                 $(e.currentTarget).find('input[name="closelead"]').val(closelead);
+                $(e.currentTarget).find('input[name="followup"]').val(followup);
 
 
 

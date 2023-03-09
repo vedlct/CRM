@@ -309,6 +309,18 @@ class UserManagementController extends Controller
                $target->targetFile=$r->targetFile;
            }
 
+           if($r->conversation !=null){
+               $target->conversation=$r->conversation;
+           }
+
+           if($r->closelead !=null){
+               $target->closelead=$r->closelead;
+           }
+
+           if($r->followup !=null){
+               $target->followup=$r->followup;
+           }
+
        }catch (ModelNotFoundException $ex) {
            $target=new Usertarget;
            $target->userId=$r->userId;
@@ -346,6 +358,17 @@ class UserManagementController extends Controller
 
                $target->targetUsa=$r->contactUsa;
            }
+           if($r->conversation !=null){
+               $target->conversation=$r->conversation;
+           }
+
+           if($r->closelead !=null){
+               $target->closelead=$r->closelead;
+           }
+
+           if($r->followup !=null){
+               $target->followup=$r->followup;
+           }
        }
 
        $target->save();
@@ -382,6 +405,18 @@ class UserManagementController extends Controller
         }
         if($r->targetFile !=null){
             $targetMonthly->targetFile=$r->targetFile;
+        }
+
+        if($r->conversation !=null){
+            $targetMonthly->conversation=$r->conversation;
+        }
+
+        if($r->closelead !=null){
+            $targetMonthly->closelead=$r->closelead;
+        }
+
+        if($r->followup !=null){
+            $targetMonthly->followup=$r->followup;
         }
         $targetMonthly->save();
 
