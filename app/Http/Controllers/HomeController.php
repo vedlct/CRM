@@ -51,17 +51,9 @@ class HomeController extends Controller
         $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-
-
-
-
-
         $leadMinedThisWeek=Lead::where('minedBy',Auth::user()->id)
             ->whereBetween('created_at', [$start, $end])->count();
 
-
-
-//
         $contactThisWeek=Workprogress::where('userId',Auth::user()->id)
             ->where('callingReport',5)
 //            ->where(function($q){
@@ -72,9 +64,7 @@ class HomeController extends Controller
 
 //        $contactThisWeek=NewCall::where('userId',Auth::user()->id)->whereBetween('created_at', [$start, $end])->count();
 
-
          $contactCall= $contactThisWeek;
-
 
         $conversation = Workprogress::where('userId',Auth::user()->id)
             ->where('callingReport',11)
@@ -84,17 +74,17 @@ class HomeController extends Controller
             ->where('progress','Closing')
             ->whereBetween('created_at', [$start, $end])->count();
 
+        $followup = Workprogress::where('userId',Auth::user()->id)
+            ->where('callingReport',4)
+            ->whereBetween('created_at', [$start, $end])->count();
 
         $day=Carbon::now()->format('l');
 
         $lastDate=Carbon::now()->subDay()->format('Y-m-d');
 
-
         if ($day=='Monday'){
             $lastDate=Carbon::now()->subDay(3)->format('Y-m-d');
-
         }
-
 
         $lastDayCalled=Workprogress::where('userId',Auth::user()->id)
             ->where('workprogress.callingReport','!=',null)
@@ -122,10 +112,6 @@ class HomeController extends Controller
         $fileCount=NewFile::where('userId',Auth::user()->id)->whereBetween(DB::raw('date(created_at)'), [$start, $end])
             ->sum('fileCount');
 
-
-
-
-
         //USA CONTACT TARGET
         $contactedUsaCount=Workprogress::where('userId',Auth::user()->id)
             ->leftJoin('leads','workprogress.leadId','leads.leadId')
@@ -137,8 +123,6 @@ class HomeController extends Controller
             })
             ->whereBetween('workprogress.created_at', [$start,$end])
             ->count();
-
-
 
         $testLeadCount=Workprogress::where('progress','Test Job')
             ->where('userId',Auth::user()->id)
@@ -157,7 +141,6 @@ class HomeController extends Controller
                 ->where('leads.minedBy',Auth::user()->id)
                 ->where('filteredPossibility',3)
                 ->whereBetween('created_at', [$start, $end])->count();
-
         }
 
         else{
@@ -165,13 +148,10 @@ class HomeController extends Controller
                 ->where('possibilityId',3)
                 ->whereBetween('created_at', [$start, $end])->count();
 
-
             $highPosibilitiesThisWeek=Possibilitychange::where('userId',Auth::user()->id)
                 ->where('possibilityId',3)
                 ->whereBetween('created_at', [$start, $end])->count();
         }
-
-
 
         try{
             $target=Usertarget::findOrFail(Auth::user()->id);
@@ -186,8 +166,6 @@ class HomeController extends Controller
             $target->targetTest = 0;
             $target->targetFile = 0;
             $target->save();
-
-
         }
 
         $countWeek=0;
@@ -258,6 +236,15 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+        $targetConversation=0;
+        if($target->conversation>0){
+            $targetConversation=round(($conversation/($target->conversation))*100);
+            if($targetConversation>100){
+                $targetConversation=100;
+            }
+            $countWeek++;
+        }
+
         $targetCloselead=0;
         if($target->closelead>0){
             $targetCloselead=round(($closelead/($target->closelead))*100);
@@ -267,9 +254,14 @@ class HomeController extends Controller
             $countWeek++;
         }
 
-
-
-
+        $targetFollowup=0;
+        if($target->followup>0){
+            $targetFollowup=round(($followup/($target->followup))*100);
+            if($targetFollowup>100){
+                $targetFollowup=100;
+            }
+            $countWeek++;
+        }
 
         return view('dashboard')
             ->with('target',$target)
@@ -291,9 +283,10 @@ class HomeController extends Controller
             ->with('contactCall',$contactCall)
             ->with('conversation',$conversation)
             ->with('closelead',$closelead)
-            ->with('targetCloselead',$targetCloselead);
-
-
+            ->with('followup',$followup)
+            ->with('targetConversation',$targetConversation)
+            ->with('targetCloselead',$targetCloselead)
+            ->with('targetFollowup',$targetFollowup);
     }
 
 

@@ -199,7 +199,7 @@
                     <div class="card-body">
                         <h4 class="card-title"><a href="{{route('followup')}}">Follow up</a></h4>
                         <div class="text-right">
-                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
+                            <h2 class="font-light m-b-0">{{$followup}} | {{$target->followup }}</h2>
                             <span class="text-muted">This Month</span>
                         </div>
 

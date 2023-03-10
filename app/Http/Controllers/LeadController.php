@@ -884,7 +884,7 @@ class LeadController extends Controller
             $text='';
 
             foreach ($comments as $comment){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'('.$comment->report.')</b> <div style="color:blue;">-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
             return Response($text);
         }
