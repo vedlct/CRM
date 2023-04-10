@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
+            <h2 class="card-title" align="center"><b>Assign Filtered Leads</b></h2>
 
 
 
@@ -59,7 +59,7 @@
             <div class="col-md-10">
 
                 {{--<div class="form-group col-md-5">--}}
-                <label ><b>Select Name:</b></label>
+                <label ><b>Assign to:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
                     @foreach($users as $user)
@@ -138,7 +138,7 @@ $(document).ready(function() {
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html(' <strong>Success!</strong> Contacted');
+                        $('#alert').html('Leads are assigned successfully');
                         $('#alert').show();
 
                     }

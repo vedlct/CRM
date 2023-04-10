@@ -22,6 +22,7 @@ use Ramsey\Uuid\Codec\CodecInterface;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Exception\UnsupportedOperationException;
+use ReturnTypeWillChange;
 
 /**
  * Represents a universally unique identifier (UUID), according to RFC 4122.
@@ -212,6 +213,7 @@ class Uuid implements UuidInterface
      * @return string
      * @link http://php.net/manual/en/class.jsonserializable.php
      */
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->toString();
@@ -224,9 +226,19 @@ class Uuid implements UuidInterface
      * @return string
      * @link http://php.net/manual/en/class.serializable.php
      */
+    #[ReturnTypeWillChange]
     public function serialize()
     {
         return $this->toString();
+    }
+
+    /**
+     * @return array{string: string}
+     */
+    #[ReturnTypeWillChange]
+    public function __serialize()
+    {
+        return ['string' => $this->toString()];
     }
 
     /**
@@ -236,12 +248,30 @@ class Uuid implements UuidInterface
      * @link http://php.net/manual/en/class.serializable.php
      * @throws InvalidUuidStringException
      */
+    #[ReturnTypeWillChange]
     public function unserialize($serialized)
     {
         $uuid = self::fromString($serialized);
         $this->codec = $uuid->codec;
         $this->converter = $uuid->converter;
         $this->fields = $uuid->fields;
+    }
+
+    /**
+     * @param array{string: string} $serialized
+     * @return void
+     * @throws InvalidUuidStringException
+     */
+    #[ReturnTypeWillChange]
+    public function __unserialize(array $serialized)
+    {
+        // @codeCoverageIgnoreStart
+        if (!isset($serialized['string'])) {
+            throw new InvalidUuidStringException();
+        }
+        // @codeCoverageIgnoreEnd
+
+        $this->unserialize($serialized['string']);
     }
 
     public function compareTo(UuidInterface $other)
@@ -350,8 +380,8 @@ class Uuid implements UuidInterface
             throw new UnsupportedOperationException('Not a time-based UUID');
         }
 
-        $unixTime = ($this->getTimestamp() - 0x01b21dd213814000) / 1e7;
-        $unixTime = number_format($unixTime, 0, '', '');
+        $unixTimeNanoseconds = $this->getTimestamp() - 0x01b21dd213814000;
+        $unixTime = ($unixTimeNanoseconds - $unixTimeNanoseconds % 1e7) / 1e7;
 
         return new DateTime("@{$unixTime}");
     }
@@ -676,7 +706,7 @@ class Uuid implements UuidInterface
      */
     public static function isValid($uuid)
     {
-        $uuid = str_replace(['urn:', 'uuid:', '{', '}'], '', $uuid);
+        $uuid = str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid);
 
         if ($uuid == self::NIL) {
             return true;

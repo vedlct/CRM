@@ -478,16 +478,16 @@ class LeadController extends Controller
 
 
 
-        $leads=Lead::with('mined','category','country','possibility', 'probability')
+        $leads=Lead::with('mined','category','country','possibility','probability','status')
             ->where('contactedUserId',$r->userId)
             ->where('statusId','!=',6);
 
 
         }else{
 
-            $leads=Lead::with('mined','category','country','possibility', 'probability');
+            $leads=Lead::with('mined','category','country','possibility', 'probability','status')
                // ->where('leadAssignStatus','!=',1)
-              //  ->where('statusId','!=',6)
+                ->where('statusId','!=',6);
               //  ->where('statusId','!=',4)
              //   ->where('statusId','!=',5);
 
@@ -1644,7 +1644,7 @@ class LeadController extends Controller
 
 
     public function verifyallLeads(Request $r){
-        $leads=Lead::with('country','category','mined','contact')
+        $leads=Lead::with('country','category','mined','contact', 'status')
             ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)

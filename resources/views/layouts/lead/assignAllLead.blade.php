@@ -13,8 +13,8 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Assign Lead To User</b></h2>
-
+            <h2 class="card-title" align="center"><b>Assign Leads From Other Marketers</b></h2>
+			<p class="card-text" align="center">Please make sure you are not assigning random leads from here</p>
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -51,6 +51,7 @@
                         {{--<th>Email</th>--}}
                         <th>Country</th>
                         <th>Category</th>
+                        <th>Status</th>
                         <th>Possibility</th>
                         <th>Probability</th>
                         <th>Action</th>
@@ -75,7 +76,7 @@
             <div class="form-group">
 
                 {{--<div class="form-group col-md-5">--}}
-                <label ><b>Select Name:</b></label>
+                <label ><b>Assign to:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
                     @foreach($users as $user)
@@ -106,7 +107,7 @@
 
             <form class="modal-content" method="post" action="{{route('leadUpdate')}}">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                   <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
@@ -414,6 +415,7 @@ function fill_datatable(userId='')
 //                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'category.categoryName', name: 'category.categoryName' ,orderable: false,defaultContent: ""},
+                    {data: 'status.statusName', name: 'status.statusName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
                     { data: 'probability.probabilityName',
                         render: function(data) {
@@ -432,11 +434,6 @@ function fill_datatable(userId='')
         });
 
     }
-
-
-
-
-
 
 
 
@@ -472,7 +469,7 @@ function fill_datatable(userId='')
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html(' <strong>Success!</strong> Assigned');
+                        $('#alert').html('Leads are assigned successfully');
                         $('#alert').show();
 
                     }

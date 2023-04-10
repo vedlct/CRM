@@ -255,13 +255,13 @@
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                     @if(Auth::user()->areaType != "usa" )
                     <li>
-                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Lead</span></a>
+                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Filtered Lead</span></a>
                     </li>
                     @endif
                 @endif
                 @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' )
                 <li>
-                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Random Lead</span></a>
+                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Others Lead</span></a>
                 </li>
                  @endif
 
