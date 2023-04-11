@@ -9,6 +9,7 @@
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
                 <h2 class="card-title" align="center"><b>Assigned Leads</b></h2>
+                <p class="card-subtitle" align="center">Please check if there's any suspicious leads in your assigned leads.</h2>
             @endif
 
             @if(Request::url()==route('contacted'))
@@ -19,11 +20,13 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th> Select</th>
-                        <th width="15%">Company Name</th>
+                        <th width="5%"> Select</th>
+                        <th width="5%">Id</th>
+                        <th width="7%">Assigned by</th>
+                        <th width="10%">Company Name</th>
                        
-                        <th width="8%">Category</th>
-                        <th width="10%">website</th>
+                        <th width="7%">Category</th>
+                        <th width="9%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="8%">Probability</th>
                         <th width="5%">Country</th>
@@ -37,11 +40,13 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td><input type="checkbox" class="checkboxvar"   name="checkboxvar[]" value="{{$lead->leadId}}"></td>
-                            <td width="15%">{{$lead->companyName}}</td>
+                            <td width="5%"><input type="checkbox" class="checkboxvar"   name="checkboxvar[]" value="{{$lead->leadId}}"></td>
+                            <td width="5%">{{$lead->leadId}}</td>
+                            <td width="7%">{{$lead->leadId}}</td>
+                            <td width="10%">{{$lead->companyName}}</td>
                            
                             <td width="8%">{{$lead->category->categoryName}}</td>
-                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
+                            <td width="9%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="8%">@if($lead->probability != null){{$lead->probability->probabilityName}} @else null @endif</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
@@ -49,7 +54,7 @@
                             <td width="8%"><a
                                         href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
-                            <td width="10%">
+                            <td width="9%">
 
                                 @if($lead->contactedUserId==null)
                                     <form method="post" action="{{route('addContacted')}}" style="float: left;">

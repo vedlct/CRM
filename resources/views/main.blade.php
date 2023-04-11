@@ -16,7 +16,7 @@
 
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{url('img/logo/TCL_logo.png')}}">
-    <title>Customer relationship management</title>
+    <title>Client Relationship Management</title>
 
 @yield('header')
 
@@ -138,7 +138,7 @@
 
 
             <footer class="footer">
-                © 2018 CRM By TECH CLOUD LTD
+                © 2023 CRM | TECH CLOUD LTD
             </footer>
 
         </div>

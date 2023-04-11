@@ -25,6 +25,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th width="2%">Id</th>
                         <th width="3%">Company Name</th>
                         <th width="3%">website</th>
                         <th width="4%">Number</th>
@@ -35,7 +36,7 @@
                         <th width="4%">Status</th>
                         <th width="4%">Possib</th>
                         <th width="4%">Probability</th>
-                        <th width="10%">Date</th>
+                        <th width="8%">Date</th>
                         <th width="10%">Edit</th>
 
 
@@ -694,6 +695,7 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website' },
                     { data: 'contactNumber', name: 'leads.contactNumber'},

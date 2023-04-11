@@ -42,6 +42,7 @@
 
 
                         <th>Select</th>
+                        <th>Id</th>
                         <th>Company Name</th>
                         <th>Phone</th>
                         <th>Date</th>
@@ -51,9 +52,9 @@
                         {{--<th>Email</th>--}}
                         <th>Country</th>
                         <th>Category</th>
-                        <th>Status</th>
                         <th>Possibility</th>
-                        <th>Probability</th>
+                        <th>Marketer</th>
+                        <th>Status</th>
                         <th>Action</th>
 
 
@@ -407,6 +408,7 @@ function fill_datatable(userId='')
 
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'contactNumber', name: 'leads.contactNumber' },
                     { data: 'created_at', name: 'leads.created_at' },
@@ -414,20 +416,10 @@ function fill_datatable(userId='')
                     { data: 'website', name: 'leads.website' },
 //                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'category.categoryName', name: 'category.categoryName' ,orderable: false,defaultContent: ""},
-                    {data: 'status.statusName', name: 'status.statusName'},
+                    { data: 'category.categoryName', name: 'category.categoryName', orderable: false,defaultContent: ""},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
-                    { data: 'probability.probabilityName',
-                        render: function(data) {
-                            if(data != null) {
-                                return data
-                            }
-                            else {
-                                return 'null'
-                            }
-
-                        },
-                    },
+                    { data: 'contact.firstName', orderable: false, defaultContent: ""},
+                    { data: 'status.statusName', name: 'status.statusName', orderable: false},
                     { data: 'check', name: 'check', orderable: false, searchable: false},
                 ]
             });

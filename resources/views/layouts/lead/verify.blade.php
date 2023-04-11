@@ -25,17 +25,17 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="3%">Company Name</th>
-                        <th width="3%">website</th>
+                        <th width="2%">Id</th>
+                        <th width="10%">Company Name</th>
+                        <th width="10%">website</th>
                         <th width="4%">Number</th>
                         <th width="3%">Category</th>
                         <th width="4%">Country</th>
-                        <th width="4%">Marketier</th>
                         <th width="4%">Contact</th>
+                        <th width="4%">Marketier</th>
                         <th width="4%">Status</th>
                         
-                        <th width="6%">Date</th>
-                       
+                        <th width="10%">Date</th>                      
 
 
                     </tr>
@@ -694,13 +694,14 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website' },
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
-                    {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
                     {data: 'personName', name: 'personName', defaultContent: ''},
+                    {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
                     {data: 'status.statusName', name: 'status.statusName', defaultContent: ''},
                    
                     { data: 'created_at', name: 'created_at',defaultContent: ''},

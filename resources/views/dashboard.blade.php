@@ -24,7 +24,7 @@
                 <h4 class="card-title"><a href="{{route('called')}}">Total Call</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
-                    <span class="text-muted">This Month</span>
+                    <span class="text-muted">Current Month</span>
                 </div>
                 @if($target->targetCall>0)
                     <?php
@@ -51,7 +51,7 @@
                         <h4 class="card-title"><a href="{{route('conversation')}}"> Conversation</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0"> {{$conversation}} | {{$target->conversation}}</h2>
-                            <span class="text-muted">This Month</span>
+                            <span class="text-muted">Current Month</span>
                         </div>
                         @if($target->conversation>0)
                             <?php
@@ -82,7 +82,7 @@
                 <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
                 <div class="text-right">
                     <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
-                    <span class="text-muted">This Month</span>
+                    <span class="text-muted">Current Month</span>
                 </div>
                 @if($target->targetLeadmine>0)
                     <?php $count++;
@@ -111,7 +111,7 @@
                         <h4 class="card-title"><a href="{{route('testLead')}}">Test Lead</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$testLeadCount}} | {{$target->targetTest}}</h2>
-                            <span class="text-muted">This Month</span>
+                            <span class="text-muted">Current Month</span>
                         </div>
 
                         @if($target->targetTest>0)
@@ -134,7 +134,7 @@
                     <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
                     <div class="text-right">
                         <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">This Month</span>
+                        <span class="text-muted">Current Month</span>
                     </div>
 
                     @if($target->targetHighPossibility>0)
@@ -160,7 +160,7 @@
                         <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
-                            <span class="text-muted">This Month</span>
+                            <span class="text-muted">Current Month</span>
                         </div>
 
                         @if($target->targetFile>0)
@@ -177,10 +177,10 @@
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('closeLead')}}">Close Lead</a></h4>
+                        <h4 class="card-title"><a href="{{route('closeLead')}}">Closed Leads</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$closelead}} | {{$target->closelead }}</h2>
-                            <span class="text-muted">This Month</span>
+                            <span class="text-muted">Current Month</span>
                         </div>
 
                         @if($target->closelead>0)
@@ -200,7 +200,7 @@
                         <h4 class="card-title"><a href="{{route('followup')}}">Follow up</a></h4>
                         <div class="text-right">
                             <h2 class="font-light m-b-0">{{$followup}} | {{$target->followup }}</h2>
-                            <span class="text-muted">This Month</span>
+                            <span class="text-muted">Current Month</span>
                         </div>
 
                         @if($target->targetFile>0)
@@ -270,23 +270,27 @@
                         legendText: "{{Auth::user()->firstName}}",
                         dataPoints: [
                                 @if(Auth::user()->typeId==4)
-                            { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
+                                    { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                                 @endif
-                              { y: {{ $calledThisWeek}},  label: "Total Call",indexLabel: "{{$calledThisWeek}}%" },
-                              { y: {{ $targetNewFile}},  label: "New File",indexLabel: "{{$targetNewFile}}%" },
-                            { y: {{$contactThisWeek}},  label: "New Contact",indexLabel: "{{$contactThisWeek}}%" },
-                            {{--{ y: {{$contactedUsa}},  label: "USA",indexLabel: "{{$contactedUsa}}%" },--}}
-                                @if(Auth::user()->typeId==4)
-                            { y: {{$leadMinedThisWeek}},  label: "Lead Mined",indexLabel: "{{$leadMinedThisWeek}}%" },
+                                @if(Auth::user()->typeId==5)
+                                    { y: {{ $lastContactPercent}},  label: "Conversation (25%)",indexLabel: "{{$lastContactPercent}}%" },
                                 @endif
-                            { y: {{$testLead}},  label: "Test Lead",indexLabel: "{{$testLead}}%" },
+                                    { y: {{ $calledThisWeek}},  label: "Total Call (5%)",indexLabel: "{{$calledThisWeek}}%" },
+                                    { y: {{ $targetNewFile}},  label: "Followup (5%)",indexLabel: "{{$targetNewFile}}%" },
+                                    { y: {{ $testLead}},  label: "Tests (45%)",indexLabel: "{{$testLead}}%" },
+                                    { y: {{ $targetCloselead}},  label: "Clients (15%)",indexLabel: "{{$targetCloselead}}%" },
+                        {{--    @if(Auth::user()->typeId==4)--}}
+                                    { y: {{ $leadMinedThisWeek}},  label: "Lead Mined (5%)",indexLabel: "{{$leadMinedThisWeek}}%" },
+                        {{--    @endif --}}
 
                             @if($userType=="RA")
-                            { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
-                                @elseif($userType=="USER")
-                            { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*20/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },
+                                { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
+                            @elseif($userType=="USER")
+                                
+                                { y:{{(($lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round(($lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
+
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
-                            { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },
+                                { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },
                             @endif
 
                         ]

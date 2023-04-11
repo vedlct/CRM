@@ -9,7 +9,7 @@
         {{--<div class="profile-img"> <img src="{{url('img/'.Auth::user()->picture)}}" alt="user" /> </div>--}}
         <!-- User profile text-->
             <div class="profile-text">
-                <b>ID :</b><strong> {{strtoupper( Auth::user()->userId )}} </strong> <span class="caret"></span><br>
+                <b>Name :</b><strong> {{strtoupper( Auth::user()->userId )}} </strong> <span class="caret"></span><br>
 
             </div>
         </div>
@@ -17,7 +17,7 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li class="nav-small-cap">PERSONAL</li>
+                <li class="nav-small-cap">MENU</li>
 
                 <li>
                     <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
@@ -88,7 +88,7 @@
 
                         <li>
                             <a href="{{route('assignedLeads')}}"><i class="fa fa-list"></i><span class="hide-menu">
-                            Assigned Leads</span></a>
+                            Assigned To You</span></a>
                         </li>
                     @endif
 
@@ -97,14 +97,14 @@
 
                         <li>
                             <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
-                                <span class="hide-menu">Todays Follow-up</span></a>
+                                <span class="hide-menu">Follow ups</span></a>
                         </li>
                         <li>
-                            <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">Mylead</span></a>
+                            <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Leads</span></a>
                         </li>
                         <li>
                             <a href="{{route('Mycontacted')}}"><i class="fa fa-user-circle-o"></i><span
-                                        class="hide-menu">My Contacted lead</span></a>
+                                        class="hide-menu">Contacted Leads</span></a>
                         </li>
                     @endif
 
@@ -128,7 +128,7 @@
                     @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='HR' || $userType =='RA'    )
                         <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
                             <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span
-                                        class="hide-menu">All Lead</span></a>
+                                        class="hide-menu">All Leads</span></a>
 
                         </li>
 

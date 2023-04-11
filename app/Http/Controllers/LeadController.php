@@ -478,14 +478,14 @@ class LeadController extends Controller
 
 
 
-        $leads=Lead::with('mined','category','country','possibility','probability','status')
+        $leads=Lead::with('mined','category','country','possibility','probability','status','contact')
             ->where('contactedUserId',$r->userId)
             ->where('statusId','!=',6);
 
 
         }else{
 
-            $leads=Lead::with('mined','category','country','possibility', 'probability','status')
+            $leads=Lead::with('mined','category','country','possibility', 'probability','status','contact')
                // ->where('leadAssignStatus','!=',1)
                 ->where('statusId','!=',6);
               //  ->where('statusId','!=',4)
@@ -1603,13 +1603,13 @@ class LeadController extends Controller
         if($lead->contactedUserId == Auth::user()->id){
             $lead->contactedUserId =null;
             $lead->save();
-            Session::flash('message', 'You have Leave The Lead successfully');
+            Session::flash('message', 'You have Left The Lead successfully');
             return back();
         }
         $lead->save();
 
 
-        Session::flash('message', 'You have Leave The Lead successfully');
+        Session::flash('message', 'You have Left The Lead successfully');
         return back();
 
     }
@@ -1644,7 +1644,7 @@ class LeadController extends Controller
 
 
     public function verifyallLeads(Request $r){
-        $leads=Lead::with('country','category','mined','contact', 'status')
+        $leads=Lead::with('country','category','mined','contact', 'status','workprogress')
             ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)

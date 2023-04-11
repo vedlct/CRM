@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-2" style="float: right">
-                    <label>Mined By</label>
+                    <label>Mined by</label>
                     <select id="minedby" class="form-control" name="minedby" onchange="mindbychanged()">
 
                         <option value="">select Mined By</option>
@@ -44,17 +44,18 @@
                     <thead>
                     <tr>
                         <th >Select</th>
-                        <th width="15%">Company Name</th>
+                        <th width="5%">Id</th>
+                        <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
-                        <th width="10%">website</th>
+                        <th width="8%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="8%">Probability</th>
-                        <th width="5%">Country</th>
+                        <th width="8%">Country</th>
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
                         <th width="8%">Status</th>
                         <th width="8%">Mined By</th>
-                        <th width="10%">Action</th>
+                        <th width="8%">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -569,6 +570,7 @@ function selectAll(source) {
 
                     {data: 'check', name: 'check', orderable: false, searchable: false},
 
+                    { data: 'leadId', name: 'leads.leadId'},
                     { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
