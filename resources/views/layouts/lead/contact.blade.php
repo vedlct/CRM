@@ -191,7 +191,7 @@
                             <input type="hidden" name="leadId">
                             <div class="form-group col-md-6">
 
-                                <label><b>Status:</b></label>
+                                <label><b>Status:</b> Select the status and cick on Leave button</label>
                                 <select class="form-control"  name="Status" id="Status" onchange="changeLeadStatus(this)" required>
                                     <option value="">Please Select</option>
                                     @foreach($status as $s)

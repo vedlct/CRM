@@ -279,10 +279,8 @@
                                     { y: {{ $targetNewFile}},  label: "Followup (5%)",indexLabel: "{{$targetNewFile}}%" },
                                     { y: {{ $testLead}},  label: "Tests (45%)",indexLabel: "{{$testLead}}%" },
                                     { y: {{ $targetCloselead}},  label: "Clients (15%)",indexLabel: "{{$targetCloselead}}%" },
-                        {{--    @if(Auth::user()->typeId==4)--}}
                                     { y: {{ $leadMinedThisWeek}},  label: "Lead Mined (5%)",indexLabel: "{{$leadMinedThisWeek}}%" },
-                        {{--    @endif --}}
-
+ 
                             @if($userType=="RA")
                                 { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
                             @elseif($userType=="USER")

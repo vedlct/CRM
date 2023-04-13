@@ -1739,6 +1739,8 @@ class ReportController extends Controller
 
     }
 
+
+
     /*public function reportValue(Request $r)
     {
 

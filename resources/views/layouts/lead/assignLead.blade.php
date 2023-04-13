@@ -24,17 +24,16 @@
 
 
                         <th>Select</th>
+                        <th>Lead Id</th>
                         <th>Company Name</th>
-                        <th>Phone</th>
-                        <th>Date</th>
-                        <th>Mined By</th>
-                        {{--<th>Category</th>--}}
-                        <th>Website</th>
-                        {{--<th>Email</th>--}}
                         <th>Country</th>
+                        <th>Website</th>
+                        <th>Phone</th>
+                        <th>Mined By</th>
                         <th>Category</th>
                         <th>Possibility</th>
                         <th>Probability</th>
+                        <th>Date</th>
 
 
                     </tr>
@@ -198,13 +197,12 @@ $(document).ready(function() {
 
                 columns: [
                     {data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
-                    { data: 'contactNumber', name: 'leads.contactNumber' },
-                    { data: 'created_at', name: 'leads.created_at' },
-                    { data: 'mined.firstName', name: 'mined.firstName' },
-                    { data: 'website', name: 'leads.website' },
-//                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'website', name: 'leads.website' },
+                    { data: 'contactNumber', name: 'leads.contactNumber' },
+                    { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'category.categoryName', name: 'category.categoryName' },
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
                     { data: 'probability.probabilityName',
@@ -218,6 +216,7 @@ $(document).ready(function() {
 
                         },
                     },
+                    { data: 'created_at', name: 'leads.created_at' },
 
                 ]
             });

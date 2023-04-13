@@ -480,16 +480,18 @@ class LeadController extends Controller
 
         $leads=Lead::with('mined','category','country','possibility','probability','status','contact')
             ->where('contactedUserId',$r->userId)
-            ->where('statusId','!=',6);
+            ->where('statusId','!=',6)
+            ->orderBy('leadId','desc');
 
 
         }else{
 
             $leads=Lead::with('mined','category','country','possibility', 'probability','status','contact')
                // ->where('leadAssignStatus','!=',1)
-                ->where('statusId','!=',6);
+                ->where('statusId','!=',6)
               //  ->where('statusId','!=',4)
              //   ->where('statusId','!=',5);
+                 ->orderBy('leadId','desc');
 
 
         }
@@ -858,6 +860,11 @@ class LeadController extends Controller
                 ->where('statusId','!=',1)
                 ->where('statusId','!=',6)
                 ->get();
+
+//                $assignedBy = DB::table('leadassigneds')
+//                    ->join('users', 'leadassigneds.assignBy','users.userId')
+//                    ->select('users.userId')
+//                    ->get();
 
             $country=Country::get();
             return view('layouts.lead.myLead')

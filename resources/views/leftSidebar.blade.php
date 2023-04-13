@@ -36,7 +36,7 @@
                         </li>
                         <li>
                             <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu">Value</span></a>
+                                <span class="hide-menu">Table</span></a>
                         </li>
                         @if($userType == 'MANAGER')
                             @if(Auth::user()->areaType != "usa" )
@@ -251,18 +251,23 @@
                     </li>
                 @endif
 
-
+<!--
                 @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
                     @if(Auth::user()->areaType != "usa" )
                     <li>
-                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Filtered Lead</span></a>
+                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Marketers' Lead</span></a>
                     </li>
                     @endif
                 @endif
+-->
+
                 @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' )
-                <li>
-                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Others Lead</span></a>
-                </li>
+                    <li>
+                        <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Marketers' Lead</span></a>
+                        </li>
+                    <li>
+                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Filtered Lead</span></a>
+                    </li>
                  @endif
 
                 @if($userType =='USER' || $userType =='MANAGER')

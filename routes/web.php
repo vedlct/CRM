@@ -231,6 +231,7 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
+
 //supervisor OR Manager OR Admin report
 Route::get('/reportTableCountry','ReportController@reportTableCountry')->name('reportcountryTable');
 Route::post('/searchCountryTableByDate','ReportController@searchCountryTableByDate')->name('searchCountryTableByDate');

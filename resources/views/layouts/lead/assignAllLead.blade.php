@@ -20,8 +20,8 @@
                     <div class="form-group">
 
                         {{--<div class="form-group col-md-5">--}}
-                            <h4>Filter By Marketier</h4>
-                        {{-- <label ><b>Select Marketier:</b></label> --}}
+                            <h4>Filter By Marketer</h4>
+                        {{-- <label ><b>Select Marketer:</b></label> --}}
                         <select class="form-control"  name="assignTo" id="otherCatches2">
                             <option value="">select</option>
 
@@ -47,9 +47,7 @@
                         <th>Phone</th>
                         <th>Date</th>
                         <th>Mined By</th>
-                        {{--<th>Category</th>--}}
                         <th>Website</th>
-                        {{--<th>Email</th>--}}
                         <th>Country</th>
                         <th>Category</th>
                         <th>Possibility</th>
@@ -407,14 +405,13 @@ function fill_datatable(userId='')
 
 
                 columns: [
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'contactNumber', name: 'leads.contactNumber' },
                     { data: 'created_at', name: 'leads.created_at' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'website', name: 'leads.website' },
-//                    { data: 'email', name: 'leads.email' },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'category.categoryName', name: 'category.categoryName', orderable: false,defaultContent: ""},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },

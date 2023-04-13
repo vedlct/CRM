@@ -75,7 +75,9 @@ GetIndividualReportController extends Controller
 
 //        return $highPosibilitiesThisWeek;
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
+                 <th>Contact No</th>
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
@@ -89,7 +91,9 @@ GetIndividualReportController extends Controller
 
         foreach ($highPosibilitiesThisWeek as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
+                    <td>'.$l->contactNumber.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>';
@@ -190,6 +194,7 @@ GetIndividualReportController extends Controller
 
 //        return $highPosibilitiesThisWeek;
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</td>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -204,6 +209,7 @@ GetIndividualReportController extends Controller
 
         foreach ($highPosibilitiesThisWeek as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -300,6 +306,7 @@ GetIndividualReportController extends Controller
                 ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -311,6 +318,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -343,6 +351,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -353,6 +362,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -387,6 +397,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -398,6 +409,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -433,6 +445,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -444,6 +457,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -488,6 +502,8 @@ GetIndividualReportController extends Controller
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>CompanyName</th>
+                 <th>Country</th>
+                 <th>Category</th>
                  <th>File Count</th>
                  <th>Created_at</th>
       </tr></thead>
@@ -496,6 +512,8 @@ GetIndividualReportController extends Controller
         foreach ($newFile as $l){
             $table.='<tr>
                     <td>'.$l->companyName.'</td>
+                    <td>'.$l->country->countryName.'</td>
+                    <td>'.$l->category->categoryName.'</td>
                     <td data-panel-id="'.$l->fid.'" onclick="listenForDoubleClick(this);" onblur="this.contentEditable=false;" onfocusout="changeQuantity(this)">'.$l->fileCount.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
@@ -536,7 +554,9 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
+                 <th>Contact No</th>
                  <th>Possibility</th>
                  <th>Category</th>
                  <th>Country</th>
@@ -545,7 +565,9 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
+                    <td>'.$l->contactNumber.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
                     <td>'.$l->country->countryName.'</td>
@@ -580,6 +602,7 @@ GetIndividualReportController extends Controller
 
             $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>Assign To</th>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -591,6 +614,7 @@ GetIndividualReportController extends Controller
             foreach ($leads as $l){
                 $table.='<tr>
                     <td>'.$l->firstName.'</td>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -614,6 +638,7 @@ GetIndividualReportController extends Controller
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
                  <th>Assign By</th>
+                 <th>Lead Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -625,6 +650,7 @@ GetIndividualReportController extends Controller
         foreach ($leads as $l){
             $table.='<tr>
                     <td>'.$l->firstName.'</td>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -658,6 +684,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -669,6 +696,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -704,6 +732,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -715,6 +744,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -783,6 +813,7 @@ GetIndividualReportController extends Controller
             ->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Call Date</th>
       </tr></thead>
@@ -790,6 +821,7 @@ GetIndividualReportController extends Controller
 
         foreach ($testLeadForRa as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->created_at.'</td>
                     </tr>';
@@ -818,6 +850,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -829,6 +862,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -862,6 +896,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -873,6 +908,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -905,6 +941,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Category</th>
@@ -916,6 +953,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->category->categoryName.'</td>
@@ -944,6 +982,7 @@ GetIndividualReportController extends Controller
         $leads = Lead::where('categoryId', $category)->where('possibilityId', $possibility)->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Country</th>
                  <th>Comment</th>
@@ -953,6 +992,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
@@ -979,6 +1019,7 @@ GetIndividualReportController extends Controller
         $leads = Lead::where('statusId', $status)->where('possibilityId', $possibility)->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Country</th>
                  <th>Comment</th>
@@ -988,6 +1029,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->country->countryName.'</td>
                     <td>'.$l->comments.'</td>
@@ -1204,6 +1246,7 @@ GetIndividualReportController extends Controller
             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromDate,$toDate])->get();
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+                 <th>Id</th>
                  <th>CompanyName</th>
                  <th>Possibility</th>
                  <th>Country</th>
@@ -1214,6 +1257,7 @@ GetIndividualReportController extends Controller
     <tbody>';
         foreach ($leads as $l){
             $table.='<tr>
+                    <td>'.$l->leadId.'</td>
                     <td>'.$l->companyName.'</td>
                     <td>'.$l->possibility->possibilityName.'</td>
                     <td>'.$l->country->countryName.'</td>

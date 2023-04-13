@@ -59,9 +59,8 @@
             <!-- ============================================================== -->
             {{--For recent Notice--}}
 
-            <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee>
-
-
+         {{--   <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee>
+        --}}
 
 
             <ul class="navbar-nav my-lg-0">
