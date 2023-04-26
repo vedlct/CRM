@@ -55,19 +55,19 @@
                         </div>
                         @if($target->conversation>0)
                             <?php
-                            $lastContactPercent= round(($conversation/$target->conversation)*100);
-                            if($lastContactPercent > 100){
-                                $lastContactPercent=100;
+                            @$lastContactPercent= round(($conversation/$target->conversation)*100);
+                            if(@$lastContactPercent > 100){
+                                @$lastContactPercent=100;
                             }
                             $count++;
                             $total+=$conversation;
                             ?>
 
-                            <span class="text-success">{{round($lastContactPercent)}}%</span>
+                            <span class="text-success">{{round(@$lastContactPercent)}}%</span>
                         @endif
                         <div class="progress">
                             @if($target->conversation>0)
-                                <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastContactPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{@$lastContactPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             @endif
                         </div>
                     </div>
@@ -273,7 +273,7 @@
                                     { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
                                 @endif
                                 @if(Auth::user()->typeId==5)
-                                    { y: {{ $lastContactPercent}},  label: "Conversation (25%)",indexLabel: "{{$lastContactPercent}}%" },
+                                    { y: {{ @$lastContactPercent}},  label: "Conversation (25%)",indexLabel: "{{@$lastContactPercent}}%" },
                                 @endif
                                     { y: {{ $calledThisWeek}},  label: "Total Call (5%)",indexLabel: "{{$calledThisWeek}}%" },
                                     { y: {{ $targetNewFile}},  label: "Followup (5%)",indexLabel: "{{$targetNewFile}}%" },
@@ -285,7 +285,7 @@
                                 { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
                             @elseif($userType=="USER")
                                 
-                                { y:{{(($lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round(($lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
+                                { y:{{((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
 
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
                                 { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },
