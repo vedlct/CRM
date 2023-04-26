@@ -1726,6 +1726,7 @@ class ReportController extends Controller
             ->with('leads', $leads);
     }
 
+
     public function reportTabHourly(Request $r)
     {
         $User_Type = Session::get('userType');

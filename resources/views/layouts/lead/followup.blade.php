@@ -36,12 +36,13 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th width="5%">Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
-                        <th width="15%">Contact Person</th>
+                        <th width="10%">Contact Person</th>
                         <th width="8%">Contact Number</th>
                         <th width="8%">Created At</th>
 
@@ -51,6 +52,7 @@
 
                     @foreach($leads as $lead)
                         <tr>
+                            <td width="15%">{{$lead->leadId}}</td>
                             <td width="15%">{{$lead->companyName}}</td>
                             <td width="8%">{{$lead->category->categoryName}}</td>
                             <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>

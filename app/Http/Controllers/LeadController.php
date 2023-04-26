@@ -861,11 +861,6 @@ class LeadController extends Controller
                 ->where('statusId','!=',6)
                 ->get();
 
-//                $assignedBy = DB::table('leadassigneds')
-//                    ->join('users', 'leadassigneds.assignBy','users.userId')
-//                    ->select('users.userId')
-//                    ->get();
-
             $country=Country::get();
             return view('layouts.lead.myLead')
                 ->with('leads', $leads)
@@ -1609,6 +1604,7 @@ class LeadController extends Controller
         $lead->statusId=$r->Status;
         if($lead->contactedUserId == Auth::user()->id){
             $lead->contactedUserId =null;
+            $lead->leadAssignStatus = 0;
             $lead->save();
             Session::flash('message', 'You have Left The Lead successfully');
             return back();
@@ -1658,3 +1654,4 @@ class LeadController extends Controller
             ->make(true);
     }
 }
+

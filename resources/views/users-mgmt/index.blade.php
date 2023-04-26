@@ -42,7 +42,7 @@
                                 </td>
                                 <td>
                                     <!-- Trigger the Edit modal with a button -->
-                                    @if($userType=='ADMIN')
+                                    @if($userType=='ADMIN' || 'MANAGER')
                                     <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                        data-id="{{$user->id}}"
                                        data-user-id="{{$user->userId}}"
@@ -100,7 +100,7 @@
 
     {{--Set Target Modal--}}
             <div class="modal fade" id="target_user_modal" >
-                <div class="modal-dialog" style="max-width: 60%;">
+                <div class="modal-dialog" style="max-width: 40%;">
                     <div class="modal-content">
             <form method="post" action="{{route('setTarget')}}">
                 {{csrf_field()}}
@@ -115,59 +115,59 @@
                         <!-- Modal body -->
                         <div class="modal-body">
                         <div class="row">
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Calling:</label>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Conversation</label>
+                                <input id="conversation" type="number" class="form-control" name="conversation" >
+                            </div> 
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Total Calls:</label>
                                 <input id="call" type="number" class="form-control" name="call" >
                             </div>
 
-                            <div class="form-group col-md-2">
-                                <label for="firstName">High Possibility:</label>
-                                <input id="followup" type="number" class="form-control" name="highPossibility" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Lead Mine:</label>
-                                <input id="lead" type="number" class="form-control" name="lead" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Contacted(o):</label>
-                                <input id="contact" type="number" class="form-control" name="contact" >
-                            </div>
-
-                            {{--<div class="form-group col-md-2">--}}
-                                {{--<label for="firstName">Contacted(usa):</label>--}}
-                                {{--<input id="contactUsa" type="number" class="form-control" name="contactUsa" >--}}
-                            {{--</div>--}}
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Test:</label>
-                                <input id="targetTest" type="number" class="form-control" name="targetTest" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">File:</label>
-                                <input id="targetFile" type="number" class="form-control" name="targetFile" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Conversation:</label>
-                                <input id="conversation" type="number" class="form-control" name="conversation" >
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="firstName">Close Lead:</label>
-                                <input id="closelead" type="number" class="form-control" name="closelead" >
-                            </div>
-
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 <label for="firstName">Followup:</label>
                                 <input id="followup" type="number" class="form-control" name="followup" >
                             </div>
 
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Test:</label>
+                                <input id="targetTest" type="number" class="form-control" name="targetTest" >
+                            </div>
 
-                            <div class="form-group col-md-2">
-                               <button class="btn btn-success" type="submit">set</button>
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Close Lead</label>
+                                <input id="closelead" type="number" class="form-control" name="closelead" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Lead Mine:</label>
+                                <input id="lead" type="number" class="form-control" name="lead" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Revenue</label>
+                                <input id="targetFile" type="number" class="form-control" name="targetFile" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">High Possibility:</label>
+                                <input id="followup" type="number" class="form-control" name="highPossibility" >
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label for="firstName">Contacted(E):</label>
+                                <input id="contact" type="number" class="form-control" name="contact" >
+                            </div>
+
+                            {{--<div class="form-group col-md-4">--}}
+                                {{--<label for="firstName">Contacted(usa):</label>--}}
+                                {{--<input id="contactUsa" type="number" class="form-control" name="contactUsa" >--}}
+                            {{--</div>--}}
+
+                            <div class="form-group col-md-12">
+                               <button class="btn btn-success" type="submit">Set Target</button>
                             </div>
 
 
