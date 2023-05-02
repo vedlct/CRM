@@ -118,12 +118,12 @@
                     @endif
 
 
-                    @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='USER')
+                    <!-- @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='USER')
 
                         <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
                             <a href="{{route('tempLeads')}}"><i class="fa fa-text-width"></i><span class="hide-menu">Temp Leads</span></a>
                         </li>
-                    @endif
+                    @endif -->
 
                     @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='HR' || $userType =='RA'    )
                         <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
@@ -140,13 +140,13 @@
                                     class="hide-menu">Verify Lead</span></a>
 
                     </li>
-                    @if(Auth::user()->id == 19)
+                    <!-- @if(Auth::user()->id == 19)
 
                         <li>
                             <a href="{{route('showrelease')}}"><i class="fa fa-adjust"></i><span class="hide-menu">Release Lead</span></a>
 
                         </li>
-                    @endif
+                    @endif -->
 
                     @if(Auth::user()->areaType == "usa")
 
@@ -327,13 +327,13 @@
                 @endif
                 @endif
 
-                @if(Auth::user()->typeId !=10)
+                <!-- @if(Auth::user()->typeId !=10)
 
                     <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
                         <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i><span class="hide-menu">Notice</span></a>
                     </li>
 
-                @endif
+                @endif -->
 
                 @if($userType =='ADMIN' )
                     <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i><span class="hide-menu">System</span></a></li>

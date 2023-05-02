@@ -13,6 +13,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Company Name</th>
                         <th>website</th>
                         <th>Number</th>
@@ -21,7 +22,6 @@
                         <th>Possibility</th>
                         <th>Probability</th>
                         <th>Date</th>
-
 
                         {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
                         <th>Contacted</th>
@@ -190,6 +190,7 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},

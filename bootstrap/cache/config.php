@@ -176,7 +176,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework/cache/data',
+        'path' => 'C:\\xampp\\htdocs\\crm\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -329,12 +329,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'W:\\xampp\\htdocs\\CRM\\storage\\app',
+        'root' => 'C:\\xampp\\htdocs\\crm\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'W:\\xampp\\htdocs\\CRM\\storage\\app/public',
+        'root' => 'C:\\xampp\\htdocs\\crm\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -371,7 +371,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'W:\\xampp\\htdocs\\CRM\\resources\\views/vendor/mail',
+        0 => 'C:\\xampp\\htdocs\\crm\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -451,7 +451,7 @@
     'lifetime' => '120',
     'expire_on_close' => true,
     'encrypt' => false,
-    'files' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework/sessions',
+    'files' => 'C:\\xampp\\htdocs\\crm\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -471,9 +471,9 @@
   array (
     'paths' => 
     array (
-      0 => 'W:\\xampp\\htdocs\\CRM\\resources\\views',
+      0 => 'C:\\xampp\\htdocs\\crm\\resources\\views',
     ),
-    'compiled' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework\\views',
+    'compiled' => 'C:\\xampp\\htdocs\\crm\\storage\\framework\\views',
   ),
   'trustedproxy' => 
   array (

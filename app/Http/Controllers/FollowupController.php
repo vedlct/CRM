@@ -255,6 +255,7 @@ class FollowupController extends Controller
         $leads = Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
             ->where('followup.userId', Auth::user()->id)
+            ->where('leads.contactedUserId', Auth::user()->id)
             ->where('followup.workStatus', 0)
             ->get();
 
