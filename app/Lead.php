@@ -36,10 +36,11 @@ class Lead extends Model
     {
 
         $leads = Lead::Join('leadassigneds', 'leadassigneds.leadId', '=', 'leads.leadId')
+            ->join('users', 'leadassigneds.assignBy', 'users.id')
             ->where('leadassigneds.assignTo', Auth::user()->id)
             ->where('leadassigneds.leaveDate', null)
             ->where('leadassigneds.workStatus', 0)
-            ->select('leads.*','leadassigneds.assignId as iid')
+            ->select('leads.*','leadassigneds.assignId as iid', 'leadassigneds.assignBy','users.userId as username')
             ->get();
 
         return $leads;
