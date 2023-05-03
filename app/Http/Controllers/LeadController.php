@@ -1613,16 +1613,17 @@ class LeadController extends Controller
         $lead->statusId=$r->Status;
         if($lead->contactedUserId == Auth::user()->id){
 
+            $lead->contactedUserId =null;
+            $lead->leadAssignStatus = 0;
+            $lead->save();
+
             $work=new Workprogress;
             $work->leadId=$r->leadId;
             $work->userId=Auth::user()->id;
             $work->callingReport=6;       
             $work->comments=Auth::user()->userId .' '. ' left the lead';
             $work->save();
-    
-            $lead->contactedUserId =null;
-            $lead->leadAssignStatus = 0;
-            $lead->save();
+            
             Session::flash('message', 'You have Left The Lead successfully');
             return back();
         }
