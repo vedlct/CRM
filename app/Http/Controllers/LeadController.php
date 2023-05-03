@@ -672,6 +672,7 @@ class LeadController extends Controller
             $wp->leadId=$lead->leadId;
             $wp->progress='Reject';
             $wp->userId=$userId;
+            $wp->comments=Auth::user()->userId .' '. ' REJECTED the lead';
             $wp->save();
 
             $lead->statusId=5;
@@ -684,6 +685,7 @@ class LeadController extends Controller
             $wp->leadId=$lead->leadId;
             $wp->progress='Closing';
             $wp->userId=Auth::user()->id;
+            $wp->comments=Auth::user()->userId .' '. ' marked it as CLIENT';
             $wp->save();
 
             $lead->statusId=$r->status;
@@ -1610,6 +1612,14 @@ class LeadController extends Controller
         $lead=Lead::findOrFail($r->leadId);
         $lead->statusId=$r->Status;
         if($lead->contactedUserId == Auth::user()->id){
+
+            $work=new Workprogress;
+            $work->leadId=$r->leadId;
+            $work->userId=Auth::user()->id;
+            $work->callingReport=6;       
+            $work->comments=Auth::user()->userId .' '. ' left the lead';
+            $work->save();
+    
             $lead->contactedUserId =null;
             $lead->leadAssignStatus = 0;
             $lead->save();
@@ -1617,6 +1627,7 @@ class LeadController extends Controller
             return back();
         }
         $lead->save();
+
 
 
         Session::flash('message', 'You have Left The Lead successfully');

@@ -44,6 +44,7 @@
 					  <table id="myTable" class="table table-bordered table-striped">
 						  <thead>
 						  <tr>
+							  <th width="5%">Id</th>
 							  <th width="15%">Company Name</th>
 							  <th>Category</th>
 							  <th>Possibility</th>
@@ -65,6 +66,7 @@
 							  <tr style="background-color:#ffcccc;">
 								  @endif
 
+								  <td width="5%">{{$lead->leadId}}</td>
 								  <td width="15%">{{$lead->companyName}}</td>
 								  <td>{{$lead->category->categoryName}}</td>
 								  <td>{{$lead->possibility->possibilityName}}</td>

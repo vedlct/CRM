@@ -451,7 +451,7 @@
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
                                 <option value="5">Rejected</option>
-                                @if($userType=="ADMIN")
+                                @if($userType=="ADMIN" || "MANAGER")
                                 <option value="6">Client</option>
                                 @endif
                             </select>
