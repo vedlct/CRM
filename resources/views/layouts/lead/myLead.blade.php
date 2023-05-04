@@ -42,7 +42,7 @@
                         <tr>
                             <td width="5%"><input type="checkbox" class="checkboxvar"   name="checkboxvar[]" value="{{$lead->leadId}}"></td>
                             <td width="5%">{{$lead->leadId}}</td>
-                            <td width="7%">{{$lead->leadId}}</td>
+                            <td width="7%">{{$lead->username}}</td>
                             <td width="10%">{{$lead->companyName}}</td>
                            
                             <td width="8%">{{$lead->category->categoryName}}</td>
