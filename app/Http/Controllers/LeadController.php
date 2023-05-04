@@ -60,9 +60,6 @@ class LeadController extends Controller
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
 
-
-
-
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
@@ -693,6 +690,16 @@ class LeadController extends Controller
             $lead->leadAssignStatus=0;
         }
 
+        if($r->status!==6 || $r->status!==5){
+            $wp=new Workprogress;
+            $wp->leadId=$lead->leadId;
+            $wp->progress=null;
+            $wp->userId=Auth::user()->id;
+            $wp->comments=Auth::user()->userId .' '. ' updated this lead';
+            $wp->save();
+
+        }
+
         $lead->save();
         Session::flash('message', 'Lead Edited successfully');
         //return back();
@@ -828,11 +835,13 @@ class LeadController extends Controller
 
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+
+                                            ><i class="fa fa-comments"></i></a>
                                     </form>
-                                    <form method="post" action="'.route('rejectStore').'">
-                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                    <button class="btn btn-danger btn-sm">X</button></form>
+
 
                                     ';}})
             ->make(true);
@@ -852,6 +861,7 @@ class LeadController extends Controller
                 ->get();
 
                 $users=User::select('id','firstName','lastName')
+                // ->orderBy('userId','DESC')
                 ->where('id','!=',Auth::user()->id)
                 ->orwhere('typeId',5)
                 ->orWhere('typeId',2)
@@ -1368,7 +1378,7 @@ class LeadController extends Controller
 
 
     public function getContacedData(Request $r){
-        $leads=Lead::with('mined','category','country','possibility', 'probability')
+        $leads=Lead::with('mined','category','country','possibility', 'probability','workprogress')
 //            ->select('workprogress.callreport','leads.*')
             ->where('contactedUserId',Auth::user()->id)
             ->orderBy('leads.leadId','desc');
@@ -1384,7 +1394,8 @@ class LeadController extends Controller
 
             }else {
                 $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
-                    return $query->where('callingReport', '=', $r->status);
+                    return $query->where('callingReport', '=', $r->status) 
+                    ->where('workprogress.userId', '=', Auth::user()->id);
 //                    ->orderBy('created_at', 'DESC');
 //                    ->groupBy('workprogress.leadId')
 //                    ->limit(1);
@@ -1574,6 +1585,7 @@ class LeadController extends Controller
         $work->leadId=$r->leadId;
         $work->userId=Auth::user()->id;
         $work->comments=$r->comment;
+        $work->comments=Auth::user()->userId .' '. ' REJECTED the lead';
         $work->save();
 //        }
         Session::flash('message', 'Lead Rejected Successfully');

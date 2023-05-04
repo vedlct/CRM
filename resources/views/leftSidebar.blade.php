@@ -109,13 +109,13 @@
                     @endif
 
 
-                    @if(Auth::user()->typeId !=10)
+                    <!-- @if(Auth::user()->typeId !=10) -->
 
-                        <li @if(Auth::user()->areaType == "usa") style="display: none" @endif>
+                        <li>
                             <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
 
                         </li>
-                    @endif
+                    <!-- @endif -->
 
 
                     <!-- @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='USER')

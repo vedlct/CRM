@@ -52,7 +52,7 @@
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
                             <td width="8%"><a
-                                        href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
+                                        href="skype:{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
                             <td width="9%">
 

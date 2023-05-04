@@ -19,6 +19,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th width="5%">Id</th>
                         <th width="15%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="10%">website</th>
@@ -479,6 +480,7 @@
                     "data":{ _token: "{{csrf_token()}}"},
                 },
                 columns: [
+                    { data: 'leadId', name: 'leads.leadId'},
                     { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},

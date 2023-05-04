@@ -8,6 +8,8 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
+            <h4 class="card-subtitle" align="center">You may get leads for you from the list below. These leads are filtered leads. Once you click on the badge, the lead will be in your My Lead.</h2>
+            <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -20,18 +22,10 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
-                        <th>Probability</th>
-                        <th>Date</th>
-
-                        {{--@if($userType=='USER' || $userType=='RA' || $userType=='MANAGER')--}}
-                        <th>Contacted</th>
-                        {{--@endif--}}
+                        <th width="10%">Action</th>
                     </tr>
                     </thead>
                     <tbody>
-
-
-
                     </tbody>
                 </table>
             </div>
@@ -44,7 +38,7 @@
 
 
 
-    <!--Edit Modal -->
+    <!-- Edit Modal -->
     <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%">
             <div class="modal-content">
@@ -138,9 +132,47 @@
                     </div></form>
             </div>
         </div>
-    </div>
+    </div> 
 
 
+    
+
+    {{--ALL Chat/Comments--}}
+    <div class="modal" id="lead_comments" >
+        <div class="modal-dialog" style="max-width: 60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">All Conversation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                    <b>Company Name:</b>
+                    <input type="text" name="companyName" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label class=""><b>Comment : </b></label>
+
+                                <ul class="list-group" style="margin: 10px; "><br>
+                                    <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+                                    </div>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div></div>
+            </div>
+        </div>
 
 
 
@@ -154,10 +186,12 @@
 @endsection
 
 @section('foot-js')
+    <script src="{{url('js/select2.min.js')}}"></script>
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <script>
         //        $(document).ready(function() {
@@ -197,26 +231,13 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
-                    { data: 'probability.probabilityName',
-                        render: function(data) {
-                            if(data != null) {
-                                return data
-                            }
-                            else {
-                                return 'null'
-                            }
-
-                        },
-                    },
-                    { data: 'created_at', name: 'created_at'},
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
             });
         });
 
-
-
+ 
         $('#my_modal').on('show.bs.modal', function(e) {
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
@@ -255,6 +276,28 @@
             //$(e.currentTarget).find('input[name="website"]').attr('readonly', true);
 
             @endif
+
+        });
+
+
+      $('#lead_comments').on('show.bs.modal', function(e) {
+
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getComments')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+
+                    $("#comment").html(data);
+                    $("#comment").scrollTop($("#comment")[0].scrollHeight);
+                }
+            });
 
         });
 
