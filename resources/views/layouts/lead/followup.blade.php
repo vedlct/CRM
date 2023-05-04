@@ -4,8 +4,13 @@
 
 @section('content')
 
-
     <div class="card" style="padding:10px;">
+        <div class="card-body">
+            <h1 class="card-title" align="center"><b>CLICK ON THE FOLLOW UP AGAIN</b></h1>
+        </div>
+    </div>
+
+    <!-- <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('highPossibility'))
                 <h2 class="card-title" align="center"><b>High Possibility This Month</b></h2>
@@ -70,7 +75,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 

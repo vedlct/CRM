@@ -8,8 +8,8 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
-            <h4 class="card-subtitle" align="center">You may get leads for you from the list below. These leads are filtered leads. Once you click on the badge, the lead will be in your My Lead.</h2>
-            <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2>
+            <h4 class="card-subtitle" align="center">You may get leads for you from the list below. These leads are filtered leads. Once you click on the badge, the lead will be in your My Lead.</h4>
+            <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
