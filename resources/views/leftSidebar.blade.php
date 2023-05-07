@@ -31,9 +31,9 @@
 					</span>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <!-- <li>
                             <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
-                        </li>
+                        </li> -->
                         <li>
                             <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
                                 <span class="hide-menu">Table</span></a>
@@ -342,6 +342,10 @@
                 @endif    {{--End Global--}}
 
                 <li class="nav-devider"></li>
+
+                <li role="separator" class="divider"></li>
+                <li><a href="{{route('accountSetting')}}"><i class="ti-settings"></i>My Account</a></li>
+                <li role="separator" class="divider"></li>
 
             </ul>
         </nav>

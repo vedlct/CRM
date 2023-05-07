@@ -542,7 +542,7 @@ class ReportController extends Controller
     }
 
     public function reportTable()
-    {
+    { 
 
         $date = Carbon::now();
         $User_Type = Session::get('userType');
@@ -620,6 +620,9 @@ class ReportController extends Controller
             ->groupBy('minedBy')
             ->get();
 
+        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))
+            ->groupBy('contactedUserId')
+            ->get();
 
         $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
             ->where('callingReport', 4)
@@ -772,6 +775,7 @@ class ReportController extends Controller
             ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
             ->with('followupThisWeek', $followupThisWeek)
             ->with('leadMinedThisWeek', $leadMinedThisWeek)
+            ->with('totalOwnedLeads', $totalOwnedLeads)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('closing', $closing)
             ->with('usersRa', $usersRa)
@@ -858,6 +862,7 @@ class ReportController extends Controller
 
 
 //        return $leadMinedThisWeek;
+
 
         $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
             ->where('callingReport', 4)
@@ -994,6 +999,13 @@ class ReportController extends Controller
             ->get();
 
 
+        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))
+            ->groupBy('contactedUserId')
+            ->get();
+
+//        return $totalOwnedLeads;
+
+
         return view('report.table')
             ->with('users', $users)
             ->with('contactedUsa', $contactedUsa)
@@ -1021,7 +1033,8 @@ class ReportController extends Controller
             ->with('notAvailable', $notAvailable)
             ->with('gatekeeper', $gatekeeper)
             ->with('notInterested', $notInterested)
-            ->with('conversation', $conversation);
+            ->with('conversation', $conversation)
+            ->with('totalOwnedLeads', $totalOwnedLeads);
 
     }
 

@@ -64,6 +64,11 @@ Route::post('user-management/search', 'UserManagementController@search')->name('
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
+//Get All Possessed Leads and Set Bar
+Route::post('user-management/possessedLeads','UserManagementController@getPossessedLeads')->name('getPossessedLeads');
+// Route::post('user-management/setBarForOwnedLeads','UserManagementController@setBarForOwnedLeads')->name('setBarForOwnedLeads');
+
+
 //Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
 Route::post('checkfollowup','FollowupController@followupCheck')->name('followupCheck');
 Route::post('storeFollowupReport','FollowupController@storeFollowupReport')->name('storeFollowupReport');
@@ -155,6 +160,7 @@ Route::get('lead/assignedleads', 'LeadController@assignedLeads')->name('assigned
 Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 Route::post('lead/callReports','LeadController@getCallingReport')->name('getCallingReport');
+Route::post('lead/activities','LeadController@getActivities')->name('getActivities');
 
 
 //Leave Lead
@@ -269,6 +275,7 @@ Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividua
 Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
+Route::post('/getPossessedLeads','GetIndividualReportController@getPossessedLeads')->name('getPossessedLeads');
 
 
 //followup report

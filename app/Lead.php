@@ -149,6 +149,11 @@ class Lead extends Model
         return $this->hasMany(Workprogress::class, 'leadId', 'leadId');
     }
 
+    public function activities()
+    {
+        return $this->hasMany(Activities::class, 'leadId', 'leadId');
+    }
+
     public function lastCallingReport()
     {
         return $this->hasMany('App\Workprogress', 'leadId', 'leadId')

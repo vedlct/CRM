@@ -188,7 +188,8 @@
                         @endif
                         <div class="progress">
                             @if($target->closelead>0)
-                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetCloselead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetCloselead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -203,12 +204,12 @@
                             <span class="text-muted">Current Month</span>
                         </div>
 
-                        @if($target->targetFile>0)
-                            <span class="text-purple">{{round($targetNewFile)}}%</span>
+                        @if($target->targetFollowup>0)
+                            <span class="text-purple">{{round($targetFollowup)}}%</span>
                         @endif
                         <div class="progress">
-                            @if($target->targetFile>0)
-                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @if($target->targetFollowup>0)
+                                <div class="progress-bar bg-success" role="progressbar" style="width:{{$targetFollowup}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                             @endif
                         </div>
                     </div>
@@ -276,7 +277,7 @@
                                     { y: {{ @$lastContactPercent}},  label: "Conversation (25%)",indexLabel: "{{@$lastContactPercent}}%" },
                                 @endif
                                     { y: {{ $calledThisWeek}},  label: "Total Call (5%)",indexLabel: "{{$calledThisWeek}}%" },
-                                    { y: {{ $targetNewFile}},  label: "Followup (5%)",indexLabel: "{{$targetNewFile}}%" },
+                                    { y: {{ $targetFollowup}},  label: "Followup (5%)",indexLabel: "{{$targetFollowup}}%" },
                                     { y: {{ $testLead}},  label: "Tests (45%)",indexLabel: "{{$testLead}}%" },
                                     { y: {{ $targetCloselead}},  label: "Clients (15%)",indexLabel: "{{$targetCloselead}}%" },
                                     { y: {{ $leadMinedThisWeek}},  label: "Lead Mined (5%)",indexLabel: "{{$leadMinedThisWeek}}%" },
@@ -285,7 +286,7 @@
                                 { y: {{(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}},  label: "Total Progress",indexLabel: "{{round(($highPosibilitiesThisWeek*50/100)+($leadMinedThisWeek*50/100))}}%" },
                             @elseif($userType=="USER")
                                 
-                                { y:{{((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetNewFile*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
+                                { y:{{((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
 
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
                                 { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },

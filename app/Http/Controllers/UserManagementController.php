@@ -12,6 +12,7 @@ use Image;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Hash;
+use App\Lead;
 use App\User;
 use App\Usertype;
 use App\Usertarget;
@@ -458,4 +459,21 @@ class UserManagementController extends Controller
         Session::flash('message', 'Password did not match');
         return back();
     }
+
+
+    public function getPossessedLeads (Request $r){
+        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(leadId) as userOwnedLead'))
+        ->groupBy('contactedUserId')
+        ->get();
+        return Response($totalOwnedLeads);
+
+    }
+
+    // public function setBarForOwnedLeads (Request $r){
+
+
+
+    // }
+
+
 }

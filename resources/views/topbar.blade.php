@@ -1,3 +1,12 @@
+
+    <style>
+            .light-color {
+                color: #ffffff;
+                padding: 0 20px;
+            }
+
+    </style>
+
 <header class="topbar">
     <nav class="navbar top-navbar navbar-expand-md navbar-light">
         <!-- ============================================================== -->
@@ -18,6 +27,8 @@
             </a>
 
         </div>
+
+        
         <!-- ============================================================== -->
         <!-- End Logo -->
         <!-- ============================================================== -->
@@ -32,42 +43,34 @@
                 <!-- ============================================================== -->
                 <!-- Comment -->
                 <!-- ============================================================== -->
-                {{--<li class="nav-item dropdown">--}}
-                    {{--<a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-message"></i>--}}
-                        {{--<div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>--}}
-                    {{--</a>--}}
-                    {{--<div class="dropdown-menu mailbox animated bounceInDown">--}}
-                        {{--<ul>--}}
-                            {{--<li>--}}
-                                {{--<div class="drop-title">Notifications</div>--}}
-                            {{--</li>--}}
-                      {{----}}
-                            {{--<li>--}}
-                                {{--<a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>--}}
-                            {{--</li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                {{--</li>--}}
 
-                {{--<input type="text" placeholder="search bar">--}}
-                <!-- ============================================================== -->
-                <!-- End Messages -->
-                <!-- ============================================================== -->
             </ul>
-            <!-- ============================================================== -->
-            <!-- User profile and search -->
-            <!-- ============================================================== -->
-            {{--For recent Notice--}}
+        <!-- {{--For recent Notice--}}
 
-         {{--   <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee>
-        --}}
+        <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee> -->
+        
+
+
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <a class="light-color" aria-current="page" href="{{route('home')}}">Dashboard</a>
+                <a class="light-color" href="{{route('reportTable')}}">Report</a>
+                <a class="light-color" href="{{route('assignedLeads')}}">Assigned Leads</a>
+                <a class="light-color" href="{{route('follow-up.index')}}">Follow-ups</a>
+                <a class="light-color" href="{{route('contacted')}}">My Leads</a>
+                <a class="light-color" href="{{route('Mycontacted')}}">Contacted Leads</a>
+                <a class="light-color" href="{{route('filterLeads')}}">Filtered Leads</a>
+                <a class="light-color" href="{{route('verifylead')}}">Verify Lead</a>
+                <a class="light-color" href="{{route('addNightShift')}}">Add New Lead</a>
+            </div>
+
 
 
             <ul class="navbar-nav my-lg-0">
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Welcome<b> {{Auth::user()->firstName}} <i class="fa fa-sort-desc" aria-hidden="true"></i></b></a>
+                        <b>Profile </b></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="dropdown-user">
                             <li>
@@ -105,6 +108,9 @@
                 </li>
 
             </ul>
+
+
+
         </div>
         </div>
     </nav>

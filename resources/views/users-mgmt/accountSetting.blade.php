@@ -28,7 +28,7 @@
 @section('content')
 
 
-    <div class="card" style="width: 40%; padding: 10px; float: left;">
+    <div class="card" style="width: 40%; margin: 25px;">
         <div class="row">
             <div class="col-md-3">
                 <b>Name :</b>
@@ -73,7 +73,7 @@
 
 
 
-    <div class="card" style="max-width: 40%; padding: 10px; float: right; margin-right: 20%;">
+    <div class="card" style="max-width: 40%; padding: 10px;  margin: 25px;">
 
         <h2 align="center"><b>Account Settings</b></h2><hr>
 

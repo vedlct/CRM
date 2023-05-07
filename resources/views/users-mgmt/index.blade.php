@@ -84,6 +84,10 @@
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
+                                    <a href="#possessed_leads" data-toggle="modal" class="btn btn-warning btn-sm"
+                                    data-id="{{$user->id}}"
+                                    data-first-name="{{$user->userId}}"
+                                    ><i class="fa fa-angle-double-down"></i></a>
                                     @endif
 
                                 </td>
@@ -95,6 +99,47 @@
             </div>
 
 
+
+        <!--Get Everyone's Number of Leads and Set bar -->
+            <div class="modal fade" id="possessed_leads" >
+                <div class="modal-dialog" style="max-width: 40%;">
+                    <div class="modal-content">
+            <form method="post" action="{{route('getPossessedLeads')}}">
+                <!-- {{csrf_field()}} -->
+                    <input type="hidden" name="userId">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Set User Possessed Leads Target</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                    <input type="text" name="name" class="col-md-12" style="text-align: center;" readonly>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                        <div class="row">
+
+                            <div class="form-group col-md-6">
+                                <label for="firstName">Total Possessed Leads </label>
+                                <input type="number" name="totalOwnedLeads" readonly>
+                                <!-- <input id="totalOwnedLeads" type="number" class="form-control" name="totalOwnedLeads" readonly > -->
+                            </div> 
+
+                            <!-- <div class="form-group col-md-6">
+                                <label for="firstName">Set New Bar </label>
+                                <input id="totalOwnedLeads" type="number" class="form-control" name="totalOwnedLeads" readonly >
+                            </div> 
+
+                        </div>
+
+
+                            <div class="form-group col-md-12">
+                               <button class="btn btn-success" type="submit">Set Bar</button>
+                            </div> -->
+
+
+                            </div></div> </form>
+
+                    </div></div></div>
 
 
 
@@ -174,6 +219,10 @@
                             </div></div> </form>
 
                     </div></div></div>
+
+
+
+
 
             {{--Set Local Target Modal--}}
 
@@ -388,6 +437,9 @@
                     </div>
                 </div>
             </div>
+
+
+
             <!-- Edit Modal -->
             <div class="modal fade" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
@@ -409,7 +461,24 @@
 
                                 <div class="row">
 
-                                    <div class="form-group col-md-6">
+                                <div class="form-group col-md-4">
+                                        <label for="typeId">User Type:</label>
+                                        <select id="typeId"  name="typeId" class="form-control form-control-warning" required>
+
+                                            @foreach ($userTypes as $userType)
+                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @if ($errors->has('typeId'))
+                                            <span class="help-block">
+				                				<strong>{{ $errors->first('typeId') }}</strong>
+                							</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
                                         <label for="userId">User Id:</label>
                                         <input id="userId" type="text" class="form-control" name="userId" required>
                                         @if ($errors->has('userId'))
@@ -419,7 +488,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group col-md-6">
+
+                                    <div class="form-group col-md-4">
                                         <label for="rfID">RF Id:</label>
                                         <input id="rfID" type="number" class="form-control" name="rfID">
 
@@ -431,7 +501,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="firstName">First Name:</label>
 
                                         <input id="firstName" type="text" class="form-control" name="firstName" required>
@@ -444,7 +514,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="lastName">Last Name:</label>
                                         <input id="lastName" type="text" class="form-control" name="lastName" required>
 
@@ -456,7 +526,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="userEmail">Email:</label>
                                         <input id="userEmail" type="email" class="form-control" name="userEmail" required>
 
@@ -468,7 +538,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="phoneNumber">Phone Number:</label>
                                         <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
                                         @if ($errors->has('phoneNumber'))
@@ -479,7 +549,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="dob">Date Of Birth:</label>
                                         <input id="dob" type="text" class="form-control" name="dob">
                                         @if ($errors->has('dob'))
@@ -490,7 +560,7 @@
                                     </div>
 
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="picture">Picture:</label>
                                         <input id="picture" type="file" class="form-control" name="picture">
                                         @if ($errors->has('picture'))
@@ -501,7 +571,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="gender">Gender:</label>
                                         <select id="gender" name="gender" class="form-control form-control-warning">
 
@@ -517,7 +587,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="active">Status:</label>
 
                                         <select id="active" name="active" class="form-control form-control-warning">
@@ -528,7 +598,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="active">Whitelist:</label>
 
                                         <select id="whitelist" name="whitelist" class="form-control form-control-warning">
@@ -539,7 +609,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="password">Password:</label>
                                         <input id="password" type="password" class="form-control" name="password">
                                         @if ($errors->has('password'))
@@ -549,29 +619,15 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="password-confirm">Confirm Password:</label>
                                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                     </div>
 
-                                    <div class="form-group col-md-10">
-                                        <label for="typeId">User Type:</label>
-                                        <select id="typeId"  name="typeId" class="form-control form-control-warning" required>
 
-                                            @foreach ($userTypes as $userType)
-                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
-                                            @endforeach
-                                        </select>
 
-                                        @if ($errors->has('typeId'))
-                                            <span class="help-block">
-								<strong>{{ $errors->first('typeId') }}</strong>
-							</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <button type="submit" class="btn btn-primary">
+                                    <div class="form-group col-md-4">
+                                        <button type="submit" class="btn btn-lg btn-success">
                                             Update
                                         </button>
                                     </div>
@@ -623,6 +679,9 @@
 
 
         }
+
+
+
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
@@ -711,6 +770,7 @@
             $(e.currentTarget).find('#whitelist').val(whitelist);
 
         });
+
 
 
     </script>

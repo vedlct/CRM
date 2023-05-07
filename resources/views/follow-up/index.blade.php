@@ -405,6 +405,7 @@
             $('#category').val(category);
             $('#country').val(country);
             $('div.mined').text(minedBy);
+
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);

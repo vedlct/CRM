@@ -89,6 +89,13 @@
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                                    <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-possibility="{{$lead->possibilityId}}"
+                                   data-lead-probability="{{$lead->probabilityId}}">
+                                    <i class="fa fa-tasks" aria-hidden="true"></i></a>
+                                    
                             </td>
                         </tr>
 
@@ -255,6 +262,45 @@
             </div>
         </div>
     </div>
+
+
+    <!--ALL Activities-->
+    
+    <div class="modal" id="lead_activities" >
+        <div class="modal-dialog" style="max-width: 60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">All Activities</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                    <b>Company Name:</b>
+                    <input type="text" name="companyName" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label class=""><b>Activities : </b></label>
+
+                                <ul class="list-group" style="margin: 10px; "><br>
+                                    <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="activity">
+
+                                    </div>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div></div>
+            </div>
+        </div>
 
 
 
@@ -539,6 +585,29 @@ function selectAll(source) {
                 }
             });
         });
+
+
+       $('#lead_activities').on('show.bs.modal', function(e) {
+
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('getActivities')}}',
+                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+
+                    $("#activity").html(data);
+                    $("#activity").scrollTop($("#activity")[0].scrollHeight);
+                }
+            });
+
+        });
+
 
         //check followup date count
 

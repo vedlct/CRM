@@ -22,6 +22,7 @@ use App\Leadassigned;
 use App\Possibilitychange;
 use App\Callingreport;
 use App\Workprogress;
+use App\Activities;
 use App\Followup;
 use App\Leadstatus;
 use DataTables;
@@ -63,15 +64,24 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
+                                            data-lead-linkedin="'.$lead->linkedin.'"
+                                            data-lead-founded="'.$lead->founded.'"
+                                            data-lead-process="'.$lead->process.'"
+                                            data-lead-volume="'.$lead->volume.'"
+                                            data-lead-frequency="'.$lead->frequency.'"
+                                            data-lead-employee="'.$lead->employee.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-comments"></i></a>
 
-                                            ><i class="fa fa-comments"></i></a></form>';
+                                            <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
+                                            data-lead-id="'.$lead->leadId.'"
+                                            data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>
+                                            </form>';
                 }
                 else{
 
@@ -95,15 +105,24 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
                                             data-lead-designation="'.$lead->designation.'"
+                                            data-lead-linkedin="'.$lead->linkedin.'"
+                                            data-lead-founded="'.$lead->founded.'"
+                                            data-lead-process="'.$lead->process.'"
+                                            data-lead-volume="'.$lead->volume.'"
+                                            data-lead-frequency="'.$lead->frequency.'"
+                                            data-lead-employee="'.$lead->employee.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-comments"></i></a>
 
-                                            ><i class="fa fa-comments"></i></a>';
+                                                <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>';
 
                     }
                     else{
@@ -123,7 +142,13 @@ class LeadController extends Controller
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
                                            data-lead-designation="'.$lead->designation.'"
-                                           data-lead-comments="'.$lead->comments.'"
+                                           data-lead-linkedin="'.$lead->linkedin.'"
+                                           data-lead-founded="'.$lead->founded.'"
+                                           data-lead-process="'.$lead->process.'"
+                                           data-lead-volume="'.$lead->volume.'"
+                                           data-lead-frequency="'.$lead->frequency.'"
+                                           data-lead-employee="'.$lead->employee.'"
+                                          data-lead-comments="'.$lead->comments.'"
                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -131,7 +156,12 @@ class LeadController extends Controller
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
 
-                                         ><i class="fa fa-comments"></i></a>';
+                                         ><i class="fa fa-comments"></i></a>
+                                            <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
+                                                data-lead-id="'.$lead->leadId.'"
+                                                data-lead-name="'.$lead->companyName.'"
+
+                                         ><i class="fa fa-tasks"></i></a>';
                     }}
             })
             ->make(true);
@@ -601,6 +631,14 @@ class LeadController extends Controller
                 $leadAssigned->assignTo=$r->userId;
                 $leadAssigned->leadId=$lead;
                 $leadAssigned->save();
+
+                $activity=new Activities;
+                $activity->leadId=$lead;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId;
+                $activity->save();
+                
+
             }
             return Response('true');
             // return Response($r->leadId);
@@ -621,6 +659,12 @@ class LeadController extends Controller
                 Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
                 ->update(['assignTo' => $r->userId,'assignBy'=>Auth::user()->id]);
 
+                $activity=new Activities;
+                $activity->leadId=$lead;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId;
+                $activity->save();
+
             }
             return Response('true');
             // return Response($r->leadId);
@@ -632,12 +676,16 @@ class LeadController extends Controller
 
 
     public function update(Request $r){
+
+
         $this->validate($r,[
             'companyName' => 'max:100',
             'website' => 'max:100',
             'email' => 'max:100',
             'personName' => 'max:100',
             'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
+
+
         ]);
 
         if(isset($r->user)){
@@ -646,6 +694,7 @@ class LeadController extends Controller
             $userId = Auth::user()->id;
         }
 
+        
         $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
@@ -653,6 +702,7 @@ class LeadController extends Controller
         $lead->personName=$r->personName;
         $lead->contactNumber=$r->number;
         $lead->website=$r->website;
+        $lead->linkedin=$r->linkedin;
         if($r->country){
             $lead->countryId=$r->country;
         }
@@ -663,45 +713,50 @@ class LeadController extends Controller
             $lead->comments=$r->comments;
         }
 
+        $lead->founded=$r->founded;
+        $lead->employee=$r->employee;
+        $lead->volume=$r->volume;
+        $lead->frequency=$r->frequency;
+        $lead->process=$r->process;
+
         if($r->status==5){
 //         For Report
-            $wp=new Workprogress;
-            $wp->leadId=$lead->leadId;
-            $wp->progress='Reject';
-            $wp->userId=$userId;
-            $wp->comments=Auth::user()->userId .' '. ' REJECTED the lead';
-            $wp->save();
+            $activity=new Activities;
+            $activity->leadId=$lead->leadId;
+            $activity->userId=$userId;
+            $activity->activity=Auth::user()->userId .' '. 'Rejected this lead';
+            $activity->save();
 
             $lead->statusId=5;
             $lead->contactedUserId=null;
             $lead->leadAssignStatus=0;
         }
 
-        if($r->status==6){
-            $wp=new Workprogress;
-            $wp->leadId=$lead->leadId;
-            $wp->progress='Closing';
-            $wp->userId=Auth::user()->id;
-            $wp->comments=Auth::user()->userId .' '. ' marked it as CLIENT';
-            $wp->save();
+        elseif($r->status==6){
+            $activity=new Activities;
+            $activity->leadId=$lead->leadId;
+            $activity->userId=Auth::user()->id;
+            $activity->activity=Auth::user()->userId .' '. 'marked it as CLIENT';
+            $activity->save();
 
             $lead->statusId=$r->status;
             $lead->contactedUserId=null;
             $lead->leadAssignStatus=0;
         }
 
-        if($r->status!==6 || $r->status!==5){
-            $wp=new Workprogress;
-            $wp->leadId=$lead->leadId;
-            $wp->progress=null;
-            $wp->userId=Auth::user()->id;
-            $wp->comments=Auth::user()->userId .' '. ' updated this lead';
-            $wp->save();
+        else {
+            $activity=new Activities;
+            $activity->leadId=$lead->leadId;
+            $activity->userId=Auth::user()->id;
+            $activity->activity=Auth::user()->userId .' '. ' updated this lead';
+            $activity->save();
 
         }
 
         $lead->save();
-        Session::flash('message', 'Lead Edited successfully');
+       // Session::forget(['callreportsession']);
+        //Session::flash('message', 'Lead Edited successfully');
+
         //return back();
 
         ////this is for back to search result///////////
@@ -903,6 +958,26 @@ class LeadController extends Controller
             return Response($text);
         }
     }
+
+    public function getActivities(Request $r){
+        if($r->ajax()){
+            $activities=Activities::select(['users.firstName','activity','activities.created_at'])
+                ->where('activities.leadId',$r->leadId)
+                ->leftJoin('users','users.id','activities.userId')
+                ->get();
+
+            $text='';
+
+            foreach ($activities as $activity){
+                $text.='<li class="list-group-item list-group-item-action"><b>'.$activity->activity.'</b> <div style="color:blue;">-By '.$activity->firstName.' ('.$activity->created_at.')</div>'.'</li>';
+            }
+            return Response($text);
+        }
+    }
+
+
+
+
     public function getCallingReport(Request $r){
         if($r->ajax()){
 
@@ -1423,14 +1498,26 @@ class LeadController extends Controller
                                     data-lead-number="'.$lead->contactNumber.'"
                                     data-lead-person="'.$lead->personName.'"
                                     data-lead-website="'.$lead->website.'"
+                                    data-lead-linkedin="'.$lead->linkedin.'"
                                     data-lead-mined="'.$lead->mined->firstName.'"
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
                                     data-lead-designation="'.$lead->designation.'"
+                                    data-lead-founded="'.$lead->founded.'"
+                                    data-lead-employee="'.$lead->employee.'"
+                                    data-lead-volume="'.$lead->volume.'"
+                                    data-lead-frequency="'.$lead->frequency.'"
+                                    data-lead-process="'.$lead->process.'"
                                     data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+
+                             ><i class="fa fa-tasks"></i></a>';
+;
             })
             ->addColumn('call', function ($lead){
                 return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
@@ -1580,17 +1667,18 @@ class LeadController extends Controller
         $lead->leadAssignStatus=0;
         $lead->save();
 
-        $work=new Workprogress;
-        $work->progress='Reject';
-        $work->leadId=$r->leadId;
-        $work->userId=Auth::user()->id;
-        $work->comments=$r->comment;
-        $work->comments=Auth::user()->userId .' '. ' REJECTED the lead';
-        $work->save();
+        $activity=new Activities;
+        $activity->leadId=$r->leadId;
+        $activity->userId=Auth::user()->id;
+        $activity->activity=$r->comment;
+        $activity->activity=Auth::user()->userId .' '. 'Rejected this lead';
+        $activity->save();
 //        }
         Session::flash('message', 'Lead Rejected Successfully');
         return back();
     }
+
+
     public function leaveLead(Request $r){
 
         if($r->Status==6){
@@ -1629,16 +1717,48 @@ class LeadController extends Controller
             $lead->leadAssignStatus = 0;
             $lead->save();
 
-            $work=new Workprogress;
-            $work->leadId=$r->leadId;
-            $work->userId=Auth::user()->id;
-            $work->callingReport=6;       
-            $work->comments=Auth::user()->userId .' '. ' left the lead';
-            $work->save();
-            
+
+            if($lead->statusId==2){           
+                $activity=new Activities;
+                $activity->leadId=$r->leadId;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'Filtered this lead';
+                $activity->save();
+            } 
+            if($lead->statusId==3){
+                $activity=new Activities;
+                $activity->leadId=$r->leadId;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'marked this lead as Not Interested and left';
+                $activity->save();
+            }
+            if($lead->statusId==4){
+                $activity=new Activities;
+                $activity->leadId=$r->leadId;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'left this lead as Bad Lead';
+                $activity->save();
+            }
+            if($lead->statusId==5){
+                $activity=new Activities;
+                $activity->leadId=$r->leadId;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'Rejected this lead';
+                $activity->save();
+            }
+            if($lead->statusId==6){
+                $activity=new Activities;
+                $activity->leadId=$r->leadId;
+                $activity->userId=Auth::user()->id;
+                $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead';
+                $activity->save();
+            }
+
+
             Session::flash('message', 'You have Left The Lead successfully');
             return back();
         }
+
         $lead->save();
 
 
@@ -1647,6 +1767,8 @@ class LeadController extends Controller
         return back();
 
     }
+
+
     public function destroy($id){
         $lead=Lead::findOrFail($id);
         $lead->delete();

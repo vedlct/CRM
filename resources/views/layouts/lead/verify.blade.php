@@ -33,6 +33,9 @@
                         <th width="4%">Country</th>
                         <th width="4%">Contact</th>
                         <th width="4%">Marketier</th>
+                        <th width="8%">Volume</th>
+                        <th width="5%">Process</th>
+                        <th width="5%">Frequency</th>
                         <th width="4%">Status</th>
                         
                         <th width="10%">Date</th>                      
@@ -702,6 +705,9 @@
                     { data: 'country.countryName', name: 'country.countryName'},
                     {data: 'personName', name: 'personName', defaultContent: ''},
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
+                    {data: 'volume', name: 'volume', defaultContent: ''},
+                    {data: 'process', name: 'process', defaultContent: ''},
+                    {data: 'frequency', name: 'frequency', defaultContent: ''},
                     {data: 'status.statusName', name: 'status.statusName', defaultContent: ''},
                    
                     { data: 'created_at', name: 'created_at',defaultContent: ''},
@@ -814,6 +820,7 @@
         });
 
 
+        
 
     </script>
 

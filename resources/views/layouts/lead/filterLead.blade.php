@@ -22,6 +22,9 @@
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
+                        <th width="8%">Volume</th>
+                        <th width="5%">Process</th>
+                        <th width="5%">Frequency</th>
                         <th width="10%">Action</th>
                     </tr>
                     </thead>
@@ -231,6 +234,10 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
+                    {data: 'volume', name: 'volume', defaultContent: ''},
+                    {data: 'process', name: 'process', defaultContent: ''},
+                    {data: 'frequency', name: 'frequency', defaultContent: ''},
+
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
