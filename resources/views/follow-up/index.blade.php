@@ -322,7 +322,7 @@
 								  </div>
 
 								  <div class="form-group" style=" margin-bottom: 5px;">
-									  <label class=""><b>Comment : </b></label>
+									  <label class=""><b>Comment* </b></label>
 									  <textarea class="form-control" rows="3" name="comment" required></textarea>
 								  </div>
 							  </div>

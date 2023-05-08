@@ -27,11 +27,15 @@
                        
                         <th width="7%">Category</th>
                         <th width="9%">website</th>
-                        <th width="8%">Possibility</th>
-                        <th width="8%">Probability</th>
+                        <th width="8%">Possib</th>
+                        <!-- <th width="8%">Probability</th> -->
                         <th width="5%">Country</th>
-                        <th width="8%">Contact Person</th>
-                        <th width="8%">Contact Number</th>
+                        <th width="8%">KDM</th>
+                        <th width="8%">Phone</th>
+                        <th width="8%">Process</th>
+                        <th width="8%">Volume</th>
+                        <th width="8%">Frequency</th>
+
                         <th width="10%">Action</th>
 
                     </tr>
@@ -48,12 +52,15 @@
                             <td width="8%">{{$lead->category->categoryName}}</td>
                             <td width="9%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
-                            <td width="8%">@if($lead->probability != null){{$lead->probability->probabilityName}} @else null @endif</td>
+                            <!-- <td width="8%">@if($lead->probability != null){{$lead->probability->probabilityName}} @else null @endif</td> -->
                             <td width="5%">{{$lead->country->countryName}}</td>
                             <td width="8%">{{$lead->personName}}</td>
                             <td width="8%"><a
                                         href="skype:{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
+                            <td width="8%">{{$lead->process}}</td>
+                            <td width="8%">{{$lead->volume}}</td>
+                            <td width="8%">{{$lead->frequency}}</td>
                             <td width="9%">
 
                                 @if($lead->contactedUserId==null)
@@ -73,8 +80,8 @@
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
 
-                                <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                <!-- Trigger the Edit modal with a button [DISPLAY NONE] -->
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm" style="display: none;"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
@@ -85,6 +92,12 @@
                                    data-lead-category="{{$lead->category->categoryId}}"
                                    data-lead-country="{{$lead->countryId}}"
                                    data-lead-designation="{{$lead->designation}}"
+                                   data-lead-process="{{$lead->process}}"
+                                   data-lead-frequency="{{$lead->frequency}}"
+                                   data-lead-volume="{{$lead->volume}}"
+                                   data-lead-employee="{{$lead->employee}}"
+                                   data-lead-linkedin="{{$lead->linkedin}}"
+                                   data-lead-founded="{{$lead->founded}}"
                                    data-lead-comments="{{$lead->comments}}"
 
                                 >
@@ -163,72 +176,117 @@
                     <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{route('leadUpdate')}}">
+                <form  method="post" action="{{route('leadUpdate')}}">
                         {{csrf_field()}}
                         <div class="row">
-                            <div class="col-md-12" align="center">
-                                <b> Mined By:
-                                    <div class="mined" id="mined"></div>
-                                </b>
+                            <!-- <div class="col-md-12" align="center">
+                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
+                            </div> -->
+
+                            <div class="col-md-3">
+                                <input type="hidden" name="leadId">
+                                <label><b>Company:</b></label>
+                                <input type="text" class="form-control" name="companyName" value="">
                             </div>
-                            <div class="col-md-4">
-                                <label>Category:</label>
-                                <select class="form-control" name="category" id="category">
+
+                            <div class="col-md-3">
+                                <label><b>Phone:</b></label>
+                                <input type="text" class="form-control" name="number" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Category:</b></label>
+                                <select class="form-control"  name="category" id="category">
                                     <option value="">Please Select</option>
                                     @foreach($categories as $category)
                                         <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <input type="hidden" name="leadId">
-                                <label>Company Name:</label>
-                                <input type="text" class="form-control" name="companyName" value="">
-                            </div>
 
-                            <div class="col-md-4">
-                                <label>Email:</label>
-                                <input type="email" class="form-control" name="email" value="">
-                            </div>
-                            <div class="col-md-4">
-                                <label>Contact Person:</label>
-                                <input type="text" class="form-control" name="personName" value=""> <br>
-                            </div>
-                            <div class="col-md-4">
-                                <label>Number:</label>
-                                <input type="text" class="form-control" name="number" value="">
-                            </div>
-                            <div class="col-md-4">
-                                <label>Website:</label>
-                                <input type="text" class="form-control" name="website" value=""> <br>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Designation:</label>
-                                <input type="text" class="form-control" name="designation" value="">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label>Country:</label>
-                                <select class="form-control" name="country" id="country">
+                            <div class="col-md-2">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
                                     @foreach($country as $c)
                                         <option value="{{$c->countryId}}">{{$c->countryName}}</option>
                                     @endforeach
                                 </select>
-                                <br><br><br>
                             </div>
 
+                            <div class="col-md-2">
+                                <label><b>Founded:</b></label>
+                                <input type="text" class="form-control" name="founded" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                <label><b>Website:</b></label>
+                                <input type="text" class="form-control" name="website" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Current Process:</b></label>
+                                <input type="text" class="form-control" name="process" value="">
+                                <br><br>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>File Volume:</b></label>
+                                <input type="text" class="form-control" name="volume" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Frequency:</b></label>
+                                <input type="text" class="form-control" name="frequency" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Employee Size:</b></label>
+                                <input type="text" class="form-control" name="employee" value="">
+                                <br><br>
+                            </div>
+
+
+
+
+                            <div class="col-md-4">
+                                <label><b>Contact Person:</b></label>
+                                <input type="text" class="form-control" name="personName" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Designation:</b></label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Email:</b></label>
+                                <input type="email" class="form-control" name="email" value="">
+                                <br><br>
+                            </div>
+
+
+
+
                             <div class="col-md-8">
-                                <label><b>Comment:</b></label>
+                                <label><b>Comments:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
 
+                            <div class="col-md-4">
+                                <label><b>LinkedIn Profile:</b></label>
+                                <input type="text" class="form-control" name="linkedin" value="">
+                            </div>
 
+                            
                             <div class="col-md-6">
                                 <button class="btn btn-success" type="submit">Update</button>
                             </div>
                         </div>
                     </form>
+
                     <br><br>
 
                     @if(Request::url()!=route('highPossibility'))
@@ -257,6 +315,7 @@
                     @endif
                 </div>
                 <div class="modal-footer">
+                    <div class="mineIdDate" id="mineIdDate" align="left"></div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -482,24 +541,6 @@ function selectAll(source) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function (e) {
@@ -511,16 +552,24 @@ function selectAll(source) {
             var number = $(e.relatedTarget).data('lead-number');
             var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
-            var minedBy = $(e.relatedTarget).data('lead-mined');
-            var category = $(e.relatedTarget).data('lead-category');
-            var country = $(e.relatedTarget).data('lead-country');
-            var designation = $(e.relatedTarget).data('lead-designation');
-            var comments = $(e.relatedTarget).data('lead-comments');
-
+            var linkedin=$(e.relatedTarget).data('lead-linkedin');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
+            var designation=$(e.relatedTarget).data('lead-designation');
+            var country=$(e.relatedTarget).data('lead-country');
+            var founded=$(e.relatedTarget).data('lead-founded');
+            var employee=$(e.relatedTarget).data('lead-employee');
+            var volume=$(e.relatedTarget).data('lead-volume');
+            var frequency=$(e.relatedTarget).data('lead-frequency');
+            var process=$(e.relatedTarget).data('lead-process');
+            var createdAt=$(e.relatedTarget).data('lead-created');
+            var comments=$(e.relatedTarget).data('lead-comments');
             //populate the textbox
             $('#category').val(category);
+            // $('div.mined').text(minedBy);
+            // $('div.mined').text(minedBy+' _'+createdAt);
+            $('div.mineIdDate').text(leadId+' was mined by '+minedBy+' at '+createdAt);
             $('#country').val(country);
-            $('div.mined').text(minedBy);
 //            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
@@ -528,7 +577,13 @@ function selectAll(source) {
             $(e.currentTarget).find('input[name="number"]').val(number);
             $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
             $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $(e.currentTarget).find('input[name="founded"]').val(founded);
+            $(e.currentTarget).find('input[name="employee"]').val(employee);
+            $(e.currentTarget).find('input[name="volume"]').val(volume);
+            $(e.currentTarget).find('input[name="frequency"]').val(frequency);
+            $(e.currentTarget).find('input[name="process"]').val(process);
             $('#comments').val(comments);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 

@@ -98,12 +98,12 @@
                 },
                 columns: [
                     { title:'User Name', data: 'username', name: 'users.userId',"orderable": false, "searchable":true },
-                    { title:'Call', data: 'targetCall', name: 'targetCall', "orderable": true, "searchable":true },
-                    { title:'Contact', data: 'targetContact', name: 'targetContact', "orderable": true, "searchable":true },
-                    { title:'High Possibility', data: 'targetHighPossibility', name: 'targetHighPossibility', "orderable": true, "searchable":true },
-                    { title:'Lead Mine', data: 'targetLeadmine', name: 'targetLeadmine', "orderable": true, "searchable":true },
-                    { title:'Usa', data: 'targetUsa', name: 'targetUsa', "orderable": true, "searchable":true },
+                    { title:'Conversation', data: 'conversation', name: 'conversation', "orderable": true, "searchable":true },
+                    { title:'Total Call', data: 'targetCall', name: 'targetCall', "orderable": true, "searchable":true },
+                    { title:'Follow Up', data: 'followup', name: 'followup', "orderable": true, "searchable":true },
                     { title:'Test', data: 'targetTest', name: 'targetTest', "orderable": true, "searchable":true },
+                    { title:'Deals CLosed', data: 'closelead', name: 'closelead', "orderable": true, "searchable":true },
+                    { title:'Lead Mine', data: 'targetLeadmine', name: 'targetLeadmine', "orderable": true, "searchable":true },
                     { title:'File', data: 'targetFile', name: 'targetFile',"orderable": true, "searchable":true }
                 ]
             });

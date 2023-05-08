@@ -33,6 +33,9 @@
                         <th>Category</th>
                         <th>Possibility</th>
                         <th>Probability</th>
+                        <th>Volume</th>
+                        <th>Frequency</th>
+                        <th>Process</th>
                         <th>Date</th>
 
 
@@ -216,6 +219,9 @@ $(document).ready(function() {
 
                         },
                     },
+                    { data: 'volume', name: 'leads.volume' },
+                    { data: 'frequency', name: 'leads.frequency' },
+                    { data: 'process', name: 'leads.process' },
                     { data: 'created_at', name: 'leads.created_at' },
 
                 ]

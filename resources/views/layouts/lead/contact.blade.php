@@ -32,7 +32,7 @@
 
                         <option value="">select Mined By</option>
                         @foreach($usersforminded as $urs)
-                            <option value="{{$urs->id }}">{{$urs->firstName}}</option>
+                            <option value="{{$urs->id }}">{{$urs->firstName}} {{$urs->lastName}}</option>
                         @endforeach
 
 
@@ -411,7 +411,7 @@
 
 
                             <div class="form-group">
-                                <label class=""><b>Comment : </b></label>
+                                <label class=""><b>Comment* </b></label>
                                 <textarea class="form-control" rows="3" name="comment" required></textarea>
                             </div>
                         </div>
@@ -526,7 +526,7 @@ function selectAll(source) {
             var value=$(x).val();
             if(value == 6){
                 // alert(value);
-                $('#newFileField').html('<label><b>New Files :</b></labe><input type="number" class="form-control" name="newFile" required>');
+                $('#newFileField').html('<label><b>New Files* :</b></labe><input type="number" class="form-control" name="newFile" required>');
             }
             else {
                 $('#newFileField').html('');

@@ -52,6 +52,9 @@
                         <th>Category</th>
                         <th>Possibility</th>
                         <th>Marketer</th>
+                        <th>Volume</th>
+                        <th>Frequency</th>
+                        <th>Process</th>
                         <th>Status</th>
                         <th>Action</th>
 
@@ -416,6 +419,9 @@ function fill_datatable(userId='')
                     { data: 'category.categoryName', name: 'category.categoryName', orderable: false,defaultContent: ""},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
                     { data: 'contact.firstName', orderable: false, defaultContent: ""},
+                    { data: 'volume', name: 'leads.volume' },
+                    { data: 'frequency', name: 'leads.frequency' },
+                    { data: 'process', name: 'leads.process' },
                     { data: 'status.statusName', name: 'status.statusName', orderable: false},
                     { data: 'check', name: 'check', orderable: false, searchable: false},
                 ]

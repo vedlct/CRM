@@ -548,6 +548,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
                                             data-lead-designation="' . $lead->designation . '"
+                                            data-lead-volume="' . $lead->volume . '"
+                                            data-lead-frequency="' . $lead->frequency . '"
+                                            data-lead-process="' . $lead->process . '"
                                             data-lead-comments="' . $lead->comments . '"
                                             data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -576,6 +579,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
                                             data-lead-designation="' . $lead->designation . '"
+                                            data-lead-volume="' . $lead->volume . '"
+                                            data-lead-frequency="' . $lead->frequency . '"
+                                            data-lead-process="' . $lead->process . '"
                                             data-lead-comments="' . $lead->comments . '"
                                             data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -601,6 +607,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                            data-lead-country="' . $lead->countryId . '"
                                            data-lead-designation="' . $lead->designation . '"
+                                           data-lead-volume="' . $lead->volume . '"
+                                           data-lead-frequency="' . $lead->frequency . '"
+                                           data-lead-process="' . $lead->process . '"
                                            data-lead-comments="' . $lead->comments . '"
                                            data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -618,7 +627,7 @@ class LeadController extends Controller
             ->make(true);
     }
 
-    public function assignStore(Request $r){
+    public function assignStore(Request $r){             
         if($r->ajax()){
             foreach ($r->leadId as $lead){
                 $l=Lead::findOrFail($lead);
@@ -635,7 +644,7 @@ class LeadController extends Controller
                 $activity=new Activities;
                 $activity->leadId=$lead;
                 $activity->userId=Auth::user()->id;
-                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId;
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId);
                 $activity->save();
                 
 
@@ -801,7 +810,7 @@ class LeadController extends Controller
             ->with('country',$country);
     }
 
-
+//SAKIB, please check this function
     public function contactedStatus(Request $r){
 
         if($r->ajax()){
@@ -815,9 +824,33 @@ class LeadController extends Controller
                     $l->contactedUserId =null;
                     //$lead->save();
 
+
+                    $activity=new Activities;
+                    $activity->leadId=$l->leadId;
+                    $activity->userId=Auth::user()->id;
+
+                    if($l->statusId==2){           
+                        $activity->activity=Auth::user()->userId .' '. 'Filtered this lead (from Table)';
+                    }
+                    if($l->statusId==3){
+                        $activity->activity=Auth::user()->userId .' '. 'marked this lead as Not Interested and left (from Table)';
+                    }
+                    if($l->statusId==4){
+                        $activity->activity=Auth::user()->userId .' '. 'left this lead as Bad Lead (from Table)';
+                    }
+                    if($l->statusId==5){
+                        $activity->activity=Auth::user()->userId .' '. 'Rejected this lead (from Table)';
+                    }    
+                    if($l->statusId==6){
+                        $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead (from Table)';
+                    }    
+
+                    $activity->save();  
+
                 }
                 $l->save();
 
+                
                 $assignId=Leadassigned::select('assignId')
                 ->where('leadId',$lead)
                 ->where('assignTo',Auth::user()->id)
@@ -835,6 +868,7 @@ class LeadController extends Controller
                 $l->leadAssignStatus=0;
                 $l->save();
             }
+
 
             }
 
@@ -1363,7 +1397,7 @@ class LeadController extends Controller
 
             }
             $assignto=User::select('id','firstName','lastName')
-                ->where('active', 1)
+                // ->where('active', 1)
                 ->where('typeId',5)
                 ->OrWhere('typeId',2)
                 ->OrWhere('typeId',3)
@@ -1386,7 +1420,7 @@ class LeadController extends Controller
             $country=Country::get();
 
             $usersforminded=User::select('id','firstName','lastName')
-                ->where('active','1')
+                // ->where('active','1')
                 ->where('typeId',5)
                 ->OrWhere('typeId',2)
                 ->OrWhere('typeId',3)
@@ -1491,7 +1525,7 @@ class LeadController extends Controller
                                    data-lead-possibility="'.$lead->possibilityId.'"
                                    data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                    <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                     data-lead-id="'.$lead->leadId.'"
                                     data-lead-name="'.$lead->companyName.'"
                                     data-lead-email="'.$lead->email.'"
@@ -1511,7 +1545,8 @@ class LeadController extends Controller
                                     data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true" ></i></a>
+                                    
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                     data-lead-id="'.$lead->leadId.'"
                                     data-lead-name="'.$lead->companyName.'"
@@ -1520,7 +1555,7 @@ class LeadController extends Controller
 ;
             })
             ->addColumn('call', function ($lead){
-                return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
+                return '<a href='.'"skype:'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
             })
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
@@ -1601,7 +1636,7 @@ class LeadController extends Controller
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
             })
             ->addColumn('call', function ($lead){
-                return '<a href='.'"skype::'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
+                return '<a href='.'"skype:'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
             })
 
             ->addColumn('callreport', function ($lead){
@@ -1805,6 +1840,17 @@ class LeadController extends Controller
 
         return DataTables::eloquent($leads)
             ->make(true);
+ 
+        }
+
+//SAKIB, please check this
+    public function returnUserName($userId){
+        $userName=User::where('id',$userId)->first()->userId;
+        return userName;
+        
     }
+
+
+
 }
 

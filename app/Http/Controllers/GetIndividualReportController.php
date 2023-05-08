@@ -1321,14 +1321,5 @@ GetIndividualReportController extends Controller
     }
 
 
-    public function getPossessedLeads(Request $r){
-        $user=User::findOrFail($r->userid);
-        $ownedLeads = Lead::select('leads.leadId')
-            ->where('contactedUserId',$user->id)
-            ->count();
-
-        return Response($ownedLeads);
-    }
-
 
 }

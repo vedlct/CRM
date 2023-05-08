@@ -430,7 +430,8 @@ class UserManagementController extends Controller
     }
 
     public function targetManagementGet(Request $data){
-        $model = UsertargetByMonth::select('usertargetsbymonth.*','users.userId as username')->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+        $model = UsertargetByMonth::select('usertargetsbymonth.*','users.userId as username')
+        ->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
         if(!empty($data->month)){
             $model = $model->whereMonth('date', '=', $data->month);
         }

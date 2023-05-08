@@ -620,9 +620,6 @@ class ReportController extends Controller
             ->groupBy('minedBy')
             ->get();
 
-        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))
-            ->groupBy('contactedUserId')
-            ->get();
 
         $followupThisWeek = Workprogress::select('userId', DB::raw('count(*) as userFollowup'))
             ->where('callingReport', 4)
@@ -775,7 +772,6 @@ class ReportController extends Controller
             ->with('highPosibilitiesThisWeekRa', $highPosibilitiesThisWeekRa)
             ->with('followupThisWeek', $followupThisWeek)
             ->with('leadMinedThisWeek', $leadMinedThisWeek)
-            ->with('totalOwnedLeads', $totalOwnedLeads)
             ->with('calledThisWeek', $calledThisWeek)
             ->with('closing', $closing)
             ->with('usersRa', $usersRa)
@@ -804,6 +800,7 @@ class ReportController extends Controller
             $users = User::select('id as userid', 'firstName', 'typeId')
                 ->where('typeId', '!=', 1)
                 ->where('typeId', '!=', 4)
+                ->where('active', 1)
                 ->where('teamId', Auth::user()->teamId)
                 ->get();
 
@@ -830,6 +827,7 @@ class ReportController extends Controller
 //                ->where('typeId','!=',4)
                 ->whereNotIn('typeId', [1, 4])
                 ->where('users.crmType', null)
+                ->where('active', 1)
                 ->get();
 
             $usersRa = User::select('id as userid', 'firstName', 'typeId')
@@ -999,12 +997,6 @@ class ReportController extends Controller
             ->get();
 
 
-        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))
-            ->groupBy('contactedUserId')
-            ->get();
-
-//        return $totalOwnedLeads;
-
 
         return view('report.table')
             ->with('users', $users)
@@ -1033,8 +1025,7 @@ class ReportController extends Controller
             ->with('notAvailable', $notAvailable)
             ->with('gatekeeper', $gatekeeper)
             ->with('notInterested', $notInterested)
-            ->with('conversation', $conversation)
-            ->with('totalOwnedLeads', $totalOwnedLeads);
+            ->with('conversation', $conversation);
 
     }
 
@@ -1753,6 +1744,12 @@ class ReportController extends Controller
 
     }
 
+
+    // public function reportIndividualLeadCount(request $r){
+    //     $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))
+    //     ->groupBy('contactedUserId')
+    //     ->get();
+    // }
 
 
     /*public function reportValue(Request $r)

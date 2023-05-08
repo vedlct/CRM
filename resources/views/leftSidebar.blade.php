@@ -36,7 +36,7 @@
                         </li> -->
                         <li>
                             <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu">Table</span></a>
+                                <span class="hide-menu"> Table</span></a>
                         </li>
                         @if($userType == 'MANAGER')
                             @if(Auth::user()->areaType != "usa" )
@@ -50,18 +50,21 @@
                         @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
                             @if(Auth::user()->areaType != "usa" )
                                 <li>
-                                    <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu">Country</span></a>
+                                    <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu"> Country</span></a>
                                 </li>
                             @endif
                         @endif
 
                         @if($userType =='SUPERVISOR')
                             <li>
-                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu">Others</span></a>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu"> Others</span></a>
                             </li>
                             <li>
-                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Follow-up</span></a>
+                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu"> Follow-up</span></a>
                             </li>
+                            <!-- <li>
+                                <a href="{{route('reportTableForUser')}}"><i class="fa fa-pie-chart" aria-hidden="true"></i><span class="hide-menu"> Ind. Lead Count</span></a>
+                            </li> -->
                             {{--<li>
                                 <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
                                                                          aria-hidden="true"></i>
