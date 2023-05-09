@@ -731,43 +731,43 @@ function selectAll(source) {
 
 
 
-$("#otherCatches2").change(function() {
+        $("#otherCatches2").change(function() {
 
-var chkArray = [];
-var userId=$(this).val();
-$('.checkboxvar:checked').each(function (i) {
+        var chkArray = [];
+        var userId=$(this).val();
+        $('.checkboxvar:checked').each(function (i) {
 
-    chkArray[i] = $(this).val();
-});
-//alert(chkArray)
-var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-// $("#inp").val(JSON.stringify(chkArray));
-// $( "#assign-form" ).submit();
-jQuery('input:checkbox:checked').parents("tr").remove();
-$(this).prop('selectedIndex',0);
+            chkArray[i] = $(this).val();
+        });
+        //alert(chkArray)
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // $("#inp").val(JSON.stringify(chkArray));
+        // $( "#assign-form" ).submit();
+        jQuery('input:checkbox:checked').parents("tr").remove();
+        $(this).prop('selectedIndex',0);
 
-$.ajax({
-    type : 'post' ,
-    url : '{{route('assignStore')}}',
-    data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
-    success : function(data){
-        console.log(data);
-        if(data == 'true'){
-            // $('#myTable').load(document.URL +  ' #myTable');
-//                        $.alert({
-//                            title: 'Success!',
-//                            content: 'successfully assigned!',
-//                        });
-            $('#alert').html(' <strong>Success!</strong> Assigned');
-            $('#alert').show();
+        $.ajax({
+            type : 'post' ,
+            url : '{{route('assignStore')}}',
+            data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+            success : function(data){
+                console.log(data);
+                if(data == 'true'){
+                    // $('#myTable').load(document.URL +  ' #myTable');
+        //                        $.alert({
+        //                            title: 'Success!',
+        //                            content: 'successfully assigned!',
+        //                        });
+                    $('#alert').html(' <strong>Success!</strong> Assigned');
+                    $('#alert').show();
 
-        }
-    }
-});
+                }
+            }
+        });
 
 
 
-});
+        });
 
 
 

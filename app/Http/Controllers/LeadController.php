@@ -644,9 +644,8 @@ class LeadController extends Controller
                 $activity=new Activities;
                 $activity->leadId=$lead;
                 $activity->userId=Auth::user()->id;
-                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId);
-                $activity->save();
-                
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId); 
+                $activity->save();               
 
             }
             return Response('true');
@@ -671,7 +670,7 @@ class LeadController extends Controller
                 $activity=new Activities;
                 $activity->leadId=$lead;
                 $activity->userId=Auth::user()->id;
-                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId;
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId);
                 $activity->save();
 
             }
@@ -810,7 +809,6 @@ class LeadController extends Controller
             ->with('country',$country);
     }
 
-//SAKIB, please check this function
     public function contactedStatus(Request $r){
 
         if($r->ajax()){
@@ -823,7 +821,7 @@ class LeadController extends Controller
                 if($l->contactedUserId == Auth::user()->id){
                     $l->contactedUserId =null;
                     //$lead->save();
-
+                }
 
                     $activity=new Activities;
                     $activity->leadId=$l->leadId;
@@ -845,9 +843,8 @@ class LeadController extends Controller
                         $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead (from Table)';
                     }    
 
-                    $activity->save();  
 
-                }
+                    $activity->save();
                 $l->save();
 
                 
@@ -1329,28 +1326,46 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
         return Redirect()->route('home');}
 
-    //ADD Contacted
+
+    //Click on Blue Badge on Assigned Leads to Make Single Lead as My Lead
     public function addContacted(Request $r){
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->contactedUserId=Auth::user()->id;
         $lead->statusId=7;
         $lead->save();
+
+        $activity=new Activities;
+        $activity->leadId=$r->leadId;
+        $activity->userId=Auth::user()->id;
+        $activity->activity=Auth::user()->userId .' '. 'made this as My Lead';
+        $activity->save();
+
         Session::flash('message', 'Lead Added To Contacted List');
         return back();
     }
 
 
+    //Click on Make My Lead button on Assigned Leads page to Make Multiple Leads as My Lead
     public function addmyContacted(Request $r){
         foreach ($r->leadId as $lead){
-        $lead=Lead::findOrFail($lead);
-        $lead->contactedUserId=Auth::user()->id;
-        $lead->statusId=7;
-        $lead->save();
+            $lead=Lead::findOrFail($lead);
+            $lead->contactedUserId=Auth::user()->id;
+            $lead->statusId=7;
+            $lead->save();
+
+            $activity=new Activities;
+            $activity->leadId=$lead->leadId;
+            $activity->userId=Auth::user()->id;
+            $activity->activity=Auth::user()->userId .' '. 'made this as My Lead';
+            $activity->save();
+
         }
+//        Session::flash('message', 'Leads are added to you My Leads');
         return Response('true');
 
     }
+
 
 // Add Contacted From Temp
     public function addContactedTemp(Request $r){
@@ -1714,6 +1729,7 @@ class LeadController extends Controller
     }
 
 
+    // When user changes the lead's status from Edit Lead to Leave the Lead
     public function leaveLead(Request $r){
 
         if($r->Status==6){
@@ -1752,45 +1768,29 @@ class LeadController extends Controller
             $lead->leadAssignStatus = 0;
             $lead->save();
 
+            $activity=new Activities;
+            $activity->leadId=$r->leadId;
+            $activity->userId=Auth::user()->id;
 
             if($lead->statusId==2){           
-                $activity=new Activities;
-                $activity->leadId=$r->leadId;
-                $activity->userId=Auth::user()->id;
                 $activity->activity=Auth::user()->userId .' '. 'Filtered this lead';
-                $activity->save();
             } 
-            if($lead->statusId==3){
-                $activity=new Activities;
-                $activity->leadId=$r->leadId;
-                $activity->userId=Auth::user()->id;
+            elseif($lead->statusId==3){
                 $activity->activity=Auth::user()->userId .' '. 'marked this lead as Not Interested and left';
-                $activity->save();
             }
-            if($lead->statusId==4){
-                $activity=new Activities;
-                $activity->leadId=$r->leadId;
-                $activity->userId=Auth::user()->id;
+            elseif($lead->statusId==4){
                 $activity->activity=Auth::user()->userId .' '. 'left this lead as Bad Lead';
-                $activity->save();
             }
-            if($lead->statusId==5){
-                $activity=new Activities;
-                $activity->leadId=$r->leadId;
-                $activity->userId=Auth::user()->id;
+            elseif($lead->statusId==5){
                 $activity->activity=Auth::user()->userId .' '. 'Rejected this lead';
-                $activity->save();
             }
-            if($lead->statusId==6){
-                $activity=new Activities;
-                $activity->leadId=$r->leadId;
-                $activity->userId=Auth::user()->id;
+            elseif($lead->statusId==6){
                 $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead';
-                $activity->save();
             }
+            $activity->save();
 
 
-            Session::flash('message', 'You have Left The Lead successfully');
+ //           Session::flash('message', 'You have Left The Lead successfully');
             return back();
         }
 
@@ -1845,7 +1845,7 @@ class LeadController extends Controller
 
 //SAKIB, please check this
     public function returnUserName($userId){
-        $userName=User::where('id',$userId)->first()->userId;
+        $userName=User::where('id',$userId)->get();
         return userName;
         
     }

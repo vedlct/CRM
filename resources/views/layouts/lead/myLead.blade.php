@@ -20,7 +20,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%"> Select</th>
+                        <th width="5%">Select</th>
                         <th width="5%">Id</th>
                         <th width="7%">Assigned by</th>
                         <th width="10%">Company Name</th>
@@ -529,7 +529,7 @@ function selectAll(source) {
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html(' <strong>Success!</strong> Contacted');
+                        $('#alert').html(' <strong>Leads are added to your My Leads</strong>');
                         $('#alert').show();
 
                     }
@@ -721,48 +721,42 @@ function selectAll(source) {
 
         $("#otherCatches").change(function() {
 
-       
-            
+        var chkArray = [];
+        var status=$(this).val();
+        $('.checkboxvar:checked').each(function (i) {
 
-var chkArray = [];
-var status=$(this).val();
-$('.checkboxvar:checked').each(function (i) {
-
-    chkArray[i] = $(this).val();
-});
-//alert(chkArray)
-var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-// $("#inp").val(JSON.stringify(chkArray));
-// $( "#assign-form" ).submit();
-jQuery('input:checkbox:checked').parents("tr").remove();
-$(this).prop('selectedIndex',0);
+            chkArray[i] = $(this).val();
+        });
+        //alert(chkArray)
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // $("#inp").val(JSON.stringify(chkArray));
+        // $( "#assign-form" ).submit();
+        jQuery('input:checkbox:checked').parents("tr").remove();
+        $(this).prop('selectedIndex',0);
 
 
+            $.ajax({
+            type : 'post' ,
+            url : '{{route('contactedStatus')}}',
+            data : {_token: CSRF_TOKEN,'leadId':chkArray,'status':status} ,
+            beforeSend:function(){
+        return confirm("Are you sure?");
+        },
+            success : function(data){
+                console.log(data);
+                if(data == 'true'){
+                    // $('#myTable').load(document.URL +  ' #myTable');
+        //                        $.alert({
+        //                            title: 'Success!',
+        //                            content: 'successfully assigned!',
+        //                        });
+                    $('#alert').html(' <strong>Success!</strong> Status Changed');
+                    $('#alert').show();
 
-
-
-$.ajax({
-    type : 'post' ,
-    url : '{{route('contactedStatus')}}',
-    data : {_token: CSRF_TOKEN,'leadId':chkArray,'status':status} ,
-    beforeSend:function(){
-return confirm("Are you sure?");
-},
-    success : function(data){
-        console.log(data);
-        if(data == 'true'){
-            // $('#myTable').load(document.URL +  ' #myTable');
-//                        $.alert({
-//                            title: 'Success!',
-//                            content: 'successfully assigned!',
-//                        });
-            $('#alert').html(' <strong>Success!</strong> Status Changed');
-            $('#alert').show();
-
-        }
-        
-    }
-});
+                }
+                
+            }
+        });
 
 });
 
