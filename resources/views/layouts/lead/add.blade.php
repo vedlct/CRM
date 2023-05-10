@@ -153,6 +153,163 @@
                 <div class="container-fluid">
                     <div class="row">
                         {{csrf_field()}}
+
+
+                        <div class="form-group col-md-4">
+                            <label class="control-label " ><b>Company Name</b></label>
+                            <span id="exceedcompany" style="color:red;display: none"><i>This Company Name already exist</i></span></label>
+                            {!! $errors->first('companyName', '<p class="help-block">:message</p>') !!}
+
+                            <input type="text" class="form-control companyNamecheck" id="" placeholder="Enter Company Name" name="companyName" required>
+
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="control-label" ><b>Website</b></label>
+                            <span id="exceedwebsite" style="color:red;display: none"><i>This Website already exist</i></span></label>
+                            {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" >
+
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="control-label" ><b>Contact Number</b></label>
+                            <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
+                            {!! $errors->first('personNumber', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
+                        </div>
+
+
+                        <div class="form-group col-md-4">
+                            <label class="control-label" ><b>Company Email:</b></label>
+                            {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Linkedin Profile</b></label>
+                            {!! $errors->first('linkedin', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="linkedin" placeholder="Company LinkedIn Profile" >
+
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Founded</b></label>
+                            {!! $errors->first('founded', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="founded" placeholder="Founding Year" >
+                        </div>
+
+
+
+                        <div class="form-group col-md-4">
+
+                            <label for="sel1"><b>Country:</b></label>
+                            <select class="select form-control" id="" name="country" style="width: 100%;">
+                                @foreach($countries as $c)
+                                    <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label ><b>Category:</b></label>
+                            <select class="form-control" id="" name="category" >
+                                @foreach($categories as $cat2)
+                                    <option value="{{$cat2->categoryId}}">{{$cat2->categoryName}}</option>
+
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Employee Size</b></label>
+                            {!! $errors->first('employee', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="employee" placeholder="Only Number of employees" >
+                            <br><br><br>
+                        </div>
+
+
+
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Current Process</b></label>
+                            {!! $errors->first('process', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="process" placeholder="In house, Outsourcing, Agency" >
+
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>File Volume</b></label>
+                            {!! $errors->first('volume', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="volume" placeholder="Only number of images per Frequency" >
+
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Frequency</b></label>
+                            {!! $errors->first('frequency', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="frequency" placeholder="Weekly, Monthly, Quarterly, Yearly" >
+                        <br><br>
+                        </div>
+
+
+
+
+                        <div class="form-group col-md-4" style="">
+                            <label class="control-label" ><b>Contact Person</b></label>
+                            {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" id="" name="personName" placeholder="Only KDM name" >
+
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="control-label " ><b>Designation</b></label>
+                            {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control" name="designation" placeholder="KDM Designation" >
+
+                        </div>
+
+                        <div class="form-group col-md-4" style="">
+                            <label ><b>Possibility:</b></label>
+                            <select class="form-control" id="" name="possibility">
+                                @foreach($possibilities as $possibility)
+                                    <option value="{{$possibility->possibilityId}}">{{$possibility->possibilityName}}</option>
+
+                                @endforeach
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group col-md-10">
+                            <label class="control-label " ><b>Extra Information</b></label>
+
+                            {!! $errors->first('comment', '<p class="help-block">:message</p>') !!}
+
+                            {{--<input type="text" class="form-control" id="" placeholder="Enter Comment" name="comment" required>--}}
+
+                            <textarea name="comment" rows="4"  class="form-control">
+
+
+                            </textarea>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Save New Lead</button>
+
+
+
+           
+
+
+
+
+
+
+
+
+<!-- 
                         <div class="form-group col-md-5">
                             <label class="control-label " ><b>Company Name</b></label>
                             <span id="exceedcompany" style="color:red;display: none"><i>This Company Name already exist</i></span></label>
@@ -270,7 +427,7 @@
                         </div>
 
 
-                        <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Insert</button>
+                        <button type="submit" class="btn btn-success btn-md" style="width: 30%; margin-left: 20px;">Insert</button> -->
 
                     </div></div>
                 <div class="modal-footer">

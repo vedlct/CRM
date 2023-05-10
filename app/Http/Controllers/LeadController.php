@@ -335,7 +335,7 @@ class LeadController extends Controller
         //Validating The input Filed
         $this->validate($r,[
             'companyName' => 'required|max:100',
-            'website' => 'max:100',
+            'website' => 'required|max:100',
             'email' => 'max:100',
             'personName' => 'max:100',
             'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
@@ -344,11 +344,11 @@ class LeadController extends Controller
         //Inserting Data To Leads TAble
 
 
-        if(isset($r->user)){
-            $userId = $r->user;
-        }else{
-            $userId = Auth::user()->id;
-        }
+        // if(isset($r->user)){
+        //     $userId = $r->user;
+        // }else{
+        //     $userId = Auth::user()->id;
+        // }
 
         $l=new Lead;
 
@@ -362,10 +362,16 @@ class LeadController extends Controller
         $l->email= $r->email;
         $l->contactNumber = $r->personNumber;
         $l->countryId = $r->country;
-        $l->comments=$r->comment;
+        $l->linkedin=$r->linkedin;
+        $l->founded=$r->founded;
+        $l->employee=$r->employee;
+        $l->volume=$r->volume;
+        $l->frequency=$r->frequency;
+        $l->process=$r->process;
+        $l->comments = $r->comment;
         //getting Loggedin User id
         $l->statusId = 1;
-        $l->minedBy = $userId;
+        $l->minedBy = Auth::user()->id;
         $l->save();
 
        // if($r->contact){
@@ -393,7 +399,7 @@ class LeadController extends Controller
         $this->validate($r,[
             'companyName' => 'required|max:100',
             'website' => 'max:100',
-            'email' => 'max:100',
+            'email' => 'required|max:100',
             'personName' => 'max:100',
             'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
             'designation'=>'max:100'
