@@ -14,37 +14,37 @@
 
 
 <br><br>
-    <div class="seven-columns-row" >
+            <div class="seven-columns-row" >
 
-        <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
+                <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
 
-    <div class="svn-col">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><a href="{{route('called')}}">Total Call</a></h4>
-                <div class="text-right">
-                    <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
-                    <span class="text-muted">Current Month</span>
-                </div>
-                @if($target->targetCall>0)
-                    <?php
-                                  $lastCallPercent= round(($lastDayCalled/$target->targetCall)*100);
-                                  if($lastCallPercent > 100){
-                                      $lastCallPercent=100;
-                                  }
-                    $count++; $total+=$lastCallPercent;
-                    ?>
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('called')}}">Total Call</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"> {{$lastDayCalled}} | {{$target->targetCall}}</h2>
+                            <span class="text-muted">Current Month</span>
+                        </div>
+                        @if($target->targetCall>0)
+                            <?php
+                                        $lastCallPercent= round(($lastDayCalled/$target->targetCall)*100);
+                                        if($lastCallPercent > 100){
+                                            $lastCallPercent=100;
+                                        }
+                            $count++; $total+=$lastCallPercent;
+                            ?>
 
-                <span class="text-success">{{round($lastCallPercent)}}%</span>
-                @endif
-                <div class="progress">
-                    @if($target->targetCall>0)
-                    <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastCallPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                    @endif
+                        <span class="text-success">{{round($lastCallPercent)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetCall>0)
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{$lastCallPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
             <div class="svn-col">
                 <div class="card">
                     <div class="card-body">
@@ -76,34 +76,32 @@
 
 
 
-    <div class="svn-col">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
-                <div class="text-right">
-                    <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
-                    <span class="text-muted">Current Month</span>
-                </div>
-                @if($target->targetLeadmine>0)
-                    <?php $count++;
-                    $lastLeadMinedPercent=($lastDayLeadMined/$target->targetLeadmine)*100;
-                    if($lastLeadMinedPercent>100){
-                        $lastLeadMinedPercent=100;
-                    }
-                    $total+=$lastLeadMinedPercent;
-
-
-                    ?>
-                <span class="text-info">{{round($lastLeadMinedPercent)}}%</span>
-                @endif
-                <div class="progress">
-                    @if($target->targetLeadmine>0)
-                    <div class="progress-bar bg-info" role="progressbar" style="width: {{$lastLeadMinedPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('mine')}}">Lead Mined</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$lastDayLeadMined}} | {{$target->targetLeadmine}}</h2>
+                            <span class="text-muted">Current Month</span>
+                        </div>
+                        @if($target->targetLeadmine>0)
+                            <?php $count++;
+                            $lastLeadMinedPercent=($lastDayLeadMined/$target->targetLeadmine)*100;
+                            if($lastLeadMinedPercent>100){
+                                $lastLeadMinedPercent=100;
+                            }
+                            $total+=$lastLeadMinedPercent;
+                            ?>
+                        <span class="text-info">{{round($lastLeadMinedPercent)}}%</span>
                         @endif
+                        <div class="progress">
+                            @if($target->targetLeadmine>0)
+                            <div class="progress-bar bg-info" role="progressbar" style="width: {{$lastLeadMinedPercent}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                @endif
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
             <div class="svn-col">
                 <div class="card">
@@ -126,7 +124,77 @@
                 </div>
             </div>
 
-            @if(Auth::user()->typeId==4)
+
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
+                            <span class="text-muted">Current Month</span>
+                        </div>
+
+                        @if($target->targetFile>0)
+                            <span class="text-purple">{{round($targetNewFile)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetFile>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('closeLead')}}">Closed Leads</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$closelead}} | {{$target->closelead }}</h2>
+                            <span class="text-muted">Current Month</span>
+                        </div>
+
+                        @if($target->closelead>0)
+                            <span class="text-purple">{{round($targetCloselead)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->closelead>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetCloselead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="svn-col">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{{route('followup')}}">Follow up</a></h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0">{{$followup}} | {{$target->followup }}</h2>
+                            <span class="text-muted">Current Month</span>
+                        </div>
+
+                        @if($target->targetFollowup>0)
+                            <span class="text-purple">{{round($targetFollowup)}}%</span>
+                        @endif
+                        <div class="progress">
+                            @if($target->targetFollowup>0)
+                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetFollowup}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- @if(Auth::user()->typeId==4)
 
             <div class="svn-col">
             <div class="card">
@@ -149,95 +217,44 @@
             </div>
         </div>
 
-            @endif
-
-
-
-
-            <div class="svn-col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('files')}}">New File</a></h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0">{{$fileCount}} | {{$target->targetFile }}</h2>
-                            <span class="text-muted">Current Month</span>
-                        </div>
-
-                        @if($target->targetFile>0)
-                            <span class="text-purple">{{round($targetNewFile)}}%</span>
-                        @endif
-                        <div class="progress">
-                            @if($target->targetFile>0)
-                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetNewFile}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="svn-col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('closeLead')}}">Closed Leads</a></h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0">{{$closelead}} | {{$target->closelead }}</h2>
-                            <span class="text-muted">Current Month</span>
-                        </div>
-
-                        @if($target->closelead>0)
-                            <span class="text-purple">{{round($targetCloselead)}}%</span>
-                        @endif
-                        <div class="progress">
-                            @if($target->closelead>0)
-                                <div class="progress-bar bg-purple" role="progressbar" style="width:{{$targetCloselead}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="svn-col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><a href="{{route('followup')}}">Follow up</a></h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0">{{$followup}} | {{$target->followup }}</h2>
-                            <span class="text-muted">Current Month</span>
-                        </div>
-
-                        @if($target->targetFollowup>0)
-                            <span class="text-purple">{{round($targetFollowup)}}%</span>
-                        @endif
-                        <div class="progress">
-                            @if($target->targetFollowup>0)
-                                <div class="progress-bar bg-success" role="progressbar" style="width:{{$targetFollowup}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            @endif -->
 
 
     </div>
 
-{{--Total Progress--}}
 
 
+        {{--Notice Box--}}
 
-
-
-<div class="row">
-    <div class="col-md-12">
-    <div class="card">
-    <div class="card-body">
-    <h4 class="card-title">Monthly Graph</h4>
-
-    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-
-
-
+    <div class="row" style="width:40%; float: left;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title"><a href="{{ route('notice.index') }}"><span class="hide-menu">Communications</span></a></h3>
+                    <p class="card-subtitle">Showing the Latest Communication.</p>
+                    <p>{!! nl2br(e($recentNotice->msg)) !!}<br><br> <span style="font-weight: 400; color: green; float:left;">From {{$recentNotice->user->firstName}} {{$recentNotice->user->lastName}} at {{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y')}}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div></div></div>
+
+
+    {{--Monthly Report Graph--}}
+
+    <div class="row" style="width:60%; float: right;">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Monthly Graph</h3>
+                    <div id="chartContainer" style="height: 400px; width: 100%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 @endsection
 @php($userType = Session::get('userType'))
@@ -270,12 +287,7 @@
                         legendMarkerColor: "grey",
                         legendText: "{{Auth::user()->firstName}}",
                         dataPoints: [
-                                @if(Auth::user()->typeId==4)
-                                    { y: {{$highPosibilitiesThisWeek}}, label: "High Possibility This Week" ,indexLabel: "{{$highPosibilitiesThisWeek}}%"},
-                                @endif
-                                @if(Auth::user()->typeId==5)
                                     { y: {{ @$lastContactPercent}},  label: "Conversation (25%)",indexLabel: "{{@$lastContactPercent}}%" },
-                                @endif
                                     { y: {{ $calledThisWeek}},  label: "Total Call (5%)",indexLabel: "{{$calledThisWeek}}%" },
                                     { y: {{ $targetFollowup}},  label: "Followup (5%)",indexLabel: "{{$targetFollowup}}%" },
                                     { y: {{ $testLead}},  label: "Tests (45%)",indexLabel: "{{$testLead}}%" },
@@ -289,7 +301,8 @@
                                 { y:{{((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
 
                             @elseif($userType=="MANAGER" ||$userType=="SUPERVISOR")
-                                { y:{{(($targetNewFile*30/100)+($testLead*30/100)+($calledThisWeek*30/100)+($contactThisWeek*25/100))}},label: "Total Progress",indexLabel: "{{round(($targetNewFile*30/100)+($calledThisWeek*30/100)+($testLead*30/100)+($contactThisWeek*10/100))}}%" },
+                                { y:{{((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}},label: "Total",indexLabel: "{{round((@$lastContactPercent*25/100)+($calledThisWeek*5/100)+($targetFollowup*5/100)+($testLead*45/100)+($targetCloselead*15/100)+($leadMinedThisWeek*5/100))}}%" },
+
                             @endif
 
                         ]

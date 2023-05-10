@@ -5,10 +5,10 @@
 	<div class="box-body">
 		<div class="card" style="padding: 2px;">
 			<div class="card-body">
-				<h2 align="center"><b>Notices</b></h2>
+				<h2 align="center"><b>Communication</b></h2>
 
-				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
-					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-info btn-sm">Add Notice</a>
+				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-info btn-sm">Add Communiction</a>
 
 				@endif
 
@@ -23,9 +23,9 @@
 					<table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
 						<thead>
 						<tr role="row">
-							<th>Notice Name</th>
-							<th>Notice</th>
-							@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
+							<th>Communication</th>
+							<th>Category</th>
+							@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 								<th>Action</th>
 							@endif
 						</tr>
@@ -33,7 +33,7 @@
 						<tbody>
 						@foreach ($notices as $notice)
 							<tr>
-								<td>{{ $notice->msg }} </br><small><font color="blue">Uploaded By: {{ $notice->userId }} &nbsp; &nbsp; &nbsp; Uploaded Time: {{ $notice->created_at }}</font></small></td>
+								<td>{!! nl2br(e($notice->msg)) !!} </br><small><font color="blue">Notice By: {{ $notice->userId }} &nbsp; &nbsp; &nbsp; Notice Time: {{ Carbon\Carbon::parse($notice->created_at)->format('d M Y') }}</font></small></td>
 								<td>
 									@if ($notice->categoryName  == 'General')
 										<font color="blue">General</font>
@@ -44,7 +44,7 @@
 									@endif
 								</td>
 								<td>
-									@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='RA')
+									@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 									<!-- Trigger the Edit modal with a button -->
 										<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
 										   data-notice-id="{{$notice->noticeId}}"
@@ -71,7 +71,7 @@
 
 
 
-	<!--Create Notice-->
+	<!--Create Notice/Communication-->
 	<div class="modal" id="create_notice_modal" style="">
 		<div class="modal-dialog" style="max-width: 60%;">
 
@@ -79,21 +79,21 @@
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title" name="modal-title">Create Notice</h4>
+					<h4 class="modal-title" name="modal-title">Create Communication</h4>
 				</div>
 
 				{{ csrf_field() }}
 
 				<div class="col-md-12">
 					<div class="form-group row{{ $errors->has('msg') ? ' has-error' : '' }}">
-						<label for="msg" class="col-md-2 control-label">Message</label>
+						<label for="msg" class="col-md-2 control-label">Communication</label>
 
 						<div class="col-md-10">
-							<textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required>{{ old('msg') }}</textarea>
+							<textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:300px" required>{{ old('msg') }}</textarea>
 
 							@if ($errors->has('msg'))
 								<span class="help-block">
-										<strong>{{ $errors->first('msg') }}</strong>
+										<strong>"<p>".implode("</p>\n<p>", {{ $errors->first('msg') }}).")</p>\n";</strong>
 									</span>
 							@endif
 						</div>
@@ -101,7 +101,7 @@
 
 
 					<div class="form-group row{{ $errors->has('categoryId') ? ' has-error' : '' }}">
-						<label for="categoryId" class="col-md-2 control-label">Notice</label>
+						<label for="categoryId" class="col-md-2 control-label">Category</label>
 
 						<div class="col-md-10">
 
@@ -171,7 +171,7 @@
 
 				<div class="col-md-12">
 					<div class="form-group row{{ $errors->has('msg') ? ' has-error' : '' }}">
-						<label for="msg" class="col-md-2 control-label">Notice Name</label>
+						<label for="msg" class="col-md-2 control-label">Communication</label>
 
 						<div class="col-md-10">
 							<textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required autofocus>{{ $notice->msg }}</textarea>
@@ -187,7 +187,7 @@
 
 				<div class="col-md-12">
 					<div class="form-group row{{ $errors->has('categoryId') ? ' has-error' : '' }}">
-						<label for="categoryId" class="col-md-2 control-label">Notice</label>
+						<label for="categoryId" class="col-md-2 control-label">Category</label>
 
 						<div class="col-md-10">
 
@@ -230,6 +230,7 @@
 	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
 	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
 	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+	<!-- <script src="gen_validatorv4.js" type="text/javascript"></script> -->
 
 	<script>
         $(document).ready(function() {
@@ -276,7 +277,14 @@
             $(e.currentTarget).find('input[name="categoryId"]').val(categoryId);
 
         });
-	</script>
+
+
+			// var frmvalidator = new Validator("create_notice_modal");
+			// frmvalidator.addValidation("msg","maxlen=20","Max length for msg is 20");
+
+
+
+</script>
 
 
 @endsection

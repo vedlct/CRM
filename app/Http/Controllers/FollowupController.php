@@ -78,6 +78,7 @@ class FollowupController extends Controller
                 ->groupBy('leads.leadId')
                 ->whereBetween('followUpDate', [$lastDate, $date])
                 ->where('leads.contactedUserId', Auth::user()->id)
+                ->where('followup.userId', Auth::user()->id)
                 ->where('followup.workStatus', 0)
                 ->orderBy('followup.followUpDate', 'desc')
                 ->get();

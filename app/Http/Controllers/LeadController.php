@@ -548,6 +548,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
                                             data-lead-designation="' . $lead->designation . '"
+                                            data-lead-linkedin="' . $lead->linkedin . '"
+                                            data-lead-founded="' . $lead->founded . '"
+                                            data-lead-employee="' . $lead->employee . '"
                                             data-lead-volume="' . $lead->volume . '"
                                             data-lead-frequency="' . $lead->frequency . '"
                                             data-lead-process="' . $lead->process . '"
@@ -579,6 +582,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
                                             data-lead-designation="' . $lead->designation . '"
+                                            data-lead-linkedin="' . $lead->linkedin . '"
+                                            data-lead-founded="' . $lead->founded . '"
+                                            data-lead-employee="' . $lead->employee . '"
                                             data-lead-volume="' . $lead->volume . '"
                                             data-lead-frequency="' . $lead->frequency . '"
                                             data-lead-process="' . $lead->process . '"
@@ -607,6 +613,9 @@ class LeadController extends Controller
                                            data-lead-category="' . $lead->category->categoryId . '"
                                            data-lead-country="' . $lead->countryId . '"
                                            data-lead-designation="' . $lead->designation . '"
+                                           data-lead-linkedin="' . $lead->linkedin . '"
+                                           data-lead-founded="' . $lead->founded . '"
+                                           data-lead-employee="' . $lead->employee . '"
                                            data-lead-volume="' . $lead->volume . '"
                                            data-lead-frequency="' . $lead->frequency . '"
                                            data-lead-process="' . $lead->process . '"
@@ -641,10 +650,12 @@ class LeadController extends Controller
                 $leadAssigned->leadId=$lead;
                 $leadAssigned->save();
 
+                $userName=User::select('userId')->where('id',$r->userId)->first()->userId;
+
                 $activity=new Activities;
                 $activity->leadId=$lead;
                 $activity->userId=Auth::user()->id;
-                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId); 
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $userName; //$this->returnUserName($r->userId); 
                 $activity->save();               
 
             }
@@ -667,10 +678,12 @@ class LeadController extends Controller
                 Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
                 ->update(['assignTo' => $r->userId,'assignBy'=>Auth::user()->id]);
 
+                $userName=User::select('userId')->where('id',$r->userId)->first()->userId;
+
                 $activity=new Activities;
                 $activity->leadId=$lead;
                 $activity->userId=Auth::user()->id;
-                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $r->userId; //$this->returnUserName($r->userId);
+                $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $userName; //$this->returnUserName($r->userId); 
                 $activity->save();
 
             }
@@ -745,6 +758,18 @@ class LeadController extends Controller
             $activity->leadId=$lead->leadId;
             $activity->userId=Auth::user()->id;
             $activity->activity=Auth::user()->userId .' '. 'marked it as CLIENT';
+            $activity->save();
+
+            $lead->statusId=$r->status;
+            $lead->contactedUserId=null;
+            $lead->leadAssignStatus=0;
+        }
+
+        elseif($r->status==8){
+            $activity=new Activities;
+            $activity->leadId=$lead->leadId;
+            $activity->userId=Auth::user()->id;
+            $activity->activity=Auth::user()->userId .' '. 'marked it as Duplicate Lead';
             $activity->save();
 
             $lead->statusId=$r->status;
@@ -841,6 +866,9 @@ class LeadController extends Controller
                     }    
                     if($l->statusId==6){
                         $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead (from Table)';
+                    }    
+                    if($l->statusId==8){
+                        $activity->activity=Auth::user()->userId .' '. 'marked it as Duplicate lead (from Table)';
                     }    
 
 
@@ -1117,7 +1145,7 @@ class LeadController extends Controller
         $this->validate($r,[
             'leadId'=>'required',
             'report' => 'required',
-            'comment' => 'required|max:300',
+            'comment' => 'required',
         ]);
 
 
@@ -1620,7 +1648,7 @@ class LeadController extends Controller
 
     public function getMyContacedData(){
 //        $workprogress = DB::table('workprogress')->select('leadId')->get()->toArray();
-        $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->groupBy('leadId')->pluck('workprogress.leadId')->all();
+        $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->orwhere('callingReport',11)->groupBy('leadId')->pluck('workprogress.leadId')->all();
 
         $leads=Lead::with('mined','category','country','possibility', 'probability')
             ->where('contactedUserId',Auth::user()->id)
@@ -1645,6 +1673,12 @@ class LeadController extends Controller
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
                                     data-lead-designation="'.$lead->designation.'"
+                                    data-lead-linkedin="'.$lead->linkedin.'"
+                                    data-lead-process="'.$lead->process.'"
+                                    data-lead-founded="'.$lead->founded.'"
+                                    data-lead-frequency="'.$lead->frequency.'"
+                                    data-lead-volume="'.$lead->volume.'"
+                                    data-lead-employee="'.$lead->employee.'"
                                     data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
@@ -1660,6 +1694,7 @@ class LeadController extends Controller
                     ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingreport')
                     ->where('workprogress.leadId',$lead->leadId)
                     ->where('workprogress.callingReport','5')
+                    ->orwhere('workprogress.callingReport','11')
                     ->groupBy('workprogress.leadId')
                     ->orderBy('created_at', 'DESC')
                     ->get();
@@ -1787,6 +1822,9 @@ class LeadController extends Controller
             elseif($lead->statusId==6){
                 $activity->activity=Auth::user()->userId .' '. 'marked it as Client and left the lead';
             }
+            elseif($lead->statusId==8){
+                $activity->activity=Auth::user()->userId .' '. 'marked it as Duplicate lead';
+            }
             $activity->save();
 
 
@@ -1842,13 +1880,6 @@ class LeadController extends Controller
             ->make(true);
  
         }
-
-//SAKIB, please check this
-    public function returnUserName($userId){
-        $userName=User::where('id',$userId)->get();
-        return userName;
-        
-    }
 
 
 

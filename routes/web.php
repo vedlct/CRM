@@ -58,6 +58,7 @@ Route::get('/files', 'HomeController@newFile')->name('files');
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
+
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
@@ -236,7 +237,10 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+Route::get('/reportAllActivties','ReportController@reportAllActivties')->name('reportAllActivties');
+
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');
+
 
 
 //supervisor OR Manager OR Admin report
@@ -254,6 +258,7 @@ Route::get('follow-up/report', 'ReportController@followupReport')->name('follow-
 Route::post('/searchFollowupByDate','ReportController@searchFollowupByDate')->name('searchFollowupByDate');
 Route::get('follow-up/report', 'ReportController@followupReport')->name('follow-up.report');
 Route::post('hour/report-filter', 'ReportController@hourReport_filter')->name('hour.report-filter');
+
 //Route::post('/searchCategoryByDate','ReportController@searchCategoryByDate')->name('searchCategoryByDate');
 //Route::post('/getHighLead','ReportController@getHighLead')->name('getHighLead');
 
@@ -276,7 +281,7 @@ Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividua
 Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
-Route::post('/getPossessedLeads','GetIndividualReportController@getPossessedLeads')->name('getPossessedLeads');
+//Route::post('/getPossessedLeads','GetIndividualReportController@getPossessedLeads')->name('getPossessedLeads');
 
 
 //followup report

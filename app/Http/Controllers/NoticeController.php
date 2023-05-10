@@ -85,7 +85,6 @@ class NoticeController extends Controller
                 'categoryId' => $request['categoryId'],
                 'userId' => Auth::user()->id
         ]);
-
         Session::flash('message', 'Successfully Notice Created');
         return redirect()->intended('notice');
     }
@@ -187,7 +186,7 @@ class NoticeController extends Controller
 	*/
     private function validateInput($request) {
         $this->validate($request, [
-        'msg' => 'required|max:50'
+        'msg' => 'required'
     ]);
     }
 }

@@ -27,7 +27,7 @@
                     <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
                             class="hide-menu">Report</span>
                         <span class="pull-right-container">
-					<i class="fa fa-angle-left pull-right"></i>
+					<i class="fa fa-angle-right pull-right"></i>
 					</span>
                     </a>
                     <ul class="treeview-menu">
@@ -62,6 +62,10 @@
                             <li>
                                 <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu"> Follow-up</span></a>
                             </li>
+                            <li>
+                                <a href="{{route('reportAllActivties')}}"><i class="fa fa-bell" aria-hidden="true"></i><span class="hide-menu"> All Activities</span></a>
+                            </li>
+
                             <!-- <li>
                                 <a href="{{route('reportTableForUser')}}"><i class="fa fa-pie-chart" aria-hidden="true"></i><span class="hide-menu"> Ind. Lead Count</span></a>
                             </li> -->
@@ -98,26 +102,60 @@
 
                     @if($userType=='SUPERVISOR' || $userType=='USER' || $userType=='MANAGER')
 
-                        <li>
-                            <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
-                                <span class="hide-menu">Follow ups</span></a>
-                        </li>
-                        <li>
-                            <a href="{{route('contacted')}}"><i class="fa fa-user-circle-o"></i><span class="hide-menu">My Leads</span></a>
-                        </li>
-                        <li>
-                            <a href="{{route('Mycontacted')}}"><i class="fa fa-user-circle-o"></i><span
-                                        class="hide-menu">Contacted Leads</span></a>
-                        </li>
+                    <li class="treeview">
+                    <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> <span
+                            class="hide-menu">My Leads</span>
+                        <span class="pull-right-container">
+    	    				<i class="fa fa-angle-right pull-right"></i>
+	    				</span>
+                    </a>
+                    <ul class="treeview-menu">
+                            <li>
+                                <a href="{{route('contacted')}}"><i class="fa fa-circle-o"></i><span class="hide-menu"> My Leads</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('follow-up.index')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                    <span class="hide-menu"> My Followups</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('Mycontacted')}}"><i class="fa fa-user-circle-o"></i><span
+                                            class="hide-menu"> Contacted Leads</span></a>
+                            </li>
+                    </ul>
+                </li>
+
                     @endif
+
+
+                    <li class="treeview">
+                    <a href="#"><i class="fa fa-folder" aria-hidden="true"></i> <span
+                            class="hide-menu">Directory</span>
+                        <span class="pull-right-container">
+    	    				<i class="fa fa-angle-right pull-right"></i>
+	    				</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li >
+                            <a href="{{route('verifylead')}}"><i class="fa fa-plus"></i><span class="hide-menu">Verify Lead</span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
+                        </li>
+
+                        @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='HR' || $userType =='RA'    )
+                        <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
+                            <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span
+                                        class="hide-menu">All Leads</span></a>
+                        </li>
+
+                        @endif
+                    </ul>
+                </li>
 
 
                     <!-- @if(Auth::user()->typeId !=10) -->
 
-                        <li>
-                            <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
-
-                        </li>
                     <!-- @endif -->
 
 
@@ -128,21 +166,8 @@
                         </li>
                     @endif -->
 
-                    @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' || $userType =='HR' || $userType =='RA'    )
-                        <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
-                            <a href="{{route('addLead')}}"><i class="fa fa-plus"></i><span
-                                        class="hide-menu">All Leads</span></a>
-
-                        </li>
-
-                    @endif
 
 
-                    <li >
-                        <a href="{{route('verifylead')}}"><i class="fa fa-plus"></i><span
-                                    class="hide-menu">Verify Lead</span></a>
-
-                    </li>
                     <!-- @if(Auth::user()->id == 19)
 
                         <li>
@@ -151,13 +176,6 @@
                         </li>
                     @endif -->
 
-                    @if(Auth::user()->areaType == "usa")
-
-                        <li>
-                            <a href="{{route('addNightShift')}}"><i class="fa fa-adjust"></i><span class="hide-menu">Add Lead</span></a>
-
-                        </li>
-                    @endif
 
 
                 @endif  {{--End For Global--}}
@@ -168,7 +186,7 @@
                     <a href="#"><i class="fa fa-map" aria-hidden="true"></i> <span
                                 class="hide-menu">Digital Marketing</span>
                         <span class="pull-right-container">
-					  <i class="fa fa-angle-left pull-right"></i>
+					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                     </a>
                     <ul class="treeview-menu">
@@ -225,15 +243,21 @@
                 </li>
 
                 @endif       {{--End Local--}}
+
+
                 {{--                @if(Auth::user()->typeId==1 || Auth::user()->typeId==2)--}}
                 {{--                    --}}
                 {{--                @endif--}}
 
-                @if(Auth::user()->crmType !='local'){{--Start Global--}}
+
+                @if(Auth::user()->crmType !='local')
+                
+                
+                {{--Start Global--}}
 
                 @if($userType =='USER' || $userType =='MANAGER' || $userType =='SUPERVISOR')
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i>
+                        <a href="#"><i class="fa fa-link"></i> <span class="hide-menu">My List</span><span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i>
 					</span>
                         </a>
                         <ul class="treeview-menu">
@@ -254,24 +278,39 @@
                     </li>
                 @endif
 
-<!--
-                @if($userType =='RA' || $userType =='MANAGER' || $userType =='SUPERVISOR' )
-                    @if(Auth::user()->areaType != "usa" )
-                    <li>
-                    <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Marketers' Lead</span></a>
-                    </li>
+
+                <li role="separator" class="divider"></li>
+
+                    @if(Auth::user()->areaType == "usa")
+
+                        <li>
+                            <a href="{{route('addNightShift')}}"><i class="fa fa-adjust"></i><span class="hide-menu">Add Lead</span></a>
+
+                        </li>
                     @endif
-                @endif
--->
+
+
 
                 @if( $userType =='MANAGER' || $userType =='SUPERVISOR' || $userType =='ADMIN' )
-                    <li>
-                        <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Marketers' Lead</span></a>
-                        </li>
-                    <li>
-                        <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Filtered Lead</span></a>
-                    </li>
-                 @endif
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-share" aria-hidden="true"></i> <span
+                            class="hide-menu">Assign Leads</span>
+                        <span class="pull-right-container">
+    	    				<i class="fa fa-angle-right pull-right"></i>
+	    				</span>
+                    </a>
+                    <ul class="treeview-menu">
+                            <li>
+                                <a href="{{route('assignAllShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Marketers' Lead</span></a>
+                                </li>
+                            <li>
+                                <a href="{{route('assignShow')}}"><i class="fa fa-share"></i><span class="hide-menu">Assign Filtered Lead</span></a>
+                            </li>
+                    </ul>
+                </li>
+                @endif
+
+
 
                 @if($userType =='USER' || $userType =='MANAGER')
                     <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
@@ -287,7 +326,7 @@
                     <li class="treeview">
                         <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
                             <span class="pull-right-container">
-					  <i class="fa fa-angle-left pull-right"></i>
+					  <i class="fa fa-angle-right pull-right"></i>
 					</span>
                         </a>
                         <ul class="treeview-menu">
@@ -330,19 +369,22 @@
                 @endif
                 @endif
 
-                <!-- @if(Auth::user()->typeId !=10)
-
-                    <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
-                        <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i><span class="hide-menu">Notice</span></a>
-                    </li>
-
-                @endif -->
 
                 @if($userType =='ADMIN' )
                     <li><a href="{{route('system')}}"> <i class="fa fa-wrench" aria-hidden="true"></i><span class="hide-menu">System</span></a></li>
                 @endif
 
-                @endif    {{--End Global--}}
+                @endif    
+                
+                @if(Auth::user()->typeId !=10)
+                    <li>
+                        <a href="{{ route('notice.index') }}"><i class="fa fa-plus-square"></i><span class="hide-menu">Communication</span></a>
+                    </li>
+
+                @endif
+
+                
+                {{--End Global--}}
 
                 <li class="nav-devider"></li>
 

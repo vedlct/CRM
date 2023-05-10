@@ -101,6 +101,7 @@
         </div>
     </div>
 
+   
 
 
       <!--Edit Modal -->
@@ -117,6 +118,142 @@
 
                     {{csrf_field()}}
                     <div class="row">
+
+                        <!-- <div class="col-md-9" float="left">
+                            <b > Mined By:   <div class="mined" id="mined"></div></b>
+                        </div>
+                        <div class="col-md-3" float="right">
+                            <b > Lead ID:   <div class="leadId" id="leadId"></div></b>
+                            <br><br>
+                        </div> -->
+
+                        <div class="col-md-3">
+                                <input type="hidden" name="leadId">
+                                <label><b>Company:</b></label>
+                                <input type="text" class="form-control" name="companyName" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Phone:</b></label>
+                                <input type="text" class="form-control" name="number" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($countries as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>Category:</label>
+                                <select class="form-control"  name="category" id="category">
+                                    <option value="">Please Select</option>
+                                    @foreach($cats as $category)
+                                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Founded:</b></label>
+                                <input type="text" class="form-control" name="founded" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                <label><b>Website:</b></label>
+                                <input type="text" class="form-control" name="website" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Current Process:</b></label>
+                                <input type="text" class="form-control" name="process" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>File Volume:</b></label>
+                                <input type="text" class="form-control" name="volume" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Frequency:</b></label>
+                                <input type="text" class="form-control" name="frequency" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Employee Size:</b></label>
+                                <input type="text" class="form-control" name="employee" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                <label><b>Contact Person:</b></label>
+                                <input type="text" class="form-control" name="personName" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Designation:</b></label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Email:</b></label>
+                                <input type="email" class="form-control" name="email" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>LinkedIn Profile:</b></label>
+                                <input type="text" class="form-control" name="linkedin" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-8">
+                                <label><b>Comments:</b></label>
+                                <textarea class="form-control" id="comments" name="comments"></textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                            <label><b>Change Status:</b></label>
+                            <select class="form-control"  name="status" id="">
+                                <option value="">select one</option>
+                                <option value="8">I am Duplicate</option>
+                                <option value="5">Reject Me</option>
+                                @if($User_Type=="ADMIN" || "MANAGER" || "SUPERVISOR")
+                                <option value="6">Make Me Client</option>
+                                @endif
+                            </select>
+                            <br><br>
+                        </div>
+
+
+                        <div class="col-md-8">
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+                <div class="modal-footer">
+                    <div class="mineIdDate" id="mineIdDate" align="left"></div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div></form>
+       </div>
+
+
+
+ <!-- 
 
                         <div class="col-md-12" align="center">
                             <b > Mined By:   <div class="mined" id="mined"></div></b>
@@ -181,13 +318,16 @@
 
                         <div class="col-md-4">
                             <label><b>Status:</b></label>
+                            <label><b>Change Status:</b></label>
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
-                                <option value="5">Rejected</option>
-                                @if($User_Type=="ADMIN")
-                                <option value="6">Client</option>
+                                <option value="8">I am Duplicate</option>
+                                <option value="5">Reject Me</option>
+                                @if($User_Type=="ADMIN" || "MANAGER" || "SUPERVISOR")
+                                <option value="6">Make Me Client</option>
                                 @endif
                             </select>
+
                             <br><br><br>
                         </div>
 
@@ -208,7 +348,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div></form>
-        </div>
+        </div> -->
     </div>
 
 
@@ -380,55 +520,53 @@ function selectAll(source) {
 
 
 
-        $(document).ready(function(){
+$(document).ready(function(){
 
 
+    fill_datatable();
+
+    function fill_datatable(userId='')
+        {
+            $(function() {
+
+                //var userId=$("#otherCatches2").val();
+                //alert(userId)
 
 
-
-fill_datatable();
-function fill_datatable(userId='')
-    {
-        $(function() {
-
-            //var userId=$("#otherCatches2").val();
-            //alert(userId)
-
-
-            $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                type:"POST",
-                "ajax":{
-                    "url": "{!! route('getAllAssignLeadData') !!}",
-                    "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}",'userId':userId}
-                },
+                $('#myTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    type:"POST",
+                    "ajax":{
+                        "url": "{!! route('getAllAssignLeadData') !!}",
+                        "type": "POST",
+                        "data":{ _token: "{{csrf_token()}}",'userId':userId}
+                    },
 
 
-                columns: [
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-                    { data: 'leadId', name: 'leads.leadId' },
-                    { data: 'companyName', name: 'leads.companyName' },
-                    { data: 'contactNumber', name: 'leads.contactNumber' },
-                    { data: 'created_at', name: 'leads.created_at' },
-                    { data: 'mined.firstName', name: 'mined.firstName' },
-                    { data: 'website', name: 'leads.website' },
-                    { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'category.categoryName', name: 'category.categoryName', orderable: false,defaultContent: ""},
-                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
-                    { data: 'contact.firstName', orderable: false, defaultContent: ""},
-                    { data: 'volume', name: 'leads.volume' },
-                    { data: 'frequency', name: 'leads.frequency' },
-                    { data: 'process', name: 'leads.process' },
-                    { data: 'status.statusName', name: 'status.statusName', orderable: false},
-                    { data: 'check', name: 'check', orderable: false, searchable: false},
-                ]
+                    columns: [
+                        { data: 'action', name: 'action', orderable: false, searchable: false},
+                        { data: 'leadId', name: 'leads.leadId' },
+                        { data: 'companyName', name: 'leads.companyName' },
+                        { data: 'contactNumber', name: 'leads.contactNumber' },
+                        { data: 'created_at', name: 'leads.created_at' },
+                        { data: 'mined.firstName', name: 'mined.firstName' },
+                        { data: 'website', name: 'leads.website' },
+                        { data: 'country.countryName', name: 'country.countryName'},
+                        { data: 'category.categoryName', name: 'category.categoryName', orderable: false,defaultContent: ""},
+                        { data: 'possibility.possibilityName', name: 'possibility.possibilityName' },
+                        { data: 'contact.firstName', orderable: false, defaultContent: ""},
+                        { data: 'volume', name: 'leads.volume' },
+                        { data: 'frequency', name: 'leads.frequency' },
+                        { data: 'process', name: 'leads.process' },
+                        { data: 'status.statusName', name: 'status.statusName', orderable: false},
+                        { data: 'check', name: 'check', orderable: false, searchable: false},
+                    ]
+                });
             });
-        });
 
-    }
+        }
 
 
 
@@ -500,107 +638,119 @@ function fill_datatable(userId='')
 
 
 
-
         $('#lead_comments').on('show.bs.modal', function(e) {
 
-var leadId = $(e.relatedTarget).data('lead-id');
-var leadName = $(e.relatedTarget).data('lead-name');
-var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var leadId = $(e.relatedTarget).data('lead-id');
+        var leadName = $(e.relatedTarget).data('lead-name');
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-$(e.currentTarget).find('input[name="companyName"]').val(leadName);
+        $(e.currentTarget).find('input[name="companyName"]').val(leadName);
 
-$.ajax({
-    type : 'post' ,
-    url : '{{route('getComments')}}',
-    data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-    success : function(data){
+        $.ajax({
+            type : 'post' ,
+            url : '{{route('getComments')}}',
+            data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+            success : function(data){
 
-        $("#comment").html(data);
-        $("#comment").scrollTop($("#comment")[0].scrollHeight);
-    }
-});
+                $("#comment").html(data);
+                $("#comment").scrollTop($("#comment")[0].scrollHeight);
+            }
+        });
 
-});
-
-
-$('#my_modal').on('show.bs.modal', function(e) {
-//get data-id attribute of the clicked element
-var leadId = $(e.relatedTarget).data('lead-id');
-var leadName = $(e.relatedTarget).data('lead-name');
-var email = $(e.relatedTarget).data('lead-email');
-var number = $(e.relatedTarget).data('lead-number');
-var personName = $(e.relatedTarget).data('lead-person');
-var website = $(e.relatedTarget).data('lead-website');
-var minedBy=$(e.relatedTarget).data('lead-mined');
-var category=$(e.relatedTarget).data('lead-category');
-var country=$(e.relatedTarget).data('lead-country');
-var designation=$(e.relatedTarget).data('lead-designation');
-var comments=$(e.relatedTarget).data('lead-comments');
-var createdAt=$(e.relatedTarget).data('lead-created');
-
-// alert(createdAt);
-console.log(comments);
-
-//populate the textbox
-$('#country').val(country);
-$('#category').val(category);
-$('div.mined').text(minedBy+' _'+createdAt);
-//            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
-$(e.currentTarget).find('input[name="leadId"]').val(leadId);
-$(e.currentTarget).find('input[name="companyName"]').val(leadName);
-$(e.currentTarget).find('input[name="email"]').val(email);
-$(e.currentTarget).find('input[name="number"]').val(number);
-$(e.currentTarget).find('input[name="personName"]').val(personName);
-$(e.currentTarget).find('input[name="website"]').val(website);
-$(e.currentTarget).find('input[name="designation"]').val(designation);
-$('#comments').val(comments);
-
-//            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
-@if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
-
-$(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
-$(e.currentTarget).find('input[name="website"]').attr('readonly', true);
+        });
 
 
-@endif
+        $('#my_modal').on('show.bs.modal', function(e) {
+        //get data-id attribute of the clicked element
+        var leadId = $(e.relatedTarget).data('lead-id');
+        var leadName = $(e.relatedTarget).data('lead-name');
+        var email = $(e.relatedTarget).data('lead-email');
+        var number = $(e.relatedTarget).data('lead-number');
+        var personName = $(e.relatedTarget).data('lead-person');
+        var website = $(e.relatedTarget).data('lead-website');
+        var linkedin=$(e.relatedTarget).data('lead-linkedin');
+        var minedBy=$(e.relatedTarget).data('lead-mined');
+        var category=$(e.relatedTarget).data('lead-category');
+        var country=$(e.relatedTarget).data('lead-country');
+        var designation=$(e.relatedTarget).data('lead-designation');
+        var founded=$(e.relatedTarget).data('lead-founded');
+        var employee=$(e.relatedTarget).data('lead-employee');
+        var volume=$(e.relatedTarget).data('lead-volume');
+        var frequency=$(e.relatedTarget).data('lead-frequency');
+        var process=$(e.relatedTarget).data('lead-process');
+        var comments=$(e.relatedTarget).data('lead-comments');
+        var createdAt=$(e.relatedTarget).data('lead-created');
 
-});
+        // alert(createdAt);
+        console.log(comments);
+
+        //populate the textbox
+        $('#country').val(country);
+        $('#category').val(category);
+//        $('div.mined').text(minedBy+' _'+createdAt);
+        $('div.mineIdDate').text(leadId+' was mined by '+minedBy+' at '+createdAt);
+//        $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
+        $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+        $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+        $(e.currentTarget).find('input[name="email"]').val(email);
+        $(e.currentTarget).find('input[name="number"]').val(number);
+        $(e.currentTarget).find('input[name="personName"]').val(personName);
+        $(e.currentTarget).find('input[name="website"]').val(website);
+        $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
+        $(e.currentTarget).find('input[name="designation"]').val(designation);
+        $(e.currentTarget).find('input[name="founded"]').val(founded);
+        $(e.currentTarget).find('input[name="employee"]').val(employee);
+        $(e.currentTarget).find('input[name="volume"]').val(volume);
+        $(e.currentTarget).find('input[name="frequency"]').val(frequency);
+        $(e.currentTarget).find('input[name="process"]').val(process);
+        $('#comments').val(comments);
+
+        //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);
+        @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
+
+        $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
+        $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
 
 
+        @endif
 
-
-$('#call_modal').on('show.bs.modal', function(e) {
-
-//get data-id attribute of the clicked element
-var leadId = $(e.relatedTarget).data('lead-id');
-var possibility=$(e.relatedTarget).data('lead-possibility');
-var probability=$(e.relatedTarget).data('lead-probability');
-
-
-
-
-var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-$(e.currentTarget).find('input[name="leadId"]').val(leadId);
+        });
 
 
 
-$('#possibility').val(possibility);
+
+        $('#call_modal').on('show.bs.modal', function(e) {
+
+        //get data-id attribute of the clicked element
+        var leadId = $(e.relatedTarget).data('lead-id');
+        var possibility=$(e.relatedTarget).data('lead-possibility');
+        var probability=$(e.relatedTarget).data('lead-probability');
 
 
-$('#probability2').val(probability);
-// $(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
-$.ajax({
-    type : 'post' ,
-    url : '{{route('getComments')}}',
-    data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-    success : function(data){
-        $('#comment2').html(data);
-        $("#comment2").scrollTop($("#comment2")[0].scrollHeight);
-    }
-});
 
-});
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+
+
+
+        $('#possibility').val(possibility);
+
+
+        $('#probability2').val(probability);
+        // $(e.currentTarget).find('input[name="possibility"]').val(possibility);
+
+        $.ajax({
+            type : 'post' ,
+            url : '{{route('getComments')}}',
+            data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+            success : function(data){
+                $('#comment2').html(data);
+                $("#comment2").scrollTop($("#comment2")[0].scrollHeight);
+            }
+        });
+
+        });
 
 
 

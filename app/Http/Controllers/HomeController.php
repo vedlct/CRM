@@ -468,6 +468,7 @@ class HomeController extends Controller
 
         $leads=Lead::select('leads.*', 'workprogress.created_at')
             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->where('leads.contactedUserId', Auth::user()->id)
             ->where('workprogress.callingReport', '!=', null)
             ->where('workprogress.callingReport', 4)
             ->whereBetween('workprogress.created_at', [$start,$end])->get();

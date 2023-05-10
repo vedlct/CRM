@@ -536,9 +536,10 @@
                             <label><b>Change Status:</b></label>
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
-                                <option value="5">Rejected</option>
-                                @if($userType=="ADMIN" || "MANAGER")
-                                <option value="6">Client</option>
+                                <option value="8">I am Duplicate</option>
+                                <option value="5">Reject Me</option>
+                                @if($userType=="ADMIN" || "MANAGER" || "SUPERVISOR")
+                                <option value="6">Make Me Client</option>
                                 @endif
                             </select>
                             <br><br>

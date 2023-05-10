@@ -22,6 +22,7 @@ use App\Lead;
 use App\Usertarget;
 use App\Possibilitychange;
 use App\Leadassigned;
+use App\Activities;
 use Carbon\Carbon;
 use stdClass;
 
@@ -144,17 +145,6 @@ class ReportController extends Controller
             ->with('users', $users);
     }
 
-    public function hourReport_filter(Request $r)
-    {
-        $User_Type = Session::get('userType');
-        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
-            $selectedDay = $r->selectedDay;
-            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
-            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
-
-            return view('hourReport-filter', compact('work', 'wp'));
-        }
-    }
 
     public function reportGraph()
     {
@@ -1744,6 +1734,38 @@ class ReportController extends Controller
 
     }
 
+    public function hourReport_filter(Request $r)
+    {
+        $User_Type = Session::get('userType');
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $selectedDay = $r->selectedDay;
+            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
+
+            return view('hourReport-filter', compact('work', 'wp'));
+        }
+    }
+
+    public function reportAllActivties(Request $r)
+    {
+        $User_Type = Session::get('userType');
+        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            $activities=Activities::Select('activities.activityId', 'users.userId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
+                    ->join('users', 'activities.userId','users.id')
+                    ->join('leads', 'activities.leadId', 'leads.leadId')
+                    ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
+                    // ->where('users.active', 1)
+                    // ->orderBy('activityId', 'desc')
+                    ->latest()->paginate(50);   
+                    // ->get();
+
+        return view('report.activities')
+            ->with('activities', $activities); 
+        }
+
+    }
+
+    
 
     // public function reportIndividualLeadCount(request $r){
     //     $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))

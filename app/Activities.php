@@ -16,7 +16,9 @@ class Activities extends Model
         return $this->belongsTo(User::class,'userId','id');
     }
 
-
+    public function leads(){
+        return $this->belongsTo(Lead::class,'leadId','leadId');
+    }
 
 
 
