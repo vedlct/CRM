@@ -8,5 +8,5 @@
         <label>Files</label>
         <input type="number" placeholder="Total Files" name="files123">
     </div>
-    <button class="btn btn-success" type="submit">Insert</button>
+    <button class="btn btn-success" type="submit">Submit Revnue</button>
 </form>

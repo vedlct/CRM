@@ -162,6 +162,7 @@ Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 Route::post('lead/callReports','LeadController@getCallingReport')->name('getCallingReport');
 Route::post('lead/activities','LeadController@getActivities')->name('getActivities');
+Route::get('lead/ippList', 'LeadController@ippList')->name('ippList');
 
 
 //Leave Lead
@@ -238,6 +239,7 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 Route::get('/reportAllActivties','ReportController@reportAllActivties')->name('reportAllActivties');
+Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');
 

@@ -70,6 +70,7 @@ class LeadController extends Controller
                                             data-lead-volume="'.$lead->volume.'"
                                             data-lead-frequency="'.$lead->frequency.'"
                                             data-lead-employee="'.$lead->employee.'"
+                                            data-lead-ipp="'.$lead->ippStatus.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
@@ -111,6 +112,7 @@ class LeadController extends Controller
                                             data-lead-volume="'.$lead->volume.'"
                                             data-lead-frequency="'.$lead->frequency.'"
                                             data-lead-employee="'.$lead->employee.'"
+                                            data-lead-ipp="'.$lead->ippStatus.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
@@ -148,7 +150,8 @@ class LeadController extends Controller
                                            data-lead-volume="'.$lead->volume.'"
                                            data-lead-frequency="'.$lead->frequency.'"
                                            data-lead-employee="'.$lead->employee.'"
-                                          data-lead-comments="'.$lead->comments.'"
+                                           data-lead-ipp="'.$lead->ippStatus.'"
+                                           data-lead-comments="'.$lead->comments.'"
                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
@@ -369,6 +372,7 @@ class LeadController extends Controller
         $l->frequency=$r->frequency;
         $l->process=$r->process;
         $l->comments = $r->comment;
+        $l->ippStatus = 0;
         //getting Loggedin User id
         $l->statusId = 1;
         $l->minedBy = Auth::user()->id;
@@ -431,6 +435,7 @@ class LeadController extends Controller
         $l->contactNumber = $r->personNumber;
         $l->countryId = $r->country;
         $l->comments=$r->comment;
+        $l->ippStatus=0;
         //getting Loggedin User id
         $l->minedBy = $userId;
         $l->save();
@@ -490,7 +495,7 @@ class LeadController extends Controller
             $callReports = Callingreport::get();
             return view('layouts.lead.assignAllLead',compact('cats','countries','possibilities','probabilities','callReports','User_Type'))
                 ->with('users',$users);}
-        return Redirect()->route('home');
+            return Redirect()->route('home');
     }
 
 
@@ -649,6 +654,7 @@ class LeadController extends Controller
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
                 $l->contactedUserId=null;
+                $l->ippStatus=0;
                 $l->save();
                 $leadAssigned=new Leadassigned;
                 $leadAssigned->assignBy=Auth::user()->id;
@@ -679,6 +685,7 @@ class LeadController extends Controller
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
                 $l->contactedUserId=null;
+                $l->ippStatus=0;
                 $l->save();
 
                 Leadassigned::where('leadId', '=', $lead)->where('assignTo',Auth::user()->id)
@@ -721,7 +728,6 @@ class LeadController extends Controller
             $userId = Auth::user()->id;
         }
 
-        
         $lead=Lead::findOrFail($r->leadId);
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
@@ -730,6 +736,7 @@ class LeadController extends Controller
         $lead->contactNumber=$r->number;
         $lead->website=$r->website;
         $lead->linkedin=$r->linkedin;
+
         if($r->country){
             $lead->countryId=$r->country;
         }
@@ -745,6 +752,7 @@ class LeadController extends Controller
         $lead->volume=$r->volume;
         $lead->frequency=$r->frequency;
         $lead->process=$r->process;
+        $lead->ippStatus=$r->ippStatus;
 
         if($r->status==5){
 //         For Report
@@ -854,6 +862,11 @@ class LeadController extends Controller
                     //$lead->save();
                 }
 
+                if($l->ippStatus == 1){
+                    $l->ippStatus = 0;
+                    //$lead->save();
+                }
+
                     $activity=new Activities;
                     $activity->leadId=$l->leadId;
                     $activity->userId=Auth::user()->id;
@@ -940,21 +953,7 @@ class LeadController extends Controller
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-                                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                           data-lead-id="'.$lead->leadId.'"
-                                           data-lead-name="'.$lead->companyName.'"
-                                           data-lead-email="'.$lead->email.'"
-                                           data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
-                                           data-lead-website="'.$lead->website.'"
-                                           data-lead-mined="'.$lead->mined->firstName.'"
-                                           data-lead-category="'.$lead->category->categoryId.'"
-                                           data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
-                                           data-lead-comments="'.$lead->comments.'"
-
-                                           >
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
@@ -1477,7 +1476,6 @@ class LeadController extends Controller
                 ->get();
 
 
-
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
                 ->with('possibilities',$possibilities)
@@ -1592,6 +1590,7 @@ class LeadController extends Controller
                                     data-lead-frequency="'.$lead->frequency.'"
                                     data-lead-process="'.$lead->process.'"
                                     data-lead-comments="'.$lead->comments.'"
+                                    data-lead-ipp="'.$lead->ippStatus.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true" ></i></a>
@@ -1685,6 +1684,7 @@ class LeadController extends Controller
                                     data-lead-frequency="'.$lead->frequency.'"
                                     data-lead-volume="'.$lead->volume.'"
                                     data-lead-employee="'.$lead->employee.'"
+                                    data-lead-ipp="'.$lead->ippStatus.'"
                                     data-lead-comments="'.$lead->comments.'"
                                     data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                     >
@@ -1738,18 +1738,21 @@ class LeadController extends Controller
 
         return Response($follow);
     }
+
     public function rejectedLeads(){
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');
         }
         return view('layouts.lead.rejectedLead');
     }
+
     public function rejectData(Request $request)
     {
         $leads = Lead::with('mined')
             ->where('statusId',5);
         return DataTables::eloquent($leads)->make(true);
     }
+
     public function rejectStore(Request $r){
         $lead=Lead::findOrFail($r->leadId);
 //        if($lead->statusId ==1){
@@ -1806,6 +1809,7 @@ class LeadController extends Controller
         if($lead->contactedUserId == Auth::user()->id){
 
             $lead->contactedUserId =null;
+            $lead->ippStatus=0;
             $lead->leadAssignStatus = 0;
             $lead->save();
 
@@ -1887,6 +1891,96 @@ class LeadController extends Controller
  
         }
 
+
+        public function ippList(){
+            // $date = Carbon::now();
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+           
+                $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
+                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+                ->leftJoin('users','leads.contactedUserId','users.id')
+                // ->where('leads.contactedUserId', Auth::user()->id)
+                ->where('leads.ippStatus', 1)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+            }else{
+            $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
+                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+                ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('leads.contactedUserId', Auth::user()->id)
+                ->where('leads.ippStatus', 1)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+            }
+
+
+            // $latestLead=Workprogress::select('created_at')->latest()->first();
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+
+
+            return view('layouts.lead.ipp')
+                ->with('leads', $leads)
+                ->with('callReports', $callReports)
+                ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
+                ->with('categories',$categories)
+                ->with('status',$status)
+                ->with('country',$country);
+              
+        }
+
+
+        public function allAssignedButNotMyleads(){
+            // $date = Carbon::now();
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+                
+
+            $leads=Lead::select('leads.*', 'leadassigneds.*','users.firstName')
+                ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
+                ->leftJoin('users','leadassigneds.assignTo','users.id')
+                ->where('leads.contactedUserId', NULL)
+                ->where('leads.leadAssignStatus', 1)
+                ->where('leadassigneds.workStatus', 0)
+                ->where('leadassigneds.leaveDate', NULL)               
+                ->groupBy('leadassigneds.leadId')
+                ->orderBy('leadassigneds.created_at','desc')
+                // ->latest('leadassigneds.created_at')
+                ->get();
+                
+
+            }
+
+
+            // $latestLead=Workprogress::select('created_at')->latest()->first();
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+            
+
+            return view('report.allAssignedLeads')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('probabilities', $probabilities)
+            ->with('categories',$categories)
+            ->with('status',$status)
+            ->with('country',$country);
+
+        }
 
 
 }

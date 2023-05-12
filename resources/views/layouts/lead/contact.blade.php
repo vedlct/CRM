@@ -2,8 +2,24 @@
 
 @section('header')
     <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
-    @endsection
-@section('content')
+    <style>
+        .ippCheckbox {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            font-size: 17px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+            color: green;
+        }
+    </style>
+@endsection
+
+
+    @section('content')
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
@@ -217,16 +233,25 @@
 
 
 
-
-                            <div class="col-md-8">
-                                <label><b>Comments:</b></label>
+                            <div class="col-md-6">
+                                <label><b>Extra Information:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label><b>LinkedIn Profile:</b></label>
                                 <input type="text" class="form-control" name="linkedin" value="">
                             </div>
+
+                            <div class="col-md-3">
+                                <label ><b>Is it your IPP?</b></label>
+                                <select class="form-control" name="ippStatus"  id="ippStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
 
                             
                             <div class="col-md-6">
@@ -330,7 +355,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label ><b>Calling Report : </b></label>
+                                <label ><b>Call Status : </b></label>
                                 <select class="form-control" id="reporttest" name="report" required>
                                     <option value=""><b>(select one)</b></option>
 
@@ -387,16 +412,6 @@
                             {{--</div>--}}
 
 
-                            <div class="form-group">
-                                <label class=""><b>Possibility : </b></label>
-                                <select class="form-control"  name="possibility" id="possibility">
-                                    <option value=""><b>(select one)</b></option>
-                                @foreach($possibilities as $p)
-                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
 
                             <div class="form-group">
                                 <label class=""><b>Closing Probability : </b></label>
@@ -552,6 +567,7 @@ function selectAll(source) {
             var volume=$(e.relatedTarget).data('lead-volume');
             var frequency=$(e.relatedTarget).data('lead-frequency');
             var process=$(e.relatedTarget).data('lead-process');
+            var ippStatus=$(e.relatedTarget).data('lead-ipp');
             var createdAt=$(e.relatedTarget).data('lead-created');
             var comments=$(e.relatedTarget).data('lead-comments');
             // alert(createdAt);
@@ -575,6 +591,7 @@ function selectAll(source) {
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
+            $(e.currentTarget).find('#ippStatus').val(ippStatus);
             $('#comments').val(comments);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )

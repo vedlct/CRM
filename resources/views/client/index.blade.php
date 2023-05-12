@@ -56,8 +56,8 @@
     <div class="card-body">
         <table class="table">
             <thead>
-                <th>Lead</th>
-                <th>Total</th>
+                <th>Company</th>
+                <th>Revnue</th>
                 <th>Action</th>
             </thead>
             <tbody>
@@ -66,7 +66,7 @@
                         <td>{{$lead->companyName}}</td>
                         <td>{{$lead->total}}</td>
                         <td>
-                            <button class="btn btn-info btn-sm" data-panel-id="{{$lead->leadId}}" onclick="fileEdit(this)"><i class="fa fa-edit" ></i></button>
+                            <!-- <button class="btn btn-info btn-sm" data-panel-id="{{$lead->leadId}}" onclick="fileEdit(this)"><i class="fa fa-edit" ></i></button> -->
                             <button class="btn btn-info btn-sm" data-panel-id="{{$lead->leadId}}" onclick="fileAdd(this)"><i class="fa fa-plus"></i></button>
                         </td>
                     </tr>

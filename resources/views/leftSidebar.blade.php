@@ -35,9 +35,9 @@
                             <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
                         </li> -->
                         <li>
-                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
-                                <span class="hide-menu"> Table</span></a>
+                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu"> Table</span></a>
                         </li>
+
                         @if($userType == 'MANAGER')
                             @if(Auth::user()->areaType != "usa" )
                                 <li>
@@ -65,6 +65,10 @@
                             <li>
                                 <a href="{{route('reportAllActivties')}}"><i class="fa fa-bell" aria-hidden="true"></i><span class="hide-menu"> All Activities</span></a>
                             </li>
+                            <li>
+                                <a href="{{route('allAssignedButNotMyleads')}}"><i class="fa fa-ban" aria-hidden="true"></i><span class="hide-menu"> Not Taken Assigned</span></a>
+                            </li>
+
 
                             <!-- <li>
                                 <a href="{{route('reportTableForUser')}}"><i class="fa fa-pie-chart" aria-hidden="true"></i><span class="hide-menu"> Ind. Lead Count</span></a>
@@ -272,6 +276,8 @@
                             <li><a href="{{route('closelist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Close List</span></a>
                             </li>
                             <li><a href="{{route('rejectlist')}}"><i class="fa fa-list-alt"></i><span class="hide-menu">Reject List</span></a>
+                            </li>
+                            <li><a href="{{route('ippList')}}"><i class="fa fa-bell" aria-hidden="true"></i><span class="hide-menu"> IPP List</span></a>
                             </li>
 
                         </ul>

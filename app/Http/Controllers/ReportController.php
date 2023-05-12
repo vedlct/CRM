@@ -1750,7 +1750,8 @@ class ReportController extends Controller
     {
         $User_Type = Session::get('userType');
         if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
-            $activities=Activities::Select('activities.activityId', 'users.userId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
+            
+            $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
                     ->join('users', 'activities.userId','users.id')
                     ->join('leads', 'activities.leadId', 'leads.leadId')
                     ->join('leadstatus', 'leads.statusId','leadstatus.statusId')

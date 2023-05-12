@@ -684,12 +684,21 @@
 
 
 
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <label><b>Comments:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label ><b>Is it your IPP?</b></label>
+                                <select class="form-control" name="ippStatus"  id="ippStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
                             <label><b>Change Status:</b></label>
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
@@ -700,7 +709,7 @@
                                 @endif
                             </select>
                             <br><br>
-                        </div>
+                            </div>
 
 
                         <div class="col-md-8">
@@ -1030,9 +1039,9 @@
             var volume=$(e.relatedTarget).data('lead-volume');
             var frequency=$(e.relatedTarget).data('lead-frequency');
             var process=$(e.relatedTarget).data('lead-process');
+            var ippStatus=$(e.relatedTarget).data('lead-ipp');
             var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
-
 
 
             console.log(comments);
@@ -1057,6 +1066,8 @@
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
+            $(e.currentTarget).find('#ippStatus').val(ippStatus);
+
             $('#comments').val(comments);
 
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);

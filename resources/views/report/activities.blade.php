@@ -17,24 +17,26 @@
                 <table id="myTable" class="table table-bordered mb-5">
                     <thead>
                     <tr>
-                        <th width="5%">Activity Id</th>
-                        <th width="10%">Name</th>
+                        <th width="10%">Activity Id</th>
+                        <th width="10%">Marketer</th>
+                        <th width="10%">Lead ID</th>
                         <th width="15%">Company Name</th>
                         <th width="10%">Lead Status</th>
-                        <th width="40%">Activities</th>
-                        <th width="20%">Date</th>
+                        <th width="30%">Activities</th>
+                        <th width="15%">Date</th>
                     </tr>
                     </thead>
                     <tbody>
 
                     @foreach($activities as $activity)
                         <tr>
-                            <td width="5%">{{$activity->activityId}}</td>
-                            <td width="10%">{{$activity->userId}}</td>
+                            <td width="10%">{{$activity->activityId}}</td>
+                            <td width="10%">{{$activity->firstName}} {{$activity->lastName}}</td>
+                            <td width="10%">{{$activity->leadId}}</td>
                             <td width="15%">{{$activity->companyName}}</td>
                             <td width="10%">{{$activity->statusName}}</td>
-                            <td width="40%">{{$activity->activity}}</td>
-                            <td width="20%">{{ Carbon\Carbon::parse($activity->created_at)->format('d M Y, H:i') }}</td>
+                            <td width="30%">{{$activity->activity}}</td>
+                            <td width="15%">{{ Carbon\Carbon::parse($activity->created_at)->format('d M Y, H:i') }}</td>
                             
                         </tr>
 

@@ -29,6 +29,7 @@
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
                         <th width="8%">Status</th>
+                        <th width="8%">IPP</th>
                         <th width="10%">Action</th>
 
                     </tr>
@@ -42,23 +43,24 @@
     </div>
 
 
-		  <!-- Edit Modal -->
+
+    <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
-                
-            <div class="modal-header">
+                <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
-
                 <div class="modal-body">
                     <form  method="post" action="{{route('leadUpdate')}}">
                         {{csrf_field()}}
+                        <div class="row">
+                            <!-- <div class="col-md-12" align="center">
+                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
+                            </div> -->
 
-                    <div class="row">
-
-                        <div class="col-md-3">
+                            <div class="col-md-3">
                                 <input type="hidden" name="leadId">
                                 <label><b>Company:</b></label>
                                 <input type="text" class="form-control" name="companyName" value="">
@@ -68,16 +70,6 @@
                                 <label><b>Phone:</b></label>
                                 <input type="text" class="form-control" name="number" value="">
                             </div>
-
-							<div class="col-md-2">
-									  <label>Country:</label>
-									  <select class="form-control"  name="country" id="country">
-										  @foreach($country as $c)
-											  <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-										  @endforeach
-									  </select>
-									  <br><br><br>
-								  </div>
 
                             <div class="col-md-2">
                                 <label><b>Category:</b></label>
@@ -90,10 +82,20 @@
                             </div>
 
                             <div class="col-md-2">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
                                 <label><b>Founded:</b></label>
                                 <input type="text" class="form-control" name="founded" value="">
                                 <br><br>
                             </div>
+
 
 
                             <div class="col-md-3">
@@ -104,6 +106,7 @@
                             <div class="col-md-3">
                                 <label><b>Current Process:</b></label>
                                 <input type="text" class="form-control" name="process" value="">
+                                <br><br>
                             </div>
 
                             <div class="col-md-2">
@@ -124,71 +127,83 @@
 
 
 
-                            <div class="col-md-3">
+
+                            <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label><b>Email:</b></label>
                                 <input type="email" class="form-control" name="email" value="">
-                            </div>
-
-                            <div class="col-md-3">
-                                <label><b>LinkedIn Profile:</b></label>
-                                <input type="text" class="form-control" name="linkedin" value="">
                                 <br><br>
                             </div>
 
 
 
-                            <div class="col-md-8">
-                                <label><b>Comments:</b></label>
+                            <div class="col-md-6">
+                                <label><b>Extra Information:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
 
-							<div class="col-md-6">
-									  <button class="btn btn-success" type="submit">Update</button>
-								  </div>
-							  </div>
-						  </form>
+                            <div class="col-md-3">
+                                <label><b>LinkedIn Profile:</b></label>
+                                <input type="text" class="form-control" name="linkedin" value="">
+                            </div>
 
-						  <br><br>
+                            <div class="col-md-3">
+                                <label ><b>Is it your IPP?</b></label>
+                                <select class="form-control" name="ippStatus"  id="ippStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
 
-						  <form method="post" action="{{route('leaveLead')}}">
-							  <div class="row">
-								  {{csrf_field()}}
 
-								  <div class=" form-group col-md-6">
-									  <input type="hidden" name="leadId">
-									  <label>Status:</label>
-									  <select class="form-control"  name="Status" id="Status" required>
-										  <option value="">Please Select</option>
-										  @foreach($status as $s)
-											  <option value="{{$s->statusId}}">{{$s->statusName}}</option>
-										  @endforeach
-									  </select>
-								  </div>
-								  <div class=" form-group col-md-6" style="margin-top: 3.2%">
-									  <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
-								  </div>
-								  </div>
-						  </form>
+                            
+                            <div class="col-md-6">
+                                <button class="btn btn-success" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                    <br><br>
+                    <form method="post" action="{{route('leaveLead')}}" id="leaveLeadForm">
+                        <div class="row">
+                            {{csrf_field()}}
 
-						</div>
+                            <input type="hidden" name="leadId">
+                            <div class="form-group col-md-4">
 
+                                <label><b>Status:</b> Select status and cick Leave button</label>
+                                <select class="form-control"  name="Status" id="Status" onchange="changeLeadStatus(this)" required>
+                                    <option value="">Please Select</option>
+                                    @foreach($status as $s)
+                                        <option value="{{$s->statusId}}">{{$s->statusName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4" id="newFileField"></div>
+                            <div class="form-group col-md-4" style="margin-top: 3.2%">
+                                <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
                 <div class="modal-footer">
                     <div class="mineIdDate" id="mineIdDate" align="left"></div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div></form>
-	        </div>
+                </div>
+            </div>
         </div>
-        </div>
+    </div>
+
 
 
     <!-- Edit Modal -->
@@ -324,7 +339,7 @@
 
                                     {{--@foreach($callReports as $report)--}}
 
-                                    {{--                                            @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
+                                    {{--@if($workprocess->contains('callingReport' , $report->callingReportId))--}}
 
                                     {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
 
@@ -477,6 +492,7 @@
             var volume=$(e.relatedTarget).data('lead-volume');
             var frequency=$(e.relatedTarget).data('lead-frequency');
             var process=$(e.relatedTarget).data('lead-process');
+            var ippStatus=$(e.relatedTarget).data('lead-ipp');
             var createdAt=$(e.relatedTarget).data('lead-created');
             var comments=$(e.relatedTarget).data('lead-comments');
 
@@ -504,6 +520,7 @@
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
+            $(e.currentTarget).find('#ippStatus').val(ippStatus);
             $('#comments').val(comments);
 
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
@@ -669,6 +686,7 @@
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     { data: 'callreport', name: 'callreport',searchable: false},
+                    { data: 'ippStatus', name: 'ippStatus',searchable: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
