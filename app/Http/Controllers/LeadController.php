@@ -1552,6 +1552,7 @@ class LeadController extends Controller
                     });
 
             }else {
+                
                 $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
                     return $query->where('callingReport', '=', $r->status) 
                     ->where('workprogress.userId', '=', Auth::user()->id);
