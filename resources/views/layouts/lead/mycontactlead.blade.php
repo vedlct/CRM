@@ -686,7 +686,17 @@
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     { data: 'callreport', name: 'callreport',searchable: false},
-                    { data: 'ippStatus', name: 'ippStatus',searchable: false},
+                    { data: 'ippStatus',
+                        render: function(data) {
+                            if(data == 1) {
+                                return 'Yes'
+                            }
+                            else {
+                                return 'No'
+                            }
+
+                        },
+                    },
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
 

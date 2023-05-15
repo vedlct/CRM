@@ -255,8 +255,8 @@ class FollowupController extends Controller
 
         $leads = Lead::leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
             ->whereBetween('followUpDate', [$request->fromdate, $request->todate])
-            ->where('followup.userId', Auth::user()->id)
             ->where('leads.contactedUserId', Auth::user()->id)
+            ->where('followup.userId', Auth::user()->id)
             ->where('followup.workStatus', 0)
             ->get();
 
@@ -266,8 +266,7 @@ class FollowupController extends Controller
         $categories = Category::where('type', 1)->get();
         $possibilities = Possibility::get();
         $probabilities = Probability::get();
-        $status = Leadstatus::where('statusId', '!=', 7)
-            ->get();
+        $status = Leadstatus::where('statusId', '!=', 7)->get();
         $country = Country::get();
 
         Session::flash('message', 'From ' . $request->fromdate . ' To ' . $request->todate . '');

@@ -565,6 +565,7 @@ class LeadController extends Controller
                                             data-lead-volume="' . $lead->volume . '"
                                             data-lead-frequency="' . $lead->frequency . '"
                                             data-lead-process="' . $lead->process . '"
+                                            data-lead-ipp="'.$lead->ippStatus.'"
                                             data-lead-comments="' . $lead->comments . '"
                                             data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -599,6 +600,7 @@ class LeadController extends Controller
                                             data-lead-volume="' . $lead->volume . '"
                                             data-lead-frequency="' . $lead->frequency . '"
                                             data-lead-process="' . $lead->process . '"
+                                            data-lead-ipp="'.$lead->ippStatus.'"
                                             data-lead-comments="' . $lead->comments . '"
                                             data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -630,6 +632,7 @@ class LeadController extends Controller
                                            data-lead-volume="' . $lead->volume . '"
                                            data-lead-frequency="' . $lead->frequency . '"
                                            data-lead-process="' . $lead->process . '"
+                                           data-lead-ipp="'.$lead->ippStatus.'"
                                            data-lead-comments="' . $lead->comments . '"
                                            data-lead-created="' . Carbon::parse($lead->created_at)->format('Y-m-d') . '"
                                            >
@@ -1946,18 +1949,35 @@ class LeadController extends Controller
             if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
                 
 
-            $leads=Lead::select('leads.*', 'leadassigneds.*','users.firstName')
-                ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
-                ->leftJoin('users','leadassigneds.assignTo','users.id')
-                ->where('leads.contactedUserId', NULL)
-                ->where('leads.leadAssignStatus', 1)
-                ->where('leadassigneds.workStatus', 0)
-                ->where('leadassigneds.leaveDate', NULL)               
-                ->groupBy('leadassigneds.leadId')
-                ->orderBy('leadassigneds.created_at','desc')
-                // ->latest('leadassigneds.created_at')
-                ->get();
+            // $leads=Lead::select('leads.*', 'leadassigneds.*','users.firstName')
+            //     ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
+            //     ->leftJoin('users','leadassigneds.assignTo','users.id')
+            //     ->where('leads.contactedUserId', NULL)
+            //     ->where('leads.leadAssignStatus', 1)
+            //     ->where('leadassigneds.workStatus', 0)
+            //     ->where('leadassigneds.leaveDate', NULL)               
+            //     ->groupBy('leadassigneds.leadId')
+            //     ->orderBy('leadassigneds.created_at','desc')
+            //     // ->latest('leadassigneds.created_at')
+            //     ->get();
                 
+            $leads = Lead::select('leads.*', 'leadassigneds.*', 'users.firstName', 'users.lastName')
+            ->leftJoin('leadassigneds', function ($join) {
+                $join->on('leads.leadId', '=', 'leadassigneds.leadId')
+                     ->whereIn('leadassigneds.created_at', function ($query) {
+                         $query->select(DB::raw('MAX(created_at)'))
+                               ->from('leadassigneds')
+                               ->whereRaw('leadassigneds.leadId = leads.leadId')
+                               ->groupBy('leadassigneds.leadId');
+                     });
+            })
+            ->leftJoin('users', 'leadassigneds.assignTo', 'users.id')
+            ->where('leads.contactedUserId', NULL)
+            ->where('leads.leadAssignStatus', 1)
+            ->where('leadassigneds.workStatus', 0)
+            ->where('leadassigneds.leaveDate', NULL)
+            ->get();
+        
 
             }
 
@@ -1971,7 +1991,7 @@ class LeadController extends Controller
             $status=Leadstatus::get();
             
 
-            return view('report.allAssignedLeads')
+            return view('report.assignedButNotTaken')
             ->with('leads', $leads)
             ->with('callReports', $callReports)
             ->with('possibilities', $possibilities)

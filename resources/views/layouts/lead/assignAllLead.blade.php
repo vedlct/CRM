@@ -56,6 +56,7 @@
                         <th>Frequency</th>
                         <th>Process</th>
                         <th>Status</th>
+                        <th>IPP</th>
                         <th>Action</th>
 
 
@@ -217,12 +218,26 @@
 
 
 
-                            <div class="col-md-8">
-                                <label><b>Comments:</b></label>
+                            <div class="col-md-4">
+                                <label><b>Extra Information:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label><b>LinkedIn Profile:</b></label>
+                                <input type="text" class="form-control" name="linkedin" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label ><b>Is it your IPP?</b></label>
+                                <select class="form-control" name="ippStatus"  id="ippStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
                             <label><b>Change Status:</b></label>
                             <select class="form-control"  name="status" id="">
                                 <option value="">select one</option>
@@ -561,6 +576,7 @@ $(document).ready(function(){
                         { data: 'frequency', name: 'leads.frequency' },
                         { data: 'process', name: 'leads.process' },
                         { data: 'status.statusName', name: 'status.statusName', orderable: false},
+                        { data: 'ippStatus', name: 'ippStatus',searchable: false},
                         { data: 'check', name: 'check', orderable: false, searchable: false},
                     ]
                 });
@@ -678,6 +694,7 @@ $(document).ready(function(){
         var volume=$(e.relatedTarget).data('lead-volume');
         var frequency=$(e.relatedTarget).data('lead-frequency');
         var process=$(e.relatedTarget).data('lead-process');
+        var ippStatus=$(e.relatedTarget).data('lead-ipp');
         var comments=$(e.relatedTarget).data('lead-comments');
         var createdAt=$(e.relatedTarget).data('lead-created');
 
@@ -703,6 +720,7 @@ $(document).ready(function(){
         $(e.currentTarget).find('input[name="volume"]').val(volume);
         $(e.currentTarget).find('input[name="frequency"]').val(frequency);
         $(e.currentTarget).find('input[name="process"]').val(process);
+        $(e.currentTarget).find('#ippStatus').val(ippStatus);
         $('#comments').val(comments);
 
         //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);

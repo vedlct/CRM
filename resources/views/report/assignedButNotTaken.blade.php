@@ -39,7 +39,7 @@
                             <td width="10%">{{$lead->personName}}</td>
                             <td width="8%">{{$lead->contactNumber}}</td>
                             <td width="8%">{{ Carbon\Carbon::parse($lead->created_at)->format('d M Y, H:i') }}</td>
-                            <td width="8%">{{$lead->firstName}}
+                            <td width="8%">{{$lead->firstName}} {{$lead->lastName}}
                             </td>
                             <td width="8%">
                                 <!-- Trigger the modal with a button -->
@@ -49,7 +49,7 @@
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                 <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
+<!--                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
@@ -71,6 +71,7 @@
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+-->                                    
 
                                     <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
