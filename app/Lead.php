@@ -164,6 +164,8 @@ class Lead extends Model
             ->latest('workprogress.created_at')
             ->first();
 
+            
+
         // return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
         //     ->leftjoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
         //     ->select('callingreports.report as callingReport')

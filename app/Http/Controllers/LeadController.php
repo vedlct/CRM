@@ -1555,7 +1555,7 @@ class LeadController extends Controller
                 
                 $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
                     return $query->where('callingReport', '=', $r->status) 
-                    ->where('workprogress.userId', '=', Auth::user()->id);
+                    ->where('workprogress.userId', Auth::user()->id);
 //                    ->orderBy('created_at', 'DESC');
 //                    ->groupBy('workprogress.leadId')
 //                    ->limit(1);
@@ -1659,7 +1659,7 @@ class LeadController extends Controller
 //        $workprogress = DB::table('workprogress')->select('leadId')->get()->toArray();
         $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->orwhere('callingReport',11)->groupBy('leadId')->pluck('workprogress.leadId')->all();
 
-        $leads=Lead::with('mined','category','country','possibility', 'probability')
+        $leads=Lead::with('mined','category','country','possibility', 'probability', 'status')
             ->where('contactedUserId',Auth::user()->id)
             ->whereIn('leads.leadId', $workprogress)
             ->orderBy('leadId','desc');
@@ -2001,6 +2001,116 @@ class LeadController extends Controller
             ->with('status',$status)
             ->with('country',$country);
 
+        }
+
+        public function duplicateLeadList (Request $r)
+        {
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+           
+                $leads=Lead::select('leads.*','users.firstName','users.lastName')
+                ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
+                ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('leads.statusId', 8)
+                ->get();
+
+   
+
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+            
+
+            return view('report.duplicateLeadList')
+            ->with('leads', $leads)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('probabilities', $probabilities)
+            ->with('categories',$categories)
+            ->with('status',$status)
+            ->with('country',$country);
+
+            }
+    
+        }
+
+        
+        // public function allConversations(){
+        
+        //     $User_Type=Session::get('userType');
+        //     if($User_Type=='SUPERVISOR' || $User_Type=='MANAGER'){
+        //         $categories=Category::where('type',1)->get();
+        //         $callReports=Callingreport::get();
+    
+    
+        //         $possibilities=Possibility::get();
+        //         $probabilities=Probability::get();
+        //         $status=Leadstatus::where('statusId','!=',7)->where('statusId','!=',1)->get();
+        //         $country=Country::get();
+    
+    
+        //         return view('report.allConversations')
+        //             ->with('callReports',$callReports)
+        //             ->with('possibilities',$possibilities)
+        //             ->with('probabilities',$probabilities)
+        //             ->with('categories',$categories)
+        //             ->with('status',$status)
+        //             ->with('country',$country);
+    
+    
+        //     }
+        //     return Redirect()->route('home');
+        // }
+        
+        
+        public function getallConversations(){
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+           
+                $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
+                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+                ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('workprogress.callingReport', 11)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+
+            // }else{
+            // $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
+            //     ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+            //     ->leftJoin('users','leads.contactedUserId','users.id')
+            //     ->where('leads.contactedUserId', Auth::user()->id)
+            //     ->where('leads.ippStatus', 1)
+            //     ->groupBy('leads.leadId')
+            //     ->orderBy('workprogress.created_at','desc')
+            //     ->get();
+           
+        }
+
+
+            // $latestLead=Workprogress::select('created_at')->latest()->first();
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+
+
+            return view('report.allConversations')
+                ->with('leads', $leads)
+                ->with('callReports', $callReports)
+                ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
+                ->with('categories',$categories)
+                ->with('status',$status)
+                ->with('country',$country);
+              
         }
 
 

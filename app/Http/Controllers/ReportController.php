@@ -1766,7 +1766,6 @@ class ReportController extends Controller
 
     }
 
-    
 
     // public function reportIndividualLeadCount(request $r){
     //     $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(*) as userOwnedLeads'))

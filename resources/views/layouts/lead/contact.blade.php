@@ -2,20 +2,6 @@
 
 @section('header')
     <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
-    <style>
-        .ippCheckbox {
-            display: block;
-            position: relative;
-            cursor: pointer;
-            font-size: 17px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-
-            color: green;
-        }
-    </style>
 @endsection
 
 

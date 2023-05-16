@@ -9,15 +9,18 @@
         {{--<div class="profile-img"> <img src="{{url('img/'.Auth::user()->picture)}}" alt="user" /> </div>--}}
         <!-- User profile text-->
             <div class="profile-text">
-                <b>Name :</b><strong> {{strtoupper( Auth::user()->userId )}} </strong> <span class="caret"></span><br>
-
+                {{( Auth::user()->firstName )}} {{( Auth::user()->lastName )}} </br>
+                UserId: {{(Auth::user()->userId )}}
             </div>
         </div>
         <!-- End User profile text-->
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li class="nav-small-cap">MENU</li>
+
+                <li class="nav-devider"></li>
+
+                <li role="separator" class="divider"></li>
 
                 <li>
                     <a href="{{route('home')}}"><i class="mdi mdi-gauge" aria-hidden="true"></i>
@@ -69,6 +72,12 @@
                                 <a href="{{route('allAssignedButNotMyleads')}}"><i class="fa fa-ban" aria-hidden="true"></i><span class="hide-menu"> Not Taken Assigned</span></a>
                             </li>
 
+                            <li>
+                                <a href="{{route('duplicateLeadList')}}"><i class="fa fa-clone" aria-hidden="true"></i><span class="hide-menu"> Duplicate Leads</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('getallConversations')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i><span class="hide-menu"> All Conversations</span></a>
+                            </li>
 
                             <!-- <li>
                                 <a href="{{route('reportTableForUser')}}"><i class="fa fa-pie-chart" aria-hidden="true"></i><span class="hide-menu"> Ind. Lead Count</span></a>
@@ -337,14 +346,27 @@
                         </a>
                         <ul class="treeview-menu">
                             <li>
+                                <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">User Management</span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i><span class="hide-menu">Monthly Target Log</span></a>
+                            </li>
+                            
+                            <li>
                                 <a href="{{route('teamManagement')}}"><i class="fa fa-users"></i>
                                     <span class="hide-menu">Team Management</span></a>
                             </li>
+                            
+                            
                             <li>
                                 <a href="{{route('rejectedLeads')}}"><i class="fa fa-ban" aria-hidden="true"></i>
                                     <span class="hide-menu">Rejected Leads</span></a>
 
                             </li>
+
+
+
 
                         </ul>
                     </li>
@@ -364,7 +386,7 @@
 {{--                    @endif--}}
 {{--                @endif--}}
 
-                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
+                <!-- @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
                     @if(Auth::user()->areaType != "usa" )
                     <li>
                         <a href="{{route('user-management.index')}}"><i class="fa fa-users" aria-hidden="true"></i><span class="hide-menu">User Management</span></a>
@@ -373,7 +395,7 @@
                         <a href="{{route('user-management.target')}}"><i class="fa fa-bullseye"></i><span class="hide-menu">Monthly Target Log</span></a>
                     </li>
                 @endif
-                @endif
+                @endif -->
 
 
                 @if($userType =='ADMIN' )

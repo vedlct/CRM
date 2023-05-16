@@ -239,7 +239,10 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 Route::get('/reportAllActivties','ReportController@reportAllActivties')->name('reportAllActivties');
+Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
+Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
+
 
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');
 
