@@ -157,20 +157,20 @@ class Lead extends Model
     public function lastCallingReport()
     {
 
-        return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
-            ->leftJoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
-            ->select('callingreports.report as callingReport')
-            ->orderBy('workprogress.created_at', 'DESC')
-            ->latest('workprogress.created_at')
-            ->first();
+        // return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
+        //     ->leftJoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
+        //     ->select('callingreports.report as callingReport')
+        //     ->orderBy('workprogress.created_at', 'DESC')
+        //     ->latest('workprogress.created_at')
+        //     ->first();
 
             
 
-        // return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
-        //     ->leftjoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
-        //     ->select('callingreports.report as callingReport')
-        //     ->orderBy('workprogress.created_at', 'DESC')
-        //     ->limit(1);
+        return $this->hasMany('App\Workprogress', 'leadId', 'leadId')
+            ->leftjoin('callingreports', 'callingreports.callingReportId', '=', 'workprogress.callingReport')
+            ->select('callingreports.report as callingReport')
+            ->orderBy('workprogress.created_at', 'DESC')
+            ->limit(1);
 
     }
 }

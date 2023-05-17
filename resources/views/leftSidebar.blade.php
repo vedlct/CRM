@@ -55,48 +55,29 @@
                                 <li>
                                     <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu"> Country</span></a>
                                 </li>
-                            @endif
-                        @endif
-
-                        @if($userType =='SUPERVISOR')
-                            <li>
-                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu"> Others</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu"> Follow-up</span></a>
-                            </li>
                             <li>
                                 <a href="{{route('reportAllActivties')}}"><i class="fa fa-bell" aria-hidden="true"></i><span class="hide-menu"> All Activities</span></a>
                             </li>
                             <li>
                                 <a href="{{route('allAssignedButNotMyleads')}}"><i class="fa fa-ban" aria-hidden="true"></i><span class="hide-menu"> Not Taken Assigned</span></a>
                             </li>
-
                             <li>
                                 <a href="{{route('duplicateLeadList')}}"><i class="fa fa-clone" aria-hidden="true"></i><span class="hide-menu"> Duplicate Leads</span></a>
                             </li>
+                            @endif
+                        @endif
+
+                        @if($userType =='SUPERVISOR')
                             <li>
                                 <a href="{{route('getallConversations')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i><span class="hide-menu"> All Conversations</span></a>
                             </li>
+                            <li>
+                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu"> Follow-up</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu"> Others</span></a>
+                            </li>
 
-                            <!-- <li>
-                                <a href="{{route('reportTableForUser')}}"><i class="fa fa-pie-chart" aria-hidden="true"></i><span class="hide-menu"> Ind. Lead Count</span></a>
-                            </li> -->
-                            {{--<li>
-                                <a href="{{route('reportCategory')}}"><i class="fa fa-hourglass-start"
-                                                                         aria-hidden="true"></i>
-                                    <span class="hide-menu">Category</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportStatus')}}"><i class="fa fa-hourglass-start"
-                                                                       aria-hidden="true"></i>
-                                    <span class="hide-menu">Status</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('reportCountry')}}"><i class="fa fa-hourglass-start"
-                                                                        aria-hidden="true"></i>
-                                    <span class="hide-menu">Country</span></a>
-                            </li>--}}
                         @endif
                     </ul>
                 </li>

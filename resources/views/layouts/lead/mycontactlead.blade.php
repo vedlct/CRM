@@ -28,7 +28,7 @@
                         <th width="5%">Country</th>
                         <th width="8%">Contact</th>
                         <th width="8%">Contact Number</th>
-                        <th width="8%">Status</th>
+                        <!-- <th width="8%">Status</th> -->
                         <th width="8%">IPP</th>
                         <th width="10%">Action</th>
 
@@ -685,7 +685,7 @@
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
-                    { data: 'callreport', name: 'callreport',searchable: false},
+                    // { data: 'callreport', name: 'callreport',searchable: false},
                     { data: 'ippStatus',
                         render: function(data) {
                             if(data == 1) {

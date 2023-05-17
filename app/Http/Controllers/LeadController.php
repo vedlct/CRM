@@ -839,6 +839,8 @@ class LeadController extends Controller
         else
             return back();
     }
+
+
     public function filter(){
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');
@@ -1537,7 +1539,7 @@ class LeadController extends Controller
 
 
     public function getContacedData(Request $r){
-        $leads=Lead::with('mined','category','country','possibility', 'probability','workprogress')
+        $leads=Lead::with('mined','category','country','possibility', 'probability','workprogress', 'status')
 //            ->select('workprogress.callreport','leads.*')
             ->where('contactedUserId',Auth::user()->id)
             ->orderBy('leads.leadId','desc');
@@ -1657,7 +1659,9 @@ class LeadController extends Controller
 
     public function getMyContacedData(){
 //        $workprogress = DB::table('workprogress')->select('leadId')->get()->toArray();
-        $workprogress = Workprogress::where('userId',Auth::user()->id)->where('callingReport',5)->orwhere('callingReport',11)->groupBy('leadId')->pluck('workprogress.leadId')->all();
+        $workprogress = Workprogress::where('userId',Auth::user()->id)
+        ->where('callingReport',5)->orwhere('callingReport',11)
+        ->groupBy('leadId')->pluck('workprogress.leadId')->all();
 
         $leads=Lead::with('mined','category','country','possibility', 'probability', 'status')
             ->where('contactedUserId',Auth::user()->id)
@@ -1699,15 +1703,19 @@ class LeadController extends Controller
             })
 
             ->addColumn('callreport', function ($lead){
-                $callingreport = DB::table('workprogress')
+                $callingreport = DB::table('workprogress', 'workprogress.created_at as workprogress_created_at')
                     ->select('report')
-                    ->leftjoin('callingreports','callingreports.callingReportId','workprogress.callingreport')
+                    ->leftjoin('callingreports','workprogress.callingreport','callingreports.callingReportId')
+                    ->leftjoin('leads', 'workprogress.leadId', 'leads.leadId')
                     ->where('workprogress.leadId',$lead->leadId)
-                    ->where('workprogress.callingReport','5')
-                    ->orwhere('workprogress.callingReport','11')
+                    // ->where('workprogress.callingReport','5')
+                    // ->orwhere('workprogress.callingReport','11')
+                    ->where('leads.contactedUserId', Auth::user()->id)
+                    ->latest('workprogress.created_at', 'DESC')
                     ->groupBy('workprogress.leadId')
-                    ->orderBy('created_at', 'DESC')
                     ->get();
+
+
 //                if (($callingreport->isEmpty())) {
 //
 //                    return $test="New Lead";
@@ -1900,7 +1908,7 @@ class LeadController extends Controller
             // $date = Carbon::now();
 
             $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+            if($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR'){
            
                 $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
@@ -2070,7 +2078,7 @@ class LeadController extends Controller
         public function getallConversations(){
 
             $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+            if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR'){
            
                 $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')

@@ -51,7 +51,7 @@
                         <th width="8%">Category</th>
                         <th width="5%">Website</th>
                         <th width="8%">Possi</th>
-                        <!-- <th width="8%">Proba</th> -->
+                        <th width="8%">Proba</th>
                         <th width="8%">Country</th>
                         <th width="8%">KDM</th>
                         <th width="8%">Phone</th>
@@ -397,13 +397,21 @@
                             {{--<input type="text" class="form-control" id="follow-show" value="" readonly>--}}
                             {{--</div>--}}
 
+                            <div class="form-group">
+                                <label class=""><b>Possibility : </b></label>
+                                <select class="form-control"  name="possibility" id="possibility">
+                                    @foreach($possibilities as $p)
+                                    <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
+                                    @endforeach
+                                    </select>
+                            </div>
 
 
                             <div class="form-group">
                                 <label class=""><b>Closing Probability : </b></label>
                                 <select class="form-control"  name="probability" id="probability">
                                     <option value=""><b>(select one)</b></option>
-                                @foreach($probabilities as $p)
+                                    @foreach($probabilities as $p)
                                         <option value="{{$p->probabilityId}}">{{$p->probabilityName}}</option>
                                     @endforeach
 
@@ -617,7 +625,7 @@ function selectAll(source) {
                 }
             });
             $.ajax({
-                type : 'post' ,
+                type : 'post',
                 url : '{{route('editcontactmodalshow')}}',
                 data : {_token:CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
@@ -685,17 +693,17 @@ function selectAll(source) {
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
 
-                    // { data: 'probability.probabilityName',
-                    //     render: function(data) {
-                    //         if(data != null) {
-                    //             return data
-                    //         }
-                    //         else {
-                    //             return 'null'
-                    //         }
+                    { data: 'probability.probabilityName',
+                        render: function(data) {
+                            if(data != null) {
+                                return data
+                            }
+                            else {
+                                return 'null'
+                            }
 
-                    //     },
-                    // },
+                        },
+                    },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
