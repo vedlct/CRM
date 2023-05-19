@@ -49,7 +49,7 @@
                                 @else 
                                     <td>Yes</td>
                                 @endif                                 
-                            <td >{{ Carbon\Carbon::parse($lead->workprogress_created_at)->format('d M Y') }}</td>
+                            <td >{{ $lead->workprogress_created_at }}</td>
                             <td >{{$lead->firstName}} {{$lead->lastName}}
                             </td>
                             <td >

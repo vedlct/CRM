@@ -15,6 +15,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th>Select</th>                       
                         <th>Id</th>
                         <th>Company Name</th>
                         <th>website</th>
@@ -31,6 +32,14 @@
                     <tbody>
                     </tbody>
                 </table>
+
+                <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
+                <div class="mt-2">
+                    <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
+
+                </div>
+
             </div>
         </div>
     </div>
@@ -196,18 +205,52 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <script>
-        //        $(document).ready(function() {
-        //            $('#myTable').DataTable();
-        //
-        //        });
 
-        //<th>Company Name</th>
-        //<th>Person</th>
-        //<th>Email</th>
-        //<th>Number</th>
-        //<th>Category</th>
-        //<th>Country</th>
+    <script>
+
+            $(document).ready(function() {
+                $("#makemy").click(function(){
+                    var chkArray = [];
+                    //var userId=$(this).val();
+                    $('.checkboxvar:checked').each(function (i) {
+
+                        chkArray[i] = $(this).val();
+                        });
+
+                        //alert(chkArray)
+
+                        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                        // $("#inp").val(JSON.stringify(chkArray));
+                        // $( "#assign-form" ).submit();
+                        jQuery('input:checkbox:checked').parents("tr").remove();
+                        $(this).prop('selectedIndex',0);
+
+                        $.ajax({
+                            type : 'post' ,
+                            url : '{{route('addmyContacted')}}',
+                            data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
+                            success : function(data){
+                                console.log(data);
+                                if(data == 'true'){
+                                    // $('#myTable').load(document.URL +  ' #myTable');
+            //                        $.alert({
+            //                            title: 'Success!',
+            //                            content: 'successfully assigned!',
+            //                        });
+                                    $('#alert').html('Leads are assigned successfully');
+                                    $('#alert').show();
+
+                                }
+                            }
+                        });
+                });
+            })
+
+    </script>
+
+
+<script>
+
         $(function() {
             $('#myTable').DataTable({
                 aLengthMenu: [
@@ -227,6 +270,8 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'check', name: 'check', orderable: false, searchable: false},
+
                     { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website'},
@@ -245,6 +290,17 @@
         });
 
  
+
+        function selectAll(source) {
+            checkboxes = document.getElementsByName('checkboxvar[]');
+            for(var i in checkboxes)
+                checkboxes[i].checked = source.checked;
+        }
+
+
+
+
+
         $('#my_modal').on('show.bs.modal', function(e) {
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');

@@ -275,4 +275,8 @@ class FollowupController extends Controller
             'possibilities' => $possibilities, 'probabilities' => $probabilities,  'categories' => $categories, 'status' => $status, 'fromDate' => $request->fromdate, 'toDate' => $request->todate, 'country' => $country]);
     }
 
+
+
+
+    
 }

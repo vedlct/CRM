@@ -848,10 +848,13 @@ class LeadController extends Controller
         $categories=Category::where('type',1)
             ->get();
         $country=Country::get();
+
         return view('layouts.lead.filterLead')
             ->with('categories',$categories)
             ->with('country',$country);
     }
+
+    
 
     public function contactedStatus(Request $r){
 
@@ -929,9 +932,12 @@ class LeadController extends Controller
 
 
     public function getFilterLeads(Request $request){
+
         $leads=(new Lead())->showNotAssignedLeads();
         return DataTables::eloquent($leads)
-            ->addColumn('action', function ($lead) {
+            ->addColumn('check', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })->addColumn('action', function ($lead) {
                 if(Session::get('userType')=='RA'){
                     return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
@@ -968,8 +974,11 @@ class LeadController extends Controller
 
 
                                     ';}})
+            ->rawColumns(['action','check'])
             ->make(true);
     }
+
+
     public function assignedLeads(){
         //will return the leads assigned to you
         //for user
@@ -998,7 +1007,7 @@ class LeadController extends Controller
                 ->get();
 
             $country=Country::get();
-            return view('layouts.lead.myLead')
+            return view('layouts.lead.myAssignedLead')
                 ->with('leads', $leads)
                 ->with('callReports', $callReports)
                 ->with('possibilities', $possibilities)

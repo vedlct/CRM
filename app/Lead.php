@@ -46,21 +46,69 @@ class Lead extends Model
         return $leads;
     }
 
+    // public function showNotAssignedLeads()
+    // {
+
+    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability','workprogress')
+    //         ->where('statusId', 2)
+    //         ->where(function ($q) {
+    //             $q->orWhere('contactedUserId', 0)
+    //                 ->orWhere('contactedUserId', null);
+    //         })
+    //         ->where('leadAssignStatus', 0)
+    //         ->select('leads.*');
+
+
+    //     return $leads;
+    // }
+
+
+    // public function showNotAssignedLeads()
+    // {
+    //     $currentUserId = Auth::user()->id;
+    
+    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
+    //         ->where('statusId', 2)
+    //         ->where(function ($q) use ($currentUserId) {
+    //             $q->orWhere('contactedUserId', 0)
+    //                 ->orWhereNull('contactedUserId');
+    //         })
+    //         ->where('leadAssignStatus', 0)
+    //         ->whereNotExists(function ($query) use ($currentUserId) {
+    //             $query->select('workprogress.userId')
+    //                 ->from('workprogress')
+    //                 ->whereRaw('leads.leadId = workprogress.leadId')
+    //                 ->where('workprogress.userId', $currentUserId);
+    //         })
+    //         ->select('leads.*');
+    
+    //     return $leads;
+    // }
+
+
     public function showNotAssignedLeads()
     {
-
-        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
+        $currentUserId = Auth::user()->id;
+    
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
             ->where('statusId', 2)
             ->where(function ($q) {
                 $q->orWhere('contactedUserId', 0)
-                    ->orWhere('contactedUserId', null);
+                    ->orWhereNull('contactedUserId');
             })
             ->where('leadAssignStatus', 0)
+            ->leftJoin('workprogress', function ($join) use ($currentUserId) {
+                $join->on('leads.leadId', '=', 'workprogress.leadId')
+                    ->where('workprogress.userId', '=', $currentUserId);
+            })
+            ->whereNull('workprogress.userId')
             ->select('leads.*');
-
-
+    
         return $leads;
     }
+    
+    
+
 
     public function showNotAssignedAllLeads()
     {
