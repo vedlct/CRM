@@ -16,10 +16,15 @@ Route::get('/', 'Auth\LoginController@mainLogin');
 
 
 
+Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
+Route::post('/analysisComments', 'LeadController@analysisComments');
+Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
+
+
+Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
 
 
 Route::view('/newinfo', 'layouts.newInfo');
-
 
 Route::view('/leaves', 'layouts.leaves');
 

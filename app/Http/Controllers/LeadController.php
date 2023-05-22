@@ -27,6 +27,10 @@ use App\Followup;
 use App\Leadstatus;
 use DataTables;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SelectedAnalysisCommentsExport;
+
+
 class LeadController extends Controller
 {
 
@@ -2055,33 +2059,7 @@ class LeadController extends Controller
     
         }
 
-        
-        // public function allConversations(){
-        
-        //     $User_Type=Session::get('userType');
-        //     if($User_Type=='SUPERVISOR' || $User_Type=='MANAGER'){
-        //         $categories=Category::where('type',1)->get();
-        //         $callReports=Callingreport::get();
-    
-    
-        //         $possibilities=Possibility::get();
-        //         $probabilities=Probability::get();
-        //         $status=Leadstatus::where('statusId','!=',7)->where('statusId','!=',1)->get();
-        //         $country=Country::get();
-    
-    
-        //         return view('report.allConversations')
-        //             ->with('callReports',$callReports)
-        //             ->with('possibilities',$possibilities)
-        //             ->with('probabilities',$probabilities)
-        //             ->with('categories',$categories)
-        //             ->with('status',$status)
-        //             ->with('country',$country);
-    
-    
-        //     }
-        //     return Redirect()->route('home');
-        // }
+  
         
         
         public function getallConversations(){
@@ -2096,21 +2074,10 @@ class LeadController extends Controller
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
                 ->get();
-
-            // }else{
-            // $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
-            //     ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-            //     ->leftJoin('users','leads.contactedUserId','users.id')
-            //     ->where('leads.contactedUserId', Auth::user()->id)
-            //     ->where('leads.ippStatus', 1)
-            //     ->groupBy('leads.leadId')
-            //     ->orderBy('workprogress.created_at','desc')
-            //     ->get();
            
         }
 
 
-            // $latestLead=Workprogress::select('created_at')->latest()->first();
             $possibilities = Possibility::get();
             $probabilities = Probability::get();
             $callReports = Callingreport::get();
@@ -2129,6 +2096,116 @@ class LeadController extends Controller
                 ->with('country',$country);
               
         }
+
+
+    //ANALYZING COMMENTS TO GET SPECIFIC LEADS 
+
+    public function analysisComments(Request $request)
+    {
+        
+        
+        $userType = Session::get('userType');
+        $searchTerm = $request->input('searchTerm');
+        $keywords = [];
+
+    
+        if (!empty($searchTerm)) {
+            // Split the search term into an array of keywords
+            $keywords = explode(',', $searchTerm);
+            // Trim whitespace from each keyword
+            $keywords = array_map('trim', $keywords);
+            // Remove any empty keywords
+            $keywords = array_filter($keywords);
+        }
+    
+        if (empty($keywords)) {
+            // Return the view without executing the search logic
+            return view('report.analysisComments')
+                ->with('searchTerm', $searchTerm);
+        }
+        
+        if ($userType == 'SUPERVISOR') {
+           
+            $analysis = Lead::select('leads.*', 'users.userId')
+                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
+                ->where('leads.statusId', '!=', 6)
+                ->where(function ($query) use ($keywords) {
+                    foreach ($keywords as $keyword) {
+                        $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
+                    }
+                })
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at', 'desc')
+                ->get();
+        } else {
+            $analysis = [];
+        }
+    
+        $possibilities = Possibility::get();
+        $probabilities = Probability::get();
+        $callReports = Callingreport::get();
+        $categories = Category::where('type', 1)->get();
+        $country = Country::get();
+        $status = Leadstatus::get();
+    
+        return view('report.analysisComments')
+            ->with('analysis', $analysis)
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('probabilities', $probabilities)
+            ->with('categories', $categories)
+            ->with('status', $status)
+            ->with('country', $country)
+            ->with('searchTerm', $searchTerm);
+    }
+
+
+
+    public function exportAnalysisComments(Request $request)
+    {
+        $selectedRows = $request->input('selectedRows');
+    
+        if (!empty($selectedRows)) {
+            $selectedRowIds = explode(',', $selectedRows);
+    
+            // Fetch the selected rows with necessary fields and relationships
+            $analysis = Lead::with('category', 'country', 'user')
+                ->whereIn('leadId', $selectedRowIds)
+                ->get();
+    
+            $export = new SelectedAnalysisCommentsExport($analysis);
+
+            return Excel::download($export, 'selected_analysis_comments.csv');
+        } else {
+            return back()->with('error', 'No rows selected for export.');
+        }
+    }
+
+
+
+        public function hourlyActivity(Request $request)
+        {
+            $user = $request->input('user');
+            $datetime = $request->input('datetime');
+        
+            $startDateTime = \Carbon\Carbon::parse($datetime)->startOfHour();
+            $endDateTime = \Carbon\Carbon::parse($datetime)->endOfHour();
+        
+            $hourlyActivities = Activities::select('activities.*', 'workprogress.comments')
+                ->join('workprogress', 'activities.userId', '=', 'workprogress.userId')
+                ->where('activities.userId', $user)
+                ->whereBetween('activities.created_at', [$startDateTime, $endDateTime])
+                ->orderBy('activities.created_at')
+                ->get();
+        
+            $users = User::where('active', 1)->get();
+        
+            return view('report.hourlyActivity', compact('users', 'hourlyActivities'));
+        }
+
+
 
 
 }

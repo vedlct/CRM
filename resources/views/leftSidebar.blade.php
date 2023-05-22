@@ -392,6 +392,32 @@
 
                 @endif
 
+
+
+                    @if($userType=='SUPERVISOR')
+
+                    <li class="treeview">
+                    <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> <span
+                            class="hide-menu">Analysis</span>
+                        <span class="pull-right-container">
+    	    				<i class="fa fa-angle-right pull-right"></i>
+	    				</span>
+                    </a>
+                    <ul class="treeview-menu">
+                            <li>
+                                <a href="{{route('analysisComments')}}"><i class="fa fa-circle-o"></i>
+                                <span class="hide-menu"> Analyze Comments</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                    <span class="hide-menu"> Hourly Activity</span></a>
+                            </li>
+                    </ul>
+                </li>
+
+                    @endif
+
+
                 
                 {{--End Global--}}
 
