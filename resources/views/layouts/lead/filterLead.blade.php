@@ -162,6 +162,12 @@
                         <div class="col-md-4">
                     <b>Company Name:</b>
                     <input type="text" name="companyName" readonly>
+                    <div class="card-body">
+                        <b>Call Statistics per marketer</b>
+                        <p>Here you will see who reached out to this company for how many times.</p>
+                        <div id="counter"></div>
+                    </div>
+
                         </div>
 
                         <div class="col-md-6">
@@ -351,16 +357,38 @@
 
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
 
-            $.ajax({
-                type : 'post' ,
-                url : '{{route('getComments')}}',
-                data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-                success : function(data){
+            // $.ajax({
+            //     type : 'post' ,
+            //     url : '{{route('getComments')}}',
+            //     data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+            //     success : function(data){
 
-                    $("#comment").html(data);
+            //         $("#comment").html(data);
+            //         $("#comment").scrollTop($("#comment")[0].scrollHeight);
+            //     }
+            // });
+
+            $.ajax({
+                type: 'post',
+                url: '{{ route('getComments') }}',
+                data: {_token: CSRF_TOKEN, 'leadId': leadId},
+                success: function(data) {
+                    $('#comment').html(data.comments);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
+
+                    var counterHtml = '';
+
+                    // Loop through the counter data
+                    $.each(data.counter, function(index, counter) {
+                        counterHtml += '<div><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</div>';
+                    });
+
+                    // Set the counter HTML to the counter div
+                    $('#counter').html(counterHtml);
                 }
             });
+
+
 
         });
 

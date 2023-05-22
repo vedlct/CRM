@@ -1032,12 +1032,24 @@ class LeadController extends Controller
                 ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                 ->get();
 
+            $counter = Workprogress::select('users.userId as userId', DB::raw('count(*) as userCounter'))
+                ->join('users', 'workprogress.userId', 'users.id')
+                ->where('leadId', $r->leadId)
+                ->groupBy('workprogress.userId')
+                ->get();
+                
+
             $text='';
 
             foreach ($comments as $comment){
                 $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
-            return Response($text);
+
+
+            return response()->json([
+                'comments' => $text,
+                'counter' => $counter
+            ]);
         }
     }
 
