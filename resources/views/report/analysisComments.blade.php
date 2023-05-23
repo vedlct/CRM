@@ -4,32 +4,49 @@
 
 @section('content')
 
-    <div class="card" style="padding:10px;">
+    <div class="card" style="padding:30px;">
         <div class="card-body">
         <h2 class="card-title" align="center"><b>Leads with Keywords in Comments</b></h2>
+        <p class="card-subtitle" align="center">On your left search box, you can write keywords (separated by comma) and get the results in a table. <br> On the right search box, you can write the keywords and download the list as an excel file.</p>
 
 
-        <div class="card-body">
-            <div class="col-md-6 ">
+        <div class="card-body" >
+            <div class="col-md-5" style="float:left;">
                 <form method="POST" action="{{ route('analysisComments') }}">
                 {{ csrf_field() }}
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="searchTerm" placeholder="Enter search terms using comma">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit">Search</button><br>
+                            <button class="btn btn-primary" type="submit">Search and Show in Table</button><br>
                         </div>
                     </div>
                 </form>
-            </div>
+                </div>
+
+                <div class="col-md-5" style="float:right;">
+                <form method="POST" action="{{ route('exportAnalysisComments') }}">
+                {{ csrf_field() }}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="searchTerm" placeholder="Enter search terms using comma">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Export Query in an Excel</button><br>
+                        </div>
+                    </div>
+                </form>
+                </div>
         </div>
 
-        @if (!empty($searchTerm))
+        <div class="card" style="padding-top:50px;">
+        </div>
+
+
+    @if (!empty($searchTerm))
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%"><input type="checkbox" id="select-all"></th>
+                        <!-- <th width="5%"><input type="checkbox" id="select-all"></th> -->
                         <th width="5%">Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
@@ -47,7 +64,7 @@
 
                     @foreach($analysis as $analyze)
                         <tr>
-                            <td ></td>
+                            <!-- <td ><input type="checkbox" class="row-checkbox" value="{{$analyze->leadId}}"></td> -->
                             <td >{{$analyze->leadId}}</td>
                             <td >{{$analyze->companyName}}</td>
                             <td >{{$analyze->category->categoryName}}</td>
@@ -103,12 +120,12 @@
                 </table>
             </div>
 
-        <input type="checkbox" id="select-all">                
+        <!-- <input type="checkbox" id="select-all">                
         <form id="exportForm" action="{{ route('exportAnalysisComments') }}" method="post">
             {{ csrf_field() }}
             <input type="hidden" name="selectedRows" id="selectedRows">
             <button type="submit" class="btn btn-primary">Export Selected as CSV</button>
-        </form>
+        </form> -->
 
     </div>
     </div>
@@ -438,9 +455,9 @@
 
 
         // Select/Deselect all rows
-        $('#select-all').click(function() {
-            $('table tbody :checkbox').prop('checked', this.checked);
-        });
+        // $('#select-all').click(function() {
+        //     $('table tbody :checkbox').prop('checked', this.checked);
+        // });
 
         // Capture selected row IDs on form submit
         $('#exportForm').submit(function() {

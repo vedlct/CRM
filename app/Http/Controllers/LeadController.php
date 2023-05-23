@@ -2177,22 +2177,60 @@ class LeadController extends Controller
 
     public function exportAnalysisComments(Request $request)
     {
-        $selectedRows = $request->input('selectedRows');
     
-        if (!empty($selectedRows)) {
-            $selectedRowIds = explode(',', $selectedRows);
+        $userType = Session::get('userType');
+        $searchTerm = $request->input('searchTerm');
+        $keywords = [];
+
     
-            // Fetch the selected rows with necessary fields and relationships
-            $analysis = Lead::with('category', 'country', 'user')
-                ->whereIn('leadId', $selectedRowIds)
-                ->get();
+        if (!empty($searchTerm)) {
+            // Split the search term into an array of keywords
+            $keywords = explode(',', $searchTerm);
+            // Trim whitespace from each keyword
+            $keywords = array_map('trim', $keywords);
+            // Remove any empty keywords
+            $keywords = array_filter($keywords);
+        }
     
-            $export = new SelectedAnalysisCommentsExport($analysis);
+        if (empty($keywords)) {
+            // Return the view without executing the search logic
+            return view('report.analysisComments')
+                ->with('searchTerm', $searchTerm);
+        }
+
+            $analysis = Lead::select(
+                'leads.leadId',
+                'leads.companyName',
+                'categories.categoryName as category_name',
+                'leads.website',
+                'leadstatus.statusName as status_name',
+                'countries.countryName as country_name',
+                'users.userId'
+            )
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+            ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+            ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+            ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
+            ->where('leads.statusId', '!=', 6)
+            ->where(function ($query) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
+                }
+            })
+            ->groupBy('leads.leadId')
+            ->orderBy('workprogress.created_at', 'desc')
+            ->get();
+    
+
+            $categories = Category::where('type', 1)->get();
+            $country = Country::get();
+            $status = Leadstatus::get();
+        
+            $export = new SelectedAnalysisCommentsExport($analysis, $categories, $country, $status);
 
             return Excel::download($export, 'selected_analysis_comments.csv');
-        } else {
-            return back()->with('error', 'No rows selected for export.');
-        }
     }
 
 
