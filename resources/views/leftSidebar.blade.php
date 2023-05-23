@@ -38,49 +38,84 @@
                             <a href="{{route('reportGraph')}}"><i class="fa fa-signal"></i> <span class="hide-menu">Graph</span></a>
                         </li> -->
                         <li>
-                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i><span class="hide-menu"> Table</span></a>
+                            <a href="{{route('reportTable')}}"><i class="fa fa-table" aria-hidden="true"></i>
+                            <span class="hide-menu"> Table</span></a>
                         </li>
 
-                        @if($userType == 'MANAGER')
-                            @if(Auth::user()->areaType != "usa" )
+                        @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
+                            <!-- @if(Auth::user()->areaType != "usa" ) -->
                                 <li>
-                                    <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu">Hourly</span></a>
+                                    <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
+                                    <span class="hide-menu">Hourly</span></a>
                                 </li>
-                            @endif
+                            <!-- @endif -->
 
                         @endif
 
                         @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
-                            @if(Auth::user()->areaType != "usa" )
+                            <!-- @if(Auth::user()->areaType != "usa" ) -->
                                 <li>
-                                    <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i><span class="hide-menu"> Country</span></a>
+                                    <a href="{{ route('reportcountryTable') }}"><i class="fa fa-flag" aria-hidden="true"></i>
+                                    <span class="hide-menu"> Country</span></a>
                                 </li>
-                            <li>
-                                <a href="{{route('reportAllActivties')}}"><i class="fa fa-bell" aria-hidden="true"></i><span class="hide-menu"> All Activities</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('allAssignedButNotMyleads')}}"><i class="fa fa-ban" aria-hidden="true"></i><span class="hide-menu"> Not Taken Assigned</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('duplicateLeadList')}}"><i class="fa fa-clone" aria-hidden="true"></i><span class="hide-menu"> Duplicate Leads</span></a>
-                            </li>
-                            @endif
+                            <!-- @endif -->
                         @endif
 
                         @if($userType =='SUPERVISOR')
                             <li>
-                                <a href="{{route('getallConversations')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i><span class="hide-menu"> All Conversations</span></a>
+                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
+                                <span class="hide-menu"> Follow-up</span></a>
                             </li>
                             <li>
-                                <a href="{{route('follow-up.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i><span class="hide-menu"> Follow-up</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i> <span class="hide-menu"> Others</span></a>
+                                <a href="{{route('report.tab')}}"><i class="fa fa-houzz"></i>
+                                <span class="hide-menu"> Others</span></a>
                             </li>
 
                         @endif
                     </ul>
                 </li>
+
+
+
+                @if($userType=='SUPERVISOR')
+
+                <li class="treeview">
+                <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> <span
+                        class="hide-menu">Analysis</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-right pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('analysisComments')}}"><i class="fa fa-circle-o"></i>
+                            <span class="hide-menu"> Analyze Comments</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('reportAllActivties')}}"><i class="fa fa-bell" aria-hidden="true"></i>
+                            <span class="hide-menu"> All Activities</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('allAssignedButNotMyleads')}}"><i class="fa fa-ban" aria-hidden="true"></i>
+                            <span class="hide-menu"> Not Taken Assigned</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('getallConversations')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i>
+                            <span class="hide-menu"> All Conversations</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('duplicateLeadList')}}"><i class="fa fa-clone" aria-hidden="true"></i>
+                            <span class="hide-menu"> Duplicate Leads</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
+                                <span class="hide-menu"> Hourly Activity</span></a>
+                        </li>
+
+                </ul>
+            </li>
+
+                @endif
 
 
                 {{--Start For Global--}}
@@ -309,7 +344,8 @@
 
 
                 @if($userType =='USER' || $userType =='MANAGER')
-                    <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif>
+                    <!-- <li @if(Auth::user()->areaType == "usa" ) style="display: none" @endif> -->
+                    <li>   
                         <a href="{{route('myTeam')}}"><i class="fa fa-users"></i>
                             <span class="hide-menu">My Team</span></a>
                     </li>
@@ -393,29 +429,6 @@
                 @endif
 
 
-
-                    @if($userType=='SUPERVISOR')
-
-                    <li class="treeview">
-                    <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> <span
-                            class="hide-menu">Analysis</span>
-                        <span class="pull-right-container">
-    	    				<i class="fa fa-angle-right pull-right"></i>
-	    				</span>
-                    </a>
-                    <ul class="treeview-menu">
-                            <li>
-                                <a href="{{route('analysisComments')}}"><i class="fa fa-circle-o"></i>
-                                <span class="hide-menu"> Analyze Comments</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
-                                    <span class="hide-menu"> Hourly Activity</span></a>
-                            </li>
-                    </ul>
-                </li>
-
-                    @endif
 
 
                 
