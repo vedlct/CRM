@@ -11,17 +11,12 @@
 |
 */
 
+// GOOGLE SEARCH ENGINE 
+Route::get('/google/search', 'SearchController@searchResults')->name('searchResults');
+
+
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
-
-
-
-Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
-Route::post('/analysisComments', 'LeadController@analysisComments');
-Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
-
-
-Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
 
 
 Route::view('/newinfo', 'layouts.newInfo');
@@ -243,10 +238,16 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+
+//Report Analysis
+Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
+Route::post('/analysisComments', 'LeadController@analysisComments');
+Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
 Route::get('/reportAllActivties','ReportController@reportAllActivties')->name('reportAllActivties');
 Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
+Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
 
 
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');

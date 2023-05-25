@@ -9,7 +9,6 @@
         <h2 class="card-title" align="center"><b>Leads with Keywords in Comments</b></h2>
         <p class="card-subtitle" align="center">On your left search box, you can write keywords (separated by comma) and get the results in a table. <br> On the right search box, you can write the keywords and download the list as an excel file.</p>
 
-
         <div class="card-body" >
             <div class="col-md-5" style="float:left;">
                 <form method="POST" action="{{ route('analysisComments') }}">
@@ -43,6 +42,8 @@
     @if (!empty($searchTerm))
 
             <div class="table-responsive m-t-40">
+                <div>You have searched for: {{$searchTerm}} </div><br><br>
+
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>

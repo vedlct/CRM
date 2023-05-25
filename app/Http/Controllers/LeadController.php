@@ -378,7 +378,7 @@ class LeadController extends Controller
         $l->comments = $r->comment;
         $l->ippStatus = 0;
         //getting Loggedin User id
-        $l->statusId = 1;
+        // $l->statusId = 1;
         $l->minedBy = Auth::user()->id;
         $l->save();
 
@@ -392,8 +392,16 @@ class LeadController extends Controller
             $pChange->possibilityId= $l->possibilityId;
         //}
 
+        //Save an activity
+        $activity=new Activities;
+        $activity->leadId=$l->leadId;
+        $activity->userId=Auth::user()->id;
+        $activity->activity=Auth::user()->userId . ' mined a lead - ' . $l->companyName;
+        $activity->save();               
+
         $l->save();
         $pChange->save();
+
         //for Flash Meassage
         Session::flash('message', 'Lead Added successfully');
         return back();
@@ -2173,6 +2181,8 @@ class LeadController extends Controller
             ->with('searchTerm', $searchTerm);
     }
 
+    
+    
 
 
     public function exportAnalysisComments(Request $request)
@@ -2233,6 +2243,7 @@ class LeadController extends Controller
             return Excel::download($export, 'selected_analysis_comments.csv');
     }
 
+    
 
 
         public function hourlyActivity(Request $request)

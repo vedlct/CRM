@@ -7,6 +7,8 @@
     "require": {
         "php": ">=7.0.0",
         "fideloper/proxy": "~3.3",
+        "google/apiclient": "^2.14",
+        "google/apiclient-services": "^0.301.0",
         "intervention/image": "^2.4",
         "khill/lavacharts": "3.0.*",
         "laravel/framework": "5.5.*",
@@ -54,12 +56,14 @@
         ]
     },
     "config": {
+        
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true,
         "allow-plugins": {
             "kylekatarnls/update-helper": true,
             "symfony/thanks": true
-        }
+        },
+        "process-timeout": 3600
     }
 }
