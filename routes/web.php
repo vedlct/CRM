@@ -11,9 +11,6 @@
 |
 */
 
-// GOOGLE SEARCH ENGINE 
-Route::get('/google/search', 'SearchController@searchResults')->name('searchResults');
-
 
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
@@ -163,6 +160,7 @@ Route::post('lead/comments','LeadController@getComments')->name('getComments');
 Route::post('lead/callReports','LeadController@getCallingReport')->name('getCallingReport');
 Route::post('lead/activities','LeadController@getActivities')->name('getActivities');
 Route::get('lead/ippList', 'LeadController@ippList')->name('ippList');
+Route::post('lead/FollowupsCounter','LeadController@getFollowupsCounter')->name('getFollowupsCounter');
 
 
 //Leave Lead

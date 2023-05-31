@@ -1033,6 +1033,9 @@ class LeadController extends Controller
         return Redirect()->route('home');}
 
     public function getComments(Request $r){
+
+        $dt = Carbon::now();
+
         if($r->ajax()){
             $comments=Workprogress::select(['users.firstName','callingreports.report','comments','workprogress.created_at'])
                 ->where('workprogress.leadId',$r->leadId)
@@ -1046,6 +1049,12 @@ class LeadController extends Controller
                 ->groupBy('workprogress.userId')
                 ->get();
                 
+            $previousFollowups = Followup::select('followup.*', 'users.firstName', 'users.lastName')
+                ->leftjoin ('users', 'followup.userID', 'users.id')
+                ->where('leadId', $r->leadId)
+                ->orderBy ('followUpDate', 'asc')
+                ->get();
+
 
             $text='';
 
@@ -1053,13 +1062,57 @@ class LeadController extends Controller
                 $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
 
+            $followupText='';
+
+            foreach ($previousFollowups as $previousFollowup){
+                $workStatus = ($previousFollowup->workStatus == 1) ? 'Worked' : 'Not Worked';
+
+                    $followupText .= '<li class="list-group-item list-group-item-action">'.$previousFollowup->followUpDate.' <span style="color: blue"> ('.$workStatus.')</span> <div style="color:black;">by '.$previousFollowup->firstName. ' ' .$previousFollowup->lastName.' set at '. $dt->toDateString($previousFollowup->created_at).'</div>'.'</li>';
+            }
 
             return response()->json([
                 'comments' => $text,
-                'counter' => $counter
+                'counter' => $counter,
+                'previousFollowups' => $followupText
             ]);
         }
     }
+
+
+    public function getFollowupsCounter (Request $r){
+
+        // $dt = Carbon::now();
+
+        if($r->ajax()){
+
+            $counter = Workprogress::select('users.userId as userId', DB::raw('count(*) as userCounter'))
+                ->join('users', 'workprogress.userId', 'users.id')
+                ->where('leadId', $r->leadId)
+                ->groupBy('workprogress.userId')
+                ->get();
+                
+            $previousFollowups = Followup::select('followup.*', 'users.firstName', 'users.lastName')
+                ->leftjoin ('users', 'followup.userID', 'users.id')
+                ->where('leadId', $r->leadId)
+                ->orderBy ('followUpDate', 'asc')
+                ->get();
+
+
+            $followupText='';
+
+            foreach ($previousFollowups as $previousFollowup){
+                $workStatus = ($previousFollowup->workStatus == 1) ? 'Worked' : 'Not Worked';
+
+                $followupText .= '<li class="list-group-item list-group-item-action">'.$previousFollowup->followUpDate.' <span style="color: blue"> ('.$workStatus.')</span> <div style="color:black;">by '.$previousFollowup->firstName. ' ' .$previousFollowup->lastName.' set at '. $previousFollowup->created_at.'</div>'.'</li>';
+            }
+
+            return response()->json([
+                'counter' => $counter,
+                'previousFollowups' => $followupText
+            ]);
+        }
+    }
+
 
     public function getActivities(Request $r){
         if($r->ajax()){

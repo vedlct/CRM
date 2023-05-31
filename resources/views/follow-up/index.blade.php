@@ -107,6 +107,11 @@
 
 									  >
 										  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+									  <!-- Trigger the Statistics modal with a button -->
+									  <a href="#stat_modal" data-toggle="modal" class="btn btn-dark btn-sm"
+										 data-lead-id="{{$lead->leadId}}"
+										 data-follow-id="{{$lead->followId}}">
+										  <i class="fa fa-square-o" aria-hidden="true"></i></a>
 
 								  </td>
 							  </tr>
@@ -480,19 +485,33 @@
 									  <textarea class="form-control" rows="3" name="comment" required></textarea>
 								  </div>
 							  </div>
+							  
 							  <div class="col-md-6">
-								  <ul class="list-group" style="margin: 10px; "><br>
-									  <div  style="height: 360px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+								  <ul class="list-group" style="margin: 10px; ">
+								  <h4 class="modal-title" name="modal-title">Previous Comments</h4>
+									  <div  style="height: 500px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
 
 									  </div>
 								  </ul>
-									<ul>
-										<b>Call Statistics per marketer</b>
-										<p>Here you will see who reached out to this company for how many times.</p>
-										<div id="counter"></div>
-									</ul>
 
 							  </div>
+
+							  <!-- <div class="col-md-3">
+								  <ul class="list-group" style="margin: 10px; ">
+										<b>Previous Follow up dates</b>
+										<div style="height: 380px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="previousfollowupdates">
+
+										</div>
+									</ul>
+									<ul class="list-group" style="margin: 20px; ">
+										<b>Call Statistics per marketer</b>
+										<p>Here you will see who reached out to this company for how many times.</p>
+										<div style="height: 100px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="counter">
+
+										</div>
+									</ul>
+
+							  </div> -->
 
 							  <div class="col-md-12"><br>
 								  <button class="btn btn-success">Submit</button>
@@ -507,6 +526,51 @@
 				  </form>
 			  </div>
 		  </div>
+
+
+
+		<!-- Statistics Modal -->
+		  <div class="modal" id="stat_modal" style="">
+			  <div class="modal-dialog" style="max-width: 50%;">
+
+			  <form class="modal-content">			  
+					  <div class="modal-body" style="padding: 20px;">
+						  {{csrf_field()}}
+						  <input type="hidden" name="leadId">
+						  <input type="hidden" name="followId">
+
+						  <div class="row">
+							  <div class="col-md-6">
+								  <ul class="list-group" >
+										<h3>Previous Follow up dates</h3><br>
+										<div style="height: 500px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="previousfollowupdates">
+
+										</div>
+									</ul>
+
+							  </div>
+
+							<div class="col-md-6">
+
+							  	<ul class="list-group" >
+										<h3>Call Statistics per marketer</h3><br>
+										<!-- <p>Here you will see who reached out to this company for how many times.</p> -->
+										<div style="height: 500px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="counter">
+
+										</div>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					  <div class="modal-footer">
+						  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					  </div>
+					</form>
+			  </div>
+		  </div>
+
+
 @endsection
 
 @section('foot-js')
@@ -688,15 +752,21 @@
                     $('#comment').html(data.comments);
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
 
-                    var counterHtml = '';
+                    // var counterHtml = '';
 
-                    // Loop through the counter data
-                    $.each(data.counter, function(index, counter) {
-                        counterHtml += '<div><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</div>';
-                    });
+                    // // Loop through the counter data
+                    // $.each(data.counter, function(index, counter) {
+                    //     counterHtml += '<div><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</div>';
+                    // });
 
-                    // Set the counter HTML to the counter div
-                    $('#counter').html(counterHtml);
+                    // // Set the counter HTML to the counter div
+                    // $('#counter').html(counterHtml);
+
+                    // // Set the Previous Followup  HTML to the previousfollowupdates div
+					// $('#previousfollowupdates').html(data.previousFollowups);
+                    // $("#previousfollowupdates").scrollTop($("#previousfollowupdates")[0].scrollHeight);
+
+
                 }
             });
 
@@ -737,6 +807,37 @@
         });
 
 
+
+        $('#stat_modal').on('show.bs.modal', function(e) {
+
+            //get data-id attribute of the clicked element
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var followup=$(e.relatedTarget).data('follow-id');
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type: 'post',
+                url: '{{ route('getFollowupsCounter') }}',
+                data: {_token: CSRF_TOKEN, 'leadId': leadId},
+                success: function(data) {
+                    // Set the Previous Followup  HTML to the previousfollowupdates div
+					$('#previousfollowupdates').html(data.previousFollowups);
+                    $("#previousfollowupdates").scrollTop($("#previousfollowupdates")[0].scrollHeight);
+
+                    var counterHtml = '';
+
+                    // Loop through the counter data
+					$.each(data.counter, function(index, counter) {
+					counterHtml += '<li style="list-style-type: disc; margin-left: 20px;"><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</li>';
+					});
+
+                    // Set the counter HTML to the counter div
+                    $('#counter').html(counterHtml);
+
+                }
+            });
+        });
 
 
 

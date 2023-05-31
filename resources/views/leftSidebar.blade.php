@@ -111,6 +111,7 @@
                             <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                                 <span class="hide-menu"> Hourly Activity</span></a>
                         </li>
+                        
 
                 </ul>
             </li>

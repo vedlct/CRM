@@ -56,7 +56,7 @@
     <div class="card-body">
         <table class="table">
             <thead>
-                <th>Company</th>
+                <th>Company Name</th>
                 <th>Revnue</th>
                 <th>Action</th>
             </thead>

@@ -35,13 +35,6 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
-
-    'google' => [
-        'search' => [
-            'api_key' => config('cache.google_search_api_key'),
-            'cx' => config('cache.google_search_cx'),
-        ],
-    ],
     
 
 ];

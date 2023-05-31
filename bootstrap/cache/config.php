@@ -38,12 +38,13 @@
       21 => 'Illuminate\\View\\ViewServiceProvider',
       22 => 'Intervention\\Image\\ImageServiceProvider',
       23 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-      24 => 'App\\Providers\\AppServiceProvider',
-      25 => 'App\\Providers\\AuthServiceProvider',
-      26 => 'App\\Providers\\EventServiceProvider',
-      27 => 'App\\Providers\\RouteServiceProvider',
-      28 => 'Yajra\\Datatables\\DatatablesServiceProvider',
-      29 => 'Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider',
+      24 => 'AlesZatloukal\\GoogleSearchApi\\GoogleSearchApiProvider',
+      25 => 'App\\Providers\\AppServiceProvider',
+      26 => 'App\\Providers\\AuthServiceProvider',
+      27 => 'App\\Providers\\EventServiceProvider',
+      28 => 'App\\Providers\\RouteServiceProvider',
+      29 => 'Yajra\\Datatables\\DatatablesServiceProvider',
+      30 => 'Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider',
     ),
     'aliases' => 
     array (
@@ -83,6 +84,7 @@
       'Image' => 'Intervention\\Image\\Facades\\Image',
       'Datatables' => 'Yajra\\Datatables\\Facades\\Datatables',
       'Lava' => 'Khill\\Lavacharts\\Laravel\\LavachartsFacade',
+      'GoogleSearchApi' => 'AlesZatloukal\\GoogleSearchApi\\Facades\\GoogleSearchApi',
     ),
   ),
   'auth' => 
@@ -551,6 +553,14 @@
       'model' => 'App\\User',
       'key' => NULL,
       'secret' => NULL,
+    ),
+    'google' => 
+    array (
+      'search' => 
+      array (
+        'api_key' => NULL,
+        'cx' => NULL,
+      ),
     ),
   ),
   'session' => 

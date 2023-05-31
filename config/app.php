@@ -233,7 +233,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
-
+        
     ],
 
 ];
