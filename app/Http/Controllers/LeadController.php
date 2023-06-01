@@ -27,6 +27,7 @@ use App\Followup;
 use App\Leadstatus;
 use DataTables;
 
+use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
 
@@ -2037,25 +2038,16 @@ class LeadController extends Controller
         }
 
 
-        public function allAssignedButNotMyleads(){
-            // $date = Carbon::now();
+//ANALYSIS PART
 
+
+        public function allAssignedButNotMyleads(){
+
+            // Retrieve user type from the session
             $User_Type=Session::get('userType');
             if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-                
 
-            // $leads=Lead::select('leads.*', 'leadassigneds.*','users.firstName')
-            //     ->leftJoin('leadassigneds','leads.leadId','leadassigneds.leadId')
-            //     ->leftJoin('users','leadassigneds.assignTo','users.id')
-            //     ->where('leads.contactedUserId', NULL)
-            //     ->where('leads.leadAssignStatus', 1)
-            //     ->where('leadassigneds.workStatus', 0)
-            //     ->where('leadassigneds.leaveDate', NULL)               
-            //     ->groupBy('leadassigneds.leadId')
-            //     ->orderBy('leadassigneds.created_at','desc')
-            //     // ->latest('leadassigneds.created_at')
-            //     ->get();
-                
+           // Retrieve assigned leads with associated data 
             $leads = Lead::select('leads.*', 'leadassigneds.*', 'users.firstName', 'users.lastName')
             ->leftJoin('leadassigneds', function ($join) {
                 $join->on('leads.leadId', '=', 'leadassigneds.leadId')
@@ -2076,8 +2068,7 @@ class LeadController extends Controller
 
             }
 
-
-            // $latestLead=Workprogress::select('created_at')->latest()->first();
+            // Retrieve additional data
             $possibilities = Possibility::get();
             $probabilities = Probability::get();
             $callReports = Callingreport::get();
@@ -2085,7 +2076,8 @@ class LeadController extends Controller
             $country=Country::get();
             $status=Leadstatus::get();
             
-
+    
+            // Return the view with the retrieved data
             return view('report.assignedButNotTaken')
             ->with('leads', $leads)
             ->with('callReports', $callReports)
@@ -2171,68 +2163,68 @@ class LeadController extends Controller
         }
 
 
-    //ANALYZING COMMENTS TO GET SPECIFIC LEADS 
+        //ANALYZING COMMENTS TO GET SPECIFIC LEADS 
 
-    public function analysisComments(Request $request)
-    {
-        
-        
-        $userType = Session::get('userType');
-        $searchTerm = $request->input('searchTerm');
-        $keywords = [];
+        public function analysisComments(Request $request)
+        {
+            
+            
+            $userType = Session::get('userType');
+            $searchTerm = $request->input('searchTerm');
+            $keywords = [];
 
-    
-        if (!empty($searchTerm)) {
-            // Split the search term into an array of keywords
-            $keywords = explode(',', $searchTerm);
-            // Trim whitespace from each keyword
-            $keywords = array_map('trim', $keywords);
-            // Remove any empty keywords
-            $keywords = array_filter($keywords);
-        }
-    
-        if (empty($keywords)) {
-            // Return the view without executing the search logic
+        
+            if (!empty($searchTerm)) {
+                // Split the search term into an array of keywords
+                $keywords = explode(',', $searchTerm);
+                // Trim whitespace from each keyword
+                $keywords = array_map('trim', $keywords);
+                // Remove any empty keywords
+                $keywords = array_filter($keywords);
+            }
+        
+            if (empty($keywords)) {
+                // Return the view without executing the search logic
+                return view('report.analysisComments')
+                    ->with('searchTerm', $searchTerm);
+            }
+            
+            if ($userType == 'SUPERVISOR') {
+            
+                $analysis = Lead::select('leads.*', 'users.userId')
+                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                    ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                    ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
+                    ->where('leads.statusId', '!=', 6)
+                    ->where(function ($query) use ($keywords) {
+                        foreach ($keywords as $keyword) {
+                            $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
+                        }
+                    })
+                    ->groupBy('leads.leadId')
+                    ->orderBy('workprogress.created_at', 'desc')
+                    ->get();
+            } else {
+                $analysis = [];
+            }
+        
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories = Category::where('type', 1)->get();
+            $country = Country::get();
+            $status = Leadstatus::get();
+        
             return view('report.analysisComments')
+                ->with('analysis', $analysis)
+                ->with('callReports', $callReports)
+                ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
+                ->with('categories', $categories)
+                ->with('status', $status)
+                ->with('country', $country)
                 ->with('searchTerm', $searchTerm);
         }
-        
-        if ($userType == 'SUPERVISOR') {
-           
-            $analysis = Lead::select('leads.*', 'users.userId')
-                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
-                ->where('leads.statusId', '!=', 6)
-                ->where(function ($query) use ($keywords) {
-                    foreach ($keywords as $keyword) {
-                        $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
-                    }
-                })
-                ->groupBy('leads.leadId')
-                ->orderBy('workprogress.created_at', 'desc')
-                ->get();
-        } else {
-            $analysis = [];
-        }
-    
-        $possibilities = Possibility::get();
-        $probabilities = Probability::get();
-        $callReports = Callingreport::get();
-        $categories = Category::where('type', 1)->get();
-        $country = Country::get();
-        $status = Leadstatus::get();
-    
-        return view('report.analysisComments')
-            ->with('analysis', $analysis)
-            ->with('callReports', $callReports)
-            ->with('possibilities', $possibilities)
-            ->with('probabilities', $probabilities)
-            ->with('categories', $categories)
-            ->with('status', $status)
-            ->with('country', $country)
-            ->with('searchTerm', $searchTerm);
-    }
 
     
     
@@ -2320,8 +2312,12 @@ class LeadController extends Controller
         }
 
 
+
         public function frequentlyFilteredLeads()
         {
+
+            $User_Type = Session::get('userType');
+            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
 
             $recentLeads = Lead::select('leads.*','activities.created_at AS activities_created_at', 'leadstatus.statusName', 'users.userId')
                     ->whereBetween(DB::raw('date(leads.created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
@@ -2347,26 +2343,143 @@ class LeadController extends Controller
                     return $lead;
                    });
 
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $callReports = Callingreport::get();
-            $categories = Category::where('type', 1)->get();
-            $country = Country::get();              
-            $status = Leadstatus::get();
-            $users = User::get();
+                $possibilities = Possibility::get();
+                $probabilities = Probability::get();
+                $callReports = Callingreport::get();
+                $categories = Category::where('type', 1)->get();
+                $country = Country::get();              
+                $status = Leadstatus::get();
+                $users = User::get();
 
-            return view('report.frequentlyFiltered', compact('recentLeads'))
-            ->with('callReports', $callReports)
-            ->with('possibilities', $possibilities)
-            ->with('probabilities', $probabilities)
-            ->with('categories', $categories)
-            ->with('status', $status)
-            ->with('country', $country)
-            ->with('users', $users);
-    
+                return view('report.frequentlyFiltered', compact('recentLeads'))
+                ->with('callReports', $callReports)
+                ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
+                ->with('categories', $categories)
+                ->with('status', $status)
+                ->with('country', $country)
+                ->with('users', $users);
+            }
 
         }
 
+
+        public function reportAllActivties(Request $r)
+        {
+            $User_Type = Session::get('userType');
+            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+                
+                $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
+                        ->join('users', 'activities.userId','users.id')
+                        ->join('leads', 'activities.leadId', 'leads.leadId')
+                        ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
+                        // ->where('users.active', 1)
+                        // ->orderBy('activityId', 'desc')
+                        ->latest()->paginate(50);   
+                        // ->get();
+    
+                 return view('report.activities', compact('activities'));
         
+            }
+    
+        }        
+
+    //     public function googleSearch(Request $request)
+    //     {
+    //         $userType = Session::get('userType');
+    //         $searchTerm = $request->input('searchTerm');
+    //         $results = [];
+    //         $availability = 'No';
+
+        
+    //         if (empty($searchTerm)) {
+    //             // Return the view without executing the search logic
+    //             return view('report.googleSearch')
+    //                 ->with('searchTerm', $searchTerm);
+    //         }
+        
+    //         if ($userType == 'SUPERVISOR') {
+
+    //             $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize
+
+    //             $fulltext->setEngineId('e30079461856a46ef'); // sets the engine ID
+    //             $fulltext->setApiKey('AIzaSyBy_QGe70slSksZVphLHCcTDPY6bSI3J_A'); // sets the API key
+                
+    //             $results = $fulltext->getResults($searchTerm); // get results for the query
+        
+    //         // Extract the domain from each search result URL
+    //         foreach ($results as $result) {
+    //             $result->domain = $this->getDomainFromURL($result->link);
+
+    //         // Check if the domain is present in the leads table
+    //         $lead = Lead::where('website', 'LIKE', '%' . $result->domain . '%')->first();
+    //         $availability = $lead ? 'Yes' : 'No';
+
+    //         }
+    //     }
+
+    //         return view('report.googleSearch')
+    //             ->with('results', $results)
+    //             ->with('searchTerm', $searchTerm)
+    //             ->with('availability', $availability);
+    //     }
+        
+    //    private function getDomainFromURL($url)
+    //    {
+    //        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
+    //        return $matches[1] ?? null;
+    //    }
+
+
+    public function googleSearch(Request $request)
+    {
+        $searchTerm = $request->input('searchTerm');
+        $results = [];
+    
+        // Store the engine key and API key in the session
+        $engineKey = $request->input('engineKey');
+        $apiKey = $request->input('apiKey');
+        Session::put('engineKey', $engineKey);
+        Session::put('apiKey', $apiKey);
+
+
+        if (empty($searchTerm)) {
+            // Return the view without executing the search logic
+            return view('report.googleSearch')->with('searchTerm', $searchTerm);
+        }
+    
+  
+            $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
+            $fulltext->setEngineId($engineKey); // gets the engine ID
+            $fulltext->setApiKey($apiKey); // gets the API key
+            $results = $fulltext->getResults($searchTerm); // get results for the query
+    
+            // Extract the domain from each search result URL
+            foreach ($results as $result) {
+                $result->domain = $this->getDomainFromURL($result->link);
+                $result->availability = $this->checkLeadAvailability($result->domain);
+            }
+        
+    
+        return view('report.googleSearch')
+            ->with('results', $results)
+            ->with('searchTerm', $searchTerm);
+    }
+    
+    private function getDomainFromURL($url)
+    {
+        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
+        return $matches[1] ?? null;
+    }
+    
+    private function checkLeadAvailability($domain)
+    {
+        $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
+        return $lead ? 'Yes' : 'No';
+    }
+    
+
+
+
 }
 

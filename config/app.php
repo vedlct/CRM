@@ -166,7 +166,6 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 		Maatwebsite\Excel\ExcelServiceProvider::class,
 
-
         /*
          * Package Service Providers...
          */
@@ -181,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngineProvider::class,
 
     ],
 
@@ -233,6 +233,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
+        'GoogleCseSearch' => JanDrda\LaravelGoogleCustomSearchEngine\Facades\LaravelGoogleCustomSearchEngineProvider::class,
         
     ],
 

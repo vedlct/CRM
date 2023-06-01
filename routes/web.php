@@ -241,12 +241,14 @@ Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('r
 Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'LeadController@analysisComments');
 Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
-Route::get('/reportAllActivties','ReportController@reportAllActivties')->name('reportAllActivties');
+Route::get('/reportAllActivties','LeadController@reportAllActivties')->name('reportAllActivties');
 Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
+Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
+Route::post('/googleSearch', 'LeadController@googleSearch');
 
 
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');

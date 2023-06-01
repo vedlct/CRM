@@ -1746,25 +1746,7 @@ class ReportController extends Controller
         }
     }
 
-    public function reportAllActivties(Request $r)
-    {
-        $User_Type = Session::get('userType');
-        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
-            
-            $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
-                    ->join('users', 'activities.userId','users.id')
-                    ->join('leads', 'activities.leadId', 'leads.leadId')
-                    ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
-                    // ->where('users.active', 1)
-                    // ->orderBy('activityId', 'desc')
-                    ->latest()->paginate(50);   
-                    // ->get();
 
-        return view('report.activities')
-            ->with('activities', $activities); 
-        }
-
-    }
 
 
     // public function reportIndividualLeadCount(request $r){
