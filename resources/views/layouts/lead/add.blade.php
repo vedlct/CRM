@@ -222,7 +222,7 @@
                         <div class="form-group col-md-4" style="">
                             <label ><b>Category:</b></label>
                             <select class="form-control" id="" name="category" >
-                                @foreach($categories as $cat2)
+                                @foreach($categories->sortBy('categoryName') as $cat2)
                                     <option value="{{$cat2->categoryId}}">{{$cat2->categoryName}}</option>
 
                                 @endforeach
@@ -625,7 +625,7 @@
                                 <label><b>Category:</b></label>
                                 <select class="form-control"  name="category" id="category">
                                     <option value="">Please Select</option>
-                                    @foreach($categories as $category)
+                                    @foreach($categories->sortBy('categoryName') as $category)
                                         <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
                                     @endforeach
                                 </select>

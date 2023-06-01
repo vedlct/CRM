@@ -2320,7 +2320,53 @@ class LeadController extends Controller
         }
 
 
+        public function frequentlyFilteredLeads()
+        {
+
+            $recentLeads = Lead::select('leads.*','activities.created_at AS activities_created_at', 'leadstatus.statusName', 'users.userId')
+                    ->whereBetween(DB::raw('date(leads.created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
+                    ->where('leads.contactedUserId', NULL)
+                    ->join('activities', 'leads.leadId','activities.leadId')
+                    ->where(function ($query) {
+                        $query->where('activities.activity', 'like', '%Filtered%')
+                            ->orWhere('activities.activity', 'like', '%Rejected%')
+                            ->orWhere('activities.activity', 'like', '%Bad%')
+                            ->orWhere('activities.activity', 'like', '%Duplicate%');
+                    })
+                    ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                    ->join('users','leads.minedBy','users.id')
+                    ->orderBy('leads.created_at', 'desc')
+                    ->groupBy('activities.leadId')
+                    ->get();
 
 
+            $recentLeads = $recentLeads->map(function ($lead) {
+                    $activitiesCreatedAt = Carbon::parse($lead->activities_created_at);
+                    $leadCreatedAt = Carbon::parse($lead->created_at);
+                    $lead->differences = $activitiesCreatedAt->diff($leadCreatedAt)->format('%d days, %h hours');
+                    return $lead;
+                   });
+
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $callReports = Callingreport::get();
+            $categories = Category::where('type', 1)->get();
+            $country = Country::get();              
+            $status = Leadstatus::get();
+            $users = User::get();
+
+            return view('report.frequentlyFiltered', compact('recentLeads'))
+            ->with('callReports', $callReports)
+            ->with('possibilities', $possibilities)
+            ->with('probabilities', $probabilities)
+            ->with('categories', $categories)
+            ->with('status', $status)
+            ->with('country', $country)
+            ->with('users', $users);
+    
+
+        }
+
+        
 }
 

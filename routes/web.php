@@ -246,6 +246,7 @@ Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('dupli
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
+Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
 
 
 // Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');

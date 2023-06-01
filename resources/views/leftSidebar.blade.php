@@ -108,6 +108,10 @@
                             <span class="hide-menu"> Duplicate Leads</span></a>
                         </li>
                         <li>
+                            <a href="{{route('frequentlyFilteredLeads')}}"><i class="fa fa-times" aria-hidden="true"></i>
+                                <span class="hide-menu"> Frequently Filtered</span></a>
+                        </li>
+                        <li>
                             <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                                 <span class="hide-menu"> Hourly Activity</span></a>
                         </li>
