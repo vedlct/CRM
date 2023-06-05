@@ -42,6 +42,12 @@
                             <span class="hide-menu"> Table</span></a>
                         </li>
 
+                        <li>
+                            <a href="{{route('myActivity')}}"><i class="fa fa-bell" aria-hidden="true"></i>
+                            <span class="hide-menu"> My Activity</span></a>
+                        </li>
+
+
                         @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
                             <!-- @if(Auth::user()->areaType != "usa" ) -->
                                 <li>
@@ -111,11 +117,6 @@
                             <a href="{{route('frequentlyFilteredLeads')}}"><i class="fa fa-times" aria-hidden="true"></i>
                                 <span class="hide-menu"> Frequently Filtered</span></a>
                         </li>
-                        <li>
-                            <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
-                                <span class="hide-menu"> Hourly Activity</span></a>
-                        </li>
-                        
 
                 </ul>
             </li>

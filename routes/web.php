@@ -237,6 +237,8 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
+Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
+
 
 //Report Analysis
 Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
@@ -246,7 +248,6 @@ Route::get('/reportAllActivties','LeadController@reportAllActivties')->name('rep
 Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
-Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActivity');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
 Route::post('/googleSearch', 'LeadController@googleSearch');

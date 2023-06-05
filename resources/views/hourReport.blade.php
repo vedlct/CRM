@@ -27,11 +27,25 @@
                             <td>
                                 {{ $user->userId }}
                             </td>
+
                             <td>
+                                @foreach($work->where('userid', $user->id) as $s)
+                                    @if(in_array($s->createtime, $highlightedTimes))
+                                        <strong style="color: blue">{{ $s->createtime }}</strong>
+                                    @elseif(in_array($s->createtime, $highlightedTimesMax))
+                                        <strong style="color: red">{{ $s->createtime }}</strong>
+                                    @else
+                                        {{ $s->createtime }}
+                                    @endif
+                                    ||
+                                @endforeach
+                            </td>
+
+                            <!-- <td>
                                 @foreach($work->where('userid', $user->id) as $s)
                                     {{ $s->createtime." || "  }}
                                 @endforeach
-                            </td>
+                            </td> -->
                         </tr>
                     @endforeach
 

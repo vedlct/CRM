@@ -2053,6 +2053,49 @@ class LeadController extends Controller
         }
 
 
+        // public function myActivity (Request $r)
+        // {
+        //     $User_Type = Session::get('userType');
+        //     if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'USER') {
+                
+        //         $myActivity=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
+        //                 ->join('users', 'activities.userId','users.id')
+        //                 ->join('leads', 'activities.leadId', 'leads.leadId')
+        //                 ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
+        //                 ->where('activities.userId', Auth::user()->id )
+        //                 // ->where('users.active', 1)
+        //                 ->orderBy('activities.created_at', 'desc')
+        //                 ->paginate(50);  
+        //                 // ->get();
+    
+        //          return view('report.myActivity', compact('myActivity'));
+        
+        //     }
+    
+        // }        
+
+
+        public function myActivity(Request $r)
+        {
+            $User_Type = Session::get('userType');
+            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'USER') {
+                
+                $myActivity = Activities::select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity', 'activities.created_at')
+                    ->join('users', 'activities.userId', 'users.id')
+                    ->join('leads', 'activities.leadId', 'leads.leadId')
+                    ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                    ->where('activities.userId', Auth::user()->id)
+                    ->orderBy('activities.activityId', 'desc')
+                    ->paginate(200);
+                
+                return view('report.myActivity', compact('myActivity'));
+            }
+        }
+        
+
+
+
+
 //ANALYSIS PART
 
 
@@ -2306,28 +2349,6 @@ class LeadController extends Controller
     
 
 
-        public function hourlyActivity(Request $request)
-        {
-            $user = $request->input('user');
-            $datetime = $request->input('datetime');
-        
-            $startDateTime = \Carbon\Carbon::parse($datetime)->startOfHour();
-            $endDateTime = \Carbon\Carbon::parse($datetime)->endOfHour();
-        
-            $hourlyActivities = Activities::select('activities.*', 'workprogress.comments')
-                ->join('workprogress', 'activities.userId', '=', 'workprogress.userId')
-                ->where('activities.userId', $user)
-                ->whereBetween('activities.created_at', [$startDateTime, $endDateTime])
-                ->orderBy('activities.created_at')
-                ->get();
-        
-            $users = User::where('active', 1)->get();
-        
-            return view('report.hourlyActivity', compact('users', 'hourlyActivities'));
-        }
-
-
-
         public function frequentlyFilteredLeads()
         {
 
@@ -2382,7 +2403,7 @@ class LeadController extends Controller
         public function reportAllActivties(Request $r)
         {
             $User_Type = Session::get('userType');
-            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'USER') {
                 
                 $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
                         ->join('users', 'activities.userId','users.id')
@@ -2390,8 +2411,9 @@ class LeadController extends Controller
                         ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
                         // ->where('users.active', 1)
                         // ->orderBy('activityId', 'desc')
-                        ->latest()->paginate(50);   
-                        // ->get();
+                        ->orderBy('activities.activityId', 'desc')
+                        // ->latest()->paginate(50);                        
+                        ->get();
     
                  return view('report.activities', compact('activities'));
         
