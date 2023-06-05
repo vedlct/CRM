@@ -12,6 +12,7 @@
 */
 
 
+
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
@@ -249,9 +250,8 @@ Route::get('/hourlyActivity', 'LeadController@hourlyActivity')->name('hourlyActi
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
 Route::post('/googleSearch', 'LeadController@googleSearch');
-
-
-// Route::get('/reportTableForOwnledLeads','ReportController@reportTableForOwnledLeads')->name('reportTableForOwnledLeads');
+Route::get('/crawl', 'LeadController@crawlWebsites')->name('crawlWebsites');
+Route::post('/crawl', 'LeadController@crawlWebsites')->name('crawlWebsites');
 
 
 

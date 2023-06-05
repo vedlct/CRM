@@ -112,10 +112,6 @@
                                 <span class="hide-menu"> Frequently Filtered</span></a>
                         </li>
                         <li>
-                            <a href="{{route('googleSearch')}}"><i class="fa fa-search" aria-hidden="true"></i>
-                                <span class="hide-menu"> Google Search</span></a>
-                        </li>
-                        <li>
                             <a href="{{route('hourlyActivity')}}"><i class="fa fa-calendar-o" aria-hidden="true"></i>
                                 <span class="hide-menu"> Hourly Activity</span></a>
                         </li>
@@ -188,6 +184,17 @@
                         </li>
 
                         @endif
+
+                        <li>
+                            <a href="{{route('googleSearch')}}"><i class="fa fa-search" aria-hidden="true"></i>
+                                <span class="hide-menu"> Google Search</span></a>
+                        </li>
+                        <li>
+                            <a href="{{route('crawlWebsites')}}"><i class="fa fa-search" aria-hidden="true"></i>
+                                <span class="hide-menu"> Crawl Website</span></a>
+                        </li>
+
+
                     </ul>
                 </li>
 

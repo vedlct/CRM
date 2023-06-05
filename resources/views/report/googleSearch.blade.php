@@ -27,18 +27,6 @@
             </div>
         </form>
 
-        <!-- <div class="col-md-5" style="float:left;">
-                <form method="GET" action="{{ route('googleSearch') }}">
-                {{ csrf_field() }}
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="searchTerm" placeholder="Search on Google">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit">Search on Google</button><br>
-                        </div>
-                    </div>
-                </form>
-                </div> -->
-
         </div>
 
         <div class="card" style="padding-top:50px;">
@@ -57,6 +45,8 @@
                             <th>Domain</th>
                             <th>Description</th>
                             <th>Availability</th>
+                            <!-- <th>Action</th> -->
+
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +63,13 @@
                                         <p>MINE ME</p>
                                     @endif
                                 </td>
+                                <!-- <td>
+                                        <button class="btn btn-success btn-sm add-night-shift-btn" data-title="{{ $result->title }}" data-url="{{ $result->link }}">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                </td> -->
+
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -81,6 +78,8 @@
         @else
             <p>No results found.</p>
         @endif
+
+
 
 
 @endsection
@@ -106,6 +105,24 @@
             });
 
         });
+
+
+
+        //  // Get all the "Add Night Shift" buttons
+        //  const addNightShiftBtns = document.querySelectorAll('.add-night-shift-btn');
+
+        // // Add click event listeners to each button
+        // addNightShiftBtns.forEach(btn => {
+        //     btn.addEventListener('click', () => {
+        //     // Get the title and URL data attributes from the button
+        //     const title = btn.getAttribute('data-title');
+        //     const url = btn.getAttribute('data-url');
+        //     // Redirect to the addNightShift page with the title and URL as query parameters
+        //     window.location.href = "{{ route('addNightShift') }}?title=" + encodeURIComponent(title) + "&url=" + encodeURIComponent(url);
+        // });
+        // });
+
+
 
     </script>
 

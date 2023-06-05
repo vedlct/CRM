@@ -32,6 +32,21 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
 
 
+use Goutte\Client;
+use GuzzleHttp\Psr7\Uri;
+use GuzzleHttp\Psr7\UriResolver;
+use Psr\Http\Message\UriInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\BrowserKit\Client as BrowserKitClient;
+use Symfony\Component\DomCrawler\Crawler;
+
+use Intervention\Image\Facades\Image;
+
+
+
+
+
+
 class LeadController extends Controller
 {
 
@@ -2351,7 +2366,7 @@ class LeadController extends Controller
                 $status = Leadstatus::get();
                 $users = User::get();
 
-                return view('report.frequentlyFiltered', compact('recentLeads'))
+            return view('report.frequentlyFiltered', compact('recentLeads'))
                 ->with('callReports', $callReports)
                 ->with('possibilities', $possibilities)
                 ->with('probabilities', $probabilities)
@@ -2383,52 +2398,6 @@ class LeadController extends Controller
             }
     
         }        
-
-    //     public function googleSearch(Request $request)
-    //     {
-    //         $userType = Session::get('userType');
-    //         $searchTerm = $request->input('searchTerm');
-    //         $results = [];
-    //         $availability = 'No';
-
-        
-    //         if (empty($searchTerm)) {
-    //             // Return the view without executing the search logic
-    //             return view('report.googleSearch')
-    //                 ->with('searchTerm', $searchTerm);
-    //         }
-        
-    //         if ($userType == 'SUPERVISOR') {
-
-    //             $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize
-
-    //             $fulltext->setEngineId('e30079461856a46ef'); // sets the engine ID
-    //             $fulltext->setApiKey('AIzaSyBy_QGe70slSksZVphLHCcTDPY6bSI3J_A'); // sets the API key
-                
-    //             $results = $fulltext->getResults($searchTerm); // get results for the query
-        
-    //         // Extract the domain from each search result URL
-    //         foreach ($results as $result) {
-    //             $result->domain = $this->getDomainFromURL($result->link);
-
-    //         // Check if the domain is present in the leads table
-    //         $lead = Lead::where('website', 'LIKE', '%' . $result->domain . '%')->first();
-    //         $availability = $lead ? 'Yes' : 'No';
-
-    //         }
-    //     }
-
-    //         return view('report.googleSearch')
-    //             ->with('results', $results)
-    //             ->with('searchTerm', $searchTerm)
-    //             ->with('availability', $availability);
-    //     }
-        
-    //    private function getDomainFromURL($url)
-    //    {
-    //        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
-    //        return $matches[1] ?? null;
-    //    }
 
 
     public function googleSearch(Request $request)
@@ -2465,20 +2434,85 @@ class LeadController extends Controller
             ->with('results', $results)
             ->with('searchTerm', $searchTerm);
     }
-    
-    private function getDomainFromURL($url)
-    {
-        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
-        return $matches[1] ?? null;
-    }
-    
-    private function checkLeadAvailability($domain)
-    {
-        $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
-        return $lead ? 'Yes' : 'No';
-    }
+
+  
+            private function getDomainFromURL($url)
+            {
+                preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
+                return $matches[1] ?? null;
+            }
+            
+            private function checkLeadAvailability($domain)
+            {
+                $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
+                return $lead ? 'Yes' : 'No';
+            }
     
 
+
+
+
+    public function crawlWebsites(Request $request)
+    {
+        $website = $request->input('website');
+        $imageSize = $request->input('imageSize');
+        $submitted = !empty($website);
+        $imageData = [];
+    
+        if ($submitted) {
+            try {
+                $client = new Client();
+                $crawler = $client->request('GET', $website);
+                $imageData = $this->getImagesData($crawler, $imageSize);
+            } catch (\Exception $e) {
+                // Log or display the error message
+                $errorMessage = $e->getMessage();
+                error_log($errorMessage);
+                $imageData = [['error' => 'An error occurred while crawling the website. Error: ' . $errorMessage]];
+            }
+        }
+    
+        return view('report.crawlWebsites', compact('submitted', 'imageData', 'website'));
+    }
+    
+            private function getImagesData($crawler, $threshold)
+            {
+                $imageData = [];
+            
+                $crawler->filter('img')->each(function ($node) use (&$imageData, $threshold) {
+                    $imageSrc = $node->attr('src');
+            
+                    try {
+                        $imageSize = getimagesize($imageSrc);
+            
+                        if ($imageSize && isset($imageSize[0]) && $imageSize[0] > $threshold) {
+                            $imageUrl = $imageSrc;
+                            $imageThumbnail = $this->generateThumbnail($imageSrc, 60, 60);
+                            $imageData[] = [
+                                'url' => $imageUrl,
+                                'thumbnail' => $imageThumbnail,
+                                'size' => $imageSize[0],
+                            ];
+                        }
+                    } catch (\Exception $e) {
+                        // Log or display the error message
+                        $errorMessage = $e->getMessage();
+                        error_log($errorMessage);
+                    }
+                });
+            
+                return $imageData;
+            }
+            
+            private function generateThumbnail($imageUrl, $width, $height)
+            {
+                $thumbnail = Image::make($imageUrl)->fit($width, $height)->encode('data-url');
+                $thumbnailTag = '<img src="' . $thumbnail . '" alt="Thumbnail" width="' . $width . '" height="' . $height . '">';
+            
+                return $thumbnailTag;
+            }
+
+    
 
 
 }

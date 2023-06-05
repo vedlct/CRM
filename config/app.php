@@ -181,6 +181,8 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngineProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
 
     ],
 
@@ -234,7 +236,8 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'GoogleCseSearch' => JanDrda\LaravelGoogleCustomSearchEngine\Facades\LaravelGoogleCustomSearchEngineProvider::class,
-        
+        'Image' => Intervention\Image\Facades\Image::class,
+
     ],
 
 ];
