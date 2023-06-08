@@ -373,10 +373,15 @@
                                     <label class=""><b>Time: </b> </label>
                                     <input class="form-control" name="time" placeholder="pick Time">
                                 </div>
-                                <div class="col-md-12" style="text-align: center; font-weight: bold;">
+                                <!-- <div class="col-md-12" style="text-align: center; font-weight: bold;">
                                     <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>
                                     <span id="total" style="color: #00aa88; display: none"></span>
-                                </div>
+                                </div> -->
+                                <div class="col-md-12" style="text-align: center; font-weight: bold;">
+                                    <span id="exceed" style="color:indigo;display: none"><i></i></span>
+                                    <span id="total" style="color: #00aa88; display: none"></span>
+                                    <span id="enoughfortoday" style="color:red;display: none"><i></i></span>
+ 							    </div>
                             </div>
 
 
@@ -622,13 +627,15 @@
                     console.log(data);
 //                    $('#follow-show').val(data.followUpDate);
                     if(data !=''){
-                        $('#follow-show').html('Follow-up Set  '+data.followUpDate);}
+                        $('#follow-show').html('Current follow-up on  '+data.followUpDate);}
 
                 }
             });
 
 
         });
+
+        
         //seted followup date
 
 
@@ -658,29 +665,62 @@
         });
 */
 
-        $('.changedate').on('change',function(){
-            var currentdate = $('.changedate').val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                type:'post',
-                url:'{{route('followupCheck')}}',
-                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
-                success : function(data)
-                {
-                    if(data >= 10)
-                    {
-                        document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
-                        document.getElementById('exceed').style.display="inline";
-                    }
-                    else
-                    {
-                        document.getElementById('exceed').style.display="none";
-                        document.getElementById('total').style.display="inline";
-                        document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
-                    }
-                }
-            });
-        });
+        // $('.changedate').on('change',function(){
+        //     var currentdate = $('.changedate').val();
+        //     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        //     $.ajax({
+        //         type:'post',
+        //         url:'{{route('followupCheck')}}',
+        //         data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+        //         success : function(data)
+        //         {
+        //             if(data >= 10)
+        //             {
+        //                 document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
+        //                 document.getElementById('exceed').style.display="inline";
+        //             }
+        //             else
+        //             {
+        //                 document.getElementById('exceed').style.display="none";
+        //                 document.getElementById('total').style.display="inline";
+        //                 document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
+        //             }
+        //         }
+        //     });
+        // });
+
+
+        $('.changedate').on('change', function() {
+				var currentdate = $('.changedate').val();
+				var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+				
+				$.ajax({
+					type: 'post',
+					url: '{{route('followupCheck')}}',
+					data: {
+						_token: CSRF_TOKEN,
+						'currentdate': currentdate
+					},
+					success: function(data) {
+						if (data >= 15) {
+							$('#exceed').hide();
+							$('#total').hide();
+							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
+							$('.changedate').datepicker('setDate', null); // Clear the selected date
+						} else if (data >= 10 && data < 15) {
+							$('#total').hide();
+							$('#enoughfortoday').hide();
+							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();
+						} else {
+							$('#enoughfortoday').hide();
+							$('#exceed').hide();
+							$('#total').text('On this date you have ' + data + ' followups').show();
+						}
+					}
+				});
+			});
+
+
 
         $(function() {
             var table=$('#myTable').DataTable({

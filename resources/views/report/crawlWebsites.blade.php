@@ -5,21 +5,22 @@
 
     <div class="card" style="padding:30px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Scrap A Website</b></h2>
-        <p class="card-subtitle" align="center">Scrap a site to get information </p>
+        <h2 class="card-title" align="center"><b>Crawl A Website</b></h2>
+        <p class="card-subtitle" align="center">Crawl a site to get information </p>
 
         <div class="card-body" >
 
         <form method="POST" action="{{ route('crawlWebsites') }}">
             {{ csrf_field() }}
-            <div class="col-md-3" style="float:left;">
-                <input type="text" class="form-control" name="imageSize" placeholder="Image Size in KB">
-            </div>
-            <div class="col-md-6" style="float:right;">
-                <input type="text" class="form-control" name="website" placeholder="Full Website Link" style="width:70%; float:left;">
+            <div class="col-md-8" style="float:left;">
+                <textarea class="form-control" name="websites" placeholder="Enter multiple URLs, one URL per line" style="width:80%; float:left;"></textarea>
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit" style="float:right;">Search on Google</button>
+                    <button class="btn btn-primary" type="submit" style="float:right;">Crawl URLs</button>
                 </div>
+            </div>
+            <div class="col-md-2" style="float:right;">
+                <label>Image Size (KB): </label>
+                <input type="text" class="form-control" name="imageSize" value="100" disabled>
             </div>
         </form>
 
@@ -30,20 +31,26 @@
 
 
         @if (!empty($submitted))
-        <div class="table-responsive m-t-40">
-                <div>You have searched for: {{ $website}}</div><br><br>
+            <div class="table-responsive m-t-40">
+                <div>You have searched for:</div>
+                <ul>
+                    @foreach($websitesArray as $website)
+                        <li>{{ $website }}</li>
+                    @endforeach
+                </ul>
+                <br>
 
                 <table id="imageTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                        <th>Image URL</th>
-                        <th>Thumbnail</th>
-                        <!-- <th>Image Size (KB)</th> -->
+                            <th>Image URL</th>
+                            <th>Thumbnail</th>
                         </tr>
                     </thead>
                 </table>
             </div>
         @endif
+
 
 
 @endsection
@@ -61,19 +68,18 @@
 
 
 <script>
-    $(document).ready(function() {
-        $('#imageTable').DataTable({
-            "processing": true,
-            stateSave: true,
-            "iDisplayLength": 50,
-            data: {!! json_encode($imageData) !!},
-            columns: [
-                { data: 'url' },
-                { data: 'thumbnail' },
-                // { data: 'size' }
-            ]
-        });
-    });
+            $(document).ready(function() {
+                $('#imageTable').DataTable({
+                    "processing": true,
+                    stateSave: true,
+                    data: {!! json_encode($imageData) !!},
+                    columns: [
+                        { data: 'url' },
+                        { data: 'thumbnail' },
+                    ]
+                });
+            });
+
 </script>
 
     

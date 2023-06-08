@@ -21,10 +21,30 @@
             </div>
             <div class="col-md-6" style="float:right;">
                 <input type="text" class="form-control" name="searchTerm" placeholder="Search on Google" style="width:70%; float:left;">
+
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="submit" style="float:right;">Search on Google</button>
                 </div>
             </div>
+
+            <div class="col-md-2" style="float: right;">
+                        <select class="form-control" name="country">
+                            <option value="">Select Country</option>
+                            <option value=" Austria">Austria</option>
+                            <option value=" Australia">Australia</option>
+                            <option value=" Belgium">Belgium</option>
+                            <option value=" Bulgaria">Bulgaria</option>
+                            <option value=" Denmark">Denmark</option>
+                            <option value=" Germany">Germany</option>
+                            <option value=" Finland">Finland</option>
+                            <option value=" Italy">Italy</option>
+                            <option value=" Netherlands">Netherlands</option>
+                            <option value=" Spain">Spain</option>
+                            <option value=" Sweden">Sweden</option>
+                            <option value=" United Kingdom">UK</option>
+                        </select>
+                    </div>
+
         </form>
 
         </div>

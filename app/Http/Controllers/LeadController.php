@@ -46,7 +46,6 @@ use Intervention\Image\Facades\Image;
 
 
 
-
 class LeadController extends Controller
 {
 
@@ -873,6 +872,7 @@ class LeadController extends Controller
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');
         }
+
         $categories=Category::where('type',1)
             ->get();
         $country=Country::get();
@@ -2085,8 +2085,8 @@ class LeadController extends Controller
                     ->join('leads', 'activities.leadId', 'leads.leadId')
                     ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
                     ->where('activities.userId', Auth::user()->id)
-                    ->orderBy('activities.activityId', 'desc')
-                    ->paginate(200);
+                    ->orderBy('activities.created_at', 'DESC')
+                    ->paginate(500);
                 
                 return view('report.myActivity', compact('myActivity'));
             }
@@ -2403,15 +2403,14 @@ class LeadController extends Controller
         public function reportAllActivties(Request $r)
         {
             $User_Type = Session::get('userType');
-            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'USER') {
+            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
                 
                 $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
                         ->join('users', 'activities.userId','users.id')
                         ->join('leads', 'activities.leadId', 'leads.leadId')
                         ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
                         // ->where('users.active', 1)
-                        // ->orderBy('activityId', 'desc')
-                        ->orderBy('activities.activityId', 'desc')
+                        ->orderBy('activityId', 'desc')
                         // ->latest()->paginate(50);                        
                         ->get();
     
@@ -2422,118 +2421,362 @@ class LeadController extends Controller
         }        
 
 
-    public function googleSearch(Request $request)
-    {
-        $searchTerm = $request->input('searchTerm');
-        $results = [];
+    // public function googleSearch(Request $request)
+    // {
+    //     $searchTerm = $request->input('searchTerm');
+    //     $results = [];
     
-        // Store the engine key and API key in the session
-        $engineKey = $request->input('engineKey');
-        $apiKey = $request->input('apiKey');
-        Session::put('engineKey', $engineKey);
-        Session::put('apiKey', $apiKey);
+    //     // Store the engine key and API key in the session
+    //     $engineKey = $request->input('engineKey');
+    //     $apiKey = $request->input('apiKey');
+    //     Session::put('engineKey', $engineKey);
+    //     Session::put('apiKey', $apiKey);
 
 
-        if (empty($searchTerm)) {
-            // Return the view without executing the search logic
-            return view('report.googleSearch')->with('searchTerm', $searchTerm);
-        }
+    //     if (empty($searchTerm)) {
+    //         // Return the view without executing the search logic
+    //         return view('report.googleSearch')->with('searchTerm', $searchTerm);
+    //     }
     
   
-            $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
-            $fulltext->setEngineId($engineKey); // gets the engine ID
-            $fulltext->setApiKey($apiKey); // gets the API key
-            $results = $fulltext->getResults($searchTerm); // get results for the query
+    //         $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
+    //         $fulltext->setEngineId($engineKey); // gets the engine ID
+    //         $fulltext->setApiKey($apiKey); // gets the API key
+    //         $results = $fulltext->getResults($searchTerm); // get results for the query
     
-            // Extract the domain from each search result URL
-            foreach ($results as $result) {
-                $result->domain = $this->getDomainFromURL($result->link);
-                $result->availability = $this->checkLeadAvailability($result->domain);
-            }
+    //         // Extract the domain from each search result URL
+    //         foreach ($results as $result) {
+    //             $result->domain = $this->getDomainFromURL($result->link);
+    //             $result->availability = $this->checkLeadAvailability($result->domain);
+    //         }
         
     
-        return view('report.googleSearch')
-            ->with('results', $results)
-            ->with('searchTerm', $searchTerm);
-    }
+    //     return view('report.googleSearch')
+    //         ->with('results', $results)
+    //         ->with('searchTerm', $searchTerm);
+    // }
 
-  
-            private function getDomainFromURL($url)
-            {
-                preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
-                return $matches[1] ?? null;
+
+
+        public function googleSearch(Request $request)
+        {
+            $searchTerm = $request->input('searchTerm');
+            $country = $request->input('country');
+            $results = [];
+        
+            // Store the engine key and API key in the session
+            $engineKey = $request->input('engineKey');
+            $apiKey = $request->input('apiKey');
+            Session::put('engineKey', $engineKey);
+            Session::put('apiKey', $apiKey);
+        
+            if (empty($searchTerm)) {
+                // Return the view without executing the search logic
+                return view('report.googleSearch')->with('searchTerm', $searchTerm);
             }
-            
-            private function checkLeadAvailability($domain)
-            {
-                $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
-                return $lead ? 'Yes' : 'No';
+        
+            $excludedKeywords = [
+                'soundcloud',
+                'medium',
+                'nytimes',
+                'yelp',
+                'facebook', 
+                'pinterest', 
+                'instagram',
+                'wikipedia', 
+                'walmart', 
+                'nike',
+                'next',
+                'quora',
+                'reddit',
+                'Louis Vuitton',
+                'Gucci', 
+                'Chanel', 
+                'Adidas', 
+                'Hermès', 
+                'Zara', 
+                'H&M', 
+                'Cartier', 
+                'uniqlo ',
+                'gap', 
+                'amazon',
+                'schiesser',
+                'wolfordshop',
+                'jbc',
+                'lolaliza',
+                'xandres',
+                'mayerline',
+                'essentiel-antwerp',
+                'bellerose',
+                'zeb',
+                'riverwoods',
+                'belloya',
+                'terrebleue',
+                'vila',
+                'pieces',
+                'noisymay',
+                'selected',
+                'only',
+                'veromoda',
+                'jackjones',
+                'mamalicious',
+                'mosscopenhagen',
+                'masai',
+                'parttwo',
+                'samsoe',
+                'baumundpferdgarten',
+                'gestuz',
+                'marimekko',
+                'lindex',
+                'ivanahelsinki',
+                'aboutyou',
+                'zalando',
+                'edited',
+                'mango',
+                'reserved',
+                'pimkie',
+                'asos',
+                'bershka',
+                'pullandbear',
+                'weekday',
+                'monki',
+                'stories',
+                'bonprix',
+                'veromoda',
+                'esprit',
+                'orsay',
+                'newyorker',
+                'snipes',
+                'engelhorn',
+                'soliver',
+                'cecil',
+                'gerryweber',
+                'vanlaack',
+                'richandroyal',
+                'zero',
+                'oneills',
+                'ovs',
+                'calzedonia',
+                'tezenis',
+                'carpisa',
+                'alcott',
+                'motivi',
+                'stradivarius',
+                'bershka',
+                'pullandbear',
+                'benetton',
+                'liujo',
+                'sisley',
+                'calliope',
+                'intimissimi',
+                'yamamay',
+                'goldenpoint',
+                'subdued',
+                'freddy',
+                'terranovastyle',
+                'steps',
+                'shoeby',
+                'msmode',
+                'riverisland',
+                'veromoda',
+                'jackjones',
+                'only',
+                'promiss',
+                'expresso',
+                'costesfashion',
+                'sandwichfashion',
+                'claudiastrater',
+                'wefashion',
+                'paprika',
+                'reserved',
+                'mohito',
+                'housebrand',
+                'cropp',
+                'desigual',
+                'spf',
+                'bershka',
+                'pullandbear',
+                'stradivarius',
+                'mango',
+                'adolfodominguez',
+                'amichi',
+                'womensecret',
+                'scalpers',
+                'tendam',
+                'pullandbear',
+                'bimbaylola',
+                'oysho',
+                'uterque',
+                'ginatricot',
+                'weekday',
+                'monki',
+                'stories',
+                'lindex',
+                'cubus',
+                'kappahl',
+                'oddmolly',
+                'acnestudios',
+                'jlindeberg',
+                'nudiejeans',
+                'bjornborg',
+                'missyempire',
+                'inthestyle',
+                'isawitfirst',
+                'rebelliousfashion',
+                'femmeluxefinery',
+                'nastygal',
+                'ohpolly',
+                'silkfred',
+                'pinkboutique',
+                'selectfashion',
+                'isawitfirst',
+                'romanoriginals',
+                'littlewoods',
+                'chichiclothing',
+                'goddiva',
+                'wantthattrend',
+                'foreverunique',
+                'rarelondon',
+                'nobodyschild',
+                'axparis',
+                'apricotonline',
+                'school',
+                'college',
+                'varsity',
+                'education',
+                'government',
+                'moncler'
+
+            ]; // Specify the keywords to exclude
+        
+            $excludedQuery = '';
+            foreach ($excludedKeywords as $keyword) {
+                $excludedQuery .= ' -' . $keyword;
             }
-    
+        
+            $excludedRegions = ['USA', 'Switzerland', 'Norway','France','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
 
-
-
-
-    public function crawlWebsites(Request $request)
-    {
-        $website = $request->input('website');
-        $imageSize = $request->input('imageSize');
-        $submitted = !empty($website);
-        $imageData = [];
-    
-        if ($submitted) {
-            try {
-                $client = new Client();
-                $crawler = $client->request('GET', $website);
-                $imageData = $this->getImagesData($crawler, $imageSize);
-            } catch (\Exception $e) {
-                // Log or display the error message
-                $errorMessage = $e->getMessage();
-                error_log($errorMessage);
-                $imageData = [['error' => 'An error occurred while crawling the website. Error: ' . $errorMessage]];
+            $excludedRegionsQuery = '';
+            foreach ($excludedRegions as $region) {
+                $excludedRegionsQuery .= ' -site:' . $region . '.*';
             }
+        
+            $searchTerm = $searchTerm . ' ' . $country; // Append the selected country to the search term
+
+            $results = [];
+
+            for ($start = 1; $start <= 40; $start += 10) {
+                $parameters = [
+                    'start' => $start,
+                    'num' => 10,
+                ];
+
+                $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
+                $fulltext->setEngineId($engineKey); // gets the engine ID
+                $fulltext->setApiKey($apiKey); // gets the API key
+                $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
+
+                // Extract the domain from each search result URL
+                foreach ($partialResults as $result) {
+                    $result->domain = $this->getDomainFromURL($result->link);
+                    $result->availability = $this->checkLeadAvailability($result->domain);
+                    $results[] = $result;
+                }
+            }
+
+            return view('report.googleSearch')
+                ->with('results', $results)
+                ->with('searchTerm', $searchTerm);
         }
-    
-        return view('report.crawlWebsites', compact('submitted', 'imageData', 'website'));
-    }
-    
-            private function getImagesData($crawler, $threshold)
-            {
-                $imageData = [];
-            
-                $crawler->filter('img')->each(function ($node) use (&$imageData, $threshold) {
-                    $imageSrc = $node->attr('src');
-            
-                    try {
-                        $imageSize = getimagesize($imageSrc);
-            
-                        if ($imageSize && isset($imageSize[0]) && $imageSize[0] > $threshold) {
-                            $imageUrl = $imageSrc;
-                            $imageThumbnail = $this->generateThumbnail($imageSrc, 60, 60);
-                            $imageData[] = [
-                                'url' => $imageUrl,
-                                'thumbnail' => $imageThumbnail,
-                                'size' => $imageSize[0],
-                            ];
-                        }
-                    } catch (\Exception $e) {
-                        // Log or display the error message
-                        $errorMessage = $e->getMessage();
-                        error_log($errorMessage);
-                    }
-                });
-            
-                return $imageData;
-            }
-            
-            private function generateThumbnail($imageUrl, $width, $height)
-            {
-                $thumbnail = Image::make($imageUrl)->fit($width, $height)->encode('data-url');
-                $thumbnailTag = '<img src="' . $thumbnail . '" alt="Thumbnail" width="' . $width . '" height="' . $height . '">';
-            
-                return $thumbnailTag;
-            }
+        
+                private function getDomainFromURL($url)
+                {
+                    preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
+                    return $matches[1] ?? null;
+                }
+                
+                private function checkLeadAvailability($domain)
+                {
+                    $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
+                    return $lead ? 'Yes' : 'No';
+                }
+        
 
+
+
+
+                // public function crawlWebsites(Request $request)
+                // {
+                //     $websites = $request->input('websites');
+                //     $imageSize = $request->input('imageSize');
+                //     $submitted = !empty($websites);
+                //     $imageData = [];
+                    
+                //     if ($submitted) {
+                //         try {
+                //             $client = new Client();
+                //             $websitesArray = preg_split("/\r\n|\n|\r/", $websites); // Split the input by new lines to get an array of URLs
+                //             $imageData = [];
+                    
+                //             foreach ($websitesArray as $website) {
+                //                 $crawler = $client->request('GET', $website);
+                //                 $imageData = array_merge($imageData, $this->getImagesData($crawler, $imageSize)); // Merge the image data from multiple URLs
+                //             }
+                    
+                //             return view('report.crawlWebsites', compact('submitted', 'imageData', 'websitesArray'));
+                //         } catch (\Exception $e) {
+                //             // Log or display the error message
+                //             $errorMessage = $e->getMessage();
+                //             error_log($errorMessage);
+                //             $imageData = [['error' => 'An error occurred while crawling the websites. Error: ' . $errorMessage]];
+                //         }
+                //     }
+                    
+            
+                //     return view('report.crawlWebsites', compact('submitted', 'imageData', 'websites'));
+                // }
+            
+                
+                // private function getImagesData($crawler, $threshold)
+                // {
+                //     $imageData = [];
+                
+                //     $crawler->filter('img')->each(function ($node) use (&$imageData, $threshold) {
+                //         $imageSrc = $node->attr('src');
+                
+                //         try {
+                //             $imageSize = getimagesize($imageSrc);
+                
+                //             if ($imageSize && isset($imageSize[0]) && $imageSize[0] > $threshold) {
+                //                 $imageUrl = $imageSrc;
+                //                 $imageThumbnail = $this->generateThumbnail($imageSrc, 60, 60);
+                //                 $imageData[] = [
+                //                     'url' => $imageUrl,
+                //                     'thumbnail' => $imageThumbnail,
+                //                     'size' => $imageSize[0],
+                //                 ];
+                //             }
+                //         } catch (\Exception $e) {
+                //             // Log or display the error message
+                //             $errorMessage = $e->getMessage();
+                //             error_log($errorMessage);
+                //         }
+                //     });
+                
+                //     return $imageData;
+                // }
+                
+                // private function generateThumbnail($imageUrl, $width, $height)
+                // {
+                //     $thumbnail = Image::make($imageUrl)->fit($width, $height)->encode('data-url');
+                //     $thumbnailTag = '<img src="' . $thumbnail . '" alt="Thumbnail" width="' . $width . '" height="' . $height . '">';
+                
+                //     return $thumbnailTag;
+                // }
+            
+
+
+    
     
 
 

@@ -238,7 +238,7 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
-
+Route::get('hour/myReport', 'ReportController@myHourReport')->name('myHourReport');
 
 //Report Analysis
 Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
@@ -251,8 +251,16 @@ Route::get('allConversations', 'LeadController@getallConversations')->name('geta
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
 Route::post('/googleSearch', 'LeadController@googleSearch');
-Route::get('/crawl', 'LeadController@crawlWebsites')->name('crawlWebsites');
-Route::post('/crawl', 'LeadController@crawlWebsites')->name('crawlWebsites');
+
+Route::get('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
+Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
+Route::get('/image-count', 'CrawlController@getImageCount')->name('imageCount');
+
+//Report - OKR
+
+// Route::get('/myOKR', 'ReportController@myOKR')->name('myOKR');
+// Route::get('/weeklyReport', 'ReportController@weeklyReport')->name('weeklyReport');
+// Route::get('/myOKR', 'ReportController@myOKR')->name('myOKR');
 
 
 

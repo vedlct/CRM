@@ -10,6 +10,10 @@
         <h2 class="card-title" align="center"><b>My Activity</b></h2>
         <h2 class="card-subtitle" align="center"><b>Only showing last 200 activities</b></h2>
 
+
+        <button id="filterButton" class="btn btn-primary">Today's Research</button>
+
+
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -34,7 +38,7 @@
                             <td width="15%">{{$activity->companyName}}</td>
                             <td width="10%">{{$activity->statusName}}</td>
                             <td width="30%">{{$activity->activity}}</td>
-                            <td width="15%">{{ Carbon\Carbon::parse($activity->created_at)->format('d M Y, H:i') }}</td>
+                            <td width="15%">{{$activity->created_at}}</td>
                             
                         </tr>
 
@@ -74,12 +78,24 @@
 
         $(document).ready(function() {
             $('#myTable').DataTable({
+                dom: 'lifrtip',
                 "processing": true,
                 stateSave: true,
+                "order": [[1, "desc"]]
+
             });
 
-        });      
+            $('#filterButton').on('click', function() {
+                // Get today's date in YYYY-MM-DD format
+                var today = new Date().toISOString().split('T')[0];
 
+                // Clear existing search
+                $('#myTable').DataTable().search('').draw();
+
+                // Apply new search with 'updated' string and today's date
+                $('#myTable').DataTable().search('updated ' + today).draw();
+            });
+        });    
 
     </script>
 

@@ -8,25 +8,26 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
-            <h4 class="card-subtitle" align="center">You may get leads for you from the list below. These leads are filtered leads. Once you click on the badge, the lead will be in your My Lead.</h4>
+            <h4 class="card-subtitle" align="center">These leads are filtered by others.<span style="font-weight:450;"> Your filtered leads are not listed here.</span></h4>
             <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Select</th>                       
+                        <th>Select</th>
                         <th>Id</th>
                         <th>Company Name</th>
                         <th>website</th>
                         <th>Number</th>
+                        <th>KDM</th>
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
-                        <th width="8%">Volume</th>
-                        <th width="5%">Process</th>
-                        <th width="5%">Frequency</th>
-                        <th width="10%">Action</th>
+                        <th >Volume</th>
+                        <th >Process</th>
+                        <th >Frequency</th>
+                        <th >Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -282,6 +283,7 @@
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
+                    { data: 'personName', name: 'leads.personName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},

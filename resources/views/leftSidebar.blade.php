@@ -42,19 +42,24 @@
                             <span class="hide-menu"> Table</span></a>
                         </li>
 
-                        <li>
-                            <a href="{{route('myActivity')}}"><i class="fa fa-bell" aria-hidden="true"></i>
-                            <span class="hide-menu"> My Activity</span></a>
-                        </li>
-
+                        @if($userType == 'USER')                        
+                            <li>
+                                <a href="{{route('myActivity')}}"><i class="fa fa-bell" aria-hidden="true"></i>
+                                <span class="hide-menu"> My Activity</span></a>
+                            </li>
+                            <li>
+                                <a href="{{route('myHourReport')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
+                                <span class="hide-menu">My Hourly</span></a>
+                            </li>
+                        @endif
 
                         @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
-                            <!-- @if(Auth::user()->areaType != "usa" ) -->
-                                <li>
-                                    <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
-                                    <span class="hide-menu">Hourly</span></a>
-                                </li>
-                            <!-- @endif -->
+                        <!-- @if(Auth::user()->areaType != "usa" ) -->
+                            <li>
+                                <a href="{{route('hour.report')}}"><i class="fa fa-houzz" aria-hidden="true"></i>
+                                <span class="hide-menu">Hourly</span></a>
+                            </li>
+                        <!-- @endif -->
 
                         @endif
 
@@ -117,6 +122,12 @@
                             <a href="{{route('frequentlyFilteredLeads')}}"><i class="fa fa-times" aria-hidden="true"></i>
                                 <span class="hide-menu"> Frequently Filtered</span></a>
                         </li>
+
+                        <li>
+                            <a href="{{route('ippList')}}"><i class="fa fa-bell" aria-hidden="true"></i>
+                                <span class="hide-menu"> All IPP List</span></a>
+                        </li>
+
 
                 </ul>
             </li>
@@ -191,7 +202,7 @@
                                 <span class="hide-menu"> Google Search</span></a>
                         </li>
                         <li>
-                            <a href="{{route('crawlWebsites')}}"><i class="fa fa-search" aria-hidden="true"></i>
+                            <a href="{{route('crawlWebsites')}}"><i class="fa fa-recycle" aria-hidden="true"></i>
                                 <span class="hide-menu"> Crawl Website</span></a>
                         </li>
 
@@ -446,6 +457,40 @@
                 @endif
 
 
+
+
+                {{-- <li class="treeview">
+                    <a href="#"><i class="fa fa-flag-checkered" aria-hidden="true"></i> <span
+                            class="hide-menu">OKR</span>
+                        <span class="pull-right-container">
+					<i class="fa fa-angle-right pull-right"></i>
+					</span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{route('myOKR')}}"><i class="fa fa-table" aria-hidden="true"></i>
+                            <span class="hide-menu"> My OKR</span></a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('weeklyReport')}}"><i class="fa fa-bell" aria-hidden="true"></i>
+                            <span class="hide-menu"> Weekly Report</span></a>
+                        </li>
+
+
+                        @if($userType == 'MANAGER' || $userType == 'SUPERVISOR' || $userType == 'ADMIN')
+                                <li>
+                                    <a href=""><i class="fa fa-houzz" aria-hidden="true"></i>
+                                    <span class="hide-menu">Set OKR</span></a>
+                                </li>
+                                <li>
+                                    <a href=""><i class="fa fa-flag" aria-hidden="true"></i>
+                                    <span class="hide-menu"> Quarter Overview</span></a>
+                                </li>
+                        @endif
+
+                    </ul>
+                </li>                --}}
 
 
                 

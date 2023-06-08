@@ -74,7 +74,7 @@
                                 @endif
                                 &nbsp;
                                 <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                                <a href="#lead_comments" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
@@ -364,7 +364,7 @@
 
 
     <!-- Call Modal -->
-    <div class="modal" id="my_modal" style="">
+    <!-- <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
             <style>
                 th.ui-datepicker-week-end,
@@ -407,7 +407,7 @@
 
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label class=""><b>Follow Up Date : </b> {{--<span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span>--}}</label>
+                                    <label class=""><b>Follow Up Date : </b></label>
                                     <input class="form-control changedate" id="datepicker" rows="3" name="followup" placeholder="pick Date">
                                 </div>
 
@@ -415,10 +415,15 @@
                                     <label class=""><b>Time: </b> </label>
                                     <input class="form-control" name="time" placeholder="pick Time">
                                 </div>
-                                <div class="col-md-12" style="text-align: center; font-size: 14px; font-weight: bold;">
-                                    <span id="exceed" style="color: red; display: none"><i>Already Exceed the limit 10</i></span>
-                                    <span id="total" style="color: #00aa88; display: none"></span>
-                                </div>
+                                <div class="col-md-12" style="text-align: center; font-weight: bold;">
+										  <span id="exceed" style="color:indigo;display: none"><i></i></span>
+										  <span id="total" style="color: #00aa88; display: none"></span>
+										  <span id="enoughfortoday" style="color:red;display: none"><i></i></span>
+ 							    </div>
+                            </div>
+
+                            <div class="col-md-12" style="text-align: center; font-weight: bold;">
+                                <span id="follow-show" style="color:grey;"><i></i></span>
                             </div>
 
                             <div class="form-group">
@@ -473,7 +478,53 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> -->
+
+
+    {{--ALL Chat/Comments--}}
+    <div class="modal" id="lead_comments" >
+        <div class="modal-dialog" style="max-width: 60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">All Conversation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                    <b>Company Name:</b>
+                    <input type="text" name="companyName" readonly>
+                    <div class="card-body">
+                        <b>Call Statistics per marketer</b>
+                        <p>Here you will see who reached out to this company for how many times.</p>
+                        <div id="counter"></div>
+                    </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                        <div class="form-group">
+                        <label class=""><b>Comment : </b></label>
+
+                                <ul class="list-group" style="margin: 10px; "><br>
+                                    <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+
+                                    </div>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div></div>
+            </div>
+        </div>
+
+
 
 
 
@@ -665,6 +716,22 @@ function selectAll(source) {
 
                 }
             });
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('editcontactmodalshow')}}',
+                data : {_token:CSRF_TOKEN,'leadId':leadId} ,
+                success : function(data){
+                    // $('#txtHint').html(data);
+                    console.log(data);
+//                    $('#follow-show').val(data.followUpDate);
+                    if(data !=''){
+                        $('#follow-show').html('Current follow-up on  '+data.followUpDate);}
+
+                }
+            });
+
+
         });
 
 
@@ -709,29 +776,61 @@ function selectAll(source) {
             });
         });*/
 
-        $('.changedate').on('change',function(){
-            var currentdate = $('.changedate').val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                type:'post',
-                url:'{{route('followupCheck')}}',
-                data:{_token: CSRF_TOKEN,'currentdate':currentdate},
-                success : function(data)
-                {
-                    if(data >= 10)
-                    {
-                        document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
-                        document.getElementById('exceed').style.display="inline";
-                    }
-                    else
-                    {
-                        document.getElementById('exceed').style.display="none";
-                        document.getElementById('total').style.display="inline";
-                        document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
-                    }
-                }
-            });
-        });
+        // $('.changedate').on('change',function(){
+        //     var currentdate = $('.changedate').val();
+        //     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        //     $.ajax({
+        //         type:'post',
+        //         url:'{{route('followupCheck')}}',
+        //         data:{_token: CSRF_TOKEN,'currentdate':currentdate},
+        //         success : function(data)
+        //         {
+        //             if(data >= 10)
+        //             {
+        //                 document.getElementById('total').innerHTML='ON '+ currentdate +  ' Already Have '+ data +' followup';
+        //                 document.getElementById('exceed').style.display="inline";
+        //             }
+        //             else
+        //             {
+        //                 document.getElementById('exceed').style.display="none";
+        //                 document.getElementById('total').style.display="inline";
+        //                 document.getElementById('total').innerHTML='On this date you already have '+ data +' followups';
+        //             }
+        //         }
+        //     });
+        // });
+
+
+        $('.changedate').on('change', function() {
+				var currentdate = $('.changedate').val();
+				var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+				
+				$.ajax({
+					type: 'post',
+					url: '{{route('followupCheck')}}',
+					data: {
+						_token: CSRF_TOKEN,
+						'currentdate': currentdate
+					},
+					success: function(data) {
+						if (data >= 15) {
+							$('#exceed').hide();
+							$('#total').hide();
+							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
+							$('.changedate').datepicker('setDate', null); // Clear the selected date
+						} else if (data >= 10 && data < 15) {
+							$('#total').hide();
+							$('#enoughfortoday').hide();
+							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();
+						} else {
+							$('#enoughfortoday').hide();
+							$('#exceed').hide();
+							$('#total').text('On this date you have ' + data + ' followups').show();
+						}
+					}
+				});
+			});
+
 
 
         $(document).ready(function () {
@@ -832,6 +931,52 @@ $.ajax({
 
 
 });
+
+
+
+        $('#lead_comments').on('show.bs.modal', function(e) {
+
+        var leadId = $(e.relatedTarget).data('lead-id');
+        var leadName = $(e.relatedTarget).data('lead-name');
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+        // $.ajax({
+        //     type : 'post' ,
+        //     url : '{{route('getComments')}}',
+        //     data : {_token: CSRF_TOKEN,'leadId':leadId} ,
+        //     success : function(data){
+
+        //         $("#comment").html(data);
+        //         $("#comment").scrollTop($("#comment")[0].scrollHeight);
+        //     }
+        // });
+
+        $.ajax({
+            type: 'post',
+            url: '{{ route('getComments') }}',
+            data: {_token: CSRF_TOKEN, 'leadId': leadId},
+            success: function(data) {
+                $('#comment').html(data.comments);
+                $("#comment").scrollTop($("#comment")[0].scrollHeight);
+
+                var counterHtml = '';
+
+                // Loop through the counter data
+                $.each(data.counter, function(index, counter) {
+                    counterHtml += '<div><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</div>';
+                });
+
+                // Set the counter HTML to the counter div
+                $('#counter').html(counterHtml);
+            }
+        });
+
+
+
+        });
+
 
 
 

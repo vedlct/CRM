@@ -81,7 +81,7 @@ class ReportController extends Controller
             $User_Type = Session::get('userType');
             if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
                 $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
-                $wp = User::where('typeId', 5)->select('id', 'userId')->get();
+                $wp = User::where('typeId', 5)->where('active', 1)->select('id', 'userId')->get();
                 $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
         
                 // Find the values with the lowest and highest differences
@@ -106,6 +106,40 @@ class ReportController extends Controller
         }
            
 
+
+        public function myHourReport(Request $r)
+        {
+            $User_Type = Session::get('userType');
+            if ($User_Type == 'USER') {
+                $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
+                $userId = Auth::user()->id; // Get the logged-in user's ID
+                
+                $wp = User::where('typeId', 5)->where('id', Auth::user()->id)->select('id', 'userId')->get();
+                $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "' AND userId = " . $userId)));
+        
+                // Find the values with the lowest and highest differences
+                $highlightedTimes = [];
+                $highlightedTimesMax = [];
+                $previousTime = null;
+                foreach ($work as $entry) {
+                    $currentTime = strtotime($entry->createtime);
+                    if ($previousTime !== null) {
+                        $timeDiff = abs($currentTime - $previousTime) / 60; // Difference in minutes
+                        if ($timeDiff <= 1) { // Two minutes or less
+                            $highlightedTimes[] = $entry->createtime;
+                        } elseif ($timeDiff >= 15) { // Fifteen minutes or more
+                            $highlightedTimesMax[] = $entry->createtime;
+                        }
+                    }
+                    $previousTime = $currentTime;
+                }
+        
+                return view('report.myHourReport', compact('work', 'wp', 'highlightedTimes', 'highlightedTimesMax'));
+            }
+        }
+          
+        
+        
     //// THIS IS PREVIOUS HOUR REPORT. 
     //  public function hourReport()
     //  {
@@ -1792,6 +1826,11 @@ class ReportController extends Controller
     }
     
 
+
+
+
+
+    
 
 
     // public function reportIndividualLeadCount(request $r){
