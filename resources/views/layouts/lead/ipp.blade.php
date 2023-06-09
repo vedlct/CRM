@@ -341,6 +341,7 @@
                                 <label class=""><b>Comment : </b></label>
                                 <textarea class="form-control" rows="3" name="comment" required></textarea>
                             </div>
+
                         </div>
                         <div class="col-md-6">
                             <ul class="list-group" style="margin: 10px; "><br>
@@ -386,6 +387,7 @@
                     <b>Company Name:</b>
                     <input type="text" name="companyName" readonly>
                         </div>
+    
 
                         <div class="col-md-6">
                         <div class="form-group">
@@ -541,6 +543,7 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
+
                 }
             });
 

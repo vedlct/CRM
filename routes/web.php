@@ -252,9 +252,8 @@ Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->nam
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
 Route::post('/googleSearch', 'LeadController@googleSearch');
 
-Route::get('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
+Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
-Route::get('/image-count', 'CrawlController@getImageCount')->name('imageCount');
 
 //Report - OKR
 

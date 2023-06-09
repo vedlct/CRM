@@ -1048,6 +1048,8 @@ class LeadController extends Controller
         }
         return Redirect()->route('home');}
 
+
+
     public function getComments(Request $r){
 
         $dt = Carbon::now();
@@ -1097,8 +1099,6 @@ class LeadController extends Controller
 
     public function getFollowupsCounter (Request $r){
 
-        // $dt = Carbon::now();
-
         if($r->ajax()){
 
             $counter = Workprogress::select('users.userId as userId', DB::raw('count(*) as userCounter'))
@@ -1112,8 +1112,7 @@ class LeadController extends Controller
                 ->where('leadId', $r->leadId)
                 ->orderBy ('followUpDate', 'asc')
                 ->get();
-
-
+                
             $followupText='';
 
             foreach ($previousFollowups as $previousFollowup){
