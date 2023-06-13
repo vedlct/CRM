@@ -162,6 +162,8 @@ Route::post('lead/callReports','LeadController@getCallingReport')->name('getCall
 Route::post('lead/activities','LeadController@getActivities')->name('getActivities');
 Route::get('lead/ippList', 'LeadController@ippList')->name('ippList');
 Route::post('lead/FollowupsCounter','LeadController@getFollowupsCounter')->name('getFollowupsCounter');
+Route::post('lead/latestFollowupDate','LeadController@getLatestFollowup')->name('getLatestFollowup');
+
 
 
 //Leave Lead
@@ -251,6 +253,8 @@ Route::get('allConversations', 'LeadController@getallConversations')->name('geta
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
 Route::post('/googleSearch', 'LeadController@googleSearch');
+
+Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
 
 Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
