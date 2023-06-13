@@ -1074,6 +1074,12 @@ class LeadController extends Controller
                 ->get();
 
 
+            $latestFollowups = Followup::select('leadId', DB::raw('MAX(followUpDate) as lastFollowUpDate'))
+                ->where('leadId', $r->leadId)    
+                ->groupBy('leadId')
+                ->get();                
+
+
             $text='';
 
             foreach ($comments as $comment){
@@ -1091,12 +1097,31 @@ class LeadController extends Controller
             return response()->json([
                 'comments' => $text,
                 'counter' => $counter,
-                'previousFollowups' => $followupText
+                'previousFollowups' => $followupText,
+                'latestFollowups' => $latestFollowups
             ]);
         }
     }
 
 
+    public function getLatestFollowup(Request $r){
+
+        if($r->ajax()){
+
+            $latestFollowups = Followup::select('leadId', DB::raw('MAX(followUpDate) as lastFollowUpDate'))
+                ->where('leadId', $r->leadId)    
+                ->groupBy('leadId')
+                ->get();                
+
+
+            return response()->json([
+                'latestFollowups' => $latestFollowups
+            ]);
+        }
+    }
+
+
+    
     public function getFollowupsCounter (Request $r){
 
         if($r->ajax()){
@@ -2474,186 +2499,188 @@ class LeadController extends Controller
                 return view('report.googleSearch')->with('searchTerm', $searchTerm);
             }
         
-            $excludedKeywords = [
-                'soundcloud',
-                'medium',
-                'nytimes',
-                'yelp',
-                'facebook', 
-                'pinterest', 
-                'instagram',
-                'wikipedia', 
-                'walmart', 
-                'nike',
-                'next',
-                'quora',
-                'reddit',
-                'Louis Vuitton',
-                'Gucci', 
-                'Chanel', 
-                'Adidas', 
-                'Hermès', 
-                'Zara', 
-                'H&M', 
-                'Cartier', 
-                'uniqlo ',
-                'gap', 
-                'amazon',
-                'schiesser',
-                'wolfordshop',
-                'jbc',
-                'lolaliza',
-                'xandres',
-                'mayerline',
-                'essentiel-antwerp',
-                'bellerose',
-                'zeb',
-                'riverwoods',
-                'belloya',
-                'terrebleue',
-                'vila',
-                'pieces',
-                'noisymay',
-                'selected',
-                'only',
-                'veromoda',
-                'jackjones',
-                'mamalicious',
-                'mosscopenhagen',
-                'masai',
-                'parttwo',
-                'samsoe',
-                'baumundpferdgarten',
-                'gestuz',
-                'marimekko',
-                'lindex',
-                'ivanahelsinki',
-                'aboutyou',
-                'zalando',
-                'edited',
-                'mango',
-                'reserved',
-                'pimkie',
-                'asos',
-                'bershka',
-                'pullandbear',
-                'weekday',
-                'monki',
-                'stories',
-                'bonprix',
-                'veromoda',
-                'esprit',
-                'orsay',
-                'newyorker',
-                'snipes',
-                'engelhorn',
-                'soliver',
-                'cecil',
-                'gerryweber',
-                'vanlaack',
-                'richandroyal',
-                'zero',
-                'oneills',
-                'ovs',
-                'calzedonia',
-                'tezenis',
-                'carpisa',
-                'alcott',
-                'motivi',
-                'stradivarius',
-                'bershka',
-                'pullandbear',
-                'benetton',
-                'liujo',
-                'sisley',
-                'calliope',
-                'intimissimi',
-                'yamamay',
-                'goldenpoint',
-                'subdued',
-                'freddy',
-                'terranovastyle',
-                'steps',
-                'shoeby',
-                'msmode',
-                'riverisland',
-                'veromoda',
-                'jackjones',
-                'only',
-                'promiss',
-                'expresso',
-                'costesfashion',
-                'sandwichfashion',
-                'claudiastrater',
-                'wefashion',
-                'paprika',
-                'reserved',
-                'mohito',
-                'housebrand',
-                'cropp',
-                'desigual',
-                'spf',
-                'bershka',
-                'pullandbear',
-                'stradivarius',
-                'mango',
-                'adolfodominguez',
-                'amichi',
-                'womensecret',
-                'scalpers',
-                'tendam',
-                'pullandbear',
-                'bimbaylola',
-                'oysho',
-                'uterque',
-                'ginatricot',
-                'weekday',
-                'monki',
-                'stories',
-                'lindex',
-                'cubus',
-                'kappahl',
-                'oddmolly',
-                'acnestudios',
-                'jlindeberg',
-                'nudiejeans',
-                'bjornborg',
-                'missyempire',
-                'inthestyle',
-                'isawitfirst',
-                'rebelliousfashion',
-                'femmeluxefinery',
-                'nastygal',
-                'ohpolly',
-                'silkfred',
-                'pinkboutique',
-                'selectfashion',
-                'isawitfirst',
-                'romanoriginals',
-                'littlewoods',
-                'chichiclothing',
-                'goddiva',
-                'wantthattrend',
-                'foreverunique',
-                'rarelondon',
-                'nobodyschild',
-                'axparis',
-                'apricotonline',
-                'school',
-                'college',
-                'varsity',
-                'education',
-                'government',
-                'moncler'
+            // $excludedKeywords = [
+            //     'soundcloud',
+            //     'medium',
+            //     'nytimes',
+            //     'yelp',
+            //     'facebook', 
+            //     'pinterest', 
+            //     'instagram',
+            //     'wikipedia', 
+            //     'walmart', 
+            //     'nike',
+            //     'next',
+            //     'quora',
+            //     'reddit',
+            //     'Louis Vuitton',
+            //     'Gucci', 
+            //     'Chanel', 
+            //     'Adidas', 
+            //     'Hermès', 
+            //     'Zara', 
+            //     'H&M', 
+            //     'Cartier', 
+            //     'uniqlo ',
+            //     'gap', 
+            //     'amazon',
+            //     'schiesser',
+            //     'wolfordshop',
+            //     'jbc',
+            //     'lolaliza',
+            //     'xandres',
+            //     'mayerline',
+            //     'essentiel-antwerp',
+            //     'bellerose',
+            //     'zeb',
+            //     'riverwoods',
+            //     'belloya',
+            //     'terrebleue',
+            //     'vila',
+            //     'pieces',
+            //     'noisymay',
+            //     'selected',
+            //     'only',
+            //     'veromoda',
+            //     'jackjones',
+            //     'mamalicious',
+            //     'mosscopenhagen',
+            //     'masai',
+            //     'parttwo',
+            //     'samsoe',
+            //     'baumundpferdgarten',
+            //     'gestuz',
+            //     'marimekko',
+            //     'lindex',
+            //     'ivanahelsinki',
+            //     'aboutyou',
+            //     'zalando',
+            //     'edited',
+            //     'mango',
+            //     'reserved',
+            //     'pimkie',
+            //     'asos',
+            //     'bershka',
+            //     'pullandbear',
+            //     'weekday',
+            //     'monki',
+            //     'stories',
+            //     'bonprix',
+            //     'veromoda',
+            //     'esprit',
+            //     'orsay',
+            //     'newyorker',
+            //     'snipes',
+            //     'engelhorn',
+            //     'soliver',
+            //     'cecil',
+            //     'gerryweber',
+            //     'vanlaack',
+            //     'richandroyal',
+            //     'zero',
+            //     'oneills',
+            //     'ovs',
+            //     'calzedonia',
+            //     'tezenis',
+            //     'carpisa',
+            //     'alcott',
+            //     'motivi',
+            //     'stradivarius',
+            //     'bershka',
+            //     'pullandbear',
+            //     'benetton',
+            //     'liujo',
+            //     'sisley',
+            //     'calliope',
+            //     'intimissimi',
+            //     'yamamay',
+            //     'goldenpoint',
+            //     'subdued',
+            //     'freddy',
+            //     'terranovastyle',
+            //     'steps',
+            //     'shoeby',
+            //     'msmode',
+            //     'riverisland',
+            //     'veromoda',
+            //     'jackjones',
+            //     'only',
+            //     'promiss',
+            //     'expresso',
+            //     'costesfashion',
+            //     'sandwichfashion',
+            //     'claudiastrater',
+            //     'wefashion',
+            //     'paprika',
+            //     'reserved',
+            //     'mohito',
+            //     'housebrand',
+            //     'cropp',
+            //     'desigual',
+            //     'spf',
+            //     'bershka',
+            //     'pullandbear',
+            //     'stradivarius',
+            //     'mango',
+            //     'adolfodominguez',
+            //     'amichi',
+            //     'womensecret',
+            //     'scalpers',
+            //     'tendam',
+            //     'pullandbear',
+            //     'bimbaylola',
+            //     'oysho',
+            //     'uterque',
+            //     'ginatricot',
+            //     'weekday',
+            //     'monki',
+            //     'stories',
+            //     'lindex',
+            //     'cubus',
+            //     'kappahl',
+            //     'oddmolly',
+            //     'acnestudios',
+            //     'jlindeberg',
+            //     'nudiejeans',
+            //     'bjornborg',
+            //     'missyempire',
+            //     'inthestyle',
+            //     'isawitfirst',
+            //     'rebelliousfashion',
+            //     'femmeluxefinery',
+            //     'nastygal',
+            //     'ohpolly',
+            //     'silkfred',
+            //     'pinkboutique',
+            //     'selectfashion',
+            //     'isawitfirst',
+            //     'romanoriginals',
+            //     'littlewoods',
+            //     'chichiclothing',
+            //     'goddiva',
+            //     'wantthattrend',
+            //     'foreverunique',
+            //     'rarelondon',
+            //     'nobodyschild',
+            //     'axparis',
+            //     'apricotonline',
+            //     'school',
+            //     'college',
+            //     'varsity',
+            //     'education',
+            //     'government',
+            //     'moncler'
 
-            ]; // Specify the keywords to exclude
-        
+            // ]; // Specify the keywords to exclude
+
+            $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
+            
             $excludedQuery = '';
             foreach ($excludedKeywords as $keyword) {
                 $excludedQuery .= ' -' . $keyword;
             }
         
-            $excludedRegions = ['USA', 'Switzerland', 'Norway','France','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
+            $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
 
             $excludedRegionsQuery = '';
             foreach ($excludedRegions as $region) {
@@ -2700,7 +2727,6 @@ class LeadController extends Controller
                     return $lead ? 'Yes' : 'No';
                 }
         
-
 
 
 
@@ -2775,9 +2801,55 @@ class LeadController extends Controller
             
 
 
-    
+                public function getAllChasingLeads(){
+
+                    $User_Type=Session::get('userType');
+                    if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR'){
+
+                    $leads = Lead::select(
+                        'leads.*',
+                        'users.firstName',
+                        'users.lastName',
+                        DB::raw('COUNT(workprogress.progressId) AS progressCount')
+                    )
+                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                    ->leftJoin('users', 'workprogress.userId', 'users.id')
+                    ->whereNotNull('leads.contactedUserId')
+                    ->where('leads.countryId', '!=', '49')
+                    ->where('leads.statusId', '7')
+                    ->where('users.active', '1')
+                    ->havingRaw('progressCount > 10')
+                    ->groupBy('leads.leadId', 'workprogress.userId')
+                    ->orderBy('progressCount', 'desc')
+                    ->get();
+        
+                    $possibilities = Possibility::get();
+                    $probabilities = Probability::get();
+                    $callReports = Callingreport::get();
+                    $categories=Category::where('type',1)->get();
+                    $country=Country::get();
+                    $status=Leadstatus::get();
+        
+        
+                    return view('report.chasingLeads')
+                        ->with('leads', $leads)
+                        ->with('callReports', $callReports)
+                        ->with('possibilities', $possibilities)
+                        ->with('probabilities', $probabilities)
+                        ->with('categories',$categories)
+                        ->with('status',$status)
+                        ->with('country',$country);
+
+                  }     
+
+                }    
     
 
+
+
+
+
+                
 
 }
 

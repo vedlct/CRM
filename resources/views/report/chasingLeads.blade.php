@@ -7,25 +7,25 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>All Conversations</b></h2>
+        <h2 class="card-title" align="center"><b>Marketers Chasing Companies</b></h2>
+        <h3 class="card-subtitle" align="center">This table wil show the names of the companies that are being chased by marketers for more than 5 times</h3>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Id</th>
+                        <th width="5%">Lead Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="15%">website</th>
                         <th width="8%">Country</th>
-                        <th width="8%">Contact Person</th>
-                        <th width="8%">Contact Number</th>
                         <th width="7%">Process</th>
                         <th width="7%">Volume</th>
                         <th width="7%">Frequency</th>
                         <th width="7%">IPP</th>
-                        <th width="10%">Convo Date</th>
-                        <th width="7%">Marketer</th>
+                        <th width="10%">Marketer</th>
+                        <th width="5%">No of Chase</th>
+                        <!-- <th width="5%">Last Contact</th> -->
                         <th width="10%">Action</th>
 
                     </tr>
@@ -37,10 +37,8 @@
                             <td >{{$lead->leadId}}</td>
                             <td >{{$lead->companyName}}</td>
                             <td >{{$lead->category->categoryName}}</td>
-                            <td ><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
+                            <td >{{$lead->website}}</td>
                             <td >{{$lead->country->countryName}}</td>
-                            <td >{{$lead->personName}}</td>
-                            <td >{{$lead->contactNumber}}</td>
                             <td >{{$lead->process}}</td>
                             <td >{{$lead->volume}}</td>
                             <td >{{$lead->frequency}}</td>
@@ -49,9 +47,9 @@
                                 @else 
                                     <td>Yes</td>
                                 @endif                                 
-                            <td >{{ $lead->workprogress_created_at }}</td>
                             <td >{{$lead->firstName}} {{$lead->lastName}}
                             </td>
+                            <td >{{$lead->progressCount}} </td>
                             <td >
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -356,7 +354,7 @@
                                 <p>Here you will see who reached out to this company for how many times.</p>
                                 <div id="counter"></div>
                             </ul>
-                            
+
                         </div>
 
                         <div class="col-md-12"><br>
@@ -368,7 +366,6 @@
                 </div>
                 <div class="modal-footer">
                     <div id="latestFollowups"></div>
-
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -546,23 +543,10 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
-
-                    var latestFollowupsHtml = '';
-
-                    // Loop through the latest follow-up data
-                    $.each(data.latestFollowups, function(index, followup) {
-                        latestFollowupsHtml += '<div>';
-                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
-                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
-                        latestFollowupsHtml += '</div>';
-                    });
-
-                    // Set the latest follow-up HTML to the latestFollowups div
-                    $('#latestFollowups').html(latestFollowupsHtml);
                 }
             });
 
-            
+
             $.ajax({
                 type: 'post',
                 url: '{{ route('getLatestFollowup') }}',
@@ -584,9 +568,7 @@
             });
 
 
-        });        
-
-
+        });
 
         //        check followup date count
 

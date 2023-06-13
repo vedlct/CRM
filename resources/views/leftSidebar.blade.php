@@ -127,6 +127,10 @@
                             <a href="{{route('ippList')}}"><i class="fa fa-bell" aria-hidden="true"></i>
                                 <span class="hide-menu"> All IPP List</span></a>
                         </li>
+                        <li>
+                            <a href="{{route('getAllChasingLeads')}}"><i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                <span class="hide-menu"> Maximum Chasing</span></a>
+                        </li>
 
 
                 </ul>
@@ -381,7 +385,7 @@
                 @endif
 
 
-                @if($userType =='SUPERVISOR')
+                @if($userType =='SUPERVISOR' || $userType =='ADMIN')
                     @if(Auth::user()->areaType != "usa" )
                     <li class="treeview">
                         <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>

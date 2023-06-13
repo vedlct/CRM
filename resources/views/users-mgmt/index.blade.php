@@ -42,7 +42,7 @@
                                 </td>
                                 <td>
                                     <!-- Trigger the Edit modal with a button -->
-                                    @if($userType=='ADMIN' || 'MANAGER')
+                                    @if($userType=='ADMIN' || 'SUPERVISOR')
                                     <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                        data-id="{{$user->id}}"
                                        data-user-id="{{$user->userId}}"
@@ -84,10 +84,6 @@
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
 
-                                    <a href="#possessed_leads" data-toggle="modal" class="btn btn-warning btn-sm"
-                                    data-id="{{$user->id}}"
-                                    data-first-name="{{$user->userId}}"
-                                    ><i class="fa fa-angle-double-down"></i></a>
                                     @endif
 
                                 </td>
@@ -683,11 +679,6 @@
                 $(e.currentTarget).find('input[name="conversation"]').val(conversation);
                 $(e.currentTarget).find('input[name="closelead"]').val(closelead);
                 $(e.currentTarget).find('input[name="followup"]').val(followup);
-
-
-
-
-
 
 
         });
