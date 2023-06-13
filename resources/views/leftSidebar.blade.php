@@ -385,7 +385,7 @@
                 @endif
 
 
-                @if($userType =='SUPERVISOR' || $userType =='ADMIN')
+                @if($userType=='ADMIN' || $userType=='SUPERVISOR' || $userType=='MANAGER' || $userType=='HR')
                     @if(Auth::user()->areaType != "usa" )
                     <li class="treeview">
                         <a href="#"><i class="fa fa-cog" aria-hidden="true"></i> <span class="hide-menu">Settings</span>
