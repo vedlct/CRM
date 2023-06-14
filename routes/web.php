@@ -255,6 +255,7 @@ Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch')
 Route::post('/googleSearch', 'LeadController@googleSearch');
 
 Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
+Route::get('/lastcommentedleads', 'LeadController@getLastCommentedLeads')->name('getLastCommentedLeads');
 
 Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');

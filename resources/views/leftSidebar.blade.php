@@ -131,6 +131,10 @@
                             <a href="{{route('getAllChasingLeads')}}"><i class="fa fa-arrow-right" aria-hidden="true"></i>
                                 <span class="hide-menu"> Maximum Chasing</span></a>
                         </li>
+                        <li>
+                            <a href="{{route('getLastCommentedLeads')}}"><i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                                <span class="hide-menu"> Long Time No Touch</span></a>
+                        </li>
 
 
                 </ul>

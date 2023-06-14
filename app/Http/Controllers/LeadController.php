@@ -2847,9 +2847,94 @@ class LeadController extends Controller
 
 
 
+                // public function getLastCommentedLeads(){
 
+                //     $User_Type=Session::get('userType');
+                //     $sixMonthsAgo = now()->subDays(180)->toDateTimeString();
 
+                //     if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER'){
+                   
+                //         $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
+                //             ->where('leads.contactedUserId', '!=', null)
+                //             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                //             ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                //             ->where('users.active', 1)
+                //             ->where('leads.countryId', '!=', '49')
+                //             ->where('leads.statusId', 7)
+                //             ->groupBy('leads.leadId')
+                //             ->orderBy('workprogress.created_at', 'desc')
+                //             ->get();
+                   
+                //     }
+
+                //     $possibilities = Possibility::get();
+                //     $probabilities = Probability::get();
+                //     $callReports = Callingreport::get();
+                //     $categories=Category::where('type',1)->get();
+                //     $country=Country::get();
+                //     $status=Leadstatus::get();
+        
+        
+                //     return view('report.lastCommentedLeads')
+                //         ->with('leads', $leads)
+                //         ->with('callReports', $callReports)
+                //         ->with('possibilities', $possibilities)
+                //         ->with('probabilities', $probabilities)
+                //         ->with('categories',$categories)
+                //         ->with('status',$status)
+                //         ->with('country',$country);
+                    
+                // }
+
+          
+                public function getLastCommentedLeads()
+                {
+                    $User_Type = Session::get('userType');
                 
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+
+                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
+                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
+                                            FROM workprogress
+                                            GROUP BY leadId) AS wp'), function ($join) {
+                                $join->on('leads.leadId', '=', 'wp.leadId');
+                            })
+                            ->leftJoin('workprogress', function ($join) {
+                                $join->on('wp.leadId', '=', 'workprogress.leadId')
+                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
+                            })
+                            ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            ->where('leads.contactedUserId', '!=', null)
+                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
+                            ->where('leads.statusId', 7)
+                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
+                            ->orderBy('workprogress.created_at', 'desc')
+                            ->get();
+
+                    }        
+
+                        $possibilities = Possibility::get();
+                        $probabilities = Probability::get();
+                        $callReports = Callingreport::get();
+                        $categories = Category::where('type', 1)->get();
+                        $country = Country::get();
+                        $status = Leadstatus::get();
+                
+                    return view('report.lastCommentedLeads')
+                        ->with('leads', $leads)
+                        ->with('callReports', $callReports)
+                        ->with('possibilities', $possibilities)
+                        ->with('probabilities', $probabilities)
+                        ->with('categories', $categories)
+                        ->with('status', $status)
+                        ->with('country', $country);
+                }
+                 
+
+
+
+
+
 
 }
 
