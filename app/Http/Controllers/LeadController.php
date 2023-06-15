@@ -2942,6 +2942,7 @@ class LeadController extends Controller
                             'leads.companyName',
                             'categories.categoryName as category_name',
                             'leads.website',
+                            'leads.contactNumber',
                             'leadstatus.statusName as status_name',
                             'countries.countryName as country_name',
                             'users.userId',
@@ -2985,7 +2986,7 @@ class LeadController extends Controller
 
 
 
-                        
+
 
 }
 

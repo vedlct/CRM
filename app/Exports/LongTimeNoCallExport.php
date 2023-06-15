@@ -29,9 +29,11 @@ class LongTimeNoCallExport implements FromCollection, WithHeadings
             'Company Name',
             'Category',
             'Website',
+            'Phone No',
             'Status',
             'Country',
             'User',
+            'Last Contacted',
         ];
     }
 }
