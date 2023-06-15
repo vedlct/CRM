@@ -7,7 +7,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Last Contacted Lead (Europe)</b></h2>
+        <h2 class="card-title" align="center"><b>Last Contacted Lead</b></h2>
         <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in someone's My Lead.</b></h4>
 
             <div class="table-responsive m-t-40">
@@ -89,12 +89,19 @@
                     @endforeach
 
                     </tbody>
+              
                 </table>
             </div>
+
+            <div class="col-md-5" style="float:left;">
+                <form method="POST" action="{{ route('exportLongTimeNoCall') }}">
+                    {{ csrf_field() }}
+                    <button class="btn btn-primary" type="submit">Export The List</button><br>
+                </form>
+            </div>
+
         </div>
     </div>
-
-
 
 
 

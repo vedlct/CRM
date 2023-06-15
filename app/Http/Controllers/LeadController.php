@@ -30,7 +30,7 @@ use DataTables;
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
-
+use App\Exports\LongTimeNoCallExport;
 
 use Goutte\Client;
 use GuzzleHttp\Psr7\Uri;
@@ -2887,7 +2887,7 @@ class LeadController extends Controller
                 // }
 
           
-                public function getLastCommentedLeads()
+                public function getLongTimeNoCall()
                 {
                     $User_Type = Session::get('userType');
                 
@@ -2920,7 +2920,7 @@ class LeadController extends Controller
                         $country = Country::get();
                         $status = Leadstatus::get();
                 
-                    return view('report.lastCommentedLeads')
+                    return view('report.longTimeNoCall')
                         ->with('leads', $leads)
                         ->with('callReports', $callReports)
                         ->with('possibilities', $possibilities)
@@ -2931,10 +2931,61 @@ class LeadController extends Controller
                 }
                  
 
+                public function exportLongTimeNoCall()
+                {
+                    $User_Type = Session::get('userType');
+                
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+
+                        $leads = Lead::select(
+                            'leads.leadId',
+                            'leads.companyName',
+                            'categories.categoryName as category_name',
+                            'leads.website',
+                            'leadstatus.statusName as status_name',
+                            'countries.countryName as country_name',
+                            'users.userId',
+                            'workprogress.created_at as workprogress_created_at'
+                            )
+
+                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
+                                            FROM workprogress
+                                            GROUP BY leadId) AS wp'), function ($join) {
+                                $join->on('leads.leadId', '=', 'wp.leadId');
+                            })
+                            ->leftJoin('workprogress', function ($join) {
+                                $join->on('wp.leadId', '=', 'workprogress.leadId')
+                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
+                            })
+                        
+                            ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+                            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                            ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                            ->where('leads.contactedUserId', '!=', null)
+                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
+                            ->where('leads.statusId', 7)
+                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
+                            ->orderBy('workprogress.created_at', 'desc')
+                            ->get();
+
+                    }        
+
+                        $categories = Category::where('type', 1)->get();
+                        $country = Country::get();
+                        $status = Leadstatus::get();
+                
+                 
+                        $export = new LongTimeNoCallExport ($leads, $categories, $country, $status);
+
+                        return Excel::download($export, 'LongTimeNoCallExport.csv');
+                        }
 
 
 
 
+
+                        
 
 }
 
