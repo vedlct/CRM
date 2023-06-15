@@ -2940,7 +2940,11 @@ class LeadController extends Controller
                                 $join->on('wp.leadId', '=', 'workprogress.leadId')
                                     ->on('wp.latest_created_at', '=', 'workprogress.created_at');
                             })
-                            ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            ->leftJoin('users', function ($join) {
+                                $join->on('workprogress.userId', '=', 'users.id')
+                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
+                            })
                             ->where('leads.contactedUserId', '!=', null)
                             ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
                             ->where('leads.statusId', 7)
@@ -2996,7 +3000,11 @@ class LeadController extends Controller
                                     ->on('wp.latest_created_at', '=', 'workprogress.created_at');
                             })
                         
-                            ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            ->leftJoin('users', function ($join) {
+                                $join->on('workprogress.userId', '=', 'users.id')
+                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
+                            })
                             ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
                             ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
                             ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
