@@ -680,6 +680,25 @@ class LeadController extends Controller
     public function assignStore(Request $r){             
         if($r->ajax()){
             foreach ($r->leadId as $lead){
+
+
+                $assignId=Leadassigned::select('assignId')
+                ->where('leadId',$lead)
+                // ->where('assignTo',Auth::user()->id)
+                ->where('leaveDate',null)
+                ->get();
+
+                foreach ($assignId as $assignId){
+
+                    $leave=Leadassigned::find($assignId->assignId);
+                    $leave->leaveDate=date('Y-m-d');
+                    $leave->save();
+                    $l=Lead::findOrFail($leave->leadId);
+                    $l->leadAssignStatus=0;
+                    $l->save();
+                }
+
+
                 $l=Lead::findOrFail($lead);
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
@@ -700,6 +719,8 @@ class LeadController extends Controller
                 $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $userName; //$this->returnUserName($r->userId); 
                 $activity->save();               
 
+
+
             }
             return Response('true');
             // return Response($r->leadId);
@@ -711,6 +732,23 @@ class LeadController extends Controller
     public function assignStore2(Request $r){
         if($r->ajax()){
             foreach ($r->leadId as $lead){
+
+                $assignId=Leadassigned::select('assignId')
+                ->where('leadId',$lead)
+                // ->where('assignTo',Auth::user()->id)
+                ->where('leaveDate',null)
+                ->get();
+
+                foreach ($assignId as $assignId){
+
+                    $leave=Leadassigned::find($assignId->assignId);
+                    $leave->leaveDate=date('Y-m-d');
+                    $leave->save();
+                    $l=Lead::findOrFail($leave->leadId);
+                    $l->leadAssignStatus=0;
+                    $l->save();
+                }
+
                 $l=Lead::findOrFail($lead);
                 $l->leadAssignStatus=1;
                 $l->statusId=2;
@@ -940,14 +978,13 @@ class LeadController extends Controller
 
                 foreach ($assignId as $assignId){
 
-
-                $leave=Leadassigned::find($assignId->assignId);
-                $leave->leaveDate=date('Y-m-d');
-                $leave->save();
-                $l=Lead::findOrFail($leave->leadId);
-                $l->leadAssignStatus=0;
-                $l->save();
-            }
+                    $leave=Leadassigned::find($assignId->assignId);
+                    $leave->leaveDate=date('Y-m-d');
+                    $leave->save();
+                    $l=Lead::findOrFail($leave->leadId);
+                    $l->leadAssignStatus=0;
+                    $l->save();
+                }
 
 
             }
