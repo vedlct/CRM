@@ -28,13 +28,10 @@
                 </li>
 
 
-                @if($userType =='ADMIN' || $userType =='SUPERVISOR' || $userType =='MANAGER')
-                    <li>
-                        <a href="{{ route('notice.index') }}"><i class="fa fa-bullhorn"></i>
-                            <span class="hide-menu">Communication</span></a>
-                    </li>
-
-                @endif
+                <li>
+                    <a href="{{ route('notice.index') }}"><i class="fa fa-bullhorn"></i>
+                        <span class="hide-menu">Communication</span></a>
+                </li>
 
 
                 <li class="treeview">
