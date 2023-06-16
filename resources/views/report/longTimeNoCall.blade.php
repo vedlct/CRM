@@ -7,8 +7,8 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Last Contacted Lead</b></h2>
-        <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in someone's My Lead.</b></h4>
+        <h2 class="card-title" align="center"><b>Long Time No Update</b></h2>
+        <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in My Lead.</b></h4>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

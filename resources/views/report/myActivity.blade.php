@@ -8,7 +8,7 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
         <h2 class="card-title" align="center"><b>My Activity</b></h2>
-        <h2 class="card-subtitle" align="center"><b>Only showing last 200 activities</b></h2>
+        <h4 class="card-subtitle" align="center"><b>Only showing last 500 activities</b></h4>
 
 
         <button id="filterButton" class="btn btn-primary">Today's Research</button>

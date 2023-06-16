@@ -2241,8 +2241,18 @@ class LeadController extends Controller
                 ->orderBy('workprogress.created_at','desc')
                 ->get();
            
-        }
-
+            } else {
+           
+                $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
+                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
+                ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('users.id', Auth::user()->id)
+                ->where('workprogress.callingReport', 11)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+       
+            }
 
             $possibilities = Possibility::get();
             $probabilities = Probability::get();
@@ -2749,99 +2759,38 @@ class LeadController extends Controller
 
 
 
-                // public function crawlWebsites(Request $request)
-                // {
-                //     $websites = $request->input('websites');
-                //     $imageSize = $request->input('imageSize');
-                //     $submitted = !empty($websites);
-                //     $imageData = [];
-                    
-                //     if ($submitted) {
-                //         try {
-                //             $client = new Client();
-                //             $websitesArray = preg_split("/\r\n|\n|\r/", $websites); // Split the input by new lines to get an array of URLs
-                //             $imageData = [];
-                    
-                //             foreach ($websitesArray as $website) {
-                //                 $crawler = $client->request('GET', $website);
-                //                 $imageData = array_merge($imageData, $this->getImagesData($crawler, $imageSize)); // Merge the image data from multiple URLs
-                //             }
-                    
-                //             return view('report.crawlWebsites', compact('submitted', 'imageData', 'websitesArray'));
-                //         } catch (\Exception $e) {
-                //             // Log or display the error message
-                //             $errorMessage = $e->getMessage();
-                //             error_log($errorMessage);
-                //             $imageData = [['error' => 'An error occurred while crawling the websites. Error: ' . $errorMessage]];
-                //         }
-                //     }
-                    
-            
-                //     return view('report.crawlWebsites', compact('submitted', 'imageData', 'websites'));
-                // }
-            
-                
-                // private function getImagesData($crawler, $threshold)
-                // {
-                //     $imageData = [];
-                
-                //     $crawler->filter('img')->each(function ($node) use (&$imageData, $threshold) {
-                //         $imageSrc = $node->attr('src');
-                
-                //         try {
-                //             $imageSize = getimagesize($imageSrc);
-                
-                //             if ($imageSize && isset($imageSize[0]) && $imageSize[0] > $threshold) {
-                //                 $imageUrl = $imageSrc;
-                //                 $imageThumbnail = $this->generateThumbnail($imageSrc, 60, 60);
-                //                 $imageData[] = [
-                //                     'url' => $imageUrl,
-                //                     'thumbnail' => $imageThumbnail,
-                //                     'size' => $imageSize[0],
-                //                 ];
-                //             }
-                //         } catch (\Exception $e) {
-                //             // Log or display the error message
-                //             $errorMessage = $e->getMessage();
-                //             error_log($errorMessage);
-                //         }
-                //     });
-                
-                //     return $imageData;
-                // }
-                
-                // private function generateThumbnail($imageUrl, $width, $height)
-                // {
-                //     $thumbnail = Image::make($imageUrl)->fit($width, $height)->encode('data-url');
-                //     $thumbnailTag = '<img src="' . $thumbnail . '" alt="Thumbnail" width="' . $width . '" height="' . $height . '">';
-                
-                //     return $thumbnailTag;
-                // }
-            
-
 
                 public function getAllChasingLeads(){
 
                     $User_Type=Session::get('userType');
                     if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR'){
 
-                    $leads = Lead::select(
-                        'leads.*',
-                        'users.firstName',
-                        'users.lastName',
-                        DB::raw('COUNT(workprogress.progressId) AS progressCount')
-                    )
-                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                    ->leftJoin('users', 'workprogress.userId', 'users.id')
-                    ->whereNotNull('leads.contactedUserId')
-                    ->where('leads.countryId', '!=', '49')
-                    ->where('leads.statusId', '7')
-                    ->where('users.active', '1')
-                    ->havingRaw('progressCount > 10')
-                    ->groupBy('leads.leadId', 'workprogress.userId')
-                    ->orderBy('progressCount', 'desc')
-                    ->get();
-        
+                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
+                        ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                        ->leftJoin('users', 'workprogress.userId', 'users.id')
+                        ->whereNotNull('leads.contactedUserId')
+                        ->where('leads.countryId', '!=', '49')
+                        ->where('leads.statusId', '7')
+                        ->where('users.active', '1')
+                        ->havingRaw('progressCount > 10')
+                        ->groupBy('leads.leadId', 'workprogress.userId')
+                        ->orderBy('progressCount', 'desc')
+                        ->get();
+                    } else {
+                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
+                        ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                        ->leftJoin('users', 'workprogress.userId', 'users.id')
+                        ->where('users.id', Auth::user()->id)
+                        ->whereNotNull('leads.contactedUserId')
+                        ->where('leads.countryId', '!=', '49')
+                        ->where('leads.statusId', '7')
+                        ->where('users.active', '1')
+                        ->havingRaw('progressCount > 10')
+                        ->groupBy('leads.leadId', 'workprogress.userId')
+                        ->orderBy('progressCount', 'desc')
+                        ->get();
+                    }
+
                     $possibilities = Possibility::get();
                     $probabilities = Probability::get();
                     $callReports = Callingreport::get();
@@ -2859,58 +2808,18 @@ class LeadController extends Controller
                         ->with('status',$status)
                         ->with('country',$country);
 
-                  }     
+                     
 
                 }    
     
 
-
-
-                // public function getLastCommentedLeads(){
-
-                //     $User_Type=Session::get('userType');
-                //     $sixMonthsAgo = now()->subDays(180)->toDateTimeString();
-
-                //     if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER'){
-                   
-                //         $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
-                //             ->where('leads.contactedUserId', '!=', null)
-                //             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                //             ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                //             ->where('users.active', 1)
-                //             ->where('leads.countryId', '!=', '49')
-                //             ->where('leads.statusId', 7)
-                //             ->groupBy('leads.leadId')
-                //             ->orderBy('workprogress.created_at', 'desc')
-                //             ->get();
-                   
-                //     }
-
-                //     $possibilities = Possibility::get();
-                //     $probabilities = Probability::get();
-                //     $callReports = Callingreport::get();
-                //     $categories=Category::where('type',1)->get();
-                //     $country=Country::get();
-                //     $status=Leadstatus::get();
-        
-        
-                //     return view('report.lastCommentedLeads')
-                //         ->with('leads', $leads)
-                //         ->with('callReports', $callReports)
-                //         ->with('possibilities', $possibilities)
-                //         ->with('probabilities', $probabilities)
-                //         ->with('categories',$categories)
-                //         ->with('status',$status)
-                //         ->with('country',$country);
-                    
-                // }
 
           
                 public function getLongTimeNoCall()
                 {
                     $User_Type = Session::get('userType');
                 
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
 
                         $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
                             ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
@@ -2927,6 +2836,30 @@ class LeadController extends Controller
                                 $join->on('workprogress.userId', '=', 'users.id')
                                     ->whereColumn('leads.contactedUserId', '=', 'users.id');
                             })
+                            ->where('leads.contactedUserId', '!=', null)
+                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
+                            ->where('leads.statusId', 7)
+                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
+                            ->orderBy('workprogress.created_at', 'desc')
+                            ->get();
+
+                    } else {    
+                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
+                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
+                                            FROM workprogress
+                                            GROUP BY leadId) AS wp'), function ($join) {
+                                $join->on('leads.leadId', '=', 'wp.leadId');
+                            })
+                            ->leftJoin('workprogress', function ($join) {
+                                $join->on('wp.leadId', '=', 'workprogress.leadId')
+                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
+                            })
+                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
+                            ->leftJoin('users', function ($join) {
+                                $join->on('workprogress.userId', '=', 'users.id')
+                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
+                            })
+                            ->where('users.id', Auth::user()->id)
                             ->where('leads.contactedUserId', '!=', null)
                             ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
                             ->where('leads.statusId', 7)
