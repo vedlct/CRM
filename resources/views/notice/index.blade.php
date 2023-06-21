@@ -1,5 +1,6 @@
 @extends('main')
 
+
 @section('content')
 	@php($userType = Session::get('userType'))
 	<div class="box-body">
@@ -18,51 +19,53 @@
 				</span>
 				@endif
 
-
-				<div class="table-responsive m-t-40">
-					<table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
-						<thead>
-						<tr role="row">
-							<th>Communication</th>
-							<th>Category</th>
-							@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-								<th>Action</th>
-							@endif
-						</tr>
-						</thead>
-						<tbody>
-						@foreach ($notices as $notice)
-							<tr>
-								<td>{!! nl2br(e($notice->msg)) !!} </br><small><font color="blue">Notice By: {{ $notice->userId }} &nbsp; &nbsp; &nbsp; Notice Time: {{ Carbon\Carbon::parse($notice->created_at)->format('d M Y') }}</font></small></td>
-								<td>
-									@if ($notice->categoryName  == 'General')
-										<font color="blue">General</font>
-									@elseif ($notice->categoryName  == 'Important')
-										<font color="pink">Important</font>
-									@elseif ($notice->categoryName  == 'Urgent')
-										<font color="red">Urgent</font>
-									@endif
-								</td>
-								<td>
-									@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-									<!-- Trigger the Edit modal with a button -->
-										<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
-										   data-notice-id="{{$notice->noticeId}}"
-										   data-notice-msg="{{$notice->msg}}"
-										   data-category-id="{{$notice->categoryId}}">
-										<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-									@endif
-								</td>
-							</tr>
-						@endforeach
-						</tbody>
-					</table>
 				</div>
-			</div>
 		</div>
 	</div>
 
+			<div class="row">
+			<div class="card-columns">
+				@foreach ($notices as $notice)
+					<div class="col-md-12">
 
+					@if ($notice->categoryName == 'Regular Notice')
+						<div class="card">
+					@elseif ($notice->categoryName == 'Urgent Notice')	
+						<div class="card text-white bg-danger">
+					@endif
+		
+					<div class="card-body">
+						<h3 class="card-title">{{ $notice->title }}</h3>
+						<p class="card-text">
+							{!! nl2br(e($notice->msg)) !!}
+							<br>
+						</p>
+
+						<footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite></footer></br>
+
+
+								@if($userType == 'ADMIN' || $userType == 'MANAGER' || $userType == 'SUPERVISOR')
+									<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
+										data-notice-id="{{$notice->noticeId}}"
+										data-notice-title="{{$notice->title}}"
+										data-notice-msg="{{$notice->msg}}"
+										data-category-id="{{$notice->categoryId}}">
+										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+									</a>
+									<!-- <a href="#delete_notice_modal" data-toggle="modal" class="btn btn-danger btn-sm"
+										data-notice-id="{{ $notice->noticeId }}"
+										data-notice-title="{{$notice->title}}"
+										data-notice-msg="{{ $notice->msg }}"
+										data-category-id="{{ $notice->categoryId }}">
+										<i class="fa fa-close" aria-hidden="true"></i>
+									</a> -->
+								@endif
+							</div>
+						</div>
+					</div>
+				@endforeach
+			</div>
+			</div>
 
 
 
@@ -84,11 +87,23 @@
 
 				{{ csrf_field() }}
 
-				<div class="col-md-12">
-					<div class="form-group row{{ $errors->has('msg') ? ' has-error' : '' }}">
-						<label for="msg" class="col-md-2 control-label">Communication</label>
+					<div class="col-md-12">
 
+					<br>
+
+					<div class="form-group row{{ $errors->has('msg') ? ' has-error' : '' }}">
+
+						<label for="title" class="col-md-2 control-label">Title</label>
 						<div class="col-md-10">
+						<input id="title" class="form-control form-control-warning" name="title" style="width:100%;" required autofocus value="{{ old('title') }}">
+
+							
+						</div>
+
+						
+						<label for="msg" class="col-md-2 control-label">Communication</label>
+						<div class="col-md-10">
+						<br>
 							<textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:300px" required>{{ old('msg') }}</textarea>
 
 							@if ($errors->has('msg'))
@@ -140,19 +155,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 	<!--edit notice-->
 	<div class="modal" id="edit_notice_modal" style="">
 		<div class="modal-dialog" style="max-width: 60%;">
@@ -168,11 +170,21 @@
 				</div>
 
 
-
 				<div class="col-md-12">
 					<div class="form-group row{{ $errors->has('msg') ? ' has-error' : '' }}">
-						<label for="msg" class="col-md-2 control-label">Communication</label>
 
+						<label for="title" class="col-md-2 control-label">Title</label>
+						<div class="col-md-10">
+						<input id="title" class="form-control form-control-warning" name="title" style="width:100%;" required autofocus value="{{ $notice->title }}">
+
+							@if ($errors->has('title'))
+								<span class="help-block">
+                                        <strong>{{ $errors->first('title') }}</strong>
+                                    </span>
+							@endif
+						</div>
+						
+						<label for="msg" class="col-md-2 control-label">Message</label>
 						<div class="col-md-10">
 							<textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required autofocus>{{ $notice->msg }}</textarea>
 
@@ -232,12 +244,11 @@
 	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 	<!-- <script src="gen_validatorv4.js" type="text/javascript"></script> -->
 
+
+
+
 	<script>
-        $(document).ready(function() {
-            $('#myTable').DataTable();
-
-        });
-
+        
 
 
 
@@ -247,11 +258,13 @@
 
             //get data-id attribute of the clicked element
             var noticeId = $(e.relatedTarget).data('notice-id');
+			var noticeTitle = $(e.relatedTarget).data('notice-title');
             var noticeMsg = $(e.relatedTarget).data('notice-msg');
             var categoryId = $(e.relatedTarget).data('category-id');
             //alert(categoryId);
             //populate the textbox
             $(e.currentTarget).find('input[name="noticeId"]').val(noticeId);
+			$(e.currentTarget).find('input[name="title"]').val(noticeTitle);
             $(e.currentTarget).find('textarea[name="msg"]').val(noticeMsg);
             $(e.currentTarget).find('#categoryId').val(categoryId);
 
@@ -268,11 +281,13 @@
 
             //get data-id attribute of the clicked element
             var noticeId = $(e.relatedTarget).data('notice-id');
+            var noticeTitle = $(e.relatedTarget).data('notice-title');
             var noticeMsg = $(e.relatedTarget).data('notice-msg');
             var categoryId = $(e.relatedTarget).data('category-id');
             //alert(noticeId);
             //populate the textbox
             $(e.currentTarget).find('input[name="noticeId"]').val(noticeId);
+            $(e.currentTarget).find('input[name="title"]').val(noticeTitle);
             $(e.currentTarget).find('textarea[name="msg"]').val(noticeMsg);
             $(e.currentTarget).find('input[name="categoryId"]').val(categoryId);
 

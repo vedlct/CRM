@@ -81,11 +81,12 @@ class NoticeController extends Controller
         $this->validateInput($request);
             DB::table('notices')->insert([
        //  Notice::create([
+                'title' => $request['title'],
                 'msg' => $request['msg'],
                 'categoryId' => $request['categoryId'],
                 'userId' => Auth::user()->id
         ]);
-        Session::flash('message', 'Successfully Notice Created');
+        Session::flash('message', 'Notice Created Successfully');
         return redirect()->intended('notice');
     }
 
@@ -131,6 +132,7 @@ class NoticeController extends Controller
         $notice = Notice::findOrFail($request->noticeId);
         $this->validateInput($request);
         $input = [
+            'title' => $request['title'],
             'msg' => $request['msg'],
             'categoryId' => $request['categoryId'],
             'userId' => Auth::user()->id
@@ -139,7 +141,7 @@ class NoticeController extends Controller
             ->update($input);
         
 
-        Session::flash('message', 'Successfully Notice Updated');
+        Session::flash('message', 'Notice Updated Successfully');
         return redirect()->intended('notice');
     }
 

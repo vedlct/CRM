@@ -75,7 +75,7 @@
                 @if($userType=='SUPERVISOR' || $userType=='ADMIN')
 
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-user-circle-o" aria-hidden="true"></i> <span
+                    <a href="#"><i class="fa fa-superpowers" aria-hidden="true"></i> <span
                             class="hide-menu">Analysis</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-right pull-right"></i>
