@@ -4,42 +4,33 @@
 
 @section('content')
 
-@php($userType = Session::get('userType'))
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Long Time No Update</b></h2>
-        @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
-            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in My Lead. </b></h4>
-        @else
-            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 3 months or more but in My Lead. </b></h4>
-        @endif
+        <h2 class="card-title" align="center"><b>Fred's Maximum Chasing Companies</b></h2>
+        <h3 class="card-subtitle" align="center">This table wil show the names of the companies that are being chased by marketers for more than 10 times</h3>
 
-            <div class="col-md-5" style="float:left;">
-                @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
-                    <form method="POST" action="{{ route('exportLongTimeNoCall') }}">
+        <div class="col-md-5" style="float:left;">
+                    <form method="POST" action="{{ route('exportFredChasingLeads') }}">
                         {{ csrf_field() }}
                         <button class="btn btn-primary" type="submit">Export The List</button>
                     </form>
-                @endif    
                 <br><br>
             </div>
-
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <!-- <th width="5%">Select</th> -->
                         <th width="5%">Lead Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
-                        <th width="10%">website</th>
+                        <th width="15%">website</th>
                         <th width="8%">Country</th>
-                        <th width="8%">Contact Number</th>
                         <th width="7%">IPP</th>
-                        <th width="10%">Last Comment</th>
-                        <th width="7%">Marketer</th>
+                        <th width="10%">Current Marketer</th>
+                        <th width="5%">No of Chase</th>
+                        <th width="15%">Exclusive Comment</th>
                         <th width="10%">Action</th>
 
                     </tr>
@@ -48,20 +39,31 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <!-- <td><input type="checkbox" class="lead-checkbox"></td> -->
                             <td >{{$lead->leadId}}</td>
                             <td >{{$lead->companyName}}</td>
                             <td >{{$lead->category->categoryName}}</td>
                             <td >{{$lead->website}}</td>
                             <td >{{$lead->country->countryName}}</td>
-                            <td >{{$lead->contactNumber}}</td>
                                 @if($lead->ippStatus == '0') 
                                     <td>No</td>
                                 @else 
                                     <td>Yes</td>
                                 @endif                                 
-                            <td >{{ $lead->workprogress_created_at }}</td>
                             <td >{{$lead->firstName}} {{$lead->lastName}}
+                            </td>
+                            <td >{{$lead->progressCount}} </td>
+                            <td>
+                                @php
+                                    $matchingComments = $wp->where('leadId', $lead->leadId)
+                                        ->pluck('comments')
+                                        ->filter(function ($comment) {
+                                            return stripos($comment, 'TEST') !== false
+                                                || stripos($comment, 'CLOSED') !== false
+                                                || stripos($comment, 'CLIENT') !== false;
+                                        })
+                                        ->implode(PHP_EOL . '<br><br>');
+                                    echo $matchingComments;
+                                @endphp
                             </td>
                             <td >
                                 <!-- Trigger the modal with a button -->
@@ -107,34 +109,12 @@
                     @endforeach
 
                     </tbody>
-              
                 </table>
             </div>
-
-
-            <!-- <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
-
-
-            <div class="row">
-
-                <div class="form-group col-md-8">
-
-                    <label ><b>Select Status:</b></label>
-                    <select class="form-control"  name="status" id="otherCatches" style="width: 30%">
-                        <option value="">select</option>
-                        @foreach($outstatus as $s)
-                            <option value="{{$s->statusId}}">{{$s->statusName}} </option>
-                        @endforeach
-                    </select>
-
-                    <input type="hidden" class="form-control" id="inp" name="leadId">
-
-                </div>
-            </div> -->
-
-
         </div>
     </div>
+
+
 
 
 
@@ -389,7 +369,7 @@
                                 <p>Here you will see who reached out to this company for how many times.</p>
                                 <div id="counter"></div>
                             </ul>
-                            
+
                         </div>
 
                         <div class="col-md-12"><br>
@@ -401,7 +381,6 @@
                 </div>
                 <div class="modal-footer">
                     <div id="latestFollowups"></div>
-
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -466,58 +445,6 @@
 
 
     <script>
-
-
-        // function selectAll(source) {
-        //     var checkboxes = document.querySelectorAll('#myTable tbody .lead-checkbox');
-        //     for (var i = 0; i < checkboxes.length; i++) {
-        //         checkboxes[i].checked = source.checked;
-        //     }
-        // }
-
-
-        // $("#otherCatches").change(function() {
-
-        //     var chkArray = [];
-        //     var status=$(this).val();
-        //     $('#myTable tbody .lead-checkbox:checked').each(function() {
-        //         chkArray.push($(this).val());
-        //     });
-        //     console.log("Selected checkboxes:", chkArray);
-        //     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        //     jQuery('input:checkbox:checked').parents("tr").remove();
-        //     $(this).prop('selectedIndex',0);
-
-        //         $.ajax({
-        //         type: 'post',
-        //         url: '{{route('contactedStatus')}}',
-        //         data: {
-        //             _token: CSRF_TOKEN,
-        //             'leadId': chkArray,
-        //             'status': status
-        //         },
-        //         beforeSend: function() {
-        //             return confirm("Are you sure?");
-        //         },
-        //         success: function(data) {
-        //             console.log("Response data:", data);
-        //             if (data === 'true') {
-        //                 $('#alert').html('<strong>Success!</strong> Status Changed');
-        //                 $('#alert').show();
-        //             } else {
-        //                 console.log("Status change failed");
-        //             }
-        //         },
-        //         error: function(jqXHR, textStatus, errorThrown) {
-        //             console.log("AJAX request failed:", textStatus, errorThrown);
-        //         }
-        //     });
-
-        // });
-
-
-
-
 
         //for Edit modal
 
@@ -631,23 +558,10 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
-
-                    var latestFollowupsHtml = '';
-
-                    // Loop through the latest follow-up data
-                    $.each(data.latestFollowups, function(index, followup) {
-                        latestFollowupsHtml += '<div>';
-                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
-                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
-                        latestFollowupsHtml += '</div>';
-                    });
-
-                    // Set the latest follow-up HTML to the latestFollowups div
-                    $('#latestFollowups').html(latestFollowupsHtml);
                 }
             });
 
-            
+
             $.ajax({
                 type: 'post',
                 url: '{{ route('getLatestFollowup') }}',
@@ -669,9 +583,7 @@
             });
 
 
-        });        
-
-
+        });
 
         //        check followup date count
 

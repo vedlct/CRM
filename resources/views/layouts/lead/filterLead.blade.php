@@ -27,6 +27,7 @@
                         <th >Volume</th>
                         <th >Process</th>
                         <th >Frequency</th>
+                        <th >Cretaed Date</th>
                         <th >Action</th>
                     </tr>
                     </thead>
@@ -290,6 +291,7 @@
                     {data: 'volume', name: 'volume', defaultContent: ''},
                     {data: 'process', name: 'process', defaultContent: ''},
                     {data: 'frequency', name: 'frequency', defaultContent: ''},
+                    {data: 'created_at', name: 'created_at', defaultContent: ''},
 
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 

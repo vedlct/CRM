@@ -79,9 +79,11 @@ class ReportController extends Controller
          public function hourReport(Request $r)
         {
             $User_Type = Session::get('userType');
-            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
+
+            if ($User_Type == 'SUPERVISOR') {
+
                 $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
-                $wp = User::where('typeId', 5)->where('active', 1)->select('id', 'userId')->get();
+                $wp = User::where('active', 1)->select('id', 'userId')->get();
                 $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
         
                 // Find the values with the lowest and highest differences
@@ -101,12 +103,95 @@ class ReportController extends Controller
                     $previousTime = $currentTime;
                 }
         
-                return view('hourReport', compact('work', 'wp', 'highlightedTimes', 'highlightedTimesMax'));
+            } elseif ($User_Type == 'MANAGER') {
+
+                $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
+                $wp = User::select('id', 'userId')->where('active', 1)->where('teamId', Auth::user()->teamId)->get();
+                $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
+
+                // Find the values with the lowest and highest differences
+                $highlightedTimes = [];
+                $highlightedTimesMax = [];
+                $previousTime = null;
+                foreach ($work as $entry) {
+                    $currentTime = strtotime($entry->createtime);
+                    if ($previousTime !== null) {
+                        $timeDiff = abs($currentTime - $previousTime) / 60; // Difference in minutes
+                        if ($timeDiff <= 1) { // One minute or less
+                            $highlightedTimes[] = $entry->createtime;
+                        } elseif ($timeDiff >= 15) { // Fifteen minutes or more
+                            $highlightedTimesMax[] = $entry->createtime;
+                        }
+                    }
+                    $previousTime = $currentTime;
+                }
+
             }
+
+            return view('hourReport', compact('work', 'wp', 'highlightedTimes', 'highlightedTimesMax'));
+
         }
            
 
+        public function hourReport_filter(Request $r)
+        {
+            $User_Type = Session::get('userType');
+    
+            if ($User_Type == 'SUPERVISOR') {
+    
+                $selectedDay = $r->selectedDay;
+                $wp = User::where('active', 1)->select('id', 'userId')->get();
+                $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
+        
+                // Find the values with the lowest and highest differences
+                $highlightedTimes = [];
+                $highlightedTimesMax = [];
+                $previousTime = null;
+                foreach ($work as $entry) {
+                    $currentTime = strtotime($entry->createtime);
+                    if ($previousTime !== null) {
+                        $timeDiff = abs($currentTime - $previousTime) / 60; // Difference in minutes
+                        if ($timeDiff <= 1) { // One minutes or less
+                            $highlightedTimes[] = $entry->createtime;
+                        } elseif ($timeDiff >= 15) { // Fifteen minutes or more
+                            $highlightedTimesMax[] = $entry->createtime;
+                        }
+                    }
+                    $previousTime = $currentTime;
+                }
+        
+            } elseif ($User_Type == 'MANAGER') {
+    
+                $selectedDay = $r->selectedDay;
+                $wp = User::select('id', 'userId')->where('active', 1)->where('teamId', Auth::user()->teamId)->get();
+                $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
+        
+                // Find the values with the lowest and highest differences
+                $highlightedTimes = [];
+                $highlightedTimesMax = [];
+                $previousTime = null;
+                foreach ($work as $entry) {
+                    $currentTime = strtotime($entry->createtime);
+                    if ($previousTime !== null) {
+                        $timeDiff = abs($currentTime - $previousTime) / 60; // Difference in minutes
+                        if ($timeDiff <= 1) { // One minutes or less
+                            $highlightedTimes[] = $entry->createtime;
+                        } elseif ($timeDiff >= 15) { // Fifteen minutes or more
+                            $highlightedTimesMax[] = $entry->createtime;
+                        }
+                    }
+                    $previousTime = $currentTime;
+                }
+        
+            }
+    
+    
+            return view('hourReport-filter', compact('work', 'wp', 'highlightedTimes', 'highlightedTimesMax'));
+        }
 
+
+
+        
         public function myHourReport(Request $r)
         {
             $User_Type = Session::get('userType');
@@ -114,7 +199,7 @@ class ReportController extends Controller
                 $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
                 $userId = Auth::user()->id; // Get the logged-in user's ID
                 
-                $wp = User::where('typeId', 5)->where('id', Auth::user()->id)->select('id', 'userId')->get();
+                $wp = User::where('id', Auth::user()->id)->select('id', 'userId')->get();
                 $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "' AND userId = " . $userId)));
         
                 // Find the values with the lowest and highest differences
@@ -1796,34 +1881,7 @@ class ReportController extends Controller
     // }
 
 
-    public function hourReport_filter(Request $r)
-    {
-        $User_Type = Session::get('userType');
-        if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
-            $selectedDay = $r->selectedDay;
-            $wp = User::where('typeId', 5)->select('id', 'userId')->get();
-            $work = collect(DB::select(DB::raw("SELECT userId as userid, time(created_at) as createtime FROM workprogress WHERE date(created_at) = '" . $selectedDay . "'")));
     
-            // Find the values with the lowest and highest differences
-            $highlightedTimes = [];
-            $highlightedTimesMax = [];
-            $previousTime = null;
-            foreach ($work as $entry) {
-                $currentTime = strtotime($entry->createtime);
-                if ($previousTime !== null) {
-                    $timeDiff = abs($currentTime - $previousTime) / 60; // Difference in minutes
-                    if ($timeDiff <= 1) { // One minutes or less
-                        $highlightedTimes[] = $entry->createtime;
-                    } elseif ($timeDiff >= 15) { // Fifteen minutes or more
-                        $highlightedTimesMax[] = $entry->createtime;
-                    }
-                }
-                $previousTime = $currentTime;
-            }
-    
-            return view('hourReport-filter', compact('work', 'wp', 'highlightedTimes', 'highlightedTimesMax'));
-        }
-    }
     
 
 

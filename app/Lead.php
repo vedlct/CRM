@@ -110,7 +110,9 @@ class Lead extends Model
     // }
     
     
-// This function will show the filtered leads which are not touched by the current user and which are filtered by the current user in last 3 months 
+// This function will show the filtered leads - that are neither touched nor filtered by the current user. 
+// It also does not show the filtered leads in last 1 month by other users   
+
     public function showNotAssignedLeads()
     {
         $currentUserId = Auth::user()->id;

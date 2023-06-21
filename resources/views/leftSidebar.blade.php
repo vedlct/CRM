@@ -120,7 +120,6 @@
                                 <span class="hide-menu"> Long Time No Call</span></a>
                         </li>
 
-
                     </ul>
                 </li>
 
@@ -230,22 +229,40 @@
                                 <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i><span class="hide-menu">Filtered Leads</span></a>
                             </li>
 
-                            <li>
-                                <a href="{{route('googleSearch')}}"><i class="fa fa-search" aria-hidden="true"></i>
-                                    <span class="hide-menu"> Google Search</span></a>
-                            </li>
-                            <li>
-                                <a href="{{route('crawlWebsites')}}"><i class="fa fa-recycle" aria-hidden="true"></i>
-                                    <span class="hide-menu"> Crawl Website</span></a>
-                            </li>
-
-                            <li>
-                                <a href="{{route('addNightShift')}}"><i class="fa fa-adjust"></i>
-                                <span class="hide-menu">Add Lead</span></a>
-
-                            </li>
-
                         </ul>
+                    </li>
+
+
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-search" aria-hidden="true"></i> <span
+                                class="hide-menu">Lead Mining</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
+                        </a>
+                            <ul class="treeview-menu">
+
+                                <li>
+                                    <a href="{{route('googleSearch')}}"><i class="fa fa-google" aria-hidden="true"></i>
+                                        <span class="hide-menu"> Google Search</span></a>
+                                </li>
+                                <li>
+                                    <a href="{{route('crawlWebsites')}}"><i class="fa fa-recycle" aria-hidden="true"></i>
+                                        <span class="hide-menu"> Crawl Website</span></a>
+                                </li>
+
+                                <li>
+                                    <a href="{{route('keywordAnalysis')}}"><i class="fa fa-key" aria-hidden="true"></i>
+                                        <span class="hide-menu"> All Keywords</span></a>
+                                </li>
+
+                                <li>
+                                    <a href="{{route('addNightShift')}}"><i class="fa fa-adjust"></i>
+                                        <span class="hide-menu">Add Lead</span></a>
+                                </li>
+
+
+                            </ul>
                     </li>
 
                 @endif  
@@ -420,6 +437,14 @@
 
                 @endif
 
+                @if($userType =='SUPERVISOR' )
+                        <li class="nav-devider"></li>
+                        <li>
+                            <a href="{{route('getFredChasingLeads')}}"><i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                                <span class="hide-menu"> Fred's Chasing</span></a>
+                        </li>
+
+                @endif
 
 
                 <li class="nav-devider"></li>

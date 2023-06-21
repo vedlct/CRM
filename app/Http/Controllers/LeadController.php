@@ -31,6 +31,7 @@ use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
 use App\Exports\LongTimeNoCallExport;
+use App\Exports\fredChasingLeadsExport;
 
 use Goutte\Client;
 use GuzzleHttp\Psr7\Uri;
@@ -1195,7 +1196,7 @@ class LeadController extends Controller
     public function getCallingReport(Request $r){
         if($r->ajax()){
 
-            $workprocess = Workprogress::where('callingReport' , '5')
+            $workprocess = Workprogress::where('callingReport' , '11')
                 ->where('userId',Auth::user()->id )
                 ->where('leadId',$r->leadId )
                 ->get();
@@ -1223,7 +1224,7 @@ class LeadController extends Controller
                 echo "<option value=''><b>(select one)</b></option>";
                 foreach ($callReports as $clR){
 
-                    if ($clR->callingReportId !=5){
+                    if ($clR->callingReportId !=11){
 
                         echo  "<option value=".$clR->callingReportId.">".$clR->report."</option>";
                     }
@@ -2474,42 +2475,6 @@ class LeadController extends Controller
         }        
 
 
-    // public function googleSearch(Request $request)
-    // {
-    //     $searchTerm = $request->input('searchTerm');
-    //     $results = [];
-    
-    //     // Store the engine key and API key in the session
-    //     $engineKey = $request->input('engineKey');
-    //     $apiKey = $request->input('apiKey');
-    //     Session::put('engineKey', $engineKey);
-    //     Session::put('apiKey', $apiKey);
-
-
-    //     if (empty($searchTerm)) {
-    //         // Return the view without executing the search logic
-    //         return view('report.googleSearch')->with('searchTerm', $searchTerm);
-    //     }
-    
-  
-    //         $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
-    //         $fulltext->setEngineId($engineKey); // gets the engine ID
-    //         $fulltext->setApiKey($apiKey); // gets the API key
-    //         $results = $fulltext->getResults($searchTerm); // get results for the query
-    
-    //         // Extract the domain from each search result URL
-    //         foreach ($results as $result) {
-    //             $result->domain = $this->getDomainFromURL($result->link);
-    //             $result->availability = $this->checkLeadAvailability($result->domain);
-    //         }
-        
-    
-    //     return view('report.googleSearch')
-    //         ->with('results', $results)
-    //         ->with('searchTerm', $searchTerm);
-    // }
-
-
 
         public function googleSearch(Request $request)
         {
@@ -2525,182 +2490,8 @@ class LeadController extends Controller
         
             if (empty($searchTerm)) {
                 // Return the view without executing the search logic
-                return view('report.googleSearch')->with('searchTerm', $searchTerm);
+                return view('mining.googleSearch')->with('searchTerm', $searchTerm);
             }
-        
-            // $excludedKeywords = [
-            //     'soundcloud',
-            //     'medium',
-            //     'nytimes',
-            //     'yelp',
-            //     'facebook', 
-            //     'pinterest', 
-            //     'instagram',
-            //     'wikipedia', 
-            //     'walmart', 
-            //     'nike',
-            //     'next',
-            //     'quora',
-            //     'reddit',
-            //     'Louis Vuitton',
-            //     'Gucci', 
-            //     'Chanel', 
-            //     'Adidas', 
-            //     'Hermès', 
-            //     'Zara', 
-            //     'H&M', 
-            //     'Cartier', 
-            //     'uniqlo ',
-            //     'gap', 
-            //     'amazon',
-            //     'schiesser',
-            //     'wolfordshop',
-            //     'jbc',
-            //     'lolaliza',
-            //     'xandres',
-            //     'mayerline',
-            //     'essentiel-antwerp',
-            //     'bellerose',
-            //     'zeb',
-            //     'riverwoods',
-            //     'belloya',
-            //     'terrebleue',
-            //     'vila',
-            //     'pieces',
-            //     'noisymay',
-            //     'selected',
-            //     'only',
-            //     'veromoda',
-            //     'jackjones',
-            //     'mamalicious',
-            //     'mosscopenhagen',
-            //     'masai',
-            //     'parttwo',
-            //     'samsoe',
-            //     'baumundpferdgarten',
-            //     'gestuz',
-            //     'marimekko',
-            //     'lindex',
-            //     'ivanahelsinki',
-            //     'aboutyou',
-            //     'zalando',
-            //     'edited',
-            //     'mango',
-            //     'reserved',
-            //     'pimkie',
-            //     'asos',
-            //     'bershka',
-            //     'pullandbear',
-            //     'weekday',
-            //     'monki',
-            //     'stories',
-            //     'bonprix',
-            //     'veromoda',
-            //     'esprit',
-            //     'orsay',
-            //     'newyorker',
-            //     'snipes',
-            //     'engelhorn',
-            //     'soliver',
-            //     'cecil',
-            //     'gerryweber',
-            //     'vanlaack',
-            //     'richandroyal',
-            //     'zero',
-            //     'oneills',
-            //     'ovs',
-            //     'calzedonia',
-            //     'tezenis',
-            //     'carpisa',
-            //     'alcott',
-            //     'motivi',
-            //     'stradivarius',
-            //     'bershka',
-            //     'pullandbear',
-            //     'benetton',
-            //     'liujo',
-            //     'sisley',
-            //     'calliope',
-            //     'intimissimi',
-            //     'yamamay',
-            //     'goldenpoint',
-            //     'subdued',
-            //     'freddy',
-            //     'terranovastyle',
-            //     'steps',
-            //     'shoeby',
-            //     'msmode',
-            //     'riverisland',
-            //     'veromoda',
-            //     'jackjones',
-            //     'only',
-            //     'promiss',
-            //     'expresso',
-            //     'costesfashion',
-            //     'sandwichfashion',
-            //     'claudiastrater',
-            //     'wefashion',
-            //     'paprika',
-            //     'reserved',
-            //     'mohito',
-            //     'housebrand',
-            //     'cropp',
-            //     'desigual',
-            //     'spf',
-            //     'bershka',
-            //     'pullandbear',
-            //     'stradivarius',
-            //     'mango',
-            //     'adolfodominguez',
-            //     'amichi',
-            //     'womensecret',
-            //     'scalpers',
-            //     'tendam',
-            //     'pullandbear',
-            //     'bimbaylola',
-            //     'oysho',
-            //     'uterque',
-            //     'ginatricot',
-            //     'weekday',
-            //     'monki',
-            //     'stories',
-            //     'lindex',
-            //     'cubus',
-            //     'kappahl',
-            //     'oddmolly',
-            //     'acnestudios',
-            //     'jlindeberg',
-            //     'nudiejeans',
-            //     'bjornborg',
-            //     'missyempire',
-            //     'inthestyle',
-            //     'isawitfirst',
-            //     'rebelliousfashion',
-            //     'femmeluxefinery',
-            //     'nastygal',
-            //     'ohpolly',
-            //     'silkfred',
-            //     'pinkboutique',
-            //     'selectfashion',
-            //     'isawitfirst',
-            //     'romanoriginals',
-            //     'littlewoods',
-            //     'chichiclothing',
-            //     'goddiva',
-            //     'wantthattrend',
-            //     'foreverunique',
-            //     'rarelondon',
-            //     'nobodyschild',
-            //     'axparis',
-            //     'apricotonline',
-            //     'school',
-            //     'college',
-            //     'varsity',
-            //     'education',
-            //     'government',
-            //     'moncler'
-
-            // ]; // Specify the keywords to exclude
 
             $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
             
@@ -2739,7 +2530,7 @@ class LeadController extends Controller
                 }
             }
 
-            return view('report.googleSearch')
+            return view('mining.googleSearch')
                 ->with('results', $results)
                 ->with('searchTerm', $searchTerm);
         }
@@ -2863,12 +2654,17 @@ class LeadController extends Controller
                             ->where('leads.contactedUserId', '!=', null)
                             ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
                             ->where('leads.statusId', 7)
-                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
+                            ->whereDate('workprogress.created_at', '<=', now()->subDays(90))
                             ->orderBy('workprogress.created_at', 'desc')
                             ->get();
 
                     }        
 
+                        $outstatus=Leadstatus::where('statusId','!=',7)
+                            ->where('statusId','!=',1)
+                            ->where('statusId','!=',6)
+                            ->get();
+        
                         $possibilities = Possibility::get();
                         $probabilities = Probability::get();
                         $callReports = Callingreport::get();
@@ -2883,7 +2679,8 @@ class LeadController extends Controller
                         ->with('probabilities', $probabilities)
                         ->with('categories', $categories)
                         ->with('status', $status)
-                        ->with('country', $country);
+                        ->with('country', $country)
+                        ->with('outstatus', $outstatus);
                 }
                  
 
@@ -2891,7 +2688,7 @@ class LeadController extends Controller
                 {
                     $User_Type = Session::get('userType');
                 
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
 
                         $leads = Lead::select(
                             'leads.leadId',
@@ -2944,9 +2741,103 @@ class LeadController extends Controller
 
 
 
+                        public function getFredChasingLeads(){
+
+                            $User_Type=Session::get('userType');
+                            if($User_Type == 'SUPERVISOR'){
+        
+                                $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
+                                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                ->where('leads.statusId', '!=', '6' )
+                                ->where('workprogress.userId', '2')
+                                ->havingRaw('progressCount > 10')
+                                ->groupBy('leads.leadId', 'workprogress.userId')
+                                ->orderBy('progressCount', 'desc')
+                                ->get();
+
+                            }
+        
+                            $leadIds = $leads->pluck('leadId')->toArray();
+
+                            $wp = Workprogress::whereIn('leadId', $leadIds)
+                                ->where(function ($query) {
+                                    $query->where('comments', 'LIKE', '%TEST%')
+                                        ->orWhere('comments', 'LIKE', '%CLOSED%')
+                                        ->orWhere('comments', 'LIKE', '%CLIENT%');
+                                })
+                                ->get();
+                        
+
+                            $possibilities = Possibility::get();
+                            $probabilities = Probability::get();
+                            $callReports = Callingreport::get();
+                            $categories=Category::where('type',1)->get();
+                            $country=Country::get();
+                            $status=Leadstatus::get();
+                
+                
+                            return view('report.fredChasingLeads')
+                                ->with('leads', $leads)
+                                ->with('callReports', $callReports)
+                                ->with('possibilities', $possibilities)
+                                ->with('probabilities', $probabilities)
+                                ->with('categories',$categories)
+                                ->with('status',$status)
+                                ->with('country',$country)
+                                ->with('wp',$wp);
+        
+                        }    
 
 
-
+                                    public function exportFredChasingLeads()
+                                    {
+                                        $User_Type = Session::get('userType');
+                                        if ($User_Type == 'SUPERVISOR') {
+                                            // Retrieve leads
+                                            $leads = Lead::select('leads.leadId',
+                                                'leads.companyName',
+                                                'categories.categoryName as category_name',
+                                                'leads.website',
+                                                'leads.contactNumber',
+                                                'leadstatus.statusName as status_name',
+                                                'countries.countryName as country_name',
+                                                'users.userId',
+                                                DB::raw('COUNT(workprogress.progressId) AS progressCount')
+                                            )
+                                                ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+                                                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                                                ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                                                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                                ->where('leads.statusId', '!=', '6')
+                                                ->where('workprogress.userId', '2')
+                                                ->havingRaw('progressCount > 10')
+                                                ->groupBy('leads.leadId', 'workprogress.userId')
+                                                ->orderBy('progressCount', 'desc')
+                                                ->get();
+                                        }
+                                    
+                                        $leadIds = $leads->pluck('leadId')->toArray();
+                                    
+                                        // Retrieve workprogress comments
+                                        $wp = Workprogress::whereIn('leadId', $leadIds)
+                                            ->where(function ($query) {
+                                                $query->where('comments', 'LIKE', '%TEST%')
+                                                    ->orWhere('comments', 'LIKE', '%CLOSED%')
+                                                    ->orWhere('comments', 'LIKE', '%CLIENT%');
+                                            })
+                                            ->get();
+                                    
+                                        $categories = Category::where('type', 1)->get();
+                                        $country = Country::get();
+                                        $status = Leadstatus::get();
+                                    
+                                        $export = new fredChasingLeadsExport($leads, $wp);
+                                    
+                                        return Excel::download($export, 'fredChasingLeadsExport.csv');
+                                    }
+                        
 
 }
 

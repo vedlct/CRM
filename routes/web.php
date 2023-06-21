@@ -251,15 +251,24 @@ Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('dupli
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
-Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
-Route::post('/googleSearch', 'LeadController@googleSearch');
 
 Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
 Route::get('/longTimeNoCall', 'LeadController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'LeadController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
 
+Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('getFredChasingLeads');
+Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');
+
+
+//Lead Mining Routes
+Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
+Route::post('/googleSearch', 'LeadController@googleSearch');
+
 Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
+
+Route::get('/keywords', 'KeywordController@index')->name('keywordAnalysis');
+Route::post('/updateKeyword', 'KeywordController@updateKeyword')->name('updateKeyword');
 
 //Report - OKR
 
