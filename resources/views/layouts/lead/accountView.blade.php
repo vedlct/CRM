@@ -54,11 +54,45 @@
                                 </p>
 
                                 <div class="mb-3">
-                                    <a href="#call_modal" class="btn btn-info">Calling</a>
+                                    <a 
+                                        href="#call_modal" 
+                                        class="btn btn-info" 
+                                        data-toggle="modal" 
+                                        data-lead-id="{{$lead->leadId}}" 
+                                        data-lead-name="{{$lead->companyName}}"
+                                        data-lead-possibility="{{$lead->possibilityId}}" 
+                                        data-lead-probability="{{$lead->probabilityId}}"
+                                    >Calling</a>
 
-                                    <a href="#lead_activities" class="btn btn-primary" data-toggle="modal" data-lead-id="{{$lead->leadId}}" data-lead-name="{{$lead->companyName}}">Activities</a>
+                                    <a 
+                                        href="#lead_activities" 
+                                        class="btn btn-primary" 
+                                        data-toggle="modal" 
+                                        data-lead-id="{{$lead->leadId}}" 
+                                        data-lead-name="{{$lead->companyName}}"
+                                    >Activities</a>
                                     
-                                    <a href="#edit_modal" class="btn btn-secondary">Edit</a>
+                                    <a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
+                                        data-lead-id="{{$lead->leadId}}" 
+                                        data-lead-name="{{$lead->companyName}}"
+                                        data-lead-email="{{$lead->email}}"
+                                        data-lead-number="{{$lead->contactNumber}}"
+                                        data-lead-person="{{$lead->personName}}"
+                                        data-lead-website="{{$lead->website}}"
+                                        data-lead-category="{{$lead->category->categoryId}}"
+                                        data-lead-country="{{$lead->countryId}}"
+                                        data-lead-designation="{{$lead->designation}}"
+                                        data-lead-linkedin="{{$lead->linkedin}}"
+                                        data-lead-founded="{{$lead->founded}}"
+                                        data-lead-process="{{$lead->process}}"
+                                        data-lead-volume="{{$lead->volume}}"
+                                        data-lead-frequency="{{$lead->frequency}}"
+                                        data-lead-employee="{{$lead->employee}}"
+                                        data-lead-ipp="{{$lead->ippStatus}}"
+                                        data-lead-comments="{{$lead->comments}}"
+                                        data-lead-possibility="{{$lead->possibilityId}}" 
+                                        data-lead-probability="{{$lead->probabilityId}}"
+                                    >Edit</a>
                                 </div>
 
                                 <h4 class="text-decoration-underline font-info pb-2">Profile:</h4>
@@ -455,8 +489,8 @@
 
     <!-- Call Modal -->
 
-    <div class="modal" id="call_modal" style="">
-        <div class="modal-dialog" style="max-width: 60%;">
+    <div class="modal" id="call_modal">
+        <div class="modal-dialog" style="max-width: 30%;">
             <style>
                 th.ui-datepicker-week-end,
                 td.ui-datepicker-week-end {
@@ -473,29 +507,16 @@
                     <input type="hidden" name="leadId">
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
+
+                            <div class="form-group col-md-6" >
                                 <label ><b>Call Status : </b></label>
                                 <select class="form-control" id="reporttest" name="report" required>
                                     <option value=""><b>(select one)</b></option>
 
-                                    {{--@foreach($callReports as $report)--}}
-
-                                    {{-- @if($workprocess->contains('callingReport' , $report->callingReportId))--}}
-
-                                    {{--<option value="{{$report->callingReportId}}">{{$report->report}}</option>--}}
-
-                                    {{--@else--}}
-
-
-                                    {{--@endif--}}
-
-                                    {{--@endforeach--}}
-
                                 </select>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group col-md-6">
                                 <label ><b>Progress : </b></label>
                                 <select class="form-control" name="progress" >
                                     <option value=""><b>(select one)</b></option>
@@ -505,6 +526,7 @@
                                 <br>
                             </div>
 
+                            <div class="col-md-12">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class=""><b>Follow Up Date : </b></label>
@@ -527,10 +549,6 @@
                                 <span id="follow-show" style="color:grey;"><i></i></span>
                             </div>
 
-                            {{--<div class="col-md-4">--}}
-                            {{--<label><b>Follow up Date:</b></label>--}}
-                            {{--<input type="text" class="form-control" id="follow-show" value="" readonly>--}}
-                            {{--</div>--}}
 
                             <div class="form-group">
                                 <label class=""><b>Possibility : </b></label>
@@ -559,19 +577,6 @@
                                 <textarea class="form-control" rows="3" name="comment" required></textarea>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <ul class="list-group" style="margin: 10px; "><br>
-                                <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
-
-                                </div>
-                            </ul>
-                            <ul>
-                                <b>Call Statistics per marketer</b>
-                                <p>Here you will see who reached out to this company for how many times.</p>
-                                <div id="counter"></div>
-                            </ul>
-
-                        </div>
 
                         <div class="col-md-12"><br>
                             <button class="btn btn-success">Submit</button>
@@ -582,6 +587,169 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+
+
+
+    <!-- Edit Modal -->
+    <div class="modal" id="edit_modal" style="">
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" name="modal-title">Edit Lead</h4>
+                </div>
+                <div class="modal-body">
+                    <form  method="post" action="{{route('leadUpdate')}}">
+                        {{csrf_field()}}
+                        <div class="row">
+                            <!-- <div class="col-md-12" align="center">
+                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
+                            </div> -->
+
+                            <div class="col-md-3">
+                                <input type="hidden" name="leadId">
+                                <label><b>Company:</b></label>
+                                <input type="text" class="form-control" name="companyName" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Phone:</b></label>
+                                <input type="text" class="form-control" name="number" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Category:</b></label>
+                                <select class="form-control"  name="category" id="category">
+                                    <option value="">Please Select</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{$category->categoryId}}">{{$category->categoryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="country" id="country">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Founded:</b></label>
+                                <input type="text" class="form-control" name="founded" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                <label><b>Website:</b></label>
+                                <input type="text" class="form-control" name="website" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Current Process:</b></label>
+                                <input type="text" class="form-control" name="process" value="">
+                                <br><br>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>File Volume:</b></label>
+                                <input type="text" class="form-control" name="volume" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Frequency:</b></label>
+                                <input type="text" class="form-control" name="frequency" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Employee Size:</b></label>
+                                <input type="text" class="form-control" name="employee" value="">
+                                <br><br>
+                            </div>
+
+
+
+
+                            <div class="col-md-4">
+                                <label><b>Contact Person:</b></label>
+                                <input type="text" class="form-control" name="personName" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Designation:</b></label>
+                                <input type="text" class="form-control" name="designation" value="">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label><b>Email:</b></label>
+                                <input type="email" class="form-control" name="email" value="">
+                                <br><br>
+                            </div>
+
+
+
+                            <div class="col-md-6">
+                                <label><b>Extra Information:</b></label>
+                                <textarea class="form-control" id="comments" name="comments"></textarea>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>LinkedIn Profile:</b></label>
+                                <input type="text" class="form-control" name="linkedin" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label ><b>Is it your IPP?</b></label>
+                                <select class="form-control" name="ippStatus"  id="ippStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
+
+                            
+                            <div class="col-md-6">
+                                <button class="btn btn-success" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                    <br><br>
+                    <form method="post" action="{{route('leaveLead')}}" id="leaveLeadForm">
+                        <div class="row">
+                            {{csrf_field()}}
+
+                            <input type="hidden" name="leadId">
+                            <div class="form-group col-md-4">
+
+                                <label><b>Status:</b> Select status and cick Leave button</label>
+                                <select class="form-control"  name="Status" id="Status" onchange="changeLeadStatus(this)" required>
+                                    <option value="">Please Select</option>
+                                    @foreach($status as $s)
+                                        <option value="{{$s->statusId}}">{{$s->statusName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4" id="newFileField"></div>
+                            <div class="form-group col-md-4" style="margin-top: 3.2%">
+                                <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to leave this Lead?')">Leave</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <div class="mineIdDate" id="mineIdDate" align="left"></div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -611,6 +779,8 @@
 
 <script>
 
+    //CHANGE THE TABS of Call Reports, Followup and Contacts
+
         var commentsTabLink = document.getElementById('comments-tab');
 
         // Activate the "Followups" tab
@@ -619,23 +789,7 @@
 
 
 
-        //for Edit modal
-        function changeLeadStatus(x){
-            var value=$(x).val();
-            if(value == 6){
-                // alert(value);
-                $('#newFileField').html('<label><b>New Files* :</b></labe><input type="number" class="form-control" name="newFile" required>');
-            }
-            else {
-                $('#newFileField').html('');
-            }
-        }
-
-        $( function() {
-            $( "#datepicker" ).datepicker();
-        } );
-
-
+        // ACTIVITIES MODAL
         $('#lead_activities').on('show.bs.modal', function(e) {
 
             var leadId = $(e.relatedTarget).data('lead-id');
@@ -658,49 +812,18 @@
         });
 
 
-
+        // CALL MODAL TO GIVE CALL ENTRIES
         $('#call_modal').on('show.bs.modal', function(e) {
-            //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
             var probability=$(e.relatedTarget).data('lead-probability');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+
             $('#possibility').val(possibility);
             $('#probability').val(probability);
-            //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
-
-            // $.ajax({
-            //     type : 'post' ,
-            //     url : '{{route('getComments')}}',
-            //     data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-            //     success : function(data){
-            //         $('#comment').html(data);
-            //         $("#comment").scrollTop($("#comment")[0].scrollHeight);
-            //     }
-            // });
-
-            $.ajax({
-                type: 'post',
-                url: '{{ route('getComments') }}',
-                data: {_token: CSRF_TOKEN, 'leadId': leadId},
-                success: function(data) {
-                    $('#comment').html(data.comments);
-                    $("#comment").scrollTop($("#comment")[0].scrollHeight);
-
-                    var counterHtml = '';
-
-                    // Loop through the counter data
-                    $.each(data.counter, function(index, counter) {
-                        counterHtml += '<div><strong>' + counter.userId + '</strong> tried <strong>' + counter.userCounter + '</strong> times</div>';
-                    });
-
-                    // Set the counter HTML to the counter div
-                    $('#counter').html(counterHtml);
-                }
-            });
-
-
+            
             $.ajax({
                 type : 'post' ,
                 url : '{{route('getCallingReport')}}',
@@ -715,15 +838,22 @@
                 url : '{{route('editcontactmodalshow')}}',
                 data : {_token:CSRF_TOKEN,'leadId':leadId} ,
                 success : function(data){
-                    // $('#txtHint').html(data);
                     console.log(data);
-//                    $('#follow-show').val(data.followUpDate);
                     if(data !=''){
                         $('#follow-show').html('Current follow-up on  '+data.followUpDate);}
                 }
             });
         });
 
+
+        // DATE PICKER ON CALL MODAL
+        $( function() {
+            $( "#datepicker" ).datepicker();
+        } );
+
+
+
+        // CHECK FOLLOWUP DATE TO SEE PREVIOUS FOLLOWUPS
         $('.changedate').on('change', function() {
 				var currentdate = $('.changedate').val();
 				var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -756,9 +886,68 @@
 
 
 
+            // EDIT MODAL DATA
+            $('#edit_modal').on('show.bs.modal', function(e) {
+            //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            //get data-id attribute of the clicked element
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+            var email = $(e.relatedTarget).data('lead-email');
+            var number = $(e.relatedTarget).data('lead-number');
+            var personName = $(e.relatedTarget).data('lead-person');
+            var website = $(e.relatedTarget).data('lead-website');
+            var linkedin=$(e.relatedTarget).data('lead-linkedin');
+            var minedBy=$(e.relatedTarget).data('lead-mined');
+            var category=$(e.relatedTarget).data('lead-category');
+            var designation=$(e.relatedTarget).data('lead-designation');
+            var country=$(e.relatedTarget).data('lead-country');
+            var founded=$(e.relatedTarget).data('lead-founded');
+            var employee=$(e.relatedTarget).data('lead-employee');
+            var volume=$(e.relatedTarget).data('lead-volume');
+            var frequency=$(e.relatedTarget).data('lead-frequency');
+            var process=$(e.relatedTarget).data('lead-process');
+            var ippStatus=$(e.relatedTarget).data('lead-ipp');
+            var createdAt=$(e.relatedTarget).data('lead-created');
+            var comments=$(e.relatedTarget).data('lead-comments');
 
+            //populate the textbox
+            $('#category').val(category);
+            // $('div.mineIdDate').text(leadId+' was mined by '+minedBy+' at '+createdAt);
+            $('#country').val(country);
 
-            
+            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+            $(e.currentTarget).find('input[name="email"]').val(email);
+            $(e.currentTarget).find('input[name="number"]').val(number);
+            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            $(e.currentTarget).find('input[name="website"]').val(website);
+            $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
+            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            $(e.currentTarget).find('input[name="founded"]').val(founded);
+            $(e.currentTarget).find('input[name="employee"]').val(employee);
+            $(e.currentTarget).find('input[name="volume"]').val(volume);
+            $(e.currentTarget).find('input[name="frequency"]').val(frequency);
+            $(e.currentTarget).find('input[name="process"]').val(process);
+            $(e.currentTarget).find('#ippStatus').val(ippStatus);
+            $('#comments').val(comments);
+
+            @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
+            $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
+            @endif
+
+        });
+
+        //CHNAGE STATUS ON EDIT LEAD
+        function changeLeadStatus(x){
+            var value=$(x).val();
+            if(value == 6){
+                // alert(value);
+                $('#newFileField').html('<label><b>New Files* :</b></labe><input type="number" class="form-control" name="newFile" required>');
+            }
+            else {
+                $('#newFileField').html('');
+            }
+        }
 
 </script>
 
