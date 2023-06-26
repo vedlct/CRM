@@ -654,6 +654,7 @@
                     document.getElementById("reporttest").innerHTML = data;
                 }
             });
+            
             $.ajax({
                 type : 'post',
                 url : '{{route('editcontactmodalshow')}}',
@@ -852,6 +853,17 @@
         });
 
 
+
+
+
+            $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/lead') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
 
 
         });

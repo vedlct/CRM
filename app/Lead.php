@@ -116,7 +116,7 @@ class Lead extends Model
     public function showNotAssignedLeads()
     {
         $currentUserId = Auth::user()->id;
-        $thirtyDaysAgo = Carbon::now()->subDays(90);
+        $ninetyDaysAgo = Carbon::now()->subDays(90);
         $filteredString = 'Filtered';
     
         $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
@@ -130,15 +130,16 @@ class Lead extends Model
                 $join->on('leads.leadId', '=', 'workprogress.leadId')
                     ->where('workprogress.userId', '=', $currentUserId);
             })
-            ->leftJoin('activities', function ($join) use ($currentUserId, $thirtyDaysAgo, $filteredString) {
+            ->leftJoin('activities', function ($join) use ($currentUserId, $ninetyDaysAgo, $filteredString) {
                 $join->on('leads.leadId', '=', 'activities.leadId')
                     ->where('activities.userId', '=', $currentUserId)
                     ->where('activities.activity', 'LIKE', "%$filteredString%")
-                    ->where('activities.created_at', '>', $thirtyDaysAgo);
+                    ->where('activities.created_at', '>', $ninetyDaysAgo);
             })
             ->whereNull('workprogress.userId')
             ->whereNull('activities.activityId')
-            ->select('leads.*')->orderBy('leads.leadId', 'DESC');
+            ->select('leads.*')
+            ->orderBy('leads.leadId', 'DESC');
     
         return $leads;
     }

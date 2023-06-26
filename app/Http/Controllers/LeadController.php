@@ -1750,9 +1750,12 @@ class LeadController extends Controller
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                     data-lead-id="'.$lead->leadId.'"
                                     data-lead-name="'.$lead->companyName.'"
+                                    ><i class="fa fa-tasks"></i></a>
 
-                             ><i class="fa fa-tasks"></i></a>';
-;
+                                    <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                        data-lead-id="'.$lead->leadId.'"
+                                    ><i class="fa fa-eye"></i></a>';
+
             })
             ->addColumn('call', function ($lead){
                 return '<a href='.'"skype:'.$lead->contactNumber.'?call">'.$lead->contactNumber.'</a>';
@@ -2838,6 +2841,114 @@ class LeadController extends Controller
                                         return Excel::download($export, 'fredChasingLeadsExport.csv');
                                     }
                         
+
+
+
+                //Single Account/Lead View Page Functions
+
+                public function accountView($leadId) {
+                    $User_Type = Session::get('userType');
+ 
+                    $lead = Lead::find($leadId);
+
+                    // Check if the lead exists
+                    if (!$lead) {
+                        abort(404);
+                    }
+
+                    // Check if the current user is authorized to view the lead
+                    if ($User_Type == 'USER' && $lead->contactedUserId !== auth()->id()) {
+                        abort(404);
+                    }
+
+                    $latestUpdate = $lead->activities()
+                        ->select('activities.*', 'users.firstName', 'users.lastName', 'activities.created_at AS activities_created_at')
+                        ->where('activity', 'LIKE', '%updated%')
+                        ->leftJoin('users', 'activities.userId', 'users.id')
+                        ->orderBy('activities.created_at', 'desc')
+                        ->first();
+
+                    $didTestWithUs = $lead->workprogress()
+                        ->select('progress', 'created_at')
+                        ->where('progress', 'LIKE', '%Test%')
+                        ->get();
+                    
+
+                    $possibilities = Possibility::get();
+                    $probabilities = Probability::get();
+                    $categories=Category::where('type',1)->get();
+                    $country=Country::get();
+                    $status=Leadstatus::get();
+        
+        
+                    return view('layouts.lead.accountView')
+                        ->with('lead', $lead)
+                        ->with('possibilities', $possibilities)
+                        ->with('probabilities', $probabilities)
+                        ->with('categories',$categories)
+                        ->with('status',$status)
+                        ->with('country',$country)
+                        ->with('latestUpdate',$latestUpdate)
+                        ->with('didTestWithUs',$didTestWithUs)
+
+                        // ->with('leadInfo',$leadInfo)
+                        ;
+
+                }
+
+
+                public function getCommentsIndividualLead(Request $r){
+
+           
+                        $comments=Workprogress::select(['users.firstName','callingreports.report','comments','workprogress.created_at'])
+                            ->where('workprogress.leadId',$r->leadId)
+                            ->leftJoin('users','users.id','workprogress.userId')
+                            ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
+                            ->get();
+            
+                        $counter = Workprogress::select('users.userId as userId', DB::raw('count(*) as userCounter'))
+                            ->join('users', 'workprogress.userId', 'users.id')
+                            ->where('leadId', $r->leadId)
+                            ->groupBy('workprogress.userId')
+                            ->get();
+                            
+                        $previousFollowups = Followup::select('followup.*', 'users.firstName', 'users.lastName')
+                            ->leftjoin ('users', 'followup.userID', 'users.id')
+                            ->where('leadId', $r->leadId)
+                            ->orderBy ('followUpDate', 'asc')
+                            ->get();
+            
+            
+                        $latestFollowups = Followup::select('leadId', DB::raw('MAX(followUpDate) as lastFollowUpDate'))
+                            ->where('leadId', $r->leadId)    
+                            ->groupBy('leadId')
+                            ->get();                
+            
+            
+                        $text='';
+            
+                        foreach ($comments as $comment){
+                            $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
+                        }
+            
+                        $followupText='';
+            
+                        foreach ($previousFollowups as $previousFollowup){
+                            $workStatus = ($previousFollowup->workStatus == 1) ? 'Worked' : 'Not Worked';
+            
+                                $followupText .= '<li class="list-group-item list-group-item-action">'.$previousFollowup->followUpDate.' <span style="color: blue"> ('.$workStatus.')</span> <div style="color:black;">by '.$previousFollowup->firstName. ' ' .$previousFollowup->lastName.' set at '. $dt->toDateString($previousFollowup->created_at).'</div>'.'</li>';
+                        }
+            
+                        return response()->json([
+                            'comments' => $text,
+                            'counter' => $counter,
+                            'previousFollowups' => $followupText,
+                            'latestFollowups' => $latestFollowups
+                        ]);
+                    }
+
+
+
 
 }
 

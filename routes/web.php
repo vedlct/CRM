@@ -13,6 +13,7 @@
 
 
 
+
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
@@ -193,6 +194,10 @@ Route::post('/mycontacted','LeadController@addmyContacted')->name('addmyContacte
 Route::post('contacted/status','LeadController@contactedStatus')->name('contactedStatus');
 Route::post('/addContactedTemp','LeadController@addContactedTemp')->name('addContactedTemp');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
+
+Route::get('/lead/{leadId}', 'LeadController@accountView')->name('accountView');
+
+
 
 Route::post('/editcontactmodalshow','LeadController@editcontactmodalshow')->name('editcontactmodalshow');
 
