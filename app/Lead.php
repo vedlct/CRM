@@ -241,6 +241,11 @@ class Lead extends Model
         return $this->hasMany(Activities::class, 'leadId', 'leadId');
     }
 
+    public function followup()
+    {
+        return $this->hasMany(Followup::class, 'leadId', 'leadId');
+    }
+
     public function lastCallingReport()
     {
 
