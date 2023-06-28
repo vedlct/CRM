@@ -83,8 +83,15 @@
                                        data-target-followup="{{$user->target['followup']}}"
                                        {{--data-target-type="{{$user->crmType}}"--}}
                                     ><i class="fa fa-angle-double-up"></i></a>
+                                    @endif
+
+                                    @if($userType=='ADMIN' || 'SUPERVISOR')
+
+                                    <a href="#" class="btn btn-primary btn-sm user-view-btn"
+                                        data-user-id="{{ $user->id }}"><i class="fa fa-eye"></i></a>
 
                                     @endif
+
 
                                 </td>
                             </tr>
@@ -635,11 +642,21 @@
 
         }
 
+        $(document).on('click', '.user-view-btn', function(e) {
+                e.preventDefault();
+
+                var id = $(this).data('user-id');
+                var newWindowUrl = '{{ url('/user') }}/' + id;
+
+                window.open(newWindowUrl, '_blank');
+        });
 
 
         $(document).ready(function() {
             $('#myTable').DataTable();
         });
+
+        
 
         $( function() {
             $( "#datepicker" ).datepicker();

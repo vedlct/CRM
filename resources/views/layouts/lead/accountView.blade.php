@@ -110,7 +110,7 @@
                                     +880185574457
                                 </p> -->
                                 <p>
-                                    <b class="text-secondary">KDM:</b>
+                                    <b class="text-secondary">KDM Name(s):</b>
                                     {{$lead->personName}}
                                 </p>
                                 <p>

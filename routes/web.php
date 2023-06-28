@@ -61,6 +61,10 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
+//USER PROFILE
+
+Route::get('user/{id}', 'UserManagementController@userProfile')->name('userProfile');
+
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
@@ -195,7 +199,7 @@ Route::post('contacted/status','LeadController@contactedStatus')->name('contacte
 Route::post('/addContactedTemp','LeadController@addContactedTemp')->name('addContactedTemp');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
 
-Route::get('/lead/{leadId}', 'LeadController@accountView')->name('accountView');
+Route::get('/account/{leadId}', 'LeadController@accountView')->name('accountView');
 
 
 
@@ -244,10 +248,12 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
-Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
+// Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
 Route::get('hour/myReport', 'ReportController@myHourReport')->name('myHourReport');
 
 //Report Analysis
+Route::get('/analysisHome', 'LeadController@analysisHomePage')->name('analysisHomePage');
+
 Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'LeadController@analysisComments');
 Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
@@ -256,6 +262,7 @@ Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('dupli
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
+Route::get('/testButNotClosed', 'LeadController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
 Route::get('/longTimeNoCall', 'LeadController@getLongTimeNoCall')->name('getLongTimeNoCall');

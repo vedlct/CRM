@@ -860,7 +860,7 @@
                 e.preventDefault();
 
                 var leadId = $(this).data('lead-id');
-                var newWindowUrl = '{{ url('/lead') }}/' + leadId;
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
 
                 window.open(newWindowUrl, '_blank');
             });

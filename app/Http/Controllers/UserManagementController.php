@@ -470,11 +470,45 @@ class UserManagementController extends Controller
 
     }
 
-    // public function setBarForOwnedLeads (Request $r){
+    
+
+    public function userProfile($id) {
+        // $User_Type = Session::get('userType');
+
+        $user = User::find($id);
+
+        // Check if the user exists
+        // if (!$id) {
+        //     abort(404);
+        // }
+
+        // Check if the current user is authorized to view the profile
+        // if ($User_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
+        //     abort(404);
+        // }
 
 
 
-    // }
+
+        return view('users-mgmt.userProfile')
+            ->with('user', $user)
+            // ->with('possibilities', $possibilities)
+            // ->with('probabilities', $probabilities)
+            // ->with('categories',$categories)
+            // ->with('status',$status)
+            // ->with('country',$country)
+            // ->with('latestUpdate',$latestUpdate)
+            // ->with('didTestWithUs',$didTestWithUs)
+            // ->with('allComments',$allComments)
+            // ->with('previousFollowups',$previousFollowups)
+            // ->with('latestFollowups',$latestFollowups)
+            // ->with('followupCounter',$followupCounter)
+
+            ;
+
+    }
+
+
 
 
 }

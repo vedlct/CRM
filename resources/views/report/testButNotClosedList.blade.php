@@ -4,116 +4,82 @@
 
 @section('content')
 
-@php($userType = Session::get('userType'))
 
-    <div class="card" style="padding:30px;">
+    <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Leads with Keywords in Comments</b></h2>
-        <p class="card-subtitle" align="center">On your left search box, you can write keywords (separated by comma) and get the results in a table. <br> On the right search box, you can write the keywords and download the list as an excel file.</p>
-        <p class="card-subtitle" align="center" style="color: red; font-style: italic;">available for admin and supervisors only</p>
-        <div class="card-body" >
-            <div class="col-md-5" style="float:left;">
-                <form method="POST" action="{{ route('analysisComments') }}">
-                {{ csrf_field() }}
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="searchTerm" placeholder="Enter search terms using comma">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit">Search and Show in Table</button><br>
-                        </div>
-                    </div>
-                </form>
-                </div>
-
-                @if($userType=='SUPERVISOR' || $userType=='ADMIN')
-                <div class="col-md-5" style="float:right;">
-                <form method="POST" action="{{ route('exportAnalysisComments') }}">
-                {{ csrf_field() }}
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="searchTerm" placeholder="Enter search terms using comma">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="submit">Export Query in an Excel</button><br>
-                        </div>
-                    </div>
-                </form>
-                </div>
-                @endif
-        </div>
-
-        <div class="card" style="padding-top:50px;">
-        </div>
-
-
-    @if (!empty($searchTerm))
+        <h2 class="card-title" align="center"><b>Received Test But Not Closed List</b></h2>
+        <h2 class="card-subtitle" align="center">We received the tests from these companies but we were unable to close them.</h2>
 
             <div class="table-responsive m-t-40">
-                <div>You have searched for: {{$searchTerm}} </div><br><br>
-
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <!-- <th width="5%"><input type="checkbox" id="select-all"></th> -->
                         <th width="5%">Id</th>
                         <th width="10%">Company Name</th>
-                        <th width="8%">Category</th>
-                        <th width="15%">website</th>
-                        <th width="8%">Status</th>
-                        <th width="8%">Country</th>
-                        <th width="8%">User</th>
-                        <th width="7%">Comments</th>
-                        <th width="7%">Action</th>
+                        <th width="5%">Category</th>
+                        <th width="10%">website</th>
+                        <th width="5%">Country</th>
+                        <th width="8%">Contact Number</th>
+                        <th width="5%">Status</th>
+                        <th width="8%">Test Date</th>
+                        <th width="20%">Latest Comment</th>
+                        <th width="8%">Marketer</th>
+                        <th width="8%">Action</th>
 
                     </tr>
                     </thead>
-                    
                     <tbody>
 
-                    @foreach($analysis as $analyze)
+                    @foreach($leads as $lead)
                         <tr>
-                            <!-- <td ><input type="checkbox" class="row-checkbox" value="{{$analyze->leadId}}"></td> -->
-                            <td >{{$analyze->leadId}}</td>
-                            <td >{{$analyze->companyName}}</td>
-                            <td >{{$analyze->category->categoryName}}</td>
-                            <td >{{$analyze->website}}</td>
-                            <td >{{$analyze->statusName}}</td>
-                            <td >{{$analyze->country->countryName}}</td>
-                            <td >{{$analyze->userId}}</td>
-                            <td >{{$analyze->comments}}</td>
-                            <td >
+                            <td width="5%">{{$lead->leadId}}</td>
+                            <td width="10%">{{$lead->companyName}}</td>
+                            <td width="8%">{{$lead->category->categoryName}}</td>
+                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
+                            <td width="5%">{{$lead->country->countryName}}</td>
+                            <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="10%">{{$lead->status->statusName}}</td>
+                            <td width="8%">{{$lead->wp_created_at }}</td>
+                            <td width="8%">{{ $lead->last_comment }}</td>
+                            <td width="8%">{{$lead->firstName}} {{$lead->lastName}}
+                            </td>
+                            <td width="8%">
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
-                                   data-lead-id="{{$analyze->leadId}}"
-                                   data-lead-possibility="{{$analyze->possibilityId}}"
-                                   data-lead-probability="{{$analyze->probabilityId}}">
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-possibility="{{$lead->possibilityId}}"
+                                   data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                 <!-- Trigger the Edit modal with a button -->
                                 <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                   data-lead-id="{{$analyze->leadId}}"
-                                   data-lead-name="{{$analyze->companyName}}"
-                                   data-lead-email="{{$analyze->email}}"
-                                   data-lead-number="{{$analyze->contactNumber}}"
-                                   data-lead-person="{{$analyze->personName}}"
-                                   data-lead-website="{{$analyze->website}}"
-                                   data-lead-mined="{{$analyze->mined->firstName}}"
-                                   data-lead-category="{{$analyze->category->categoryId}}"
-                                   data-lead-country="{{$analyze->countryId}}"
-                                   data-lead-designation="{{$analyze->designation}}"
-                                   data-lead-process="{{$analyze->process}}"
-                                   data-lead-frequency="{{$analyze->frequency}}"
-                                   data-lead-volume="{{$analyze->volume}}"
-                                   data-lead-employee="{{$analyze->employee}}"
-                                   data-lead-linkedin="{{$analyze->linkedin}}"
-                                   data-lead-founded="{{$analyze->founded}}"
-                                   data-lead-ipp="{{$analyze->ippStatus}}"
-                                   data-lead-comments="{{$analyze->comments}}"
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-name="{{$lead->companyName}}"
+                                   data-lead-email="{{$lead->email}}"
+                                   data-lead-number="{{$lead->contactNumber}}"
+                                   data-lead-person="{{$lead->personName}}"
+                                   data-lead-website="{{$lead->website}}"
+                                   data-lead-mined="{{$lead->mined->firstName}}"
+                                   data-lead-category="{{$lead->category->categoryId}}"
+                                   data-lead-country="{{$lead->countryId}}"
+                                   data-lead-designation="{{$lead->designation}}"
+                                   data-lead-process="{{$lead->process}}"
+                                   data-lead-frequency="{{$lead->frequency}}"
+                                   data-lead-volume="{{$lead->volume}}"
+                                   data-lead-employee="{{$lead->employee}}"
+                                   data-lead-linkedin="{{$lead->linkedin}}"
+                                   data-lead-founded="{{$lead->founded}}"
+                                   data-lead-ippStatus="{{$lead->ippStatus}}"
+                                   data-lead-comments="{{$lead->comments}}"
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                  
 
                                     <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
-                                   data-lead-id="{{$analyze->leadId}}"
-                                   data-lead-possibility="{{$analyze->possibilityId}}"
-                                   data-lead-probability="{{$analyze->probabilityId}}">
+                                   data-lead-id="{{$lead->leadId}}"
+                                   data-lead-possibility="{{$lead->possibilityId}}"
+                                   data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-tasks" aria-hidden="true"></i></a>
                             </td>
 
@@ -124,16 +90,16 @@
                     </tbody>
                 </table>
             </div>
-
-        <!-- <input type="checkbox" id="select-all">                
-        <form id="exportForm" action="{{ route('exportAnalysisComments') }}" method="post">
-            {{ csrf_field() }}
-            <input type="hidden" name="selectedRows" id="selectedRows">
-            <button type="submit" class="btn btn-primary">Export Selected as CSV</button>
-        </form> -->
-
+        </div>
     </div>
-    </div>
+
+
+
+
+
+
+
+
 
 
 
@@ -251,15 +217,14 @@
                                 <input type="text" class="form-control" name="linkedin" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label ><b>Is it your IPP?</b></label>
-                                <select class="form-control" name="ippStatus"  id="ippStatus">
-                                    <!-- <option value="">(select one)</option> -->
+                                <select class="form-control" name="ippStatus" >
+                                    <option value="">(select one)</option>
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
-                            </div>
-
+                            </div> -->
 
                             
                             <div class="col-md-6">
@@ -438,7 +403,7 @@
             </div>
         </div>
 
-        @endif
+
 
 
 @endsection
@@ -457,22 +422,6 @@
 
 
     <script>
-
-
-        // Select/Deselect all rows
-        // $('#select-all').click(function() {
-        //     $('table tbody :checkbox').prop('checked', this.checked);
-        // });
-
-        // Capture selected row IDs on form submit
-        $('#exportForm').submit(function() {
-            var selectedRows = [];
-            $('table tbody :checkbox:checked').each(function() {
-                selectedRows.push($(this).closest('tr').data('id'));
-            });
-            $('#selectedRows').val(selectedRows.join(','));
-        });
-
 
         //for Edit modal
 
@@ -495,16 +444,12 @@
             var volume=$(e.relatedTarget).data('lead-volume');
             var frequency=$(e.relatedTarget).data('lead-frequency');
             var process=$(e.relatedTarget).data('lead-process');
-            var ippStatus=$(e.relatedTarget).data('lead-ipp');
             var createdAt=$(e.relatedTarget).data('lead-created');
             var comments=$(e.relatedTarget).data('lead-comments');
             //populate the textbox
             $('#category').val(category);
-            // $('div.mined').text(minedBy);
-            // $('div.mined').text(minedBy+' _'+createdAt);
             $('div.mineIdDate').text(leadId+' was mined by '+minedBy+' at '+createdAt);
             $('#country').val(country);
-//            $(e.currentTarget).find('input[name="minedBy"]').val(minedBy);
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
@@ -518,15 +463,11 @@
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
-            $(e.currentTarget).find('#ippStatus').val(ippStatus);
-
             $('#comments').val(comments);
-            // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
 
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
-           // $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
 
             @endif
 
@@ -537,8 +478,6 @@
         $( function() {
             $( "#datepicker" ).datepicker();
         } );
-
-
 
 
 
@@ -557,17 +496,6 @@
 
 
             $('#possibility').val(possibility);
-            //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
-
-            // $.ajax({
-            //     type : 'post' ,
-            //     url : '{{route('getComments')}}',
-            //     data : {_token: CSRF_TOKEN,'leadId':leadId} ,
-            //     success : function(data){
-            //         $('#comment').html(data);
-            //         $("#comment").scrollTop($("#comment")[0].scrollHeight);
-            //     }
-            // });
 
             $.ajax({
                 type: 'post',
@@ -588,7 +516,6 @@
                     $('#counter').html(counterHtml);
                 }
             });
-
 
 
         });

@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\AssignOp\Mod;
 class User extends Authenticatable
 {
     use Notifiable;
+    protected $primaryKey = 'id';
     protected $table = 'users';
 
     /**
