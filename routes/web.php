@@ -215,6 +215,8 @@ Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 
 Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
+//Employees
+Route::post('/createEmployee','LeadController@createEmployee')->name('createEmployee');
 
 
 //My Team

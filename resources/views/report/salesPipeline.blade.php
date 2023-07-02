@@ -268,7 +268,7 @@
             <input type="text" class="form-control" name="companyName" id="companyName" value="" disabled>
           </div>
           <div class="form-group">
-            <label for="stage">Select Status:</label>
+            <label for="stage">Select Stage:</label>
             <select id="stage" name="stage" class="form-control">
               <option value="Contact">Contact</option>
               <option value="Conversation">Conversation</option>

@@ -1,5 +1,12 @@
 @extends('main')
+<style>
+    .kdm {
+    background-color: lightblue;
+    color: black !important;
+    padding: 10px;
+    }
 
+</style>
 
 @section('content')
     <!-- ============================================================== -->
@@ -219,6 +226,7 @@
 
                                         <!-- comments -->
                                         @foreach ($allComments as $comment)
+                                        <hr>
                                         <div class="alert alert-primary p-4">
                                             <p class="text-dark mb-2">{{$comment->comments}}</p>
                                             <div class="media mb-0">
@@ -232,12 +240,14 @@
 
                                     <!-- followup tab -->
                                     <div class="tab-pane fade" id="followups" role="tabpanel">
+                                        <hr>
                                         <div class="alert alert-success p-4">
                                             @foreach ($latestFollowups as $followup)
                                                 <b>Latest Followup Date: {{$followup->lastFollowUpDate}}</b>
                                             @endforeach
 
-                                        </div>                                        
+                                        </div>
+                                        <hr>                                        
                                         
                                         <div class="alert alert-secondary p-4">
                                             <h4>Call Statistics:</h4><br>
@@ -246,7 +256,7 @@
                                             @endforeach
 
                                         </div>                                        
-
+                                        <hr>
                                         <h3>Previous Followup Dates:</h3>
 
                                         @foreach ($previousFollowups as $previousFollowup)
@@ -268,49 +278,63 @@
                                     <!-- contacts tab -->
                                     <div class="tab-pane fade" id="contacts" role="tabpanel">
                                         <p class="my-1"><br>
-                                            <a href="#" class="btn btn-primary">Create Contact</a> <span style="color: red;"> This is an upcoming feature. </span>
+                                            <a href="#create_employee" class="btn btn-info">Create Contact</a> 
                                         </p>
-                                        <hr>
-                                        <div class="row">
+                                        @foreach ($employees as $employee)
+                                            <hr>
+                                            @if ($employee->iskdm == 1)
+                                            <div class="row kdm" >
+                                            @else
+                                            <div class="row">
+                                            @endif
                                             <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Full Name:</b>
-                                                    Max Cooper
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Email Address:</b>
-                                                    max@tcl.com
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Linkedin:</b>
+                                                    <p>
+                                                        <b class="text-secondary">Is it KDM:</b>
+                                                        @if ($employee->iskdm == 1) Yes @else No @endif
+                                                    </p>
+                                                    <p>
+                                                        <b class="text-secondary">Name:</b>
+                                                        {{$employee->name}}
+                                                    </p>
+                                                    <p>
+                                                        <b class="text-secondary">Designation:</b>
+                                                        {{$employee->designation->designationName}}
+                                                    </p>
+                                                    <p>
+                                                        <b class="text-secondary">Phone:</b>
+                                                        {{$employee->number}}
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>
+                                                        <a href="#edit_employee">Edit Employee</a>
+                                                    </p>
+                                                    <p>
+                                                        <b class="text-secondary">Status:</b>
+                                                        @if ($employee->jobstatus ==1) Active @else Left Job @endif
+                                                    </p>
 
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Employe Status:</b>
+                                                    <p>
+                                                        <b class="text-secondary">Email:</b>
+                                                        {{$employee->email}}
+                                                    </p>
 
-                                                </p>
+                                                    <p>
+                                                        <b class="text-secondary">Country:</b>
+                                                        {{$employee->country->countryName}}
+                                                    </p>
                                             </div>
-                                            <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Designation:</b>
-                                                    KDM
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Phone Number:</b>
-                                                    +01711708848
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Country:</b>
-                                                    Bangladesh
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Notes:</b>
-                                                    Notes about this.
-                                                </p>
+                                            <div class="col-md-12">
+                                                    <p>
+                                                        <b class="text-secondary">Linkedin:</b>
+                                                        {{$employee->linkedin}}
+                                                    </p>
+
                                             </div>
+
                                         </div>
-                                        <hr>
-                                        <div class="row">
+                                        @endforeach
+                                        <!-- <div class="row">
                                             <div class="col-md-6">
                                                 <p>
                                                     <b class="text-secondary">Created by:</b>
@@ -331,7 +355,7 @@
                                                     6 July 2022 3:50 PM
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -810,7 +834,7 @@
           </div>
 
           <div class="form-group">
-            <label for="stage">Select Status:</label>
+            <label for="stage">Select Stage:</label>
             <select id="stage" name="stage" class="form-control">
               <option value="Contact">Contact</option>
               <option value="Conversation">Conversation</option>
@@ -829,6 +853,54 @@
     </div>
   </div>
 </div>
+
+
+
+
+<!-- Create Employee  Modal -->
+<div class="modal" id="create_employee">
+  <div class="modal-dialog" style="max-width: 400px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Set Sales Pipeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="post" action="{{ route('createEmployee') }}">
+        {{csrf_field()}}
+
+          <div class="form-group">
+            <label for="leadId">Lead Id:</label>
+            <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
+          </div>
+          <div class="form-group">
+            <label for="companyName">Company:</label>
+            <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="stage">Select Stage:</label>
+            <select id="stage" name="stage" class="form-control">
+              <option value="Contact">Contact</option>
+              <option value="Conversation">Conversation</option>
+              <option value="Possibility">Test Possibility</option>
+              <option value="Test">Test Received</option>
+              <option value="Closed">Deal Closed</option>
+              <option value="Lost">Lost the Deal</option>
+            </select>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-success" type="submit">Set</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
