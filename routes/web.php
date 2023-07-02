@@ -131,6 +131,7 @@ Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
 Route::post('lead/assignn','LeadController@assignStore2')->name('assignStore2');
+Route::post('/assignToPipeline','PipelineController@assignToPipeline')->name('assignToPipeline');
 
 
 Route::get('lead/assign-lead','LeadController@assignAllShow')->name('assignAllShow');
@@ -267,6 +268,12 @@ Route::get('/testButNotClosed', 'LeadController@getTestButNotClosedList')->name(
 Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
 Route::get('/longTimeNoCall', 'LeadController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'LeadController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
+
+Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
+Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
+Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
+Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
+Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
 
 Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('getFredChasingLeads');
 Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');

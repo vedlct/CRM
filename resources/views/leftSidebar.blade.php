@@ -63,7 +63,7 @@
                         </li>
                         <li>
                             <a href="{{route('assignedLeads')}}"><i class="fa fa-list"></i>
-                            <span class="hide-menu"> Assigned To You</span></a>
+                            <span class="hide-menu"> Assigned to Me</span></a>
                         </li>
                     </ul>
                 </li>

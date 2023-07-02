@@ -76,7 +76,7 @@
 
 
 
-            <div class="form-group col-md-8">
+            <div class="form-group col-md-4">
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Status:</b></label>
@@ -91,12 +91,26 @@
                 </select>
             </div>
 
+            <div class="form-group col-md-4">
+
+                <label ><b>Set Pipeline:</b></label>
+                <select class="form-control"  name="stage" id="setpipeline" style="width: 30%">
+                    <option value="">select</option>
+                    <option value="Contact">Contact</option>
+                    <option value="Conversation">Conversation</option>
+                    <option value="Possibility">Test Possibility</option>
+                    <option value="Test">Test Received</option>
+                    <option value="Closed">Deal Closed</option>
+                    <option value="Lost">Lost the Deal</option>
+
+                </select>
+            </div>
+
 
             <div class="form-group col-md-4">
 
-                {{--<div class="form-group col-md-5">--}}
                 <label ><b>Assign To:</b></label>
-                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 50%">
+                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 40%">
                     <option value="">select</option>
                     @foreach($assignto as $user)
                         <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
@@ -468,6 +482,7 @@
     <script src="{{url('js/jconfirm.js')}}"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
@@ -491,9 +506,6 @@
 
         $("#otherCatches").change(function() {
 
-
-
-
             var chkArray = [];
             var status=$(this).val();
             $('.checkboxvar:checked').each(function (i) {
@@ -506,9 +518,6 @@
             // $( "#assign-form" ).submit();
             jQuery('input:checkbox:checked').parents("tr").remove();
             $(this).prop('selectedIndex',0);
-
-
-
 
 
             $.ajax({
@@ -533,6 +542,41 @@
 
                 }
             });
+
+        });
+
+
+        $("#setpipeline").change(function() {
+
+        var chkArray = [];
+        var stage=$(this).val();
+        $('.checkboxvar:checked').each(function (i) {
+
+            chkArray[i] = $(this).val();
+        });
+        //alert(chkArray)
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        jQuery('input:checkbox:checked').parents("tr").remove();
+        $(this).prop('selectedIndex',0);
+
+
+        $.ajax({
+            type : 'post' ,
+            url : '{{route('assignToPipeline')}}',
+            data : {_token: CSRF_TOKEN,'leadId':chkArray,'stage':stage} ,
+            beforeSend:function(){
+            return confirm("Are you sure?");
+            },
+            success : function(data){
+                console.log(data);
+                if(data == 'true'){
+                    $('#alert').html(' <strong>Success!</strong> Sales Pipeline Set');
+                    $('#alert').show();
+
+                }
+
+            }
+        });
 
         });
 
@@ -836,11 +880,6 @@
             success : function(data){
                 console.log(data);
                 if(data == 'true'){
-                    // $('#myTable').load(document.URL +  ' #myTable');
-        //                        $.alert({
-        //                            title: 'Success!',
-        //                            content: 'successfully assigned!',
-        //                        });
                     $('#alert').html(' <strong>Success!</strong> Assigned');
                     $('#alert').show();
 
@@ -848,10 +887,7 @@
             }
         });
 
-
-
         });
-
 
 
 

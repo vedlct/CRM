@@ -246,6 +246,11 @@ class Lead extends Model
         return $this->hasMany(Followup::class, 'leadId', 'leadId');
     }
 
+    public function salespipeline()
+    {
+        return $this->hasMany(SalesPipeline::class, 'leadId', 'leadId');
+    }
+
     public function lastCallingReport()
     {
 

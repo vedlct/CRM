@@ -6,6 +6,8 @@
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
 
+
+    
     <div class="content-page">
         <div class="content">
             <!-- Start Content-->
@@ -28,12 +30,12 @@
                             <div class="card-body">
                                 <h5 class="border-bottom pb-2">Compnay Information</h5>
                                 <p>
-                                    <b class="text-secondary">Lead Id:</b>
-                                    {{$lead->leadId}}
-                                </p>
-                                <p>
                                     <b class="text-secondary">Company Name:</b>
                                     {{$lead->companyName}}
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Lead Id:</b>
+                                    {{$lead->leadId}}
                                 </p>
                                 <p>
                                     <b class="text-secondary">Staus:</b>
@@ -52,6 +54,17 @@
                                             Possibility not found.
                                     @endif
                                 </p>
+
+                                <p>
+                                    <b class="text-secondary">Pipeline:</b>
+                                    @if ($pipeline->isEmpty())
+                                        Not in Sales Pipeline
+                                    @else
+                                        @foreach ($pipeline as $item)
+                                            {{$item->stage}}
+                                        @endforeach
+                                    @endif
+                               </p>
 
                                 <div class="mb-3">
                                     <a 
@@ -93,6 +106,17 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Edit</a>
+
+                                    @if ($pipeline->isEmpty() && $lead->contactedUserId == auth()->id())
+                                    <a href="#" class="btn btn-outline-dark" 
+                                        data-toggle="modal" 
+                                        data-target="#set_pipeline"
+                                        data-lead-id="{{ $lead->leadId }}"
+                                        data-lead-name="{{ $lead->companyName }}" 
+                                        data-pipeline-stage="{{ $lead->stage }}"                                                                                
+                                        >Set Pipeline</a>
+                                    @endif  
+
                                 </div>
 
                                 <h4 class="text-decoration-underline font-info pb-2">Profile:</h4>
@@ -355,7 +379,7 @@
                                     @if ($lead)
                                         @php
                                             $leadProbability = $probabilities->firstWhere('probabilityId', $lead->probabilityId);
-                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown Probability';
+                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown';
                                         @endphp
 
                                             {{ $probabilityName }}
@@ -408,6 +432,16 @@
                                 </p>
                                 <h4 class="text-decoration-underline font-info pb-2">Account Updates:</h4>
                                 <p>
+                                    <b class="text-secondary">Current Marekter:</b>
+                                    @if ($users->isEmpty())
+                                        No one is chasing this!
+                                    @else
+                                        @foreach ($users as $user)
+                                            {{$user->firstName}} {{$user->lastName}}
+                                        @endforeach
+                                    @endif
+                                </p>
+                                <p>
                                     <b class="text-secondary">Mined by:</b>
                                     {{$lead->mined->firstName}} {{$lead->mined->lastName}}
                                 </p>
@@ -449,7 +483,7 @@
    <!--ALL Activities-->
     
    <div class="modal" id="lead_activities" >
-        <div class="modal-dialog" style="max-width: 60%">
+        <div class="modal-dialog" style="max-width: 30%">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
@@ -457,15 +491,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-4">
-                    <b>Company Name:</b>
-                    <input type="text" name="companyName" readonly>
-                        </div>
-
-                        <div class="col-md-6">
-                        <div class="form-group">
-                        <label class=""><b>Activities : </b></label>
-
+                        <div class="col-md-12">
+                            <b>Company Name:</b>
+                            <input type="text" name="companyName" readonly>
+                            <div class="form-group">
                                 <ul class="list-group" style="margin: 10px; "><br>
                                     <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="activity">
 
@@ -755,6 +784,54 @@
 
 
 
+
+
+<!--Modal for Create New Sales Pipeline-->
+<div class="modal" id="set_pipeline">
+  <div class="modal-dialog" style="max-width: 400px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Set Sales Pipeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form  method="post" action="{{ route('createPipeline') }}">
+        {{csrf_field()}}
+
+          <div class="form-group">
+            <label for="leadId">Lead Id:</label>
+            <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
+          </div>
+          <div class="form-group">
+            <label for="companyName">Company:</label>
+            <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="stage">Select Status:</label>
+            <select id="stage" name="stage" class="form-control">
+              <option value="Contact">Contact</option>
+              <option value="Conversation">Conversation</option>
+              <option value="Possibility">Test Possibility</option>
+              <option value="Test">Test Received</option>
+              <option value="Closed">Deal Closed</option>
+              <option value="Lost">Lost the Deal</option>
+            </select>
+          </div>
+          <div class="text-right">
+            <button class="btn btn-success" type="submit">Set</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 @endsection
 
 @section('foot-js')
@@ -846,7 +923,25 @@
         });
 
 
-        // DATE PICKER ON CALL MODAL
+    // CREATE PIPELINE MODAL
+    $('#set_pipeline').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var leadId = button.data('lead-id');
+        var companyName = button.data('lead-name');
+        var pipelineStage = button.data('pipeline-stage'); // Get the pipeline-stage attribute
+
+        // Set the values in the input fields
+        $('#leadId').val(leadId);
+        $('#companyName').val(companyName);
+            
+        // Set the value in the select element
+        $('#stage').val(pipelineStage);
+    });
+
+
+
+
+// DATE PICKER ON CALL MODAL
         $( function() {
             $( "#datepicker" ).datepicker();
         } );

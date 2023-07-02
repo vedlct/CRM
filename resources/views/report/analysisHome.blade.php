@@ -1,12 +1,20 @@
 @extends('main')
 
 <style>
-    .card:hover {
+  .card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.10);
+}
+
+    /* .card:hover {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transform: translateY(-2px);
         background-color: #e6e6fa;
         border: 2px solid #0018F9;
-    }
+    } */
 </style>
 
 @section('content')
@@ -17,7 +25,31 @@
   <div class="row">
     <div class="col-md-12">
       <h1 class="text-center mb-4" style="padding: 30px 0;">Analysis Tools</h1>
+      
       <div class="row">
+
+      <div class="col-md-4">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('public/img/analysisHome/salesPipeline.jpg')}}" alt="Card image cap">
+              <a href="#!">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Sales Pipeline</h4>
+              <p class="card-text">Where leads go on an adventure, battling objections, jumping through hoops, and finally emerging as victorious customers. Ready to conquer?</p>
+              <p class="card-text"><small class="text-muted">Important: please check frequently</small></p>
+              <a href="{{route('salesPipeline')}}" target="_blank" class="btn btn-primary">Visit Pipeline</a>
+            </div>
+            <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">Available for: Only Users</div>
+            </div>
+            </div>
+          </div>
+          </div>
+
 
       <div class="col-md-4">
           <div class="card">
@@ -41,6 +73,7 @@
           </div>
         </div>
 
+
         <div class="col-md-4">
           <div class="card">
             <div class="view overlay">
@@ -62,28 +95,7 @@
             </div>
           </div>
         </div>
-        
-        <div class="col-md-4">
-          <div class="card">
-            <div class="view overlay">
-              <img class="card-img-top" src="{{ url('public/img/analysisHome/allActivities.jpg')}}" alt="Card image cap">
-              <a href="#!">
-                <div class="mask rgba-white-slight"></div>
-              </a>
-            </div>
-            <div class="card-body">
-              <h4 class="card-title">All Activities</h4>
-              <p class="card-text">Step into the realm of marketers' daily CRM adventures. From mining to updating and everything in between, this is where their magic happens </p>
-              <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('reportAllActivties')}}" target="_blank" class="btn btn-primary">See Activities</a>
-            </div>
-            <div class="card-footer">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted">Available for: All Users</div>
-            </div>
-            </div>
-          </div>
-        </div>
+                
       </div>
 
       
@@ -104,8 +116,7 @@
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted">Available for: Admin, Supervisor</div>
-                
+                <div class="text-muted">Available for: Admin, Supervisor</div>               
             </div>
             </div>
           </div>
@@ -152,11 +163,13 @@
             </div>
           </div>
         </div>
+
       </div>
 
 
       <div class="row">
-        <div class="col-md-4">
+
+      <div class="col-md-4">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/ipplist.jpg')}}" alt="Card image cap">
@@ -218,11 +231,13 @@
             </div>
           </div>
         </div>
+
       </div>
 
 
       <div class="row">
-        <div class="col-md-4">
+
+      <div class="col-md-4">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/duplicateleads.jpg')}}" alt="Card image cap">
@@ -265,32 +280,32 @@
           </div>
         </div>
 
-<!--
+
         <div class="col-md-4">
           <div class="card">
             <div class="view overlay">
-            <img class="card-img-top" src="{{ url('public/img/analysisHome/allActivities.jpg')}}" alt="Card image cap">
+              <img class="card-img-top" src="{{ url('public/img/analysisHome/allActivities.jpg')}}" alt="Card image cap">
               <a href="#!">
                 <div class="mask rgba-white-slight"></div>
               </a>
             </div>
             <div class="card-body">
-              <h4 class="card-title">Frequently Filtered</h4>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="{{route('analysisComments')}}" target="_blank" class="btn btn-primary">Analyze Comments</a>
+              <h4 class="card-title">All Activities</h4>
+              <p class="card-text">Step into the realm of marketers' daily CRM adventures. From mining to updating and everything in between, this is where their magic happens </p>
+              <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
+              <a href="{{route('reportAllActivties')}}" target="_blank" class="btn btn-primary">See Activities</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted">Available for Supervisors only</div>
+                <div class="text-muted">Available for: All Users</div>
             </div>
             </div>
-          </div> 
--->
-
+          </div>
         </div>
+
       </div>
 
-	  
+<!--Main Container-->	  
     </div>
   </div>
 </div>
@@ -308,5 +323,19 @@
 @section('foot-js')
 
 <!-- Additional JavaScript code goes here -->
+<script>
+  const cards = document.querySelectorAll('.card');
+
+  cards.forEach(card => {
+    card.addEventListener('mouseover', () => {
+      card.classList.add('hover');
+    });
+
+    card.addEventListener('mouseout', () => {
+      card.classList.remove('hover');
+    });
+  });
+</script>
+
 
 @endsection

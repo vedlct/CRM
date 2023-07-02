@@ -916,11 +916,6 @@ $.ajax({
     success : function(data){
         console.log(data);
         if(data == 'true'){
-            // $('#myTable').load(document.URL +  ' #myTable');
-//                        $.alert({
-//                            title: 'Success!',
-//                            content: 'successfully assigned!',
-//                        });
             $('#alert').html(' <strong>Success!</strong> Assigned');
             $('#alert').show();
 

@@ -25,6 +25,7 @@ use App\Workprogress;
 use App\Activities;
 use App\Followup;
 use App\Leadstatus;
+use App\SalesPipeline;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -184,7 +185,11 @@ class LeadController extends Controller
                                                 data-lead-id="'.$lead->leadId.'"
                                                 data-lead-name="'.$lead->companyName.'"
 
-                                         ><i class="fa fa-tasks"></i></a>';
+                                         ><i class="fa fa-tasks"></i></a>
+
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                                data-lead-id="'.$lead->leadId.'"
+                                         ><i class="fa fa-eye"></i></a>';
                     }}
             })
             ->make(true);
@@ -678,6 +683,8 @@ class LeadController extends Controller
             ->make(true);
     }
 
+
+
     public function assignStore(Request $r){             
         if($r->ajax()){
             foreach ($r->leadId as $lead){
@@ -718,6 +725,13 @@ class LeadController extends Controller
                 $activity->save();               
 
 
+                $pipeline = SalesPipeline::whereIn('leadId', $r->leadId)->get();
+
+                if ($pipeline->isNotEmpty()) {
+                    SalesPipeline::whereIn('leadId', $r->leadId)
+                        ->update(['workStatus' => 0]);
+                }
+
 
             }
             return Response('true');
@@ -750,13 +764,22 @@ class LeadController extends Controller
                 $activity->activity=Auth::user()->userId .' '. 'assigned this lead to' .' '. $userName; //$this->returnUserName($r->userId); 
                 $activity->save();
 
+
+                $pipeline = SalesPipeline::whereIn('leadId', $r->leadId)->get();
+
+                if ($pipeline->isNotEmpty()) {
+                    SalesPipeline::whereIn('leadId', $r->leadId)
+                        ->update(['workStatus' => 0]);
+                }
+
+
             }
             return Response('true');
             // return Response($r->leadId);
         }
     }
 
-
+  
 
 
 
@@ -953,10 +976,10 @@ class LeadController extends Controller
 
                 
                 $assignId=Leadassigned::select('assignId')
-                ->where('leadId',$lead)
-                ->where('assignTo',Auth::user()->id)
-                ->where('leaveDate',null)
-                ->get();
+                    ->where('leadId',$lead)
+                    ->where('assignTo',Auth::user()->id)
+                    ->where('leaveDate',null)
+                    ->get();
 
 
                 foreach ($assignId as $assignId){
@@ -970,6 +993,12 @@ class LeadController extends Controller
                 }
 
 
+                $pipeline = SalesPipeline::whereIn('leadId', $r->leadId)->get();
+
+                if ($pipeline->isNotEmpty()) {
+                    SalesPipeline::whereIn('leadId', $r->leadId)
+                        ->update(['workStatus' => 0]);
+                }
             }
 
             return Response('true');
@@ -1929,6 +1958,15 @@ class LeadController extends Controller
         $activity->activity=Auth::user()->userId .' '. 'Rejected this lead';
         $activity->save();
 //        }
+
+        $pipeline = SalesPipeline::where('leadId', $r->leadId)
+        ->first();
+
+        if ($pipeline) {
+            $pipeline->workStatus = 0;
+            $pipeline->save();
+        }
+
         Session::flash('message', 'Lead Rejected Successfully');
         return back();
     }
@@ -1936,6 +1974,15 @@ class LeadController extends Controller
 
     // When user changes the lead's status from Edit Lead to Leave the Lead
     public function leaveLead(Request $r){
+
+
+        $pipeline = SalesPipeline::where('leadId', $r->leadId)->first();
+
+        if ($pipeline) {
+            $pipeline->workStatus = 0;
+            $pipeline->save();
+        }
+        
 
         if($r->Status==6){
             $newFile=new NewFile();
@@ -1999,12 +2046,10 @@ class LeadController extends Controller
             $activity->save();
 
 
- //           Session::flash('message', 'You have Left The Lead successfully');
             return back();
         }
 
         $lead->save();
-
 
 
         Session::flash('message', 'You have Left The Lead successfully');
@@ -2832,6 +2877,7 @@ class LeadController extends Controller
                                 
 
                                     
+                              
 
 
 
@@ -2853,7 +2899,7 @@ class LeadController extends Controller
                     }
 
                     // Check if the current user is authorized to view the lead
-                    if ($User_Type !== 'SUPERVISOR' && $lead->contactedUserId !== auth()->id()) {
+                    if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id()) {
                         abort(404);
                     }
 
@@ -2897,14 +2943,24 @@ class LeadController extends Controller
                         ->groupBy('workprogress.userId')
                         ->get();
 
+                    $pipeline = $lead->SalesPipeline()
+                        ->select('salespipeline.*')
+                        // ->join('leads', 'salespipeline.leadId', 'leads.leadId')
+                        ->where('salespipeline.workStatus', 1)
+                        ->get();
 
+                    $users = User::select('users.firstName', 'users.lastName')
+                        ->Join('leads', 'users.id', 'leads.contactedUserId')
+                        ->where('leads.leadId', $leadId)
+                        ->get();  
+                        
+                        
 
                     $possibilities = Possibility::get();
                     $probabilities = Probability::get();
                     $categories = Category::where('type',1)->get();
                     $country = Country::get();
                     $status = Leadstatus::get();
-        
         
                     return view('layouts.lead.accountView')
                         ->with('lead', $lead)
@@ -2919,6 +2975,8 @@ class LeadController extends Controller
                         ->with('previousFollowups',$previousFollowups)
                         ->with('latestFollowups',$latestFollowups)
                         ->with('followupCounter',$followupCounter)
+                        ->with('pipeline',$pipeline)
+                        ->with('users',$users)
 
                         ;
 
