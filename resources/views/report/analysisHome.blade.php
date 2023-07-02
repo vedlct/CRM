@@ -2,11 +2,11 @@
 
 <style>
   .card {
-  transition: transform 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .card:hover {
-  transform: scale(1.10);
+  transform: scale(1.05);
 }
 
     /* .card:hover {
@@ -15,20 +15,24 @@
         background-color: #e6e6fa;
         border: 2px solid #0018F9;
     } */
+.mainrow {
+  padding: 0 100px;
+}
+    
 </style>
 
 @section('content')
 
 
 
-<div class="container">
-  <div class="row">
+<!-- <div class="container"> -->
+  <div class="row mainrow">
     <div class="col-md-12">
       <h1 class="text-center mb-4" style="padding: 30px 0;">Analysis Tools</h1>
       
       <div class="row">
 
-      <div class="col-md-4">
+      <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/salesPipeline.jpg')}}" alt="Card image cap">
@@ -51,7 +55,7 @@
           </div>
 
 
-      <div class="col-md-4">
+      <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
               <img class="card-img-top" src="{{ url('public/img/analysisHome/testbutnotclosed.jpg')}}" alt="Card image cap">
@@ -74,7 +78,7 @@
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
                 <img class="card-img-top" src="{{ url('public/img/analysisHome/longtimenocall.jpg')}}" alt="Card image cap">
@@ -96,12 +100,7 @@
           </div>
         </div>
                 
-      </div>
-
-      
-      <div class="row">
-
-      <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
               <img class="card-img-top" src="{{ url('public/img/analysisHome/Analysiscomments.jpg')}}" alt="Card image cap">
@@ -122,7 +121,12 @@
           </div>
         </div>      
 
-        <div class="col-md-4">
+      </div>
+
+      
+      <div class="row">
+
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/conversations.jpg')}}" alt="Card image cap">
@@ -143,7 +147,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/maxchasing.jpg')}}" alt="Card image cap">
@@ -164,12 +168,7 @@
           </div>
         </div>
 
-      </div>
-
-
-      <div class="row">
-
-      <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/ipplist.jpg')}}" alt="Card image cap">
@@ -190,7 +189,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/assignedbutnottaken.jpg')}}" alt="Card image cap">
@@ -211,7 +210,12 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+      </div>
+
+
+      <div class="row">
+
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/frequentlyfiltered.jpg')}}" alt="Card image cap">
@@ -232,12 +236,7 @@
           </div>
         </div>
 
-      </div>
-
-
-      <div class="row">
-
-      <div class="col-md-4">
+      <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/duplicateleads.jpg')}}" alt="Card image cap">
@@ -259,7 +258,7 @@
         </div>
 
  
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('public/img/analysisHome/fredchasingleads.jpg')}}" alt="Card image cap">
@@ -281,7 +280,7 @@
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
               <img class="card-img-top" src="{{ url('public/img/analysisHome/allActivities.jpg')}}" alt="Card image cap">

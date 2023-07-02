@@ -473,21 +473,23 @@ class UserManagementController extends Controller
     
 
     public function userProfile($id) {
-        // $User_Type = Session::get('userType');
 
-        $user = User::find($id);
+        $user_Type=Session::get('userType');
+		if( $user_Type== 'SUPERVISOR' || $user_Type== 'ADMIN'){
 
-        // Check if the user exists
-        // if (!$id) {
-        //     abort(404);
-        // }
+            $user = User::find($id);
 
-        // Check if the current user is authorized to view the profile
-        // if ($User_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
-        //     abort(404);
-        // }
+            // Check if the user exists
+            // if (!$id) {
+            //     abort(404);
+            // }
 
+            // Check if the current user is authorized to view the profile
+            // if ($user_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
+            //     abort(404);
+            // }
 
+        }
 
 
         return view('users-mgmt.userProfile')

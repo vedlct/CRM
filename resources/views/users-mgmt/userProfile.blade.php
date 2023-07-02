@@ -5,6 +5,9 @@
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
+    
+    @php($user_Type = Session::get('userType'))
+
 
     <div class="content-page">
         <div class="content">
@@ -14,7 +17,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <h4 class="page-title">User details</h4>
+                            <!-- <h4 class="page-title">User details</h4> -->
                         </div>
                     </div>
                 </div>
@@ -27,7 +30,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <p class="text-center">
-                                <img src="{{ url('public/img/users/') . '/' . $user->picture }}" alt="" class="img-fluid">
+                                <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
 
                                 </p>
                                 <p class="mb-1">Username: {{$user->userId}}</p>
@@ -37,8 +40,39 @@
                                 <p class="mb-1">Email: {{$user->userEmail}}</p>
                                 <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
                                 <p class="">Status: @if ($user->active == 1) Active @else Inactive @endif</p>
-                                <a href="#" class="btn btn-primary">Edit Profile</a>
-                                <a href="#" class="btn btn-info">Set Target</a>
+
+                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-primary"
+                                       data-id="{{$user->id}}"
+                                       data-user-id="{{$user->userId}}"
+                                       data-type-id="{{$user->typeId}}"
+                                       data-rf-id="{{$user->rfID}}"
+                                       data-user-email="{{$user->userEmail}}"
+                                       data-password="{{$user->password}}"
+                                       data-first-name="{{$user->firstName}}"
+                                       data-last-name="{{$user->lastName}}"
+                                       data-phone-number="{{$user->phoneNumber}}"
+                                       data-dob="{{$user->dob}}"
+                                       data-gender="{{$user->gender}}"
+                                       data-active="{{$user->active}}"
+                                       data-whitelist="{{$user->whitelist}}"
+                                        >Edit Profile</a>
+
+                                @if($user_Type=='ADMIN' || 'SUPERVISOR')
+                                <a href="#target_user_modal" data-toggle="modal" class="btn btn-info"
+                                       data-id="{{$user->id}}"
+                                       data-first-name="{{$user->userId}}"
+                                       data-target-call="{{$user->target['targetCall']}}"
+                                       data-target-high="{{$user->target['targetHighPossibility']}}"
+                                       data-target-lead="{{$user->target['targetLeadmine']}}"
+                                       data-target-contact="{{$user->target['targetContact']}}"
+                                       data-target-contactusa="{{$user->target['targetUsa']}}"
+                                       data-target-test="{{$user->target['targetTest']}}"
+                                       data-target-file="{{$user->target['targetFile']}}"
+                                       data-target-conversation="{{$user->target['conversation']}}"
+                                       data-target-closelead="{{$user->target['closelead']}}"
+                                       data-target-followup="{{$user->target['followup']}}"                                
+                                        >Set Target</a>
+                                @endif        
                             </div>
                         </div>
                     </div>
