@@ -2862,6 +2862,57 @@ class LeadController extends Controller
 
                                     
                               
+                            public function getDuplicateLeads()
+                            {
+                                $User_Type = Session::get('userType');
+                            
+                                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+                                    
+                                    $categoryIdList = [1, 2, 3, 4, 5, 6];
+                                    $statusIdList = [2, 3, 5, 7];
+                                    
+                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName')
+                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                        // ->where('leads.contactedUserId', '!=', null)
+                                        ->whereIn('leads.categoryId', $categoryIdList)
+                                        ->whereIn('leads.statusId', $statusIdList)
+                                        ->where('leads.website', '<>', '')
+                                        ->whereIn(DB::raw('(SELECT COUNT(*) FROM leads AS l2 WHERE l2.website = leads.website)'), [2, 3, 4, 5, 6, 7, 8, 9, 10])
+                                        ->orderBy('leads.companyName', 'ASC')
+                                        ->get();
+                                
+
+                                        $possibilities = Possibility::get();
+                                        $probabilities = Probability::get();
+                                        $callReports = Callingreport::get();
+                                        $categories = Category::where('type', 1)->get();
+                                        $country = Country::get();
+                                        $status = Leadstatus::get();
+                                        $users = User::get();
+
+                                        
+                                    return view('report.duplicateLeads')
+                                        ->with('leads', $leads)
+                                        ->with('callReports', $callReports)
+                                        ->with('possibilities', $possibilities)
+                                        ->with('probabilities', $probabilities)
+                                        ->with('categories', $categories)
+                                        ->with('status', $status)
+                                        ->with('country', $country)
+                                        ->with('users', $users)
+                                        ;
+                                } else {
+                                    return view('report.analysisHome');
+                                }
+                            }
+                            
+                            
+                                
+                                                        
+
+
+
+
 
 
 

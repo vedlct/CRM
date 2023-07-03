@@ -247,7 +247,7 @@
             <div class="card-body">
               <h4 class="card-title">Duplicacy or Conspiracy!</h4>
               <p class="card-text">Double trouble or mere coincidence? Dive into the intriguing world of duplicate leads marked by our marketers. Are they duplicates or part of a master plan?</p>
-              <a href="{{route('duplicateLeadList')}}" target="_blank" class="btn btn-primary">Duplicate Leads</a>
+              <a href="{{route('getDuplicateLeads')}}" target="_blank" class="btn btn-primary">Duplicate Leads</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">

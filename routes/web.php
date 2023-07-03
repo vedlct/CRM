@@ -262,6 +262,7 @@ Route::post('/analysisComments', 'LeadController@analysisComments');
 Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
 Route::get('/reportAllActivties','LeadController@reportAllActivties')->name('reportAllActivties');
 Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
+Route::get('duplicateLeads', 'LeadController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
