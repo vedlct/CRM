@@ -64,13 +64,16 @@
                             <td >{{$lead->firstName}} {{$lead->lastName}}
                             </td>
                             <td >
-                                <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                        data-lead-id="{{$lead->leadId}}"
+                                    ><i class="fa fa-eye"></i></a>'
+                                    
+                                    
+                                <!-- <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <!-- Trigger the Edit modal with a button -->
                                 <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
@@ -94,12 +97,11 @@
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                                    <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
-                                    <i class="fa fa-tasks" aria-hidden="true"></i></a>
+                                    <i class="fa fa-tasks" aria-hidden="true"></i></a> -->
                             </td>
 
                         </tr>
@@ -145,7 +147,7 @@
 
 
    <!-- Edit Modal -->
-   <div class="modal" id="edit_modal" style="">
+   <!-- <div class="modal" id="edit_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -157,9 +159,6 @@
                 <form  method="post" action="{{route('leadUpdate')}}">
                         {{csrf_field()}}
                         <div class="row">
-                            <!-- <div class="col-md-12" align="center">
-                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
-                            </div> -->
 
                             <div class="col-md-3">
                                 <input type="hidden" name="leadId">
@@ -261,7 +260,6 @@
                             <div class="col-md-3">
                                 <label ><b>Is it your IPP?</b></label>
                                 <select class="form-control" name="ippStatus"  id="ippStatus">
-                                    <!-- <option value="">(select one)</option> -->
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -308,7 +306,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
@@ -321,7 +319,7 @@
 
 
     <!-- Call Modal -->
-    <div class="modal" id="my_modal" style="">
+    <!-- <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
@@ -389,7 +387,7 @@
                                 <p>Here you will see who reached out to this company for how many times.</p>
                                 <div id="counter"></div>
                             </ul>
-                            
+
                         </div>
 
                         <div class="col-md-12"><br>
@@ -401,17 +399,16 @@
                 </div>
                 <div class="modal-footer">
                     <div id="latestFollowups"></div>
-
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
-    </div>
+    </div> -->
 
 
    <!--ALL Activities-->
     
-   <div class="modal" id="lead_activities" >
+   <!-- <div class="modal" id="lead_activities" >
         <div class="modal-dialog" style="max-width: 60%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -445,7 +442,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div></div>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -703,7 +700,18 @@
                 stateSave: true,
             });
 
+            $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
+
         });
+
 
 
        $('#lead_activities').on('show.bs.modal', function(e) {

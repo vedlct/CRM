@@ -56,6 +56,10 @@ class User extends Authenticatable
         return $this->belongsTo(Usertarget::class,'id','userId');
     }
 
+    public function designation(){
+        return $this->belongsTo(Designation::class,'designationId','designationId');
+    }
+
     public function getUserType($typeId){
         $userType = DB::table('usertypes')->select('typeId')->where('typeId', $typeId)->get();
 

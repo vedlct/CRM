@@ -47,11 +47,6 @@
 
 
 @section('content')
-    <!-- <div class="row" style="padding: 30px;">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create_pipeline_modal">
-            Create Sales Pipeline
-        </button>
-    </div> -->
 
     <div class="row" style="padding: 30px;">
         <div class="col-md-2">
@@ -210,7 +205,7 @@
         <!-- Not Closed card -->
         <div class="card h-100">
         <div class="card-header bg-danger text-white">
-            Not Won
+            Lost Deal
             <span class="badge badge-pill badge-white">({{ $pipeline['Lost']['total'] }})</span>
         </div>
 
@@ -273,7 +268,7 @@
               <option value="Contact">Contact</option>
               <option value="Conversation">Conversation</option>
               <option value="Possibility">Test Possibility</option>
-              <option value="Test">Test Received</option>
+              <option value="Test">Received Test</option>
               <option value="Closed">Deal Closed</option>
               <option value="Lost">Lost the Deal</option>
             </select>

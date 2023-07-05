@@ -29,16 +29,18 @@
                     <div class="col-sm-4 col-xl-2">
                         <div class="card">
                             <div class="card-body">
-                                <p class="text-center">
-                                <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
 
+
+                                <p class="text-center">
+                                    <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
                                 </p>
                                 <p class="mb-1">Username: {{$user->userId}}</p>
                                 <p class="mb-1">First Name: {{$user->firstName}}</p>
                                 <p class="mb-1">Last Name: {{$user->lastName}}</p>
-                                <!-- <p class="mb-1">Designation: Global Marketer</p> -->
+                                <p class="mb-1">Designation: @if ($user->designation) {{$user->designation->designationName}} @endif</p>
                                 <p class="mb-1">Email: {{$user->userEmail}}</p>
                                 <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
+                                <p class="mb-1">Gender: @if ($user->gender == "M") Male @else Female @endif</p>
                                 <p class="">Status: @if ($user->active == 1) Active @else Inactive @endif</p>
 
                                 <a href="#edit_user_modal" data-toggle="modal" class="btn btn-primary"
@@ -56,8 +58,9 @@
                                        data-active="{{$user->active}}"
                                        data-whitelist="{{$user->whitelist}}"
                                         >Edit Profile</a>
+                               
 
-                                @if($user_Type=='ADMIN' || 'SUPERVISOR')
+                                @if($user_Type == 'ADMIN' || 'SUPERVISOR')
                                 <a href="#target_user_modal" data-toggle="modal" class="btn btn-info"
                                        data-id="{{$user->id}}"
                                        data-first-name="{{$user->userId}}"
@@ -104,6 +107,7 @@
                                                                     <i class="fe-phone avatar-title font-22 text-white"></i>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-6">
                                                                 <div class="text-end">
                                                                     <h3 class="text-dark my-1">
@@ -114,6 +118,7 @@
                                                                     </p>
                                                                 </div>
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>

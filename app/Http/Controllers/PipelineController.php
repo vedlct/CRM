@@ -52,7 +52,7 @@ class PipelineController extends Controller
 
             } else {
                 $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website')
-                ->where('salespipeline.userId', Auth::user()->id)
+                // ->where('salespipeline.userId', Auth::user()->id)
                 ->leftJoin('leads', 'salespipeline.leadId', 'leads.leadId')
                 // ->where('leads.contactedUserId', Auth::user()->id)
                 ->where('salespipeline.stage', 'LIKE', '%' . $stage . '%')

@@ -64,6 +64,9 @@ Route::post('user-management/search', 'UserManagementController@search')->name('
 //USER PROFILE
 
 Route::get('user/{id}', 'UserManagementController@userProfile')->name('userProfile');
+Route::post('/updateUserEnd', 'UserManagementController@updateUserEnd')->name('updateUserEnd');
+Route::post('/changePasswordUserEnd', 'UserManagementController@changePasswordUserEnd')->name('changePasswordUserEnd');
+
 
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');

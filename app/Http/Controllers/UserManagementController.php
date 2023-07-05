@@ -17,6 +17,8 @@ use App\User;
 use App\Usertype;
 use App\Usertarget;
 use App\Targetlog;
+use App\Designation;
+
 use Yajra\DataTables\DataTables;
 
 
@@ -193,6 +195,51 @@ class UserManagementController extends Controller
 
         Session::flash('message', 'Successfully user\'s info updated ');
         return redirect()->intended('/user-management');
+    }
+
+
+
+    public function updateUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        $this->validateInput($request);
+        // Upload image
+        $keys = ['userId', 'userEmail', 'firstName', 'lastName',
+            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
+        $input = $this->createQueryInput($keys, $request);
+
+        if ($request->file('picture')) {
+            $img = $request->file('picture');
+            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
+            $location = public_path('img/'.$filename);
+            Image::make($img)->resize(200,200)->save($location);
+            $input['picture'] = $filename;
+
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your profile is updated sucessfully ');
+        return redirect()->intended('/settings');
+    }
+
+
+    public function changePasswordUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        if ($request['password'] != null && strlen($request['password']) > 0) {
+            $constraints['password'] = 'required|min:6|confirmed';
+            $input['password'] =  bcrypt($request['password']);
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your password is updated sucessfully ');
+        return redirect()->intended('/settings');
     }
 
 

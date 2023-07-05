@@ -278,7 +278,30 @@
                                     <!-- contacts tab -->
                                     <div class="tab-pane fade" id="contacts" role="tabpanel">
                                         <p class="my-1"><br>
-                                            <a href="#create_employee" class="btn btn-info">Create Contact</a> 
+
+                                        <a href="#create_employee" class="btn btn-info" data-toggle="modal" 
+                                            data-lead-id="{{$lead->leadId}}" 
+                                            data-lead-name="{{$lead->companyName}}"
+                                            data-lead-email="{{$lead->email}}"
+                                            data-lead-number="{{$lead->contactNumber}}"
+                                            data-lead-person="{{$lead->personName}}"
+                                            data-lead-website="{{$lead->website}}"
+                                            data-lead-category="{{$lead->category->categoryId}}"
+                                            data-lead-country="{{$lead->countryId}}"
+                                            data-lead-designation="{{$lead->designation}}"
+                                            data-lead-linkedin="{{$lead->linkedin}}"
+                                            data-lead-founded="{{$lead->founded}}"
+                                            data-lead-process="{{$lead->process}}"
+                                            data-lead-volume="{{$lead->volume}}"
+                                            data-lead-frequency="{{$lead->frequency}}"
+                                            data-lead-employee="{{$lead->employee}}"
+                                            data-lead-ipp="{{$lead->ippStatus}}"
+                                            data-lead-comments="{{$lead->comments}}"
+                                            data-lead-possibility="{{$lead->possibilityId}}" 
+                                            data-lead-probability="{{$lead->probabilityId}}"
+                                        >Create Contact</a>
+
+
                                         </p>
                                         @foreach ($employees as $employee)
                                             <hr>
@@ -424,7 +447,7 @@
                                 </p>
                                 <p>
                                     <b class="text-secondary">Operated in:</b>
-                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Bangladesh</a>
+                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
                                 </p>
                                 <!-- modal -->
                                 <!-- Modal -->
@@ -436,7 +459,7 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                Bangladesh
+                                                Demo Country
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -839,7 +862,7 @@
               <option value="Contact">Contact</option>
               <option value="Conversation">Conversation</option>
               <option value="Possibility">Test Possibility</option>
-              <option value="Test">Test Received</option>
+              <option value="Test">Received Test</option>
               <option value="Closed">Deal Closed</option>
               <option value="Lost">Lost the Deal</option>
             </select>
@@ -859,10 +882,10 @@
 
 <!-- Create Employee  Modal -->
 <div class="modal" id="create_employee">
-  <div class="modal-dialog" style="max-width: 400px;">
+  <div class="modal-dialog" style="max-width: 40%;">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Set Sales Pipeline</h5>
+        <h5 class="modal-title">Create Employee</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -871,28 +894,83 @@
         <form  method="post" action="{{ route('createEmployee') }}">
         {{csrf_field()}}
 
-          <div class="form-group">
+        <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
             <label for="leadId">Lead Id:</label>
             <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
-          </div>
-          <div class="form-group">
+            </div>
+
+            <div class="form-group">
+            <label for="name">Employee Name:</label>
+            <input type="text" class="form-control" name="name" id="name" value="">
+            </div>
+
+            <div class="form-group">
+            <label for="designationId">Designation:</label>
+            <select id="designationId" name="designationId" class="form-control form-control-warning">
+                    @foreach($designations as $designation)
+                        <option value="{{$designation->designationId}}">{{$designation->designationName}}</option>
+                    @endforeach
+
+            </select>
+            </div>
+
+            <div class="form-group">
+            <label for="number">Contact Number:</label>
+            <input type="text" class="form-control" name="number" id="number" value="">
+            </div>
+
+            <div class="form-group">
+            <label for="jobstatus">Is KDM?</label>
+            <select id="jobstatus" name="jobstatus" class="form-control">
+                <option value="0" {{ $user->jobstatus == 0 ? 'selected' : '' }}>Left Job</option>
+                <option value="1" {{ $user->jobstatus == 1 ? 'selected' : '' }}>Active</option>
+            </select>
+            </div>
+            
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
             <label for="companyName">Company:</label>
             <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
-          </div>
+            </div>
 
-          <div class="form-group">
-            <label for="stage">Select Stage:</label>
-            <select id="stage" name="stage" class="form-control">
-              <option value="Contact">Contact</option>
-              <option value="Conversation">Conversation</option>
-              <option value="Possibility">Test Possibility</option>
-              <option value="Test">Test Received</option>
-              <option value="Closed">Deal Closed</option>
-              <option value="Lost">Lost the Deal</option>
+            <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" name="email" id="email" value="">
+            </div>
+
+
+            <div class="form-group">
+            <label for="countryId">Country:</label>
+            <select id="countryId" name="countryId" class="form-control form-control-warning">
+                    @foreach($country as $c)
+                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                    @endforeach
             </select>
-          </div>
+            </div>
+
+
+            <div class="form-group">
+            <label for="linkedin">Linkedin:</label>
+            <input type="text" class="form-control" name="linkedin" id="linkedin" value="">
+            </div>
+
+            <div class="form-group">
+            <label for="iskdm">Is KDM?</label>
+            <select id="iskdm" name="iskdm" class="form-control">
+                <option value="0" {{ $user->iskdm == 0 ? 'selected' : '' }}>No</option>
+                <option value="1" {{ $user->iskdm == 1 ? 'selected' : '' }}>Yes</option>
+            </select>
+            </div>
+
+        </div>
+        </div>
+
+
           <div class="text-right">
-            <button class="btn btn-success" type="submit">Set</button>
+            <button class="btn btn-success" type="submit">Create</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </form>
@@ -1115,6 +1193,23 @@
                 $('#newFileField').html('');
             }
         }
+
+
+
+
+    // CREATE EMPLOYEE
+    $('#create_employee').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var leadId = button.data('lead-id');
+        var companyName = button.data('lead-name');
+        var pipelineStage = button.data('pipeline-stage'); 
+
+        // Set the values in the input fields
+        $('#leadId').val(leadId);
+        $('#companyName').val(companyName);
+    });
+
+
 
 </script>
 

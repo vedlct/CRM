@@ -27,6 +27,7 @@ use App\Followup;
 use App\Leadstatus;
 use App\SalesPipeline;
 use App\Employees;
+use App\Designation;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -2491,7 +2492,7 @@ class LeadController extends Controller
                     ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
                     ->where('activities.userId', Auth::user()->id)
                     ->orderBy('activities.created_at', 'DESC')
-                    ->paginate(500);
+                    ->paginate(300);
 
                 }
 
@@ -3001,6 +3002,8 @@ class LeadController extends Controller
             $categories = Category::where('type',1)->get();
             $country = Country::get();
             $status = Leadstatus::get();
+            $designations = Designation::get();
+            
 
             return view('layouts.lead.accountView')
                 ->with('lead', $lead)
@@ -3018,11 +3021,11 @@ class LeadController extends Controller
                 ->with('pipeline',$pipeline)
                 ->with('users',$users)
                 ->with('employees',$employees)
+                ->with('designations',$designations)
 
                 ;
 
         }
-
 
 
                 

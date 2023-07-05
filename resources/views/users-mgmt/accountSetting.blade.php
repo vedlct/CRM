@@ -5,8 +5,9 @@
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
+    
+    @php($user_Type = Session::get('userType'))
 
-    @php($userType = Session::get('userType'))
 
     <div class="content-page">
         <div class="content">
@@ -28,46 +29,38 @@
                     <div class="col-sm-4 col-xl-2">
                         <div class="card">
                             <div class="card-body">
-                                <p class="text-center">
-                                <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
 
+
+                                <p class="text-center">
+                                    <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
                                 </p>
+                                <p class="">Status: @if ($user->active == 1) <span style="color: green;">Active</span> @else <span style="color: red;">Active</span>Inactive @endif</p>
                                 <p class="mb-1">Username: {{$user->userId}}</p>
                                 <p class="mb-1">First Name: {{$user->firstName}}</p>
                                 <p class="mb-1">Last Name: {{$user->lastName}}</p>
-                                <!-- <p class="mb-1">Designation: Global Marketer</p> -->
-                                <p class="mb-1">Email: {{$user->userEmail}}</p>
+                                <p class="mb-1">Designation: @if ($user->designation) {{$user->designation->designationName}} @endif</p>
                                 <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
-                                <p class="">Status: @if ($user->active == 1) Active @else Inactive @endif</p>
+                                <p class="mb-1">Gender: @if ($user->gender == "M") Male @else Female @endif</p>
+                                <p class="mb-1">DOB: {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
+                                <p class="mb-1">Email: {{$user->userEmail}}</p>
+
 
                                 <a href="#edit_user_modal" data-toggle="modal" class="btn btn-primary"
-                                       data-id="{{$user->id}}"
-                                       data-user-id="{{$user->userId}}"
-                                       data-user-email="{{$user->userEmail}}"
-                                       data-password="{{$user->password}}"
-                                       data-first-name="{{$user->firstName}}"
-                                       data-last-name="{{$user->lastName}}"
-                                       data-phone-number="{{$user->phoneNumber}}"
-                                       data-dob="{{$user->dob}}"
-                                       data-gender="{{$user->gender}}"
-                                        >Edit Profile</a>
+                                        data-id="{{$user->id}}"
+                                        data-user-id="{{$user->userId}}"
+                                        data-first-name="{{$user->firstName}}"
+                                        data-last-name="{{$user->lastName}}"
+                                        data-phone-number="{{$user->phoneNumber}}"
+                                        data-dob="{{$user->dob}}"
+                                        data-gender="{{$user->gender}}"
+                                        data-designation-id="{{$user->designationId}}"
+                                        data-picture="{{$user->picture}}">Edit Profile</a>
 
-                                @if($userType=='ADMIN' || 'SUPERVISOR')
-                                <a href="#target_user_modal" data-toggle="modal" class="btn btn-info"
-                                       data-id="{{$user->id}}"
-                                       data-first-name="{{$user->userId}}"
-                                       data-target-call="{{$user->target['targetCall']}}"
-                                       data-target-high="{{$user->target['targetHighPossibility']}}"
-                                       data-target-lead="{{$user->target['targetLeadmine']}}"
-                                       data-target-contact="{{$user->target['targetContact']}}"
-                                       data-target-contactusa="{{$user->target['targetUsa']}}"
-                                       data-target-test="{{$user->target['targetTest']}}"
-                                       data-target-file="{{$user->target['targetFile']}}"
-                                       data-target-conversation="{{$user->target['conversation']}}"
-                                       data-target-closelead="{{$user->target['closelead']}}"
-                                       data-target-followup="{{$user->target['followup']}}"                                
-                                        >Set Target</a>
-                                @endif        
+
+                                <a href="#change_password" data-toggle="modal" class="btn btn-warning"
+                                        data-id="{{$user->id}}"
+                                        data-user-id="{{$user->userId}}"
+                                        data-password="{{$user->password}}">Password</a>     
                             </div>
                         </div>
                     </div>
@@ -99,6 +92,7 @@
                                                                     <i class="fe-phone avatar-title font-22 text-white"></i>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-6">
                                                                 <div class="text-end">
                                                                     <h3 class="text-dark my-1">
@@ -109,6 +103,7 @@
                                                                     </p>
                                                                 </div>
                                                             </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -413,7 +408,190 @@
 
 
 
+        
 
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="edit_user_modal" >
+                <div class="modal-dialog" style="max-width: 60%;">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update Your Profile</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('updateUserEnd') }}" enctype="multipart/form-data">
+                                <input type="hidden" name="_method" value="PUT">
+                                {{ csrf_field() }}
+                                <input id="id" type="text" class="form-control" name="id">
+
+                                <div class="row">
+
+                                    <div class="form-group col-md-4">
+                                        <label for="firstName">First Name:</label>
+
+                                        <input id="firstName" type="text" class="form-control" name="firstName" required>
+
+                                        @if ($errors->has('firstName'))
+                                            <span class="help-block">
+												<strong>{{ $errors->first('firstName') }}</strong>
+											</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="lastName">Last Name:</label>
+                                        <input id="lastName" type="text" class="form-control" name="lastName" required>
+
+                                        @if ($errors->has('lastName'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('lastName') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="phoneNumber">Phone Number:</label>
+                                        <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
+                                        @if ($errors->has('phoneNumber'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('phoneNumber') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="dob">Date Of Birth:</label>
+                                        <input id="dob" type="text" class="form-control" name="dob">
+                                        @if ($errors->has('dob'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('dob') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="gender">Gender:</label>
+                                        <select id="gender" name="gender" class="form-control">
+                                            <option value="M" {{$user->gender == 'M' ? 'selected' : ''}}>Male</option>
+                                            <option value="F" {{$user->gender == 'F' ? 'selected' : ''}}>Female</option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="designationId">Designation:</label>
+
+                                        <select id="designationId" name="designationId" class="form-control form-control-warning">
+                                            <option value="32" {{$user->designationId == 32 ? 'selected' : ''}}>Trainee Executive</option>
+                                            <option value="33" {{$user->designationId == 33 ? 'selected' : ''}}>Junior Executive</option>
+                                            <option value="34" {{$user->designationId == 34 ? 'selected' : ''}}>Executive</option>
+                                            <option value="35" {{$user->designationId == 35 ? 'selected' : ''}}>Sr.  Executive</option>
+                                            <option value="36" {{$user->designationId == 36 ? 'selected' : ''}}>Asst. Manager</option>
+                                            <option value="37" {{$user->designationId == 37 ? 'selected' : ''}}>Manager</option>
+                                            <option value="38" {{$user->designationId == 38 ? 'selected' : ''}}>Sr. Manager</option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="picture">Picture:</label>
+                                        <input id="picture" type="file" class="form-control" name="picture">
+                                        @if ($errors->has('picture'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('picture') }}</strong>
+										</span>
+                                        @endif
+
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <button type="submit" class="btn btn-lg btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Change Password Modal -->
+            <div class="modal fade" id="change_password" >
+                <div class="modal-dialog" style="max-width: 40%;">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4 class="modal-title">Change Password</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('changePasswordUserEnd') }}" enctype="multipart/form-data">
+                                <input type="hidden" name="_method" value="PUT">
+                                {{ csrf_field() }}
+                                <input id="user_id" type="text" class="form-control" name="id">
+
+                                <div class="row">
+
+                                <div class="form-group col-md-4">
+                                        <label for="password">Password:</label>
+                                        <input id="password" type="password" class="form-control" name="password">
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="password-confirm">Confirm Password:</label>
+                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                    </div>
+
+
+                                    <div class="form-group col-md-4"></br>
+                                        <button type="submit" class="btn btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -438,12 +616,59 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    //CHANGE THE TABS 
 
-    var reportTabLink = document.getElementById('report-tab');
-    var tab = new bootstrap.Tab(reportTabLink);
-    tab.show();
 
+$(document).ready(function() {
+
+        $('#edit_user_modal').on('show.bs.modal', function (e) {
+            // Retrieve the data attributes from the clicked element
+            var id = $(e.relatedTarget).data('id');
+            var userId = $(e.relatedTarget).data('user-id');
+            var firstName = $(e.relatedTarget).data('first-name');
+            var lastName = $(e.relatedTarget).data('last-name');
+            var phoneNumber = $(e.relatedTarget).data('phone-number');
+            var dob = $(e.relatedTarget).data('dob');
+            var gender = $(e.relatedTarget).data('gender');
+            var designationId = $(e.relatedTarget).data('designation-id');
+            var picture = $(e.relatedTarget).data('picture');
+
+            // Populate the input fields in the modal with the retrieved values
+            $(e.currentTarget).find('#id').val(id);
+            $(e.currentTarget).find('#userId').val(userId);
+            $(e.currentTarget).find('#firstName').val(firstName);
+            $(e.currentTarget).find('#lastName').val(lastName);
+            $(e.currentTarget).find('#phoneNumber').val(phoneNumber);
+            $(e.currentTarget).find('#dob').val(dob);
+            $(e.currentTarget).find('#gender').val(gender);
+            $(e.currentTarget).find('#designationId').val(designationId);
+            $(e.currentTarget).find('#picture').val(picture);
+        });
+
+
+
+        $('#change_password').on('show.bs.modal', function(e) {
+            $('#change_password').on('show.bs.modal', function(e) {
+                var id = $(e.relatedTarget).data('id');
+                var userId = $(e.relatedTarget).data('user-id');
+
+                $(e.currentTarget).find('#user_id').val(id);
+                $(e.currentTarget).find('#userId').val(userId);
+            });
+        });
+    });
+
+
+        
+
+
+        $( function() {
+            $( "#dob" ).datepicker();
+        } );
+
+
+
+    
+        
 
 
 </script>

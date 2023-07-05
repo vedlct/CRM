@@ -1866,6 +1866,18 @@ class ReportController extends Controller
 
     }
 
+
+
+
+
+
+
+
+
+
+
+    
+    
     
     //// THIS IS REVIOUS CODE FOR FILTERING HOUR PAGE BY DATE
     // public function hourReport_filter(Request $r)

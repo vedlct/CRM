@@ -364,8 +364,13 @@
                 <li class="nav-devider"></li>
 
                 <li role="separator" class="divider"></li>
-                <li><a href="{{route('accountSetting')}}"><i class="ti-settings"></i>My Account</a></li>
-                <li role="separator" class="divider"></li>
+                <li><a href="{{route('accountSetting')}}">
+					<i class="ti-settings"></i>My Account</a></li>
+
+				<li><a href="{{ route('logout') }}"
+				   onclick="event.preventDefault();
+					document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
+					<i class="mdi mdi-power"></i>Log Out</a></li>
 
             </ul>
         </nav>
@@ -373,14 +378,13 @@
     </div>
     <!-- End Sidebar scroll-->
     <!-- Bottom points-->
-    <div class="sidebar-footer">
+    <!--<div class="sidebar-footer">
 
-        <!-- item-->
         <a href="{{ route('logout') }}"
            onclick="event.preventDefault();
             document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout">
 
-            <i class="mdi mdi-power"></i></a>
+            <i class="mdi mdi-power"></i></a>-->
 
     </div>
     <!-- End Bottom points-->

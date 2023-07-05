@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Usertype;
 use App\Test;
+use App\Designation;
 
 class UserController extends Controller
 {
@@ -18,8 +19,10 @@ class UserController extends Controller
 
         $user =User::get();
 
+        $designations = Designation::get();
 
-        return view('test')->with('user',$user);
+
+        return view('test')->with('user',$user)->with('designations', '$designations');
 
     }
 
