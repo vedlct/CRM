@@ -5,6 +5,72 @@
                 padding: 0 20px;
             }
 
+
+.onhover-dropdown{
+    cursor:pointer;
+    position:relative
+}
+
+.onhover-show-div {
+    top: 80px;
+    left: -150px; 
+    position: absolute;
+    z-index: 8;
+    background-color: #fff;
+    -webkit-transition: all linear 0.3s;
+    transition: all linear 0.3s;
+    -webkit-box-shadow:0 0 20px rgba(89,102,122,0.1);
+    box-shadow:0 0 20px rgba(89,102,122,0.1);
+    -webkit-transform:translateY(30px);
+    transform:translateY(30px);
+    opacity:0;
+    visibility:hidden;
+
+}
+
+.onhover-dropdown:hover .onhover-show-div{
+    opacity:1;
+    -webkit-transform:translateY(0px);
+    transform:translateY(0px);
+    visibility:visible;
+    border-radius:5px;
+    overflow:hidden
+}
+.onhover-dropdown:hover .onhover-show-div:before{
+    width:0;
+    height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:7px solid #fff;
+    content:"";
+    top:-7px;
+    position:absolute;
+    left:10px;
+    z-index:2
+}
+.onhover-dropdown:hover .onhover-show-div:after{
+    width:0;
+    height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:7px solid #d7e2e9;
+    content:"";
+    top:-7px;
+    position:absolute;
+    left:10px;
+    z-index:1
+}
+
+.notification-box{
+    position:relative
+}
+.notification-dropdown{
+    padding-top:20px;
+    top:52px;
+    width:300px;
+    right:-20px !important;
+    left:unset
+}
     </style>
 
 <header class="topbar">
@@ -68,7 +134,7 @@
 
             <ul class="navbar-nav my-lg-0">
 
-                <li class="nav-item dropdown">
+               <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>Profile </b></a>
                     <div class="dropdown-menu dropdown-menu-right">

@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\AssignOp\Mod;
 class User extends Authenticatable
 {
     use Notifiable;
+    protected $primaryKey = 'id';
     protected $table = 'users';
 
     /**
@@ -53,6 +54,10 @@ class User extends Authenticatable
 
     public function target(){
         return $this->belongsTo(Usertarget::class,'id','userId');
+    }
+
+    public function designation(){
+        return $this->belongsTo(Designation::class,'designationId','designationId');
     }
 
     public function getUserType($typeId){

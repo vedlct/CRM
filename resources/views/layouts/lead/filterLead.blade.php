@@ -16,17 +16,18 @@
                     <thead>
                     <tr>
                         <th>Select</th>
-                        <th>Id</th>
-                        <th>Company Name</th>
+                        <!-- <th>Id</th> -->
+                        <!-- <th>Company Name</th> -->
                         <th>website</th>
                         <th>Number</th>
-                        <th>KDM</th>
+                        <!-- <th>KDM</th> -->
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
                         <th >Volume</th>
                         <th >Process</th>
-                        <th >Frequency</th>
+                        <!-- <th >Frequency</th> -->
+                        <!-- <th >Cretaed Date</th> -->
                         <th >Action</th>
                     </tr>
                     </thead>
@@ -279,17 +280,18 @@
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
 
-                    { data: 'leadId', name: 'leads.leadId' },
-                    { data: 'companyName', name: 'leads.companyName' },
+                    // { data: 'leadId', name: 'leads.leadId' },
+                    // { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
-                    { data: 'personName', name: 'leads.personName'},
+                    // { data: 'personName', name: 'leads.personName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
                     {data: 'volume', name: 'volume', defaultContent: ''},
                     {data: 'process', name: 'process', defaultContent: ''},
-                    {data: 'frequency', name: 'frequency', defaultContent: ''},
+                    // {data: 'frequency', name: 'frequency', defaultContent: ''},
+                    // {data: 'created_at', name: 'created_at', defaultContent: ''},
 
                     {data: 'action', name: 'action', orderable: false, searchable: false}
 

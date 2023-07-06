@@ -13,6 +13,7 @@
 
 
 
+
 Route::view('/main', 'layouts.index')->name('main');
 Route::get('/', 'Auth\LoginController@mainLogin');
 
@@ -59,6 +60,13 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+
+//USER PROFILE
+
+Route::get('user/{id}', 'UserManagementController@userProfile')->name('userProfile');
+Route::post('/updateUserEnd', 'UserManagementController@updateUserEnd')->name('updateUserEnd');
+Route::post('/changePasswordUserEnd', 'UserManagementController@changePasswordUserEnd')->name('changePasswordUserEnd');
+
 
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
@@ -127,6 +135,7 @@ Route::post('lead/getAssignLeadData','LeadController@getAssignLeadData')->name('
 Route::post('lead/assign','LeadController@assignStore')->name('assignStore');
 
 Route::post('lead/assignn','LeadController@assignStore2')->name('assignStore2');
+Route::post('/assignToPipeline','PipelineController@assignToPipeline')->name('assignToPipeline');
 
 
 Route::get('lead/assign-lead','LeadController@assignAllShow')->name('assignAllShow');
@@ -195,6 +204,10 @@ Route::post('contacted/status','LeadController@contactedStatus')->name('contacte
 Route::post('/addContactedTemp','LeadController@addContactedTemp')->name('addContactedTemp');
 Route::post('/getContacedData','LeadController@getContacedData')->name('getContacedData');
 
+Route::get('/account/{leadId}', 'LeadController@accountView')->name('accountView');
+
+
+
 Route::post('/editcontactmodalshow','LeadController@editcontactmodalshow')->name('editcontactmodalshow');
 
 Route::get('/Mycontacted', 'LeadController@Mycontacted')->name('Mycontacted');
@@ -206,6 +219,8 @@ Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 
 Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
+//Employees
+Route::post('/createEmployee','LeadController@createEmployee')->name('createEmployee');
 
 
 //My Team
@@ -240,27 +255,46 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
-Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
+// Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
 Route::get('hour/myReport', 'ReportController@myHourReport')->name('myHourReport');
 
 //Report Analysis
+Route::get('/analysisHome', 'LeadController@analysisHomePage')->name('analysisHomePage');
+
 Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'LeadController@analysisComments');
 Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
 Route::get('/reportAllActivties','LeadController@reportAllActivties')->name('reportAllActivties');
 Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
+Route::get('duplicateLeads', 'LeadController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
 Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
-Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
-Route::post('/googleSearch', 'LeadController@googleSearch');
+Route::get('/testButNotClosed', 'LeadController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
 Route::get('/longTimeNoCall', 'LeadController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'LeadController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
 
+Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
+Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
+Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
+Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
+Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
+
+Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('getFredChasingLeads');
+Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');
+
+
+//Lead Mining Routes
+Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
+Route::post('/googleSearch', 'LeadController@googleSearch');
+
 Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');
+
+Route::get('/keywords', 'KeywordController@index')->name('keywordAnalysis');
+Route::post('/updateKeyword', 'KeywordController@updateKeyword')->name('updateKeyword');
 
 //Report - OKR
 

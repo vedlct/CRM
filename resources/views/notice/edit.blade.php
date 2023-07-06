@@ -14,6 +14,10 @@
                             <label for="msg" class="col-sm-3 control-label">Notice</label>
 
                             <div class="col-sm-9">
+                                <input id="title" class="form-control form-control-warning" name="title" style="width:100%;" required autofocus>{{ $notice->title }}</input>
+                            </div>
+
+                            <div class="col-sm-9">
                                 <textarea id="msg" class="form-control form-control-warning" name="msg" style="width:100%; height:200px" required autofocus>{{ $notice->msg }}</textarea>
 
                                 @if ($errors->has('msg'))

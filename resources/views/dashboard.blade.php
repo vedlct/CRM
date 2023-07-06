@@ -190,51 +190,23 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-            <!-- @if(Auth::user()->typeId==4)
-
-            <div class="svn-col">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title"><a href="{{route('highPossibility')}}">High Possibilities</a></h4>
-                    <div class="text-right">
-                        <h2 class="font-light m-b-0">{{$highPosibilities}} | {{$target->targetHighPossibility}}</h2>
-                        <span class="text-muted">Current Month</span>
-                    </div>
-
-                    @if($target->targetHighPossibility>0)
-                        <span class="text-purple">{{round($highPosibilitiesThisWeek)}}%</span>
-                    @endif
-                    <div class="progress">
-                        @if($target->targetHighPossibility>0)
-                        <div class="progress-bar bg-purple" role="progressbar" style="width:{{$highPosibilitiesThisWeek}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-
-            @endif -->
-
-
     </div>
 
 
 
-        {{--Notice Box--}}
+    {{--Notice Box--}}
 
-    <div class="row" style="width:40%; float: left;">
+    <div class="row" style="width: 40%; float: left;">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title"><a href="{{ route('notice.index') }}"><span class="hide-menu">Communications</span></a></h3>
-                    <p class="card-subtitle">Showing the Latest Communication.</p>
-                    <p>{!! nl2br(e($recentNotice->msg)) !!}<br><br> <span style="font-weight: 400; color: green; float:left;">From {{$recentNotice->user->firstName}} {{$recentNotice->user->lastName}} at {{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y')}}</span></p>
+                    <h4 class="card-title" style="color: purple;">{{ $recentNotice->title }}</h4>
+                    <div class="card-text">
+                        <p>{!! nl2br(e($recentNotice->msg)) !!}</p>
                     </div>
+                    <footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite></footer>
                 </div>
+                <a href="{{ route('notice.index') }}" class="btn btn-info">All Communications</a>
             </div>
         </div>
     </div>

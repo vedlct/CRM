@@ -46,75 +46,14 @@ class Lead extends Model
 
         return $leads;
     }
-
-    // public function showNotAssignedLeads()
-    // {
-
-    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability','workprogress')
-    //         ->where('statusId', 2)
-    //         ->where(function ($q) {
-    //             $q->orWhere('contactedUserId', 0)
-    //                 ->orWhere('contactedUserId', null);
-    //         })
-    //         ->where('leadAssignStatus', 0)
-    //         ->select('leads.*');
-
-
-    //     return $leads;
-    // }
-
-
-    // public function showNotAssignedLeads()
-    // {
-    //     $currentUserId = Auth::user()->id;
     
-    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
-    //         ->where('statusId', 2)
-    //         ->where(function ($q) use ($currentUserId) {
-    //             $q->orWhere('contactedUserId', 0)
-    //                 ->orWhereNull('contactedUserId');
-    //         })
-    //         ->where('leadAssignStatus', 0)
-    //         ->whereNotExists(function ($query) use ($currentUserId) {
-    //             $query->select('workprogress.userId')
-    //                 ->from('workprogress')
-    //                 ->whereRaw('leads.leadId = workprogress.leadId')
-    //                 ->where('workprogress.userId', $currentUserId);
-    //         })
-    //         ->select('leads.*');
-    
-    //     return $leads;
-    // }
+// This function will show the filtered leads - that are neither touched nor filtered by the current user. 
+// It also does not show the filtered leads in last 1 month by other users   
 
-
-    // public function showNotAssignedLeads()
-    // {
-    //     $currentUserId = Auth::user()->id;
-        
-    
-    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
-    //         ->where('statusId', 2)
-    //         ->where(function ($q) {
-    //             $q->orWhere('contactedUserId', 0)
-    //                 ->orWhereNull('contactedUserId');
-    //         })
-    //         ->where('leadAssignStatus', 0)
-    //         ->leftJoin('workprogress', function ($join) use ($currentUserId) {
-    //             $join->on('leads.leadId', '=', 'workprogress.leadId')
-    //                 ->where('workprogress.userId', '=', $currentUserId);
-    //         })
-    //         ->whereNull('workprogress.userId')
-    //         ->select('leads.*');
-    
-    //     return $leads;
-    // }
-    
-    
-// This function will show the filtered leads which are not touched by the current user and which are filtered by the current user in last 3 months 
     public function showNotAssignedLeads()
     {
         $currentUserId = Auth::user()->id;
-        $thirtyDaysAgo = Carbon::now()->subDays(90);
+        $ninetyDaysAgo = Carbon::now()->subDays(90);
         $filteredString = 'Filtered';
     
         $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
@@ -128,15 +67,16 @@ class Lead extends Model
                 $join->on('leads.leadId', '=', 'workprogress.leadId')
                     ->where('workprogress.userId', '=', $currentUserId);
             })
-            ->leftJoin('activities', function ($join) use ($currentUserId, $thirtyDaysAgo, $filteredString) {
+            ->leftJoin('activities', function ($join) use ($currentUserId, $ninetyDaysAgo, $filteredString) {
                 $join->on('leads.leadId', '=', 'activities.leadId')
                     ->where('activities.userId', '=', $currentUserId)
                     ->where('activities.activity', 'LIKE', "%$filteredString%")
-                    ->where('activities.created_at', '>', $thirtyDaysAgo);
+                    ->where('activities.created_at', '>', $ninetyDaysAgo);
             })
             ->whereNull('workprogress.userId')
             ->whereNull('activities.activityId')
-            ->select('leads.*')->orderBy('leads.leadId', 'DESC');
+            ->select('leads.*')
+            ->orderBy('leads.leadId', 'DESC');
     
         return $leads;
     }
@@ -161,7 +101,10 @@ class Lead extends Model
         return $leads;
     }
 
-
+    public function employees()
+    {
+        return $this->hasMany(Employees::class, 'leadId', 'leadId');
+    }
 
     public function possibility()
     {
@@ -236,6 +179,16 @@ class Lead extends Model
     public function activities()
     {
         return $this->hasMany(Activities::class, 'leadId', 'leadId');
+    }
+
+    public function followup()
+    {
+        return $this->hasMany(Followup::class, 'leadId', 'leadId');
+    }
+
+    public function salespipeline()
+    {
+        return $this->hasMany(SalesPipeline::class, 'leadId', 'leadId');
     }
 
     public function lastCallingReport()

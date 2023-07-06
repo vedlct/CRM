@@ -42,7 +42,7 @@ class CrawlController extends Controller
     //                             $imageData = array_merge($imageData, $this->getImagesData($crawler, $imageSize)); // Merge the image data from multiple URLs
     //                         }
                     
-    //                         return view('report.crawlWebsites', compact('submitted', 'imageData', 'websitesArray'));
+    //                         return view('mining.crawlWebsites', compact('submitted', 'imageData', 'websitesArray'));
     //                     } catch (\Exception $e) {
     //                         // Log or display the error message
     //                         $errorMessage = $e->getMessage();
@@ -52,7 +52,7 @@ class CrawlController extends Controller
     //                 }
                     
             
-    //                 return view('report.crawlWebsites', compact('submitted', 'imageData', 'websites'));
+    //                 return view('mining.crawlWebsites', compact('submitted', 'imageData', 'websites'));
     //             }
             
                 
@@ -97,7 +97,7 @@ class CrawlController extends Controller
 
     public function index()
     {
-        return view('report.crawlWebsites');
+        return view('mining.crawlWebsites');
     }
 
         public function crawlWebsites(Request $request)
@@ -108,7 +108,7 @@ class CrawlController extends Controller
             $totalImages = $crawlResult['totalImages'];
             $errors = $crawlResult['errors'];
 
-        return view('report.crawlWebsites', compact('domain', 'totalImages', 'errors'));
+        return view('mining.crawlWebsites', compact('domain', 'totalImages', 'errors'));
         }
 
    

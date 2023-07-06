@@ -1055,6 +1055,17 @@
         });
 
 
+        $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
+
+
         $('#my_modal').on('show.bs.modal', function(e) {
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');

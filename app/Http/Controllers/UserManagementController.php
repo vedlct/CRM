@@ -17,6 +17,8 @@ use App\User;
 use App\Usertype;
 use App\Usertarget;
 use App\Targetlog;
+use App\Designation;
+
 use Yajra\DataTables\DataTables;
 
 
@@ -193,6 +195,51 @@ class UserManagementController extends Controller
 
         Session::flash('message', 'Successfully user\'s info updated ');
         return redirect()->intended('/user-management');
+    }
+
+
+
+    public function updateUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        $this->validateInput($request);
+        // Upload image
+        $keys = ['userId', 'userEmail', 'firstName', 'lastName',
+            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
+        $input = $this->createQueryInput($keys, $request);
+
+        if ($request->file('picture')) {
+            $img = $request->file('picture');
+            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
+            $location = public_path('img/'.$filename);
+            Image::make($img)->resize(200,200)->save($location);
+            $input['picture'] = $filename;
+
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your profile is updated sucessfully ');
+        return redirect()->intended('/settings');
+    }
+
+
+    public function changePasswordUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        if ($request['password'] != null && strlen($request['password']) > 0) {
+            $constraints['password'] = 'required|min:6|confirmed';
+            $input['password'] =  bcrypt($request['password']);
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your password is updated sucessfully ');
+        return redirect()->intended('/settings');
     }
 
 
@@ -470,11 +517,47 @@ class UserManagementController extends Controller
 
     }
 
-    // public function setBarForOwnedLeads (Request $r){
+    
+
+    public function userProfile($id) {
+
+        $user_Type=Session::get('userType');
+		if( $user_Type== 'SUPERVISOR' || $user_Type== 'ADMIN'){
+
+            $user = User::find($id);
+
+            // Check if the user exists
+            // if (!$id) {
+            //     abort(404);
+            // }
+
+            // Check if the current user is authorized to view the profile
+            // if ($user_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
+            //     abort(404);
+            // }
+
+        }
 
 
+        return view('users-mgmt.userProfile')
+            ->with('user', $user)
+            // ->with('possibilities', $possibilities)
+            // ->with('probabilities', $probabilities)
+            // ->with('categories',$categories)
+            // ->with('status',$status)
+            // ->with('country',$country)
+            // ->with('latestUpdate',$latestUpdate)
+            // ->with('didTestWithUs',$didTestWithUs)
+            // ->with('allComments',$allComments)
+            // ->with('previousFollowups',$previousFollowups)
+            // ->with('latestFollowups',$latestFollowups)
+            // ->with('followupCounter',$followupCounter)
 
-    // }
+            ;
+
+    }
+
+
 
 
 }

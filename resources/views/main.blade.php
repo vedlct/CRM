@@ -170,6 +170,8 @@
 
 <script>
 
+
+
 {{--@if(Auth::user()->typeId !=1)--}}
     {{--$(document).ready(function () {--}}
         {{--// alert('asdsd');--}}

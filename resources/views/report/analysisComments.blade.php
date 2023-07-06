@@ -4,11 +4,13 @@
 
 @section('content')
 
+@php($userType = Session::get('userType'))
+
     <div class="card" style="padding:30px;">
         <div class="card-body">
         <h2 class="card-title" align="center"><b>Leads with Keywords in Comments</b></h2>
         <p class="card-subtitle" align="center">On your left search box, you can write keywords (separated by comma) and get the results in a table. <br> On the right search box, you can write the keywords and download the list as an excel file.</p>
-
+        <p class="card-subtitle" align="center" style="color: red; font-style: italic;">available for admin and supervisors only</p>
         <div class="card-body" >
             <div class="col-md-5" style="float:left;">
                 <form method="POST" action="{{ route('analysisComments') }}">
@@ -22,6 +24,7 @@
                 </form>
                 </div>
 
+                @if($userType=='SUPERVISOR' || $userType=='ADMIN')
                 <div class="col-md-5" style="float:right;">
                 <form method="POST" action="{{ route('exportAnalysisComments') }}">
                 {{ csrf_field() }}
@@ -33,6 +36,7 @@
                     </div>
                 </form>
                 </div>
+                @endif
         </div>
 
         <div class="card" style="padding-top:50px;">
