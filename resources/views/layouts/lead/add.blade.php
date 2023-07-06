@@ -962,23 +962,13 @@
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'website', name: 'leads.website' },
                     { data: 'contactNumber', name: 'leads.contactNumber'},
-                    { data: 'category.categoryName', name: 'category.categoryName'},
-                    { data: 'country.countryName', name: 'country.countryName'},
+                    { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
+                    { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
                     {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
-                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
-                    { data: 'probability.probabilityName',
-                        render: function(data) {
-                            if(data != null) {
-                                return data
-                            }
-                            else {
-                                return 'null'
-                            }
-
-                        },
-                    },
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
+                    { data: 'probability.probabilityName', name: 'probability.probabilityName' , defaultContent: ''},
                     { data: 'volume', name: 'leads.volume' },
                     { data: 'process', name: 'leads.process' },
                     { data: 'frequency', name: 'leads.frequency' },
