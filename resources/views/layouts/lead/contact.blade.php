@@ -51,7 +51,7 @@
                         <th width="8%">Category</th>
                         <th width="5%">Website</th>
                         <th width="8%">Possi</th>
-                        <th width="8%">Proba</th>
+                        <!-- <th width="8%">Proba</th> -->
                         <th width="8%">Country</th>
                         <th width="8%">KDM</th>
                         <th width="8%">Phone</th>
@@ -809,17 +809,17 @@
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
 
-                    { data: 'probability.probabilityName',
-                        render: function(data) {
-                            if(data != null) {
-                                return data
-                            }
-                            else {
-                                return 'null'
-                            }
+                    // { data: 'probability.probabilityName',
+                    //     render: function(data) {
+                    //         if(data != null) {
+                    //             return data
+                    //         }
+                    //         else {
+                    //             return 'null'
+                    //         }
 
-                        },
-                    },
+                    //     },
+                    // },
                     { data: 'country.countryName', name: 'country.countryName'},
                     { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},

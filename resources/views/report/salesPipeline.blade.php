@@ -57,23 +57,25 @@
                 </div>
 
                 @foreach ($pipeline['Contact']['leads'] as $lead)
-                    <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+                <div class="card-body" data-leadid="{{ $lead->leadId }}">
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
-                    </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -87,20 +89,22 @@
 
                 @foreach ($pipeline['Conversation']['leads'] as $lead)
                 <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
                 </div>
                 @endforeach
@@ -117,25 +121,27 @@
             </div>
 
             @foreach ($pipeline['Possibility']['leads'] as $lead)
-            <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+                <div class="card-body" data-leadid="{{ $lead->leadId }}">
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
                 </div>
-
             @endforeach
+
         </div>
     </div>
 
@@ -148,25 +154,27 @@
             </div>
 
             @foreach ($pipeline['Test']['leads'] as $lead)
-            <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+                <div class="card-body" data-leadid="{{ $lead->leadId }}">
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
                 </div>
-
             @endforeach
+
         </div>
     </div>
 
@@ -179,25 +187,27 @@
             </div>
 
             @foreach ($pipeline['Closed']['leads'] as $lead)
-            <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+                <div class="card-body" data-leadid="{{ $lead->leadId }}">
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
                 </div>
-
             @endforeach
+
         </div>
     </div>
 
@@ -209,27 +219,28 @@
             <span class="badge badge-pill badge-white">({{ $pipeline['Lost']['total'] }})</span>
         </div>
 
-            @foreach ($pipeline['Lost']['leads'] as $lead)
-            <div class="card-body" data-leadid="{{ $lead->leadId }}">
-                        <h6 class="card-title">{{ $lead->companyName }}</h6>
-                        <p class="card-text">{{ $lead->website }}</p><br>
-                        <p><span style="float:left;">
-                            <a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
-                                <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
+        @foreach ($pipeline['Lost']['leads'] as $lead)
+                <div class="card-body" data-leadid="{{ $lead->leadId }}">
+                        <h5 class="card-text">{{ $lead->website }}</h5>
+                        <p class="card-text">
+                            <span style="float:left;">Ipp: @if ($lead->ippStatus == 1) Yes @else No @endif</span>
+                            <span style="float:right;">{{ $lead->possibilityName }}</span>
+                        </p><br><br>
+                        <p>
+                            <span style="float:left;"><a href="account/{{ $lead->leadId }}" target="_blank"> {{ $lead->leadId }} </a></span> 
+                            <span style="float:right;"> <a href="#" data-toggle="modal" data-target="#change_stage"
                                         data-pipeline-id="{{ $lead->pipelineId }}" data-leadid="{{ $lead->leadId }}"
                                         data-leadname="{{ $lead->companyName }}" data-pipeline-stage="{{ $lead->stage }}"
                                         >Change Stage</a>
-                                </span>
+                            </span>
                         </p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">
-
                         </small>
                 </div>
-
-
             @endforeach
+
 
         </div>
     </div>

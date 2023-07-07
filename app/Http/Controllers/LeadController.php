@@ -1404,8 +1404,6 @@ class LeadController extends Controller
             ->where('callingReport',5)
             ->count();
 
-
-
         if($countNewCallContact==0 && $r->report ==5){
             $newCalll=new NewCall();
             $newCalll->leadId=$r->leadId;
@@ -1414,7 +1412,57 @@ class LeadController extends Controller
             $newCalll->save();
         }
 
-        Session::flash('message', 'Report Updated Successfully');
+
+        $salesPipeline = SalesPipeline::where('leadId', $r->leadId)
+            ->where('userId', Auth::user()->id)
+            ->first();
+
+        if ($salesPipeline) {
+            if (stripos($r->progress, 'Test') !== false) {
+                $salesPipeline->stage = 'Test';
+                $salesPipeline->workStatus = 1;
+                // $salesPipeline->updated_at = ;
+            } elseif (stripos($r->progress, 'Closing') !== false) {
+                $salesPipeline->stage = 'Closed';
+                $salesPipeline->workStatus = 1;
+            } elseif ($r->report == 11) {
+                $salesPipeline->stage = 'Conversation';
+                $salesPipeline->workStatus = 1;
+            } elseif ($r->report == 5) {
+                $salesPipeline->stage = 'Contact';
+                $salesPipeline->workStatus = 1;
+            }
+            $message = 'Report Updated and sales pipeline Updated successfully.';
+            $salesPipeline->save();
+        } else {
+            // Create a new pipeline
+            $newReport = $r->report;
+            $newProgress = $r->progress;
+            
+            $newPipeline = new SalesPipeline;
+            $newPipeline->leadId = $r->leadId;
+            $newPipeline->userId = Auth::user()->id;
+            $newPipeline->workStatus = 1;
+            
+            if ($newReport == 5 && $newProgress == null) {
+                $newPipeline->stage = 'Contact';
+            } else if ($newReport == 11 && $newProgress == null) {
+                $newPipeline->stage = 'Conversation';
+            } else if (stripos($newProgress, 'Test') !== false) {
+                $newPipeline->stage = 'Test';
+            } else if (stripos($newProgress, 'Closing') !== false) {
+                $newPipeline->stage = 'Closed';
+            }
+            
+            if (isset($newPipeline->stage)) {
+                $newPipeline->save();
+                $message = 'Report Updated and sales pipeline created successfully.';
+            } else {
+                $message = 'Report Updated successfully.';
+            }        }
+
+
+        Session::flash('message', $message);
         return back();
     }
 
@@ -2049,14 +2097,53 @@ class LeadController extends Controller
 
 
 
-    public function addNewContact (Request $r) {
+
+    public function createEmployees (Request $r) {
+
+        //Validating The input Filed
+        $this->validate($r,[
+            'name' => 'required|max:100',
+            'email' => 'required|max:100',
+            'number' => 'max:20|unique:employees,number|regex:/^[\0-9\-\(\)\s]*$/'
+        ]);
+
+        $employees=new Employees;
+
+        $employees->leadId = $r->leadId;
+        $employees->name = $r->name;
+        $employees->designationId= $r->designation;
+        $employees->countryId= $r->country;
+        $employees->email= $r->email;
+        $employees->number = $r->number;
+        $employees->linkedin = $r->linkedin;
+        $employees->jobstatus=$r->jobstatus;
+        $employees->iskdm=$r->iskdm;
+        $employees->save();
+
+        Session::flash('message', 'Create Employee Successfully');
+        return back();
+
+    }    
+
+
+        public function employeeNumberCheck(Request $r){
+            $number=Employees::where('number',$r->number)->count();
+            return Response($number);
+        }
+        public function employeeEmailCheck(Request $r){
+            $email=Employees::where('email',$r->email)->count();
+            return Response($email);
+        }
+
+
+
+    public function updateEmployees (Request $r) {
 
 
 
     }    
 
-
-    public function removeContact (Request $r) {
+    public function removeEmployees (Request $r) {
 
         return back();
 
@@ -2064,7 +2151,33 @@ class LeadController extends Controller
     }    
 
 
+    public function getAllemployees ()
+    {
+        $User_Type=Session::get('userType');
+        if($User_Type == 'USER' || $User_Type == 'MANAGER'){
 
+            $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+            ->Join('leads','employees.leadId','leads.leadId')
+            ->where('leads.contactedUserId', Auth::User()->id)
+            ->get();
+        }else{
+            $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+            ->Join('leads','employees.leadId','leads.leadId')
+            // ->where('leads.contactedUserId', Auth::User()->id)
+            ->get();
+
+        }
+
+            $country=Country::get();
+            $designation=Designation::get();
+            
+            return view('layouts.lead.allEmployees')
+                ->with('employees', $employees)
+                ->with('country', $country)
+                ->with('designation', $designation)
+            ;
+
+    }
 
 
 
@@ -2085,6 +2198,20 @@ class LeadController extends Controller
 
 
         //ANALYSIS PART
+
+
+
+
+        public function analysisHomePage ()
+        {
+
+
+            return view ('report.analysisHome');
+        
+        }
+    
+
+
 
         public function ippList(){
             // $date = Carbon::now();
@@ -2133,16 +2260,6 @@ class LeadController extends Controller
         }
 
 
-
-
-        public function analysisHomePage ()
-        {
-
-
-            return view ('report.analysisHome');
-        
-        }
-    
 
 
         public function allAssignedButNotMyleads()
@@ -2990,11 +3107,12 @@ class LeadController extends Controller
                 ->where('leads.leadId', $leadId)
                 ->get();  
                 
-            $employees = Employees::select('employees.*')
-                ->join('leads', 'employees.leadId', 'leads.leadId')
-                ->where('employees.leadId', $leadId)
-                ->get();
-                
+            // $employees = Employees::select('employees.*')
+            //     ->join('leads', 'employees.leadId', 'leads.leadId')
+            //     ->where('employees.leadId', $leadId)
+            //     ->get();
+
+            $employees = $lead->employees()->get();                
 
 
             $possibilities = Possibility::get();

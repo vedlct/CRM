@@ -219,7 +219,12 @@ Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
 //Employees
-Route::post('/createEmployee','LeadController@createEmployee')->name('createEmployee');
+Route::get('/employees','LeadController@getAllemployees')->name('getAllemployees');
+Route::post('/createEmployees','LeadController@createEmployees')->name('createEmployees');
+Route::post('/updateEmployees','LeadController@updateEmployees')->name('updateEmployees');
+Route::post('/removeEmployees','LeadController@removeEmployees')->name('removeEmployees');
+Route::post('/employeeNumberCheck','LeadController@employeeNumberCheck')->name('employeeNumberCheck');
+Route::post('/employeeEmailCheck','LeadController@employeeEmailCheck')->name('employeeEmailCheck');
 
 
 //My Team

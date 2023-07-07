@@ -216,7 +216,7 @@
                                         <div class="material-border"></div>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#contacts" role="tab" aria-selected="true" id="contacts-tab">Contacts</a>
+                                        <a class="nav-link" data-bs-toggle="tab" href="#employees" role="tab" aria-selected="true" id="employees-tab">Employees</a>
                                         <div class="material-border"></div>
                                     </li>
                                 </ul>         
@@ -275,32 +275,15 @@
                                     </div>
 
 
-                                    <!-- contacts tab -->
-                                    <div class="tab-pane fade" id="contacts" role="tabpanel">
+                                    <!-- employees tab -->
+                                    <div class="tab-pane fade" id="employees" role="tabpanel">
                                         <p class="my-1"><br>
-
-                                        <a href="#create_employee" class="btn btn-info" data-toggle="modal" 
-                                            data-lead-id="{{$lead->leadId}}" 
-                                            data-lead-name="{{$lead->companyName}}"
-                                            data-lead-email="{{$lead->email}}"
-                                            data-lead-number="{{$lead->contactNumber}}"
-                                            data-lead-person="{{$lead->personName}}"
-                                            data-lead-website="{{$lead->website}}"
-                                            data-lead-category="{{$lead->category->categoryId}}"
-                                            data-lead-country="{{$lead->countryId}}"
-                                            data-lead-designation="{{$lead->designation}}"
-                                            data-lead-linkedin="{{$lead->linkedin}}"
-                                            data-lead-founded="{{$lead->founded}}"
-                                            data-lead-process="{{$lead->process}}"
-                                            data-lead-volume="{{$lead->volume}}"
-                                            data-lead-frequency="{{$lead->frequency}}"
-                                            data-lead-employee="{{$lead->employee}}"
-                                            data-lead-ipp="{{$lead->ippStatus}}"
-                                            data-lead-comments="{{$lead->comments}}"
-                                            data-lead-possibility="{{$lead->possibilityId}}" 
-                                            data-lead-probability="{{$lead->probabilityId}}"
-                                        >Create Contact</a>
-
+                                        <a href="#create_employee" 
+                                            class="btn btn-primary" 
+                                            data-toggle="modal"
+                                            data-lead-id="{{ $lead->leadId }}" 
+                                            data-lead-name="{{ $lead->companyName }}"
+                                            >Create Employee</a>
 
                                         </p>
                                         @foreach ($employees as $employee)
@@ -833,55 +816,160 @@
 
 
 
-<!--Modal for Create New Sales Pipeline-->
-<div class="modal" id="set_pipeline">
-  <div class="modal-dialog" style="max-width: 400px;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Set Sales Pipeline</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form  method="post" action="{{ route('createPipeline') }}">
-        {{csrf_field()}}
+    <!--Modal for Create New Sales Pipeline-->
+    <div class="modal" id="set_pipeline">
+    <div class="modal-dialog" style="max-width: 400px;">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Set Sales Pipeline</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form  method="post" action="{{ route('createPipeline') }}">
+            {{csrf_field()}}
 
-          <div class="form-group">
-            <label for="leadId">Lead Id:</label>
-            <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
-          </div>
-          <div class="form-group">
-            <label for="companyName">Company:</label>
-            <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
-          </div>
+            <div class="form-group">
+                <label for="leadId">Lead Id:</label>
+                <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
+            </div>
+            <div class="form-group">
+                <label for="companyName">Company:</label>
+                <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
+            </div>
 
-          <div class="form-group">
-            <label for="stage">Select Stage:</label>
-            <select id="stage" name="stage" class="form-control">
-              <option value="Contact">Contact</option>
-              <option value="Conversation">Conversation</option>
-              <option value="Possibility">Test Possibility</option>
-              <option value="Test">Received Test</option>
-              <option value="Closed">Deal Closed</option>
-              <option value="Lost">Lost the Deal</option>
-            </select>
-          </div>
-          <div class="text-right">
-            <button class="btn btn-success" type="submit">Set</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </form>
-      </div>
+            <div class="form-group">
+                <label for="stage">Select Stage:</label>
+                <select id="stage" name="stage" class="form-control">
+                <option value="Contact">Contact</option>
+                <option value="Conversation">Conversation</option>
+                <option value="Possibility">Test Possibility</option>
+                <option value="Test">Received Test</option>
+                <option value="Closed">Deal Closed</option>
+                <option value="Lost">Lost the Deal</option>
+                </select>
+            </div>
+            <div class="text-right">
+                <button class="btn btn-success" type="submit">Set</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+        </div>
     </div>
-  </div>
-</div>
+    </div>
 
 
 
 
-<!-- Create Employee  Modal -->
-<div class="modal" id="create_employee">
+
+    <!-- Create Employee  Modal -->
+    <div class="modal" id="create_employee">
+    <div class="modal-dialog" style="max-width: 40%;">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Create New Employee</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form  method="post" action="{{ route('createEmployees') }}">
+            {{csrf_field()}}
+
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="leadId">Lead Id:</label>
+                    <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="companyName">Company Name:</label>
+                    <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="iskdm">Is it KDM:</label>
+                    <select id="iskdm" name="iskdm" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="jobstatus">Still Working:</label>
+                    <select id="jobstatus" name="jobstatus" class="form-control">
+                    <option value="1">Yes</option>
+                    <option value="0">Left The Job</option>
+                    </select>
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="name">Full Name:**</label>
+                    <input type="text" class="form-control" name="name" id="name" value="" >
+                </div>
+
+                <div class="col-md-6">
+                    <label for="designation">Designation:</label>
+                        <select class="select form-control" id="" name="designation" style="width: 100%;">
+                            @foreach($designations as $d)
+                                <option value="{{$d->designationId}}">{{$d->designationName}}</option>
+                            @endforeach
+                        </select>
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="email">Email Address:**</label>
+                    <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" >
+                    <span id="exceedemail" style="color:red;display: none"><i>This email already exist</i></span></label>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="number ">Phone Number:</label>
+                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
+                    <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="country">Country:</label>
+                        <select class="select form-control" id="" name="country" style="width: 100%;">
+                            @foreach($country as $c)
+                                <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                            @endforeach
+                        </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="linkedin">LinkedIn:</label>
+                    <input type="text" class="form-control" name="linkedin" id="linkedin" value="" >
+                </div>
+            </div>
+
+            <hr>
+            <div class="text-right">
+                <button class="btn btn-success" type="submit">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+<!-- Update Employee  Modal -->
+<div class="modal" id="edit_employee">
   <div class="modal-dialog" style="max-width: 40%;">
     <div class="modal-content">
       <div class="modal-header">
@@ -891,88 +979,91 @@
         </button>
       </div>
       <div class="modal-body">
-        <form  method="post" action="{{ route('createEmployee') }}">
+        <form  method="post" action="{{ route('updateEmployees') }}">
         {{csrf_field()}}
 
-        <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-            <label for="leadId">Lead Id:</label>
-            <input type="text" class="form-control" name="leadId" id="leadId" value="" readonly>
+            <div class="row">
+
+                            <div class="col-md-3">
+                                <input type="text" name="leadId" value="">
+                                <label><b>Lead Id:</b></label>
+                                <input type="text" class="form-control" name="leadId" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Company Name:</b></label>
+                                <input type="text" class="form-control" name="companyname" value="">
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Employee Name:</b></label>
+                                <input type="text" class="form-control" name="employeeName" value="">
+                                <br><br>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Designation:</b></label>
+                                <select class="form-control"  name="employeeDesignation" id="employeeDesignation">
+                                    <option value="">Please Select</option>
+                                    @foreach($designations as $designation)
+                                        <option value="{{$designation->designationId}}">{{$designation->designationName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>Country:</b></label>
+                                <select class="form-control"  name="employeeCountry" id="employeeCountry">
+                                    @foreach($country as $c)
+                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+
+
+                            <div class="col-md-3">
+                                <label><b>Email:</b></label>
+                                <input type="text" class="form-control" name="employeeEmail" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label><b>Contact No:</b></label>
+                                <input type="text" class="form-control" name="employeeNumber" value="">
+                                <br><br>
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><b>LinkedIn:</b></label>
+                                <input type="text" class="form-control" name="employeeLinkedIn" value="">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label ><b>Job Status?</b></label>
+                                <select class="form-control" name="employeeJobStatus"  id="employeeJobStatus">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">Left Job</option>
+                                    <option value="1">Active</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label ><b>Is it KDM?</b></label>
+                                <select class="form-control" name="employeeIsKDM"  id="employeeIsKDM">
+                                    <!-- <option value="">(select one)</option> -->
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
             </div>
 
-            <div class="form-group">
-            <label for="name">Employee Name:</label>
-            <input type="text" class="form-control" name="name" id="name" value="">
+            <div class="text-right">
+                <button class="btn btn-success" type="submit">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
 
-            <div class="form-group">
-            <label for="designationId">Designation:</label>
-            <select id="designationId" name="designationId" class="form-control form-control-warning">
-                    @foreach($designations as $designation)
-                        <option value="{{$designation->designationId}}">{{$designation->designationName}}</option>
-                    @endforeach
-
-            </select>
-            </div>
-
-            <div class="form-group">
-            <label for="number">Contact Number:</label>
-            <input type="text" class="form-control" name="number" id="number" value="">
-            </div>
-
-            <div class="form-group">
-            <label for="jobstatus">Is KDM?</label>
-            <select id="jobstatus" name="jobstatus" class="form-control">
-                <option value="0" {{ $user->jobstatus == 0 ? 'selected' : '' }}>Left Job</option>
-                <option value="1" {{ $user->jobstatus == 1 ? 'selected' : '' }}>Active</option>
-            </select>
-            </div>
-            
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-            <label for="companyName">Company:</label>
-            <input type="text" class="form-control" name="companyName" id="companyName" value="" readonly>
-            </div>
-
-            <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control" name="email" id="email" value="">
-            </div>
-
-
-            <div class="form-group">
-            <label for="countryId">Country:</label>
-            <select id="countryId" name="countryId" class="form-control form-control-warning">
-                    @foreach($country as $c)
-                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-                    @endforeach
-            </select>
-            </div>
-
-
-            <div class="form-group">
-            <label for="linkedin">Linkedin:</label>
-            <input type="text" class="form-control" name="linkedin" id="linkedin" value="">
-            </div>
-
-            <div class="form-group">
-            <label for="iskdm">Is KDM?</label>
-            <select id="iskdm" name="iskdm" class="form-control">
-                <option value="0" {{ $user->iskdm == 0 ? 'selected' : '' }}>No</option>
-                <option value="1" {{ $user->iskdm == 1 ? 'selected' : '' }}>Yes</option>
-            </select>
-            </div>
-
-        </div>
-        </div>
-
-
-          <div class="text-right">
-            <button class="btn btn-success" type="submit">Create</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
         </form>
       </div>
     </div>
@@ -1131,8 +1222,8 @@
 
 
 
-            // EDIT MODAL DATA
-            $('#edit_modal').on('show.bs.modal', function(e) {
+        // EDIT MODAL DATA
+        $('#edit_modal').on('show.bs.modal', function(e) {
             //var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
@@ -1196,18 +1287,119 @@
 
 
 
-
     // CREATE EMPLOYEE
     $('#create_employee').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var leadId = button.data('lead-id');
-        var companyName = button.data('lead-name');
-        var pipelineStage = button.data('pipeline-stage'); 
+    var button = $(event.relatedTarget);
+    var leadId = button.data('lead-id');
+    var companyName = button.data('lead-name');
 
-        // Set the values in the input fields
-        $('#leadId').val(leadId);
-        $('#companyName').val(companyName);
+    // $('#designation').val(designation);
+    // $('#country').val(country);
+
+
+    // Set the values in the input fields
+    $(this).find('#leadId').val(leadId);
+    $(this).find('#companyName').val(companyName);
     });
+
+
+
+
+    // UPDATE EMPLOYEE
+    $('#edit_employee').on('show.bs.modal', function(event) {
+            var leadId = $(e.relatedTarget).data('lead-id');
+            var leadName = $(e.relatedTarget).data('lead-name');
+
+            // var employeeId = $(e.relatedTarget).data('employee-id');
+            var employeeDesignation = $(e.relatedTarget).data('employee-designation');
+            var employeeEmail = $(e.relatedTarget).data('employee-email');
+            var employeeNumber = $(e.relatedTarget).data('employee-number');
+            var employeeLinkedin=$(e.relatedTarget).data('employee-linkedin');
+            var employeeJobstatus=$(e.relatedTarget).data('employee-jobstatus');
+            var employeeCountry=$(e.relatedTarget).data('employee-country');
+            var employeeIsKDM=$(e.relatedTarget).data('employee-iskdm');
+
+            $('#employeecountry').val(employeeCountry);
+            $('#employeedesignation').val(employeeDesignation);
+
+            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
+            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
+
+            $(e.currentTarget).find('input[name="employeeEmail"]').val(employeeEmail);
+            $(e.currentTarget).find('input[name="employeeNumber"]').val(employeeNumber);
+            $(e.currentTarget).find('input[name="employeeLinkedin"]').val(employeeLinkedin);
+            $(e.currentTarget).find('input[name="employeeJobstatus"]').val(employeeJobstatus);
+            $(e.currentTarget).find('#employeeIsKDM').val(employeeIsKDM);
+        });
+
+
+
+
+
+        function chkValidate() {
+
+        var phone= document.getElementById('number').value;
+        var phoneReg = /^[\0-9\-\(\)\s]*$/;
+
+        if (!phone.match(phoneReg)){
+            alert(" please validate phone number");
+            return false;
+        }
+        return true;
+
+        }
+
+
+        $('.employeeNumberCheck').bind('input propertychange',function(){
+        var number = $('.employeeNumberCheck').val();
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          $.ajax({
+            type:'post',
+            url:'{{route('employeeNumberCheck')}}',
+            data:{_token: CSRF_TOKEN,'number':number},
+            success : function(data)
+            {
+
+                if(data >0)
+                {
+                    document.getElementById('exceed').style.display="inline";
+                }
+                else
+                {
+                    document.getElementById('exceed').style.display="none";
+                }
+            }
+         });
+        });
+
+
+        $('.employeeEmailCheck').bind('input propertychange',function(){
+        var email = $('.employeeEmailCheck').val();
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            type:'post',
+            url:'{{route('employeeEmailCheck')}}',
+            data:{_token: CSRF_TOKEN,'email':email},
+            success : function(data)
+            {
+
+                if(data >0)
+                {
+                    document.getElementById('exceedemail').style.display="inline";
+                }
+                else
+                {
+                    document.getElementById('exceedemail').style.display="none";
+                }
+            }
+        });
+        });
+
+
+
+
+
+
 
 
 

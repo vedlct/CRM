@@ -26,5 +26,8 @@ class Employees extends Model
         return $this->belongsTo(Designation::class, 'designationId', 'designationId');
     }
 
+    public function leads(){
+        return $this->belongsTo(Lead::class,'leadId','leadId');
+    }
 
 }

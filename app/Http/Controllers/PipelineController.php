@@ -40,20 +40,22 @@ class PipelineController extends Controller
     
         foreach ($stages as $stage) {
 
-            if($UserType == 'USER'){
+            if($UserType == 'USER' || $UserType == 'MANAGER' ){
 
-                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website')
+                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName')
                 ->where('salespipeline.userId', Auth::user()->id)
                 ->leftJoin('leads', 'salespipeline.leadId', 'leads.leadId')
+                ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')
                 ->where('leads.contactedUserId', Auth::user()->id)
                 ->where('salespipeline.stage', 'LIKE', '%' . $stage . '%')
                 ->where('salespipeline.workStatus', '1')
                 ->get();
 
             } else {
-                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website')
+                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName')
                 // ->where('salespipeline.userId', Auth::user()->id)
                 ->leftJoin('leads', 'salespipeline.leadId', 'leads.leadId')
+                ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')
                 // ->where('leads.contactedUserId', Auth::user()->id)
                 ->where('salespipeline.stage', 'LIKE', '%' . $stage . '%')
                 ->where('salespipeline.workStatus', '1')
@@ -67,7 +69,7 @@ class PipelineController extends Controller
             ];
         }
     
-        return view('report.salesPipeline')->with('pipeline', $pipeline);
+        return view('report.salesPipeline')->with('pipeline', $pipeline)->with('possibilities', '$possibilities');
     }
     
     
