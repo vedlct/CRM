@@ -115,6 +115,7 @@ Route::post('/user-target-management', 'UserManagementController@targetManagemen
 
 
 //Lead
+Route::get('/forupdate', 'LeadController@forupdate')->name('forupdate');
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::get('/lead/addNightShift', 'LeadController@addNightShift')->name('addNightShift');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');

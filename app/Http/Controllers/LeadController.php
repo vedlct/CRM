@@ -3028,7 +3028,39 @@ class LeadController extends Controller
                                 
                                                         
 
+        public function forupdate(){
 
+
+            $filePath = storage_path('app/Last_Contacted_19_6_23.csv');
+            $file = fopen($filePath, 'r');
+
+            $header = fgetcsv($file);
+
+            $leads = [];
+            while ($row = fgetcsv($file)) {
+                $leads[] = array_combine($header, $row);
+            }
+            foreach ($leads as $lead){
+                $leadid = $lead['Lead Id'];
+                $leadsTable = Lead::findOrfail($leadid);
+                $leadsTable->statusId = 2;
+                $leadsTable->contactedUserId = NULL;
+                $leadsTable->leadAssignStatus = 0;
+                $leadsTable->save();
+
+
+                $leadassigTable = Leadassigned::where('leadId',$leadid )->where('leaveDate', Null)->first();
+                if(!empty($leadassigTable)) {
+                    $leadassigTable->workstatus = 1;
+                    $leadassigTable->leaveDate = "2023-06-19";
+                    $leadassigTable->save();
+                }
+            }
+
+            fclose($file);
+            return ;
+
+        }
 
 
 

@@ -38,13 +38,14 @@
       21 => 'Illuminate\\View\\ViewServiceProvider',
       22 => 'Intervention\\Image\\ImageServiceProvider',
       23 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-      24 => 'AlesZatloukal\\GoogleSearchApi\\GoogleSearchApiProvider',
-      25 => 'App\\Providers\\AppServiceProvider',
-      26 => 'App\\Providers\\AuthServiceProvider',
-      27 => 'App\\Providers\\EventServiceProvider',
-      28 => 'App\\Providers\\RouteServiceProvider',
-      29 => 'Yajra\\Datatables\\DatatablesServiceProvider',
-      30 => 'Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider',
+      24 => 'App\\Providers\\AppServiceProvider',
+      25 => 'App\\Providers\\AuthServiceProvider',
+      26 => 'App\\Providers\\EventServiceProvider',
+      27 => 'App\\Providers\\RouteServiceProvider',
+      28 => 'Yajra\\Datatables\\DatatablesServiceProvider',
+      29 => 'Khill\\Lavacharts\\Laravel\\LavachartsServiceProvider',
+      30 => 'JanDrda\\LaravelGoogleCustomSearchEngine\\LaravelGoogleCustomSearchEngineProvider',
+      31 => 'Intervention\\Image\\ImageServiceProvider',
     ),
     'aliases' => 
     array (
@@ -84,7 +85,7 @@
       'Image' => 'Intervention\\Image\\Facades\\Image',
       'Datatables' => 'Yajra\\Datatables\\Facades\\Datatables',
       'Lava' => 'Khill\\Lavacharts\\Laravel\\LavachartsFacade',
-      'GoogleSearchApi' => 'AlesZatloukal\\GoogleSearchApi\\Facades\\GoogleSearchApi',
+      'GoogleCseSearch' => 'JanDrda\\LaravelGoogleCustomSearchEngine\\Facades\\LaravelGoogleCustomSearchEngineProvider',
     ),
   ),
   'auth' => 
@@ -179,7 +180,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\xampp\\htdocs\\crm\\storage\\framework/cache/data',
+        'path' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -424,7 +425,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'C:\\xampp\\htdocs\\crm\\storage\\framework/laravel-excel',
+      'local_path' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -439,12 +440,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\crm\\storage\\app',
+        'root' => 'W:\\xampp\\htdocs\\CRM\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\xampp\\htdocs\\crm\\storage\\app/public',
+        'root' => 'W:\\xampp\\htdocs\\CRM\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -481,7 +482,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\xampp\\htdocs\\crm\\resources\\views/vendor/mail',
+        0 => 'W:\\xampp\\htdocs\\CRM\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -554,14 +555,6 @@
       'key' => NULL,
       'secret' => NULL,
     ),
-    'google' => 
-    array (
-      'search' => 
-      array (
-        'api_key' => NULL,
-        'cx' => NULL,
-      ),
-    ),
   ),
   'session' => 
   array (
@@ -569,7 +562,7 @@
     'lifetime' => '120',
     'expire_on_close' => true,
     'encrypt' => false,
-    'files' => 'C:\\xampp\\htdocs\\crm\\storage\\framework/sessions',
+    'files' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -589,9 +582,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\xampp\\htdocs\\crm\\resources\\views',
+      0 => 'W:\\xampp\\htdocs\\CRM\\resources\\views',
     ),
-    'compiled' => 'C:\\xampp\\htdocs\\crm\\storage\\framework\\views',
+    'compiled' => 'W:\\xampp\\htdocs\\CRM\\storage\\framework\\views',
   ),
   'trustedproxy' => 
   array (
