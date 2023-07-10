@@ -304,6 +304,57 @@
 
       </div>
 
+
+      <div class="row">
+
+        <div class="col-md-3">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://www.frebers.com/wp-content/uploads/wpdm-cache/financial-Research-Report-01-768x0.jpg')}}" alt="Card image cap">
+              <a href="#!">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Random Reports</h4>
+              <p class="card-text">Produce random reports based on your previous records. You may find it Surprising!  </p>
+              <a href="{{route('randomReports')}}" target="_blank" class="btn btn-primary">Generate It</a>
+            </div>
+            <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">Available for: All Users</div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-3">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://img.freepik.com/free-vector/faqs-concept-illustration_114360-6685.jpg')}}" alt="Card image cap">
+              <a href="#!">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Frequently Asked Questions</h4>
+              <p class="card-text">Because asking us directly was too mainstream. We've compiled the answers to your burning questions so you can save time and have a laugh!  </p>
+              <a href="{{route('frequentlyAskedQuestions')}}" target="_blank" class="btn btn-primary">Read FAQ</a>
+            </div>
+            <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">Available for: All Users</div>
+            </div>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+
+
+
+
+      
 <!--Main Container-->	  
     </div>
   </div>

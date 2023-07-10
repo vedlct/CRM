@@ -54,28 +54,24 @@ class Lead extends Model
     {
         $currentUserId = Auth::user()->id;
         $ninetyDaysAgo = Carbon::now()->subDays(90);
-        $filteredString = 'Filtered';
     
-        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
+        $leads = Lead::Select('leads.*')
+            ->with('category', 'country', 'workprogress')
             ->where('statusId', 2)
-            ->where(function ($q) {
-                $q->orWhere('contactedUserId', 0)
-                    ->orWhereNull('contactedUserId');
-            })
+            ->where('contactedUserId', NULL)
             ->where('leadAssignStatus', 0)
-            ->leftJoin('workprogress', function ($join) use ($currentUserId) {
-                $join->on('leads.leadId', '=', 'workprogress.leadId')
-                    ->where('workprogress.userId', '=', $currentUserId);
-            })
-            ->leftJoin('activities', function ($join) use ($currentUserId, $ninetyDaysAgo, $filteredString) {
-                $join->on('leads.leadId', '=', 'activities.leadId')
-                    ->where('activities.userId', '=', $currentUserId)
-                    ->where('activities.activity', 'LIKE', "%$filteredString%")
-                    ->where('activities.created_at', '>', $ninetyDaysAgo);
-            })
-            ->whereNull('workprogress.userId')
-            ->whereNull('activities.activityId')
-            ->select('leads.*')
+            // ->leftJoin('workprogress', function ($join) use ($currentUserId) {
+            //     $join->on('leads.leadId', '=', 'workprogress.leadId')
+            //         ->where('workprogress.userId', '=', $currentUserId);
+            // })
+            // ->leftJoin('activities', function ($join) use ($currentUserId, $ninetyDaysAgo) {
+            //     $join->on('leads.leadId', '=', 'activities.leadId')
+            //         ->where('activities.userId', '=', $currentUserId)
+            //         ->where('activities.activity', 'LIKE', "%$Filtered%")
+            //         ->where('activities.created_at', '>', $ninetyDaysAgo);
+            // })
+            // ->whereNull('workprogress.userId')
+            // ->whereNull('activities.activityId')
             ->orderBy('leads.leadId', 'DESC');
     
         return $leads;

@@ -42,7 +42,7 @@ class PipelineController extends Controller
 
             if($UserType == 'USER' || $UserType == 'MANAGER' ){
 
-                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName')
+                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName', 'leads.ippStatus')
                 ->where('salespipeline.userId', Auth::user()->id)
                 ->leftJoin('leads', 'salespipeline.leadId', 'leads.leadId')
                 ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')
@@ -52,7 +52,7 @@ class PipelineController extends Controller
                 ->get();
 
             } else {
-                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName')
+                $leads = SalesPipeline::select('salespipeline.*', 'leads.leadId', 'leads.companyName', 'leads.website', 'possibilities.possibilityName', 'leads.ippStatus')
                 // ->where('salespipeline.userId', Auth::user()->id)
                 ->leftJoin('leads', 'salespipeline.leadId', 'leads.leadId')
                 ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')

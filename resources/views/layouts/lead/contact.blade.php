@@ -46,8 +46,8 @@
                     <thead>
                     <tr>
                         <th width="2%">Select</th>
-                        <th width="5%">Id</th>
-                        <th width="8%">Company</th>
+                        <!-- <th width="5%">Id</th> -->
+                        <!-- <th width="8%">Company</th> -->
                         <th width="8%">Category</th>
                         <th width="5%">Website</th>
                         <th width="8%">Possi</th>
@@ -59,7 +59,7 @@
                         <th width="5%">Process</th>
                         <th width="5%">Frequency</th>
                         <th width="5%">Status</th>
-                        <th width="8%">Mined By</th>
+                        <!-- <th width="8%">Mined By</th> -->
                         <th width="8%">Action</th>
                     </tr>
                     </thead>
@@ -803,8 +803,8 @@
 
                     {data: 'check', name: 'check', orderable: false, searchable: false},
 
-                    { data: 'leadId', name: 'leads.leadId'},
-                    { data: 'companyName', name: 'leads.companyName'},
+                    // { data: 'leadId', name: 'leads.leadId'},
+                    // { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName'},
@@ -827,7 +827,7 @@
                     { data: 'process', name: 'process', searchable: true},
                     { data: 'frequency', name: 'frequency', searchable: true},
                     { data: 'callreport', name: 'callreport', searchable: false},
-                    { data: 'minedby', name: 'minedby', searchable: false},
+                    // { data: 'minedby', name: 'minedby', searchable: false},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });

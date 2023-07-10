@@ -290,6 +290,10 @@ Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('
 Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('getFredChasingLeads');
 Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');
 
+Route::get('/randomReports', 'LeadController@randomReports')->name('randomReports');
+Route::get('/frequentlyAskedQuestions', 'LeadController@frequentlyAskedQuestions')->name('frequentlyAskedQuestions');
+
+
 
 //Lead Mining Routes
 Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');

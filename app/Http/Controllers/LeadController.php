@@ -1016,28 +1016,28 @@ class LeadController extends Controller
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })->addColumn('action', function ($lead) {
-                if(Session::get('userType')=='RA'){
-                    return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
-                                           data-lead-id="'.$lead->leadId.'"
-                                           data-lead-name="'.$lead->companyName.'"
-                                           data-lead-email="'.$lead->email.'"
-                                           data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
-                                           data-lead-website="'.$lead->website.'"
-                                           data-lead-mined="'.$lead->mined->firstName.'"
-                                           data-lead-category="'.$lead->category->categoryId.'"
-                                           data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
-                                           data-lead-comments="'.$lead->comments.'"
-                                           >
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                 <form method="post" action="'.route('rejectStore').'">
-                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                    <button class="btn btn-danger btn-sm">X</button></form>
-                                    ';
-                }
-                else{
+                // if(Session::get('userType')=='RA'){
+                //     return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
+                //                            data-lead-id="'.$lead->leadId.'"
+                //                            data-lead-name="'.$lead->companyName.'"
+                //                            data-lead-email="'.$lead->email.'"
+                //                            data-lead-number="'.$lead->contactNumber.'"
+                //                            data-lead-person="'.$lead->personName.'"
+                //                            data-lead-website="'.$lead->website.'"
+                //                            data-lead-mined="'.$lead->mined->firstName.'"
+                //                            data-lead-category="'.$lead->category->categoryId.'"
+                //                            data-lead-country="'.$lead->countryId.'"
+                //                            data-lead-designation="'.$lead->designation.'"
+                //                            data-lead-comments="'.$lead->comments.'"
+                //                            >
+                //                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                //                  <form method="post" action="'.route('rejectStore').'">
+                //                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                //                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                //                     <button class="btn btn-danger btn-sm">X</button></form>
+                //                     ';
+                // }
+                // else{
                     return '<form method="post" action="'.route('addContacted').'">
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
@@ -1048,10 +1048,9 @@ class LeadController extends Controller
                                                 data-lead-name="'.$lead->companyName.'"
 
                                             ><i class="fa fa-comments"></i></a>
-                                    </form>
-
-
-                                    ';}})
+                                    </form>';
+                // }
+                                })
             ->rawColumns(['action','check'])
             ->make(true);
     }
@@ -2069,25 +2068,27 @@ class LeadController extends Controller
             return redirect()->route('home');
         }
 
-        $cats=Category::where('type', 1)->get();
-        $countries=Country::get();
-        $possibilities=Possibility::get();
-        $probabilities=Probability::get();
-        $callReports = Callingreport::get();
+        // $cats=Category::where('type', 1)->get();
+        // $countries=Country::get();
+        // $possibilities=Possibility::get();
+        // $probabilities=Probability::get();
+        // $callReports = Callingreport::get();
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
+
         return view('layouts.lead.verify')
-            ->with('categories',$cats)
-            ->with('countries',$countries)
-            ->with('possibilities',$possibilities)
-            ->with('probabilities',$probabilities)
-            ->with('callReports',$callReports)
+            // ->with('categories',$cats)
+            // ->with('countries',$countries)
+            // ->with('possibilities',$possibilities)
+            // ->with('probabilities',$probabilities)
+            // ->with('callReports',$callReports)
             ->with('user',$user);
     }
 
 
 
     public function verifyallLeads(Request $r){
-        $leads=Lead::with('country','category','mined','contact', 'status','workprogress')
+        $leads=Lead::select('leadId', 'website', 'contactNumber', 'contactedUserId', 'statusId')
+            ->with('country','category','mined','contact', 'status','workprogress')
             ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)
@@ -2102,9 +2103,9 @@ class LeadController extends Controller
 
         //Validating The input Filed
         $this->validate($r,[
-            'name' => 'required|max:100',
-            'email' => 'required|max:100',
-            'number' => 'max:20|unique:employees,number|regex:/^[\0-9\-\(\)\s]*$/'
+            'name' => 'required|max:150',
+            'email' => 'max:100|unique:employees,email',
+            'number' => 'max:20|regex:/^[\0-9\-\(\)\s]*$/'
         ]);
 
         $employees=new Employees;
@@ -2127,23 +2128,52 @@ class LeadController extends Controller
 
 
         public function employeeNumberCheck(Request $r){
-            $number=Employees::where('number',$r->number)->count();
-            return Response($number);
+            $numberCount=Employees::where('number',$r->number)->count();
+            return response()->json($numberCount);
         }
-        public function employeeEmailCheck(Request $r){
-            $email=Employees::where('email',$r->email)->count();
-            return Response($email);
+        public function employeeEmailCheck(Request $r)
+        {
+            $emailCount = Employees::where('email', $r->email)->count();
+            return response()->json($emailCount);
         }
 
 
 
-    public function updateEmployees (Request $r) {
+
+        public function updateEmployees(Request $r)
+        {
+            // Retrieve the employee ID from the request
+            $employeeId = $r->input('employeeId');
+        
+            // Retrieve the updated employee data from the request
+            $name = $r->input('name');
+            $designation = $r->input('designation');
+            $email = $r->input('email');
+            $number = $r->input('number');
+            $linkedin = $r->input('linkedin');
+            $jobstatus = $r->input('jobstatus');
+            $country = $r->input('country');
+            $iskdm = $r->input('iskdm');
+        
+            // Update the employee in the database
+            $employee = Employee::find($employeeId);
+            $employee->name = $name;
+            $employee->designationId = $designation;
+            $employee->email = $email;
+            $employee->number = $number;
+            $employee->linkedin = $linkedin;
+            $employee->jobstatus = $jobstatus;
+            $employee->countryId = $country;
+            $employee->iskdm = $iskdm;
+            $employee->save();
+        
+            Session::flash('message', 'Create Employee Successfully');
+            return back();
+        }
+        
 
 
-
-    }    
-
-    public function removeEmployees (Request $r) {
+        public function removeEmployees (Request $r) {
 
         return back();
 
@@ -3028,40 +3058,100 @@ class LeadController extends Controller
                                 
                                                         
 
-        public function forupdate(){
+
+            public function randomReports () {
+                
+                $User_Type = Session::get('userType');
+
+                //GETIING OWNED REPORTS
+                $totalOwnCall = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnCall'))
+                    ->where('userId', Auth::user()->id)
+                    ->value('totalOwnCall');
+
+                $totalOwnContact = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnContact'))
+                    ->where('userId', Auth::user()->id)
+                    ->where('callingReport', '=', 5)
+                    ->value('totalOwnContact');
+
+                $totalOwnConvo = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnConvo'))
+                    ->where('userId', Auth::user()->id)
+                    ->where('callingReport', '=', 11)
+                    ->value('totalOwnConvo');
+
+                $totalOwnTest = Workprogress::Select(DB::raw('COUNT(progress) as totalOwnTest'))
+                    ->where('progress', 'like', '%Test%')
+                    ->where('userId', Auth::user()->id)
+                    ->value('totalOwnTest');
 
 
-            $filePath = storage_path('app/Last_Contacted_19_6_23.csv');
-            $file = fopen($filePath, 'r');
 
-            $header = fgetcsv($file);
+                $callToContact = ($totalOwnContact / $totalOwnCall) * 100;
+                $callToConvo = ($totalOwnConvo / $totalOwnCall) * 100;
+                
+                $callToTest = ($totalOwnTest / $totalOwnCall) * 100;
+                $contactToTest = ($totalOwnTest / $totalOwnContact) * 100;
+                $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
 
-            $leads = [];
-            while ($row = fgetcsv($file)) {
-                $leads[] = array_combine($header, $row);
+
+
+                //GETTING REPORTS OF THE MAXIMUM NUMBERS
+
+                $maxTotalCall = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalCall'))
+                    ->groupBy('userId')
+                    ->orderByDesc('maxTotalCall')
+                    ->value('maxTotalCall');
+
+                $maxTotalContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalContact'))
+                    ->where('callingReport', '=', 5)
+                    ->groupBy('userId')
+                    ->orderByDesc('maxTotalContact')
+                    ->value('maxTotalContact');
+
+                $maxTotalConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalConvo'))
+                    ->where('callingReport', '=', 11)
+                    ->groupBy('userId')
+                    ->orderByDesc('maxTotalConvo')
+                    ->value('maxTotalConvo');
+
+                $maxTotalTest = Workprogress::Select(DB::raw('COUNT(progress) as maxTotalTest'))
+                    ->where('progress', 'like', '%Test%')
+                    ->groupBy('userId')
+                    ->orderByDesc('maxTotalTest')
+                    ->value('maxTotalTest');
+
+
+
+
+                return view ('report.randomReports')
+                        ->with('maxTotalCall', $maxTotalCall)
+                        ->with('maxTotalContact', $maxTotalContact)
+                        ->with('maxTotalConvo', $maxTotalConvo)
+                        ->with('maxTotalTest', $maxTotalTest)
+                        ->with('totalOwnCall', $totalOwnCall)
+                        ->with('totalOwnContact', $totalOwnContact)
+                        ->with('totalOwnConvo', $totalOwnConvo)
+                        ->with('totalOwnTest', $totalOwnTest)
+                        ->with('callToContact', $callToContact)
+                        ->with('callToConvo', $callToConvo)
+                        ->with('callToTest', $callToTest)
+                        ->with('contactToTest', $contactToTest)
+                        ->with('convoToTest', $convoToTest)
+                        ;
+
             }
-            foreach ($leads as $lead){
-                $leadid = $lead['Lead Id'];
-                $leadsTable = Lead::findOrfail($leadid);
-                $leadsTable->statusId = 2;
-                $leadsTable->contactedUserId = NULL;
-                $leadsTable->leadAssignStatus = 0;
-                $leadsTable->save();
 
 
-                $leadassigTable = Leadassigned::where('leadId',$leadid )->where('leaveDate', Null)->first();
-                if(!empty($leadassigTable)) {
-                    $leadassigTable->workstatus = 1;
-                    $leadassigTable->leaveDate = "2023-06-19";
-                    $leadassigTable->save();
-                }
+
+           
+
+
+
+
+            public function frequentlyAskedQuestions () {
+
+                return view ('report.frequentlyAskedQuestions');
+
             }
-
-            fclose($file);
-            return ;
-
-        }
-
 
 
 
@@ -3276,6 +3366,44 @@ class LeadController extends Controller
                         }
                 
         
+
+
+
+                        public function forupdate(){
+
+
+                            $filePath = storage_path('app/Last_Contacted_19_6_23.csv');
+                            $file = fopen($filePath, 'r');
+                
+                            $header = fgetcsv($file);
+                
+                            $leads = [];
+                            while ($row = fgetcsv($file)) {
+                                $leads[] = array_combine($header, $row);
+                            }
+                            foreach ($leads as $lead){
+                                $leadid = $lead['Lead Id'];
+                                $leadsTable = Lead::findOrfail($leadid);
+                                $leadsTable->statusId = 2;
+                                $leadsTable->contactedUserId = NULL;
+                                $leadsTable->leadAssignStatus = 0;
+                                $leadsTable->save();
+                
+                
+                                $leadassigTable = Leadassigned::where('leadId',$leadid )->where('leaveDate', Null)->first();
+                                if(!empty($leadassigTable)) {
+                                    $leadassigTable->workstatus = 1;
+                                    $leadassigTable->leaveDate = "2023-06-19";
+                                    $leadassigTable->save();
+                                }
+                            }
+                
+                            fclose($file);
+                            return ;
+                
+                        }
+                
+
 
 }
 

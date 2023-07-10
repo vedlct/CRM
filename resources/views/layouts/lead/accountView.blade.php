@@ -313,7 +313,20 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <p>
-                                                        <a href="#edit_employee">Edit Employee</a>
+                                                        <a href="#edit_employee"
+                                                        data-toggle="modal"
+                                                        data-employee-id="{{ $employee->employeeId }}"
+                                                        data-employee-name="{{ $employee->name }}"
+                                                        data-employee-designation="{{ $employee->designationId }}"
+                                                        data-employee-email="{{ $employee->email }}"
+                                                        data-employee-number="{{ $employee->number }}"
+                                                        data-employee-linkedin="{{ $employee->linkedin }}"
+                                                        data-employee-jobstatus="{{ $employee->jobstatus }}"
+                                                        data-employee-country="{{ $employee->countryId }}"
+                                                        data-employee-iskdm="{{ $employee->iskdm }}"
+                                                        >Edit Employee
+                                                        </a>
+
                                                     </p>
                                                     <p>
                                                         <b class="text-secondary">Status:</b>
@@ -875,7 +888,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <form  method="post" action="{{ route('createEmployees') }}">
+            <form  method="post" action="{{ route('createEmployees') }}" onsubmit="return chkValidate();">
             {{csrf_field()}}
 
             <div class ="row">
@@ -912,6 +925,7 @@
                 <div class="col-md-6">
                     <label for="name">Full Name:**</label>
                     <input type="text" class="form-control" name="name" id="name" value="" >
+                    <span class="error" style="color:red;" id="nameError"></span>
                 </div>
 
                 <div class="col-md-6">
@@ -926,15 +940,15 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:**</label>
-                    <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" >
-                    <span id="exceedemail" style="color:red;display: none"><i>This email already exist</i></span></label>
+                    <label for="email">Email Address:</label>
+                    <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
+                    <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="number ">Phone Number:</label>
                     <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
-                    <span id="exceed" style="color:red;display: none"><i>This number already exist</i></span></label>
+                    <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
             </div><br>
 
@@ -956,8 +970,8 @@
 
             <hr>
             <div class="text-right">
-                <button class="btn btn-success" type="submit">Create</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button class="btn btn-success" id="submitButton" type="submit">Create</button>
+                <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
             </div>
             </form>
         </div>
@@ -979,88 +993,83 @@
         </button>
       </div>
       <div class="modal-body">
-        <form  method="post" action="{{ route('updateEmployees') }}">
+        <form  method="post" action="{{ route('updateEmployees') }}" >
         {{csrf_field()}}
 
-            <div class="row">
 
-                            <div class="col-md-3">
-                                <input type="text" name="leadId" value="">
-                                <label><b>Lead Id:</b></label>
-                                <input type="text" class="form-control" name="leadId" value="">
-                            </div>
+        <div class ="row">
+                <div class="col-md-6">
+                    <input type="hidden" name="employeeId">
+                    <label for="name">Full Name:**</label>
+                    <input type="text" class="form-control" name="name" id="name" value="">
+                    <span class="error" style="color:red;" id="nameError"></span>
+                </div>
 
-                            <div class="col-md-3">
-                                <label><b>Company Name:</b></label>
-                                <input type="text" class="form-control" name="companyname" value="">
-                            </div>
+                <div class="col-md-6">
+                    <label for="designation">Designation:</label>
+                        <select class="select form-control" id="" name="designation" style="width: 100%;">
+                            @foreach($designations as $d)
+                                <option value="{{$d->designationId}}">{{$d->designationName}}</option>
+                            @endforeach
+                        </select>
+                </div>
+            </div><br>
 
-                            <div class="col-md-2">
-                                <label><b>Employee Name:</b></label>
-                                <input type="text" class="form-control" name="employeeName" value="">
-                                <br><br>
-                            </div>
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="email">Email Address:</label>
+                    <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
+                    <span class="error" style="color:red;" id="emailError"></span>
+                </div>
 
-                            <div class="col-md-2">
-                                <label><b>Designation:</b></label>
-                                <select class="form-control"  name="employeeDesignation" id="employeeDesignation">
-                                    <option value="">Please Select</option>
-                                    @foreach($designations as $designation)
-                                        <option value="{{$designation->designationId}}">{{$designation->designationName}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label><b>Country:</b></label>
-                                <select class="form-control"  name="employeeCountry" id="employeeCountry">
-                                    @foreach($country as $c)
-                                        <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                <div class="col-md-6">
+                    <label for="number ">Phone Number:</label>
+                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
+                    <span class="error" style="color:purple;" id="numberError"></span>
+                </div>
+            </div><br>
 
 
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="country">Country:</label>
+                        <select class="select form-control" id="" name="country" style="width: 100%;">
+                            @foreach($country as $c)
+                                <option value="{{$c->countryId}}">{{$c->countryName}}</option>
+                            @endforeach
+                        </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="linkedin">LinkedIn:</label>
+                    <input type="text" class="form-control" name="linkedin" id="linkedin" value="" >
+                </div>
+            </div><br>
 
 
-                            <div class="col-md-3">
-                                <label><b>Email:</b></label>
-                                <input type="text" class="form-control" name="employeeEmail" value="">
-                            </div>
+            <div class ="row">
+                <div class="col-md-6">
+                    <label for="iskdm">Is it KDM:</label>
+                    <select id="iskdm" name="iskdm" class="form-control">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                    </select>
+                </div>
 
-                            <div class="col-md-3">
-                                <label><b>Contact No:</b></label>
-                                <input type="text" class="form-control" name="employeeNumber" value="">
-                                <br><br>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label><b>LinkedIn:</b></label>
-                                <input type="text" class="form-control" name="employeeLinkedIn" value="">
-                            </div>
-
-                            <div class="col-md-3">
-                                <label ><b>Job Status?</b></label>
-                                <select class="form-control" name="employeeJobStatus"  id="employeeJobStatus">
-                                    <!-- <option value="">(select one)</option> -->
-                                    <option value="0">Left Job</option>
-                                    <option value="1">Active</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label ><b>Is it KDM?</b></label>
-                                <select class="form-control" name="employeeIsKDM"  id="employeeIsKDM">
-                                    <!-- <option value="">(select one)</option> -->
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-
+                <div class="col-md-6">
+                    <label for="jobstatus">Still Working:</label>
+                    <select id="jobstatus" name="jobstatus" class="form-control">
+                    <option value="1">Yes</option>
+                    <option value="0">Left The Job</option>
+                    </select>
+                </div>
             </div>
 
+
+            <hr>
+
             <div class="text-right">
-                <button class="btn btn-success" type="submit">Create</button>
+                <button class="btn btn-success"  type="submit">Update</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
 
@@ -1289,116 +1298,125 @@
 
     // CREATE EMPLOYEE
     $('#create_employee').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget);
-    var leadId = button.data('lead-id');
-    var companyName = button.data('lead-name');
+        var button = $(event.relatedTarget);
+        var leadId = button.data('lead-id');
+        var companyName = button.data('lead-name');
 
-    // $('#designation').val(designation);
-    // $('#country').val(country);
+        // $('#designation').val(designation);
+        // $('#country').val(country);
 
 
-    // Set the values in the input fields
-    $(this).find('#leadId').val(leadId);
-    $(this).find('#companyName').val(companyName);
+        // Set the values in the input fields
+        $(this).find('#leadId').val(leadId);
+        $(this).find('#companyName').val(companyName);
     });
 
 
 
+            $('#edit_employee').on('show.bs.modal', function(event) {
+                var link = $(event.relatedTarget);
+                var employeeId = link.data('employee-id');
+                var employeeName = link.data('employee-name');
+                var employeeDesignation = link.data('employee-designation');
+                var employeeEmail = link.data('employee-email');
+                var employeeNumber = link.data('employee-number');
+                var employeeLinkedin = link.data('employee-linkedin');
+                var employeeJobstatus = link.data('employee-jobstatus');
+                var employeeCountry = link.data('employee-country');
+                var employeeIsKDM = link.data('employee-iskdm');
 
-    // UPDATE EMPLOYEE
-    $('#edit_employee').on('show.bs.modal', function(event) {
-            var leadId = $(e.relatedTarget).data('lead-id');
-            var leadName = $(e.relatedTarget).data('lead-name');
+                $('#employeecountry').val(employeeCountry);
+                $('#employeedesignation').val(employeeDesignation);
 
-            // var employeeId = $(e.relatedTarget).data('employee-id');
-            var employeeDesignation = $(e.relatedTarget).data('employee-designation');
-            var employeeEmail = $(e.relatedTarget).data('employee-email');
-            var employeeNumber = $(e.relatedTarget).data('employee-number');
-            var employeeLinkedin=$(e.relatedTarget).data('employee-linkedin');
-            var employeeJobstatus=$(e.relatedTarget).data('employee-jobstatus');
-            var employeeCountry=$(e.relatedTarget).data('employee-country');
-            var employeeIsKDM=$(e.relatedTarget).data('employee-iskdm');
-
-            $('#employeecountry').val(employeeCountry);
-            $('#employeedesignation').val(employeeDesignation);
-
-            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
-            $(e.currentTarget).find('input[name="companyName"]').val(leadName);
-
-            $(e.currentTarget).find('input[name="employeeEmail"]').val(employeeEmail);
-            $(e.currentTarget).find('input[name="employeeNumber"]').val(employeeNumber);
-            $(e.currentTarget).find('input[name="employeeLinkedin"]').val(employeeLinkedin);
-            $(e.currentTarget).find('input[name="employeeJobstatus"]').val(employeeJobstatus);
-            $(e.currentTarget).find('#employeeIsKDM').val(employeeIsKDM);
-        });
+                $(this).find('input[name="employeeId"]').val(employeeId);
+                $(this).find('input[name="name"]').val(employeeName);
+                $(this).find('input[name="email"]').val(employeeEmail);
+                $(this).find('input[name="number"]').val(employeeNumber);
+                $(this).find('input[name="linkedin"]').val(employeeLinkedin);
+                $(this).find('select[name="designation"]').val(employeeDesignation);
+                $(this).find('select[name="jobstatus"]').val(employeeJobstatus);
+                $(this).find('select[name="country"]').val(employeeCountry);
+                $(this).find('select[name="iskdm"]').val(employeeIsKDM);
+            });
 
 
-
-
-
+        //VALIDATE EMPLOYEE NAME, EMAIL, NUMBER
         function chkValidate() {
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var number = document.getElementById('number').value;
+            var phoneReg = /^[\0-9\-\(\)\s]*$/;
 
-        var phone= document.getElementById('number').value;
-        var phoneReg = /^[\0-9\-\(\)\s]*$/;
+            // Reset error messages
+            document.getElementById('nameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('numberError').textContent = '';
 
-        if (!phone.match(phoneReg)){
-            alert(" please validate phone number");
-            return false;
-        }
-        return true;
+            var hasError = false;
 
-        }
-
-
-        $('.employeeNumberCheck').bind('input propertychange',function(){
-        var number = $('.employeeNumberCheck').val();
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-          $.ajax({
-            type:'post',
-            url:'{{route('employeeNumberCheck')}}',
-            data:{_token: CSRF_TOKEN,'number':number},
-            success : function(data)
-            {
-
-                if(data >0)
-                {
-                    document.getElementById('exceed').style.display="inline";
-                }
-                else
-                {
-                    document.getElementById('exceed').style.display="none";
-                }
+            // Check name field
+            if (name.trim() === '') {
+                document.getElementById('nameError').textContent = 'Please enter a name.';
+                hasError = true;
             }
-         });
-        });
 
-
-        $('.employeeEmailCheck').bind('input propertychange',function(){
-        var email = $('.employeeEmailCheck').val();
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            type:'post',
-            url:'{{route('employeeEmailCheck')}}',
-            data:{_token: CSRF_TOKEN,'email':email},
-            success : function(data)
-            {
-
-                if(data >0)
-                {
-                    document.getElementById('exceedemail').style.display="inline";
-                }
-                else
-                {
-                    document.getElementById('exceedemail').style.display="none";
-                }
+            // Check email field
+            if (email.trim() === '') {
+                document.getElementById('emailError').textContent = 'Please enter an email address.';
+                hasError = true;
             }
-        });
-        });
 
+            // Check number field
+            if (!number.match(phoneReg)) {
+                document.getElementById('numberError').textContent = 'Please validate the phone number.';
+                hasError = true;
+            }
 
+            // Perform AJAX requests to check email and number uniqueness
+            checkEmailUniqueness(email);
+            checkNumberUniqueness(number);
 
+            // Prevent form submission if there are errors
+            if (hasError) {
+                return false;
+            }
 
+            return true;
+        }
 
+        function checkEmailUniqueness(email) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('employeeEmailCheck') }}',
+                data: {_token: CSRF_TOKEN, 'email': email},
+                success: function(response) {
+                    if (response > 0) {
+                        $('#emailError').text('Email Exists! You cannot save the entry');
+                        hasError = true;
+                    } else {
+                        $('#emailError').empty();
+                    }
+                }
+            });
+        }
+
+        function checkNumberUniqueness(number) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('employeeNumberCheck') }}',
+                data: {_token: CSRF_TOKEN, 'number': number},
+                success: function(response) {
+                    if (response > 0) {
+                        $('#numberError').text('Number exist! But you can save the entry');
+                        hasError = true;
+                    } else {
+                        $('#numberError').empty();
+                    }
+                }
+            });
+        }
 
 
 
