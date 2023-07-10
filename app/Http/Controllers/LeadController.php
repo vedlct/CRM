@@ -2088,7 +2088,7 @@ class LeadController extends Controller
 
     public function verifyallLeads(Request $r){
         $leads=Lead::select('leadId', 'website', 'contactNumber', 'contactedUserId', 'statusId')
-            ->with('country','category','mined','contact', 'status','workprogress')
+            ->with('mined','contact', 'status')
             ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)
