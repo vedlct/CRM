@@ -56,7 +56,7 @@ class Lead extends Model
         $ninetyDaysAgo = Carbon::now()->subDays(90);
     
         $leads = Lead::Select('leads.*')
-            ->with('category', 'country', 'workprogress')
+            ->with('category', 'country')
             ->where('statusId', 2)
             ->where('contactedUserId', NULL)
             ->where('leadAssignStatus', 0)
