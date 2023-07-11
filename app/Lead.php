@@ -52,10 +52,11 @@ class Lead extends Model
 
     public function showNotAssignedLeads()
     {
-        $currentUserId = Auth::user()->id;
-        $ninetyDaysAgo = Carbon::now()->subDays(90);
+        // $currentUserId = Auth::user()->id;
+        // $ninetyDaysAgo = Carbon::now()->subDays(90);
     
-        $leads = Lead::Select('leads.*')
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
+            ->Select('leads.*')
             ->with('category', 'country')
             ->where('statusId', 2)
             ->where('contactedUserId', NULL)
