@@ -185,7 +185,8 @@ class LeadController extends Controller
                                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
                                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
                                         <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-                    <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                    
+                                        <a href="#my_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                            data-lead-id="'.$lead->leadId.'"
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
@@ -215,7 +216,11 @@ class LeadController extends Controller
                                             <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                             data-lead-id="'.$lead->leadId.'"
                                             data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>
-                                            </form>';
+                                            </form>
+                                            
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
                 }
                 else{
 
@@ -257,7 +262,10 @@ class LeadController extends Controller
 
                                                 <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>';
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>
+                                                
+                                                <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
 
                     }
                     else{
@@ -290,18 +298,14 @@ class LeadController extends Controller
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-comments"></i></a>
 
-                                         ><i class="fa fa-comments"></i></a>
                                             <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                                 data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
-
-                                         ><i class="fa fa-tasks"></i></a>
+                                                data-lead-name="'.$lead->companyName.'"><i class="fa fa-tasks"></i></a>
 
                                             <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
-                                                data-lead-id="'.$lead->leadId.'"
-                                         ><i class="fa fa-eye"></i></a>';
+                                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
                     }}
             })
             ->make(true);
