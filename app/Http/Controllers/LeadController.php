@@ -2088,7 +2088,7 @@ class LeadController extends Controller
 
     public function verifyallLeads(Request $r){
         $leads=Lead::select('leadId', 'website', 'contactNumber', 'contactedUserId', 'statusId')
-            ->with('country','category','mined','contact', 'status','workprogress')
+            ->with('mined','contact', 'status')
             ->orderBy('leadId','desc');
 
         return DataTables::eloquent($leads)
@@ -2098,139 +2098,130 @@ class LeadController extends Controller
 
 
 
+        
+        // EMPLOYEE SECTION START
 
-    public function createEmployees (Request $r) {
-
-        //Validating The input Filed
-        $this->validate($r,[
-            'name' => 'required|max:150',
-            'email' => 'max:100|unique:employees,email',
-            'number' => 'max:20|regex:/^[\0-9\-\(\)\s]*$/'
-        ]);
-
-        $employees=new Employees;
-
-        $employees->leadId = $r->leadId;
-        $employees->name = $r->name;
-        $employees->designationId= $r->designation;
-        $employees->countryId= $r->country;
-        $employees->email= $r->email;
-        $employees->number = $r->number;
-        $employees->linkedin = $r->linkedin;
-        $employees->jobstatus=$r->jobstatus;
-        $employees->iskdm=$r->iskdm;
-        $employees->save();
-
-        Session::flash('message', 'Create Employee Successfully');
-        return back();
-
-    }    
-
-
-        public function employeeNumberCheck(Request $r){
-            $numberCount=Employees::where('number',$r->number)->count();
-            return response()->json($numberCount);
-        }
-        public function employeeEmailCheck(Request $r)
+        public function getAllemployees ()
         {
-            $emailCount = Employees::where('email', $r->email)->count();
-            return response()->json($emailCount);
+            $User_Type=Session::get('userType');
+            if($User_Type == 'USER' || $User_Type == 'MANAGER'){
+
+                $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+                ->Join('leads','employees.leadId','leads.leadId')
+                ->where('leads.contactedUserId', Auth::User()->id)
+                ->get();
+            }else{
+                $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+                ->Join('leads','employees.leadId','leads.leadId')
+                // ->where('leads.contactedUserId', Auth::User()->id)
+                ->get();
+
+            }
+
+                $country=Country::get();
+                $designation=Designation::get();
+                
+                return view('layouts.lead.allEmployees')
+                    ->with('employees', $employees)
+                    ->with('country', $country)
+                    ->with('designation', $designation)
+                ;
+
         }
 
 
 
+        public function createEmployees (Request $r) {
 
-        public function updateEmployees(Request $r)
-        {
-            // Retrieve the employee ID from the request
-            $employeeId = $r->input('employeeId');
-        
-            // Retrieve the updated employee data from the request
-            $name = $r->input('name');
-            $designation = $r->input('designation');
-            $email = $r->input('email');
-            $number = $r->input('number');
-            $linkedin = $r->input('linkedin');
-            $jobstatus = $r->input('jobstatus');
-            $country = $r->input('country');
-            $iskdm = $r->input('iskdm');
-        
-            // Update the employee in the database
-            $employee = Employee::find($employeeId);
-            $employee->name = $name;
-            $employee->designationId = $designation;
-            $employee->email = $email;
-            $employee->number = $number;
-            $employee->linkedin = $linkedin;
-            $employee->jobstatus = $jobstatus;
-            $employee->countryId = $country;
-            $employee->iskdm = $iskdm;
-            $employee->save();
-        
-            Session::flash('message', 'Create Employee Successfully');
+            //Validating The input Filed
+            $this->validate($r,[
+                'name' => 'required|max:150',
+                'email' => 'max:100|unique:employees,email',
+                'number' => 'max:20|regex:/^[\0-9\-\(\)\s]*$/'
+            ]);
+
+            $employees=new Employees;
+
+            $employees->leadId = $r->leadId;
+            $employees->name = $r->name;
+            $employees->designationId= $r->designation;
+            $employees->countryId= $r->country;
+            $employees->email= $r->email;
+            $employees->number = $r->number;
+            $employees->linkedin = $r->linkedin;
+            $employees->jobstatus=$r->jobstatus;
+            $employees->iskdm=$r->iskdm;
+            $employees->save();
+
+            Session::flash('message', 'Created Employee Successfully');
             return back();
-        }
-        
+
+        }    
 
 
-        public function removeEmployees (Request $r) {
 
-        return back();
+            public function employeeNumberCheck(Request $r){
+                $numberCount=Employees::where('number',$r->number)->count();
+                return response()->json($numberCount);
+            }
+            public function employeeEmailCheck(Request $r)
+            {
+                $emailCount = Employees::where('email', $r->email)->count();
+                return response()->json($emailCount);
+            }
 
-        
-    }    
 
 
-    public function getAllemployees ()
-    {
-        $User_Type=Session::get('userType');
-        if($User_Type == 'USER' || $User_Type == 'MANAGER'){
 
-            $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
-            ->Join('leads','employees.leadId','leads.leadId')
-            ->where('leads.contactedUserId', Auth::User()->id)
-            ->get();
-        }else{
-            $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
-            ->Join('leads','employees.leadId','leads.leadId')
-            // ->where('leads.contactedUserId', Auth::User()->id)
-            ->get();
-
-        }
-
-            $country=Country::get();
-            $designation=Designation::get();
+            public function updateEmployees(Request $r)
+            {
+                // Retrieve the employee ID from the request
+                $employeeId = $r->input('employeeId');
             
-            return view('layouts.lead.allEmployees')
-                ->with('employees', $employees)
-                ->with('country', $country)
-                ->with('designation', $designation)
-            ;
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //ANALYSIS PART
-
+                // Retrieve the updated employee data from the request
+                $name = $r->input('name');
+                $designation = $r->input('designation');
+                $email = $r->input('email');
+                $number = $r->input('number');
+                $linkedin = $r->input('linkedin');
+                $jobstatus = $r->input('jobstatus');
+                $country = $r->input('country');
+                $iskdm = $r->input('iskdm');
+            
+                // Update the employee in the database
+                $employee = Employee::findOrfail($employeeId);
+                $employee->name = $name;
+                $employee->designationId = $designation;
+                $employee->email = $email;
+                $employee->number = $number;
+                $employee->linkedin = $linkedin;
+                $employee->jobstatus = $jobstatus;
+                $employee->countryId = $country;
+                $employee->iskdm = $iskdm;
+                $employee->save();
+            
+                Session::flash('message', 'Updated Employee Successfully');
+                return back();
+            }
+            
 
 
+            public function removeEmployees (Request $r) {
+
+            return back();
+
+            
+        }        
+
+        // EMPLOYEE SECTION END
+
+
+
+
+
+
+
+        //ANALYSIS PART START
 
         public function analysisHomePage ()
         {
@@ -2240,7 +2231,6 @@ class LeadController extends Controller
         
         }
     
-
 
 
         public function ippList(){
@@ -2649,9 +2639,6 @@ class LeadController extends Controller
 
 
        
-
-
-
 
                 public function getAllChasingLeads(){
 
@@ -3142,13 +3129,11 @@ class LeadController extends Controller
 
 
 
-           
-
-
-
 
             public function frequentlyAskedQuestions () {
 
+            
+            
                 return view ('report.frequentlyAskedQuestions');
 
             }
@@ -3157,215 +3142,81 @@ class LeadController extends Controller
 
 
 
-
-
-
-
-        //Single Account/Lead View Page Functions
-
-        public function accountView($leadId) {
-            $User_Type = Session::get('userType');
-
-            $lead = Lead::find($leadId);
-
-            // Check if the lead exists
-            if (!$lead) {
-                abort(404);
-            }
-
-            // Check if the current user is authorized to view the lead
-            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id()) {
-                abort(404);
-            }
-
-            $latestUpdate = $lead->activities()
-                ->select('activities.*', 'users.firstName', 'users.lastName', 'activities.created_at AS activities_created_at')
-                ->where('activity', 'LIKE', '%updated%')
-                ->leftJoin('users', 'activities.userId', 'users.id')
-                ->orderBy('activities.created_at', 'desc')
-                ->first();
-
-            $didTestWithUs = $lead->workprogress()
-                ->select('progress', 'created_at')
-                ->where('progress', 'LIKE', '%Test%')
-                ->get();
+            public function googleSearch(Request $request)
+            {
+                $searchTerm = $request->input('searchTerm');
+                $country = $request->input('country');
+                $results = [];
             
-            $allComments = $lead->Workprogress()
-                ->select('users.firstName','users.lastName','callingreports.report','comments','workprogress.created_at')
-                ->leftJoin('users','users.id','workprogress.userId')
-                ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
-                ->orderby('workprogress.created_at', 'desc')
-                ->get();
-
-
-            $previousFollowups =  $lead->followup()
-                ->select('followup.*', 'users.firstName', 'users.lastName')
-                ->leftjoin ('users', 'followup.userID', 'users.id')
-                // ->where('leadId', $r->leadId)
-                ->orderBy ('followUpDate', 'desc')
-                ->get();
-
-            $latestFollowups = $lead->followup()
-                ->select('leadId', DB::raw('MAX(followUpDate) as lastFollowUpDate'))
-                // ->where('leadId', $r->leadId)    
-                ->groupBy('leadId')
-                ->get();       
-
-            $followupCounter = $lead->Workprogress()
-                ->select('users.userId as userId', DB::raw('count(*) as userCounter'))
-                ->join('users', 'workprogress.userId', 'users.id')
-                // ->where('leadId', $r->leadId)
-                ->groupBy('workprogress.userId')
-                ->get();
-
-            $pipeline = $lead->SalesPipeline()
-                ->select('salespipeline.*')
-                // ->join('leads', 'salespipeline.leadId', 'leads.leadId')
-                ->where('salespipeline.workStatus', 1)
-                ->get();
-
-            $users = User::select('users.firstName', 'users.lastName')
-                ->Join('leads', 'users.id', 'leads.contactedUserId')
-                ->where('leads.leadId', $leadId)
-                ->get();  
-                
-            // $employees = Employees::select('employees.*')
-            //     ->join('leads', 'employees.leadId', 'leads.leadId')
-            //     ->where('employees.leadId', $leadId)
-            //     ->get();
-
-            $employees = $lead->employees()->get();                
-
-
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $categories = Category::where('type',1)->get();
-            $country = Country::get();
-            $status = Leadstatus::get();
-            $designations = Designation::get();
+                // Store the engine key and API key in the session
+                $engineKey = $request->input('engineKey');
+                $apiKey = $request->input('apiKey');
+                Session::put('engineKey', $engineKey);
+                Session::put('apiKey', $apiKey);
             
-
-            return view('layouts.lead.accountView')
-                ->with('lead', $lead)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country)
-                ->with('latestUpdate',$latestUpdate)
-                ->with('didTestWithUs',$didTestWithUs)
-                ->with('allComments',$allComments)
-                ->with('previousFollowups',$previousFollowups)
-                ->with('latestFollowups',$latestFollowups)
-                ->with('followupCounter',$followupCounter)
-                ->with('pipeline',$pipeline)
-                ->with('users',$users)
-                ->with('employees',$employees)
-                ->with('designations',$designations)
-
-                ;
-
-        }
-
-
+                if (empty($searchTerm)) {
+                    // Return the view without executing the search logic
+                    return view('mining.googleSearch')->with('searchTerm', $searchTerm);
+                }
+    
+                $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
                 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                public function googleSearch(Request $request)
-                {
-                    $searchTerm = $request->input('searchTerm');
-                    $country = $request->input('country');
-                    $results = [];
-                
-                    // Store the engine key and API key in the session
-                    $engineKey = $request->input('engineKey');
-                    $apiKey = $request->input('apiKey');
-                    Session::put('engineKey', $engineKey);
-                    Session::put('apiKey', $apiKey);
-                
-                    if (empty($searchTerm)) {
-                        // Return the view without executing the search logic
-                        return view('mining.googleSearch')->with('searchTerm', $searchTerm);
+                $excludedQuery = '';
+                foreach ($excludedKeywords as $keyword) {
+                    $excludedQuery .= ' -' . $keyword;
+                }
+            
+                $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
+    
+                $excludedRegionsQuery = '';
+                foreach ($excludedRegions as $region) {
+                    $excludedRegionsQuery .= ' -site:' . $region . '.*';
+                }
+            
+                $searchTerm = $searchTerm . ' ' . $country; // Append the selected country to the search term
+    
+                $results = [];
+    
+                for ($start = 1; $start <= 40; $start += 10) {
+                    $parameters = [
+                        'start' => $start,
+                        'num' => 10,
+                    ];
+    
+                    $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
+                    $fulltext->setEngineId($engineKey); // gets the engine ID
+                    $fulltext->setApiKey($apiKey); // gets the API key
+                    $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
+    
+                    // Extract the domain from each search result URL
+                    foreach ($partialResults as $result) {
+                        $result->domain = $this->getDomainFromURL($result->link);
+                        $result->availability = $this->checkLeadAvailability($result->domain);
+                        $results[] = $result;
                     }
-        
-                    $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
+                }
+    
+                return view('mining.googleSearch')
+                    ->with('results', $results)
+                    ->with('searchTerm', $searchTerm);
+                }
+            
+                    private function getDomainFromURL($url)
+                    {
+                        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
+                        return $matches[1] ?? null;
+                    }
                     
-                    $excludedQuery = '';
-                    foreach ($excludedKeywords as $keyword) {
-                        $excludedQuery .= ' -' . $keyword;
-                    }
-                
-                    $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
-        
-                    $excludedRegionsQuery = '';
-                    foreach ($excludedRegions as $region) {
-                        $excludedRegionsQuery .= ' -site:' . $region . '.*';
-                    }
-                
-                    $searchTerm = $searchTerm . ' ' . $country; // Append the selected country to the search term
-        
-                    $results = [];
-        
-                    for ($start = 1; $start <= 40; $start += 10) {
-                        $parameters = [
-                            'start' => $start,
-                            'num' => 10,
-                        ];
-        
-                        $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
-                        $fulltext->setEngineId($engineKey); // gets the engine ID
-                        $fulltext->setApiKey($apiKey); // gets the API key
-                        $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
-        
-                        // Extract the domain from each search result URL
-                        foreach ($partialResults as $result) {
-                            $result->domain = $this->getDomainFromURL($result->link);
-                            $result->availability = $this->checkLeadAvailability($result->domain);
-                            $results[] = $result;
-                        }
+                    private function checkLeadAvailability($domain)
+                    {
+                        $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
+                        return $lead ? 'Yes' : 'No';
                     }
         
-                    return view('mining.googleSearch')
-                        ->with('results', $results)
-                        ->with('searchTerm', $searchTerm);
-                    }
-                
-                        private function getDomainFromURL($url)
-                        {
-                            preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
-                            return $matches[1] ?? null;
-                        }
-                        
-                        private function checkLeadAvailability($domain)
-                        {
-                            $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
-                            return $lead ? 'Yes' : 'No';
-                        }
-                
-        
+
+        // ANALYSIS PART END
+
+
 
 
 
