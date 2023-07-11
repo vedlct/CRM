@@ -58,6 +58,116 @@ class LeadController extends Controller
         $this->middleware('auth');
     }
 
+
+
+        //Single Account/Lead View Page Functions
+
+        public function accountView($leadId) {
+            $User_Type = Session::get('userType');
+
+            $lead = Lead::find($leadId);
+
+            // Check if the lead exists
+            if (!$lead) {
+                abort(404);
+            }
+
+            // Check if the current user is authorized to view the lead
+            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id()) {
+                abort(404);
+            }
+
+            $latestUpdate = $lead->activities()
+                ->select('activities.*', 'users.firstName', 'users.lastName', 'activities.created_at AS activities_created_at')
+                ->where('activity', 'LIKE', '%updated%')
+                ->leftJoin('users', 'activities.userId', 'users.id')
+                ->orderBy('activities.created_at', 'desc')
+                ->first();
+
+            $didTestWithUs = $lead->workprogress()
+                ->select('progress', 'created_at')
+                ->where('progress', 'LIKE', '%Test%')
+                ->get();
+            
+            $allComments = $lead->Workprogress()
+                ->select('users.firstName','users.lastName','callingreports.report','comments','workprogress.created_at')
+                ->leftJoin('users','users.id','workprogress.userId')
+                ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
+                ->orderby('workprogress.created_at', 'desc')
+                ->get();
+
+
+            $previousFollowups =  $lead->followup()
+                ->select('followup.*', 'users.firstName', 'users.lastName')
+                ->leftjoin ('users', 'followup.userID', 'users.id')
+                // ->where('leadId', $r->leadId)
+                ->orderBy ('followUpDate', 'desc')
+                ->get();
+
+            $latestFollowups = $lead->followup()
+                ->select('leadId', DB::raw('MAX(followUpDate) as lastFollowUpDate'))
+                // ->where('leadId', $r->leadId)    
+                ->groupBy('leadId')
+                ->get();       
+
+            $followupCounter = $lead->Workprogress()
+                ->select('users.userId as userId', DB::raw('count(*) as userCounter'))
+                ->join('users', 'workprogress.userId', 'users.id')
+                // ->where('leadId', $r->leadId)
+                ->groupBy('workprogress.userId')
+                ->get();
+
+            $pipeline = $lead->SalesPipeline()
+                ->select('salespipeline.*')
+                // ->join('leads', 'salespipeline.leadId', 'leads.leadId')
+                ->where('salespipeline.workStatus', 1)
+                ->get();
+
+            $users = User::select('users.firstName', 'users.lastName')
+                ->Join('leads', 'users.id', 'leads.contactedUserId')
+                ->where('leads.leadId', $leadId)
+                ->get();  
+                
+            // $employees = Employees::select('employees.*')
+            //     ->join('leads', 'employees.leadId', 'leads.leadId')
+            //     ->where('employees.leadId', $leadId)
+            //     ->get();
+
+            $employees = $lead->employees()->get();                
+
+
+            $possibilities = Possibility::get();
+            $probabilities = Probability::get();
+            $categories = Category::where('type',1)->get();
+            $country = Country::get();
+            $status = Leadstatus::get();
+            $designations = Designation::get();
+            
+
+            return view('layouts.lead.accountView')
+                ->with('lead', $lead)
+                ->with('possibilities', $possibilities)
+                ->with('probabilities', $probabilities)
+                ->with('categories',$categories)
+                ->with('status',$status)
+                ->with('country',$country)
+                ->with('latestUpdate',$latestUpdate)
+                ->with('didTestWithUs',$didTestWithUs)
+                ->with('allComments',$allComments)
+                ->with('previousFollowups',$previousFollowups)
+                ->with('latestFollowups',$latestFollowups)
+                ->with('followupCounter',$followupCounter)
+                ->with('pipeline',$pipeline)
+                ->with('users',$users)
+                ->with('employees',$employees)
+                ->with('designations',$designations)
+
+                ;
+
+        }
+        
+        
+
     public function allLeads(Request $r){
         $leads=Lead::with('country','category','mined','status','contact','possibility', 'probability')
             ->orderBy('leadId','desc');
@@ -3072,13 +3182,26 @@ class LeadController extends Controller
 
 
 
-                $callToContact = ($totalOwnContact / $totalOwnCall) * 100;
-                $callToConvo = ($totalOwnConvo / $totalOwnCall) * 100;
-                
-                $callToTest = ($totalOwnTest / $totalOwnCall) * 100;
-                $contactToTest = ($totalOwnTest / $totalOwnContact) * 100;
-                $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
-
+                    $callToContact = 0;
+                    $callToConvo = 0;
+                    $callToTest = 0;
+                    $contactToTest = 0;
+                    $convoToTest = 0;
+                    
+                    if ($totalOwnCall != 0) {
+                        $callToContact = ($totalOwnContact / $totalOwnCall) * 100;
+                        $callToConvo = ($totalOwnConvo / $totalOwnCall) * 100;
+                        $callToTest = ($totalOwnTest / $totalOwnCall) * 100;
+                    }
+                    
+                    if ($totalOwnContact != 0) {
+                        $contactToTest = ($totalOwnTest / $totalOwnContact) * 100;
+                    }
+                    
+                    if ($totalOwnConvo != 0) {
+                        $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
+                    }
+                    
 
 
                 //GETTING REPORTS OF THE MAXIMUM NUMBERS
