@@ -2303,7 +2303,7 @@ class LeadController extends Controller
                 $iskdm = $r->input('iskdm');
             
                 // Update the employee in the database
-                $employee = Employee::findOrfail($employeeId);
+                $employee = Employees::findOrfail($employeeId);
                 $employee->name = $name;
                 $employee->designationId = $designation;
                 $employee->email = $email;

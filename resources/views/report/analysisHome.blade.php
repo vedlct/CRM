@@ -349,7 +349,7 @@
           </div>
         </div>
 
-        <!-- <div class="col-md-3">
+        <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
             <img class="card-img-top" src="{{ url('https://img.freepik.com/free-vector/faqs-concept-illustration_114360-6685.jpg')}}" alt="Card image cap">
@@ -368,7 +368,7 @@
             </div>
             </div>
           </div>
-        </div> -->
+        </div>
 
       </div>
 
