@@ -328,6 +328,27 @@
           </div>
         </div>
 
+        <div class="col-md-3">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://img.freepik.com/premium-vector/woman-holds-large-loupe-magnifying-glass-his-hands_531064-4856.jpg')}}" alt="Card image cap">
+              <a href="#!">
+                <div class="mask rgba-white-slight"></div>
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Random Reports All</h4>
+              <p class="card-text">This is a tool for Admin and Supervisors to see the reports of all users in a table. </p>
+              <a href="{{route('randomReportsAll')}}" target="_blank" class="btn btn-primary">Generate It</a>
+            </div>
+            <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">Available for: Admin, Supervisor</div>
+            </div>
+            </div>
+          </div>
+        </div>
+
         <!-- <div class="col-md-3">
           <div class="card">
             <div class="view overlay">

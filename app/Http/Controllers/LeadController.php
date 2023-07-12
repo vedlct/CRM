@@ -3162,25 +3162,29 @@ class LeadController extends Controller
 
             public function randomReports () {
                 
-                $User_Type = Session::get('userType');
+                $fromDay = "2023-01-01";
+                $tillToday = Carbon::today()->toDateString();
 
-                //GETIING OWNED REPORTS
                 $totalOwnCall = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnCall'))
                     ->where('userId', Auth::user()->id)
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->value('totalOwnCall');
 
                 $totalOwnContact = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnContact'))
                     ->where('userId', Auth::user()->id)
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('callingReport', '=', 5)
                     ->value('totalOwnContact');
 
                 $totalOwnConvo = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnConvo'))
                     ->where('userId', Auth::user()->id)
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('callingReport', '=', 11)
                     ->value('totalOwnConvo');
 
                 $totalOwnTest = Workprogress::Select(DB::raw('COUNT(progress) as totalOwnTest'))
                     ->where('progress', 'like', '%Test%')
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('userId', Auth::user()->id)
                     ->value('totalOwnTest');
 
@@ -3205,52 +3209,119 @@ class LeadController extends Controller
                     if ($totalOwnConvo != 0) {
                         $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
                     }
-                    
 
-
-                //GETTING REPORTS OF THE MAXIMUM NUMBERS
 
                 $maxTotalCall = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalCall'))
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalCall')
                     ->value('maxTotalCall');
 
                 $maxTotalContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalContact'))
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('callingReport', '=', 5)
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalContact')
                     ->value('maxTotalContact');
 
                 $maxTotalConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalConvo'))
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('callingReport', '=', 11)
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalConvo')
                     ->value('maxTotalConvo');
 
                 $maxTotalTest = Workprogress::Select(DB::raw('COUNT(progress) as maxTotalTest'))
+                    ->whereBetween('created_at', [$fromDay, $tillToday])
                     ->where('progress', 'like', '%Test%')
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalTest')
                     ->value('maxTotalTest');
 
 
+                    return view('report.randomReports')
+                            ->with('totalOwnCall', $totalOwnCall)
+                            ->with('totalOwnContact', $totalOwnContact)
+                            ->with('totalOwnConvo', $totalOwnConvo)
+                            ->with('totalOwnTest', $totalOwnTest)
+                            ->with('callToContact', $callToContact)
+                            ->with('callToConvo', $callToConvo)
+                            ->with('callToTest', $callToTest)
+                            ->with('contactToTest', $contactToTest)
+                            ->with('convoToTest', $convoToTest)
+                            ->with('maxTotalCall', $maxTotalCall)
+                            ->with('maxTotalContact', $maxTotalContact)
+                            ->with('maxTotalConvo', $maxTotalConvo)
+                            ->with('maxTotalTest', $maxTotalTest)
+                    ;
+            }
 
 
-                return view ('report.randomReports')
-                        ->with('maxTotalCall', $maxTotalCall)
-                        ->with('maxTotalContact', $maxTotalContact)
-                        ->with('maxTotalConvo', $maxTotalConvo)
-                        ->with('maxTotalTest', $maxTotalTest)
-                        ->with('totalOwnCall', $totalOwnCall)
-                        ->with('totalOwnContact', $totalOwnContact)
-                        ->with('totalOwnConvo', $totalOwnConvo)
-                        ->with('totalOwnTest', $totalOwnTest)
-                        ->with('callToContact', $callToContact)
-                        ->with('callToConvo', $callToConvo)
-                        ->with('callToTest', $callToTest)
-                        ->with('contactToTest', $contactToTest)
-                        ->with('convoToTest', $convoToTest)
-                        ;
+
+            public function randomReportsAll () {
+
+                $User_Type = Session::get('userType');
+                            
+                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+
+                    $fromDay = "2023-01-01";
+                    $tillToday = Carbon::today()->toDateString();
+                    $users = User::get()->where('crmType', '!=', 'local')->where('active', '1');
+
+                    
+                    foreach ($users as $user) {
+                        $user->totalOwnCall = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnCall'))
+                            ->where('userId', $user->id)
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->value('totalOwnCall');
+                    
+                        $user->totalOwnContact = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnContact'))
+                            ->where('userId', $user->id)
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->where('callingReport', '=', 5)
+                            ->value('totalOwnContact');
+                    
+                        $user->totalOwnConvo = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnConvo'))
+                            ->where('userId', $user->id)
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->where('callingReport', '=', 11)
+                            ->value('totalOwnConvo');
+                    
+                        $user->totalOwnTest = Workprogress::Select(DB::raw('COUNT(progress) as totalOwnTest'))
+                            ->where('progress', 'like', '%Test%')
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->where('userId', $user->id)
+                            ->value('totalOwnTest');
+                    
+                        $user->callToContact = 0;
+                        $user->callToConvo = 0;
+                        $user->callToTest = 0;
+                        $user->contactToTest = 0;
+                        $user->convoToTest = 0;
+                    
+                        if ($user->totalOwnCall != 0) {
+                            $user->callToContact = ($user->totalOwnContact / $user->totalOwnCall) * 100;
+                            $user->callToConvo = ($user->totalOwnConvo / $user->totalOwnCall) * 100;
+                            $user->callToTest = ($user->totalOwnTest / $user->totalOwnCall) * 100;
+                        }
+                    
+                        if ($user->totalOwnContact != 0) {
+                            $user->contactToTest = ($user->totalOwnTest / $user->totalOwnContact) * 100;
+                        }
+                    
+                        if ($user->totalOwnConvo != 0) {
+                            $user->convoToTest = ($user->totalOwnTest / $user->totalOwnConvo) * 100;
+                        }
+                    }
+
+                    return view('report.randomReportsAll')
+                            ->with('users', $users);
+
+                } else {
+
+                    return view('report.analysisHome');
+                }
+
 
             }
 

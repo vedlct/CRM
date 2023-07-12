@@ -291,6 +291,7 @@ Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('get
 Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');
 
 Route::get('/randomReports', 'LeadController@randomReports')->name('randomReports');
+Route::get('/randomReportsAll', 'LeadController@randomReportsAll')->name('randomReportsAll');
 Route::get('/frequentlyAskedQuestions', 'LeadController@frequentlyAskedQuestions')->name('frequentlyAskedQuestions');
 
 
