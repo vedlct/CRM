@@ -10,39 +10,67 @@
             <h4 class="card-subtitle" align="center">Comparison Table: how many calls lead to Test or how many conversations lead to teast and so on</h4> 
 
                 <div class="table-responsive m-t-40">
-                    <table id="myTable" class="table table-bordered table-striped">
-                    <thead>
-                          <tr>
-                              <th>Name</th>
-                              <th>Calls</th>
-                              <th>Contact</th>
-                              <th>Call to Contact</th>
-                              <th>Conversation</th>
-                              <th>Call to Convo</th>
-                              <th>Tests</th>
-                              <th>Call to Test</th>
-                              <th >Contact to Test</th>
-                              <th>Convo to Test</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          @foreach($users as $user)
-                              <tr>
-                                  <td>{{$user->firstName}} {{$user->lastName}}</td>
-                                  <td>{{$user->totalOwnCall}}</td>
-                                  <td>{{$user->totalOwnContact}}</td>
-                                  <td>{{ceil($user->callToContact)}}%</td>
-                                  <td>{{$user->totalOwnConvo}}</td>
-                                  <td>{{ceil($user->callToConvo)}}%</td>
-                                  <td>{{$user->totalOwnTest}}</td>
-                                  <td>{{ceil($user->callToTest)}}%</td>
-                                  <td>{{ceil($user->contactToTest)}}%</td>
-                                  <td>{{ceil($user->convoToTest)}}%</td>
-                              </tr>
-                          @endforeach
-                      </tbody>
 
+                    <table id="myTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Calls</th>
+                                <th>Contact</th>
+                                <th>Call to Contact</th>
+                                <th>Conversation</th>
+                                <th>Call to Convo</th>
+                                <th>Tests</th>
+                                <th>Call to Test</th>
+                                <th>Contact to Test</th>
+                                <th>Convo to Test</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                            @if($user->totalOwnTest > 1)
+                            <tr>
+                                <td>{{ $user->firstName}} {{$user->lastName}}</td>
+                                <td>{{ $user->totalOwnCall }}</td>
+                                <td>{{ $user->totalOwnContact }}</td>
+                                <td>{{ number_format($user->callToContact, 1) }}%</td>
+                                <td>{{ $user->totalOwnConvo }}</td>
+                                <td>{{ number_format($user->callToConvo, 1) }}%</td>
+                                <td>{{ $user->totalOwnTest }}</td>
+                                <td>{{ number_format($user->callToTest, 1) }}%</td>
+                                <td>{{ number_format($user->contactToTest, 1) }}%</td>
+                                <td>{{ number_format($user->convoToTest, 1) }}%</td>
+                            </tr>
+                            @endif
+                            @endforeach
+                            <tr>
+                                <td><strong>.Totals</strong></td>
+                                <td><strong>{{$users->where('totalOwnTest', '>', 1)->sum('totalOwnCall')}}</strong></td>
+                                <td><strong>{{$users->where('totalOwnTest', '>', 1)->sum('totalOwnContact')}}</strong></td>
+                                <td><strong>-</strong></td>
+                                <td><strong>{{$users->where('totalOwnTest', '>', 1)->sum('totalOwnConvo')}}</strong></td>
+                                <td><strong>-</strong></td>
+                                <td><strong>{{$users->where('totalOwnTest', '>', 1)->sum('totalOwnTest')}}</strong></td>
+                                <td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
+                                <td><strong>-</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>.Averages</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('totalOwnCall'), 0)}}</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('totalOwnContact'), 0)}}</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('callToContact'), 1)}}%</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('totalOwnConvo'), 0)}}</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('callToConvo'), 1)}}%</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('totalOwnTest'), 0)}}</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('callToTest'), 1)}}%</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('contactToTest'), 1)}}%</strong></td>
+                                <td><strong>{{number_format($users->where('totalOwnTest', '>', 1)->avg('convoToTest'), 1)}}%</strong></td>
+                            </tr>
+                        </tbody>
                     </table>
+                  
+
                 </div>
               </div>
             </div>

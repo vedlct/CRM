@@ -509,13 +509,13 @@ class UserManagementController extends Controller
     }
 
 
-    public function getPossessedLeads (Request $r){
-        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(leadId) as userOwnedLead'))
-        ->groupBy('contactedUserId')
-        ->get();
-        return Response($totalOwnedLeads);
+    // public function getPossessedLeads (Request $r){
+    //     $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(leadId) as userOwnedLead'))
+    //     ->groupBy('contactedUserId')
+    //     ->get();
+    //     return Response($totalOwnedLeads);
 
-    }
+    // }
 
     
 

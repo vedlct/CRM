@@ -28,6 +28,7 @@ use App\Leadstatus;
 use App\SalesPipeline;
 use App\Employees;
 use App\Designation;
+use App\ExcludeKeywords;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -2997,265 +2998,377 @@ class LeadController extends Controller
                     }    
 
 
-                                public function exportFredChasingLeads()
-                                {
-                                    $User_Type = Session::get('userType');
-                                    if ($User_Type == 'SUPERVISOR') {
-                                        // Retrieve leads
-                                        $leads = Lead::select('leads.leadId',
-                                            'leads.companyName',
-                                            'categories.categoryName as category_name',
-                                            'leads.website',
-                                            'leads.contactNumber',
-                                            'leadstatus.statusName as status_name',
-                                            'countries.countryName as country_name',
-                                            'users.userId',
-                                            DB::raw('COUNT(workprogress.progressId) AS progressCount')
-                                        )
-                                            ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
-                                            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
-                                            ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                                            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                                            ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                            ->where('leads.statusId', '!=', '6')
-                                            ->where('workprogress.userId', '2')
-                                            ->havingRaw('progressCount > 10')
-                                            ->groupBy('leads.leadId', 'workprogress.userId')
-                                            ->orderBy('progressCount', 'desc')
-                                            ->get();
-                                    }
-                                
-                                    $leadIds = $leads->pluck('leadId')->toArray();
-                                
-                                    // Retrieve workprogress comments
-                                    $wp = Workprogress::whereIn('leadId', $leadIds)
-                                        ->where(function ($query) {
-                                            $query->where('comments', 'LIKE', '%TEST%')
-                                                ->orWhere('comments', 'LIKE', '%CLOSED%')
-                                                ->orWhere('comments', 'LIKE', '%CLIENT%');
-                                        })
-                                        ->get();
-                                
-                                    $categories = Category::where('type', 1)->get();
-                                    $country = Country::get();
-                                    $status = Leadstatus::get();
-                                
-                                    $export = new fredChasingLeadsExport($leads, $wp);
-                                
-                                    return Excel::download($export, 'fredChasingLeadsExport.csv');
-                                }
-                    
-                                
-                                
-
-                            public function getTestButNotClosedList()
-                            {
-                                $User_Type = Session::get('userType');
-                            
-                                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
-            
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        ->where('leads.statusId', '!=', 6)
-                                        ->where('workprogress.progress', 'LIKE', '%Test%')
-                                        ->whereNotExists(function ($query) {
-                                            $query->select(DB::raw(1))
-                                                ->from('workprogress as wp2')
-                                                ->whereRaw('wp2.leadId = leads.leadId')
-                                                ->where('wp2.progress', 'LIKE', '%Closing%');
-                                        })
-                                        ->orderBy('workprogress.created_at', 'desc')
-                                        ->groupBy('leads.leadId')
-                                        ->get();
-                                            
-                                } else {
-
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        ->where('users.id', Auth::user()->id)
-                                        ->where('leads.statusId', '!=', 6)
-                                        ->where('workprogress.progress', 'LIKE', '%Test%')
-                                        ->whereNotExists(function ($query) {
-                                            $query->select(DB::raw(1))
-                                                ->from('workprogress as wp2')
-                                                ->whereRaw('wp2.leadId = leads.leadId')
-                                                ->where('wp2.progress', 'LIKE', '%Closing%');
-                                        })
-                                        ->orderBy('workprogress.created_at', 'desc')
-                                        ->groupBy('leads.leadId')
-                                        ->get();
-                                                
-                                }        
-            
-                    
-                                    $possibilities = Possibility::get();
-                                    $probabilities = Probability::get();
-                                    $callReports = Callingreport::get();
-                                    $categories = Category::where('type', 1)->get();
-                                    $country = Country::get();
-                                    $status = Leadstatus::get();
-                            
-                                return view('report.testButNotClosedList')
-                                    ->with('leads', $leads)
-                                    ->with('callReports', $callReports)
-                                    ->with('possibilities', $possibilities)
-                                    ->with('probabilities', $probabilities)
-                                    ->with('categories', $categories)
-                                    ->with('status', $status)
-                                    ->with('country', $country)
-                                    ;
+                        public function exportFredChasingLeads()
+                        {
+                            $User_Type = Session::get('userType');
+                            if ($User_Type == 'SUPERVISOR') {
+                                // Retrieve leads
+                                $leads = Lead::select('leads.leadId',
+                                    'leads.companyName',
+                                    'categories.categoryName as category_name',
+                                    'leads.website',
+                                    'leads.contactNumber',
+                                    'leadstatus.statusName as status_name',
+                                    'countries.countryName as country_name',
+                                    'users.userId',
+                                    DB::raw('COUNT(workprogress.progressId) AS progressCount')
+                                )
+                                    ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+                                    ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                                    ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                                    ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                    ->where('leads.statusId', '!=', '6')
+                                    ->where('workprogress.userId', '2')
+                                    ->havingRaw('progressCount > 10')
+                                    ->groupBy('leads.leadId', 'workprogress.userId')
+                                    ->orderBy('progressCount', 'desc')
+                                    ->get();
                             }
-                                
+                        
+                            $leadIds = $leads->pluck('leadId')->toArray();
+                        
+                            // Retrieve workprogress comments
+                            $wp = Workprogress::whereIn('leadId', $leadIds)
+                                ->where(function ($query) {
+                                    $query->where('comments', 'LIKE', '%TEST%')
+                                        ->orWhere('comments', 'LIKE', '%CLOSED%')
+                                        ->orWhere('comments', 'LIKE', '%CLIENT%');
+                                })
+                                ->get();
+                        
+                            $categories = Category::where('type', 1)->get();
+                            $country = Country::get();
+                            $status = Leadstatus::get();
+                        
+                            $export = new fredChasingLeadsExport($leads, $wp);
+                        
+                            return Excel::download($export, 'fredChasingLeadsExport.csv');
+                        }
+            
+                        
+                        
 
+                    public function getTestButNotClosedList()
+                    {
+                        $User_Type = Session::get('userType');
+                    
+                        if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
+    
+                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
+                                ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                ->where('leads.statusId', '!=', 6)
+                                ->where('workprogress.progress', 'LIKE', '%Test%')
+                                ->whereNotExists(function ($query) {
+                                    $query->select(DB::raw(1))
+                                        ->from('workprogress as wp2')
+                                        ->whereRaw('wp2.leadId = leads.leadId')
+                                        ->where('wp2.progress', 'LIKE', '%Closing%');
+                                })
+                                ->orderBy('workprogress.created_at', 'desc')
+                                ->groupBy('leads.leadId')
+                                ->get();
                                     
-                              
-                            public function getDuplicateLeads()
-                            {
-                                $User_Type = Session::get('userType');
-                            
-                                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
-                                    
-                                    $categoryIdList = [1, 2, 3, 4, 5, 6];
-                                    $statusIdList = [2, 3, 5, 7];
-                                    
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        // ->where('leads.contactedUserId', '!=', null)
-                                        ->whereIn('leads.categoryId', $categoryIdList)
-                                        ->whereIn('leads.statusId', $statusIdList)
-                                        ->where('leads.website', '<>', '')
-                                        ->whereIn(DB::raw('(SELECT COUNT(*) FROM leads AS l2 WHERE l2.website = leads.website)'), [2, 3, 4, 5, 6, 7, 8, 9, 10])
-                                        ->orderBy('leads.companyName', 'ASC')
-                                        ->get();
-                                
+                        } else {
 
-                                        $possibilities = Possibility::get();
-                                        $probabilities = Probability::get();
-                                        $callReports = Callingreport::get();
-                                        $categories = Category::where('type', 1)->get();
-                                        $country = Country::get();
-                                        $status = Leadstatus::get();
-                                        $users = User::get();
-
+                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
+                                ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                ->where('users.id', Auth::user()->id)
+                                ->where('leads.statusId', '!=', 6)
+                                ->where('workprogress.progress', 'LIKE', '%Test%')
+                                ->whereNotExists(function ($query) {
+                                    $query->select(DB::raw(1))
+                                        ->from('workprogress as wp2')
+                                        ->whereRaw('wp2.leadId = leads.leadId')
+                                        ->where('wp2.progress', 'LIKE', '%Closing%');
+                                })
+                                ->orderBy('workprogress.created_at', 'desc')
+                                ->groupBy('leads.leadId')
+                                ->get();
                                         
-                                    return view('report.duplicateLeads')
-                                        ->with('leads', $leads)
-                                        ->with('callReports', $callReports)
-                                        ->with('possibilities', $possibilities)
-                                        ->with('probabilities', $probabilities)
-                                        ->with('categories', $categories)
-                                        ->with('status', $status)
-                                        ->with('country', $country)
-                                        ->with('users', $users)
-                                        ;
-                                } else {
-                                    return view('report.analysisHome');
-                                }
-                            }
+                        }        
+    
+            
+                            $possibilities = Possibility::get();
+                            $probabilities = Probability::get();
+                            $callReports = Callingreport::get();
+                            $categories = Category::where('type', 1)->get();
+                            $country = Country::get();
+                            $status = Leadstatus::get();
+                    
+                        return view('report.testButNotClosedList')
+                            ->with('leads', $leads)
+                            ->with('callReports', $callReports)
+                            ->with('possibilities', $possibilities)
+                            ->with('probabilities', $probabilities)
+                            ->with('categories', $categories)
+                            ->with('status', $status)
+                            ->with('country', $country)
+                            ;
+                    }
+                        
+
                             
+                        
+                    public function getDuplicateLeads()
+                    {
+                        $User_Type = Session::get('userType');
+                    
+                        if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
                             
+                            $categoryIdList = [1, 2, 3, 4, 5, 6];
+                            $statusIdList = [2, 3, 5, 7];
+                            
+                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName')
+                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                                // ->where('leads.contactedUserId', '!=', null)
+                                ->whereIn('leads.categoryId', $categoryIdList)
+                                ->whereIn('leads.statusId', $statusIdList)
+                                ->where('leads.website', '<>', '')
+                                ->whereIn(DB::raw('(SELECT COUNT(*) FROM leads AS l2 WHERE l2.website = leads.website)'), [2, 3, 4, 5, 6, 7, 8, 9, 10])
+                                ->orderBy('leads.companyName', 'ASC')
+                                ->get();
+                        
+
+                                $possibilities = Possibility::get();
+                                $probabilities = Probability::get();
+                                $callReports = Callingreport::get();
+                                $categories = Category::where('type', 1)->get();
+                                $country = Country::get();
+                                $status = Leadstatus::get();
+                                $users = User::get();
+
                                 
+                            return view('report.duplicateLeads')
+                                ->with('leads', $leads)
+                                ->with('callReports', $callReports)
+                                ->with('possibilities', $possibilities)
+                                ->with('probabilities', $probabilities)
+                                ->with('categories', $categories)
+                                ->with('status', $status)
+                                ->with('country', $country)
+                                ->with('users', $users)
+                                ;
+                        } else {
+                            return view('report.analysisHome');
+                        }
+                    }
+                                                         
                                                         
 
 
-            public function randomReports () {
-                
-                $fromDay = "2023-01-01";
+
+            public function randomReports()
+            {
+                $currentDay = date('N');
                 $tillToday = Carbon::today()->toDateString();
-
-                $totalOwnCall = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnCall'))
+                $firstDayOfWeek = date('Y-m-d', strtotime("-" . ($currentDay - 1) . " day"));
+                $firstDayOfMonth = Carbon::now()->startOfMonth()->toDateString();
+                $firstDayOfYear = Carbon::now()->startOfYear()->toDateString();
+            
+                //GETTING INDIVIDUAL DATA
+                
+                $dataWeekly = Workprogress::select(
+                    DB::raw('COUNT(progressId) as weeklyOwnCall'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 5 THEN progressId END) as weeklyOwnContact'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 11 THEN progressId END) as weeklyOwnConvo'),
+                    DB::raw('COUNT(CASE WHEN progress LIKE "%Test%" THEN progressId END) as weeklyOwnTest')
+                )
                     ->where('userId', Auth::user()->id)
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
-                    ->value('totalOwnCall');
-
-                $totalOwnContact = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnContact'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
+                    ->first();
+            
+                $dataMonthly = Workprogress::select(
+                    DB::raw('COUNT(progressId) as monthlyOwnCall'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 5 THEN progressId END) as monthlyOwnContact'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 11 THEN progressId END) as monthlyOwnConvo'),
+                    DB::raw('COUNT(CASE WHEN progress LIKE "%Test%" THEN progressId END) as monthlyOwnTest')
+                )
                     ->where('userId', Auth::user()->id)
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->first();
+
+                $dataYearly = Workprogress::select(
+                    DB::raw('COUNT(progressId) as totalOwnCall'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 5 THEN progressId END) as totalOwnContact'),
+                    DB::raw('COUNT(CASE WHEN callingReport = 11 THEN progressId END) as totalOwnConvo'),
+                    DB::raw('COUNT(CASE WHEN progress LIKE "%Test%" THEN progressId END) as totalOwnTest')
+                )
+                    ->where('userId', Auth::user()->id)
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
+                    ->first();
+
+
+
+
+                //MAXIMUM SCORES IN CURRENT WEEK
+                $maxThisWeekCall = Workprogress::select(DB::raw('COUNT(progressId) as maxThisWeekCall'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisWeekCall')
+                    ->value('maxThisWeekCall');
+
+
+                $maxThisWeekContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxThisWeekContact'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
                     ->where('callingReport', '=', 5)
-                    ->value('totalOwnContact');
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisWeekContact')
+                    ->value('maxThisWeekContact');
 
-                $totalOwnConvo = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnConvo'))
-                    ->where('userId', Auth::user()->id)
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                $maxThisWeekConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxThisWeekConvo'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
                     ->where('callingReport', '=', 11)
-                    ->value('totalOwnConvo');
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisWeekConvo')
+                    ->value('maxThisWeekConvo');
 
-                $totalOwnTest = Workprogress::Select(DB::raw('COUNT(progress) as totalOwnTest'))
+                $maxThisWeekTest = Workprogress::Select(DB::raw('COUNT(progress) as maxThisWeekTest'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
                     ->where('progress', 'like', '%Test%')
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
-                    ->where('userId', Auth::user()->id)
-                    ->value('totalOwnTest');
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisWeekTest')
+                    ->value('maxThisWeekTest');
+
+                $maxThisWeekLeadMining = Lead::Select(DB::raw('COUNT(minedBy) as maxThisWeekLeadMining'))
+                    ->whereBetween('created_at', [$firstDayOfWeek, $tillToday])
+                    ->groupBy('minedBy')
+                    ->orderByDesc('maxThisWeekLeadMining')
+                    ->value('maxThisWeekLeadMining');
 
 
 
-                    $callToContact = 0;
-                    $callToConvo = 0;
-                    $callToTest = 0;
-                    $contactToTest = 0;
-                    $convoToTest = 0;
-                    
-                    if ($totalOwnCall != 0) {
-                        $callToContact = ($totalOwnContact / $totalOwnCall) * 100;
-                        $callToConvo = ($totalOwnConvo / $totalOwnCall) * 100;
-                        $callToTest = ($totalOwnTest / $totalOwnCall) * 100;
-                    }
-                    
-                    if ($totalOwnContact != 0) {
-                        $contactToTest = ($totalOwnTest / $totalOwnContact) * 100;
-                    }
-                    
-                    if ($totalOwnConvo != 0) {
-                        $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
-                    }
+                //MAXIMUM SCORES IN CURRENT MONTH
+
+                $maxThisMonthCall = Workprogress::select(DB::raw('COUNT(progressId) as maxThisMonthCall'))
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisMonthCall')
+                    ->value('maxThisMonthCall');
 
 
+                $maxThisMonthContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxThisMonthContact'))
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->where('callingReport', '=', 5)
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisMonthContact')
+                    ->value('maxThisMonthContact');
+
+                $maxThisMonthConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxThisMonthConvo'))
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->where('callingReport', '=', 11)
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisMonthConvo')
+                    ->value('maxThisMonthConvo');
+
+                $maxThisMonthTest = Workprogress::Select(DB::raw('COUNT(progress) as maxThisMonthTest'))
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->where('progress', 'like', '%Test%')
+                    ->groupBy('userId')
+                    ->orderByDesc('maxThisMonthTest')
+                    ->value('maxThisMonthTest');
+
+                $maxThisMonthLeadMining = Lead::Select(DB::raw('COUNT(minedBy) as maxThisMonthLeadMining'))
+                    ->whereBetween('created_at', [$firstDayOfMonth, $tillToday])
+                    ->groupBy('minedBy')
+                    ->orderByDesc('maxThisMonthLeadMining')
+                    ->value('maxThisMonthLeadMining');
+
+
+
+                //MAXIMUM SCORES IN CURRENT YEAR
                 $maxTotalCall = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalCall'))
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalCall')
                     ->value('maxTotalCall');
 
                 $maxTotalContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalContact'))
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
                     ->where('callingReport', '=', 5)
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalContact')
                     ->value('maxTotalContact');
 
                 $maxTotalConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalConvo'))
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
                     ->where('callingReport', '=', 11)
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalConvo')
                     ->value('maxTotalConvo');
 
                 $maxTotalTest = Workprogress::Select(DB::raw('COUNT(progress) as maxTotalTest'))
-                    ->whereBetween('created_at', [$fromDay, $tillToday])
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
                     ->where('progress', 'like', '%Test%')
                     ->groupBy('userId')
                     ->orderByDesc('maxTotalTest')
                     ->value('maxTotalTest');
 
+                $maxTotalLeadMining = Lead::Select(DB::raw('COUNT(minedBy) as maxTotalLeadMining'))
+                    ->whereBetween('created_at', [$firstDayOfYear, $tillToday])
+                    ->groupBy('minedBy')
+                    ->orderByDesc('maxTotalLeadMining')
+                    ->value('maxTotalLeadMining');
 
-                    return view('report.randomReports')
-                            ->with('totalOwnCall', $totalOwnCall)
-                            ->with('totalOwnContact', $totalOwnContact)
-                            ->with('totalOwnConvo', $totalOwnConvo)
-                            ->with('totalOwnTest', $totalOwnTest)
-                            ->with('callToContact', $callToContact)
-                            ->with('callToConvo', $callToConvo)
-                            ->with('callToTest', $callToTest)
-                            ->with('contactToTest', $contactToTest)
-                            ->with('convoToTest', $convoToTest)
-                            ->with('maxTotalCall', $maxTotalCall)
-                            ->with('maxTotalContact', $maxTotalContact)
-                            ->with('maxTotalConvo', $maxTotalConvo)
-                            ->with('maxTotalTest', $maxTotalTest)
-                    ;
+            
+
+                return view('report.randomReports', [
+                    'totalOwnCall' => $dataYearly->totalOwnCall,
+                    'totalOwnContact' => $dataYearly->totalOwnContact,
+                    'totalOwnConvo' => $dataYearly->totalOwnConvo,
+                    'totalOwnTest' => $dataYearly->totalOwnTest,
+            
+                    'callToContact' => ($dataYearly->totalOwnCall != 0) ? ($dataYearly->totalOwnContact / $dataYearly->totalOwnCall) * 100 : 0,
+                    'callToConvo' => ($dataYearly->totalOwnCall != 0) ? ($dataYearly->totalOwnConvo / $dataYearly->totalOwnCall) * 100 : 0,
+                    'callToTest' => ($dataYearly->totalOwnCall != 0) ? ($dataYearly->totalOwnTest / $dataYearly->totalOwnCall) * 100 : 0,
+                    'contactToTest' => ($dataYearly->totalOwnContact != 0) ? ($dataYearly->totalOwnTest / $dataYearly->totalOwnContact) * 100 : 0,
+                    'convoToTest' => ($dataYearly->totalOwnConvo != 0) ? ($dataYearly->totalOwnTest / $dataYearly->totalOwnConvo) * 100 : 0,
+            
+                    'monthlyOwnCall' => $dataMonthly->monthlyOwnCall,
+                    'monthlyOwnContact' => $dataMonthly->monthlyOwnContact,
+                    'monthlyOwnConvo' => $dataMonthly->monthlyOwnConvo,
+                    'monthlyOwnTest' => $dataMonthly->monthlyOwnTest,
+
+                    'callToContactWeekly' => ($dataMonthly->monthlyOwnCall != 0) ? ($dataMonthly->monthlyOwnContact / $dataMonthly->monthlyOwnCall) * 100 : 0,
+                    'callToConvoWeekly' => ($dataMonthly->monthlyOwnCall != 0) ? ($dataMonthly->monthlyOwnConvo / $dataMonthly->monthlyOwnCall) * 100 : 0,
+                    'callToTestWeekly' => ($dataMonthly->monthlyOwnCall != 0) ? ($dataMonthly->monthlyOwnTest / $dataMonthly->monthlyOwnCall) * 100 : 0,
+                    'contactToTestWeekly' => ($dataMonthly->monthlyOwnContact != 0) ? ($dataMonthly->monthlyOwnTest / $dataMonthly->monthlyOwnContact) * 100 : 0,
+                    'convoToTestWeekly' => ($dataMonthly->monthlyOwnConvo != 0) ? ($dataMonthly->monthlyOwnTest / $dataMonthly->monthlyOwnConvo) * 100 : 0,
+
+                    'weeklyOwnCall' => $dataWeekly->weeklyOwnCall,
+                    'weeklyOwnContact' => $dataWeekly->weeklyOwnContact,
+                    'weeklyOwnConvo' => $dataWeekly->weeklyOwnConvo,
+                    'weeklyOwnTest' => $dataWeekly->weeklyOwnTest,
+
+                    'callToContactMonthly' => ($dataWeekly->weeklyOwnCall != 0) ? ($dataWeekly->weeklyOwnContact / $dataWeekly->weeklyOwnCall) * 100 : 0,
+                    'callToConvoMonthly' => ($dataWeekly->weeklyOwnCall != 0) ? ($dataWeekly->weeklyOwnConvo / $dataWeekly->weeklyOwnCall) * 100 : 0,
+                    'callToTestMonthly' => ($dataWeekly->weeklyOwnCall != 0) ? ($dataWeekly->weeklyOwnTest / $dataWeekly->weeklyOwnCall) * 100 : 0,
+                    'contactToTestMonthly' => ($dataWeekly->weeklyOwnContact != 0) ? ($dataWeekly->weeklyOwnTest / $dataWeekly->weeklyOwnContact) * 100 : 0,
+                    'convoToTestMonthly' => ($dataWeekly->weeklyOwnConvo != 0) ? ($dataWeekly->weeklyOwnTest / $dataWeekly->weeklyOwnConvo) * 100 : 0,
+
+                    'maxThisWeekCall' => $maxThisWeekCall,
+                    'maxThisWeekContact' => $maxThisWeekContact,
+                    'maxThisWeekConvo' => $maxThisWeekConvo,
+                    'maxThisWeekTest' => $maxThisWeekTest,
+                    'maxThisWeekLeadMining' => $maxThisWeekLeadMining,
+            
+                    'maxThisMonthCall' => $maxThisMonthCall,
+                    'maxThisMonthContact' => $maxThisMonthContact,
+                    'maxThisMonthConvo' => $maxThisMonthConvo,
+                    'maxThisMonthTest' => $maxThisMonthTest,
+                    'maxThisMonthLeadMining' => $maxThisMonthLeadMining,
+            
+                    'maxTotalCall' => $maxTotalCall,
+                    'maxTotalContact' => $maxTotalContact,
+                    'maxTotalConvo' => $maxTotalConvo,
+                    'maxTotalTest' => $maxTotalTest,
+                    'maxTotalLeadMining' => $maxTotalLeadMining
+                ]);
             }
 
+            
 
 
             public function randomReportsAll () {
@@ -3357,7 +3470,7 @@ class LeadController extends Controller
                     return view('mining.googleSearch')->with('searchTerm', $searchTerm);
                 }
     
-                $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
+                $excludedKeywords = ExcludeKeywords::pluck('keyword')->toArray();
                 
                 $excludedQuery = '';
                 foreach ($excludedKeywords as $keyword) {
@@ -3371,7 +3484,7 @@ class LeadController extends Controller
                     $excludedRegionsQuery .= ' -site:' . $region . '.*';
                 }
             
-                $searchTerm = $searchTerm . ' ' . $country; // Append the selected country to the search term
+                $searchTerm = $searchTerm . ' ' . $country; 
     
                 $results = [];
     

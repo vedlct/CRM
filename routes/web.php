@@ -71,8 +71,16 @@ Route::post('/changePasswordUserEnd', 'UserManagementController@changePasswordUs
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
+//FAQ Management
+Route::get('/faq', 'NoticeController@faqIndex')->name('faqIndex');
+Route::post('faq/create','NoticeController@faqCreate')->name('faqCreate');
+Route::put('/faq/update/{id}', 'NoticeController@faqUpdate')->name('faq.update');
+Route::post('faq/remove','NoticeController@faqRemove')->name('faqRemove');
+
+
+
 //Get All Possessed Leads and Set Bar
-Route::post('user-management/possessedLeads','UserManagementController@getPossessedLeads')->name('getPossessedLeads');
+// Route::post('user-management/possessedLeads','UserManagementController@getPossessedLeads')->name('getPossessedLeads');
 // Route::post('user-management/setBarForOwnedLeads','UserManagementController@setBarForOwnedLeads')->name('setBarForOwnedLeads');
 
 
@@ -292,8 +300,6 @@ Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')-
 
 Route::get('/randomReports', 'LeadController@randomReports')->name('randomReports');
 Route::get('/randomReportsAll', 'LeadController@randomReportsAll')->name('randomReportsAll');
-Route::get('/frequentlyAskedQuestions', 'LeadController@frequentlyAskedQuestions')->name('frequentlyAskedQuestions');
-
 
 
 //Lead Mining Routes
@@ -352,7 +358,6 @@ Route::post('/getMineIndividual','GetIndividualReportController@getMineIndividua
 Route::post('/getFileCountIndividual','GetIndividualReportController@getFileCountIndividual')->name('getFileCountIndividual');
 Route::post('/getNewCallIndividual','GetIndividualReportController@getNewCallIndividual')->name('getNewCallIndividual');
 Route::post('/getTestFileRaIndividual','GetIndividualReportController@getTestFileRaIndividual')->name('getTestFileRaIndividual');
-//Route::post('/getPossessedLeads','GetIndividualReportController@getPossessedLeads')->name('getPossessedLeads');
 
 
 //followup report

@@ -348,7 +348,7 @@
             </div>
           </div>
         </div>
-<!-- 
+
         <div class="col-md-3">
           <div class="card">
             <div class="view overlay">
@@ -360,7 +360,7 @@
             <div class="card-body">
               <h4 class="card-title">Frequently Asked Questions</h4>
               <p class="card-text">Because asking us directly was too mainstream. We've compiled the answers to your burning questions so you can save time and have a laugh!  </p>
-              <a href="{{route('frequentlyAskedQuestions')}}" target="_blank" class="btn btn-primary">Read FAQ</a>
+              <a href="{{route('faqIndex')}}" target="_blank" class="btn btn-primary">Read FAQ</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -368,7 +368,7 @@
             </div>
             </div>
           </div>
-        </div> -->
+        </div>
 
       </div>
 

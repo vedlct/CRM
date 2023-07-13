@@ -55,7 +55,7 @@
 
         @if (!empty($results))
             <div class="table-responsive m-t-40">
-                <div>You have searched for: {{ $searchTerm }}</div><br><br>
+                <div>You have searched for: {{ $searchTerm }} </div><br><br>
 
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
