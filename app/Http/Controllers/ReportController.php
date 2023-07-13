@@ -195,7 +195,7 @@ class ReportController extends Controller
         public function myHourReport(Request $r)
         {
             $User_Type = Session::get('userType');
-            if ($User_Type == 'USER' || $User_Type == 'MANAGER') {
+            if ($User_Type == 'USER' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
                 $selectedDay = date('Y-m-d'); // or use $r->selectedDay if available
                 $userId = Auth::user()->id; // Get the logged-in user's ID
                 
