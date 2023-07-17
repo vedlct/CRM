@@ -233,7 +233,7 @@ class NoticeController extends Controller
         $categories = Category::where('type', 4)
             ->get();
 		
-        return view('faq/index', ['notices' => $notices])
+        return view('analysis.faq', ['notices' => $notices])
 			->with('categories', $categories);
     }
 

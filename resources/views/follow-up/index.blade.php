@@ -50,7 +50,7 @@
 							  <th>Possibility</th>
 							  <th>Probability</th>
 							  <th>Country</th>
-							  <th width="5%">Contact Person</th>
+							  <!-- <th width="5%">Contact Person</th> -->
 							  <th>Contact Number</th>
 							  <th>Time</th>
 							  <th width="8%">Action</th>
@@ -72,7 +72,7 @@
 								  <td>{{$lead->possibility->possibilityName}}</td>
 								  <td>@if(!empty($lead->probability->probabilityName)){{$lead->probability->probabilityName}}@endif</td>
 								  <td>{{$lead->country->countryName}}</td>
-								  <td width="5%">{{$lead->personName}}</td>
+								  <!-- <td width="5%">{{$lead->personName}}</td> -->
 									  <td><a href="skype::{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 									  <td>{{$lead->time}}</td>
 
@@ -91,12 +91,10 @@
 										 data-lead-name="{{$lead->companyName}}"
 										 data-lead-email="{{$lead->email}}"
 										 data-lead-number="{{$lead->contactNumber}}"
-										 data-lead-person="{{$lead->personName}}"
 										 data-lead-website="{{$lead->website}}"
 										 data-lead-mined="{{$lead->mined->firstName}}"
 										 data-lead-category="{{$lead->category->categoryId}}"
 										 data-lead-country="{{$lead->countryId}}"
-										 data-lead-designation="{{$lead->designation}}"
 										 data-lead-linkedin="{{$lead->linkedin}}"
 										 data-lead-founded="{{$lead->founded}}"
 										 data-lead-employee="{{$lead->employee}}"
@@ -221,15 +219,15 @@
 
 
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-3">
                                 <label><b>Email:</b></label>
@@ -616,13 +614,13 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
             var volume=$(e.relatedTarget).data('lead-volume');
@@ -642,10 +640,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);

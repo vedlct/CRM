@@ -7,30 +7,21 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Fred's Maximum Chasing Companies</b></h2>
-        <h3 class="card-subtitle" align="center">This table wil show the names of the companies that are being chased by marketers for more than 10 times</h3>
-
-        <div class="col-md-5" style="float:left;">
-                    <form method="POST" action="{{ route('exportFredChasingLeads') }}">
-                        {{ csrf_field() }}
-                        <button class="btn btn-primary" type="submit">Export The List</button>
-                    </form>
-                <br><br>
-            </div>
+        <h2 class="card-title" align="center"><b>All Duplicate Leads</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Lead Id</th>
+                        <th width="5%">Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
                         <th width="15%">website</th>
                         <th width="8%">Country</th>
-                        <th width="7%">IPP</th>
-                        <th width="10%">Current Marketer</th>
-                        <th width="5%">No of Chase</th>
-                        <th width="15%">Exclusive Comment</th>
+                        <!-- <th width="8%">Contact Person</th> -->
+                        <th width="8%">Contact Number</th>
+                        <th width="7%">Marketer</th>
+                        <th width="7%">Status</th>
                         <th width="10%">Action</th>
 
                     </tr>
@@ -42,29 +33,31 @@
                             <td >{{$lead->leadId}}</td>
                             <td >{{$lead->companyName}}</td>
                             <td >{{$lead->category->categoryName}}</td>
-                            <td >{{$lead->website}}</td>
+                            <td ><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td >{{$lead->country->countryName}}</td>
-                                @if($lead->ippStatus == '0') 
-                                    <td>No</td>
+                            <!-- <td >{{$lead->personName}}</td> -->
+                            <td >{{$lead->contactNumber}}</td>
+                            <td >{{$lead->firstName}} {{$lead->lastName}}</td>
+                        
+                                @if ($lead->statusId == '8') 
+                                    <td>Duplicate</td>
+                                @elseif ($lead->statusId == '6') 
+                                    <td>Client</td>
+                                @elseif ($lead->statusId == '5') 
+                                    <td>Rejected</td>
+                                @elseif ($lead->statusId == '4') 
+                                    <td>Bad Lead</td>
+                                @elseif ($lead->statusId == '3') 
+                                    <td>Not Interested</td>
+                                @elseif ($lead->statusId == '2') 
+                                    <td>Filtered</td>
+                                @elseif ($lead->statusId == '7') 
+                                    <td>Contact</td>
                                 @else 
-                                    <td>Yes</td>
+                                    <td>{{$lead->statusId}}</td>
                                 @endif                                 
-                            <td >{{$lead->firstName}} {{$lead->lastName}}
-                            </td>
-                            <td >{{$lead->progressCount}} </td>
-                            <td>
-                                @php
-                                    $matchingComments = $wp->where('leadId', $lead->leadId)
-                                        ->pluck('comments')
-                                        ->filter(function ($comment) {
-                                            return stripos($comment, 'TEST') !== false
-                                                || stripos($comment, 'CLOSED') !== false
-                                                || stripos($comment, 'CLIENT') !== false;
-                                        })
-                                        ->implode(PHP_EOL . '<br><br>');
-                                    echo $matchingComments;
-                                @endphp
-                            </td>
+
+                            
                             <td >
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -73,17 +66,15 @@
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                 <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
                                    data-lead-number="{{$lead->contactNumber}}"
-                                   data-lead-person="{{$lead->personName}}"
                                    data-lead-website="{{$lead->website}}"
                                    data-lead-mined="{{$lead->mined->firstName}}"
                                    data-lead-category="{{$lead->category->categoryId}}"
                                    data-lead-country="{{$lead->countryId}}"
-                                   data-lead-designation="{{$lead->designation}}"
                                    data-lead-process="{{$lead->process}}"
                                    data-lead-frequency="{{$lead->frequency}}"
                                    data-lead-volume="{{$lead->volume}}"
@@ -209,15 +200,15 @@
 
 
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <label><b>Email:</b></label>
@@ -380,7 +371,6 @@
 
                 </div>
                 <div class="modal-footer">
-                    <div id="latestFollowups"></div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
@@ -455,12 +445,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -481,10 +471,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
@@ -558,27 +548,6 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
-                }
-            });
-
-
-            $.ajax({
-                type: 'post',
-                url: '{{ route('getLatestFollowup') }}',
-                data: {_token: CSRF_TOKEN, 'leadId': leadId},
-                success: function(data) {
-                    var latestFollowupsHtml = '';
-
-                    // Loop through the latest follow-up data
-                    $.each(data.latestFollowups, function(index, followup) {
-                        latestFollowupsHtml += '<div>';
-                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
-                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
-                        latestFollowupsHtml += '</div>';
-                    });
-
-                    // Set the latest follow-up HTML to the latestFollowups div
-                    $('#latestFollowups').html(latestFollowupsHtml);
                 }
             });
 

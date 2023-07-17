@@ -62,7 +62,6 @@ Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
 //USER PROFILE
-
 Route::get('user/{id}', 'UserManagementController@userProfile')->name('userProfile');
 Route::post('/updateUserEnd', 'UserManagementController@updateUserEnd')->name('updateUserEnd');
 Route::post('/changePasswordUserEnd', 'UserManagementController@changePasswordUserEnd')->name('changePasswordUserEnd');
@@ -133,8 +132,10 @@ Route::post('lead/all','LeadController@allLeads')->name('allLeads');
 
 
 //verify lead
-Route::get('/verify-lead', 'LeadController@verifylead')->name('verifylead');
-Route::post('verifyleads','LeadController@verifyallLeads')->name('verifyallLeads');
+// Route::get('/verify-lead', 'LeadController@verifylead')->name('verifylead');
+// Route::post('verifyleads','LeadController@verifyallLeads')->name('verifyallLeads');
+Route::get('/verify', 'LeadController@verifylead')->name('verifylead');
+Route::post('/verify', 'LeadController@verifyallLeads')->name('verifyallLeads');
 
 
 
@@ -178,7 +179,6 @@ Route::post('lead/report', 'LeadController@storeReport')->name('storeReport');
 Route::post('lead/comments','LeadController@getComments')->name('getComments');
 Route::post('lead/callReports','LeadController@getCallingReport')->name('getCallingReport');
 Route::post('lead/activities','LeadController@getActivities')->name('getActivities');
-Route::get('lead/ippList', 'LeadController@ippList')->name('ippList');
 Route::post('lead/FollowupsCounter','LeadController@getFollowupsCounter')->name('getFollowupsCounter');
 Route::post('lead/latestFollowupDate','LeadController@getLatestFollowup')->name('getLatestFollowup');
 
@@ -268,26 +268,33 @@ Route::get('/reportTable','ReportController@reportTable')->name('reportTable');
 Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('searchTableByDate');
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
-// Route::get('/myActivity','LeadController@myActivity')->name('myActivity');
-Route::get('hour/myReport', 'ReportController@myHourReport')->name('myHourReport');
 
 //Report Analysis
-Route::get('/analysisHome', 'LeadController@analysisHomePage')->name('analysisHomePage');
+Route::get('/analysisHome', 'AnalysisController@analysisHomePage')->name('analysisHomePage');
 
-Route::get('/analysisComments', 'LeadController@analysisComments')->name('analysisComments');
-Route::post('/analysisComments', 'LeadController@analysisComments');
-Route::post('/exportAnalysisComments', 'LeadController@exportAnalysisComments')->name('exportAnalysisComments');
-Route::get('/reportAllActivties','LeadController@reportAllActivties')->name('reportAllActivties');
-Route::get('duplicateLeadList', 'LeadController@duplicateLeadList')->name('duplicateLeadList');
-Route::get('duplicateLeads', 'LeadController@getDuplicateLeads')->name('getDuplicateLeads');
-Route::get('allAssignedButNotMyleads', 'LeadController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
-Route::get('allConversations', 'LeadController@getallConversations')->name('getallConversations');
-Route::get('/frequentlyFiltered', 'LeadController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
-Route::get('/testButNotClosed', 'LeadController@getTestButNotClosedList')->name('getTestButNotClosedList');
+Route::get('/analysisComments', 'AnalysisController@analysisComments')->name('analysisComments');
+Route::post('/analysisComments', 'AnalysisController@analysisComments');
+Route::post('/exportAnalysisComments', 'AnalysisController@exportAnalysisComments')->name('exportAnalysisComments');
+Route::get('/reportAllActivities','AnalysisController@reportAllActivities')->name('reportAllActivities');
+Route::get('/duplicateLeadList', 'AnalysisController@duplicateLeadList')->name('duplicateLeadList');
+Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('getDuplicateLeads');
+Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
+Route::get('/allConversations', 'AnalysisController@getallConversations')->name('getallConversations');
+Route::get('/frequentlyFiltered', 'AnalysisController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
+Route::get('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
-Route::get('/chasingLeads', 'LeadController@getAllChasingLeads')->name('getAllChasingLeads');
-Route::get('/longTimeNoCall', 'LeadController@getLongTimeNoCall')->name('getLongTimeNoCall');
-Route::post('/exportLongTimeNoCall', 'LeadController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
+Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
+Route::get('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
+Route::post('/exportLongTimeNoCall', 'AnalysisController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
+
+Route::get('/fredChasingLeads', 'AnalysisController@getFredChasingLeads')->name('getFredChasingLeads');
+Route::post('/exportFredChasingLeads', 'AnalysisController@exportFredChasingLeads')->name('exportFredChasingLeads');
+
+Route::get('/randomReports', 'AnalysisController@randomReports')->name('randomReports');
+Route::get('/randomReportsAll', 'AnalysisController@randomReportsAll')->name('randomReportsAll');
+Route::get('lead/ippList', 'AnalysisController@ippList')->name('ippList');
+
+Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
 
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
@@ -295,16 +302,10 @@ Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updat
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
 
-Route::get('/fredChasingLeads', 'LeadController@getFredChasingLeads')->name('getFredChasingLeads');
-Route::post('/exportFredChasingLeads', 'LeadController@exportFredChasingLeads')->name('exportFredChasingLeads');
-
-Route::get('/randomReports', 'LeadController@randomReports')->name('randomReports');
-Route::get('/randomReportsAll', 'LeadController@randomReportsAll')->name('randomReportsAll');
-
 
 //Lead Mining Routes
-Route::get('/googleSearch', 'LeadController@googleSearch')->name('googleSearch');
-Route::post('/googleSearch', 'LeadController@googleSearch');
+Route::get('/googleSearch', 'AnalysisController@googleSearch')->name('googleSearch');
+Route::post('/googleSearch', 'AnalysisController@googleSearch');
 
 Route::get('/crawl', 'CrawlController@index')->name('crawlWebsites');
 Route::post('/crawl', 'CrawlController@crawlWebsites')->name('crawlWebsites');

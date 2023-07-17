@@ -199,48 +199,6 @@ class UserManagementController extends Controller
 
 
 
-    public function updateUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        $this->validateInput($request);
-        // Upload image
-        $keys = ['userId', 'userEmail', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
-        $input = $this->createQueryInput($keys, $request);
-
-        if ($request->file('picture')) {
-            $img = $request->file('picture');
-            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
-            $location = public_path('img/'.$filename);
-            Image::make($img)->resize(200,200)->save($location);
-            $input['picture'] = $filename;
-
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your profile is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
-
-
-    public function changePasswordUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        if ($request['password'] != null && strlen($request['password']) > 0) {
-            $constraints['password'] = 'required|min:6|confirmed';
-            $input['password'] =  bcrypt($request['password']);
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your password is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
 
 
     public function destroy($id)
@@ -306,12 +264,7 @@ class UserManagementController extends Controller
         return $queryInput;
     }
 
-    public function settings(){
-        $user=User::findOrFail(Auth::user()->id);
 
-        return view('users-mgmt.accountSetting')
-                ->with('user',$user);
-    }
 
     public function setTarget(Request $r){
        try{
@@ -555,6 +508,74 @@ class UserManagementController extends Controller
 
             ;
 
+    }
+
+
+
+    public function updateUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        $this->validateInput($request);
+        // Upload image
+        $keys = ['userEmail', 'firstName', 'lastName',
+            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
+        $input = $this->createQueryInput($keys, $request);
+
+        if ($request->file('picture')) {
+            $img = $request->file('picture');
+            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
+            $location = public_path('img/'.$filename);
+            Image::make($img)->resize(200,200)->save($location);
+            $input['picture'] = $filename;
+
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your profile is updated sucessfully ');
+        return redirect()->intended('/settings');
+    }
+
+
+    public function changePasswordUserEnd(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+		
+        if ($request['password'] != null && strlen($request['password']) > 0) {
+            $constraints['password'] = 'required|min:6|confirmed';
+            $input['password'] =  bcrypt($request['password']);
+        }
+
+        User::where('id', $request->id)
+            ->update($input);
+
+        Session::flash('message', 'Your password is updated sucessfully ');
+        return redirect()->intended('/settings');
+    }
+
+
+
+    public function settings()
+    {
+        $user = Auth::user();
+        $User_Type=Session::get('userType');
+
+		    if($User_Type=='MANAGER'){
+                $users = User::with('target')
+                    ->where('teamId',Auth::user()->teamId)
+                    ->get();
+            }else{
+                $users = User::with('target')
+                    ->get();
+            }
+
+            $userTypes = Usertype::get();
+
+        return view('users-mgmt.accountSetting')
+            ->with('user', $user)
+            ->with('userTypes', $userTypes);
     }
 
 

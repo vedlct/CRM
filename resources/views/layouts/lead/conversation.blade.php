@@ -41,7 +41,7 @@
                         <th width="10%">website</th>
                         <th width="8%">Possibility</th>
                         <th width="5%">Country</th>
-                        <th width="15%">Contact Person</th>
+                        <!-- <th width="15%">Contact Person</th> -->
                         <th width="8%">Contact Number</th>
                         <th width="8%">Created At</th>
 
@@ -56,7 +56,7 @@
                             <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <td width="5%">{{$lead->country->countryName}}</td>
-                            <td width="8%">{{$lead->personName}}</td>
+                            <!-- <td width="8%">{{$lead->personName}}</td> -->
                             <td width="8%">{{$lead->contactNumber}}</td>
                             <td width="8%">{{$lead->created_at}}</td>
 
@@ -260,7 +260,7 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
@@ -274,7 +274,7 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 

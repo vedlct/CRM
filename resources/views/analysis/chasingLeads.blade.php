@@ -7,25 +7,26 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>IPP List</b></h2>
+        <h2 class="card-title" align="center"><b>Chasing Companies</b></h2>
+        <h3 class="card-subtitle" align="center">This table wil show the names of the companies that are being chased by marketers for more than 10 times</h3>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Id</th>
-                        <th width="10%">Company Name</th>
+                        <th width="5%">Lead Id</th>
+                        <th width="15%">Company Name</th>
                         <th width="8%">Category</th>
-                        <th width="10%">website</th>
-                        <th width="5%">Country</th>
-                        <th width="10%">Contact Person</th>
-                        <th width="8%">Contact Number</th>
-                        <th width="5%">Process</th>
-                        <th width="5%">Volume</th>
-                        <th width="5%">Frequency</th>
-                        <th width="8%">Last Update</th>
-                        <th width="8%">Marketer</th>
-                        <th width="8%">Action</th>
+                        <th width="15%">website</th>
+                        <th width="8%">Country</th>
+                        <th width="7%">Process</th>
+                        <th width="7%">Volume</th>
+                        <th width="7%">Frequency</th>
+                        <th width="7%">IPP</th>
+                        <th width="10%">Marketer</th>
+                        <th width="5%">No of Chase</th>
+                        <!-- <th width="5%">Last Contact</th> -->
+                        <th width="5%">Action</th>
 
                     </tr>
                     </thead>
@@ -33,28 +34,34 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td width="5%">{{$lead->leadId}}</td>
-                            <td width="10%">{{$lead->companyName}}</td>
-                            <td width="8%">{{$lead->category->categoryName}}</td>
-                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
-                            <td width="5%">{{$lead->country->countryName}}</td>
-                            <td width="10%">{{$lead->personName}}</td>
-                            <td width="8%">{{$lead->contactNumber}}</td>
-                            <td width="5%">{{$lead->process}}</td>
-                            <td width="5%">{{$lead->volume}}</td>
-                            <td width="5%">{{$lead->frequency}}</td>
-                            <td width="8%">{{ Carbon\Carbon::parse($lead->created_at)->format('d M Y, H:i') }}</td>
-                            <td width="8%">{{$lead->firstName}} {{$lead->lastName}}
+                            <td >{{$lead->leadId}}</td>
+                            <td >{{$lead->companyName}}</td>
+                            <td >{{$lead->category->categoryName}}</td>
+                            <td >{{$lead->website}}</td>
+                            <td >{{$lead->country->countryName}}</td>
+                            <td >{{$lead->process}}</td>
+                            <td >{{$lead->volume}}</td>
+                            <td >{{$lead->frequency}}</td>
+                                @if($lead->ippStatus == '0') 
+                                    <td>No</td>
+                                @else 
+                                    <td>Yes</td>
+                                @endif                                 
+                            <td >{{$lead->firstName}} {{$lead->lastName}}
                             </td>
-                            <td width="8%">
-                                <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                            <td >{{$lead->progressCount}} </td>
+                            <td >
+                                <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                        data-lead-id="{{$lead->leadId}}"
+                                    ><i class="fa fa-eye"></i></a>'
+                                    
+                                    
+                                <!-- <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
@@ -77,12 +84,11 @@
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                                    <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
-                                    <i class="fa fa-tasks" aria-hidden="true"></i></a>
+                                    <i class="fa fa-tasks" aria-hidden="true"></i></a> -->
                             </td>
 
                         </tr>
@@ -105,11 +111,8 @@
 
 
 
-
-
-
    <!-- Edit Modal -->
-   <div class="modal" id="edit_modal" style="">
+   <!-- <div class="modal" id="edit_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -121,9 +124,6 @@
                 <form  method="post" action="{{route('leadUpdate')}}">
                         {{csrf_field()}}
                         <div class="row">
-                            <!-- <div class="col-md-12" align="center">
-                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
-                            </div> -->
 
                             <div class="col-md-3">
                                 <input type="hidden" name="leadId">
@@ -225,7 +225,6 @@
                             <div class="col-md-3">
                                 <label ><b>Is it your IPP?</b></label>
                                 <select class="form-control" name="ippStatus"  id="ippStatus">
-                                    <!-- <option value="">(select one)</option> -->
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -272,7 +271,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
@@ -285,7 +284,7 @@
 
 
     <!-- Call Modal -->
-    <div class="modal" id="my_modal" style="">
+    <!-- <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
@@ -341,7 +340,6 @@
                                 <label class=""><b>Comment : </b></label>
                                 <textarea class="form-control" rows="3" name="comment" required></textarea>
                             </div>
-
                         </div>
                         <div class="col-md-6">
                             <ul class="list-group" style="margin: 10px; "><br>
@@ -365,16 +363,17 @@
 
                 </div>
                 <div class="modal-footer">
+                    <div id="latestFollowups"></div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
-    </div>
+    </div> -->
 
 
    <!--ALL Activities-->
     
-   <div class="modal" id="lead_activities" >
+   <!-- <div class="modal" id="lead_activities" >
         <div class="modal-dialog" style="max-width: 60%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -387,7 +386,6 @@
                     <b>Company Name:</b>
                     <input type="text" name="companyName" readonly>
                         </div>
-    
 
                         <div class="col-md-6">
                         <div class="form-group">
@@ -409,7 +407,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div></div>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -440,12 +438,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -466,10 +464,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
@@ -543,7 +541,27 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
+                }
+            });
 
+
+            $.ajax({
+                type: 'post',
+                url: '{{ route('getLatestFollowup') }}',
+                data: {_token: CSRF_TOKEN, 'leadId': leadId},
+                success: function(data) {
+                    var latestFollowupsHtml = '';
+
+                    // Loop through the latest follow-up data
+                    $.each(data.latestFollowups, function(index, followup) {
+                        latestFollowupsHtml += '<div>';
+                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
+                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
+                        latestFollowupsHtml += '</div>';
+                    });
+
+                    // Set the latest follow-up HTML to the latestFollowups div
+                    $('#latestFollowups').html(latestFollowupsHtml);
                 }
             });
 
@@ -580,6 +598,16 @@
                 stateSave: true,
             });
 
+            $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
+
         });
 
 
@@ -604,6 +632,9 @@
 
         });
         
+
+        
+
 
 
 

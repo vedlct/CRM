@@ -54,20 +54,22 @@
 
         $(function() {
             $('#myTable').dataTable({
-                aLengthMenu: [
-                    [25, 50, 100],
-                    [25, 50, 100]
-                ],
-                "iDisplayLength": 25,
+                // aLengthMenu: [
+                //     [25, 50, 100],
+                //     [25, 50, 100]
+                // ],
+                // "iDisplayLength": 25,
                 processing: true,
                 serverSide: true,
                 stateSave: true,
                 Filter: true,
                 type:"POST",
-                "ajax":{
+                "ajax": {
                     "url": "{!! route('verifyallLeads') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data": {
+                        "_token": "{{ csrf_token() }}"
+                    }
                 },
                 columns: [
                     { data: 'leadId', name: 'leads.leadId' },

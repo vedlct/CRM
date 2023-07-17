@@ -69,7 +69,7 @@ class PipelineController extends Controller
             ];
         }
     
-        return view('report.salesPipeline')->with('pipeline', $pipeline)->with('possibilities', '$possibilities');
+        return view('analysis.salesPipeline')->with('pipeline', $pipeline)->with('possibilities', '$possibilities');
     }
     
     

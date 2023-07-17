@@ -28,10 +28,10 @@
                 <label><b>Email:</b></label>
                 <input type="email" class="form-control" name="email" value="{{$lead->email}}">
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <label><b>Contact Person:</b></label>
                 <input type="text" class="form-control" name="personName" value="{{$lead->personName}}">
-            </div>
+            </div> -->
             <div class="col-md-4">
                 <label><b>Number:</b></label>
                 <input type="text" class="form-control" name="number" value="{{$lead->contactNumber}}">
@@ -41,10 +41,10 @@
                 <input type="text" class="form-control" name="website" value="{{$lead->website}}">
             </div>
 
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <label><b>Designation:</b></label>
                 <input type="text" class="form-control" name="designation" value="{{$lead->designation}}">
-            </div>
+            </div> -->
 
 
             <div class="col-md-4">

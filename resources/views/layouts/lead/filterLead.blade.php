@@ -148,11 +148,11 @@
 
         $(function() {
             $('#myTable').DataTable({
-                aLengthMenu: [
-                    [25, 50, 100],
-                    [25, 50, 100]
-                ],
-                "iDisplayLength": 25,
+                // aLengthMenu: [
+                //     [25, 50, 100],
+                //     [25, 50, 100]
+                // ],
+                // "iDisplayLength": 25,
                 processing: true,
                 serverSide: true,
                 Filter: true,
@@ -163,7 +163,6 @@
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
                 },
-                {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
 

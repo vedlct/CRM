@@ -292,7 +292,7 @@
               <h4 class="card-title">All Activities</h4>
               <p class="card-text">Step into the realm of marketers' daily CRM adventures. From mining to updating and everything in between, this is where their magic happens </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('reportAllActivties')}}" target="_blank" class="btn btn-info">See Activities</a>
+              <a href="{{route('reportAllActivities')}}" target="_blank" class="btn btn-info">See Activities</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -317,7 +317,7 @@
             </div>
             <div class="card-body">
               <h4 class="card-title">Random Reports</h4>
-              <p class="card-text">Produce random reports based on your previous records like Call to Contact and Conversation to Test. You may find it Surprising!  </p>
+              <p class="card-text">Produce random reports based on your previous records like Call to Contact and Conversation to Test. </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
               <a href="{{route('randomReports')}}" target="_blank" class="btn btn-info">Generate It</a>
             </div>

@@ -9,9 +9,11 @@
 
             <table class="table table-bordered" id="posts">
                 <thead>
+                <th>Lead Id</th>
                 <th>Company Name</th>
                 <th>Mined By</th>
                 <th>Email</th>
+                <th>Number</th>
 
 
                 </thead>
@@ -70,9 +72,11 @@
                 },
                 {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
+                    { data: 'leadId', name: 'leads.leadId' },
                     { data: 'companyName', name: 'leads.companyName' },
                     { data: 'mined.firstName', name: 'mined.firstName' },
                     { data: 'email', name: 'email' },
+                    { data: 'contactNumber', name: 'contactNumber' },
 
                 ]
             });

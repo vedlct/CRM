@@ -4,24 +4,42 @@
 
 @section('content')
 
+@php($userType = Session::get('userType'))
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>All Duplicate Leads</b></h2>
+        <h2 class="card-title" align="center"><b>Long Time No Update</b></h2>
+        @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
+            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in My Lead. </b></h4>
+        @else
+            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 3 months or more but in My Lead. </b></h4>
+        @endif
+
+            <div class="col-md-5" style="float:left;">
+                @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
+                    <form method="POST" action="{{ route('exportLongTimeNoCall') }}">
+                        {{ csrf_field() }}
+                        <button class="btn btn-primary" type="submit">Export The List</button>
+                    </form>
+                @endif    
+                <br><br>
+            </div>
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th width="5%">Id</th>
+                        <!-- <th width="5%">Select</th> -->
+                        <th width="5%">Lead Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
-                        <th width="15%">website</th>
+                        <th width="10%">website</th>
                         <th width="8%">Country</th>
-                        <th width="8%">Contact Person</th>
                         <th width="8%">Contact Number</th>
+                        <th width="7%">IPP</th>
+                        <th width="10%">Last Comment</th>
                         <th width="7%">Marketer</th>
-                        <th width="7%">Status</th>
                         <th width="10%">Action</th>
 
                     </tr>
@@ -30,43 +48,33 @@
 
                     @foreach($leads as $lead)
                         <tr>
+                            <!-- <td><input type="checkbox" class="lead-checkbox"></td> -->
                             <td >{{$lead->leadId}}</td>
                             <td >{{$lead->companyName}}</td>
                             <td >{{$lead->category->categoryName}}</td>
-                            <td ><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
+                            <td >{{$lead->website}}</td>
                             <td >{{$lead->country->countryName}}</td>
-                            <td >{{$lead->personName}}</td>
                             <td >{{$lead->contactNumber}}</td>
-                            <td >{{$lead->firstName}} {{$lead->lastName}}</td>
-                        
-                                @if ($lead->statusId == '8') 
-                                    <td>Duplicate</td>
-                                @elseif ($lead->statusId == '6') 
-                                    <td>Client</td>
-                                @elseif ($lead->statusId == '5') 
-                                    <td>Rejected</td>
-                                @elseif ($lead->statusId == '4') 
-                                    <td>Bad Lead</td>
-                                @elseif ($lead->statusId == '3') 
-                                    <td>Not Interested</td>
-                                @elseif ($lead->statusId == '2') 
-                                    <td>Filtered</td>
-                                @elseif ($lead->statusId == '7') 
-                                    <td>Contact</td>
+                                @if($lead->ippStatus == '0') 
+                                    <td>No</td>
                                 @else 
-                                    <td>{{$lead->statusId}}</td>
+                                    <td>Yes</td>
                                 @endif                                 
-
-                            
+                            <td >{{ $lead->workprogress_created_at }}</td>
+                            <td >{{$lead->firstName}} {{$lead->lastName}}
+                            </td>
                             <td >
-                                <!-- Trigger the modal with a button -->
-                                <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
+                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                        data-lead-id="{{$lead->leadId}}"
+                                    ><i class="fa fa-eye"></i></a>'
+                                    
+                                    
+                                <!-- <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
@@ -89,12 +97,11 @@
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
 
-                                    <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
-                                    <i class="fa fa-tasks" aria-hidden="true"></i></a>
+                                    <i class="fa fa-tasks" aria-hidden="true"></i></a> -->
                             </td>
 
                         </tr>
@@ -102,8 +109,32 @@
                     @endforeach
 
                     </tbody>
+              
                 </table>
             </div>
+
+
+            <!-- <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
+
+            <div class="row">
+
+                <div class="form-group col-md-8">
+
+                    <label ><b>Select Status:</b></label>
+                    <select class="form-control"  name="status" id="otherCatches" style="width: 30%">
+                        <option value="">select</option>
+                        @foreach($outstatus as $s)
+                            <option value="{{$s->statusId}}">{{$s->statusName}} </option>
+                        @endforeach
+                    </select>
+
+                    <input type="hidden" class="form-control" id="inp" name="leadId">
+
+                </div>
+            </div> -->
+
+
         </div>
     </div>
 
@@ -115,10 +146,8 @@
 
 
 
-
-
    <!-- Edit Modal -->
-   <div class="modal" id="edit_modal" style="">
+   <!-- <div class="modal" id="edit_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -130,9 +159,6 @@
                 <form  method="post" action="{{route('leadUpdate')}}">
                         {{csrf_field()}}
                         <div class="row">
-                            <!-- <div class="col-md-12" align="center">
-                                <label><b> Mined By: </b></label>  <div class="mined" id="mined"></div><br>
-                            </div> -->
 
                             <div class="col-md-3">
                                 <input type="hidden" name="leadId">
@@ -234,7 +260,6 @@
                             <div class="col-md-3">
                                 <label ><b>Is it your IPP?</b></label>
                                 <select class="form-control" name="ippStatus"  id="ippStatus">
-                                    <!-- <option value="">(select one)</option> -->
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -281,7 +306,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
 
@@ -294,7 +319,7 @@
 
 
     <!-- Call Modal -->
-    <div class="modal" id="my_modal" style="">
+    <!-- <div class="modal" id="my_modal" style="">
         <div class="modal-dialog" style="max-width: 60%;">
 
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
@@ -373,16 +398,17 @@
 
                 </div>
                 <div class="modal-footer">
+                    <div id="latestFollowups"></div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
-    </div>
+    </div> -->
 
 
    <!--ALL Activities-->
     
-   <div class="modal" id="lead_activities" >
+   <!-- <div class="modal" id="lead_activities" >
         <div class="modal-dialog" style="max-width: 60%">
             <div class="modal-content">
                 <div class="modal-header">
@@ -416,7 +442,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div></div>
             </div>
-        </div>
+        </div> -->
 
 
 
@@ -438,6 +464,58 @@
 
     <script>
 
+
+        // function selectAll(source) {
+        //     var checkboxes = document.querySelectorAll('#myTable tbody .lead-checkbox');
+        //     for (var i = 0; i < checkboxes.length; i++) {
+        //         checkboxes[i].checked = source.checked;
+        //     }
+        // }
+
+
+        // $("#otherCatches").change(function() {
+
+        //     var chkArray = [];
+        //     var status=$(this).val();
+        //     $('#myTable tbody .lead-checkbox:checked').each(function() {
+        //         chkArray.push($(this).val());
+        //     });
+        //     console.log("Selected checkboxes:", chkArray);
+        //     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        //     jQuery('input:checkbox:checked').parents("tr").remove();
+        //     $(this).prop('selectedIndex',0);
+
+        //         $.ajax({
+        //         type: 'post',
+        //         url: '{{route('contactedStatus')}}',
+        //         data: {
+        //             _token: CSRF_TOKEN,
+        //             'leadId': chkArray,
+        //             'status': status
+        //         },
+        //         beforeSend: function() {
+        //             return confirm("Are you sure?");
+        //         },
+        //         success: function(data) {
+        //             console.log("Response data:", data);
+        //             if (data === 'true') {
+        //                 $('#alert').html('<strong>Success!</strong> Status Changed');
+        //                 $('#alert').show();
+        //             } else {
+        //                 console.log("Status change failed");
+        //             }
+        //         },
+        //         error: function(jqXHR, textStatus, errorThrown) {
+        //             console.log("AJAX request failed:", textStatus, errorThrown);
+        //         }
+        //     });
+
+        // });
+
+
+
+
+
         //for Edit modal
 
         $('#edit_modal').on('show.bs.modal', function (e) {
@@ -447,12 +525,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -473,10 +551,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
@@ -550,11 +628,47 @@
 
                     // Set the counter HTML to the counter div
                     $('#counter').html(counterHtml);
+
+                    var latestFollowupsHtml = '';
+
+                    // Loop through the latest follow-up data
+                    $.each(data.latestFollowups, function(index, followup) {
+                        latestFollowupsHtml += '<div>';
+                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
+                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
+                        latestFollowupsHtml += '</div>';
+                    });
+
+                    // Set the latest follow-up HTML to the latestFollowups div
+                    $('#latestFollowups').html(latestFollowupsHtml);
+                }
+            });
+
+            
+            $.ajax({
+                type: 'post',
+                url: '{{ route('getLatestFollowup') }}',
+                data: {_token: CSRF_TOKEN, 'leadId': leadId},
+                success: function(data) {
+                    var latestFollowupsHtml = '';
+
+                    // Loop through the latest follow-up data
+                    $.each(data.latestFollowups, function(index, followup) {
+                        latestFollowupsHtml += '<div>';
+                        latestFollowupsHtml += 'Lead ID: ' + followup.leadId + ' || ';
+                        latestFollowupsHtml += 'Latest Follow-up: ' + followup.lastFollowUpDate;
+                        latestFollowupsHtml += '</div>';
+                    });
+
+                    // Set the latest follow-up HTML to the latestFollowups div
+                    $('#latestFollowups').html(latestFollowupsHtml);
                 }
             });
 
 
-        });
+        });        
+
+
 
         //        check followup date count
 
@@ -586,7 +700,18 @@
                 stateSave: true,
             });
 
+            $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
+
         });
+
 
 
        $('#lead_activities').on('show.bs.modal', function(e) {

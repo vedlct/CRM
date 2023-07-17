@@ -97,11 +97,9 @@
                                         data-lead-name="{{$lead->companyName}}"
                                         data-lead-email="{{$lead->email}}"
                                         data-lead-number="{{$lead->contactNumber}}"
-                                        data-lead-person="{{$lead->personName}}"
                                         data-lead-website="{{$lead->website}}"
                                         data-lead-category="{{$lead->category->categoryId}}"
                                         data-lead-country="{{$lead->countryId}}"
-                                        data-lead-designation="{{$lead->designation}}"
                                         data-lead-linkedin="{{$lead->linkedin}}"
                                         data-lead-founded="{{$lead->founded}}"
                                         data-lead-process="{{$lead->process}}"
@@ -140,10 +138,10 @@
                                     <b class="text-secondary">Other Phone:</b>
                                     +880185574457
                                 </p> -->
-                                <p>
+                                <!-- <p>
                                     <b class="text-secondary">KDM Name(s):</b>
                                     {{$lead->personName}}
-                                </p>
+                                </p> -->
                                 <p>
                                     <b class="text-secondary">Email:</b>
                                     {{$lead->email}}
@@ -184,7 +182,7 @@
                                 </p>
                                 <p>
                                     <b class="text-secondary">Extra Information:</b>
-                                    {{$lead->comments}}
+                                     {!! nl2br(e($lead->comments)) !!}
                                 </p>
                             </div>
                         </div>
@@ -324,6 +322,7 @@
                                                         data-employee-jobstatus="{{ $employee->jobstatus }}"
                                                         data-employee-country="{{ $employee->countryId }}"
                                                         data-employee-iskdm="{{ $employee->iskdm }}"
+                                                        data-employee-extrainfo="{{ $employee->extrainfo }}"
                                                         >Edit Employee
                                                         </a>
 
@@ -347,6 +346,13 @@
                                                     <p>
                                                         <b class="text-secondary">Linkedin:</b>
                                                         {{$employee->linkedin}}
+                                                    </p>
+
+                                            </div>
+                                            <div class="col-md-12">
+                                                    <p>
+                                                        <b class="text-secondary">Extra Info:</b>
+                                                        {{$employee->extrainfo}}
                                                     </p>
 
                                             </div>
@@ -747,9 +753,7 @@
                             </div>
 
 
-
-
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
                             </div>
@@ -757,17 +761,16 @@
                             <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label><b>Email:</b></label>
                                 <input type="email" class="form-control" name="email" value="">
                                 <br><br>
                             </div>
 
 
-
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><b>Extra Information:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
@@ -777,7 +780,7 @@
                                 <input type="text" class="form-control" name="linkedin" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label ><b>Is it your IPP?</b></label>
                                 <select class="form-control" name="ippStatus"  id="ippStatus">
                                     <!-- <option value="">(select one)</option> -->
@@ -786,9 +789,8 @@
                                 </select>
                             </div>
 
-
                             
-                            <div class="col-md-6">
+                            <div class="col-md-6"><br>
                                 <button class="btn btn-success" type="submit">Update</button>
                             </div>
                         </div>
@@ -923,31 +925,34 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="name">Full Name:**</label>
+                    <label for="name">Full Name:*</label>
                     <input type="text" class="form-control" name="name" id="name" value="" >
                     <span class="error" style="color:red;" id="nameError"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="designation">Designation:</label>
-                        <select class="select form-control" id="" name="designation" style="width: 100%;">
-                            @foreach($designations as $d)
-                                <option value="{{$d->designationId}}">{{$d->designationName}}</option>
-                            @endforeach
-                        </select>
+                    <select class="select form-control" id="" name="designation" style="width: 100%;">
+                        <option value=""></option>
+                        @foreach($designations as $d)
+                            <option value="{{$d->designationId}}" {{ $d->designationName == 'Others' ? 'selected' : '' }}>
+                                {{$d->designationName}}
+                            </option>
+                        @endforeach
+                    </select>                
                 </div>
             </div><br>
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:</label>
+                    <label for="email">Email Address:*</label>
                     <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
                     <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="number ">Phone Number:</label>
-                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
+                    <label for="number ">Phone Number:*</label>
+                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="{{$lead->contactNumber}}" >
                     <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
             </div><br>
@@ -955,16 +960,25 @@
             <div class ="row">
                 <div class="col-md-6">
                     <label for="country">Country:</label>
-                        <select class="select form-control" id="" name="country" style="width: 100%;">
-                            @foreach($country as $c)
-                                <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-                            @endforeach
-                        </select>
+                    <select class="select form-control" id="" name="country" style="width: 100%;">
+                        @foreach($country as $c)
+                            <option value="{{$c->countryId}}" {{ $c->countryId == $lead->countryId ? 'selected' : '' }}>
+                                {{$c->countryName}}
+                            </option>
+                        @endforeach
+                    </select>                
                 </div>
 
                 <div class="col-md-6">
                     <label for="linkedin">LinkedIn:</label>
                     <input type="text" class="form-control" name="linkedin" id="linkedin" value="" >
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-12">
+                <label for="extrainfo">Extra Info:</label>
+                    <input type="text" class="form-control" name="extrainfo" id="extrainfo" value="" >
                 </div>
             </div>
 
@@ -1063,8 +1077,14 @@
                     <option value="0">Left The Job</option>
                     </select>
                 </div>
-            </div>
+            </div><br>
 
+            <div class ="row">
+                <div class="col-md-12">
+                    <label for="extrainfo">Extra Info:</label>
+                    <input type="text" class="form-control" name="extrainfo" id="extrainfo" value="" />
+                </div>
+            </div>
 
             <hr>
 
@@ -1239,12 +1259,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -1264,17 +1284,19 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
             $(e.currentTarget).find('#ippStatus').val(ippStatus);
-            $('#comments').val(comments);
+            // $('#comments').val(comments);
+            $(e.currentTarget).find('textarea[name="comments"]').val(comments);
+
 
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
@@ -1324,6 +1346,7 @@
                 var employeeJobstatus = link.data('employee-jobstatus');
                 var employeeCountry = link.data('employee-country');
                 var employeeIsKDM = link.data('employee-iskdm');
+                var extrainfo = link.data('employee-extrainfo');
 
                 $('#employeecountry').val(employeeCountry);
                 $('#employeedesignation').val(employeeDesignation);
@@ -1337,6 +1360,8 @@
                 $(this).find('select[name="jobstatus"]').val(employeeJobstatus);
                 $(this).find('select[name="country"]').val(employeeCountry);
                 $(this).find('select[name="iskdm"]').val(employeeIsKDM);
+                $(this).find('input[name="extrainfo"]').val(extrainfo);
+                
             });
 
 

@@ -32,7 +32,7 @@
                         <th width="3%">Category</th>
                         <th width="4%">Country</th>
                         <th width="4%">Marketier</th>
-                        <th width="4%">Contact</th>
+                        <!-- <th width="4%">Contact</th> -->
                         <th width="4%">Status</th>
                         <th width="4%">Poss</th>
                         <th width="4%">Prob</th>
@@ -263,19 +263,19 @@
 
 
 
-                        <div class="form-group col-md-4" style="">
+                        <!-- <div class="form-group col-md-4" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" id="" name="personName" placeholder="Only KDM name" >
 
-                        </div>
+                        </div> -->
 
-                        <div class="form-group col-md-4">
+                        <!-- <div class="form-group col-md-4">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" name="designation" placeholder="KDM Designation" >
 
-                        </div>
+                        </div> -->
 
                         <div class="form-group col-md-4" style="">
                             <label ><b>Possibility:</b></label>
@@ -480,12 +480,12 @@
 
                         </div>
 
-                        <div class="form-group col-md-5" style="">
+                        <!-- <div class="form-group col-md-5" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" id="" name="personName" placeholder="name" >
 
-                        </div>
+                        </div> -->
 
 
                         <div class="form-group col-md-5">
@@ -502,12 +502,12 @@
                             <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                         </div>
 
-                        <div class="form-group col-md-5">
+                        <!-- <div class="form-group col-md-5">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" >
 
-                        </div>
+                        </div> -->
 
 
 
@@ -668,15 +668,15 @@
 
 
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-3">
                                 <label><b>Email:</b></label>
@@ -965,7 +965,7 @@
                     { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
                     { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
                     {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
-                    {data: 'personName', name: 'personName', defaultContent: ''},
+                    // {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
                     { data: 'probability.probabilityName', name: 'probability.probabilityName' , defaultContent: ''},
@@ -1062,13 +1062,13 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
             var volume=$(e.relatedTarget).data('lead-volume');
@@ -1092,10 +1092,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);

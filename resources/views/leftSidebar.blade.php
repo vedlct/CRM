@@ -62,10 +62,6 @@
                             <span class="hide-menu"> Contacted Leads</span></a>
                         </li>
                         <li>
-                            <a href="{{route('getAllemployees')}}"><i class="fa fa-users"></i>
-                            <span class="hide-menu"> All Contacts</span></a>
-                        </li>
-                        <li>
                             <a href="{{route('assignedLeads')}}"><i class="fa fa-list"></i>
                             <span class="hide-menu"> Assigned to Me</span></a>
                         </li>
@@ -100,6 +96,11 @@
                             <li>
                                 <a href="{{route('filterLeads')}}"><i class="fa fa-filter"></i>
                                     <span class="hide-menu">Filtered Leads</span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{route('getAllemployees')}}"><i class="fa fa-users"></i>
+                                <span class="hide-menu"> All Contacts</span></a>
                             </li>
 
                         </ul>

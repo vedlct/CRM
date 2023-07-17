@@ -44,17 +44,21 @@
                                 <p class="mb-1">DOB: {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
                                 <p class="mb-1">Email: {{$user->userEmail}}</p>
 
-
-                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-primary"
-                                        data-id="{{$user->id}}"
-                                        data-user-id="{{$user->userId}}"
-                                        data-first-name="{{$user->firstName}}"
-                                        data-last-name="{{$user->lastName}}"
-                                        data-phone-number="{{$user->phoneNumber}}"
-                                        data-dob="{{$user->dob}}"
-                                        data-gender="{{$user->gender}}"
-                                        data-designation-id="{{$user->designationId}}"
-                                        data-picture="{{$user->picture}}">Edit Profile</a>
+                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                       data-id="{{$user->id}}"
+                                       data-user-id="{{$user->userId}}"
+                                       data-type-id="{{$user->typeId}}"
+                                       data-rf-id="{{$user->rfID}}"
+                                       data-user-email="{{$user->userEmail}}"
+                                       data-password="{{$user->password}}"
+                                       data-first-name="{{$user->firstName}}"
+                                       data-last-name="{{$user->lastName}}"
+                                       data-phone-number="{{$user->phoneNumber}}"
+                                       data-dob="{{$user->dob}}"
+                                       data-gender="{{$user->gender}}"
+                                       data-active="{{$user->active}}"
+                                       data-whitelist="{{$user->whitelist}}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit Profile</a>
 
 
                                 <a href="#change_password" data-toggle="modal" class="btn btn-warning"
@@ -410,26 +414,66 @@
 
         
 
-            <!-- Edit User Modal -->
+            <!-- Edit Modal -->
             <div class="modal fade" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Update Your Profile</h4>
+                            <h4 class="modal-title">Update User's Info</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
 
                         <!-- Modal body -->
                         <div class="modal-body">
 
-                            <form class="form-horizontal" role="form" method="POST" action="{{ route('updateUserEnd') }}" enctype="multipart/form-data">
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.update', ['id' => 1]) }}" enctype="multipart/form-data">
                                 <input type="hidden" name="_method" value="PUT">
                                 {{ csrf_field() }}
-                                <input id="id" type="text" class="form-control" name="id">
+                                <input id="id" type="hidden" class="form-control" name="id"  required>
 
                                 <div class="row">
+
+                                <div class="form-group col-md-4">
+                                        <label for="typeId">User Type:</label>
+                                        <select id="typeId"  name="typeId" class="form-control form-control-warning" required>
+
+                                            @foreach ($userTypes as $userType)
+                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @if ($errors->has('typeId'))
+                                            <span class="help-block">
+				                				<strong>{{ $errors->first('typeId') }}</strong>
+                							</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="userId">User Id:</label>
+                                        <input id="userId" type="text" class="form-control" name="userId" required>
+                                        @if ($errors->has('userId'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('userId') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="rfID">RF Id:</label>
+                                        <input id="rfID" type="number" class="form-control" name="rfID">
+
+                                        @if ($errors->has('rfID'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('rfID') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
 
                                     <div class="form-group col-md-4">
                                         <label for="firstName">First Name:</label>
@@ -451,6 +495,18 @@
                                         @if ($errors->has('lastName'))
                                             <span class="help-block">
 											<strong>{{ $errors->first('lastName') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="userEmail">Email:</label>
+                                        <input id="userEmail" type="email" class="form-control" name="userEmail" required>
+
+                                        @if ($errors->has('userEmail'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('userEmail') }}</strong>
 										</span>
                                         @endif
                                     </div>
@@ -479,32 +535,6 @@
 
 
                                     <div class="form-group col-md-4">
-                                        <label for="gender">Gender:</label>
-                                        <select id="gender" name="gender" class="form-control">
-                                            <option value="M" {{$user->gender == 'M' ? 'selected' : ''}}>Male</option>
-                                            <option value="F" {{$user->gender == 'F' ? 'selected' : ''}}>Female</option>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="designationId">Designation:</label>
-
-                                        <select id="designationId" name="designationId" class="form-control form-control-warning">
-                                            <option value="32" {{$user->designationId == 32 ? 'selected' : ''}}>Trainee Executive</option>
-                                            <option value="33" {{$user->designationId == 33 ? 'selected' : ''}}>Junior Executive</option>
-                                            <option value="34" {{$user->designationId == 34 ? 'selected' : ''}}>Executive</option>
-                                            <option value="35" {{$user->designationId == 35 ? 'selected' : ''}}>Sr.  Executive</option>
-                                            <option value="36" {{$user->designationId == 36 ? 'selected' : ''}}>Asst. Manager</option>
-                                            <option value="37" {{$user->designationId == 37 ? 'selected' : ''}}>Manager</option>
-                                            <option value="38" {{$user->designationId == 38 ? 'selected' : ''}}>Sr. Manager</option>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group col-md-4">
                                         <label for="picture">Picture:</label>
                                         <input id="picture" type="file" class="form-control" name="picture">
                                         @if ($errors->has('picture'))
@@ -514,6 +544,60 @@
                                         @endif
 
                                     </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="gender">Gender:</label>
+                                        <select id="gender" name="gender" class="form-control form-control-warning">
+
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+
+                                        </select>
+                                        @if ($errors->has('gender'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('gender') }}</strong>
+										</span>
+                                        @endif
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="active">Status:</label>
+
+                                        <select id="active" name="active" class="form-control form-control-warning">
+
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="active">Whitelist:</label>
+
+                                        <select id="whitelist" name="whitelist" class="form-control form-control-warning">
+
+                                            <option value="0">Black</option>
+                                            <option value="1">white</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="password">Password:</label>
+                                        <input id="password" type="password" class="form-control" name="password">
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="password-confirm">Confirm Password:</label>
+                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                    </div>
+
 
 
                                     <div class="form-group col-md-4">
@@ -620,29 +704,40 @@
 
 $(document).ready(function() {
 
-        $('#edit_user_modal').on('show.bs.modal', function (e) {
-            // Retrieve the data attributes from the clicked element
-            var id = $(e.relatedTarget).data('id');
-            var userId = $(e.relatedTarget).data('user-id');
-            var firstName = $(e.relatedTarget).data('first-name');
-            var lastName = $(e.relatedTarget).data('last-name');
-            var phoneNumber = $(e.relatedTarget).data('phone-number');
-            var dob = $(e.relatedTarget).data('dob');
-            var gender = $(e.relatedTarget).data('gender');
-            var designationId = $(e.relatedTarget).data('designation-id');
-            var picture = $(e.relatedTarget).data('picture');
+    $('#edit_user_modal').on('show.bs.modal', function(e) {
 
-            // Populate the input fields in the modal with the retrieved values
-            $(e.currentTarget).find('#id').val(id);
-            $(e.currentTarget).find('#userId').val(userId);
-            $(e.currentTarget).find('#firstName').val(firstName);
-            $(e.currentTarget).find('#lastName').val(lastName);
-            $(e.currentTarget).find('#phoneNumber').val(phoneNumber);
-            $(e.currentTarget).find('#dob').val(dob);
-            $(e.currentTarget).find('#gender').val(gender);
-            $(e.currentTarget).find('#designationId').val(designationId);
-            $(e.currentTarget).find('#picture').val(picture);
-        });
+    //get data-id attribute of the clicked element
+    var id = $(e.relatedTarget).data('id');
+    var userId = $(e.relatedTarget).data('user-id');
+    var typeId = $(e.relatedTarget).data('type-id');
+    var rfID = $(e.relatedTarget).data('rf-id');
+    var userEmail = $(e.relatedTarget).data('user-email');
+    //var password = $(e.relatedTarget).data('password');
+    var firstName = $(e.relatedTarget).data('first-name');
+    var lastName = $(e.relatedTarget).data('last-name');
+    var phoneNumber = $(e.relatedTarget).data('phone-number');
+    var dob = $(e.relatedTarget).data('dob');
+    var gender = $(e.relatedTarget).data('gender');
+    var active = $(e.relatedTarget).data('active');
+    var whitelist = $(e.relatedTarget).data('whitelist');
+
+    //alert(userId);
+    //populate the textbox
+    $(e.currentTarget).find('#id').val(id);
+    $(e.currentTarget).find('#userId').val(userId);
+    $(e.currentTarget).find('#typeId').val(typeId);
+    $(e.currentTarget).find('#rfID').val(rfID);
+    $(e.currentTarget).find('#userEmail').val(userEmail);
+    //$(e.currentTarget).find('#password').val(password);
+    $(e.currentTarget).find('#firstName').val(firstName);
+    $(e.currentTarget).find('#lastName').val(lastName);
+    $(e.currentTarget).find('#phoneNumber').val(phoneNumber);
+    $(e.currentTarget).find('#dob').val(dob);
+    $(e.currentTarget).find('#gender').val(gender);
+    $(e.currentTarget).find('#active').val(active);
+    $(e.currentTarget).find('#whitelist').val(whitelist);
+
+    });
 
 
 

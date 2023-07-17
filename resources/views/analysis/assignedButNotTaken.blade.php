@@ -7,7 +7,8 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>All Duplicate Leads</b></h2>
+        <h2 class="card-title" align="center"><b>Assigned But Not My Leads</b></h2>
+        <h2 class="card-subtitle" align="center">These leads are assigned to someone but haven't been marked as My Lead yet.</h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -16,13 +17,13 @@
                         <th width="5%">Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
-                        <th width="15%">website</th>
-                        <th width="8%">Country</th>
-                        <th width="8%">Contact Person</th>
+                        <th width="10%">website</th>
+                        <th width="5%">Country</th>
+                        <!-- <th width="10%">Contact Person</th> -->
                         <th width="8%">Contact Number</th>
-                        <th width="7%">Marketer</th>
-                        <th width="7%">Status</th>
-                        <th width="10%">Action</th>
+                        <th width="8%">Last Update</th>
+                        <th width="8%">Marketer</th>
+                        <th width="8%">Action</th>
 
                     </tr>
                     </thead>
@@ -30,35 +31,17 @@
 
                     @foreach($leads as $lead)
                         <tr>
-                            <td >{{$lead->leadId}}</td>
-                            <td >{{$lead->companyName}}</td>
-                            <td >{{$lead->category->categoryName}}</td>
-                            <td ><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
-                            <td >{{$lead->country->countryName}}</td>
-                            <td >{{$lead->personName}}</td>
-                            <td >{{$lead->contactNumber}}</td>
-                            <td >{{$lead->firstName}} {{$lead->lastName}}</td>
-                        
-                                @if ($lead->statusId == '8') 
-                                    <td>Duplicate</td>
-                                @elseif ($lead->statusId == '6') 
-                                    <td>Client</td>
-                                @elseif ($lead->statusId == '5') 
-                                    <td>Rejected</td>
-                                @elseif ($lead->statusId == '4') 
-                                    <td>Bad Lead</td>
-                                @elseif ($lead->statusId == '3') 
-                                    <td>Not Interested</td>
-                                @elseif ($lead->statusId == '2') 
-                                    <td>Filtered</td>
-                                @elseif ($lead->statusId == '7') 
-                                    <td>Contact</td>
-                                @else 
-                                    <td>{{$lead->statusId}}</td>
-                                @endif                                 
-
-                            
-                            <td >
+                            <td width="5%">{{$lead->leadId}}</td>
+                            <td width="10%">{{$lead->companyName}}</td>
+                            <td width="8%">{{$lead->category->categoryName}}</td>
+                            <td width="10%"><a href="{{$lead->website}}" target="_blank">{{$lead->website}}</a></td>
+                            <td width="5%">{{$lead->country->countryName}}</td>
+                            <!-- <td width="10%">{{$lead->personName}}</td> -->
+                            <td width="8%">{{$lead->contactNumber}}</td>
+                            <td width="8%">{{ Carbon\Carbon::parse($lead->created_at)->format('d M Y, H:i') }}</td>
+                            <td width="8%">{{$lead->firstName}} {{$lead->lastName}}
+                            </td>
+                            <td width="8%">
                                 <!-- Trigger the modal with a button -->
                                 <a href="#my_modal" data-toggle="modal" class="btn btn-success btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
@@ -66,7 +49,7 @@
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
                                 <!-- Trigger the Edit modal with a button -->
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm""
+<!--                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
                                    data-lead-id="{{$lead->leadId}}"
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
@@ -83,11 +66,12 @@
                                    data-lead-employee="{{$lead->employee}}"
                                    data-lead-linkedin="{{$lead->linkedin}}"
                                    data-lead-founded="{{$lead->founded}}"
-                                   data-lead-ipp="{{$lead->ippStatus}}"
+                                   data-lead-ippStatus="{{$lead->ippStatus}}"
                                    data-lead-comments="{{$lead->comments}}"
 
                                 >
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+-->                                    
 
                                     <!-- Trigger the Activties modal with a button -->
                                     <a href="#lead_activities" data-toggle="modal" class="btn btn-warning btn-sm"
@@ -202,15 +186,15 @@
 
 
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <label><b>Email:</b></label>
@@ -231,15 +215,14 @@
                                 <input type="text" class="form-control" name="linkedin" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <!-- <div class="col-md-3">
                                 <label ><b>Is it your IPP?</b></label>
-                                <select class="form-control" name="ippStatus"  id="ippStatus">
-                                    <!-- <option value="">(select one)</option> -->
+                                <select class="form-control" name="ippStatus" >
+                                    <option value="">(select one)</option>
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
-                            </div>
-
+                            </div> -->
 
                             
                             <div class="col-md-6">
@@ -447,19 +430,18 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
             var volume=$(e.relatedTarget).data('lead-volume');
             var frequency=$(e.relatedTarget).data('lead-frequency');
             var process=$(e.relatedTarget).data('lead-process');
-            var ippStatus=$(e.relatedTarget).data('lead-ipp');
             var createdAt=$(e.relatedTarget).data('lead-created');
             var comments=$(e.relatedTarget).data('lead-comments');
             //populate the textbox
@@ -473,17 +455,15 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
-            $(e.currentTarget).find('#ippStatus').val(ippStatus);
-
             $('#comments').val(comments);
             // $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
