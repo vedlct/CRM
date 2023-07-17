@@ -1,4 +1,4 @@
-
+<!-- 
     <style>
             .light-color {
                 color: #ffffff;
@@ -75,48 +75,22 @@
 
 <header class="topbar">
     <nav class="navbar top-navbar navbar-expand-md navbar-light">
-        <!-- ============================================================== -->
-        <!-- Logo -->
-        <!-- ============================================================== -->
         <div class="navbar-header">
             <a class="navbar-brand" href="{{route('home')}}">
-                <!-- Logo icon -->
-
                 <img src="{{url('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" width="40px"/>
-
-
                 <span>
-
                     <b>CRM</b>
-                    <!-- Light Logo text -->
                 </span>
             </a>
 
         </div>
 
         
-        <!-- ============================================================== -->
-        <!-- End Logo -->
-        <!-- ============================================================== -->
         <div class="navbar-collapse">
-            <!-- ============================================================== -->
-            <!-- toggle and nav items -->
-            <!-- ============================================================== -->
             <ul class="navbar-nav mr-auto mt-md-0 ">
-                <!-- This is  -->
                 <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
                 <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="icon-arrow-left-circle"></i></a> </li>
-                <!-- ============================================================== -->
-                <!-- Comment -->
-                <!-- ============================================================== -->
-
             </ul>
-        <!-- {{--For recent Notice--}}
-
-        <marquee width="75%" style="color: white;">{{$recentNotice->msg}} <span style="color: green">-By {{$recentNotice->user->firstName}} -{{$recentNotice->created_at}}</span></marquee> -->
-        
-
-
 
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <a class="light-color" aria-current="page" href="{{route('home')}}">Dashboard</a>
@@ -129,8 +103,6 @@
                 <a class="light-color" href="{{route('verifylead')}}">Verify Lead</a>
                 <a class="light-color" href="{{route('addNightShift')}}">Add New Lead</a>
             </div>
-
-
 
             <ul class="navbar-nav my-lg-0">
 
@@ -150,10 +122,9 @@
 
 
                             <li role="separator" class="divider"></li>
-                            <li><a href="{{route('accountSetting')}}"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li><a href="{{route('accountSetting')}}"><i class="ti-settings"></i> Update Profile</a></li>
                             <li role="separator" class="divider"></li>
                             <li>
-
 
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
@@ -165,9 +136,6 @@
                                     {{ csrf_field() }}
                                 </form>
 
-
-
-
                             </li>
                         </ul>
                     </div>
@@ -178,6 +146,126 @@
 
 
         </div>
+        </div>
+    </nav>
+</header>
+
+ -->
+
+
+ <style>
+    
+    body {
+        padding-top: 50px; 
+    }
+    
+    .navbar {
+        background-color: #007bff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar.fixed-top {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .navbar-brand img {
+        width: 40px;
+        margin-right: 10px;
+    }
+
+    .navbar-brand span {
+        font-weight: bold;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        color: #ffffff;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover {
+        color: #f8f9fa;
+    }
+
+    .navbar-nav .nav-item.active .nav-link {
+        color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    .dropdown-menu .dropdown-item {
+        color: #343a40;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    .dropdown-menu .divider {
+        border-color: #f8f9fa;
+    }
+</style>
+
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light fixed-top">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{route('home')}}">
+                <img src="{{url('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" />
+                <span>CRM</span>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{route('home')}}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('reportTable')}}">Report</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('assignedLeads')}}">Assigned Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('follow-up.index')}}">Follow-ups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('contacted')}}">My Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('Mycontacted')}}">Contacted Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('filterLeads')}}">Filtered Leads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('verifylead')}}">Verify Lead</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('addNightShift')}}">Add New Lead</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Profile
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{{route('accountSetting')}}"><i class="ti-settings"></i> Update Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                            <i class="fa fa-power-off"></i>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
     </nav>
 </header>

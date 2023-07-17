@@ -167,14 +167,16 @@ class UserManagementController extends Controller
         return Redirect()->route('home');
     }
 
+
+    
     public function update(Request $request)
     {
         $user = User::findOrFail($request->id);
 		
-        $this->validateInput($request);
+        $this->validateInputNew($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'active', 'whitelist'];
+            'phoneNumber', 'dob', 'gender', 'active', 'whitelist', 'designationId'];
         $input = $this->createQueryInput($keys, $request);
 
         if ($request['password'] != null && strlen($request['password']) > 0) {
@@ -184,7 +186,7 @@ class UserManagementController extends Controller
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
-            $location = public_path('img/'.$filename);
+            $location = public_path('img/users/'.$filename);
             Image::make($img)->resize(200,200)->save($location);
             $input['picture'] = $filename;
 
@@ -194,10 +196,9 @@ class UserManagementController extends Controller
             ->update($input);
 
         Session::flash('message', 'Successfully user\'s info updated ');
+
         return redirect()->intended('/user-management');
     }
-
-
 
 
 
@@ -251,6 +252,23 @@ class UserManagementController extends Controller
         'dob' => 'max:10',
         'gender' => 'max:1',
         'active' => 'required|max:1'
+    ]);
+    }
+
+    private function validateInputNew ($request) {
+        $this->validate($request, [
+		'userId' => 'max:50',
+		'typeId' => 'max:11|numeric',
+		'userEmail' => 'required|email|max:45',
+        'password' => 'max:20|confirmed',
+        'firstName' => 'required|max:20',
+        'lastName' => 'required|max:20',
+        'rfID' => 'max:11',
+        'phoneNumber' => 'max:15',
+        'picture' => 'max:3000',
+        'dob' => 'max:10',
+        'gender' => 'max:1',
+        'active' => 'max:1'
     ]);
     }
 
@@ -461,100 +479,7 @@ class UserManagementController extends Controller
         return back();
     }
 
-
-    // public function getPossessedLeads (Request $r){
-    //     $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(leadId) as userOwnedLead'))
-    //     ->groupBy('contactedUserId')
-    //     ->get();
-    //     return Response($totalOwnedLeads);
-
-    // }
-
     
-
-    public function userProfile($id) {
-
-        $user_Type=Session::get('userType');
-		if( $user_Type== 'SUPERVISOR' || $user_Type== 'ADMIN'){
-
-            $user = User::find($id);
-
-            // Check if the user exists
-            // if (!$id) {
-            //     abort(404);
-            // }
-
-            // Check if the current user is authorized to view the profile
-            // if ($user_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
-            //     abort(404);
-            // }
-
-        }
-
-
-        return view('users-mgmt.userProfile')
-            ->with('user', $user)
-            // ->with('possibilities', $possibilities)
-            // ->with('probabilities', $probabilities)
-            // ->with('categories',$categories)
-            // ->with('status',$status)
-            // ->with('country',$country)
-            // ->with('latestUpdate',$latestUpdate)
-            // ->with('didTestWithUs',$didTestWithUs)
-            // ->with('allComments',$allComments)
-            // ->with('previousFollowups',$previousFollowups)
-            // ->with('latestFollowups',$latestFollowups)
-            // ->with('followupCounter',$followupCounter)
-
-            ;
-
-    }
-
-
-
-    public function updateUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        $this->validateInput($request);
-        // Upload image
-        $keys = ['userEmail', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
-        $input = $this->createQueryInput($keys, $request);
-
-        if ($request->file('picture')) {
-            $img = $request->file('picture');
-            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
-            $location = public_path('img/'.$filename);
-            Image::make($img)->resize(200,200)->save($location);
-            $input['picture'] = $filename;
-
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your profile is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
-
-
-    public function changePasswordUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        if ($request['password'] != null && strlen($request['password']) > 0) {
-            $constraints['password'] = 'required|min:6|confirmed';
-            $input['password'] =  bcrypt($request['password']);
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your password is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
-
 
 
     public function settings()
@@ -562,14 +487,14 @@ class UserManagementController extends Controller
         $user = Auth::user();
         $User_Type=Session::get('userType');
 
-		    if($User_Type=='MANAGER'){
-                $users = User::with('target')
-                    ->where('teamId',Auth::user()->teamId)
-                    ->get();
-            }else{
-                $users = User::with('target')
-                    ->get();
-            }
+		    // if($User_Type=='MANAGER'){
+            //     $users = User::with('target')
+            //         ->where('teamId',Auth::user()->teamId)
+            //         ->get();
+            // }else{
+            //     $users = User::with('target')
+            //         ->get();
+            // }
 
             $userTypes = Usertype::get();
 
@@ -577,6 +502,7 @@ class UserManagementController extends Controller
             ->with('user', $user)
             ->with('userTypes', $userTypes);
     }
+
 
 
 

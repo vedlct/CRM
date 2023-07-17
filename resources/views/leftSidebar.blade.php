@@ -370,7 +370,7 @@
 
                 <li role="separator" class="divider"></li>
                 <li><a href="{{route('accountSetting')}}">
-					<i class="ti-settings"></i>My Account</a></li>
+					<i class="ti-settings"></i>My Profile</a></li>
 
 				<li><a href="{{ route('logout') }}"
 				   onclick="event.preventDefault();

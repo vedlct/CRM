@@ -61,26 +61,9 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
 
-//USER PROFILE
-Route::get('user/{id}', 'UserManagementController@userProfile')->name('userProfile');
-Route::post('/updateUserEnd', 'UserManagementController@updateUserEnd')->name('updateUserEnd');
-Route::post('/changePasswordUserEnd', 'UserManagementController@changePasswordUserEnd')->name('changePasswordUserEnd');
-
 
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
-
-//FAQ Management
-Route::get('/faq', 'NoticeController@faqIndex')->name('faqIndex');
-Route::post('faq/create','NoticeController@faqCreate')->name('faqCreate');
-Route::put('/faq/update/{id}', 'NoticeController@faqUpdate')->name('faq.update');
-Route::post('faq/remove','NoticeController@faqRemove')->name('faqRemove');
-
-
-
-//Get All Possessed Leads and Set Bar
-// Route::post('user-management/possessedLeads','UserManagementController@getPossessedLeads')->name('getPossessedLeads');
-// Route::post('user-management/setBarForOwnedLeads','UserManagementController@setBarForOwnedLeads')->name('setBarForOwnedLeads');
 
 
 //Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
@@ -301,6 +284,13 @@ Route::post('/createPipeline', 'PipelineController@createPipeline')->name('creat
 Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
+
+
+//FAQ Management
+Route::get('/faq', 'NoticeController@faqIndex')->name('faqIndex');
+Route::post('faq/create','NoticeController@faqCreate')->name('faqCreate');
+Route::put('/faq/update/{id}', 'NoticeController@faqUpdate')->name('faq.update');
+Route::post('faq/remove','NoticeController@faqRemove')->name('faqRemove');
 
 
 //Lead Mining Routes
