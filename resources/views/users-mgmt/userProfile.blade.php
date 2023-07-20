@@ -32,19 +32,24 @@
 
 
                                 <p class="text-center">
-                                    <img src="{{ url('public/img/users/default.jpg') }}" alt="" class="img-fluid">
+                                    @if ($user->picture)
+                                        <img src="{{ asset('public/img/users/' . $user->picture) }}" alt="User Picture" class="img-fluid">
+                                    @else
+                                        <img src="{{ asset('public/img/users/default.jpg') }}" alt="User Picture" class="img-fluid">
+                                    @endif
                                 </p>
+                                <p class="">Status: @if ($user->active == 1) <span style="color: green;">Active</span> @else <span style="color: red;">Active</span>Inactive @endif</p>
                                 <p class="mb-1">Username: {{$user->userId}}</p>
                                 <p class="mb-1">First Name: {{$user->firstName}}</p>
                                 <p class="mb-1">Last Name: {{$user->lastName}}</p>
                                 <p class="mb-1">Designation: @if ($user->designation) {{$user->designation->designationName}} @endif</p>
-                                <p class="mb-1">Email: {{$user->userEmail}}</p>
                                 <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
                                 <p class="mb-1">Gender: @if ($user->gender == "M") Male @else Female @endif</p>
-                                <p class="">Status: @if ($user->active == 1) Active @else Inactive @endif</p>
+                                <p class="mb-1">DOB: {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
+                                <p class="mb-1">Email: {{$user->userEmail}}</p><br>
 
-                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-primary"
-                                       data-id="{{$user->id}}"
+                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info"
+                                data-id="{{$user->id}}"
                                        data-user-id="{{$user->userId}}"
                                        data-type-id="{{$user->typeId}}"
                                        data-rf-id="{{$user->rfID}}"
@@ -52,30 +57,15 @@
                                        data-password="{{$user->password}}"
                                        data-first-name="{{$user->firstName}}"
                                        data-last-name="{{$user->lastName}}"
+                                       data-designation-id="{{$user->designationId}}"
                                        data-phone-number="{{$user->phoneNumber}}"
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
                                        data-active="{{$user->active}}"
-                                       data-whitelist="{{$user->whitelist}}"
-                                        >Edit Profile</a>
-                               
+                                       data-whitelist="{{$user->whitelist}}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Edit Profile</a>
 
-                                @if($user_Type == 'ADMIN' || 'SUPERVISOR')
-                                <a href="#target_user_modal" data-toggle="modal" class="btn btn-info"
-                                       data-id="{{$user->id}}"
-                                       data-first-name="{{$user->userId}}"
-                                       data-target-call="{{$user->target['targetCall']}}"
-                                       data-target-high="{{$user->target['targetHighPossibility']}}"
-                                       data-target-lead="{{$user->target['targetLeadmine']}}"
-                                       data-target-contact="{{$user->target['targetContact']}}"
-                                       data-target-contactusa="{{$user->target['targetUsa']}}"
-                                       data-target-test="{{$user->target['targetTest']}}"
-                                       data-target-file="{{$user->target['targetFile']}}"
-                                       data-target-conversation="{{$user->target['conversation']}}"
-                                       data-target-closelead="{{$user->target['closelead']}}"
-                                       data-target-followup="{{$user->target['followup']}}"                                
-                                        >Set Target</a>
-                                @endif        
+
                             </div>
                         </div>
                     </div>
@@ -417,34 +407,321 @@
             <!-- container -->
         </div>
         <!-- content -->
+
+
+
+
+
+
+        
+
+            
+            <!-- Edit Modal -->
+            <div class="modal fade" id="edit_user_modal" >
+                <div class="modal-dialog" style="max-width: 60%;">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Update User's Info</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.update', ['id' => 1]) }}" enctype="multipart/form-data">
+                                <input type="hidden" name="_method" value="PUT">
+                                {{ csrf_field() }}
+                                <input id="id" type="hidden" class="form-control" name="id"  >
+                                <input id="typeId" type="hidden" class="form-control" name="typeId"  >
+                                <input id="userId" type="hidden" class="form-control" name="userId"  >
+                                <input id="rfID" type="hidden" class="form-control" name="rfID"  >
+                                <input id="active" type="hidden" class="form-control" name="active"  >
+                                <input id="whitelist" type="hidden" class="form-control" name="whitelist"  >
+
+                                <div class="row">
+<!-- 
+                                <div class="form-group col-md-4">
+                                        <label for="typeId">User Type:</label>
+                                        <select id="typeId"  name="typeId" class="form-control form-control-warning">
+
+                                            @foreach ($userTypes as $userType)
+                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
+                                            @endforeach
+                                        </select>
+
+                                        @if ($errors->has('typeId'))
+                                            <span class="help-block">
+				                				<strong>{{ $errors->first('typeId') }}</strong>
+                							</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="userId">User Id:</label>
+                                        <input id="userId" type="text" class="form-control" name="userId">
+                                        @if ($errors->has('userId'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('userId') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="rfID">RF Id:</label>
+                                        <input id="rfID" type="number" class="form-control" name="rfID">
+
+                                        @if ($errors->has('rfID'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('rfID') }}</strong>
+										</span>
+                                        @endif
+                                    </div> -->
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="firstName">First Name:</label>
+
+                                        <input id="firstName" type="text" class="form-control" name="firstName" required>
+
+                                        @if ($errors->has('firstName'))
+                                            <span class="help-block">
+												<strong>{{ $errors->first('firstName') }}</strong>
+											</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="lastName">Last Name:</label>
+                                        <input id="lastName" type="text" class="form-control" name="lastName" required>
+
+                                        @if ($errors->has('lastName'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('lastName') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="designationId">Designation:</label>
+                                        <select id="designationId" name="designationId" class="form-control form-control-warning">
+                                            <option value="">Select Designation</option>
+                                            <option value="105" {{ old('designationId') == 105 ? 'selected' : '' }}>Managing Director</option>
+                                            <option value="142" {{ old('designationId') == 142 ? 'selected' : '' }}>Senior Manager</option>
+                                            <option value="98" {{ old('designationId') == 98 ? 'selected' : '' }}>HR Manager</option>
+                                            <option value="104" {{ old('designationId') == 105 ? 'selected' : '' }}>Manager</option>
+                                            <option value="18" {{ old('designationId') == 142 ? 'selected' : '' }}>Deputy Manager</option>
+                                            <option value="2" {{ old('designationId') == 98 ? 'selected' : '' }}>Assistant Manager</option>
+                                            <option value="141" {{ old('designationId') == 105 ? 'selected' : '' }}>Senior Executive</option>
+                                            <option value="43" {{ old('designationId') == 142 ? 'selected' : '' }}>Executive</option>
+                                            <option value="103" {{ old('designationId') == 98 ? 'selected' : '' }}>Junior Executive</option>
+                                            <option value="153" {{ old('designationId') == 105 ? 'selected' : '' }}>Trainee Executive</option>
+                                            <option value="100" {{ old('designationId') == 142 ? 'selected' : '' }}>Intern</option>
+                                        </select>
+                                        @if ($errors->has('designationId'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('designationId') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+
+
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="userEmail">Email:</label>
+                                        <input id="userEmail" type="email" class="form-control" name="userEmail" required>
+
+                                        @if ($errors->has('userEmail'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('userEmail') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="phoneNumber">Phone Number:</label>
+                                        <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
+                                        @if ($errors->has('phoneNumber'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('phoneNumber') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="dob">Date Of Birth:</label>
+                                        <input id="dob" type="text" class="form-control" name="dob">
+                                        @if ($errors->has('dob'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('dob') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="gender">Gender:</label>
+                                        <select id="gender" name="gender" class="form-control form-control-warning">
+
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+
+                                        </select>
+                                        @if ($errors->has('gender'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('gender') }}</strong>
+										</span>
+                                        @endif
+
+                                    </div>
+
+                                    <div class="form-group col-md-8">
+                                        <label for="picture">Picture:</label>
+                                        <input id="picture" type="file" class="form-control" name="picture">
+                                        @if ($errors->has('picture'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('picture') }}</strong>
+										</span>
+                                        @endif
+
+                                    </div>
+
+
+                                    <!-- <div class="form-group col-md-4">
+                                        <label for="active">Status:</label>
+
+                                        <select id="active" name="active" class="form-control form-control-warning">
+
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label for="active">Whitelist:</label>
+
+                                        <select id="whitelist" name="whitelist" class="form-control form-control-warning">
+
+                                            <option value="0">Black</option>
+                                            <option value="1">white</option>
+                                        </select>
+
+                                    </div> -->
+
+                                    <div class="form-group col-md-6">
+                                        <label for="password">Password (min 6 characters):</label>
+                                        <input id="password" type="password" class="form-control" name="password">
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="password-confirm">Repeat Password:</label>
+                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                    </div>
+
+
+
+                                    <div class="form-group col-md-4">
+                                        <button type="submit" class="btn btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
 @endsection
 
-@section('footer.js')
 
-<script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+@section('foot-js')
+    <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+    <script>
+
+        
+
+        $(function() {
+            $('#dob').datepicker({
+                dateFormat: 'yy-mm-dd', // Format the date as 'yyyy-mm-dd'
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0" 
+            });
+        });
 
 
-<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+        //for Edit modal
 
-<script src="{{url('js/jconfirm.js')}}"></script>
+        $('#edit_user_modal').on('show.bs.modal', function(e) {
 
-<meta name="csrf-token" content="{{ csrf_token() }}" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            //get data-id attribute of the clicked element
+            var id = $(e.relatedTarget).data('id');
+            var userId = $(e.relatedTarget).data('user-id');
+            var typeId = $(e.relatedTarget).data('type-id');
+            var rfID = $(e.relatedTarget).data('rf-id');
+            var userEmail = $(e.relatedTarget).data('user-email');
+            //var password = $(e.relatedTarget).data('password');
+            var firstName = $(e.relatedTarget).data('first-name');
+            var lastName = $(e.relatedTarget).data('last-name');
+            var phoneNumber = $(e.relatedTarget).data('phone-number');
+            var dob = $(e.relatedTarget).data('dob');
+            var gender = $(e.relatedTarget).data('gender');
+            var active = $(e.relatedTarget).data('active');
+            var whitelist = $(e.relatedTarget).data('whitelist');
+            var designationId = $(e.relatedTarget).data('designation-id');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            //alert(userId);
+            //populate the textbox
+            $(e.currentTarget).find('#id').val(id);
+            $(e.currentTarget).find('#userId').val(userId);
+            $(e.currentTarget).find('#typeId').val(typeId);
+            $(e.currentTarget).find('#rfID').val(rfID);
+            $(e.currentTarget).find('#userEmail').val(userEmail);
+            //$(e.currentTarget).find('#password').val(password);
+            $(e.currentTarget).find('#firstName').val(firstName);
+            $(e.currentTarget).find('#lastName').val(lastName);
+            $(e.currentTarget).find('#phoneNumber').val(phoneNumber);
+            $(e.currentTarget).find('#dob').val(dob);
+            $(e.currentTarget).find('#gender').val(gender);
+            $(e.currentTarget).find('#active').val(active);
+            $(e.currentTarget).find('#whitelist').val(whitelist);
+            $(e.currentTarget).find('#designationId').val(designationId);
 
-<script>
-    //CHANGE THE TABS 
-
-    var reportTabLink = document.getElementById('report-tab');
-    var tab = new bootstrap.Tab(reportTabLink);
-    tab.show();
+        });
 
 
 
 </script>
+
 
 @endsection

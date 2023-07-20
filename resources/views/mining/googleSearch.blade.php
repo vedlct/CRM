@@ -49,6 +49,7 @@
 
         </div>
 
+
         <div class="card" style="padding-top:50px;">
         </div>
 
@@ -94,10 +95,14 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+                </div>
         @else
             <p>No results found.</p>
         @endif
+            </div>
+            </div>
+
+
 
 
 

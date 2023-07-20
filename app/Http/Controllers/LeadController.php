@@ -1441,6 +1441,13 @@ class LeadController extends Controller
             $leadAssigned->workStatus=1;
             $leadAssigned->save();
         }
+
+        $existingFollowup = Followup::where('leadId', $r->leadId)->exists();
+
+        if ($existingFollowup) {
+            Followup::where('leadId', $r->leadId)->update(['workStatus' => 1]);
+        }
+
         if($r->followup !=null){
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
@@ -2068,7 +2075,14 @@ class LeadController extends Controller
             $pipeline->workStatus = 0;
             $pipeline->save();
         }
-        
+
+        $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
+
+        foreach ($followups as $followup) {
+            $followup->workStatus = 1;
+            $followup->save();
+        }
+
 
         if($r->Status==6){
             $newFile=new NewFile();

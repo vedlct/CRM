@@ -1224,25 +1224,76 @@ class AnalysisController extends Controller
                     return view('mining.googleSearch')->with('searchTerm', $searchTerm);
                 }
     
-                $excludedKeywords = ExcludeKeywords::pluck('keyword')->toArray();
+                // $excludedKeywords = ExcludeKeywords::pluck('designationName')->toArray();
                 
+                // $excludedQuery = '';
+                // foreach ($excludedKeywords as $keyword) {
+                //     $excludedQuery .= ' -' . $keyword;
+                // }
+            
+
+                // Array of excluded keywords
+                $excludedKeywords = [
+                    'soundcloud', 'medium', 'nytimes', 'yelp', 'facebook', 'pinterest', 'instagram', 'wikipedia',
+                    'walmart', 'nike', 'next', 'quora', 'reddit', 'Louis Vuitton', 'Gucci', 'Chanel', 'Adidas',
+                    'Hermès', 'Zara', 'H&M', 'Cartier', 'uniqlo', 'gap', 'amazon', 'schiesser', 'wolfordshop',
+                    'jbc', 'lolaliza', 'xandres', 'mayerline', 'essentiel-antwerp', 'bellerose', 'zeb', 'riverwoods',
+                    'belloya', 'terrebleue', 'vila', 'pieces', 'noisymay', 'selected', 'only', 'veromoda', 'jackjones',
+                    'mamalicious', 'mosscopenhagen', 'masai', 'parttwo', 'samsoe', 'baumundpferdgarten', 'gestuz',
+                    'marimekko', 'lindex', 'ivanahelsinki', 'aboutyou', 'zalando', 'edited', 'mango', 'reserved',
+                    'pimkie', 'asos', 'bershka', 'pullandbear', 'weekday', 'monki', 'stories', 'bonprix', 'veromoda',
+                    'esprit', 'orsay', 'newyorker', 'snipes', 'engelhorn', 'soliver', 'cecil', 'gerryweber',
+                    'vanlaack', 'richandroyal', 'zero', 'oneills', 'ovs', 'calzedonia', 'tezenis', 'carpisa',
+                    'alcott', 'motivi', 'stradivarius', 'bershka', 'pullandbear', 'benetton', 'liujo', 'sisley',
+                    'calliope', 'intimissimi', 'yamamay', 'goldenpoint', 'subdued', 'freddy', 'terranovastyle',
+                    'steps', 'shoeby', 'msmode', 'riverisland', 'veromoda', 'jackjones', 'only', 'promiss',
+                    'expresso', 'costesfashion', 'sandwichfashion', 'claudiastrater', 'wefashion', 'paprika',
+                    'reserved', 'mohito', 'housebrand', 'cropp', 'desigual', 'spf', 'bershka', 'pullandbear',
+                    'stradivarius', 'mango', 'adolfodominguez', 'amichi', 'womensecret', 'scalpers', 'tendam',
+                    'pullandbear', 'bimbaylola', 'oysho', 'uterque', 'ginatricot', 'weekday', 'monki', 'stories',
+                    'lindex', 'cubus', 'kappahl', 'oddmolly', 'acnestudios', 'jlindeberg', 'nudiejeans', 'bjornborg',
+                    'missyempire', 'inthestyle', 'isawitfirst', 'rebelliousfashion', 'femmeluxefinery', 'nastygal',
+                    'ohpolly', 'silkfred', 'pinkboutique', 'selectfashion', 'isawitfirst', 'romanoriginals',
+                    'littlewoods', 'chichiclothing', 'goddiva', 'wantthattrend', 'foreverunique', 'rarelondon',
+                    'nobodyschild', 'axparis', 'apricotonline', 'school', 'college', 'varsity', 'education', 'government',
+                    'statista', 'similarweb', 'diesel', 'dior', 'hugoboss', 'moncler', 'ray-ban', 'jewelry', 'Jewellery',
+                    'USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 
+                    'Ghana', 'South Africa', 'New York', 'Massachusetts', 'Washington', 'California', 'North Dakota', 
+                    'Connecticut', 'Delaware', 'Alaska', 'Nebraska', 'Illinois', 'Florida', 'linkedin', 'article', 'blog',
+                    'course', 'hospital', 'medicine', 'porn', 'tiktok'
+
+                ];
+
+                // Convert the excluded keywords array into a string
                 $excludedQuery = '';
                 foreach ($excludedKeywords as $keyword) {
                     $excludedQuery .= ' -' . $keyword;
                 }
-            
-                $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
-    
-                $excludedRegionsQuery = '';
-                foreach ($excludedRegions as $region) {
-                    $excludedRegionsQuery .= ' -site:' . $region . '.*';
+
+                // $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 
+                // 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL'];
+                // $excludedRegionsQuery = '';
+                // foreach ($excludedRegions as $region) {
+                //     $excludedRegionsQuery .= ' -site:' . $region . '.*';
+                // }
+              
+
+                // Add excluded file types
+                $excludedFileTypes = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
+                $excludedFileTypesQuery = '';
+                foreach ($excludedFileTypes as $fileType) {
+                    $excludedFileTypesQuery .= ' -filetype:' . $fileType;
                 }
-            
+
+                // Build the full search query
+                // $fullSearchQuery = $searchTerm . ' ' . $country . $excludedQuery . $excludedRegionsQuery . $excludedFileTypesQuery;
                 $searchTerm = $searchTerm . ' ' . $country; 
-    
+                $fullSearchQuery = $searchTerm . $excludedQuery . $excludedFileTypesQuery;
+
+
                 $results = [];
     
-                for ($start = 1; $start <= 40; $start += 10) {
+                for ($start = 1; $start <= 50; $start += 10) {
                     $parameters = [
                         'start' => $start,
                         'num' => 10,
@@ -1251,7 +1302,13 @@ class AnalysisController extends Controller
                     $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
                     $fulltext->setEngineId($engineKey); // gets the engine ID
                     $fulltext->setApiKey($apiKey); // gets the API key
-                    $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
+
+                    // Modify the search query to include excluded keywords, regions, and file types
+                    // $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery . $excludedFileTypesQuery, $parameters);
+
+                    $partialResults = $fulltext->getResults($fullSearchQuery, $parameters);
+
+                    // $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
     
                     // Extract the domain from each search result URL
                     foreach ($partialResults as $result) {
@@ -1263,6 +1320,7 @@ class AnalysisController extends Controller
     
                 return view('mining.googleSearch')
                     ->with('results', $results)
+                    ->with('fullSearchQuery', $fullSearchQuery)
                     ->with('searchTerm', $searchTerm);
                 }
             

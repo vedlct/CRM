@@ -76,7 +76,7 @@
 
 
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Status:</b></label>
@@ -91,7 +91,7 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-4">
+            <!-- <div class="form-group col-md-4">
 
                 <label ><b>Set Pipeline:</b></label>
                 <select class="form-control"  name="stage" id="setpipeline" style="width: 30%">
@@ -104,10 +104,10 @@
                     <option value="Lost">Lost the Deal</option>
 
                 </select>
-            </div>
+            </div> -->
 
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
 
                 <label ><b>Assign To:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 40%">
@@ -546,39 +546,38 @@
         });
 
 
-        $("#setpipeline").change(function() {
+        // $("#setpipeline").change(function() {
 
-        var chkArray = [];
-        var stage=$(this).val();
-        $('.checkboxvar:checked').each(function (i) {
+        // var chkArray = [];
+        // var stage=$(this).val();
+        // $('.checkboxvar:checked').each(function (i) {
 
-            chkArray[i] = $(this).val();
-        });
-        //alert(chkArray)
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        jQuery('input:checkbox:checked').parents("tr").remove();
-        $(this).prop('selectedIndex',0);
+        //     chkArray[i] = $(this).val();
+        // });
+        // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // jQuery('input:checkbox:checked').parents("tr").remove();
+        // $(this).prop('selectedIndex',0);
 
 
-        $.ajax({
-            type : 'post' ,
-            url : '{{route('assignToPipeline')}}',
-            data : {_token: CSRF_TOKEN,'leadId':chkArray,'stage':stage} ,
-            beforeSend:function(){
-            return confirm("Are you sure?");
-            },
-            success : function(data){
-                console.log(data);
-                if(data == 'true'){
-                    $('#alert').html(' <strong>Success!</strong> Sales Pipeline Set');
-                    $('#alert').show();
+        // $.ajax({
+        //     type : 'post' ,
+        //     url : '{{route('assignToPipeline')}}',
+        //     data : {_token: CSRF_TOKEN,'leadId':chkArray,'stage':stage} ,
+        //     beforeSend:function(){
+        //     return confirm("Are you sure?");
+        //     },
+        //     success : function(data){
+        //         console.log(data);
+        //         if(data == 'true'){
+        //             $('#alert').html(' <strong>Success!</strong> Sales Pipeline Set');
+        //             $('#alert').show();
 
-                }
+        //         }
 
-            }
-        });
+        //     }
+        // });
 
-        });
+        // });
 
 
         //for Edit modal

@@ -104,12 +104,15 @@
 										 data-lead-comments="{{$lead->comments}}"
 
 									  >
-										  <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-									  <!-- Trigger the Statistics modal with a button -->
-									  <a href="#stat_modal" data-toggle="modal" class="btn btn-dark btn-sm"
-										 data-lead-id="{{$lead->leadId}}"
-										 data-follow-id="{{$lead->followId}}">
-										  <i class="fa fa-square-o" aria-hidden="true"></i></a>
+										<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+										<a href="#stat_modal" data-toggle="modal" class="btn btn-dark btn-sm"
+											data-lead-id="{{$lead->leadId}}"
+											data-follow-id="{{$lead->followId}}">
+										<i class="fa fa-square-o" aria-hidden="true"></i></a>
+
+										<a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="{{$lead->leadId}}">
+										<i class="fa fa-eye"></i></a>
 
 								  </td>
 							  </tr>
@@ -841,6 +844,15 @@
 
         });
 
+
+		$(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
 
 
         $('#stat_modal').on('show.bs.modal', function(e) {

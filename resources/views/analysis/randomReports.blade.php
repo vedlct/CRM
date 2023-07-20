@@ -23,10 +23,10 @@
     <div class="row mainrow">
         <div class="col-md-12">
             <h1 class="text-center mb-4" style="padding: 30px 0 0 0;">Random Reports </h1>
-            <h4 class="text-center mb-4" style="padding: -20px 0 30px 0;">Since January 1st, 2023 </h4>
+            <h4 class="text-center mb-4" style="padding: -20px 0 30px 0;">Since January 1st, 2023 | All Data is 6 Hours Old </h4>
 
                 <div class="card"  style="padding: 40px;">
-                <h3 class="card-title" align="center">My Weekly, Monthly and Yearly Comparison</h3>
+                <!-- <h3 class="card-title" align="center">My Weekly, Monthly and Yearly Comparison</h3> -->
 
                     <div class="table-responsive m-t-40">
 
