@@ -19,7 +19,7 @@
             @if($userType =='ADMIN')
             <a href="#admin_create_temp_modal" title="Client!" data-toggle="modal" class="btn btn-success btn-md" style="border-radius: 50%; float: right; margin-right: 10px;"><i class="fa fa-plus"></i></a>
             @endif
-            <h2 class="card-title" align="center"><b>All Leads</b></h2>
+            <h2 align="center"><b>All Leads</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

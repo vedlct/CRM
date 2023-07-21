@@ -9,7 +9,7 @@
 				<h2 align="center"><b>Communication</b></h2>
 
 				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-info btn-sm">Add Communiction</a>
+					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
 
 				@endif
 
@@ -31,7 +31,7 @@
 					@if ($notice->categoryName == 'Regular Notice')
 						<div class="card">
 					@elseif ($notice->categoryName == 'Urgent Notice')	
-						<div class="card text-white bg-danger">
+						<div class="card text-white bg-success">
 					@endif
 		
 					<div class="card-body">
@@ -45,7 +45,7 @@
 
 
 								@if($userType == 'ADMIN' || $userType == 'MANAGER' || $userType == 'SUPERVISOR')
-									<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-info btn-sm"
+									<a href="#edit_notice_modal" data-toggle="modal" class="btn btn-custom btn-sm"
 										data-notice-id="{{$notice->noticeId}}"
 										data-notice-title="{{$notice->title}}"
 										data-notice-msg="{{$notice->msg}}"
@@ -139,11 +139,11 @@
 							Create
 						</button>
 					</div>
-				</div>
+				</div><br>
 
-				<div class="modal-footer">
+				<!-- <div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+				</div> -->
 
 			</form>
 		</div>
@@ -221,11 +221,11 @@
 
 				<div class="col-md-12" align="center">
 					<button class="btn btn-success" type="submit">Update</button></br>
-				</div>
+				</div><br>
 
-				<div class="modal-footer">
+				<!-- <div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
+				</div> -->
 			</form>
 		</div>
 	</div>
@@ -239,11 +239,16 @@
 
 @section('foot-js')
 	<script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+	<!-- <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
 	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+	<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script> -->
 	<!-- <script src="gen_validatorv4.js" type="text/javascript"></script> -->
 
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+
+
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
 
 
 

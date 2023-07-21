@@ -9,12 +9,12 @@
     @php($user_Type = Session::get('userType'))
 
 
-    <div class="content-page">
+    <div class="content-page" >
         <div class="content">
             <!-- Start Content-->
             <div class="container-fluid">
                 <!-- start page title -->
-                <div class="row">
+                <div class="row" >
                     <div class="col-12">
                         <div class="page-title-box">
                             <!-- <h4 class="page-title">User details</h4> -->
@@ -24,31 +24,39 @@
                 <!-- end page title -->
 
                 <!-- table start -->
-                <div class="row">
+                <div class="row" style="margin-top: 20px;">
                     <!-- user details -->
-                    <div class="col-sm-4 col-xl-2">
+                    <div class="col-sm-4 col-xl-3">
                         <div class="card">
                             <div class="card-body">
 
 
                                 <p class="text-center">
-                                    @if ($user->picture)
-                                        <img src="{{ asset('public/img/users/' . $user->picture) }}" alt="User Picture" class="img-fluid">
+                                    @if (!empty($user->picture))
+                                        <img src="{{ asset('public/img/users/' . $user->picture) }}" alt="User Picture" class="img-fluid" style="margin-top: 10px;">
                                     @else
-                                        <img src="{{ asset('public/img/users/default.jpg') }}" alt="User Picture" class="img-fluid">
+                                        <img src="{{ asset('public/img/users/' . 'default.jpg') }}" alt="User Picture" class="img-fluid" style="margin-top: 10px;">
                                     @endif
                                 </p>
-                                <p class="">Status: @if ($user->active == 1) <span style="color: green;">Active</span> @else <span style="color: red;">Active</span>Inactive @endif</p>
-                                <p class="mb-1">Username: {{$user->userId}}</p>
-                                <p class="mb-1">First Name: {{$user->firstName}}</p>
-                                <p class="mb-1">Last Name: {{$user->lastName}}</p>
-                                <p class="mb-1">Designation: @if ($user->designation) {{$user->designation->designationName}} @endif</p>
-                                <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
-                                <p class="mb-1">Gender: @if ($user->gender == "M") Male @else Female @endif</p>
-                                <p class="mb-1">DOB: {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
-                                <p class="mb-1">Email: {{$user->userEmail}}</p><br>
+                                <p class=""><span style="font-weight:400">Status:</span> 
+                                  @if ($user->active == 1) <span style="color: green;">Active</span> @else <span style="color: red;">Active</span>Inactive @endif</p>
+                                <p class="mb-1"><span style="font-weight:400">Username: </span>
+                                    {{$user->userId}}</p>
+                                <p class="mb-1"><span style="font-weight:400">Full Name: </span>
+                                    {{$user->firstName}} {{$user->lastName}}</p>
+                                <!-- <p class="mb-1">Last Name: </p> -->
+                                <p class="mb-1"><span style="font-weight:400">Designation: </span>
+                                    @if ($user->designation) {{$user->designation->designationName}} @endif</p>
+                                <p class="mb-1"><span style="font-weight:400">Phone: </span>
+                                    {{$user->phoneNumber}}</p>
+                                <p class="mb-1"><span style="font-weight:400">Gender: </span>
+                                    @if ($user->gender == "M") Male @else Female @endif</p>
+                                <p class="mb-1"><span style="font-weight:400">DOB: </span>
+                                    {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
+                                <p class="mb-1"><span style="font-weight:400">Email: </span>
+                                    {{$user->userEmail}}</p><br>
 
-                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info"
+                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-custom"
                                 data-id="{{$user->id}}"
                                        data-user-id="{{$user->userId}}"
                                        data-type-id="{{$user->typeId}}"
@@ -63,7 +71,7 @@
                                        data-gender="{{$user->gender}}"
                                        data-active="{{$user->active}}"
                                        data-whitelist="{{$user->whitelist}}">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Edit Profile</a>
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Update Profile</a>
 
 
                             </div>
@@ -71,7 +79,7 @@
                     </div>
 
                     <!-- user report and others -->
-                    <div class="col-sm-8 col-xl-10">
+                    <div class="col-sm-8 col-xl-9">
                         <div class="card">
                             <div class="card-body">
                                 <ul class="nav nav-tabs border-tab mb-0" id="top-tab" role="tablist">
@@ -256,6 +264,8 @@
                                                 </div>
                                                 <!-- end card-->
                                             </div>
+
+
                                             <div class="col-12">
                                                 <h4 class="header-title mb-3">December, 2022</h4>
                                                 <div class="table-responsive">
@@ -263,11 +273,13 @@
                                                         <thead class="table-primary">
                                                         <tr>
                                                             <th></th>
-                                                            <th>Total call</th>
-                                                            <th>Contact</th>
-                                                            <th>Lead</th>
+                                                            <th>Conversation</th>
+                                                            <th>Total Call</th>
                                                             <th>Followup</th>
                                                             <th>Test</th>
+                                                            <th>Closed Deal</th>
+                                                            <th>Lead Mine</th>
+                                                            <th>Revenue</th>
                                                         </tr>
                                                         </thead>
 
@@ -279,6 +291,8 @@
                                                             <td>566</td>
                                                             <td>34</td>
                                                             <td>43</td>
+                                                            <td>43</td>
+                                                            <td>43</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Achievement</th>
@@ -287,6 +301,8 @@
                                                             <td>566</td>
                                                             <td>34</td>
                                                             <td>43</td>
+                                                            <td>43</td>
+                                                            <td>43</td>
                                                         </tr>
                                                         <tr>
                                                             <th>%</th>
@@ -294,13 +310,16 @@
                                                             <td>33%</td>
                                                             <td>86%</td>
                                                             <td>42%</td>
+                                                            <td>43</td>
+                                                            <td>43</td>
                                                             <td>89%</td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="col-12">
+
+                                            <!-- <div class="col-12">
                                                 <h4 class="header-title mb-3">January, 2022</h4>
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered">
@@ -343,7 +362,8 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-                                            </div>
+                                            </div> -->
+
                                         </div>
                                     </div>
                                     <!-- notes tab -->
@@ -417,7 +437,7 @@
 
             
             <!-- Edit Modal -->
-            <div class="modal fade" id="edit_user_modal" >
+            <div class="modal" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 

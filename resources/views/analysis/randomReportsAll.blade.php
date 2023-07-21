@@ -6,8 +6,8 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Random Report Table</b></h2>
-            <h4 class="card-subtitle" align="center">Comparison Table: how many calls lead to Test or how many conversations lead to teast and so on</h4> 
+            <h2  align="center"><b>Random Report Table</b></h2>
+            <h5 class="card-subtitle" align="center">Comparison Table: how many calls lead to Test or how many conversations lead to teast and so on</h5> 
 
                 <div class="table-responsive m-t-40">
 

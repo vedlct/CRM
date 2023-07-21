@@ -6,7 +6,7 @@
 
     <div class="card" style="padding:30px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Search Keywords on Google</b></h2>
+        <h2 align="center"><b>Search Keywords on Google</b></h2>
         <p class="card-subtitle" align="center">Try to use long tail with country and city so that you get good leads </p>
 
         <div class="card-body" >

@@ -8,11 +8,11 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Long Time No Update</b></h2>
+        <h2  align="center"><b>Long Time No Update</b></h2>
         @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
-            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 6 months or more but in My Lead. </b></h4>
+            <h5 class="card-subtitle" align="center">List of leads that are not touched in last 6 months or more but in My Lead. </h5>
         @else
-            <h4 class="card-subtitle" align="center"><b>List of leads that are not touched in last 3 months or more but in My Lead. </b></h4>
+            <h5 class="card-subtitle" align="center">List of leads that are not touched in last 3 months or more but in My Lead. </h5>
         @endif
 
             <div class="col-md-5" style="float:left;">

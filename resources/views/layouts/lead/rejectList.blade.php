@@ -11,7 +11,7 @@
         <div class="card-body">
 
 
-                <h2 class="card-title" align="center"><b>Your Rejected Leads</b></h2>
+                <h2  align="center"><b>Your Rejected Leads</b></h2>
 
 
 

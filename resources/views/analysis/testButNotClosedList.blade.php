@@ -7,8 +7,8 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Received Test But Not Closed List</b></h2>
-        <h2 class="card-subtitle" align="center">We received the tests from these companies but we were unable to close them.</h2>
+        <h2 align="center"><b>Received Test But Not Closed List</b></h2>
+        <p class="card-subtitle" align="center">We received the tests from these companies but we were unable to close them.</p>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

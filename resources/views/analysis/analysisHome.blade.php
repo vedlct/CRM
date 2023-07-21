@@ -44,7 +44,7 @@
               <h4 class="card-title">Sales Pipeline</h4>
               <p class="card-text">Where leads go on an adventure, battling objections, jumping through hoops, and finally emerging as victorious customers. Ready to conquer?</p>
               <p class="card-text"><small class="text-muted">Important: please check frequently</small></p>
-              <a href="{{route('salesPipeline')}}" target="_blank" class="btn btn-info">Visit Pipeline</a>
+              <a href="{{route('salesPipeline')}}" target="_blank" class="btn btn-custom">Visit Pipeline</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -67,7 +67,7 @@
               <h4 class="card-title">Test But Not Closed</h4>
               <p class="card-text">Where do the other 80% of tests go? Join the search party as we unravel the mystery of the disappearing acts in the world of closures</p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('getTestButNotClosedList')}}" target="_blank" class="btn btn-info">See The List</a>
+              <a href="{{route('getTestButNotClosedList')}}" target="_blank" class="btn btn-custom">See The List</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -90,7 +90,7 @@
               <h4 class="card-title">Long Time No Call</h4>
               <p class="card-text">Missed follow-ups and untouched leads? Don't worry, we've got your back. Get insights into the neglected opportunities and follow-up fails </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('getLongTimeNoCall')}}" target="_blank" class="btn btn-info">Get Me There</a>
+              <a href="{{route('getLongTimeNoCall')}}" target="_blank" class="btn btn-custom">Get Me There</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -111,7 +111,7 @@
             <div class="card-body">
               <h4 class="card-title">Analysis Comments</h4>
               <p class="card-text">Unlock hidden conversations and lead details with ease. Find specific call reports and uncover interesting discussions, like those mentioning 'outsourcing'</p>
-              <a href="{{route('analysisComments')}}" target="_blank" class="btn btn-info">Let's Analyze</a>
+              <a href="{{route('analysisComments')}}" target="_blank" class="btn btn-custom">Let's Analyze</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -137,7 +137,7 @@
             <div class="card-body">
               <h4 class="card-title">All Conversations</h4>
               <p class="card-text">Curious about the successful long pitches? Feast your eyes on the list of companies we've impressed with our charm and marketing prowess.</p>
-              <a href="{{route('getallConversations')}}" target="_blank" class="btn btn-info">Find Conversations</a>
+              <a href="{{route('getallConversations')}}" target="_blank" class="btn btn-custom">Find Conversations</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -158,7 +158,7 @@
             <div class="card-body">
               <h4 class="card-title">Maximum Chasing</h4>
               <p class="card-text">How persistent are we in chasing our prospects? Discover the companies that have witnessed our unwavering pursuit, with at least 10 attempts or more</p>
-              <a href="{{route('getAllChasingLeads')}}" target="_blank" class="btn btn-info">Explore The List</a>
+              <a href="{{route('getAllChasingLeads')}}" target="_blank" class="btn btn-custom">Explore The List</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -179,7 +179,7 @@
             <div class="card-body">
               <h4 class="card-title">Ideal Prospect Profile</h4>
               <p class="card-text">Explore the Ideal Prospect Profile (IPP) list, revealing the companies our marketers consider perfect for pursuit based on their conversations with KDMs</p>
-              <a href="{{route('ippList')}}" target="_blank" class="btn btn-info">Get IPP List</a>
+              <a href="{{route('ippList')}}" target="_blank" class="btn btn-custom">Get IPP List</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -200,7 +200,7 @@
             <div class="card-body">
               <h4 class="card-title">Assigned But Not Taken</h4>
               <p class="card-text">Lost leads alert! We've spotted some unclaimed assignments. Help us reunite the assigned leads with their rightful marketers in the My Lead section</p>
-              <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-info">Browse The List</a>
+              <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -226,7 +226,7 @@
             <div class="card-body">
               <h4 class="card-title">Frequently Filtered</h4>
               <p class="card-text">Quick filters, quick decisions. Find out why some leads are swiftly filtered after mining. Unveil the reasons behind the rapid selection process</p>
-              <a href="{{route('frequentlyFilteredLeads')}}" target="_blank" class="btn btn-info">Analyze Recently Filtered</a>
+              <a href="{{route('frequentlyFilteredLeads')}}" target="_blank" class="btn btn-custom">Analyze Recently Filtered</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -247,7 +247,7 @@
             <div class="card-body">
               <h4 class="card-title">Duplicacy or Conspiracy!</h4>
               <p class="card-text">Double trouble or mere coincidence? Dive into the intriguing world of duplicate leads marked by our marketers. Is it a part of a master plan?</p>
-              <a href="{{route('getDuplicateLeads')}}" target="_blank" class="btn btn-info">Duplicate Leads</a>
+              <a href="{{route('getDuplicateLeads')}}" target="_blank" class="btn btn-custom">Duplicate Leads</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -269,7 +269,7 @@
             <div class="card-body">
               <h4 class="card-title">Fred's Leads</h4>
               <p class="card-text">Fred chased these leads in his tenure with Tech Cloud. Now, some leads are already assigned to the marketers, some are not. </p>
-              <a href="{{route('getFredChasingLeads')}}" target="_blank" class="btn btn-info">Get Fred</a>
+              <a href="{{route('getFredChasingLeads')}}" target="_blank" class="btn btn-custom">Get Fred</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -292,7 +292,7 @@
               <h4 class="card-title">All Activities</h4>
               <p class="card-text">Step into the realm of marketers' daily CRM adventures. From mining to updating and everything in between, this is where their magic happens </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('reportAllActivities')}}" target="_blank" class="btn btn-info">See Activities</a>
+              <a href="{{route('reportAllActivities')}}" target="_blank" class="btn btn-custom">See Activities</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -319,7 +319,7 @@
               <h4 class="card-title">Random Reports</h4>
               <p class="card-text">Produce random reports based on your previous records like Call to Contact and Conversation to Test. </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('randomReports')}}" target="_blank" class="btn btn-info">Generate It</a>
+              <a href="{{route('randomReports')}}" target="_blank" class="btn btn-custom">Generate It</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -340,7 +340,7 @@
             <div class="card-body">
               <h4 class="card-title">Random Reports All</h4>
               <p class="card-text">This is a tool for Admin and Supervisors to see the reports of all users in a table. They can check the Total Calls, Contacts, Conversations, Tests and the ratios. </p>
-              <a href="{{route('randomReportsAll')}}" target="_blank" class="btn btn-info">Generate It</a>
+              <a href="{{route('randomReportsAll')}}" target="_blank" class="btn btn-custom">Generate It</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -361,7 +361,7 @@
             <div class="card-body">
               <h4 class="card-title">Frequently Asked Questions</h4>
               <p class="card-text">Because asking us directly was too mainstream. We've compiled the answers to your burning questions so you can save time and have a laugh!  </p>
-              <a href="{{route('faqIndex')}}" target="_blank" class="btn btn-info">Read FAQ</a>
+              <a href="{{route('faqIndex')}}" target="_blank" class="btn btn-custom">Read FAQ</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -382,7 +382,7 @@
             <div class="card-body">
               <h4 class="card-title">Individual Hourly Report</h4>
               <p class="card-text">How many calls have you made in every hour. Is there any large gap between calls? Are you making too many calls within short time? Check yourself! </p>
-              <a href="{{route('myHourReport')}}" target="_blank" class="btn btn-info">Check Houry Report</a>
+              <a href="{{route('myHourReport')}}" target="_blank" class="btn btn-custom">Check Houry Report</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">

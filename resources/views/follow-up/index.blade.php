@@ -7,7 +7,7 @@
 		  <div class="card" style="padding: 20px">
 
 			  <div class="card-body">
-				  <h2 class="card-title" align="center"><b>Followup List</b></h2>
+				  <h2  align="center"><b>Followup List</b></h2>
 
                   <form id="serchf" method="POST" action="{{ route('follow-up.search')}}">
                       {{ csrf_field() }}

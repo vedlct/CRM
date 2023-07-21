@@ -8,7 +8,7 @@
 
     <div class="card" style="padding:30px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Leads with Keywords in Comments</b></h2>
+        <h2 align="center"><b>Leads with Keywords in Comments</b></h2>
         <p class="card-subtitle" align="center">On your left search box, you can write keywords (separated by comma) and get the results in a table. <br> On the right search box, you can write the keywords and download the list as an excel file.</p>
         <p class="card-subtitle" align="center" style="color: red; font-style: italic;">available for admin and supervisors only</p>
         <div class="card-body" >

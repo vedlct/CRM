@@ -107,7 +107,7 @@
   
 
     {{--Set Target Modal--}}
-            <div class="modal fade" id="target_user_modal" >
+            <div class="modal" id="target_user_modal" >
                 <div class="modal-dialog" style="max-width: 40%;">
                     <div class="modal-content">
             <form method="post" action="{{route('setTarget')}}">
@@ -192,7 +192,7 @@
 
 
 
-            <div class="modal fade" id="target_local_modal">
+            <div class="modal" id="target_local_modal">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Modal Header -->
@@ -211,7 +211,7 @@
             </div>
 
             <!-- Create User Modal -->
-            <div class="modal fade" id="myModal1" >
+            <div class="modal" id="myModal1" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
@@ -404,7 +404,7 @@
 
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="edit_user_modal" >
+            <div class="modal" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
@@ -648,9 +648,14 @@
 
 @section('foot-js')
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+    <!-- <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script> -->
+
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+
 
     <script>
         function setLocalUserTarget(x) {

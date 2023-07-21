@@ -9,7 +9,7 @@
 
 
 		@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-				<a href="#create_faq_modal" data-toggle="modal" class="btn btn-info btn-sm">Add FAQ</a>
+				<a href="#create_faq_modal" data-toggle="modal" class="btn btn-custom">Add FAQ</a>
 		@endif
 
 		@if ($errors->has('msg'))
@@ -19,40 +19,35 @@
 		@endif
 
 		<br><hr>
-		<div class="card">
 
-			<div class="accordion" id="faqAccordion">
+
+		<div class="row">
+			<div class="card-columns">
 				@foreach ($notices as $notice)
-					<div class="card">
-						<div class="card-header" id="notice{{$notice->noticeId}}">
-							<h2 class="mb-0">
-							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{$notice->noticeId}}" aria-expanded="true" aria-controls="collapse{{$notice->noticeId}}">
-                        		<span style="color: black !important; text-decoration: none !important; background-color: transparent !important; border: none; padding: 0; outline: none; cursor: pointer; font-size: 20px; font-weight: 400;">{{ $notice->title }}</span>
-                    		</button>
-							</h2>
-						</div>
-						<div id="collapse{{$notice->noticeId}}" class="collapse" aria-labelledby="notice{{$notice->noticeId}}" data-parent="#faqAccordion">
-							<div class="card-body">
-							<span style="color: #333333 !important; background-color: transparent !important; border: none; padding: 10px; outline: none; cursor: pointer; font-size: 18px; font-weight: 300;">{!! nl2br(e($notice->msg)) !!}</span>
-							<br><br>
-								@if($userType == 'ADMIN' || $userType == 'MANAGER' || $userType == 'SUPERVISOR')
-									<a href="#edit_faq_modal" data-toggle="modal" class="btn btn-info btn-sm"
-										data-notice-id="{{$notice->noticeId}}"
-										data-notice-title="{{$notice->title}}"
-										data-notice-msg="{{$notice->msg}}"
-										data-category-id="{{$notice->categoryId}}">
-										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-									</a>
-								@endif
-							</div>
+					<div class="col-md-12">
+						<div class="card">
+						<div class="card-body">
+							<h3 class="card-title">{{ $notice->title }}</h3>
+							<p class="card-text">
+								{!! nl2br(e($notice->msg)) !!}
+								<br>
+							</p>
+
+							@if($userType == 'ADMIN' || $userType == 'MANAGER' || $userType == 'SUPERVISOR')
+								<a href="#edit_faq_modal" data-toggle="modal" class="btn btn-custom btn-sm"
+									data-notice-id="{{$notice->noticeId}}"
+									data-notice-title="{{$notice->title}}"
+									data-notice-msg="{{$notice->msg}}"
+									data-category-id="{{$notice->categoryId}}">
+									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+								</a>
+							@endif
 						</div>
 					</div>
+				</div>
 				@endforeach
 			</div>
-		</div>
-
-
-
+			</div>
 
 
 

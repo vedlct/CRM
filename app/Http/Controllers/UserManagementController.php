@@ -187,7 +187,10 @@ class UserManagementController extends Controller
             $img = $request->file('picture');
             $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
             $location = public_path('img/users/'.$filename);
-            Image::make($img)->resize(200,200)->save($location);
+            // Image::make($img)->resize(300,200)->save($location);
+            Image::make($img)->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($location);
             $input['picture'] = $filename;
 
         }

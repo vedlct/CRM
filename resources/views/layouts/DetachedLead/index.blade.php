@@ -5,7 +5,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>My Team Members Lead List</b></h2>
+            <h2 align="center"><b>My Team Members Lead List</b></h2>
 
             <div class="table-responsive m-t-40" style="padding: 20px;">
                 <table id="myTable" class="table table-bordered table-striped">

@@ -193,11 +193,9 @@
     </div>
 
 
+    <div class="row">
 
-    {{--Notice Box--}}
-
-    <div class="row" style="width: 40%; float: left;">
-        <div class="col-md-12">
+        <div class="col-md-6" style="width: 40%; float: left;">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title" style="color: purple;">{{ $recentNotice->title }}</h4>
@@ -209,13 +207,8 @@
                 <a href="{{ route('notice.index') }}" class="btn btn-info">All Communications</a>
             </div>
         </div>
-    </div>
-
-
-    {{--Monthly Report Graph--}}
-
-    <div class="row" style="width:60%; float: right;">
-        <div class="col-md-12">
+        
+        <div class="col-md-6" style="width:60%; float: right;">
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Monthly Graph</h3>
@@ -224,8 +217,8 @@
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 
 
 @endsection

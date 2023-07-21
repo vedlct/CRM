@@ -8,12 +8,12 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>Assigned Leads</b></h2>
+                <h2  align="center"><b>Assigned Leads</b></h2>
                 <p class="card-subtitle" align="center">Please check if there's any suspicious leads in your assigned leads.</h2>
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>Contacted</b></h2>
+                <h2 align="center"><b>Contacted</b></h2>
             @endif
 
             <div class="table-responsive m-t-40">

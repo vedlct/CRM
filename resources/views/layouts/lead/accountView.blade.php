@@ -20,13 +20,13 @@
             <!-- Start Content-->
             <div class="container-fluid">
                 <!-- start page title -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12">
                         <div class="page-title-box" style="padding: 20px 0;">
                             <h2 class="page-title" style="text-align: center;">{{$lead->companyName}}</h2>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- end page title -->
 
                 <!-- content start -->
@@ -76,7 +76,7 @@
                                 <div class="mb-3">
                                     <a 
                                         href="#call_modal" 
-                                        class="btn btn-info" 
+                                        class="btn btn-custom" 
                                         data-toggle="modal" 
                                         data-lead-id="{{$lead->leadId}}" 
                                         data-lead-name="{{$lead->companyName}}"
@@ -113,7 +113,7 @@
                                     >Edit</a>
 
                                     @if ($pipeline->isEmpty() && $lead->contactedUserId == auth()->id())
-                                    <a href="#" class="btn btn-outline-dark" 
+                                    <a href="#" class="btn btn-info" 
                                         data-toggle="modal" 
                                         data-target="#set_pipeline"
                                         data-lead-id="{{ $lead->leadId }}"
@@ -225,13 +225,9 @@
                                         <!-- comments -->
                                         @foreach ($allComments as $comment)
                                         <hr>
-                                        <div class="alert alert-primary p-4">
-                                            <p class="text-dark mb-2">{{$comment->comments}}</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1"><span style="color: green;">- {{$comment->firstName}} {{$comment->lastName}}</span> at {{$comment->created_at}}</p>
-                                                </div>
-                                            </div>
+                                        <div class="card p-2">
+                                            <p class="text-dark mb-3">{{$comment->comments}}</p>
+                                            <footer class="blockquote-footer" style="font-size: 15px;">{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</footer>
                                         </div>
                                         @endforeach
                                     </div>
@@ -239,36 +235,62 @@
                                     <!-- followup tab -->
                                     <div class="tab-pane fade" id="followups" role="tabpanel">
                                         <hr>
-                                        <div class="alert alert-success p-4">
+                                        <div class="card card-warning p-4">
                                             @foreach ($latestFollowups as $followup)
-                                                <b>Latest Followup Date: {{$followup->lastFollowUpDate}}</b>
+                                                Latest Followup Date: <span style= "font-weight: bold;">
+                                                {{$followup->lastFollowUpDate}}</span>
                                             @endforeach
 
                                         </div>
                                         <hr>                                        
                                         
-                                        <div class="alert alert-secondary p-4">
-                                            <h4>Call Statistics:</h4><br>
-                                            @foreach ($followupCounter as $counter)
-                                                 {{$counter->userId}} - {{$counter->userCounter}}</b><br>
-                                            @endforeach
-
-                                        </div>                                        
-                                        <hr>
-                                        <h3>Previous Followup Dates:</h3>
-
-                                        @foreach ($previousFollowups as $previousFollowup)
-                                        <div class="alert alert-info p-4">
-                                            <p class="text-dark mb-2">Followup date: {{$previousFollowup->followUpDate}}</p>
-                                                    <p>- set by {{$previousFollowup->firstName}} 
-                                                        <span style="color: blue;"> 
-                                                        @if ($previousFollowup->workStatus == 1)
-                                                            Worked
-                                                        @else
-                                                            Not Worked
-                                                        @endif</span></p>
+                                        <div class="card card-primary p-4 text-white">
+                                        <h5 class="text-white">Call Statistics:</h5>
+                                            <table class="table text-white">
+                                                <tbody>
+                                                    @foreach ($followupCounter as $counter)
+                                                    <tr>
+                                                        <td>{{$counter->userId}}</td>
+                                                        <td>-</td>
+                                                        <td>{{$counter->userCounter}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        @endforeach
+                          
+                                        <hr>
+
+                                        <h5>Previous Followup Dates:</h5>
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Followup Date</th>
+                                                    <th>Set By</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($previousFollowups as $previousFollowup)
+                                                <tr>
+                                                    <td>
+                                                        <p class="text-dark mb-0">{{$previousFollowup->followUpDate}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="text-info mb-0">{{$previousFollowup->firstName}}</p>
+                                                    </td>
+                                                    <td>
+                                                        @if ($previousFollowup->workStatus == 1)
+                                                            <span class="text-primary">Worked</span>
+                                                        @else
+                                                            <span class="text-danger">Not Worked</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
 
                                     </div>
 
@@ -277,110 +299,113 @@
                                     <div class="tab-pane fade" id="employees" role="tabpanel">
                                         <p class="my-1"><br>
                                         <a href="#create_employee" 
-                                            class="btn btn-primary" 
+                                            class="btn btn-custom" 
                                             data-toggle="modal"
                                             data-lead-id="{{ $lead->leadId }}" 
                                             data-lead-name="{{ $lead->companyName }}"
                                             >Create Employee</a>
-
                                         </p>
-                                        @foreach ($employees as $employee)
+
+                                    {{-- Loop through KDM Employees --}}
+                                    @foreach ($employees as $employee)
+                                        @if ($employee->iskdm == 1)
                                             <hr>
-                                            @if ($employee->iskdm == 1)
-                                            <div class="row kdm" >
-                                            @else
-                                            <div class="row">
-                                            @endif
-                                            <div class="col-md-6">
-                                                    <p>
-                                                        <b class="text-secondary">Is it KDM:</b>
-                                                        @if ($employee->iskdm == 1) Yes @else No @endif
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Name:</b>
-                                                        {{$employee->name}}
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Designation:</b>
-                                                        {{$employee->designation->designationName}}
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Phone:</b>
-                                                        {{$employee->number}}
-                                                    </p>
+                                                <div class="card mb-4">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h5 class="card-title text-info">KDM Employee</h5>
+                                                            </div>
+                                                            <div class="col-md-6 text-right">
+                                                                <a href="#edit_employee" class="card-link" data-toggle="modal"
+                                                                    data-employee-id="{{ $employee->employeeId }}"
+                                                                    data-employee-name="{{ $employee->name }}"
+                                                                    data-employee-designation="{{ $employee->designationId }}"
+                                                                    data-employee-email="{{ $employee->email }}"
+                                                                    data-employee-number="{{ $employee->number }}"
+                                                                    data-employee-linkedin="{{ $employee->linkedin }}"
+                                                                    data-employee-jobstatus="{{ $employee->jobstatus }}"
+                                                                    data-employee-country="{{ $employee->countryId }}"
+                                                                    data-employee-iskdm="{{ $employee->iskdm }}"
+                                                                    data-employee-extrainfo="{{ $employee->extrainfo }}"
+                                                                >Edit Employee</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Name:</b> {{$employee->name}}</p>
+                                                                <p class="card-text"><b>Designation:</b> {{$employee->designation->designationName}}</p>
+                                                                <p class="card-text"><b>Email:</b> {{$employee->email}}</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Status:</b> @if ($employee->jobstatus == 1) Active @else Left Job @endif</p>
+                                                                <p class="card-text"><b>Phone:</b> {{$employee->number}}</p>
+                                                                <p class="card-text"><b>Country:</b> {{$employee->country->countryName}}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" style="padding-top:15px;">
+                                                            <div class="col-md-12">
+                                                                <p class="card-text"><b>Extra Info:</b> {{$employee->extrainfo}}</p>
+                                                                <p class="card-text"><b>Linkedin:</b> {{$employee->linkedin}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <p>
-                                                        <a href="#edit_employee"
-                                                        data-toggle="modal"
-                                                        data-employee-id="{{ $employee->employeeId }}"
-                                                        data-employee-name="{{ $employee->name }}"
-                                                        data-employee-designation="{{ $employee->designationId }}"
-                                                        data-employee-email="{{ $employee->email }}"
-                                                        data-employee-number="{{ $employee->number }}"
-                                                        data-employee-linkedin="{{ $employee->linkedin }}"
-                                                        data-employee-jobstatus="{{ $employee->jobstatus }}"
-                                                        data-employee-country="{{ $employee->countryId }}"
-                                                        data-employee-iskdm="{{ $employee->iskdm }}"
-                                                        data-employee-extrainfo="{{ $employee->extrainfo }}"
-                                                        >Edit Employee
-                                                        </a>
-
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Status:</b>
-                                                        @if ($employee->jobstatus ==1) Active @else Left Job @endif
-                                                    </p>
-
-                                                    <p>
-                                                        <b class="text-secondary">Email:</b>
-                                                        {{$employee->email}}
-                                                    </p>
-
-                                                    <p>
-                                                        <b class="text-secondary">Country:</b>
-                                                        {{$employee->country->countryName}}
-                                                    </p>
-                                            </div>
-                                            <div class="col-md-12">
-                                                    <p>
-                                                        <b class="text-secondary">Linkedin:</b>
-                                                        {{$employee->linkedin}}
-                                                    </p>
-
-                                            </div>
-                                            <div class="col-md-12">
-                                                    <p>
-                                                        <b class="text-secondary">Extra Info:</b>
-                                                        {{$employee->extrainfo}}
-                                                    </p>
-
-                                            </div>
-
-                                        </div>
+                                            @endif
                                         @endforeach
-                                        <!-- <div class="row">
-                                            <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Created by:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Updated by:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Created at:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Updated at:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                            </div>
-                                        </div> -->
+
+                                    {{-- Loop through Non-KDM Employees --}}
+                                    @foreach ($employees as $employee)
+                                        @if ($employee->iskdm == 0)
+                                        <hr>
+                                                <div class="card mb-4">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h5 class="card-title text-secondary">Non-KDM Employee</h5>
+                                                            </div>
+                                                            <div class="col-md-6 text-right">
+                                                                <a href="#edit_employee" class="card-link" data-toggle="modal"
+                                                                    data-employee-id="{{ $employee->employeeId }}"
+                                                                    data-employee-name="{{ $employee->name }}"
+                                                                    data-employee-designation="{{ $employee->designationId }}"
+                                                                    data-employee-email="{{ $employee->email }}"
+                                                                    data-employee-number="{{ $employee->number }}"
+                                                                    data-employee-linkedin="{{ $employee->linkedin }}"
+                                                                    data-employee-jobstatus="{{ $employee->jobstatus }}"
+                                                                    data-employee-country="{{ $employee->countryId }}"
+                                                                    data-employee-iskdm="{{ $employee->iskdm }}"
+                                                                    data-employee-extrainfo="{{ $employee->extrainfo }}"
+                                                                >Edit Employee</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Name:</b> {{$employee->name}}</p>
+                                                                <p class="card-text"><b>Designation:</b> {{$employee->designation->designationName}}</p>
+                                                                <p class="card-text"><b>Email:</b> {{$employee->email}}</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Status:</b> @if ($employee->jobstatus == 1) Active @else Left Job @endif</p>
+                                                                <p class="card-text"><b>Phone:</b> {{$employee->number}}</p>
+                                                                <p class="card-text"><b>Country:</b> {{$employee->country->countryName}}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" style="padding-top:15px;">
+                                                            <div class="col-md-12">
+                                                                <p class="card-text"><b>Extra Info:</b> {{$employee->extrainfo}}</p>
+                                                                <p class="card-text"><b>Linkedin:</b> {{$employee->linkedin}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+
                                     </div>
                                 </div>
                             </div>
@@ -453,7 +478,7 @@
                                 </p>
                                 <!-- modal -->
                                 <!-- Modal -->
-                                <div class="modal fade" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
+                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -925,7 +950,7 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="name">Full Name:*</label>
+                    <label for="name">Full Name <i>(required)</i>:</label>
                     <input type="text" class="form-control" name="name" id="name" value="" >
                     <span class="error" style="color:red;" id="nameError"></span>
                 </div>
@@ -945,13 +970,13 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:*</label>
+                    <label for="email">Email Address <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
                     <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="number ">Phone Number:*</label>
+                    <label for="number ">Phone Number <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="{{$lead->contactNumber}}" >
                     <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
@@ -1014,7 +1039,7 @@
         <div class ="row">
                 <div class="col-md-6">
                     <input type="hidden" name="employeeId">
-                    <label for="name">Full Name:**</label>
+                    <label for="name">Full Name <i>(required)</i>:</label>
                     <input type="text" class="form-control" name="name" id="name" value="">
                     <span class="error" style="color:red;" id="nameError"></span>
                 </div>
@@ -1031,13 +1056,13 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:</label>
+                    <label for="email">Email Address <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
                     <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="number ">Phone Number:</label>
+                    <label for="number ">Phone Number <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
                     <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
@@ -1207,8 +1232,6 @@
         // Set the value in the select element
         $('#stage').val(pipelineStage);
     });
-
-
 
 
 // DATE PICKER ON CALL MODAL

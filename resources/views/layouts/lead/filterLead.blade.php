@@ -7,8 +7,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
-            <h4 class="card-subtitle" align="center">These leads are filtered by others.<span style="font-weight:450;"> Your filtered leads are not listed here.</span></h4>
+            <h2  align="center"><b>Filtered Lead</b></h2>
             <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
 
             <div class="table-responsive m-t-40">

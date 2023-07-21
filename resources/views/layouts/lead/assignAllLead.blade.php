@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Assign Leads From Other Marketers</b></h2>
+            <h2  align="center"><b>Assign Leads From Other Marketers</b></h2>
 			<p class="card-text" align="center">Please make sure you are not assigning random leads from here</p>
             <div class="row">
                 <div class="col-md-3">

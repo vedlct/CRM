@@ -7,7 +7,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Assigned But Not My Leads</b></h2>
+        <h2  align="center"><b>Assigned But Not My Leads</b></h2>
         <h2 class="card-subtitle" align="center">These leads are assigned to someone but haven't been marked as My Lead yet.</h2>
 
             <div class="table-responsive m-t-40">

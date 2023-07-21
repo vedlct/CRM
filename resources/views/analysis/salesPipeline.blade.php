@@ -298,7 +298,7 @@
 
 
 <!--Modal for Create New Sales Pipeline-->
-<!-- <div class="modal fade" id="create_pipeline_modal" tabindex="-1" role="dialog" aria-labelledby="createPipelineModalLabel" aria-hidden="true">
+<!-- <div class="modal" id="create_pipeline_modal" tabindex="-1" role="dialog" aria-labelledby="createPipelineModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -374,19 +374,6 @@
 
 
 
-
-
-
-//   function redirectToLead(element) {
-//     var leadId = element.getAttribute('data-leadid');
-//     var companyName = element.getAttribute('data-leadname');
-//     var url = 'account/' + leadId;
-//     window.location.href = url;
-//   }
-
-  
-
-
     function removePipeline() {
         // Get the pipelineId value
         var pipelineId = $('#pipelineId').val();
@@ -410,7 +397,7 @@
                 // Hide the modal
                 $('#change_stage').modal('hide');
 
-                // window.location.reload();
+                window.location.reload();
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText); // You can display an error message or handle the error as needed
@@ -418,16 +405,11 @@
         });
     }
 
-    $('#change_stage').on('hidden.bs.modal', function() {
-        $('.modal-backdrop').remove();
-        window.location.reload();
-    });
-
-
-
-
-
-        
+    // $('#change_stage').on('hidden.bs.modal', function() {
+    //     $('.modal-backdrop').remove();
+    //     window.location.reload();
+    // });
+   
 
 </script>
 

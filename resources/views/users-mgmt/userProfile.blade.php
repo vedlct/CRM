@@ -417,7 +417,7 @@
 
             
             <!-- Edit Modal -->
-            <div class="modal fade" id="edit_user_modal" >
+            <div class="modal" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 

@@ -153,119 +153,340 @@
  -->
 
 
- <style>
-    
+ 
+
+<header class="topbar">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light fixed-top" style="background-color: #2986CC;">
+      <a class="navbar-brand" href="{{route('home')}}">
+        @if(file_exists('public/img/logo/TCL_logo_white.png'))
+          <img src="{{ url('public/img/logo/TCL_logo_white.png') }}" alt="homepage" class="dark-logo" style="padding-left: 10px;" />
+        @else
+          <img src="{{ url('public/img/logo/TCL_logo.png') }}" alt="homepage" class="dark-logo" style="padding-left: 10px"; />
+        @endif
+
+        <span class="font-weight-bold">CRM</span>
+      </a>
+
+      <div class="navbar-collapse">
+            <ul class="navbar-nav mr-auto mt-md-0 ">
+                <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="icon-arrow-left-circle"></i></a> </li>
+            </ul>
+    </div>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('analysisHomePage')}}">Analysis</a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('reportTable')}}">Report</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{route('assignedLeads')}}">Assigned</a>
+          </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('follow-up.index')}}">Followups</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('contacted')}}">MyLeads</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('Mycontacted')}}">Contacted</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('filterLeads')}}">Filtered</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('verifylead')}}">Verify</a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link" href="{{route('addNightShift')}}">AddNew</a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{route('salesPipeline')}}">Pipeline</a>
+        </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              Welcome, {{( Auth::user()->firstName )}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="{{route('accountSetting')}}">
+                <i class="ti-settings"></i> Update Profile
+              </a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Logout
+                <i class="fa fa-power-off"></i>
+              </a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <!-- <style>
+    /* Custom top padding for the body */
     body {
-        padding-top: 50px; 
+      padding-top: 70px; /* Adjust as needed */
     }
-    
+
+    /* Styling for the navbar */
     .navbar {
-        background-color: #007bff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      background-color: #2986CC;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      height: 70px; /* Set the height for the navbar */
+      padding: 0 20px; /* Add some padding to the left and right */
     }
 
+    /* Ensure the navbar stays fixed at the top */
     .navbar.fixed-top {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 999;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
     }
 
+    /* Styling for the logo */
     .navbar-brand img {
-        width: 40px;
-        margin-right: 10px;
+      width: 40px;
+      margin-right: 10px;
     }
 
     .navbar-brand span {
-        font-weight: bold;
+      font-weight: bold;
+      color: #ffffff; /* Set the color of the text */
+      font-size: 20px; /* Adjust the font size */
     }
 
+    /* Styling for the links in the navbar */
     .navbar-nav .nav-item .nav-link {
-        color: #ffffff;
+      color: #ffffff;
+      font-size: 16px; /* Adjust the font size */
     }
 
     .navbar-nav .nav-item .nav-link:hover {
-        color: #f8f9fa;
+      color: #f8f9fa;
+      background-color: transparent; /* Add a transparent background on hover */
     }
 
+    /* Styling for the active link in the navbar */
     .navbar-nav .nav-item.active .nav-link {
-        color: #f8f9fa;
-        font-weight: bold;
+      color: #f8f9fa;
+      font-weight: bold;
+      background-color: transparent; /* Add a transparent background to active link */
     }
 
+    /* Styling for dropdown menu items */
     .dropdown-menu .dropdown-item {
-        color: #343a40;
+      color: #343a40;
+      font-size: 16px; /* Adjust the font size */
     }
 
     .dropdown-menu .dropdown-item:hover {
-        background-color: #f8f9fa;
-        color: #343a40;
+      background-color: #f8f9fa;
+      color: #343a40;
     }
 
     .dropdown-menu .divider {
-        border-color: #f8f9fa;
+      border-color: #f8f9fa;
     }
-</style>
 
-<header class="topbar">
-    <nav class="navbar top-navbar navbar-expand-md navbar-light fixed-top">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{route('home')}}">
-                <img src="{{url('img/logo/TCL_logo.png')}}" alt="homepage" class="dark-logo" />
-                <span>CRM</span>
-            </a>
-        </div>
+    /* Optional: Reduce the padding between navbar items */
+    .navbar-nav {
+      padding-right: 20px;
+    }
 
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{route('home')}}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('reportTable')}}">Report</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('assignedLeads')}}">Assigned Leads</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('follow-up.index')}}">Follow-ups</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('contacted')}}">My Leads</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('Mycontacted')}}">Contacted Leads</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('filterLeads')}}">Filtered Leads</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('verifylead')}}">Verify Lead</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('addNightShift')}}">Add New Lead</a>
-                </li>
-            </ul>
+    /* Mobile layout adjustments */
+    @media (max-width: 600px) {
+      /* Stack all menus under one menu */
+      .navbar-nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
 
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Profile
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="{{route('accountSetting')}}"><i class="ti-settings"></i> Update Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
-                            <i class="fa fa-power-off"></i>
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+      /* Adjust the height of the navbar for mobile devices */
+      .navbar {
+        height: auto;
+      }
+
+      /* Center the logo and adjust font size for mobile devices */
+      .navbar-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .navbar-brand img {
+        width: 30px;
+        margin-right: 5px;
+      }
+
+      .navbar-brand span {
+        font-size: 18px;
+      }
+
+      /* Adjust font size for mobile devices */
+      .navbar-nav .nav-item .nav-link,
+      .dropdown-menu .dropdown-item {
+        font-size: 14px;
+      }
+
+      /* Collapse the navbar when in mobile view */
+      .navbar-collapse {
+        display: none;
+      }
+
+      /* Show the collapsed navbar when the hamburger icon is clicked */
+      .navbar-toggler {
+        display: block;
+      }
+
+      /* Show the navbar links in a vertical layout when the hamburger icon is clicked */
+      .navbar.show .navbar-collapse {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style> -->
+
+
+  <style>
+  
+  /* Custom top padding for the body */
+body {
+  padding-top: 80px; /* Adjust as needed */
+}
+
+/* Styling for the navbar */
+.navbar {
+  background-color: #8F6251 !important; /* New primary color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 70px; /* Set the height for the navbar */
+  padding: 0 20px; /* Add some padding to the left and right */
+}
+
+/* Ensure the navbar stays fixed at the top */
+.navbar.fixed-top {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+/* Styling for the logo */
+.navbar-brand img {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.navbar-brand span {
+  font-weight: bold;
+  color: #ffffff; /* Set the color of the text */
+  font-size: 20px; /* Adjust the font size */
+}
+
+/* Styling for the links in the navbar */
+.navbar-nav .nav-item .nav-link {
+  color: #ffffff;
+  font-size: 16px; /* Adjust the font size */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #f8f9fa;
+  background-color: transparent; /* Add a transparent background on hover */
+}
+
+/* Styling for the active link in the navbar */
+.navbar-nav .nav-item.active .nav-link {
+  color: #f8f9fa;
+  font-weight: bold;
+  background-color: transparent; /* Add a transparent background to active link */
+}
+
+/* Styling for dropdown menu items */
+.dropdown-menu .dropdown-item {
+  color: #343a40;
+  font-size: 16px; /* Adjust the font size */
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+.dropdown-menu .divider {
+  border-color: #f8f9fa;
+}
+
+/* Optional: Reduce the padding between navbar items */
+.navbar-nav {
+  padding-right: 20px;
+}
+
+/* Mobile layout adjustments */
+@media (max-width: 600px) {
+  /* Stack all menus under one menu */
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Adjust the height of the navbar for mobile devices */
+  .navbar {
+    height: auto;
+  }
+
+  /* Center the logo and adjust font size for mobile devices */
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .navbar-brand img {
+    width: 30px;
+    margin-right: 5px;
+  }
+
+  .navbar-brand span {
+    font-size: 18px;
+  }
+
+  /* Adjust font size for mobile devices */
+  .navbar-nav .nav-item .nav-link,
+  .dropdown-menu .dropdown-item {
+    font-size: 14px;
+  }
+
+  /* Collapse the navbar when in mobile view */
+  .navbar-collapse {
+    display: none;
+  }
+
+  /* Show the collapsed navbar when the hamburger icon is clicked */
+  .navbar-toggler {
+    display: block;
+  }
+
+  /* Show the navbar links in a vertical layout when the hamburger icon is clicked */
+  .navbar.show .navbar-collapse {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+  
+  
+  </style>

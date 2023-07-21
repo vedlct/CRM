@@ -7,8 +7,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Fred's Maximum Chasing Companies</b></h2>
-        <h3 class="card-subtitle" align="center">This table wil show the names of the companies that are being chased by marketers for more than 10 times</h3>
+        <h2  align="center"><b>Fred's Maximum Chasing Companies</b></h2>
 
         <div class="col-md-5" style="float:left;">
                     <form method="POST" action="{{ route('exportFredChasingLeads') }}">

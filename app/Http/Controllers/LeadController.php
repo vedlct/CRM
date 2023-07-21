@@ -831,7 +831,14 @@ class LeadController extends Controller
                         ->update(['workStatus' => 0]);
                 }
 
+                $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
 
+                foreach ($followups as $followup) {
+                    $followup->workStatus = 1;
+                    $followup->save();
+                }
+
+                
             }
             return Response('true');
             // return Response($r->leadId);
@@ -869,6 +876,13 @@ class LeadController extends Controller
                 if ($pipeline->isNotEmpty()) {
                     SalesPipeline::whereIn('leadId', $r->leadId)
                         ->update(['workStatus' => 0]);
+                }
+
+                $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
+
+                foreach ($followups as $followup) {
+                    $followup->workStatus = 1;
+                    $followup->save();
                 }
 
 
@@ -1227,7 +1241,7 @@ class LeadController extends Controller
             $text='';
 
             foreach ($comments as $comment){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action">'.$comment->comments.' <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
 
             $followupText='';
@@ -1308,7 +1322,7 @@ class LeadController extends Controller
             $text='';
 
             foreach ($activities as $activity){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$activity->activity.'</b> <div style="color:blue;">-By '.$activity->firstName.' ('.$activity->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action">'.$activity->activity.' <div style="color:blue;">-By '.$activity->firstName.' ('.$activity->created_at.')</div>'.'</li>';
             }
             return Response($text);
         }

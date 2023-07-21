@@ -8,11 +8,11 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>My List</b></h2>
+                <h2  align="center"><b>My List</b></h2>
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>My Contacted Lead</b></h2>
+                <h2  align="center"><b>My Contacted Lead</b></h2>
             @endif
 
             <div class="table-responsive m-t-40">
