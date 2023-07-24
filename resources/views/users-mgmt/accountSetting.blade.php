@@ -82,7 +82,7 @@
                     <div class="col-sm-8 col-xl-9">
                         <div class="card">
                             <div class="card-body">
-                                <ul class="nav nav-tabs border-tab mb-0" id="top-tab" role="tablist">
+                                <!-- <ul class="nav nav-tabs border-tab mb-0" id="top-tab" role="tablist">
                                     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#report" id="report-tab" role="tab" aria-selected="false">Reports</a>
                                         <div class="material-border"></div>
                                     </li>
@@ -94,180 +94,11 @@
                                     </li>
                                 </ul>
                                 <div class="tab-content" id="top-tabContent">
-                                    <div class="tab-pane fade active show" id="report" role="tabpanel">
+                                    <div class="tab-pane fade active show" id="report" role="tabpanel"> -->
+                                    <br><hr>
                                         <div class="row">
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-success rounded">
-                                                                    <i class="fe-phone avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">1</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Total Call
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-blue rounded">
-                                                                    <i class="fe-users avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">2/4</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">Contact</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-danger rounded">
-                                                                    <i class="fe-phone avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">6</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Lead Mined
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-warning rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Test
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-primary rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Followup
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-danger rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Test
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-primary rounded">
-                                                                    <i class="fe-user avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Client
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-
-
                                             <div class="col-12">
-                                                <h4 class="header-title mb-3">December, 2022</h4>
+                                                <h4 class="header-title mb-3">{{ $showCurrentMonth }} </h4>
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered">
                                                         <thead class="table-primary">
@@ -286,38 +117,106 @@
                                                         <tbody>
                                                         <tr>
                                                             <th>Target</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                            <td>43</td>
-                                                            <td>43</td>
+                                                        @foreach ($userTargets as $userTarget)
+                                                            <td>{{$userTarget->conversation}}</td>
+                                                            <td>{{$userTarget->targetCall}}</td>
+                                                            <td>{{$userTarget->followup}}</td>
+                                                            <td>{{$userTarget->targetTest}}</td>
+                                                            <td>{{$userTarget->closelead}}</td>
+                                                            <td>{{$userTarget->targetLeadmine}}</td>
+                                                            <td>{{$userTarget->targetFile}}</td>
+                                                        @endforeach
                                                         </tr>
                                                         <tr>
                                                             <th>Achievement</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                            <td>43</td>
-                                                            <td>43</td>
+                                                            <td>{{$totalConversationCalls}}</td>
+                                                            <td>{{$totalProgressIds}}</td>
+                                                            <td>{{$totalFollowUp}}</td>
+                                                            <td>{{$totalTestProgress}}</td>
+                                                            <td>{{$totalClosingProgress}}</td>
+                                                            <td>{{$totalLeadMining}}</td>
+                                                            <td>{{$totalRevenue}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>%</th>
-                                                            <td>56%</td>
-                                                            <td>33%</td>
-                                                            <td>86%</td>
-                                                            <td>42%</td>
-                                                            <td>43</td>
-                                                            <td>43</td>
-                                                            <td>89%</td>
+                                                            @foreach ($userTargets as $userTarget)
+                                                                <td>{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+
+                                                            @endforeach                                                        
                                                         </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
+
+
+
+                                            <div class="col-12">
+                                            <br><hr>
+                                                <h4 class="header-title mb-3">{{ $showCurrentMonth }} </h4>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered">
+                                                        <thead class="table-primary">
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Conversation</th>
+                                                            <th>Total Call</th>
+                                                            <th>Followup</th>
+                                                            <th>Test</th>
+                                                            <th>Closed Deal</th>
+                                                            <th>Lead Mine</th>
+                                                            <th>Revenue</th>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        <tr>
+                                                            <th>Target</th>
+                                                        @foreach ($userTargets as $userTarget)
+                                                            <td>{{$userTarget->conversation}}</td>
+                                                            <td>{{$userTarget->targetCall}}</td>
+                                                            <td>{{$userTarget->followup}}</td>
+                                                            <td>{{$userTarget->targetTest}}</td>
+                                                            <td>{{$userTarget->closelead}}</td>
+                                                            <td>{{$userTarget->targetLeadmine}}</td>
+                                                            <td>{{$userTarget->targetFile}}</td>
+                                                        @endforeach
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Achievement</th>
+                                                            <td>{{$totalConversationCalls}}</td>
+                                                            <td>{{$totalProgressIds}}</td>
+                                                            <td>{{$totalFollowUp}}</td>
+                                                            <td>{{$totalTestProgress}}</td>
+                                                            <td>{{$totalClosingProgress}}</td>
+                                                            <td>{{$totalLeadMining}}</td>
+                                                            <td>{{$totalRevenue}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>%</th>
+                                                            @foreach ($userTargets as $userTarget)
+                                                                <td>{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
+                                                                <td>{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+
+                                                            @endforeach                                                        
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+
 
                                             <!-- <div class="col-12">
                                                 <h4 class="header-title mb-3">January, 2022</h4>
@@ -367,7 +266,7 @@
                                         </div>
                                     </div>
                                     <!-- notes tab -->
-                                    <div class="tab-pane fade" id="comment" role="tabpanel">
+                                    <!-- <div class="tab-pane fade" id="comment" role="tabpanel">
                                         <div class="alert alert-primary p-2">
                                             <h4>By Riz</h4>
                                             <p class="text-dark mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
@@ -387,9 +286,9 @@
                                             </div>
                                         </div>
 
-                                    </div>
+                                    </div> -->
                                     <!-- contacts tab -->
-                                    <div class="tab-pane fade" id="ippList" role="tabpanel">
+                                    <!-- <div class="tab-pane fade" id="ippList" role="tabpanel">
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead class="table-primary">
@@ -415,7 +314,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
                             </div>
                         </div>

@@ -4,7 +4,7 @@
     <div class="box-body">
         <div class="card" style="padding: 2px;">
             <div class="card-header">
-                <h2>Users Target</h2>
+            <h3 class="font-weight-bold text-white">Users Target</h3>
             </div>
             <div class="card-body">
                 <div class="row">

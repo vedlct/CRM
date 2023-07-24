@@ -2221,20 +2221,20 @@ class LeadController extends Controller
         public function getAllemployees ()
         {
             $User_Type=Session::get('userType');
-            if($User_Type == 'USER' || $User_Type == 'MANAGER'){
+            // if($User_Type == 'USER' || $User_Type == 'MANAGER'){
 
-                $employees = Employees::select('employees.*', 'leads.website')
+            //     $employees = Employees::select('employees.*', 'leads.website', 'leads.leadId')
+            //     ->Join('leads','employees.leadId','leads.leadId')
+            //     ->where('leads.contactedUserId', Auth::User()->id)
+            //     ->orderBy('employeeId', 'desc')
+            //     ->get();
+            // }else{
+                $employees = Employees::select('employees.*', 'leads.website', 'leads.leadId')
                 ->Join('leads','employees.leadId','leads.leadId')
                 ->where('leads.contactedUserId', Auth::User()->id)
                 ->orderBy('employeeId', 'desc')
                 ->get();
-            }else{
-                $employees = Employees::select('employees.*', 'leads.website')
-                ->Join('leads','employees.leadId','leads.leadId')
-                // ->where('leads.contactedUserId', Auth::User()->id)
-                ->orderBy('employeeId', 'desc')
-                ->get();
-            }
+            // }
 
                 $country=Country::get();
                 $designation=Designation::get();

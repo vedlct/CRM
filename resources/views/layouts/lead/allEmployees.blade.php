@@ -24,7 +24,7 @@
                         <th >KDM?</th>
                         <!-- <th >Company</th> -->
                         <th >Website</th>
-                        <!-- <th >Created</th> -->
+                        <th >Action</th>
 
                     </tr>
                     </thead>
@@ -43,8 +43,11 @@
                             <td width="8%">@if ($employee->iskdm == 1) KDM @else No @endif</td>
                             <!-- <td width="8%">{{$employee->companyName}}</td> -->
                             <td width="8%">{{$employee->website}}</td>
-                            <!-- <td width="8%">{{$employee->created_at}}</td> -->
-
+                            <td width="8%">
+                            <a href="." class="btn btn btn-info btn-sm lead-view-btn"
+                                            data-lead-id="{{$employee->leadId}}">
+										<i class="fa fa-eye"></i></a>
+                            </td>
                         </tr>
 
                     @endforeach
@@ -97,6 +100,14 @@
         });
 
 
+		$(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
 
 
 

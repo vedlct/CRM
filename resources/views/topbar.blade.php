@@ -8,8 +8,8 @@ body {
 
 /* Styling for the navbar */
 .navbar {
-  background-color: #8F6251 !important; /* New primary color */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #517E8F !important; /* New primary color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   height: 70px; /* Set the height for the navbar */
   padding: 0 20px; /* Add some padding to the left and right */
 }

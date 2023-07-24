@@ -12,12 +12,17 @@ use Image;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+
 use App\Lead;
 use App\User;
 use App\Usertype;
 use App\Usertarget;
 use App\Targetlog;
 use App\Designation;
+use App\Workprogress;
+use App\Followup;
+use App\NewFile;
 
 use Yajra\DataTables\DataTables;
 
@@ -485,25 +490,88 @@ class UserManagementController extends Controller
     
 
 
+    // public function settings()
+    // {
+    //     $user = Auth::user();
+    //     $User_Type=Session::get('userType');
+    //     $currentMonth = Carbon::now()->format('F Y');
+    //     // $currentMonth = Carbon::now()->format('Y-m');
+
+    //     $userTargets = UsertargetByMonth::Select('usertargetsbymonth.*')
+    //     ->where('userId', Auth::user()->id)
+    //     ->where('date', 'like', $currentMonth.'%')
+    //     ->get();
+
+
+    //     $userTypes = Usertype::get();
+
+    //     return view('users-mgmt.accountSetting')
+    //         ->with('user', $user)
+    //         ->with('currentMonth', $currentMonth)
+    //         ->with('userTargets', $userTargets)
+    //         ->with('userTypes', $userTypes);
+    // }
+
+
     public function settings()
     {
+
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
         $user = Auth::user();
-        $User_Type=Session::get('userType');
+        $User_Type = Session::get('userType');
+        $showCurrentMonth = Carbon::now()->format('F Y');
+        $currentMonth = Carbon::now()->format('Y-m');
+        $userTypes = Usertype::get();
+    
+        $userTargets = UsertargetByMonth::where('userId', Auth::user()->id)
+            ->where('date', 'like', $currentMonth . '%')
+            ->get();
 
-		    // if($User_Type=='MANAGER'){
-            //     $users = User::with('target')
-            //         ->where('teamId',Auth::user()->teamId)
-            //         ->get();
-            // }else{
-            //     $users = User::with('target')
-            //         ->get();
-            // }
+        $totalProgressIds = Workprogress::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
 
-            $userTypes = Usertype::get();
+        $totalConversationCalls = Workprogress::where('userId', Auth::user()->id)
+            ->where('callingReport', 11)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
 
+        $totalTestProgress = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Test%')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
+
+        $totalClosingProgress = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Closing%')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+      
+        $totalLeadMining = Lead::where('minedBy', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalFollowUp = Followup::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalRevenue = NewFile::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->sum('fileCount');    
+
+            
         return view('users-mgmt.accountSetting')
             ->with('user', $user)
-            ->with('userTypes', $userTypes);
+            ->with('showCurrentMonth', $showCurrentMonth)
+            ->with('userTargets', $userTargets)
+            ->with('userTypes', $userTypes)
+            ->with('totalProgressIds', $totalProgressIds)
+            ->with('totalConversationCalls', $totalConversationCalls)
+            ->with('totalTestProgress', $totalTestProgress)
+            ->with('totalClosingProgress', $totalClosingProgress)
+            ->with('totalLeadMining', $totalLeadMining)
+            ->with('totalFollowUp', $totalFollowUp)
+            ->with('totalRevenue', $totalRevenue);
     }
 
 

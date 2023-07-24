@@ -27,21 +27,19 @@
 			<div class="card-columns">
 				@foreach ($notices as $notice)
 					<div class="col-md-12">
-
-					@if ($notice->categoryName == 'Regular Notice')
-						<div class="card">
-					@elseif ($notice->categoryName == 'Urgent Notice')	
-						<div class="card text-white bg-success">
-					@endif
-		
-					<div class="card-body">
+					<div class="card">
+						<div class="card-body">
 						<h3 class="card-title">{{ $notice->title }}</h3>
 						<p class="card-text">
 							{!! nl2br(e($notice->msg)) !!}
 							<br>
 						</p>
 
-						<footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite></footer></br>
+						<footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite>
+					
+						@if ($notice->categoryName == 'Urgent Notice') <span style="color: red; float: right;">Urgent Notice</span>@endif
+
+						</footer></br>
 
 
 								@if($userType == 'ADMIN' || $userType == 'MANAGER' || $userType == 'SUPERVISOR')

@@ -6,9 +6,6 @@
         display: none;
     }
 
-    .card-header {
-        background-color: #6D98A9  !important;
-    }
 
 </style>
 
@@ -201,13 +198,13 @@
 
         <div class="col-md-8" style=" float: left;">
             <div class="card">
-            <div class="card-header">
+            <div class="card-header bg-secondary">
                     <h5 class="font-weight-bold text-white">Latest Communication</h5>
                     <div class="card-header-right">
                     </div>
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title" style="color: purple;">{{ $recentNotice->title }}</h4>
+                    <h4 class="card-title">{{ $recentNotice->title }}</h4>
                     <div class="card-text">
                         <p>{!! nl2br(e($recentNotice->msg)) !!}</p>
                     </div>
@@ -241,9 +238,7 @@
                                     @elseif ($activity->callingReport = 11)
                                         <h6 class="mt-0">{{ $activity->userId }} had a Conversation</h6>
                                     @endif
-                                    <ul class="dates">
-                                        <li>{{ \Carbon\Carbon::parse($activity->created_at)->format('d F Y') }}</li>
-                                    </ul>
+                                        <cite>{{ \Carbon\Carbon::parse($activity->created_at)->format('d F Y') }}</cite>
                                 </div>
                             </li>
                         @endforeach
@@ -258,8 +253,10 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+            <div class="card-header bg-secondary">
+                <h5 class="font-weight-bold text-white">Personal Monthly Graph</h5>
+            </div>
                 <div class="card-body">
-                    <h3 class="card-title">Personal Monthly Graph</h3>
                     <div id="chartContainer" style="height: 400px; width: 100%;">
                     </div>
                 </div>
