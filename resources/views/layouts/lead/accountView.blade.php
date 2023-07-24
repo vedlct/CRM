@@ -1,12 +1,4 @@
 @extends('main')
-<style>
-    .kdm {
-    background-color: lightblue;
-    color: black !important;
-    padding: 10px;
-    }
-
-</style>
 
 @section('content')
     <!-- ============================================================== -->
@@ -35,11 +27,11 @@
                     <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="border-bottom pb-2">Compnay Information</h5>
-                                <p>
+                                <h5 class="border-bottom pb-2">Company Name: {{$lead->companyName}}</h5>
+                                <!-- <p>
                                     <b class="text-secondary">Company Name:</b>
                                     {{$lead->companyName}}
-                                </p>
+                                </p> -->
                                 <p>
                                     <b class="text-secondary">Lead Id:</b>
                                     {{$lead->leadId}}
@@ -72,7 +64,41 @@
                                         @endforeach
                                     @endif
                                </p>
+                               <p>
+                                    <b class="text-secondary">IPP?:</b>
+                                    @if ($lead->ippStatus == 1)
+                                        Yes
+                                    @else
+                                        No
+                                    @endif
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Closing Probability:</b>
+                                    @if ($lead)
+                                        @php
+                                            $leadProbability = $probabilities->firstWhere('probabilityId', $lead->probabilityId);
+                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown';
+                                        @endphp
 
+                                            {{ $probabilityName }}
+                                    @else
+                                            Probability not found.
+                                    @endif
+
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Did a test?:</b>
+                                    @if ($didTestWithUs->isNotEmpty())
+                                        @foreach ($didTestWithUs as $workprogress)
+                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
+                                        @endforeach
+                                    @else
+                                        Not Yet
+                                    @endif
+                                </p>
+
+                                <hr>
+                                
                                 <div class="mb-3">
                                     <a 
                                         href="#call_modal" 
@@ -123,8 +149,9 @@
                                     @endif  
 
                                 </div>
+                                <hr>
 
-                                <h4 class="text-decoration-underline font-info pb-2">Profile:</h4>
+                                <h5 class="text-decoration-underline font-info pb-2">Profile:</h5>
 
                                 <p>
                                     <b class="text-secondary">Location:</b>
@@ -159,6 +186,38 @@
                                             Category not found.
                                     @endif
                                 </p>
+                                <p>
+                                    <b class="text-secondary">Operated in:</b>
+                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
+                                </p>
+                                <!-- modal -->
+                                <!-- Modal -->
+                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Demo Country
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <b class="text-secondary">Parent Company:</b>
+
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Sub Brands:</b>
+
+                                </p>                                
                                 <!-- <p>
                                     <b class="text-secondary">Sub Category:</b>
                                     Software Development
@@ -167,23 +226,7 @@
                                     <b class="text-secondary">No. of Images Online:</b>
                                     322
                                 </p> -->
-                                <h4 class="text-decoration-underline font-info pb-2">Links:</h4>
-                                <p>
-                                    <b>Web:</b>
-                                    <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
-                                </p>
-                                <!-- <p>
-                                    <b>FB:</b>
-                                    <a href="#">facebook.com</a>
-                                </p> -->
-                                <p>
-                                    <b>Linkedin:</b>
-                                    <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Extra Information:</b>
-                                     {!! nl2br(e($lead->comments)) !!}
-                                </p>
+                                
                             </div>
                         </div>
                     </div>
@@ -440,71 +483,29 @@
                                     <b class="text-secondary">Season:</b>
                                     {{$lead->season}}
                                 </p> -->
-                                <p>
-                                    <b class="text-secondary">IPP?:</b>
-                                    @if ($lead->ippStatus == 1)
-                                        Yes
-                                    @else
-                                        No
-                                    @endif
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Closing Probability:</b>
-                                    @if ($lead)
-                                        @php
-                                            $leadProbability = $probabilities->firstWhere('probabilityId', $lead->probabilityId);
-                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown';
-                                        @endphp
+                                <hr>
 
-                                            {{ $probabilityName }}
-                                    @else
-                                            Probability not found.
-                                    @endif
-
+                                <h5 class="text-decoration-underline font-info pb-2">Links:</h5>
+                                <p>
+                                    <b>Web:</b>
+                                    <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
+                                </p>
+                                <!-- <p>
+                                    <b>FB:</b>
+                                    <a href="#">facebook.com</a>
+                                </p> -->
+                                <p>
+                                    <b>Linkedin:</b>
+                                    <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
                                 </p>
                                 <p>
-                                    <b class="text-secondary">Did a test?:</b>
-                                    @if ($didTestWithUs->isNotEmpty())
-                                        @foreach ($didTestWithUs as $workprogress)
-                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
-                                        @endforeach
-                                    @else
-                                        Not Yet
-                                    @endif
+                                    <b class="text-secondary">Extra Information:</b>
+                                     {!! nl2br(e($lead->comments)) !!}
                                 </p>
-                                <p>
-                                    <b class="text-secondary">Operated in:</b>
-                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
-                                </p>
-                                <!-- modal -->
-                                <!-- Modal -->
-                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Demo Country
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <p>
-                                    <b class="text-secondary">Parent Company:</b>
+                                <hr>
 
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Sub Brands:</b>
-
-                                </p>
-                                <h4 class="text-decoration-underline font-info pb-2">Account Updates:</h4>
+                                <h5 class="text-decoration-underline font-info pb-2">Account Updates:</h5>
                                 <p>
                                     <b class="text-secondary">Current Marekter:</b>
                                     @if ($users->isEmpty())
@@ -560,8 +561,8 @@
         <div class="modal-dialog" style="max-width: 30%">
             <div class="modal-content">
                 <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">All Activities</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">All Activities</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -602,8 +603,8 @@
             </style>
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Calling Report</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body" >
                     {{csrf_field()}}
@@ -701,8 +702,8 @@
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
                     <form  method="post" action="{{route('leadUpdate')}}">
@@ -867,7 +868,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <form  method="post" action="{{ route('createPipeline') }}">
+            <form  method="post" action="{{ route('createPipeline') }}"  onsubmit="validateStage(event)">
             {{csrf_field()}}
 
             <div class="form-group">
@@ -1232,6 +1233,22 @@
         // Set the value in the select element
         $('#stage').val(pipelineStage);
     });
+
+
+    function validateStage(event) {
+        // Get the value of the selected option in the stage dropdown
+        var selectedStage = $('#stage').val();
+
+        // Check if the stage is empty or null
+        if (!selectedStage) {
+            // If the stage is not selected, prevent the form submission
+            event.preventDefault();
+            // You can also display an alert or error message to inform the user
+            alert("Please select a stage before setting the sales pipeline.");
+        }
+    }
+
+
 
 
 // DATE PICKER ON CALL MODAL

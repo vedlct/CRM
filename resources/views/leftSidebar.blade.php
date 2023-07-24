@@ -4,7 +4,9 @@
 <aside class="left-sidebar">
     <div class="scroll-sidebar">
         <div class="user-profile">
-            <img src="{{ url('public/img/users/' . Auth::user()->picture) }}" alt="user" style="margin-top: -20px; max-width: 65%;"/>
+        <a href="{{route('home')}}">
+            <img src="{{ url('public/img/logo/TCL_logo.png') }}" alt="homepage" class="dark-logo" style="margin-top: -20px; max-width: 70%;" />
+        </a>
         </div>
         <nav class="sidebar-nav">
             <ul id="sidebarnav">

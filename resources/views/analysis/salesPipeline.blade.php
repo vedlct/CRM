@@ -297,49 +297,6 @@
 
 
 
-<!--Modal for Create New Sales Pipeline-->
-<!-- <div class="modal" id="create_pipeline_modal" tabindex="-1" role="dialog" aria-labelledby="createPipelineModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createPipelineModalLabel">Create Sales Pipeline</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('createPipeline') }}" method="POST">
-                {{ csrf_field() }}
-                    <div class="form-group">
-                        <label for="companyName">Company Name</label>
-                        <select class="form-control" id="companyName" name="companyName" required>
-                            <option value="">Select a company name</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="website">Website</label>
-                        <input type="text" class="form-control" id="website" name="website" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="stage">Stage</label>
-                        <select class="form-control" id="stage" name="stage" required>
-                            <option value="Contact">Contact</option>
-                            <option value="Conversation">Conversation</option>
-                            <option value="Possibility">Test Possibility</option>
-                            <option value="Test">Test Received</option>
-                            <option value="Closed">Deal Closed</option>
-                            <option value="Lost">Lost the Deal</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
-
 @endsection
 
 @section('foot-js')

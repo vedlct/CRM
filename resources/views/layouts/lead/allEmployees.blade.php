@@ -22,7 +22,7 @@
                         <th >LinkedIn</th>
                         <th >Job Status</th>
                         <th >KDM?</th>
-                        <th >Company</th>
+                        <!-- <th >Company</th> -->
                         <th >Website</th>
                         <!-- <th >Created</th> -->
 
@@ -41,7 +41,7 @@
                             <td width="8%">{{$employee->linkedin}}</td>
                             <td width="8%">@if ($employee->jobstatus == 1) Active @else Left Job @endif</td>
                             <td width="8%">@if ($employee->iskdm == 1) KDM @else No @endif</td>
-                            <td width="8%">{{$employee->companyName}}</td>
+                            <!-- <td width="8%">{{$employee->companyName}}</td> -->
                             <td width="8%">{{$employee->website}}</td>
                             <!-- <td width="8%">{{$employee->created_at}}</td> -->
 
