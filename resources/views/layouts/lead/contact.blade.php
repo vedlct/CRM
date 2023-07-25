@@ -10,11 +10,11 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>My List</b></h2>
+                <h2 align="center"><b>My List</b></h2>
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>My Lead </b></h2>
+                <h2 align="center"><b>My Lead </b></h2>
             @endif
                 <div class="form-group col-md-2" style="float: right">
                     <label>Lead Status</label>
@@ -53,7 +53,7 @@
                         <th width="8%">Possi</th>
                         <!-- <th width="8%">Proba</th> -->
                         <th width="8%">Country</th>
-                        <th width="8%">KDM</th>
+                        <!-- <th width="8%">KDM</th> -->
                         <th width="8%">Phone</th>
                         <th width="8%">Volume</th>
                         <th width="5%">Process</th>
@@ -76,7 +76,7 @@
 
 
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
 
                 {{--<div class="form-group col-md-5">--}}
                 <label ><b>Select Status:</b></label>
@@ -91,7 +91,7 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-4">
+            <!-- <div class="form-group col-md-4">
 
                 <label ><b>Set Pipeline:</b></label>
                 <select class="form-control"  name="stage" id="setpipeline" style="width: 30%">
@@ -104,10 +104,10 @@
                     <option value="Lost">Lost the Deal</option>
 
                 </select>
-            </div>
+            </div> -->
 
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
 
                 <label ><b>Assign To:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 40%">
@@ -215,15 +215,15 @@
 
 
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <label><b>Email:</b></label>
@@ -546,39 +546,38 @@
         });
 
 
-        $("#setpipeline").change(function() {
+        // $("#setpipeline").change(function() {
 
-        var chkArray = [];
-        var stage=$(this).val();
-        $('.checkboxvar:checked').each(function (i) {
+        // var chkArray = [];
+        // var stage=$(this).val();
+        // $('.checkboxvar:checked').each(function (i) {
 
-            chkArray[i] = $(this).val();
-        });
-        //alert(chkArray)
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        jQuery('input:checkbox:checked').parents("tr").remove();
-        $(this).prop('selectedIndex',0);
+        //     chkArray[i] = $(this).val();
+        // });
+        // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // jQuery('input:checkbox:checked').parents("tr").remove();
+        // $(this).prop('selectedIndex',0);
 
 
-        $.ajax({
-            type : 'post' ,
-            url : '{{route('assignToPipeline')}}',
-            data : {_token: CSRF_TOKEN,'leadId':chkArray,'stage':stage} ,
-            beforeSend:function(){
-            return confirm("Are you sure?");
-            },
-            success : function(data){
-                console.log(data);
-                if(data == 'true'){
-                    $('#alert').html(' <strong>Success!</strong> Sales Pipeline Set');
-                    $('#alert').show();
+        // $.ajax({
+        //     type : 'post' ,
+        //     url : '{{route('assignToPipeline')}}',
+        //     data : {_token: CSRF_TOKEN,'leadId':chkArray,'stage':stage} ,
+        //     beforeSend:function(){
+        //     return confirm("Are you sure?");
+        //     },
+        //     success : function(data){
+        //         console.log(data);
+        //         if(data == 'true'){
+        //             $('#alert').html(' <strong>Success!</strong> Sales Pipeline Set');
+        //             $('#alert').show();
 
-                }
+        //         }
 
-            }
-        });
+        //     }
+        // });
 
-        });
+        // });
 
 
         //for Edit modal
@@ -600,12 +599,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -627,10 +626,10 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
@@ -756,12 +755,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 15) {
+						if (data > 20) {
 							$('#exceed').hide();
 							$('#total').hide();
-							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
+							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 10 && data < 15) {
+						} else if (data > 15 && data < 20) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();
@@ -821,7 +820,7 @@
                     //     },
                     // },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'personName', name: 'personName',searchable: true},
+                    // { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     { data: 'volume', name: 'volume', searchable: false},
                     { data: 'process', name: 'process', searchable: true},

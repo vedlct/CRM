@@ -4,7 +4,7 @@
 
     <div class="card" style="padding:30px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Crawl A Website</b></h2>
+            <h2 align="center"><b>Crawl A Website</b></h2>
             <p class="card-subtitle" align="center">Crawl a site to get information. Every request will take 60 or less seconds to perform.  </p>
 
             <div class="card-body">

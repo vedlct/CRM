@@ -52,6 +52,7 @@
                                        data-password="{{$user->password}}"
                                        data-first-name="{{$user->firstName}}"
                                        data-last-name="{{$user->lastName}}"
+                                       data-designation-id="{{$user->designationId}}"
                                        data-phone-number="{{$user->phoneNumber}}"
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
@@ -106,7 +107,7 @@
   
 
     {{--Set Target Modal--}}
-            <div class="modal fade" id="target_user_modal" >
+            <div class="modal" id="target_user_modal" >
                 <div class="modal-dialog" style="max-width: 40%;">
                     <div class="modal-content">
             <form method="post" action="{{route('setTarget')}}">
@@ -191,7 +192,7 @@
 
 
 
-            <div class="modal fade" id="target_local_modal">
+            <div class="modal" id="target_local_modal">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <!-- Modal Header -->
@@ -210,7 +211,7 @@
             </div>
 
             <!-- Create User Modal -->
-            <div class="modal fade" id="myModal1" >
+            <div class="modal" id="myModal1" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
@@ -403,7 +404,7 @@
 
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="edit_user_modal" >
+            <div class="modal" id="edit_user_modal" >
                 <div class="modal-dialog" style="max-width: 60%;">
                     <div class="modal-content">
 
@@ -486,6 +487,33 @@
 										</span>
                                         @endif
                                     </div>
+
+
+
+                                    <div class="form-group col-md-4">
+                                        <label for="designationId">Designation:</label>
+                                        <select id="designationId" name="designationId" class="form-control form-control-warning">
+                                            <option value="">Select Designation</option>
+                                            <option value="105" {{ old('designationId') == 105 ? 'selected' : '' }}>Managing Director</option>
+                                            <option value="142" {{ old('designationId') == 142 ? 'selected' : '' }}>Senior Manager</option>
+                                            <option value="98" {{ old('designationId') == 98 ? 'selected' : '' }}>HR Manager</option>
+                                            <option value="104" {{ old('designationId') == 105 ? 'selected' : '' }}>Manager</option>
+                                            <option value="18" {{ old('designationId') == 142 ? 'selected' : '' }}>Deputy Manager</option>
+                                            <option value="2" {{ old('designationId') == 98 ? 'selected' : '' }}>Assistant Manager</option>
+                                            <option value="141" {{ old('designationId') == 105 ? 'selected' : '' }}>Senior Executive</option>
+                                            <option value="43" {{ old('designationId') == 142 ? 'selected' : '' }}>Executive</option>
+                                            <option value="103" {{ old('designationId') == 98 ? 'selected' : '' }}>Junior Executive</option>
+                                            <option value="153" {{ old('designationId') == 105 ? 'selected' : '' }}>Trainee Executive</option>
+                                            <option value="100" {{ old('designationId') == 142 ? 'selected' : '' }}>Intern</option>
+                                        </select>
+                                        @if ($errors->has('designationId'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('designationId') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+
+
 
 
                                     <div class="form-group col-md-4">
@@ -620,9 +648,14 @@
 
 @section('foot-js')
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+    <!-- <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+    <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script> -->
+
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+
 
     <script>
         function setLocalUserTarget(x) {
@@ -658,9 +691,14 @@
 
         
 
-        $( function() {
-            $( "#datepicker" ).datepicker();
-        } );
+        $(function() {
+            $('#dob').datepicker({
+                dateFormat: 'yy-mm-dd', // Format the date as 'yyyy-mm-dd'
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0" 
+            });
+        });
 
         //Set  target_user_modal
 
@@ -719,6 +757,7 @@
             var gender = $(e.relatedTarget).data('gender');
             var active = $(e.relatedTarget).data('active');
             var whitelist = $(e.relatedTarget).data('whitelist');
+            var designationId = $(e.relatedTarget).data('designation-id');
 
             //alert(userId);
             //populate the textbox
@@ -735,6 +774,7 @@
             $(e.currentTarget).find('#gender').val(gender);
             $(e.currentTarget).find('#active').val(active);
             $(e.currentTarget).find('#whitelist').val(whitelist);
+            $(e.currentTarget).find('#designationId').val(designationId);
 
         });
 

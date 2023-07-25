@@ -38,11 +38,12 @@ class NoticeController extends Controller
     public function index()
     {
         $notices = DB::table('notices')
-        ->leftJoin('users', 'notices.userId', '=', 'users.id')
-        ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
-        ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName', 'categories.categoryId as categoryId')
-        ->orderBy('noticeId', 'desc')
-        ->get();
+            ->leftJoin('users', 'notices.userId', '=', 'users.id')
+            ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
+            ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName', 'categories.categoryId as categoryId')
+            ->where('categories.type', 2)
+            ->orderBy('noticeId', 'desc')
+            ->get();
 
         $categories = Category::where('type', 2)
             ->get();
@@ -217,6 +218,61 @@ class NoticeController extends Controller
 
 
 
+
+
+    public function faqIndex()
+    {
+        $notices = DB::table('notices')
+            ->leftJoin('users', 'notices.userId', '=', 'users.id')
+            ->leftJoin('categories', 'notices.categoryId', '=', 'categories.categoryId')
+            ->select('notices.*', 'users.userId as userId', 'categories.categoryName as categoryName', 'categories.categoryId as categoryId')
+            ->where('categories.type', 4)
+            ->orderBy('noticeId', 'desc')
+            ->get();
+
+        $categories = Category::where('type', 4)
+            ->get();
+		
+        return view('analysis.faq', ['notices' => $notices])
+			->with('categories', $categories);
+    }
+
+
+
+    public function faqCreate (Request $request)
+    {
+        $this->validateInput($request);
+            DB::table('notices')->insert([
+                'title' => $request['title'],
+                'msg' => $request['msg'],
+                'categoryId' => $request['categoryId'],
+                'userId' => Auth::user()->id
+        ]);
+        Session::flash('message', 'FAQ Created Successfully');
+        return redirect()->intended('faq');
+    }
+
+
+    public function faqUpdate (Request $request)
+    {
+        $notice = Notice::findOrFail($request->noticeId);
+        $this->validateInput($request);
+        $input = [
+            'title' => $request['title'],
+            'msg' => $request['msg'],
+            'categoryId' => $request['categoryId'],
+            'userId' => Auth::user()->id
+        ];
+        Notice::where('noticeId', $request->noticeId)
+            ->update($input);
+        
+
+        Session::flash('message', 'FAQ Updated Successfully');
+        return redirect()->intended('faq');
+    }
+
+
+    
 
 
 }

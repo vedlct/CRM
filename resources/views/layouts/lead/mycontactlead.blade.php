@@ -8,11 +8,11 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>My List</b></h2>
+                <h2  align="center"><b>My List</b></h2>
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>My Contacted Lead</b></h2>
+                <h2  align="center"><b>My Contacted Lead</b></h2>
             @endif
 
             <div class="table-responsive m-t-40">
@@ -26,7 +26,7 @@
                         <th width="8%">Possibility</th>
                         <th width="8%">Probability</th>
                         <th width="5%">Country</th>
-                        <th width="8%">Contact</th>
+                        <!-- <th width="8%">Contact</th> -->
                         <th width="8%">Contact Number</th>
                         <!-- <th width="8%">Status</th> -->
                         <th width="8%">IPP</th>
@@ -128,15 +128,15 @@
 
 
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <label><b>Email:</b></label>
@@ -491,12 +491,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -522,9 +522,9 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
@@ -752,7 +752,7 @@
                         },
                     },
                     { data: 'country.countryName', name: 'country.countryName'},
-                    { data: 'personName', name: 'personName',searchable: true},
+                    // { data: 'personName', name: 'personName',searchable: true},
                     { data: 'call', name: 'leads.contactNumber',searchable: true},
                     // { data: 'callreport', name: 'callreport',searchable: false},
                     { data: 'ippStatus',

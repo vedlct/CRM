@@ -15,7 +15,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Verify Leads</b></h2>
+            <h2 align="center"><b>Verify Leads</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -54,11 +54,11 @@
 
         $(function() {
             $('#myTable').dataTable({
-                aLengthMenu: [
-                    [25, 50, 100],
-                    [25, 50, 100]
-                ],
-                "iDisplayLength": 25,
+                // aLengthMenu: [
+                //     [25, 50, 100],
+                //     [25, 50, 100]
+                // ],
+                // "iDisplayLength": 25,
                 processing: true,
                 serverSide: true,
                 stateSave: true,
@@ -68,10 +68,12 @@
                     return: true
                 },
                 type:"POST",
-                "ajax":{
+                "ajax": {
                     "url": "{!! route('verifyallLeads') !!}",
                     "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                    "data": {
+                        "_token": "{{ csrf_token() }}"
+                    }
                 },
                 columns: [
                     { data: 'leadId', name: 'leads.leadId' },

@@ -11,7 +11,7 @@
         <div class="card-body">
 
 
-                <h2 class="card-title" align="center"><b>Your Rejected Leads</b></h2>
+                <h2  align="center"><b>Your Rejected Leads</b></h2>
 
 
 
@@ -23,7 +23,7 @@
                         <th>Category</th>
                         <th>Possibility</th>
                         <th>Country</th>
-                        <th>Contact Person</th>
+                        <!-- <th>Contact Person</th> -->
                         <th>Contact Number</th>
                         <th>Reject By</th>
                         <th>Comment</th>
@@ -39,7 +39,7 @@
                             <td>{{$lead->category->categoryName}}</td>
                             <td>{{$lead->possibility->possibilityName}}</td>
                             <td>{{$lead->country->countryName}}</td>
-                            <td>{{$lead->personName}}</td>
+                            <!-- <td>{{$lead->personName}}</td> -->
                             <td>{{$lead->contactNumber}}</td>
                             <td>{{$lead->firstName}}</td>
                             <td>{{$lead->comments}}</td>
@@ -113,10 +113,10 @@
                         </div>
 
 
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label>Contact Person:</label>
                             <input type="text" class="form-control" name="personName" value=""> <br><br><br>
-                        </div>
+                        </div> -->
 
 
                         <div class="col-md-4">
@@ -267,7 +267,7 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
@@ -281,7 +281,7 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 

@@ -13,7 +13,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Assign Filtered Leads</b></h2>
+            <h2  align="center"><b>Assign Filtered Leads</b></h2>
 
 
 

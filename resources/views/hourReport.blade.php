@@ -7,7 +7,7 @@
     <div class="card" style="padding:10px;">
 
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Hour Report</b></h2>
+            <h2 align="center"><b>Hour Report</b></h2>
 
             <div class="row">
                 <div class="col-3">

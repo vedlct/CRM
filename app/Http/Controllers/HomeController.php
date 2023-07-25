@@ -263,6 +263,17 @@ class HomeController extends Controller
             $countWeek++;
         }
 
+
+        $topActivities = Workprogress::select('workprogress.leadId', 'workprogress.userId', 'workprogress.progress', 'workprogress.created_at', 'users.userId', 'users.picture' )
+            ->leftJoin('users', 'workprogress.userId', 'users.id')
+            ->where('workprogress.progress', 'LIKE', '%TEST%')
+            ->orWhere('workprogress.progress', 'LIKE', '%CLOSING%')
+            ->orWhere('workprogress.callingReport', '=', 11)
+            ->orderBy('workprogress.progressId', 'desc')
+            ->limit(10)
+            ->get();
+
+
         return view('dashboard')
             ->with('target',$target)
             ->with('lastDayLeadMined',$lastDayLeadMined)
@@ -286,7 +297,8 @@ class HomeController extends Controller
             ->with('followup',$followup)
             ->with('targetConversation',$targetConversation)
             ->with('targetCloselead',$targetCloselead)
-            ->with('targetFollowup',$targetFollowup);
+            ->with('targetFollowup',$targetFollowup)
+            ->with('topActivities',$topActivities);
     }
 
 
@@ -642,6 +654,7 @@ class HomeController extends Controller
 //     return $newFiles;
 
  }
+
 
 
 }

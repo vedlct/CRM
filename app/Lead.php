@@ -57,7 +57,6 @@ class Lead extends Model
     
         $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
             ->Select('leads.*')
-            ->with('category', 'country')
             ->where('statusId', 2)
             ->where('contactedUserId', NULL)
             ->where('leadAssignStatus', 0)

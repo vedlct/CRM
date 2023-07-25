@@ -4,7 +4,7 @@
 
 <div class="card" style="padding:10px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>List of Keywords</b></h2>
+        <h2 align="center"><b>List of Keywords</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="keywordTable" class="table table-bordered table-striped">

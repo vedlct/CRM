@@ -7,8 +7,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 class="card-title" align="center"><b>Filtered Lead</b></h2>
-            <h4 class="card-subtitle" align="center">These leads are filtered by others.<span style="font-weight:450;"> Your filtered leads are not listed here.</span></h4>
+            <h2  align="center"><b>Filtered Lead</b></h2>
             <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
 
             <div class="table-responsive m-t-40">
@@ -148,11 +147,11 @@
 
         $(function() {
             $('#myTable').DataTable({
-                aLengthMenu: [
-                    [25, 50, 100],
-                    [25, 50, 100]
-                ],
-                "iDisplayLength": 25,
+                // aLengthMenu: [
+                //     [25, 50, 100],
+                //     [25, 50, 100]
+                // ],
+                // "iDisplayLength": 25,
                 processing: true,
                 serverSide: true,
                 Filter: true,
@@ -163,7 +162,6 @@
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
                 },
-                {{--ajax: '{!! route('test') !!}',--}}
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
 
@@ -180,7 +178,16 @@
             });
         });
 
- 
+        
+        $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
 
         function selectAll(source) {
             checkboxes = document.getElementsByName('checkboxvar[]');

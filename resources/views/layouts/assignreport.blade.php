@@ -10,7 +10,7 @@
         <div><a href="#myModal" data-toggle="modal" id="2" data-target="#edit-modal" class="btn btn-success">Edit 2</a></div><br>
         <div><a href="#myModal" data-toggle="modal" id="3" data-target="#edit-modal" class="btn btn-success">Edit 3</a></div><br>
 
-        <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="edit-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

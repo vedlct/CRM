@@ -1,12 +1,4 @@
 @extends('main')
-<style>
-    .kdm {
-    background-color: lightblue;
-    color: black !important;
-    padding: 10px;
-    }
-
-</style>
 
 @section('content')
     <!-- ============================================================== -->
@@ -20,13 +12,13 @@
             <!-- Start Content-->
             <div class="container-fluid">
                 <!-- start page title -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-12">
                         <div class="page-title-box" style="padding: 20px 0;">
                             <h2 class="page-title" style="text-align: center;">{{$lead->companyName}}</h2>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- end page title -->
 
                 <!-- content start -->
@@ -35,11 +27,11 @@
                     <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="border-bottom pb-2">Compnay Information</h5>
-                                <p>
+                                <h5 class="border-bottom pb-2">Company Name: {{$lead->companyName}}</h5>
+                                <!-- <p>
                                     <b class="text-secondary">Company Name:</b>
                                     {{$lead->companyName}}
-                                </p>
+                                </p> -->
                                 <p>
                                     <b class="text-secondary">Lead Id:</b>
                                     {{$lead->leadId}}
@@ -72,17 +64,53 @@
                                         @endforeach
                                     @endif
                                </p>
+                               <p>
+                                    <b class="text-secondary">IPP?:</b>
+                                    @if ($lead->ippStatus == 1)
+                                        Yes
+                                    @else
+                                        No
+                                    @endif
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Closing Probability:</b>
+                                    @if ($lead)
+                                        @php
+                                            $leadProbability = $probabilities->firstWhere('probabilityId', $lead->probabilityId);
+                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown';
+                                        @endphp
 
+                                            {{ $probabilityName }}
+                                    @else
+                                            Probability not found.
+                                    @endif
+
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Did a test?:</b>
+                                    @if ($didTestWithUs->isNotEmpty())
+                                        @foreach ($didTestWithUs as $workprogress)
+                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
+                                        @endforeach
+                                    @else
+                                        Not Yet
+                                    @endif
+                                </p>
+
+                                <hr>
+                                
                                 <div class="mb-3">
+                                @if ($lead->statusId == 7)
                                     <a 
                                         href="#call_modal" 
-                                        class="btn btn-info" 
+                                        class="btn btn-custom" 
                                         data-toggle="modal" 
                                         data-lead-id="{{$lead->leadId}}" 
                                         data-lead-name="{{$lead->companyName}}"
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Calling</a>
+                                @endif    
 
                                     <a 
                                         href="#lead_activities" 
@@ -97,11 +125,9 @@
                                         data-lead-name="{{$lead->companyName}}"
                                         data-lead-email="{{$lead->email}}"
                                         data-lead-number="{{$lead->contactNumber}}"
-                                        data-lead-person="{{$lead->personName}}"
                                         data-lead-website="{{$lead->website}}"
                                         data-lead-category="{{$lead->category->categoryId}}"
                                         data-lead-country="{{$lead->countryId}}"
-                                        data-lead-designation="{{$lead->designation}}"
                                         data-lead-linkedin="{{$lead->linkedin}}"
                                         data-lead-founded="{{$lead->founded}}"
                                         data-lead-process="{{$lead->process}}"
@@ -115,7 +141,7 @@
                                     >Edit</a>
 
                                     @if ($pipeline->isEmpty() && $lead->contactedUserId == auth()->id())
-                                    <a href="#" class="btn btn-outline-dark" 
+                                    <a href="#" class="btn btn-info" 
                                         data-toggle="modal" 
                                         data-target="#set_pipeline"
                                         data-lead-id="{{ $lead->leadId }}"
@@ -124,9 +150,19 @@
                                         >Set Pipeline</a>
                                     @endif  
 
-                                </div>
 
-                                <h4 class="text-decoration-underline font-info pb-2">Profile:</h4>
+                                    @if ($lead->statusId == 2)
+                                        <a href="#" class="btn btn-danger make-lead-btn" 
+                                            data-lead-id="{{ $lead->leadId }}"
+                                        >
+                                            <i class="fa fa-bookmark" aria-hidden="true"></i><b>  Make My Lead</b>
+                                        </a>
+                                    @endif
+
+                                </div>
+                                <hr>
+
+                                <h5 class="text-decoration-underline font-info pb-2">Profile:</h5>
 
                                 <p>
                                     <b class="text-secondary">Location:</b>
@@ -140,10 +176,10 @@
                                     <b class="text-secondary">Other Phone:</b>
                                     +880185574457
                                 </p> -->
-                                <p>
+                                <!-- <p>
                                     <b class="text-secondary">KDM Name(s):</b>
                                     {{$lead->personName}}
-                                </p>
+                                </p> -->
                                 <p>
                                     <b class="text-secondary">Email:</b>
                                     {{$lead->email}}
@@ -161,6 +197,38 @@
                                             Category not found.
                                     @endif
                                 </p>
+                                <p>
+                                    <b class="text-secondary">Operated in:</b>
+                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
+                                </p>
+                                <!-- modal -->
+                                <!-- Modal -->
+                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Demo Country
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>
+                                    <b class="text-secondary">Parent Company:</b>
+
+                                </p>
+                                <p>
+                                    <b class="text-secondary">Sub Brands:</b>
+
+                                </p>                                
                                 <!-- <p>
                                     <b class="text-secondary">Sub Category:</b>
                                     Software Development
@@ -169,23 +237,7 @@
                                     <b class="text-secondary">No. of Images Online:</b>
                                     322
                                 </p> -->
-                                <h4 class="text-decoration-underline font-info pb-2">Links:</h4>
-                                <p>
-                                    <b>Web:</b>
-                                    <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
-                                </p>
-                                <!-- <p>
-                                    <b>FB:</b>
-                                    <a href="#">facebook.com</a>
-                                </p> -->
-                                <p>
-                                    <b>Linkedin:</b>
-                                    <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Extra Information:</b>
-                                    {{$lead->comments}}
-                                </p>
+                                
                             </div>
                         </div>
                     </div>
@@ -227,13 +279,9 @@
                                         <!-- comments -->
                                         @foreach ($allComments as $comment)
                                         <hr>
-                                        <div class="alert alert-primary p-4">
-                                            <p class="text-dark mb-2">{{$comment->comments}}</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1"><span style="color: green;">- {{$comment->firstName}} {{$comment->lastName}}</span> at {{$comment->created_at}}</p>
-                                                </div>
-                                            </div>
+                                        <div class="card p-2">
+                                            <p class="text-dark mb-3">{{$comment->comments}}</p>
+                                            <footer class="blockquote-footer" style="font-size: 15px;">{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</footer>
                                         </div>
                                         @endforeach
                                     </div>
@@ -241,36 +289,62 @@
                                     <!-- followup tab -->
                                     <div class="tab-pane fade" id="followups" role="tabpanel">
                                         <hr>
-                                        <div class="alert alert-success p-4">
+                                        <div class="card card-warning p-4">
                                             @foreach ($latestFollowups as $followup)
-                                                <b>Latest Followup Date: {{$followup->lastFollowUpDate}}</b>
+                                                Latest Followup Date: <span style= "font-weight: bold;">
+                                                {{$followup->lastFollowUpDate}}</span>
                                             @endforeach
 
                                         </div>
                                         <hr>                                        
                                         
-                                        <div class="alert alert-secondary p-4">
-                                            <h4>Call Statistics:</h4><br>
-                                            @foreach ($followupCounter as $counter)
-                                                 {{$counter->userId}} - {{$counter->userCounter}}</b><br>
-                                            @endforeach
-
-                                        </div>                                        
-                                        <hr>
-                                        <h3>Previous Followup Dates:</h3>
-
-                                        @foreach ($previousFollowups as $previousFollowup)
-                                        <div class="alert alert-info p-4">
-                                            <p class="text-dark mb-2">Followup date: {{$previousFollowup->followUpDate}}</p>
-                                                    <p>- set by {{$previousFollowup->firstName}} 
-                                                        <span style="color: blue;"> 
-                                                        @if ($previousFollowup->workStatus == 1)
-                                                            Worked
-                                                        @else
-                                                            Not Worked
-                                                        @endif</span></p>
+                                        <div class="card card-primary p-4 text-white">
+                                        <h5 class="text-white">Call Statistics:</h5>
+                                            <table class="table text-white">
+                                                <tbody>
+                                                    @foreach ($followupCounter as $counter)
+                                                    <tr>
+                                                        <td>{{$counter->userId}}</td>
+                                                        <td>-</td>
+                                                        <td>{{$counter->userCounter}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        @endforeach
+                          
+                                        <hr>
+
+                                        <h5>Previous Followup Dates:</h5>
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Followup Date</th>
+                                                    <th>Set By</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($previousFollowups as $previousFollowup)
+                                                <tr>
+                                                    <td>
+                                                        <p class="text-dark mb-0">{{$previousFollowup->followUpDate}}</p>
+                                                    </td>
+                                                    <td>
+                                                        <p class="text-info mb-0">{{$previousFollowup->firstName}}</p>
+                                                    </td>
+                                                    <td>
+                                                        @if ($previousFollowup->workStatus == 1)
+                                                            <span class="text-primary">Worked</span>
+                                                        @else
+                                                            <span class="text-danger">Not Worked</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
 
                                     </div>
 
@@ -278,103 +352,119 @@
                                     <!-- employees tab -->
                                     <div class="tab-pane fade" id="employees" role="tabpanel">
                                         <p class="my-1"><br>
+                                        @if ($lead->statusId == 7 )
                                         <a href="#create_employee" 
-                                            class="btn btn-primary" 
+                                            class="btn btn-custom" 
                                             data-toggle="modal"
                                             data-lead-id="{{ $lead->leadId }}" 
                                             data-lead-name="{{ $lead->companyName }}"
                                             >Create Employee</a>
-
+                                        @endif    
                                         </p>
-                                        @foreach ($employees as $employee)
+
+                                    {{-- Loop through KDM Employees --}}
+                                    @foreach ($employees as $employee)
+                                        @if ($employee->iskdm == 1)
                                             <hr>
-                                            @if ($employee->iskdm == 1)
-                                            <div class="row kdm" >
-                                            @else
-                                            <div class="row">
-                                            @endif
-                                            <div class="col-md-6">
-                                                    <p>
-                                                        <b class="text-secondary">Is it KDM:</b>
-                                                        @if ($employee->iskdm == 1) Yes @else No @endif
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Name:</b>
-                                                        {{$employee->name}}
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Designation:</b>
-                                                        {{$employee->designation->designationName}}
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Phone:</b>
-                                                        {{$employee->number}}
-                                                    </p>
+                                                <div class="card mb-4">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h5 class="card-title text-info">KDM Employee</h5>
+                                                            </div>
+                                                            <div class="col-md-6 text-right">
+
+                                                            @if ($lead->statusId == 7)
+                                                                <a href="#edit_employee" class="card-link" data-toggle="modal"
+                                                                    data-employee-id="{{ $employee->employeeId }}"
+                                                                    data-employee-name="{{ $employee->name }}"
+                                                                    data-employee-designation="{{ $employee->designationId }}"
+                                                                    data-employee-email="{{ $employee->email }}"
+                                                                    data-employee-number="{{ $employee->number }}"
+                                                                    data-employee-linkedin="{{ $employee->linkedin }}"
+                                                                    data-employee-jobstatus="{{ $employee->jobstatus }}"
+                                                                    data-employee-country="{{ $employee->countryId }}"
+                                                                    data-employee-iskdm="{{ $employee->iskdm }}"
+                                                                    data-employee-extrainfo="{{ $employee->extrainfo }}"
+                                                                >Edit Employee</a>
+                                                            @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Name:</b> {{$employee->name}}</p>
+                                                                <p class="card-text"><b>Designation:</b> {{$employee->designation->designationName}}</p>
+                                                                <p class="card-text"><b>Email:</b> {{$employee->email}}</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Status:</b> @if ($employee->jobstatus == 1) Active @else Left Job @endif</p>
+                                                                <p class="card-text"><b>Phone:</b> {{$employee->number}}</p>
+                                                                <p class="card-text"><b>Country:</b> {{$employee->country->countryName}}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" style="padding-top:15px;">
+                                                            <div class="col-md-12">
+                                                                <p class="card-text"><b>Extra Info:</b> {{$employee->extrainfo}}</p>
+                                                                <p class="card-text"><b>Linkedin:</b> {{$employee->linkedin}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <p>
-                                                        <a href="#edit_employee"
-                                                        data-toggle="modal"
-                                                        data-employee-id="{{ $employee->employeeId }}"
-                                                        data-employee-name="{{ $employee->name }}"
-                                                        data-employee-designation="{{ $employee->designationId }}"
-                                                        data-employee-email="{{ $employee->email }}"
-                                                        data-employee-number="{{ $employee->number }}"
-                                                        data-employee-linkedin="{{ $employee->linkedin }}"
-                                                        data-employee-jobstatus="{{ $employee->jobstatus }}"
-                                                        data-employee-country="{{ $employee->countryId }}"
-                                                        data-employee-iskdm="{{ $employee->iskdm }}"
-                                                        >Edit Employee
-                                                        </a>
-
-                                                    </p>
-                                                    <p>
-                                                        <b class="text-secondary">Status:</b>
-                                                        @if ($employee->jobstatus ==1) Active @else Left Job @endif
-                                                    </p>
-
-                                                    <p>
-                                                        <b class="text-secondary">Email:</b>
-                                                        {{$employee->email}}
-                                                    </p>
-
-                                                    <p>
-                                                        <b class="text-secondary">Country:</b>
-                                                        {{$employee->country->countryName}}
-                                                    </p>
-                                            </div>
-                                            <div class="col-md-12">
-                                                    <p>
-                                                        <b class="text-secondary">Linkedin:</b>
-                                                        {{$employee->linkedin}}
-                                                    </p>
-
-                                            </div>
-
-                                        </div>
+                                            @endif
                                         @endforeach
-                                        <!-- <div class="row">
-                                            <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Created by:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Updated by:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p>
-                                                    <b class="text-secondary">Created at:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                                <p>
-                                                    <b class="text-secondary">Updated at:</b>
-                                                    6 July 2022 3:50 PM
-                                                </p>
-                                            </div>
-                                        </div> -->
+
+                                    {{-- Loop through Non-KDM Employees --}}
+                                    @foreach ($employees as $employee)
+                                        @if ($employee->iskdm == 0)
+                                        <hr>
+                                                <div class="card mb-4">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <h5 class="card-title text-secondary">Non-KDM Employee</h5>
+                                                            </div>
+                                                            <div class="col-md-6 text-right">
+                                                                <a href="#edit_employee" class="card-link" data-toggle="modal"
+                                                                    data-employee-id="{{ $employee->employeeId }}"
+                                                                    data-employee-name="{{ $employee->name }}"
+                                                                    data-employee-designation="{{ $employee->designationId }}"
+                                                                    data-employee-email="{{ $employee->email }}"
+                                                                    data-employee-number="{{ $employee->number }}"
+                                                                    data-employee-linkedin="{{ $employee->linkedin }}"
+                                                                    data-employee-jobstatus="{{ $employee->jobstatus }}"
+                                                                    data-employee-country="{{ $employee->countryId }}"
+                                                                    data-employee-iskdm="{{ $employee->iskdm }}"
+                                                                    data-employee-extrainfo="{{ $employee->extrainfo }}"
+                                                                >Edit Employee</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Name:</b> {{$employee->name}}</p>
+                                                                <p class="card-text"><b>Designation:</b> {{$employee->designation->designationName}}</p>
+                                                                <p class="card-text"><b>Email:</b> {{$employee->email}}</p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="card-text"><b>Status:</b> @if ($employee->jobstatus == 1) Active @else Left Job @endif</p>
+                                                                <p class="card-text"><b>Phone:</b> {{$employee->number}}</p>
+                                                                <p class="card-text"><b>Country:</b> {{$employee->country->countryName}}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" style="padding-top:15px;">
+                                                            <div class="col-md-12">
+                                                                <p class="card-text"><b>Extra Info:</b> {{$employee->extrainfo}}</p>
+                                                                <p class="card-text"><b>Linkedin:</b> {{$employee->linkedin}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+
                                     </div>
                                 </div>
                             </div>
@@ -409,71 +499,29 @@
                                     <b class="text-secondary">Season:</b>
                                     {{$lead->season}}
                                 </p> -->
-                                <p>
-                                    <b class="text-secondary">IPP?:</b>
-                                    @if ($lead->ippStatus == 1)
-                                        Yes
-                                    @else
-                                        No
-                                    @endif
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Closing Probability:</b>
-                                    @if ($lead)
-                                        @php
-                                            $leadProbability = $probabilities->firstWhere('probabilityId', $lead->probabilityId);
-                                            $probabilityName  = $leadProbability ? $leadProbability->probabilityName  : 'Unknown';
-                                        @endphp
+                                <hr>
 
-                                            {{ $probabilityName }}
-                                    @else
-                                            Probability not found.
-                                    @endif
-
+                                <h5 class="text-decoration-underline font-info pb-2">Links:</h5>
+                                <p>
+                                    <b>Web:</b>
+                                    <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
+                                </p>
+                                <!-- <p>
+                                    <b>FB:</b>
+                                    <a href="#">facebook.com</a>
+                                </p> -->
+                                <p>
+                                    <b>Linkedin:</b>
+                                    <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
                                 </p>
                                 <p>
-                                    <b class="text-secondary">Did a test?:</b>
-                                    @if ($didTestWithUs->isNotEmpty())
-                                        @foreach ($didTestWithUs as $workprogress)
-                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
-                                        @endforeach
-                                    @else
-                                        Not Yet
-                                    @endif
+                                    <b class="text-secondary">Extra Information:</b>
+                                     {!! nl2br(e($lead->comments)) !!}
                                 </p>
-                                <p>
-                                    <b class="text-secondary">Operated in:</b>
-                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
-                                </p>
-                                <!-- modal -->
-                                <!-- Modal -->
-                                <div class="modal fade" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Demo Country
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <p>
-                                    <b class="text-secondary">Parent Company:</b>
+                                <hr>
 
-                                </p>
-                                <p>
-                                    <b class="text-secondary">Sub Brands:</b>
-
-                                </p>
-                                <h4 class="text-decoration-underline font-info pb-2">Account Updates:</h4>
+                                <h5 class="text-decoration-underline font-info pb-2">Account Updates:</h5>
                                 <p>
                                     <b class="text-secondary">Current Marekter:</b>
                                     @if ($users->isEmpty())
@@ -529,8 +577,8 @@
         <div class="modal-dialog" style="max-width: 30%">
             <div class="modal-content">
                 <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">All Activities</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">All Activities</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -571,8 +619,8 @@
             </style>
             <form class="modal-content" action="{{route('storeReport')}}" method="post">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" name="modal-title">Calling Report</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body" >
                     {{csrf_field()}}
@@ -670,8 +718,8 @@
         <div class="modal-dialog" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">Edit Lead</h4>
                 </div>
                 <div class="modal-body">
                     <form  method="post" action="{{route('leadUpdate')}}">
@@ -747,9 +795,7 @@
                             </div>
 
 
-
-
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
                             </div>
@@ -757,17 +803,16 @@
                             <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label><b>Email:</b></label>
                                 <input type="email" class="form-control" name="email" value="">
                                 <br><br>
                             </div>
 
 
-
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label><b>Extra Information:</b></label>
                                 <textarea class="form-control" id="comments" name="comments"></textarea>
                             </div>
@@ -777,7 +822,7 @@
                                 <input type="text" class="form-control" name="linkedin" value="">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label ><b>Is it your IPP?</b></label>
                                 <select class="form-control" name="ippStatus"  id="ippStatus">
                                     <!-- <option value="">(select one)</option> -->
@@ -786,9 +831,8 @@
                                 </select>
                             </div>
 
-
                             
-                            <div class="col-md-6">
+                            <div class="col-md-6"><br>
                                 <button class="btn btn-success" type="submit">Update</button>
                             </div>
                         </div>
@@ -840,7 +884,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <form  method="post" action="{{ route('createPipeline') }}">
+            <form  method="post" action="{{ route('createPipeline') }}"  onsubmit="validateStage(event)">
             {{csrf_field()}}
 
             <div class="form-group">
@@ -923,31 +967,34 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="name">Full Name:**</label>
+                    <label for="name">Full Name <i>(required)</i>:</label>
                     <input type="text" class="form-control" name="name" id="name" value="" >
                     <span class="error" style="color:red;" id="nameError"></span>
                 </div>
 
                 <div class="col-md-6">
                     <label for="designation">Designation:</label>
-                        <select class="select form-control" id="" name="designation" style="width: 100%;">
-                            @foreach($designations as $d)
-                                <option value="{{$d->designationId}}">{{$d->designationName}}</option>
-                            @endforeach
-                        </select>
+                    <select class="select form-control" id="" name="designation" style="width: 100%;">
+                        <option value=""></option>
+                        @foreach($designations as $d)
+                            <option value="{{$d->designationId}}" {{ $d->designationName == 'Others' ? 'selected' : '' }}>
+                                {{$d->designationName}}
+                            </option>
+                        @endforeach
+                    </select>                
                 </div>
             </div><br>
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:</label>
+                    <label for="email">Email Address <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
                     <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="number ">Phone Number:</label>
-                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
+                    <label for="number ">Phone Number <i>(required)</i>:</label>
+                    <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="{{$lead->contactNumber}}" >
                     <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
             </div><br>
@@ -955,16 +1002,25 @@
             <div class ="row">
                 <div class="col-md-6">
                     <label for="country">Country:</label>
-                        <select class="select form-control" id="" name="country" style="width: 100%;">
-                            @foreach($country as $c)
-                                <option value="{{$c->countryId}}">{{$c->countryName}}</option>
-                            @endforeach
-                        </select>
+                    <select class="select form-control" id="" name="country" style="width: 100%;">
+                        @foreach($country as $c)
+                            <option value="{{$c->countryId}}" {{ $c->countryId == $lead->countryId ? 'selected' : '' }}>
+                                {{$c->countryName}}
+                            </option>
+                        @endforeach
+                    </select>                
                 </div>
 
                 <div class="col-md-6">
                     <label for="linkedin">LinkedIn:</label>
                     <input type="text" class="form-control" name="linkedin" id="linkedin" value="" >
+                </div>
+            </div><br>
+
+            <div class ="row">
+                <div class="col-md-12">
+                <label for="extrainfo">Extra Info:</label>
+                    <input type="text" class="form-control" name="extrainfo" id="extrainfo" value="" >
                 </div>
             </div>
 
@@ -1000,7 +1056,7 @@
         <div class ="row">
                 <div class="col-md-6">
                     <input type="hidden" name="employeeId">
-                    <label for="name">Full Name:**</label>
+                    <label for="name">Full Name <i>(required)</i>:</label>
                     <input type="text" class="form-control" name="name" id="name" value="">
                     <span class="error" style="color:red;" id="nameError"></span>
                 </div>
@@ -1017,13 +1073,13 @@
 
             <div class ="row">
                 <div class="col-md-6">
-                    <label for="email">Email Address:</label>
+                    <label for="email">Email Address <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeEmailCheck" name="email" id="email" value="" />
                     <span class="error" style="color:red;" id="emailError"></span>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="number ">Phone Number:</label>
+                    <label for="number ">Phone Number <i>(required)</i>:</label>
                     <input type="text" class="form-control employeeNumberCheck" name="number" id="number" value="" >
                     <span class="error" style="color:purple;" id="numberError"></span>
                 </div>
@@ -1063,8 +1119,14 @@
                     <option value="0">Left The Job</option>
                     </select>
                 </div>
-            </div>
+            </div><br>
 
+            <div class ="row">
+                <div class="col-md-12">
+                    <label for="extrainfo">Extra Info:</label>
+                    <input type="text" class="form-control" name="extrainfo" id="extrainfo" value="" />
+                </div>
+            </div>
 
             <hr>
 
@@ -1189,6 +1251,20 @@
     });
 
 
+    function validateStage(event) {
+        // Get the value of the selected option in the stage dropdown
+        var selectedStage = $('#stage').val();
+
+        // Check if the stage is empty or null
+        if (!selectedStage) {
+            // If the stage is not selected, prevent the form submission
+            event.preventDefault();
+            // You can also display an alert or error message to inform the user
+            alert("Please select a stage before setting the sales pipeline.");
+        }
+    }
+
+
 
 
 // DATE PICKER ON CALL MODAL
@@ -1211,12 +1287,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 15) {
+						if (data > 20) {
 							$('#exceed').hide();
 							$('#total').hide();
-							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
+							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 10 && data < 15) {
+						} else if (data > 15 && data < 20) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();
@@ -1239,12 +1315,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -1264,17 +1340,19 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);
             $(e.currentTarget).find('input[name="frequency"]').val(frequency);
             $(e.currentTarget).find('input[name="process"]').val(process);
             $(e.currentTarget).find('#ippStatus').val(ippStatus);
-            $('#comments').val(comments);
+            // $('#comments').val(comments);
+            $(e.currentTarget).find('textarea[name="comments"]').val(comments);
+
 
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
@@ -1324,6 +1402,7 @@
                 var employeeJobstatus = link.data('employee-jobstatus');
                 var employeeCountry = link.data('employee-country');
                 var employeeIsKDM = link.data('employee-iskdm');
+                var extrainfo = link.data('employee-extrainfo');
 
                 $('#employeecountry').val(employeeCountry);
                 $('#employeedesignation').val(employeeDesignation);
@@ -1337,6 +1416,8 @@
                 $(this).find('select[name="jobstatus"]').val(employeeJobstatus);
                 $(this).find('select[name="country"]').val(employeeCountry);
                 $(this).find('select[name="iskdm"]').val(employeeIsKDM);
+                $(this).find('input[name="extrainfo"]').val(extrainfo);
+                
             });
 
 
@@ -1419,6 +1500,31 @@
         }
 
 
+
+    $(document).ready(function() {
+        $('.make-lead-btn').on('click', function(e) {
+            e.preventDefault();
+            var leadId = $(this).data('lead-id');
+
+            // Make an AJAX request to the 'addContacted' route
+            $.ajax({
+                url: '{{ route('addContacted') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    leadId: leadId
+                },
+                success : function(data){
+                        location.reload();
+                        console.log(data);
+                        if(data == 'true'){
+                            $('#alert').html('Leads are assigned successfully');
+                            $('#alert').show();
+                        }
+                    }                        
+            });
+        });
+    });
 
 
 </script>

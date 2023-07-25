@@ -125,12 +125,12 @@
 
                         </div>
 
-                        <div class="form-group col-md-5" style="">
+                        <!-- <div class="form-group col-md-5" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" id="" name="personName" placeholder="name" >
 
-                        </div>
+                        </div> -->
 
 
                         <div class="form-group col-md-5">
@@ -147,12 +147,12 @@
                             <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                         </div>
 
-                        <div class="form-group col-md-5">
+                        <!-- <div class="form-group col-md-5">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" >
 
-                        </div>
+                        </div> -->
 
                         <div class="form-group col-md-5" style="">
                             <label ><b>Category:</b></label>
@@ -276,12 +276,12 @@
 
                         </div>
 
-                        <div class="form-group col-md-5" style="">
+                        <!-- <div class="form-group col-md-5" style="">
                             <label class="control-label" ><b>Contact Person</b></label>
                             {!! $errors->first('personName', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" id="" name="personName" placeholder="name" >
 
-                        </div>
+                        </div> -->
 
 
                         <div class="form-group col-md-5">
@@ -298,12 +298,12 @@
                             <input type="text" class="form-control numbercheck" id="personNumber" name="personNumber" placeholder="Enter Phone Number" required>
                         </div>
 
-                        <div class="form-group col-md-5">
+                        <!-- <div class="form-group col-md-5">
                             <label class="control-label " ><b>Designation</b></label>
                             {!! $errors->first('designation', '<p class="help-block">:message</p>') !!}
                             <input type="text" class="form-control" name="designation" placeholder="Enter Person Designation" >
 
-                        </div>
+                        </div> -->
 
 
 
@@ -431,11 +431,11 @@
                         </div>
 
 
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label>Contact Person:</label>
                             <input type="text" class="form-control" name="personName" value=""> <br><br><br>
                         </div>
-
+ -->
 
                         <div class="col-md-4">
                             <label>Number:</label>
@@ -448,10 +448,10 @@
                         </div>
 
 
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <label><b>Designation:</b></label>
                             <input type="text" class="form-control" name="designation" value="">
-                        </div>
+                        </div> -->
 
                         <div class="col-md-4">
                             <label><b>Country:</b></label>
@@ -680,7 +680,7 @@
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'country.countryName', name: 'country.countryName'},
                     {data: 'release.firstName', name: 'release.firstName', defaultContent: ''},
-                    {data: 'personName', name: 'personName', defaultContent: ''},
+                    // {data: 'personName', name: 'personName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName',defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName',defaultContent: ''},
                     { data: 'probability.probabilityName',
@@ -730,12 +730,12 @@
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
             var country=$(e.relatedTarget).data('lead-country');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var comments=$(e.relatedTarget).data('lead-comments');
             var createdAt=$(e.relatedTarget).data('lead-created');
 
@@ -751,9 +751,9 @@
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $('#comments').val(comments);
 
 //            $(e.currentTarget).find('#reject').attr('href', '/lead/reject/'+leadId);

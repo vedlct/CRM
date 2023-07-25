@@ -1,6 +1,6 @@
 @extends('main')
 @section('content')
-    <div class="modal fade" id="highPossibility" role="dialog">
+    <div class="modal" id="highPossibility" role="dialog">
         <div class="modal-dialog" style="max-width: 80%">
             <!-- Modal content-->
             <div class="modal-content">

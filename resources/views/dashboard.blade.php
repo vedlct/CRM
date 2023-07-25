@@ -5,15 +5,24 @@
     {
         display: none;
     }
+    .card {
+        border-radius:  20px !important;
+        box-shadow: 0.1px 0.1px 1px ;
+    }
+
+    .card-header {
+        box-shadow: 0.1px 0.1px 2px grey;
+    }
 
 </style>
 
-    @endsection
+@endsection
 
 @section('content')
 
 
-<br><br>
+            <br><br>
+            
             <div class="seven-columns-row" >
 
                 <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
@@ -193,38 +202,72 @@
     </div>
 
 
+    <div class="row">
 
-    {{--Notice Box--}}
-
-    <div class="row" style="width: 40%; float: left;">
-        <div class="col-md-12">
+        <div class="col-md-8" style=" float: left;">
             <div class="card">
+            <div class="card-header bg-secondary">
+                    <h5 class="font-weight-bold text-white">Latest Communication</h5>
+                    <div class="card-header-right">
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title" style="color: purple;">{{ $recentNotice->title }}</h4>
+                    <h4 class="card-title">{{ $recentNotice->title }}</h4>
                     <div class="card-text">
                         <p>{!! nl2br(e($recentNotice->msg)) !!}</p>
                     </div>
                     <footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite></footer>
                 </div>
-                <a href="{{ route('notice.index') }}" class="btn btn-info">All Communications</a>
+                <!-- <a href="{{ route('notice.index') }}" class="btn btn-custom">All Communications</a> -->
             </div>
-        </div>
-    </div>
 
-
-    {{--Monthly Report Graph--}}
-
-    <div class="row" style="width:60%; float: right;">
-        <div class="col-md-12">
             <div class="card">
+            <div class="card-header bg-secondary">
+                <h5 class="font-weight-bold text-white">Personal Monthly Graph</h5>
+            </div>
                 <div class="card-body">
-                    <h3 class="card-title">Monthly Graph</h3>
                     <div id="chartContainer" style="height: 400px; width: 100%;">
                     </div>
                 </div>
             </div>
+
+
         </div>
-    </div>
+        
+        <div class="col-md-4" style="float: right;">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="font-weight-bold text-white">Recent Top Activities</h5>
+                    <div class="card-header-right">
+                    </div>
+                </div>
+                <div class="card-body">
+                @if ($topActivities->isEmpty())
+                    <p>No Recent Activity</p>
+                @else
+                    <ul class="crm-activity">
+                        @foreach ($topActivities as $activity)
+                            <li class="media">
+                                <span class="me-3 font-primary"><img src="{{ url('public/img/users/' . $activity->picture) }}" alt="Photo" style="max-height: 50px; border-radius: 50%; padding-right: 10px;"></span>
+                                <div class="align-self-center media-body">
+                                    <!-- <h6 class="mt-0">{{ $activity->userId }} just received a {{ $activity->progress }}</h6> -->
+                                    @if (strpos($activity->progress, 'Test') !== false)
+                                        <h6 class="mt-0">{{ $activity->userId }} has just received a Free Trial </h6>
+                                    @elseif (strpos($activity->progress, 'Closing') !== false)
+                                        <h6 class="mt-0">{{ $activity->userId }} has onboarded a <b>Client</b></h6>
+                                    @elseif ($activity->callingReport = 11)
+                                        <h6 class="mt-0">{{ $activity->userId }} had a Conversation</h6>
+                                    @endif
+                                        <cite>{{ \Carbon\Carbon::parse($activity->created_at)->format('d F Y') }}</cite>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </div>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -286,11 +329,7 @@
         }
 
 
-
     </script>
-
-
-
 
 
     @endsection

@@ -12,12 +12,17 @@ use Image;
 use Auth;
 use Session;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+
 use App\Lead;
 use App\User;
 use App\Usertype;
 use App\Usertarget;
 use App\Targetlog;
 use App\Designation;
+use App\Workprogress;
+use App\Followup;
+use App\NewFile;
 
 use Yajra\DataTables\DataTables;
 
@@ -167,14 +172,16 @@ class UserManagementController extends Controller
         return Redirect()->route('home');
     }
 
+
+    
     public function update(Request $request)
     {
         $user = User::findOrFail($request->id);
 		
-        $this->validateInput($request);
+        $this->validateInputNew($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'active', 'whitelist'];
+            'phoneNumber', 'dob', 'gender', 'active', 'whitelist', 'designationId'];
         $input = $this->createQueryInput($keys, $request);
 
         if ($request['password'] != null && strlen($request['password']) > 0) {
@@ -184,8 +191,11 @@ class UserManagementController extends Controller
         if ($request->file('picture')) {
             $img = $request->file('picture');
             $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
-            $location = public_path('img/'.$filename);
-            Image::make($img)->resize(200,200)->save($location);
+            $location = public_path('img/users/'.$filename);
+            // Image::make($img)->resize(300,200)->save($location);
+            Image::make($img)->resize(300, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save($location);
             $input['picture'] = $filename;
 
         }
@@ -194,53 +204,10 @@ class UserManagementController extends Controller
             ->update($input);
 
         Session::flash('message', 'Successfully user\'s info updated ');
+
         return redirect()->intended('/user-management');
     }
 
-
-
-    public function updateUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        $this->validateInput($request);
-        // Upload image
-        $keys = ['userId', 'userEmail', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'designationId', 'picture'];
-        $input = $this->createQueryInput($keys, $request);
-
-        if ($request->file('picture')) {
-            $img = $request->file('picture');
-            $filename=  $request['userId'].'.'.$img->getClientOriginalExtension();
-            $location = public_path('img/'.$filename);
-            Image::make($img)->resize(200,200)->save($location);
-            $input['picture'] = $filename;
-
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your profile is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
-
-
-    public function changePasswordUserEnd(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-		
-        if ($request['password'] != null && strlen($request['password']) > 0) {
-            $constraints['password'] = 'required|min:6|confirmed';
-            $input['password'] =  bcrypt($request['password']);
-        }
-
-        User::where('id', $request->id)
-            ->update($input);
-
-        Session::flash('message', 'Your password is updated sucessfully ');
-        return redirect()->intended('/settings');
-    }
 
 
     public function destroy($id)
@@ -296,6 +263,23 @@ class UserManagementController extends Controller
     ]);
     }
 
+    private function validateInputNew ($request) {
+        $this->validate($request, [
+		'userId' => 'max:50',
+		'typeId' => 'max:11|numeric',
+		'userEmail' => 'required|email|max:45',
+        'password' => 'max:20|confirmed',
+        'firstName' => 'required|max:20',
+        'lastName' => 'required|max:20',
+        'rfID' => 'max:11',
+        'phoneNumber' => 'max:15',
+        'picture' => 'max:3000',
+        'dob' => 'max:10',
+        'gender' => 'max:1',
+        'active' => 'max:1'
+    ]);
+    }
+
     private function createQueryInput($keys, $request) {
         $queryInput = [];
         for($i = 0; $i < sizeof($keys); $i++) {
@@ -306,12 +290,7 @@ class UserManagementController extends Controller
         return $queryInput;
     }
 
-    public function settings(){
-        $user=User::findOrFail(Auth::user()->id);
 
-        return view('users-mgmt.accountSetting')
-                ->with('user',$user);
-    }
 
     public function setTarget(Request $r){
        try{
@@ -508,54 +487,130 @@ class UserManagementController extends Controller
         return back();
     }
 
-
-    public function getPossessedLeads (Request $r){
-        $totalOwnedLeads = Lead::select('contactedUserId', DB::raw('count(leadId) as userOwnedLead'))
-        ->groupBy('contactedUserId')
-        ->get();
-        return Response($totalOwnedLeads);
-
-    }
-
     
 
-    public function userProfile($id) {
 
-        $user_Type=Session::get('userType');
-		if( $user_Type== 'SUPERVISOR' || $user_Type== 'ADMIN'){
+    public function settings()
+    {
 
-            $user = User::find($id);
+        $user = Auth::user();
+        $User_Type = Session::get('userType');
+        $userTypes = Usertype::get();
 
-            // Check if the user exists
-            // if (!$id) {
-            //     abort(404);
-            // }
+        $currentMonth = Carbon::now()->format('Y-m');
+        $showCurrentMonth = Carbon::now()->format('F Y');
 
-            // Check if the current user is authorized to view the profile
-            // if ($user_Type !== 'SUPERVISOR' && $user->id !== auth()->id()) {
-            //     abort(404);
-            // }
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
 
-        }
+        $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+        $showPreviousMonth = Carbon::now()->subMonth()->format('F Y');
+        
+        $previousMonthStart = Carbon::now()->subMonth()->startOfMonth();
+        $previousMonthEnd = Carbon::now()->subMonth()->endOfMonth();
 
 
-        return view('users-mgmt.userProfile')
+    
+        $userTargets = UsertargetByMonth::where('userId', Auth::user()->id)
+            ->where('date', 'like', $currentMonth . '%')
+            ->get();
+
+        $totalProgressIds = Workprogress::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
+
+        $totalConversationCalls = Workprogress::where('userId', Auth::user()->id)
+            ->where('callingReport', 11)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
+
+        $totalTestProgress = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Test%')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();
+
+        $totalClosingProgress = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Closing%')
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+      
+        $totalLeadMining = Lead::where('minedBy', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalFollowUp = Followup::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalRevenue = NewFile::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+            ->sum('fileCount');    
+
+
+
+
+        $userTargetPreviousMonth = UsertargetByMonth::where('userId', Auth::user()->id)
+            ->where('date', 'like', $previousMonth . '%')
+            ->get();
+
+        $totalCallPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalConvoPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('callingReport', 11)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalTestPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Test%')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalClosingPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Closing%')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();    
+      
+        $totalLeadMiningPreviousMonth = Lead::where('minedBy', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalFollowUpPreviousMonth = Followup::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();    
+
+        $totalRevenuePreviousMonth = NewFile::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->sum('fileCount'); 
+
+
+
+            
+        return view('users-mgmt.accountSetting')
             ->with('user', $user)
-            // ->with('possibilities', $possibilities)
-            // ->with('probabilities', $probabilities)
-            // ->with('categories',$categories)
-            // ->with('status',$status)
-            // ->with('country',$country)
-            // ->with('latestUpdate',$latestUpdate)
-            // ->with('didTestWithUs',$didTestWithUs)
-            // ->with('allComments',$allComments)
-            // ->with('previousFollowups',$previousFollowups)
-            // ->with('latestFollowups',$latestFollowups)
-            // ->with('followupCounter',$followupCounter)
-
+            ->with('showCurrentMonth', $showCurrentMonth)
+            ->with('userTargets', $userTargets)
+            ->with('userTypes', $userTypes)
+            ->with('totalProgressIds', $totalProgressIds)
+            ->with('totalConversationCalls', $totalConversationCalls)
+            ->with('totalTestProgress', $totalTestProgress)
+            ->with('totalClosingProgress', $totalClosingProgress)
+            ->with('totalLeadMining', $totalLeadMining)
+            ->with('totalFollowUp', $totalFollowUp)
+            ->with('totalRevenue', $totalRevenue)
+            ->with('showPreviousMonth', $showPreviousMonth)
+            ->with('userTargetPreviousMonth', $userTargetPreviousMonth)
+            ->with('totalCallPreviousMonth', $totalCallPreviousMonth)
+            ->with('totalConvoPreviousMonth', $totalConvoPreviousMonth)
+            ->with('totalTestPreviousMonth', $totalTestPreviousMonth)
+            ->with('totalClosingPreviousMonth', $totalClosingPreviousMonth)
+            ->with('totalLeadMiningPreviousMonth', $totalLeadMiningPreviousMonth)
+            ->with('totalFollowUpPreviousMonth', $totalFollowUpPreviousMonth)
+            ->with('totalRevenuePreviousMonth', $totalRevenuePreviousMonth)
             ;
-
     }
+
 
 
 

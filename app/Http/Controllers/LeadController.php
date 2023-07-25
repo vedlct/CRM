@@ -28,6 +28,7 @@ use App\Leadstatus;
 use App\SalesPipeline;
 use App\Employees;
 use App\Designation;
+use App\ExcludeKeywords;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -191,13 +192,11 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
 
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
-                                            data-lead-designation="'.$lead->designation.'"
                                             data-lead-linkedin="'.$lead->linkedin.'"
                                             data-lead-founded="'.$lead->founded.'"
                                             data-lead-process="'.$lead->process.'"
@@ -237,13 +236,11 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
 
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
-                                            data-lead-designation="'.$lead->designation.'"
                                             data-lead-linkedin="'.$lead->linkedin.'"
                                             data-lead-founded="'.$lead->founded.'"
                                             data-lead-process="'.$lead->process.'"
@@ -278,13 +275,11 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
 
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
                                            data-lead-linkedin="'.$lead->linkedin.'"
                                            data-lead-founded="'.$lead->founded.'"
                                            data-lead-process="'.$lead->process.'"
@@ -386,12 +381,10 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
-                                            data-lead-designation="'.$lead->designation.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
@@ -415,12 +408,10 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
                                             data-lead-country="'.$lead->countryId.'"
-                                            data-lead-designation="'.$lead->designation.'"
                                             data-lead-comments="'.$lead->comments.'"
                                             data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
@@ -441,12 +432,10 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
                                            data-lead-comments="'.$lead->comments.'"
                                            data-lead-created="'.Carbon::parse($lead->created_at)->format('Y-m-d').'"
                                            >
@@ -481,9 +470,9 @@ class LeadController extends Controller
             'companyName' => 'required|max:100',
             'website' => 'required|max:100',
             'email' => 'max:100',
-            'personName' => 'max:100',
+            // 'personName' => 'max:100',
             'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
-            'designation'=>'max:100'
+            // 'designation'=>'max:100'
         ]);
         //Inserting Data To Leads TAble
 
@@ -500,8 +489,8 @@ class LeadController extends Controller
         $l->probabilityId=$r->probability;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
-        $l->personName= $r->personName;
-        $l->designation=$r->designation;
+        // $l->personName= $r->personName;
+        // $l->designation=$r->designation;
         $l->website = $r->website;
         $l->email= $r->email;
         $l->contactNumber = $r->personNumber;
@@ -553,9 +542,9 @@ class LeadController extends Controller
             'companyName' => 'required|max:100',
             'website' => 'max:100',
             'email' => 'required|max:100',
-            'personName' => 'max:100',
+            // 'personName' => 'max:100',
             'personNumber' => 'required|max:25|unique:leads,contactNumber|regex:/^[\0-9\-\(\)\s]*$/',
-            'designation'=>'max:100'
+            // 'designation'=>'max:100'
         ]);
         //Inserting Data To Leads TAble
         $l=new Lead;
@@ -577,8 +566,8 @@ class LeadController extends Controller
         $l->probabilityId=$r->probability;
         $l->categoryId = $r->category;
         $l->companyName = $r->companyName;
-        $l->personName= $r->personName;
-        $l->designation=$r->designation;
+        // $l->personName= $r->personName;
+        // $l->designation=$r->designation;
         $l->website = $r->website;
         $l->email= $r->email;
         $l->contactNumber = $r->personNumber;
@@ -702,12 +691,10 @@ class LeadController extends Controller
                                            data-lead-name="' . $lead->companyName . '"
                                            data-lead-email="' . $lead->email . '"
                                            data-lead-number="' . $lead->contactNumber . '"
-                                           data-lead-person="' . $lead->personName . '"
                                            data-lead-website="' . $lead->website . '"
                                            data-lead-mined="' . $lead->mined->firstName . '"
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
-                                            data-lead-designation="' . $lead->designation . '"
                                             data-lead-linkedin="' . $lead->linkedin . '"
                                             data-lead-founded="' . $lead->founded . '"
                                             data-lead-employee="' . $lead->employee . '"
@@ -723,7 +710,11 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                            ><i class="fa fa-comments"></i></a></form>';
+                                            ><i class="fa fa-comments"></i></a></form>
+
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
                     } else {
                         if ($lead->contactedUserId == Auth::user()->id) {
                             return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -737,12 +728,10 @@ class LeadController extends Controller
                                            data-lead-name="' . $lead->companyName . '"
                                            data-lead-email="' . $lead->email . '"
                                            data-lead-number="' . $lead->contactNumber . '"
-                                           data-lead-person="' . $lead->personName . '"
                                            data-lead-website="' . $lead->website . '"
                                            data-lead-mined="' . $lead->mined->firstName . '"
                                            data-lead-category="' . $lead->category->categoryId . '"
                                             data-lead-country="' . $lead->countryId . '"
-                                            data-lead-designation="' . $lead->designation . '"
                                             data-lead-linkedin="' . $lead->linkedin . '"
                                             data-lead-founded="' . $lead->founded . '"
                                             data-lead-employee="' . $lead->employee . '"
@@ -758,7 +747,11 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                            ><i class="fa fa-comments"></i></a>';
+                                            ><i class="fa fa-comments"></i></a>
+
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
 
                         } else {
                             return '<a href="#" class="btn btn-danger btn-sm" >
@@ -769,12 +762,10 @@ class LeadController extends Controller
                                            data-lead-name="' . $lead->companyName . '"
                                            data-lead-email="' . $lead->email . '"
                                            data-lead-number="' . $lead->contactNumber . '"
-                                           data-lead-person="' . $lead->personName . '"
                                            data-lead-website="' . $lead->website . '"
                                            data-lead-mined="' . $lead->mined->firstName . '"
                                            data-lead-category="' . $lead->category->categoryId . '"
                                            data-lead-country="' . $lead->countryId . '"
-                                           data-lead-designation="' . $lead->designation . '"
                                            data-lead-linkedin="' . $lead->linkedin . '"
                                            data-lead-founded="' . $lead->founded . '"
                                            data-lead-employee="' . $lead->employee . '"
@@ -790,7 +781,10 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                         ><i class="fa fa-comments"></i></a>';
+                                         ><i class="fa fa-comments"></i></a>
+                                         <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                         data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
                         }
                     }
                 }})
@@ -848,7 +842,14 @@ class LeadController extends Controller
                         ->update(['workStatus' => 0]);
                 }
 
+                $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
 
+                foreach ($followups as $followup) {
+                    $followup->workStatus = 1;
+                    $followup->save();
+                }
+
+                
             }
             return Response('true');
             // return Response($r->leadId);
@@ -888,6 +889,13 @@ class LeadController extends Controller
                         ->update(['workStatus' => 0]);
                 }
 
+                $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
+
+                foreach ($followups as $followup) {
+                    $followup->workStatus = 1;
+                    $followup->save();
+                }
+
 
             }
             return Response('true');
@@ -906,7 +914,7 @@ class LeadController extends Controller
             'companyName' => 'max:100',
             'website' => 'max:100',
             'email' => 'max:100',
-            'personName' => 'max:100',
+            // 'personName' => 'max:100',
             'number' => 'required|max:15|regex:/^[\+0-9\-\(\)\s]*$/',
 
 
@@ -922,7 +930,7 @@ class LeadController extends Controller
         $lead->companyName=$r->companyName;
         $lead->email=$r->email;
         $lead->categoryId=$r->category;
-        $lead->personName=$r->personName;
+        // $lead->personName=$r->personName;
         $lead->contactNumber=$r->number;
         $lead->website=$r->website;
         $lead->linkedin=$r->linkedin;
@@ -930,9 +938,9 @@ class LeadController extends Controller
         if($r->country){
             $lead->countryId=$r->country;
         }
-        if($r->designation){
-            $lead->designation=$r->designation;
-        }
+        // if($r->designation){
+        //     $lead->designation=$r->designation;
+        // }
         if(!empty($r->comments)){
             $lead->comments=$r->comments;
         }
@@ -1130,40 +1138,19 @@ class LeadController extends Controller
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })->addColumn('action', function ($lead) {
-                // if(Session::get('userType')=='RA'){
-                //     return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
-                //                            data-lead-id="'.$lead->leadId.'"
-                //                            data-lead-name="'.$lead->companyName.'"
-                //                            data-lead-email="'.$lead->email.'"
-                //                            data-lead-number="'.$lead->contactNumber.'"
-                //                            data-lead-person="'.$lead->personName.'"
-                //                            data-lead-website="'.$lead->website.'"
-                //                            data-lead-mined="'.$lead->mined->firstName.'"
-                //                            data-lead-category="'.$lead->category->categoryId.'"
-                //                            data-lead-country="'.$lead->countryId.'"
-                //                            data-lead-designation="'.$lead->designation.'"
-                //                            data-lead-comments="'.$lead->comments.'"
-                //                            >
-                //                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                //                  <form method="post" action="'.route('rejectStore').'">
-                //                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                //                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                //                     <button class="btn btn-danger btn-sm">X</button></form>
-                //                     ';
-                // }
-                // else{
                     return '<form method="post" action="'.route('addContacted').'">
-                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
                                         
-                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
-                                                data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
-
-                                            ><i class="fa fa-comments"></i></a>
-                                    </form>';
-                // }
+                                <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+                                ><i class="fa fa-comments"></i></a>
+                            </form>
+                                <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                
                                 })
             ->rawColumns(['action','check'])
             ->make(true);
@@ -1246,7 +1233,7 @@ class LeadController extends Controller
             $text='';
 
             foreach ($comments as $comment){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$comment->comments.'</b> <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action">'.$comment->comments.' <div style="color:blue;">-<span style="color: green">('.$comment->report.')</span>-By '.$comment->firstName.' ('.$comment->created_at.')</div>'.'</li>';
             }
 
             $followupText='';
@@ -1327,7 +1314,7 @@ class LeadController extends Controller
             $text='';
 
             foreach ($activities as $activity){
-                $text.='<li class="list-group-item list-group-item-action"><b>'.$activity->activity.'</b> <div style="color:blue;">-By '.$activity->firstName.' ('.$activity->created_at.')</div>'.'</li>';
+                $text.='<li class="list-group-item list-group-item-action">'.$activity->activity.' <div style="color:blue;">-By '.$activity->firstName.' ('.$activity->created_at.')</div>'.'</li>';
             }
             return Response($text);
         }
@@ -1416,12 +1403,10 @@ class LeadController extends Controller
                                            data-lead-name="'.$lead->companyName.'"
                                            data-lead-email="'.$lead->email.'"
                                            data-lead-number="'.$lead->contactNumber.'"
-                                           data-lead-person="'.$lead->personName.'"
                                            data-lead-website="'.$lead->website.'"
                                            data-lead-mined="'.$lead->mined->firstName.'"
                                            data-lead-category="'.$lead->category->categoryId.'"
                                            data-lead-country="'.$lead->countryId.'"
-                                           data-lead-designation="'.$lead->designation.'"
                                            data-lead-comments="'.$lead->comments.'"
 
                                            >
@@ -1462,6 +1447,13 @@ class LeadController extends Controller
             $leadAssigned->workStatus=1;
             $leadAssigned->save();
         }
+
+        $existingFollowup = Followup::where('leadId', $r->leadId)->exists();
+
+        if ($existingFollowup) {
+            Followup::where('leadId', $r->leadId)->update(['workStatus' => 1]);
+        }
+
         if($r->followup !=null){
             $followUp=New Followup;
             $followUp->leadId=$r->leadId;
@@ -1874,18 +1866,16 @@ class LeadController extends Controller
                                    data-lead-possibility="'.$lead->possibilityId.'"
                                    data-lead-probability="'.$lead->probabilityId.'">
                                     <i class="fa fa-phone" aria-hidden="true"></i></a>
-                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                <a href="#edit_modal" data-toggle="modal" class="btn btn-info btn-sm" 
                                     data-lead-id="'.$lead->leadId.'"
                                     data-lead-name="'.$lead->companyName.'"
                                     data-lead-email="'.$lead->email.'"
                                     data-lead-number="'.$lead->contactNumber.'"
-                                    data-lead-person="'.$lead->personName.'"
                                     data-lead-website="'.$lead->website.'"
                                     data-lead-linkedin="'.$lead->linkedin.'"
                                     data-lead-mined="'.$lead->mined->firstName.'"
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
-                                    data-lead-designation="'.$lead->designation.'"
                                     data-lead-founded="'.$lead->founded.'"
                                     data-lead-employee="'.$lead->employee.'"
                                     data-lead-volume="'.$lead->volume.'"
@@ -1969,12 +1959,10 @@ class LeadController extends Controller
                                     data-lead-name="'.$lead->companyName.'"
                                     data-lead-email="'.$lead->email.'"
                                     data-lead-number="'.$lead->contactNumber.'"
-                                    data-lead-person="'.$lead->personName.'"
                                     data-lead-website="'.$lead->website.'"
                                     data-lead-mined="'.$lead->mined->firstName.'"
                                     data-lead-category="'.$lead->category->categoryId.'"
                                     data-lead-country="'.$lead->countryId.'"
-                                    data-lead-designation="'.$lead->designation.'"
                                     data-lead-linkedin="'.$lead->linkedin.'"
                                     data-lead-process="'.$lead->process.'"
                                     data-lead-founded="'.$lead->founded.'"
@@ -2093,7 +2081,14 @@ class LeadController extends Controller
             $pipeline->workStatus = 0;
             $pipeline->save();
         }
-        
+
+        $followups = Followup::where('leadId', $r->leadId)->where('workStatus', 0)->get();
+
+        foreach ($followups as $followup) {
+            $followup->workStatus = 1;
+            $followup->save();
+        }
+
 
         if($r->Status==6){
             $newFile=new NewFile();
@@ -2214,37 +2209,47 @@ class LeadController extends Controller
 
 
 
-        
         // EMPLOYEE SECTION START
 
-        public function getAllemployees ()
+        public function allEmployees ()
+        {
+
+
+            return view('layouts.lead.allEmployees');
+
+        }
+
+
+        public function getAllEmployees(Request $request)
         {
             $User_Type=Session::get('userType');
             if($User_Type == 'USER' || $User_Type == 'MANAGER'){
 
-                $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+                $employees = Employees::select('employees.*','leads.website', 'leads.companyName', 'leads.leadId', 'designations.designationName', 'countries.countryName')
                 ->Join('leads','employees.leadId','leads.leadId')
                 ->where('leads.contactedUserId', Auth::User()->id)
+                ->Join('designations','employees.designationId','designations.designationId')
+                ->Join('countries','employees.countryId','countries.countryId')
+                ->orderBy('employeeId', 'desc')
                 ->get();
             }else{
-                $employees = Employees::select('employees.*', 'leads.companyName', 'leads.website')
+                $employees = Employees::select('employees.*','leads.website', 'leads.companyName','leads.leadId', 'designations.designationName', 'countries.countryName')
                 ->Join('leads','employees.leadId','leads.leadId')
-                // ->where('leads.contactedUserId', Auth::User()->id)
+                ->Join('designations','employees.designationId','designations.designationId')
+                ->Join('countries','employees.countryId','countries.countryId')
+                ->orderBy('employeeId', 'desc')
                 ->get();
-
             }
-
-                $country=Country::get();
-                $designation=Designation::get();
-                
-                return view('layouts.lead.allEmployees')
-                    ->with('employees', $employees)
-                    ->with('country', $country)
-                    ->with('designation', $designation)
-                ;
-
+        
+            return DataTables::of($employees)
+                ->addColumn('action', function ($employee) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                })
+                ->toJson();
         }
 
+        
 
 
         public function createEmployees (Request $r) {
@@ -2267,6 +2272,7 @@ class LeadController extends Controller
             $employees->linkedin = $r->linkedin;
             $employees->jobstatus=$r->jobstatus;
             $employees->iskdm=$r->iskdm;
+            $employees->extrainfo=$r->extrainfo;
             $employees->save();
 
             Session::flash('message', 'Created Employee Successfully');
@@ -2303,9 +2309,10 @@ class LeadController extends Controller
                 $jobstatus = $r->input('jobstatus');
                 $country = $r->input('country');
                 $iskdm = $r->input('iskdm');
+                $extrainfo = $r->input('extrainfo');
             
                 // Update the employee in the database
-                $employee = Employee::findOrfail($employeeId);
+                $employee = Employees::findOrfail($employeeId);
                 $employee->name = $name;
                 $employee->designationId = $designation;
                 $employee->email = $email;
@@ -2314,6 +2321,7 @@ class LeadController extends Controller
                 $employee->jobstatus = $jobstatus;
                 $employee->countryId = $country;
                 $employee->iskdm = $iskdm;
+                $employee->extrainfo = $extrainfo;
                 $employee->save();
             
                 Session::flash('message', 'Updated Employee Successfully');
@@ -2332,1018 +2340,6 @@ class LeadController extends Controller
         // EMPLOYEE SECTION END
 
 
-
-
-
-
-
-        //ANALYSIS PART START
-
-        public function analysisHomePage ()
-        {
-
-
-            return view ('report.analysisHome');
-        
-        }
-    
-
-
-        public function ippList(){
-            // $date = Carbon::now();
-
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR'){
-           
-                $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
-                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                // ->where('leads.contactedUserId', Auth::user()->id)
-                ->where('leads.ippStatus', 1)
-                ->groupBy('leads.leadId')
-                ->orderBy('workprogress.created_at','desc')
-                ->get();
-            }else{
-            $leads=Lead::select('leads.*', 'workprogress.created_at','users.firstName','users.lastName')
-                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('leads.contactedUserId', Auth::user()->id)
-                ->where('leads.ippStatus', 1)
-                ->groupBy('leads.leadId')
-                ->orderBy('workprogress.created_at','desc')
-                ->get();
-            }
-
-
-            // $latestLead=Workprogress::select('created_at')->latest()->first();
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $callReports = Callingreport::get();
-            $categories=Category::where('type',1)->get();
-            $country=Country::get();
-            $status=Leadstatus::get();
-
-
-            return view('layouts.lead.ipp')
-                ->with('leads', $leads)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country);
-              
-        }
-
-
-
-
-        public function allAssignedButNotMyleads()
-        {
-
-            // Retrieve user type from the session
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-
-           // Retrieve assigned leads with associated data 
-            $leads = Lead::select('leads.*', 'leadassigneds.*', 'users.firstName', 'users.lastName')
-            ->leftJoin('leadassigneds', function ($join) {
-                $join->on('leads.leadId', '=', 'leadassigneds.leadId')
-                     ->whereIn('leadassigneds.created_at', function ($query) {
-                         $query->select(DB::raw('MAX(created_at)'))
-                               ->from('leadassigneds')
-                               ->whereRaw('leadassigneds.leadId = leads.leadId')
-                               ->groupBy('leadassigneds.leadId');
-                     });
-            })
-            ->leftJoin('users', 'leadassigneds.assignTo', 'users.id')
-            ->where('leads.contactedUserId', NULL)
-            ->where('leads.leadAssignStatus', 1)
-            ->where('leadassigneds.workStatus', 0)
-            ->where('leadassigneds.leaveDate', NULL)
-            ->get();
-        
-
-
-            // Retrieve additional data
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $callReports = Callingreport::get();
-            $categories=Category::where('type',1)->get();
-            $country=Country::get();
-            $status=Leadstatus::get();
-
-            
-            // Return the view with the retrieved data
-            return view('report.assignedButNotTaken')
-            ->with('leads', $leads)
-            ->with('callReports', $callReports)
-            ->with('possibilities', $possibilities)
-            ->with('probabilities', $probabilities)
-            ->with('categories',$categories)
-            ->with('status',$status)
-            ->with('country',$country);
-
-        } else {
-
-            return view ('report.analysisHome');
-        }
-
-
-        }
-
-
-        public function duplicateLeadList (Request $r)
-        {
-
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-           
-                $leads=Lead::select('leads.*','users.firstName','users.lastName')
-                ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('leads.statusId', 8)
-                ->get();
-
-   
-
-                $possibilities = Possibility::get();
-                $probabilities = Probability::get();
-                $callReports = Callingreport::get();
-                $categories=Category::where('type',1)->get();
-                $country=Country::get();
-                $status=Leadstatus::get();
-                
-
-                return view('report.duplicateLeadList')
-                ->with('leads', $leads)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country);
-
-            } else {
-
-                return view ('report.analysisHome');
-            }
-    
-        }
-
-  
-        
-        
-        public function getallConversations(){
-
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR'){
-           
-                $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
-                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('workprogress.callingReport', 11)
-                ->groupBy('leads.leadId')
-                ->orderBy('workprogress.created_at','desc')
-                ->get();
-           
-            } else {
-           
-                $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
-                ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('users.id', Auth::user()->id)
-                ->where('workprogress.callingReport', 11)
-                ->groupBy('leads.leadId')
-                ->orderBy('workprogress.created_at','desc')
-                ->get();
-       
-            }
-
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $callReports = Callingreport::get();
-            $categories=Category::where('type',1)->get();
-            $country=Country::get();
-            $status=Leadstatus::get();
-
-
-            return view('report.allConversations')
-                ->with('leads', $leads)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country);
-              
-        }
-
-
-        //ANALYZING COMMENTS TO GET SPECIFIC LEADS 
-
-        public function analysisComments(Request $request)
-        {
-            
-            
-            $userType = Session::get('userType');
-            $searchTerm = $request->input('searchTerm');
-            $keywords = [];
-
-        
-            if (!empty($searchTerm)) {
-                // Split the search term into an array of keywords
-                $keywords = explode(',', $searchTerm);
-                // Trim whitespace from each keyword
-                $keywords = array_map('trim', $keywords);
-                // Remove any empty keywords
-                $keywords = array_filter($keywords);
-            }
-        
-            if (empty($keywords)) {
-                // Return the view without executing the search logic
-                return view('report.analysisComments')
-                    ->with('searchTerm', $searchTerm);
-            }
-            
-            if ($userType == 'SUPERVISOR' || $userType == 'ADMIN') {
-            
-                $analysis = Lead::select('leads.*', 'users.userId')
-                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                    ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                    ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
-                    ->where('leads.statusId', '!=', 6)
-                    ->where(function ($query) use ($keywords) {
-                        foreach ($keywords as $keyword) {
-                            $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
-                        }
-                    })
-                    ->groupBy('leads.leadId')
-                    ->orderBy('workprogress.created_at', 'desc')
-                    ->get();
-            } else {
-                $analysis = [];
-            }
-        
-            $possibilities = Possibility::get();
-            $probabilities = Probability::get();
-            $callReports = Callingreport::get();
-            $categories = Category::where('type', 1)->get();
-            $country = Country::get();
-            $status = Leadstatus::get();
-        
-            return view('report.analysisComments')
-                ->with('analysis', $analysis)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories', $categories)
-                ->with('status', $status)
-                ->with('country', $country)
-                ->with('searchTerm', $searchTerm);
-        }
-
-    
-    
-
-
-            public function exportAnalysisComments(Request $request)
-            {
-            
-                $userType = Session::get('userType');
-                $searchTerm = $request->input('searchTerm');
-                $keywords = [];
-
-            
-                if (!empty($searchTerm)) {
-                    // Split the search term into an array of keywords
-                    $keywords = explode(',', $searchTerm);
-                    // Trim whitespace from each keyword
-                    $keywords = array_map('trim', $keywords);
-                    // Remove any empty keywords
-                    $keywords = array_filter($keywords);
-                }
-            
-                if (empty($keywords)) {
-                    // Return the view without executing the search logic
-                    return view('report.analysisComments')
-                        ->with('searchTerm', $searchTerm);
-                }
-
-                    $analysis = Lead::select(
-                        'leads.leadId',
-                        'leads.companyName',
-                        'categories.categoryName as category_name',
-                        'leads.website',
-                        'leadstatus.statusName as status_name',
-                        'countries.countryName as country_name',
-                        'users.userId'
-                    )
-                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                    ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                    ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
-                    ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
-                    ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                    ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
-                    ->where('leads.statusId', '!=', 6)
-                    ->where(function ($query) use ($keywords) {
-                        foreach ($keywords as $keyword) {
-                            $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
-                        }
-                    })
-                    ->groupBy('leads.leadId')
-                    ->orderBy('workprogress.created_at', 'desc')
-                    ->get();
-            
-
-                    $categories = Category::where('type', 1)->get();
-                    $country = Country::get();
-                    $status = Leadstatus::get();
-                
-                    $export = new SelectedAnalysisCommentsExport($analysis, $categories, $country, $status);
-
-                    return Excel::download($export, 'selected_analysis_comments.csv');
-            }
-
-    
-
-
-        public function frequentlyFilteredLeads()
-        {
-
-            $User_Type = Session::get('userType');
-            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN') {
-
-            $recentLeads = Lead::select('leads.*','activities.created_at AS activities_created_at', 'leadstatus.statusName', 'users.userId')
-                    ->whereBetween(DB::raw('date(leads.created_at)'), [Carbon::now()->subDays(30), date('Y-m-d')])
-                    ->where('leads.contactedUserId', NULL)
-                    ->join('activities', 'leads.leadId','activities.leadId')
-                    ->where(function ($query) {
-                        $query->where('activities.activity', 'like', '%Filtered%')
-                            ->orWhere('activities.activity', 'like', '%Rejected%')
-                            ->orWhere('activities.activity', 'like', '%Bad%')
-                            ->orWhere('activities.activity', 'like', '%Duplicate%');
-                    })
-                    ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                    ->join('users','leads.minedBy','users.id')
-                    ->orderBy('leads.created_at', 'desc')
-                    ->groupBy('activities.leadId')
-                    ->get();
-
-
-            $recentLeads = $recentLeads->map(function ($lead) {
-                    $activitiesCreatedAt = Carbon::parse($lead->activities_created_at);
-                    $leadCreatedAt = Carbon::parse($lead->created_at);
-                    $lead->differences = $activitiesCreatedAt->diff($leadCreatedAt)->format('%d days, %h hours');
-                    return $lead;
-                   });
-
-                $possibilities = Possibility::get();
-                $probabilities = Probability::get();
-                $callReports = Callingreport::get();
-                $categories = Category::where('type', 1)->get();
-                $country = Country::get();              
-                $status = Leadstatus::get();
-                $users = User::get();
-
-            return view('report.frequentlyFiltered', compact('recentLeads'))
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories', $categories)
-                ->with('status', $status)
-                ->with('country', $country)
-                ->with('users', $users);
-
-            } else {
-
-                return view ('report.analysisHome');
-            }
-
-        }
-
-
-        public function reportAllActivties(Request $r)
-        {
-            $User_Type = Session::get('userType');
-            if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN') {
-                
-                $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
-                        ->join('users', 'activities.userId','users.id')
-                        ->join('leads', 'activities.leadId', 'leads.leadId')
-                        ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
-                        // ->where('users.active', 1)
-                        ->orderBy('activityId', 'desc')
-                        // ->latest()->paginate(50);                        
-                        ->get();
-    
-                } else {
-
-                    $activities = Activities::select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity', 'activities.created_at')
-                    ->join('users', 'activities.userId', 'users.id')
-                    ->join('leads', 'activities.leadId', 'leads.leadId')
-                    ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                    ->where('activities.userId', Auth::user()->id)
-                    ->orderBy('activities.created_at', 'DESC')
-                    ->paginate(300);
-
-                }
-
-                return view('report.activities', compact('activities'));
-        
-        }        
-
-
-       
-
-                public function getAllChasingLeads(){
-
-                    $User_Type=Session::get('userType');
-                    if($User_Type == 'ADMIN' ||  $User_Type == 'SUPERVISOR'){
-
-                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
-                        ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                        ->leftJoin('users', 'workprogress.userId', 'users.id')
-                        ->whereNotNull('leads.contactedUserId')
-                        ->where('leads.countryId', '!=', '49')
-                        ->where('leads.statusId', '7')
-                        ->where('users.active', '1')
-                        ->havingRaw('progressCount > 10')
-                        ->groupBy('leads.leadId', 'workprogress.userId')
-                        ->orderBy('progressCount', 'desc')
-                        ->get();
-                    } else {
-                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
-                        ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                        ->leftJoin('users', 'workprogress.userId', 'users.id')
-                        ->where('users.id', Auth::user()->id)
-                        ->whereNotNull('leads.contactedUserId')
-                        ->where('leads.countryId', '!=', '49')
-                        ->where('leads.statusId', '7')
-                        ->where('users.active', '1')
-                        ->havingRaw('progressCount > 10')
-                        ->groupBy('leads.leadId', 'workprogress.userId')
-                        ->orderBy('progressCount', 'desc')
-                        ->get();
-                    }
-
-                    $possibilities = Possibility::get();
-                    $probabilities = Probability::get();
-                    $callReports = Callingreport::get();
-                    $categories=Category::where('type',1)->get();
-                    $country=Country::get();
-                    $status=Leadstatus::get();
-        
-        
-                    return view('report.chasingLeads')
-                        ->with('leads', $leads)
-                        ->with('callReports', $callReports)
-                        ->with('possibilities', $possibilities)
-                        ->with('probabilities', $probabilities)
-                        ->with('categories',$categories)
-                        ->with('status',$status)
-                        ->with('country',$country);
-
-                     
-
-                }    
-    
-
-
-          
-                public function getLongTimeNoCall()
-                {
-                    $User_Type = Session::get('userType');
-                
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
-
-                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
-                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
-                                            FROM workprogress
-                                            GROUP BY leadId) AS wp'), function ($join) {
-                                $join->on('leads.leadId', '=', 'wp.leadId');
-                            })
-                            ->leftJoin('workprogress', function ($join) {
-                                $join->on('wp.leadId', '=', 'workprogress.leadId')
-                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
-                            })
-                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
-                            ->leftJoin('users', function ($join) {
-                                $join->on('workprogress.userId', '=', 'users.id')
-                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
-                            })
-                            ->where('leads.contactedUserId', '!=', null)
-                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
-                            ->where('leads.statusId', 7)
-                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
-                            ->orderBy('workprogress.created_at', 'desc')
-                            ->get();
-
-                    } else {    
-                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
-                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
-                                            FROM workprogress
-                                            GROUP BY leadId) AS wp'), function ($join) {
-                                $join->on('leads.leadId', '=', 'wp.leadId');
-                            })
-                            ->leftJoin('workprogress', function ($join) {
-                                $join->on('wp.leadId', '=', 'workprogress.leadId')
-                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
-                            })
-                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
-                            ->leftJoin('users', function ($join) {
-                                $join->on('workprogress.userId', '=', 'users.id')
-                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
-                            })
-                            ->where('users.id', Auth::user()->id)
-                            ->where('leads.contactedUserId', '!=', null)
-                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
-                            ->where('leads.statusId', 7)
-                            ->whereDate('workprogress.created_at', '<=', now()->subDays(90))
-                            ->orderBy('workprogress.created_at', 'desc')
-                            ->get();
-
-                    }        
-
-                        $outstatus=Leadstatus::where('statusId','!=',7)
-                            ->where('statusId','!=',1)
-                            ->where('statusId','!=',6)
-                            ->get();
-        
-                        $possibilities = Possibility::get();
-                        $probabilities = Probability::get();
-                        $callReports = Callingreport::get();
-                        $categories = Category::where('type', 1)->get();
-                        $country = Country::get();
-                        $status = Leadstatus::get();
-                
-                    return view('report.longTimeNoCall')
-                        ->with('leads', $leads)
-                        ->with('callReports', $callReports)
-                        ->with('possibilities', $possibilities)
-                        ->with('probabilities', $probabilities)
-                        ->with('categories', $categories)
-                        ->with('status', $status)
-                        ->with('country', $country)
-                        ->with('outstatus', $outstatus);
-                }
-                 
-
-                public function exportLongTimeNoCall()
-                {
-                    $User_Type = Session::get('userType');
-                
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
-
-                        $leads = Lead::select(
-                            'leads.leadId',
-                            'leads.companyName',
-                            'categories.categoryName as category_name',
-                            'leads.website',
-                            'leads.contactNumber',
-                            'leadstatus.statusName as status_name',
-                            'countries.countryName as country_name',
-                            'users.userId',
-                            'workprogress.created_at as workprogress_created_at'
-                            )
-
-                            ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
-                                            FROM workprogress
-                                            GROUP BY leadId) AS wp'), function ($join) {
-                                $join->on('leads.leadId', '=', 'wp.leadId');
-                            })
-                            ->leftJoin('workprogress', function ($join) {
-                                $join->on('wp.leadId', '=', 'workprogress.leadId')
-                                    ->on('wp.latest_created_at', '=', 'workprogress.created_at');
-                            })
-                        
-                            // ->leftJoin('users', 'workprogress.userId', '=', 'users.id')
-                            ->leftJoin('users', function ($join) {
-                                $join->on('workprogress.userId', '=', 'users.id')
-                                    ->whereColumn('leads.contactedUserId', '=', 'users.id');
-                            })
-                            ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
-                            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
-                            ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                            ->where('leads.contactedUserId', '!=', null)
-                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
-                            ->where('leads.statusId', 7)
-                            ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
-                            ->orderBy('workprogress.created_at', 'desc')
-                            ->get();
-
-                    }        
-
-                        $categories = Category::where('type', 1)->get();
-                        $country = Country::get();
-                        $status = Leadstatus::get();
-                
-                 
-                        $export = new LongTimeNoCallExport ($leads, $categories, $country, $status);
-
-                        return Excel::download($export, 'LongTimeNoCallExport.csv');
-                        }
-
-
-
-                    public function getFredChasingLeads(){
-
-                        $User_Type=Session::get('userType');
-                        if($User_Type == 'SUPERVISOR'){
-    
-                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', DB::raw('COUNT(workprogress.progressId) AS progressCount'))
-                            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                            ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                            ->where('leads.statusId', '!=', '6' )
-                            ->where('workprogress.userId', '2')
-                            ->havingRaw('progressCount > 10')
-                            ->groupBy('leads.leadId', 'workprogress.userId')
-                            ->orderBy('progressCount', 'desc')
-                            ->get();
-
-    
-                        $leadIds = $leads->pluck('leadId')->toArray();
-
-                        $wp = Workprogress::whereIn('leadId', $leadIds)
-                            ->where(function ($query) {
-                                $query->where('comments', 'LIKE', '%TEST%')
-                                    ->orWhere('comments', 'LIKE', '%CLOSED%')
-                                    ->orWhere('comments', 'LIKE', '%CLIENT%');
-                            })
-                            ->get();
-                    
-
-                        $possibilities = Possibility::get();
-                        $probabilities = Probability::get();
-                        $callReports = Callingreport::get();
-                        $categories=Category::where('type',1)->get();
-                        $country=Country::get();
-                        $status=Leadstatus::get();
-            
-            
-                        return view('report.fredChasingLeads')
-                            ->with('leads', $leads)
-                            ->with('callReports', $callReports)
-                            ->with('possibilities', $possibilities)
-                            ->with('probabilities', $probabilities)
-                            ->with('categories',$categories)
-                            ->with('status',$status)
-                            ->with('country',$country)
-                            ->with('wp',$wp);
-
-                        } else {
-
-                            return view ('report.analysisHome');
-                        }
-                
-                    }    
-
-
-                                public function exportFredChasingLeads()
-                                {
-                                    $User_Type = Session::get('userType');
-                                    if ($User_Type == 'SUPERVISOR') {
-                                        // Retrieve leads
-                                        $leads = Lead::select('leads.leadId',
-                                            'leads.companyName',
-                                            'categories.categoryName as category_name',
-                                            'leads.website',
-                                            'leads.contactNumber',
-                                            'leadstatus.statusName as status_name',
-                                            'countries.countryName as country_name',
-                                            'users.userId',
-                                            DB::raw('COUNT(workprogress.progressId) AS progressCount')
-                                        )
-                                            ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
-                                            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
-                                            ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                                            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
-                                            ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                            ->where('leads.statusId', '!=', '6')
-                                            ->where('workprogress.userId', '2')
-                                            ->havingRaw('progressCount > 10')
-                                            ->groupBy('leads.leadId', 'workprogress.userId')
-                                            ->orderBy('progressCount', 'desc')
-                                            ->get();
-                                    }
-                                
-                                    $leadIds = $leads->pluck('leadId')->toArray();
-                                
-                                    // Retrieve workprogress comments
-                                    $wp = Workprogress::whereIn('leadId', $leadIds)
-                                        ->where(function ($query) {
-                                            $query->where('comments', 'LIKE', '%TEST%')
-                                                ->orWhere('comments', 'LIKE', '%CLOSED%')
-                                                ->orWhere('comments', 'LIKE', '%CLIENT%');
-                                        })
-                                        ->get();
-                                
-                                    $categories = Category::where('type', 1)->get();
-                                    $country = Country::get();
-                                    $status = Leadstatus::get();
-                                
-                                    $export = new fredChasingLeadsExport($leads, $wp);
-                                
-                                    return Excel::download($export, 'fredChasingLeadsExport.csv');
-                                }
-                    
-                                
-                                
-
-                            public function getTestButNotClosedList()
-                            {
-                                $User_Type = Session::get('userType');
-                            
-                                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
-            
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        ->where('leads.statusId', '!=', 6)
-                                        ->where('workprogress.progress', 'LIKE', '%Test%')
-                                        ->whereNotExists(function ($query) {
-                                            $query->select(DB::raw(1))
-                                                ->from('workprogress as wp2')
-                                                ->whereRaw('wp2.leadId = leads.leadId')
-                                                ->where('wp2.progress', 'LIKE', '%Closing%');
-                                        })
-                                        ->orderBy('workprogress.created_at', 'desc')
-                                        ->groupBy('leads.leadId')
-                                        ->get();
-                                            
-                                } else {
-
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        ->where('users.id', Auth::user()->id)
-                                        ->where('leads.statusId', '!=', 6)
-                                        ->where('workprogress.progress', 'LIKE', '%Test%')
-                                        ->whereNotExists(function ($query) {
-                                            $query->select(DB::raw(1))
-                                                ->from('workprogress as wp2')
-                                                ->whereRaw('wp2.leadId = leads.leadId')
-                                                ->where('wp2.progress', 'LIKE', '%Closing%');
-                                        })
-                                        ->orderBy('workprogress.created_at', 'desc')
-                                        ->groupBy('leads.leadId')
-                                        ->get();
-                                                
-                                }        
-            
-                    
-                                    $possibilities = Possibility::get();
-                                    $probabilities = Probability::get();
-                                    $callReports = Callingreport::get();
-                                    $categories = Category::where('type', 1)->get();
-                                    $country = Country::get();
-                                    $status = Leadstatus::get();
-                            
-                                return view('report.testButNotClosedList')
-                                    ->with('leads', $leads)
-                                    ->with('callReports', $callReports)
-                                    ->with('possibilities', $possibilities)
-                                    ->with('probabilities', $probabilities)
-                                    ->with('categories', $categories)
-                                    ->with('status', $status)
-                                    ->with('country', $country)
-                                    ;
-                            }
-                                
-
-                                    
-                              
-                            public function getDuplicateLeads()
-                            {
-                                $User_Type = Session::get('userType');
-                            
-                                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
-                                    
-                                    $categoryIdList = [1, 2, 3, 4, 5, 6];
-                                    $statusIdList = [2, 3, 5, 7];
-                                    
-                                    $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName')
-                                        ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                        // ->where('leads.contactedUserId', '!=', null)
-                                        ->whereIn('leads.categoryId', $categoryIdList)
-                                        ->whereIn('leads.statusId', $statusIdList)
-                                        ->where('leads.website', '<>', '')
-                                        ->whereIn(DB::raw('(SELECT COUNT(*) FROM leads AS l2 WHERE l2.website = leads.website)'), [2, 3, 4, 5, 6, 7, 8, 9, 10])
-                                        ->orderBy('leads.companyName', 'ASC')
-                                        ->get();
-                                
-
-                                        $possibilities = Possibility::get();
-                                        $probabilities = Probability::get();
-                                        $callReports = Callingreport::get();
-                                        $categories = Category::where('type', 1)->get();
-                                        $country = Country::get();
-                                        $status = Leadstatus::get();
-                                        $users = User::get();
-
-                                        
-                                    return view('report.duplicateLeads')
-                                        ->with('leads', $leads)
-                                        ->with('callReports', $callReports)
-                                        ->with('possibilities', $possibilities)
-                                        ->with('probabilities', $probabilities)
-                                        ->with('categories', $categories)
-                                        ->with('status', $status)
-                                        ->with('country', $country)
-                                        ->with('users', $users)
-                                        ;
-                                } else {
-                                    return view('report.analysisHome');
-                                }
-                            }
-                            
-                            
-                                
-                                                        
-
-
-            public function randomReports () {
-                
-                $User_Type = Session::get('userType');
-
-                //GETIING OWNED REPORTS
-                $totalOwnCall = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnCall'))
-                    ->where('userId', Auth::user()->id)
-                    ->value('totalOwnCall');
-
-                $totalOwnContact = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnContact'))
-                    ->where('userId', Auth::user()->id)
-                    ->where('callingReport', '=', 5)
-                    ->value('totalOwnContact');
-
-                $totalOwnConvo = Workprogress::Select(DB::raw('COUNT(progressId) as totalOwnConvo'))
-                    ->where('userId', Auth::user()->id)
-                    ->where('callingReport', '=', 11)
-                    ->value('totalOwnConvo');
-
-                $totalOwnTest = Workprogress::Select(DB::raw('COUNT(progress) as totalOwnTest'))
-                    ->where('progress', 'like', '%Test%')
-                    ->where('userId', Auth::user()->id)
-                    ->value('totalOwnTest');
-
-
-
-                    $callToContact = 0;
-                    $callToConvo = 0;
-                    $callToTest = 0;
-                    $contactToTest = 0;
-                    $convoToTest = 0;
-                    
-                    if ($totalOwnCall != 0) {
-                        $callToContact = ($totalOwnContact / $totalOwnCall) * 100;
-                        $callToConvo = ($totalOwnConvo / $totalOwnCall) * 100;
-                        $callToTest = ($totalOwnTest / $totalOwnCall) * 100;
-                    }
-                    
-                    if ($totalOwnContact != 0) {
-                        $contactToTest = ($totalOwnTest / $totalOwnContact) * 100;
-                    }
-                    
-                    if ($totalOwnConvo != 0) {
-                        $convoToTest = ($totalOwnTest / $totalOwnConvo) * 100;
-                    }
-                    
-
-
-                //GETTING REPORTS OF THE MAXIMUM NUMBERS
-
-                $maxTotalCall = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalCall'))
-                    ->groupBy('userId')
-                    ->orderByDesc('maxTotalCall')
-                    ->value('maxTotalCall');
-
-                $maxTotalContact = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalContact'))
-                    ->where('callingReport', '=', 5)
-                    ->groupBy('userId')
-                    ->orderByDesc('maxTotalContact')
-                    ->value('maxTotalContact');
-
-                $maxTotalConvo = Workprogress::Select(DB::raw('COUNT(progressId) as maxTotalConvo'))
-                    ->where('callingReport', '=', 11)
-                    ->groupBy('userId')
-                    ->orderByDesc('maxTotalConvo')
-                    ->value('maxTotalConvo');
-
-                $maxTotalTest = Workprogress::Select(DB::raw('COUNT(progress) as maxTotalTest'))
-                    ->where('progress', 'like', '%Test%')
-                    ->groupBy('userId')
-                    ->orderByDesc('maxTotalTest')
-                    ->value('maxTotalTest');
-
-
-
-
-                return view ('report.randomReports')
-                        ->with('maxTotalCall', $maxTotalCall)
-                        ->with('maxTotalContact', $maxTotalContact)
-                        ->with('maxTotalConvo', $maxTotalConvo)
-                        ->with('maxTotalTest', $maxTotalTest)
-                        ->with('totalOwnCall', $totalOwnCall)
-                        ->with('totalOwnContact', $totalOwnContact)
-                        ->with('totalOwnConvo', $totalOwnConvo)
-                        ->with('totalOwnTest', $totalOwnTest)
-                        ->with('callToContact', $callToContact)
-                        ->with('callToConvo', $callToConvo)
-                        ->with('callToTest', $callToTest)
-                        ->with('contactToTest', $contactToTest)
-                        ->with('convoToTest', $convoToTest)
-                        ;
-
-            }
-
-
-
-
-            public function frequentlyAskedQuestions () {
-
-            
-            
-                return view ('report.frequentlyAskedQuestions');
-
-            }
-
-
-
-
-
-            public function googleSearch(Request $request)
-            {
-                $searchTerm = $request->input('searchTerm');
-                $country = $request->input('country');
-                $results = [];
-            
-                // Store the engine key and API key in the session
-                $engineKey = $request->input('engineKey');
-                $apiKey = $request->input('apiKey');
-                Session::put('engineKey', $engineKey);
-                Session::put('apiKey', $apiKey);
-            
-                if (empty($searchTerm)) {
-                    // Return the view without executing the search logic
-                    return view('mining.googleSearch')->with('searchTerm', $searchTerm);
-                }
-    
-                $excludedKeywords = DB::table('excludeKeywords')->pluck('keyword')->toArray();
-                
-                $excludedQuery = '';
-                foreach ($excludedKeywords as $keyword) {
-                    $excludedQuery .= ' -' . $keyword;
-                }
-            
-                $excludedRegions = ['USA', 'Switzerland', 'Norway','India','China','Hong Kong','Canada','Brazil', 'Africa', 'Nigeria', 'Ghana', 'South Africa','NY','MA','WA','CA','ND','CT','DE','AK','NE','IL','FL']; // Specify the regions to exclude
-    
-                $excludedRegionsQuery = '';
-                foreach ($excludedRegions as $region) {
-                    $excludedRegionsQuery .= ' -site:' . $region . '.*';
-                }
-            
-                $searchTerm = $searchTerm . ' ' . $country; // Append the selected country to the search term
-    
-                $results = [];
-    
-                for ($start = 1; $start <= 40; $start += 10) {
-                    $parameters = [
-                        'start' => $start,
-                        'num' => 10,
-                    ];
-    
-                    $fulltext = new LaravelGoogleCustomSearchEngine(); // initialize the plugin
-                    $fulltext->setEngineId($engineKey); // gets the engine ID
-                    $fulltext->setApiKey($apiKey); // gets the API key
-                    $partialResults = $fulltext->getResults($searchTerm . $excludedQuery . $excludedRegionsQuery, $parameters); // Exclude the specified keywords and regions from the search query
-    
-                    // Extract the domain from each search result URL
-                    foreach ($partialResults as $result) {
-                        $result->domain = $this->getDomainFromURL($result->link);
-                        $result->availability = $this->checkLeadAvailability($result->domain);
-                        $results[] = $result;
-                    }
-                }
-    
-                return view('mining.googleSearch')
-                    ->with('results', $results)
-                    ->with('searchTerm', $searchTerm);
-                }
-            
-                    private function getDomainFromURL($url)
-                    {
-                        preg_match('/^(?:https?:\/\/)?(?:www\.)?([^.]+)\.[^.]+/i', $url, $matches);
-                        return $matches[1] ?? null;
-                    }
-                    
-                    private function checkLeadAvailability($domain)
-                    {
-                        $lead = Lead::where('website', 'LIKE', '%' . $domain . '%')->first();
-                        return $lead ? 'Yes' : 'No';
-                    }
-        
-
-        // ANALYSIS PART END
 
 
 

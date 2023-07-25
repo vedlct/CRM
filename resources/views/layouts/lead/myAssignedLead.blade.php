@@ -8,12 +8,12 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('assignedLeads'))
-                <h2 class="card-title" align="center"><b>Assigned Leads</b></h2>
+                <h2  align="center"><b>Assigned Leads</b></h2>
                 <p class="card-subtitle" align="center">Please check if there's any suspicious leads in your assigned leads.</h2>
             @endif
 
             @if(Request::url()==route('contacted'))
-                <h2 class="card-title" align="center"><b>Contacted</b></h2>
+                <h2 align="center"><b>Contacted</b></h2>
             @endif
 
             <div class="table-responsive m-t-40">
@@ -30,7 +30,7 @@
                         <th width="8%">Possib</th>
                         <!-- <th width="8%">Probability</th> -->
                         <th width="5%">Country</th>
-                        <th width="8%">KDM</th>
+                        <!-- <th width="8%">KDM</th> -->
                         <th width="8%">Phone</th>
                         <th width="8%">Process</th>
                         <th width="8%">Volume</th>
@@ -54,7 +54,7 @@
                             <td width="8%">{{$lead->possibility->possibilityName}}</td>
                             <!-- <td width="8%">@if($lead->probability != null){{$lead->probability->probabilityName}} @else null @endif</td> -->
                             <td width="5%">{{$lead->country->countryName}}</td>
-                            <td width="8%">{{$lead->personName}}</td>
+                            <!-- <td width="8%">{{$lead->personName}}</td> -->
                             <td width="8%"><a
                                         href="skype:{{$lead->contactNumber."?call"}}">{{$lead->contactNumber}}</a></td>
 
@@ -86,12 +86,10 @@
                                    data-lead-name="{{$lead->companyName}}"
                                    data-lead-email="{{$lead->email}}"
                                    data-lead-number="{{$lead->contactNumber}}"
-                                   data-lead-person="{{$lead->personName}}"
                                    data-lead-website="{{$lead->website}}"
                                    data-lead-mined="{{$lead->mined->firstName}}"
                                    data-lead-category="{{$lead->category->categoryId}}"
                                    data-lead-country="{{$lead->countryId}}"
-                                   data-lead-designation="{{$lead->designation}}"
                                    data-lead-process="{{$lead->process}}"
                                    data-lead-frequency="{{$lead->frequency}}"
                                    data-lead-volume="{{$lead->volume}}"
@@ -251,15 +249,15 @@
 
 
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Contact Person:</b></label>
                                 <input type="text" class="form-control" name="personName" value="">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label><b>Designation:</b></label>
                                 <input type="text" class="form-control" name="designation" value="">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-4">
                                 <label><b>Email:</b></label>
@@ -606,12 +604,12 @@ function selectAll(source) {
             var leadName = $(e.relatedTarget).data('lead-name');
             var email = $(e.relatedTarget).data('lead-email');
             var number = $(e.relatedTarget).data('lead-number');
-            var personName = $(e.relatedTarget).data('lead-person');
+            // var personName = $(e.relatedTarget).data('lead-person');
             var website = $(e.relatedTarget).data('lead-website');
             var linkedin=$(e.relatedTarget).data('lead-linkedin');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-            var designation=$(e.relatedTarget).data('lead-designation');
+            // var designation=$(e.relatedTarget).data('lead-designation');
             var country=$(e.relatedTarget).data('lead-country');
             var founded=$(e.relatedTarget).data('lead-founded');
             var employee=$(e.relatedTarget).data('lead-employee');
@@ -631,10 +629,10 @@ function selectAll(source) {
             $(e.currentTarget).find('input[name="companyName"]').val(leadName);
             $(e.currentTarget).find('input[name="email"]').val(email);
             $(e.currentTarget).find('input[name="number"]').val(number);
-            $(e.currentTarget).find('input[name="personName"]').val(personName);
+            // $(e.currentTarget).find('input[name="personName"]').val(personName);
             $(e.currentTarget).find('input[name="website"]').val(website);
             $(e.currentTarget).find('input[name="linkedin"]').val(linkedin);
-            $(e.currentTarget).find('input[name="designation"]').val(designation);
+            // $(e.currentTarget).find('input[name="designation"]').val(designation);
             $(e.currentTarget).find('input[name="founded"]').val(founded);
             $(e.currentTarget).find('input[name="employee"]').val(employee);
             $(e.currentTarget).find('input[name="volume"]').val(volume);

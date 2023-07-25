@@ -11,7 +11,7 @@
     <!-- Trigger the modal with a button -->
 
     <!-- Modal -->
-    <div class="modal fade" id="addTeamModal" role="dialog">
+    <div class="modal" id="addTeamModal" role="dialog">
         <div class="modal-dialog" style="max-width: 50%">
             <!-- Modal content-->
             <div class="modal-content">

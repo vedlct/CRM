@@ -6,7 +6,7 @@
 
     <div class="card" style="padding:30px;">
         <div class="card-body">
-        <h2 class="card-title" align="center"><b>Search Keywords on Google</b></h2>
+        <h2 align="center"><b>Search Keywords on Google</b></h2>
         <p class="card-subtitle" align="center">Try to use long tail with country and city so that you get good leads </p>
 
         <div class="card-body" >
@@ -49,13 +49,14 @@
 
         </div>
 
+
         <div class="card" style="padding-top:50px;">
         </div>
 
 
         @if (!empty($results))
             <div class="table-responsive m-t-40">
-                <div>You have searched for: {{ $searchTerm }}</div><br><br>
+                <div>You have searched for: {{ $searchTerm }} </div><br><br>
 
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -94,10 +95,14 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
+                </div>
         @else
             <p>No results found.</p>
         @endif
+            </div>
+            </div>
+
+
 
 
 
