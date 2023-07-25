@@ -2226,38 +2226,47 @@ class LeadController extends Controller
 
 
 
-        
         // EMPLOYEE SECTION START
 
-        public function getAllemployees ()
+        public function allEmployees ()
         {
-            $User_Type=Session::get('userType');
-            // if($User_Type == 'USER' || $User_Type == 'MANAGER'){
 
-            //     $employees = Employees::select('employees.*', 'leads.website', 'leads.leadId')
-            //     ->Join('leads','employees.leadId','leads.leadId')
-            //     ->where('leads.contactedUserId', Auth::User()->id)
-            //     ->orderBy('employeeId', 'desc')
-            //     ->get();
-            // }else{
-                $employees = Employees::select('employees.*', 'leads.website', 'leads.leadId')
-                ->Join('leads','employees.leadId','leads.leadId')
-                ->where('leads.contactedUserId', Auth::User()->id)
-                ->orderBy('employeeId', 'desc')
-                ->get();
-            // }
 
-                $country=Country::get();
-                $designation=Designation::get();
-                
-                return view('layouts.lead.allEmployees')
-                    ->with('employees', $employees)
-                    ->with('country', $country)
-                    ->with('designation', $designation)
-                ;
+            return view('layouts.lead.allEmployees');
 
         }
 
+
+        public function getAllEmployees(Request $request)
+        {
+            $User_Type=Session::get('userType');
+            if($User_Type == 'USER' || $User_Type == 'MANAGER'){
+
+                $employees = Employees::select('employees.*','leads.website', 'leads.companyName', 'leads.leadId', 'designations.designationName', 'countries.countryName')
+                ->Join('leads','employees.leadId','leads.leadId')
+                ->where('leads.contactedUserId', Auth::User()->id)
+                ->Join('designations','employees.designationId','designations.designationId')
+                ->Join('countries','employees.countryId','countries.countryId')
+                ->orderBy('employeeId', 'desc')
+                ->get();
+            }else{
+                $employees = Employees::select('employees.*','leads.website', 'leads.companyName','leads.leadId', 'designations.designationName', 'countries.countryName')
+                ->Join('leads','employees.leadId','leads.leadId')
+                ->Join('designations','employees.designationId','designations.designationId')
+                ->Join('countries','employees.countryId','countries.countryId')
+                ->orderBy('employeeId', 'desc')
+                ->get();
+            }
+        
+            return DataTables::of($employees)
+                ->addColumn('action', function ($employee) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                })
+                ->toJson();
+        }
+
+        
 
 
         public function createEmployees (Request $r) {

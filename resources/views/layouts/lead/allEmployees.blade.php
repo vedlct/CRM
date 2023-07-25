@@ -4,6 +4,8 @@
 
 @section('content')
 
+@php($userType = Session::get('userType'))
+
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
@@ -13,7 +15,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th >Id</th>
+                        <th >Emp Id</th>
                         <th >Full Name</th>
                         <th >Designation</th>
                         <th >Email Address</th>
@@ -22,7 +24,7 @@
                         <th >LinkedIn</th>
                         <th >Job Status</th>
                         <th >KDM?</th>
-                        <!-- <th >Company</th> -->
+                        <th >Company</th>
                         <th >Website</th>
                         <th >Action</th>
 
@@ -30,45 +32,12 @@
                     </thead>
                     <tbody>
 
-                    @foreach($employees as $employee)
-                        <tr>
-                            <td width="15%">{{$employee->employeeId}}</td>
-                            <td width="15%">{{$employee->name}}</td>
-                            <td width="8%">{{$employee->designation->designationName}}</td>
-                            <td width="10%">{{$employee->email}}</a></td>
-                            <td width="8%">{{$employee->number}}</td>
-                            <td width="5%">{{$employee->country->countryName}}</td>
-                            <td width="8%">{{$employee->linkedin}}</td>
-                            <td width="8%">@if ($employee->jobstatus == 1) Active @else Left Job @endif</td>
-                            <td width="8%">@if ($employee->iskdm == 1) KDM @else No @endif</td>
-                            <!-- <td width="8%">{{$employee->companyName}}</td> -->
-                            <td width="8%">{{$employee->website}}</td>
-                            <td width="8%">
-                            <a href="." class="btn btn btn-info btn-sm lead-view-btn"
-                                            data-lead-id="{{$employee->leadId}}">
-										<i class="fa fa-eye"></i></a>
-                            </td>
-                        </tr>
-
-                    @endforeach
 
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -90,13 +59,41 @@
 
     <script>
 
-
         $(document).ready(function() {
             $('#myTable').DataTable({
-                "processing": true,
+                processing: true,
+                serverSide: true,
                 stateSave: true,
+                ajax: {
+                    url: "{!! route('getAllEmployees') !!}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                columns: [
+                    { data: 'employeeId', name: 'employeeId' },
+                    { data: 'name', name: 'name' },
+                    { data: 'designationName', name: 'designationName' },
+                    { data: 'email', name: 'email' },
+                    { data: 'number', name: 'number' },
+                    { data: 'countryName', name: 'countryName' },
+                    { data: 'linkedin', name: 'linkedin' },
+                    { 
+                        data: 'jobstatus',name: 'jobstatus', render: function(data, type, full, meta) {
+                            return data == 1 ? 'Active' : 'Left Job';
+                        }
+                    },
+                    { 
+                        data: 'iskdm', name: 'iskdm', render: function(data, type, full, meta) {
+                            return data == 1 ? 'Yes' : 'No';
+                        }
+                    },
+                    { data: 'companyName', name: 'companyName' },
+                    { data: 'website', name: 'website' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                ]
             });
-
         });
 
 

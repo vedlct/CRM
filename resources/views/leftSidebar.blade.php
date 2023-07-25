@@ -106,7 +106,7 @@
                         </li>
 
                         <li>
-                            <a href="{{ route('getAllemployees') }}">
+                            <a href="{{ route('allEmployees') }}">
                                 <i class="fa fa-users"></i>
                                 <span class="hide-menu"> All Contacts</span>
                             </a>
