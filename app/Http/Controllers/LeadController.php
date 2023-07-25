@@ -1138,38 +1138,19 @@ class LeadController extends Controller
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
             })->addColumn('action', function ($lead) {
-                // if(Session::get('userType')=='RA'){
-                //     return '<a href="#my_modal" data-toggle="modal"   class="btn btn-info btn-sm"
-                //                            data-lead-id="'.$lead->leadId.'"
-                //                            data-lead-name="'.$lead->companyName.'"
-                //                            data-lead-email="'.$lead->email.'"
-                //                            data-lead-number="'.$lead->contactNumber.'"
-                //                            data-lead-website="'.$lead->website.'"
-                //                            data-lead-mined="'.$lead->mined->firstName.'"
-                //                            data-lead-category="'.$lead->category->categoryId.'"
-                //                            data-lead-country="'.$lead->countryId.'"
-                //                            data-lead-comments="'.$lead->comments.'"
-                //                            >
-                //                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                //                  <form method="post" action="'.route('rejectStore').'">
-                //                         <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                //                         <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                //                     <button class="btn btn-danger btn-sm">X</button></form>
-                //                     ';
-                // }
-                // else{
                     return '<form method="post" action="'.route('addContacted').'">
-                                        <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                                        <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                        <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
                                         
-                                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
-                                                data-lead-id="'.$lead->leadId.'"
-                                                data-lead-name="'.$lead->companyName.'"
-
-                                            ><i class="fa fa-comments"></i></a>
-                                    </form>';
-                // }
+                                <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+                                ><i class="fa fa-comments"></i></a>
+                            </form>
+                                <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                
                                 })
             ->rawColumns(['action','check'])
             ->make(true);

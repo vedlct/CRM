@@ -197,8 +197,6 @@ Route::post('/getContacedData','LeadController@getContacedData')->name('getConta
 
 Route::get('/account/{leadId}', 'LeadController@accountView')->name('accountView');
 
-
-
 Route::post('/editcontactmodalshow','LeadController@editcontactmodalshow')->name('editcontactmodalshow');
 
 Route::get('/Mycontacted', 'LeadController@Mycontacted')->name('Mycontacted');
@@ -211,15 +209,14 @@ Route::post('rejectlead','LeadController@rejectData')->name('rejectData');
 Route::post('/lead/reject','LeadController@rejectStore')->name('rejectStore');
 
 //Employees
-// Route::get('/employees','LeadController@getAllemployees')->name('getAllemployees');
+Route::get('/employees', 'LeadController@allEmployees')->name('allEmployees');
+Route::post('/employees', 'LeadController@getAllEmployees')->name('getAllEmployees');
 Route::post('/createEmployees','LeadController@createEmployees')->name('createEmployees');
 Route::post('/updateEmployees','LeadController@updateEmployees')->name('updateEmployees');
 Route::post('/removeEmployees','LeadController@removeEmployees')->name('removeEmployees');
 Route::post('/employeeNumberCheck','LeadController@employeeNumberCheck')->name('employeeNumberCheck');
 Route::post('/employeeEmailCheck','LeadController@employeeEmailCheck')->name('employeeEmailCheck');
 
-Route::get('/employees', 'LeadController@allEmployees')->name('allEmployees');
-Route::post('/employees', 'LeadController@getAllEmployees')->name('getAllEmployees');
 
 
 //My Team
@@ -267,7 +264,9 @@ Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('get
 Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('/allConversations', 'AnalysisController@getallConversations')->name('getallConversations');
 Route::get('/frequentlyFiltered', 'AnalysisController@frequentlyFilteredLeads')->name('frequentlyFilteredLeads');
-Route::get('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
+
+Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name('testButNotClosedList');
+Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
 Route::get('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');

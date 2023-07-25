@@ -770,7 +770,26 @@ class AnalysisController extends Controller
                         }
             
                         
-                        
+
+                    public function testButNotClosedList(Request $r){
+                       
+                        $possibilities = Possibility::get();
+                        $probabilities = Probability::get();
+                        $categories = Category::where('type', 1)->get();
+                        $country = Country::get();
+                        $status = Leadstatus::get();
+
+                       
+                        return view('analysis.testButNotClosedList')
+                            // ->with('leads', $leads)
+                            ->with('possibilities', $possibilities)
+                            ->with('probabilities', $probabilities)
+                            ->with('categories', $categories)
+                            ->with('status', $status)
+                            ->with('country', $country)
+                            ;
+                    }    
+
 
                     public function getTestButNotClosedList()
                     {
@@ -778,7 +797,8 @@ class AnalysisController extends Controller
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
     
-                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
+                            $leads = Lead::with('country','category','status','contact','possibility', 'probability')
+                                ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
                                 ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
                                 ->leftJoin('users', 'leads.contactedUserId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
@@ -795,7 +815,8 @@ class AnalysisController extends Controller
                                     
                         } else {
 
-                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
+                            $leads = Lead::with('country','category','status','contact','possibility', 'probability')
+                                ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
                                 ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
                                 ->leftJoin('users', 'leads.contactedUserId', 'users.id')
                                 ->where('users.id', Auth::user()->id)
@@ -813,23 +834,14 @@ class AnalysisController extends Controller
                                         
                         }        
     
-            
-                            $possibilities = Possibility::get();
-                            $probabilities = Probability::get();
-                            $callReports = Callingreport::get();
-                            $categories = Category::where('type', 1)->get();
-                            $country = Country::get();
-                            $status = Leadstatus::get();
+                        return DataTables::of($leads)
+                        ->addColumn('action', function ($lead) {
+                            return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                        })
+                        ->toJson();
                     
-                        return view('analysis.testButNotClosedList')
-                            ->with('leads', $leads)
-                            ->with('callReports', $callReports)
-                            ->with('possibilities', $possibilities)
-                            ->with('probabilities', $probabilities)
-                            ->with('categories', $categories)
-                            ->with('status', $status)
-                            ->with('country', $country)
-                            ;
+
                     }
                         
 

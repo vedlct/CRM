@@ -100,6 +100,7 @@
                                 <hr>
                                 
                                 <div class="mb-3">
+                                @if ($lead->statusId == 7)
                                     <a 
                                         href="#call_modal" 
                                         class="btn btn-custom" 
@@ -109,6 +110,7 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Calling</a>
+                                @endif    
 
                                     <a 
                                         href="#lead_activities" 
@@ -147,6 +149,15 @@
                                         data-pipeline-stage="{{ $lead->stage }}"                                                                                
                                         >Set Pipeline</a>
                                     @endif  
+
+
+                                    @if ($lead->statusId == 2)
+                                        <a href="#" class="btn btn-danger make-lead-btn" 
+                                            data-lead-id="{{ $lead->leadId }}"
+                                        >
+                                            <i class="fa fa-bookmark" aria-hidden="true"></i><b>  Make My Lead</b>
+                                        </a>
+                                    @endif
 
                                 </div>
                                 <hr>
@@ -341,12 +352,14 @@
                                     <!-- employees tab -->
                                     <div class="tab-pane fade" id="employees" role="tabpanel">
                                         <p class="my-1"><br>
+                                        @if ($lead->statusId == 7 )
                                         <a href="#create_employee" 
                                             class="btn btn-custom" 
                                             data-toggle="modal"
                                             data-lead-id="{{ $lead->leadId }}" 
                                             data-lead-name="{{ $lead->companyName }}"
                                             >Create Employee</a>
+                                        @endif    
                                         </p>
 
                                     {{-- Loop through KDM Employees --}}
@@ -360,6 +373,8 @@
                                                                 <h5 class="card-title text-info">KDM Employee</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
+
+                                                            @if ($lead->statusId == 7)
                                                                 <a href="#edit_employee" class="card-link" data-toggle="modal"
                                                                     data-employee-id="{{ $employee->employeeId }}"
                                                                     data-employee-name="{{ $employee->name }}"
@@ -372,6 +387,7 @@
                                                                     data-employee-iskdm="{{ $employee->iskdm }}"
                                                                     data-employee-extrainfo="{{ $employee->extrainfo }}"
                                                                 >Edit Employee</a>
+                                                            @endif
                                                             </div>
                                                         </div>
 
@@ -1484,6 +1500,31 @@
         }
 
 
+
+    $(document).ready(function() {
+        $('.make-lead-btn').on('click', function(e) {
+            e.preventDefault();
+            var leadId = $(this).data('lead-id');
+
+            // Make an AJAX request to the 'addContacted' route
+            $.ajax({
+                url: '{{ route('addContacted') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    leadId: leadId
+                },
+                success : function(data){
+                        location.reload();
+                        console.log(data);
+                        if(data == 'true'){
+                            $('#alert').html('Leads are assigned successfully');
+                            $('#alert').show();
+                        }
+                    }                        
+            });
+        });
+    });
 
 
 </script>
