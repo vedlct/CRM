@@ -948,6 +948,7 @@
                 "iDisplayLength": 100,
                 processing: true,
                 serverSide: true,
+                deferRender: true,
                 stateSave: true,
                 Filter: true,
                 type:"POST",

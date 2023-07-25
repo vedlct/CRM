@@ -2190,12 +2190,14 @@ class LeadController extends Controller
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
         return view('layouts.lead.verify')
+       // return view('layouts.lead.testing')
             // ->with('categories',$cats)
             // ->with('countries',$countries)
             // ->with('possibilities',$possibilities)
             // ->with('probabilities',$probabilities)
             // ->with('callReports',$callReports)
-            ->with('user',$user);
+            ->with('user',$user)
+            ;
     }
 
 
