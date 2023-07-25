@@ -710,7 +710,11 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                            ><i class="fa fa-comments"></i></a></form>';
+                                            ><i class="fa fa-comments"></i></a></form>
+
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
                     } else {
                         if ($lead->contactedUserId == Auth::user()->id) {
                             return '<a href="#call_modal" data-toggle="modal" class="btn btn-success btn-sm"
@@ -743,7 +747,11 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                            ><i class="fa fa-comments"></i></a>';
+                                            ><i class="fa fa-comments"></i></a>
+
+                                            <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                            data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
 
                         } else {
                             return '<a href="#" class="btn btn-danger btn-sm" >
@@ -773,7 +781,10 @@ class LeadController extends Controller
                                                 data-lead-id="' . $lead->leadId . '"
                                                 data-lead-name="' . $lead->companyName . '"
 
-                                         ><i class="fa fa-comments"></i></a>';
+                                         ><i class="fa fa-comments"></i></a>
+                                         <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                         data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+
                         }
                     }
                 }})

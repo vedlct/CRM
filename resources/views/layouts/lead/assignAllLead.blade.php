@@ -828,7 +828,14 @@ $(document).ready(function(){
         });
 
 
+        $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
 
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
 
 
 
@@ -836,6 +843,8 @@ $(document).ready(function(){
 
 
         });
+
+        
 
     </script>
 

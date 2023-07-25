@@ -1271,12 +1271,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 15) {
+						if (data > 20) {
 							$('#exceed').hide();
 							$('#total').hide();
-							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
+							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 10 && data < 15) {
+						} else if (data > 15 && data < 20) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();

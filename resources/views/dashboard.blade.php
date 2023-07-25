@@ -5,16 +5,24 @@
     {
         display: none;
     }
+    .card {
+        border-radius:  20px !important;
+        box-shadow: 0.1px 0.1px 1px ;
+    }
 
+    .card-header {
+        box-shadow: 0.1px 0.1px 2px grey;
+    }
 
 </style>
 
-    @endsection
+@endsection
 
 @section('content')
 
 
-<br><br>
+            <br><br>
+            
             <div class="seven-columns-row" >
 
                 <?php $count=0; $total=0; $lastCallPercent=0; $lastLeadMinedPercent=0; ?>
@@ -210,8 +218,20 @@
                     </div>
                     <footer class="blockquote-footer">From {{ $recentNotice->user->firstName }} {{ $recentNotice->user->lastName }} at <cite>{{ Carbon\Carbon::parse($recentNotice->created_at)->format('d M Y') }}</cite></footer>
                 </div>
-                <a href="{{ route('notice.index') }}" class="btn btn-custom">All Communications</a>
+                <!-- <a href="{{ route('notice.index') }}" class="btn btn-custom">All Communications</a> -->
             </div>
+
+            <div class="card">
+            <div class="card-header bg-secondary">
+                <h5 class="font-weight-bold text-white">Personal Monthly Graph</h5>
+            </div>
+                <div class="card-body">
+                    <div id="chartContainer" style="height: 400px; width: 100%;">
+                    </div>
+                </div>
+            </div>
+
+
         </div>
         
         <div class="col-md-4" style="float: right;">
@@ -248,21 +268,6 @@
                 </div>
             </div>
         </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-            <div class="card-header bg-secondary">
-                <h5 class="font-weight-bold text-white">Personal Monthly Graph</h5>
-            </div>
-                <div class="card-body">
-                    <div id="chartContainer" style="height: 400px; width: 100%;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -324,11 +329,7 @@
         }
 
 
-
     </script>
-
-
-
 
 
     @endsection

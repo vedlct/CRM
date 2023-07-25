@@ -1,4 +1,20 @@
 @extends('main')
+<style>
+
+.bg-light-red {
+        background-color: #fa9775; 
+    }
+
+table {
+  border-collapse: collapse; 
+}
+
+tr, td, th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+</style>
 
 
 @section('content')
@@ -82,19 +98,6 @@
                     <div class="col-sm-8 col-xl-9">
                         <div class="card">
                             <div class="card-body">
-                                <!-- <ul class="nav nav-tabs border-tab mb-0" id="top-tab" role="tablist">
-                                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#report" id="report-tab" role="tab" aria-selected="false">Reports</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#comment" id="comment-tab"  role="tab" aria-selected="false">Comments</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#ippList" id="ippList-tab" role="tab" aria-selected="true">IPP List</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="top-tabContent">
-                                    <div class="tab-pane fade active show" id="report" role="tabpanel"> -->
                                     <br><hr>
                                         <div class="row">
                                             <div class="col-12">
@@ -104,13 +107,13 @@
                                                         <thead class="table-primary">
                                                         <tr>
                                                             <th></th>
-                                                            <th>Conversation</th>
-                                                            <th>Total Call</th>
-                                                            <th>Followup</th>
-                                                            <th>Test</th>
-                                                            <th>Closed Deal</th>
-                                                            <th>Lead Mine</th>
-                                                            <th>Revenue</th>
+                                                            <th width="12%">Conversation</th>
+                                                            <th width="12%">Total Call</th>
+                                                            <th width="12%">Followup</th>
+                                                            <th width="12%">Test</th>
+                                                            <th width="12%">Closed Deal</th>
+                                                            <th width="12%">Lead Mine</th>
+                                                            <th width="12%">Revenue</th>
                                                         </tr>
                                                         </thead>
 
@@ -140,13 +143,13 @@
                                                         <tr>
                                                             <th>%</th>
                                                             @foreach ($userTargets as $userTarget)
-                                                                <td>{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
 
                                                             @endforeach                                                        
                                                         </tr>
@@ -154,60 +157,59 @@
                                                     </table>
                                                 </div>
                                             </div>
-
 
 
                                             <div class="col-12">
                                             <br><hr>
-                                                <h4 class="header-title mb-3">{{ $showCurrentMonth }} </h4>
+                                                <h4 class="header-title mb-3">{{ $showPreviousMonth }} </h4>
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered">
                                                         <thead class="table-primary">
                                                         <tr>
                                                             <th></th>
-                                                            <th>Conversation</th>
-                                                            <th>Total Call</th>
-                                                            <th>Followup</th>
-                                                            <th>Test</th>
-                                                            <th>Closed Deal</th>
-                                                            <th>Lead Mine</th>
-                                                            <th>Revenue</th>
+                                                            <th width="12%">Conversation</th>
+                                                            <th width="12%">Total Call</th>
+                                                            <th width="12%">Followup</th>
+                                                            <th width="12%">Test</th>
+                                                            <th width="12%">Closed Deal</th>
+                                                            <th width="12%">Lead Mine</th>
+                                                            <th width="12%">Revenue</th>
                                                         </tr>
                                                         </thead>
 
                                                         <tbody>
                                                         <tr>
                                                             <th>Target</th>
-                                                        @foreach ($userTargets as $userTarget)
-                                                            <td>{{$userTarget->conversation}}</td>
-                                                            <td>{{$userTarget->targetCall}}</td>
-                                                            <td>{{$userTarget->followup}}</td>
-                                                            <td>{{$userTarget->targetTest}}</td>
-                                                            <td>{{$userTarget->closelead}}</td>
-                                                            <td>{{$userTarget->targetLeadmine}}</td>
-                                                            <td>{{$userTarget->targetFile}}</td>
+                                                        @foreach ($userTargetPreviousMonth as $userTargetPM)
+                                                            <td>{{$userTargetPM->conversation}}</td>
+                                                            <td>{{$userTargetPM->targetCall}}</td>
+                                                            <td>{{$userTargetPM->followup}}</td>
+                                                            <td>{{$userTargetPM->targetTest}}</td>
+                                                            <td>{{$userTargetPM->closelead}}</td>
+                                                            <td>{{$userTargetPM->targetLeadmine}}</td>
+                                                            <td>{{$userTargetPM->targetFile}}</td>
                                                         @endforeach
                                                         </tr>
                                                         <tr>
                                                             <th>Achievement</th>
-                                                            <td>{{$totalConversationCalls}}</td>
-                                                            <td>{{$totalProgressIds}}</td>
-                                                            <td>{{$totalFollowUp}}</td>
-                                                            <td>{{$totalTestProgress}}</td>
-                                                            <td>{{$totalClosingProgress}}</td>
-                                                            <td>{{$totalLeadMining}}</td>
-                                                            <td>{{$totalRevenue}}</td>
+                                                            <td>{{$totalConvoPreviousMonth}}</td>
+                                                            <td>{{$totalCallPreviousMonth}}</td>
+                                                            <td>{{$totalFollowUpPreviousMonth}}</td>
+                                                            <td>{{$totalTestPreviousMonth}}</td>
+                                                            <td>{{$totalClosingPreviousMonth}}</td>
+                                                            <td>{{$totalLeadMiningPreviousMonth}}</td>
+                                                            <td>{{$totalRevenuePreviousMonth}}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>%</th>
-                                                            @foreach ($userTargets as $userTarget)
-                                                                <td>{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
-                                                                <td>{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+                                                            @foreach ($userTargetPreviousMonth as $userTargetPM)
+                                                                <td class="percentage-cell">{{ number_format($totalConvoPreviousMonth ? ($totalConvoPreviousMonth / $userTargetPM->conversation * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalCallPreviousMonth ? ($totalCallPreviousMonth / $userTargetPM->targetCall * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalFollowUpPreviousMonth ? ($totalFollowUpPreviousMonth / $userTargetPM->followup * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalTestPreviousMonth ? ($totalTestPreviousMonth / $userTargetPM->targetTest * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalClosingPreviousMonth ? ($totalClosingPreviousMonth / $userTargetPM->closelead* 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalLeadMiningPreviousMonth ? ($totalLeadMiningPreviousMonth / $userTargetPM->targetLeadmine* 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format($totalRevenuePreviousMonth ? ($totalRevenuePreviousMonth / $userTargetPM->targetFile * 100) : 0, 1) }}%</td>
 
                                                             @endforeach                                                        
                                                         </tr>
@@ -215,107 +217,8 @@
                                                     </table>
                                                 </div>
                                             </div>
-
-
-
-                                            <!-- <div class="col-12">
-                                                <h4 class="header-title mb-3">January, 2022</h4>
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead class="table-primary">
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Total call</th>
-                                                            <th>Contact</th>
-                                                            <th>Lead</th>
-                                                            <th>Followup</th>
-                                                            <th>Test</th>
-                                                        </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        <tr>
-                                                            <th>Target</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Achievement</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>%</th>
-                                                            <td>56%</td>
-                                                            <td>33%</td>
-                                                            <td>86%</td>
-                                                            <td>42%</td>
-                                                            <td>89%</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div> -->
-
                                         </div>
                                     </div>
-                                    <!-- notes tab -->
-                                    <!-- <div class="tab-pane fade" id="comment" role="tabpanel">
-                                        <div class="alert alert-primary p-2">
-                                            <h4>By Riz</h4>
-                                            <p class="text-dark mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1">6 July 2022 3:50 PM | Tech cloud ltd. | Calling report</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-primary p-2">
-                                            <h4>By Riz</h4>
-                                            <p class="text-dark mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1">6 July 2022 3:50 PM | Tech cloud ltd. | Calling report</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div> -->
-                                    <!-- contacts tab -->
-                                    <!-- <div class="tab-pane fade" id="ippList" role="tabpanel">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead class="table-primary">
-                                                <tr>
-                                                    <th>Company</th>
-                                                    <th>Category</th>
-                                                    <th>Country</th>
-                                                    <th>Last update</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                <tr>
-                                                    <td>Foodpeon</td>
-                                                    <td>Food delivery</td>
-                                                    <td>BD</td>
-                                                    <td>1 Dec 2022</td>
-                                                    <td><a href="#"><i class="fa fa-eye"></i></a></td>
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div> -->
-
                             </div>
                         </div>
                     </div>
@@ -360,46 +263,6 @@
                                 <input id="whitelist" type="hidden" class="form-control" name="whitelist"  >
 
                                 <div class="row">
-<!-- 
-                                <div class="form-group col-md-4">
-                                        <label for="typeId">User Type:</label>
-                                        <select id="typeId"  name="typeId" class="form-control form-control-warning">
-
-                                            @foreach ($userTypes as $userType)
-                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
-                                            @endforeach
-                                        </select>
-
-                                        @if ($errors->has('typeId'))
-                                            <span class="help-block">
-				                				<strong>{{ $errors->first('typeId') }}</strong>
-                							</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="userId">User Id:</label>
-                                        <input id="userId" type="text" class="form-control" name="userId">
-                                        @if ($errors->has('userId'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('userId') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="rfID">RF Id:</label>
-                                        <input id="rfID" type="number" class="form-control" name="rfID">
-
-                                        @if ($errors->has('rfID'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('rfID') }}</strong>
-										</span>
-                                        @endif
-                                    </div> -->
-
 
                                     <div class="form-group col-md-4">
                                         <label for="firstName">First Name:</label>
@@ -449,7 +312,6 @@
                                             </span>
                                         @endif
                                     </div>
-
 
 
 
@@ -515,27 +377,6 @@
                                     </div>
 
 
-                                    <!-- <div class="form-group col-md-4">
-                                        <label for="active">Status:</label>
-
-                                        <select id="active" name="active" class="form-control form-control-warning">
-
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="active">Whitelist:</label>
-
-                                        <select id="whitelist" name="whitelist" class="form-control form-control-warning">
-
-                                            <option value="0">Black</option>
-                                            <option value="1">white</option>
-                                        </select>
-
-                                    </div> -->
 
                                     <div class="form-group col-md-6">
                                         <label for="password">Password (min 6 characters):</label>
@@ -638,6 +479,19 @@
 
         });
 
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all elements with the class "percentage-cell"
+        const percentageCells = document.querySelectorAll('.percentage-cell');
+
+        // Loop through each cell and apply background color based on condition
+        percentageCells.forEach(cell => {
+            const percentage = parseFloat(cell.innerText);
+            if (percentage < 50) {
+                cell.classList.add('bg-light-red'); // Add the class for red background
+            }
+        });
+    });
 
 
 </script>

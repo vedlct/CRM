@@ -490,39 +490,26 @@ class UserManagementController extends Controller
     
 
 
-    // public function settings()
-    // {
-    //     $user = Auth::user();
-    //     $User_Type=Session::get('userType');
-    //     $currentMonth = Carbon::now()->format('F Y');
-    //     // $currentMonth = Carbon::now()->format('Y-m');
-
-    //     $userTargets = UsertargetByMonth::Select('usertargetsbymonth.*')
-    //     ->where('userId', Auth::user()->id)
-    //     ->where('date', 'like', $currentMonth.'%')
-    //     ->get();
-
-
-    //     $userTypes = Usertype::get();
-
-    //     return view('users-mgmt.accountSetting')
-    //         ->with('user', $user)
-    //         ->with('currentMonth', $currentMonth)
-    //         ->with('userTargets', $userTargets)
-    //         ->with('userTypes', $userTypes);
-    // }
-
-
     public function settings()
     {
 
-        $currentMonthStart = Carbon::now()->startOfMonth();
-        $currentMonthEnd = Carbon::now()->endOfMonth();
         $user = Auth::user();
         $User_Type = Session::get('userType');
-        $showCurrentMonth = Carbon::now()->format('F Y');
-        $currentMonth = Carbon::now()->format('Y-m');
         $userTypes = Usertype::get();
+
+        $currentMonth = Carbon::now()->format('Y-m');
+        $showCurrentMonth = Carbon::now()->format('F Y');
+
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
+
+        $previousMonth = Carbon::now()->subMonth()->format('Y-m');
+        $showPreviousMonth = Carbon::now()->subMonth()->format('F Y');
+        
+        $previousMonthStart = Carbon::now()->subMonth()->startOfMonth();
+        $previousMonthEnd = Carbon::now()->subMonth()->endOfMonth();
+
+
     
         $userTargets = UsertargetByMonth::where('userId', Auth::user()->id)
             ->where('date', 'like', $currentMonth . '%')
@@ -559,6 +546,46 @@ class UserManagementController extends Controller
             ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
             ->sum('fileCount');    
 
+
+
+
+        $userTargetPreviousMonth = UsertargetByMonth::where('userId', Auth::user()->id)
+            ->where('date', 'like', $previousMonth . '%')
+            ->get();
+
+        $totalCallPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalConvoPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('callingReport', 11)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalTestPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Test%')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();
+
+        $totalClosingPreviousMonth = Workprogress::where('userId', Auth::user()->id)
+            ->where('progress', 'LIKE', '%Closing%')
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();    
+      
+        $totalLeadMiningPreviousMonth = Lead::where('minedBy', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $currentMonthEnd])
+            ->count();    
+
+        $totalFollowUpPreviousMonth = Followup::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->count();    
+
+        $totalRevenuePreviousMonth = NewFile::where('userId', Auth::user()->id)
+            ->whereBetween('created_at', [$previousMonthStart, $previousMonthEnd])
+            ->sum('fileCount'); 
+
+
+
             
         return view('users-mgmt.accountSetting')
             ->with('user', $user)
@@ -571,7 +598,17 @@ class UserManagementController extends Controller
             ->with('totalClosingProgress', $totalClosingProgress)
             ->with('totalLeadMining', $totalLeadMining)
             ->with('totalFollowUp', $totalFollowUp)
-            ->with('totalRevenue', $totalRevenue);
+            ->with('totalRevenue', $totalRevenue)
+            ->with('showPreviousMonth', $showPreviousMonth)
+            ->with('userTargetPreviousMonth', $userTargetPreviousMonth)
+            ->with('totalCallPreviousMonth', $totalCallPreviousMonth)
+            ->with('totalConvoPreviousMonth', $totalConvoPreviousMonth)
+            ->with('totalTestPreviousMonth', $totalTestPreviousMonth)
+            ->with('totalClosingPreviousMonth', $totalClosingPreviousMonth)
+            ->with('totalLeadMiningPreviousMonth', $totalLeadMiningPreviousMonth)
+            ->with('totalFollowUpPreviousMonth', $totalFollowUpPreviousMonth)
+            ->with('totalRevenuePreviousMonth', $totalRevenuePreviousMonth)
+            ;
     }
 
 
