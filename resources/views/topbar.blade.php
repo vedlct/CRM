@@ -168,19 +168,19 @@ body {
 
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-            <span class="nav-date">Dhaka: {{ $timeData['Dhaka']->format('h:i A') }}</span> | 
+            <span class="nav-date">Dhaka: {{ $timeData['Dhaka']->format('H:i') }}</span> | 
             </li>
             <li class="nav-item">
-            <span class="nav-date">London: {{ $timeData['London']->format('h:i A') }}</span> | 
+            <span class="nav-date">London: {{ $timeData['London']->format('H:i') }}</span> | 
             </li>
             <li class="nav-item">
-            <span class="nav-date">Italy: {{ $timeData['Italy']->format('h:i A') }}</span> | 
+            <span class="nav-date">Italy: {{ $timeData['Italy']->format('H:i') }}</span> | 
             </li>
             <li class="nav-item">
-            <span class="nav-date">Australia: {{ $timeData['Australia']->format('h:i A') }}</span> | 
+            <span class="nav-date">Australia: {{ $timeData['Australia']->format('H:i') }}</span> | 
             </li>
             <li class="nav-item">
-            <span class="nav-date">Canada: {{ $timeData['Canada']->format('h:i A') }}</span>
+            <span class="nav-date">Canada: {{ $timeData['Canada']->format('H:i') }}</span>
             </li>
         </ul>
 
@@ -189,7 +189,7 @@ body {
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
-              Welcome, {{( Auth::user()->firstName )}} <i class="fa fa-chevron-down"></i>
+              {{( Auth::user()->firstName )}} <i class="fa fa-chevron-down"></i>
             </a> 
             <div class="dropdown-menu dropdown-menu-right">
               <a class="dropdown-item" href="{{route('accountSetting')}}">
