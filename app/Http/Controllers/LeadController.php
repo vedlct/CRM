@@ -74,7 +74,7 @@ class LeadController extends Controller
             }
 
             // Check if the current user is authorized to view the lead
-            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id()) {
+            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id() && $lead->statusId !== 2) {
                 abort(404);
             }
 

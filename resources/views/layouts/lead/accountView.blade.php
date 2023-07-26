@@ -110,16 +110,7 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Calling</a>
-                                @endif    
-
-                                    <a 
-                                        href="#lead_activities" 
-                                        class="btn btn-primary" 
-                                        data-toggle="modal" 
-                                        data-lead-id="{{$lead->leadId}}" 
-                                        data-lead-name="{{$lead->companyName}}"
-                                    >Activities</a>
-                                    
+                                   
                                     <a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
                                         data-lead-id="{{$lead->leadId}}" 
                                         data-lead-name="{{$lead->companyName}}"
@@ -139,6 +130,16 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Edit</a>
+
+                                    @endif    
+                                    
+                                    <a 
+                                        href="#lead_activities" 
+                                        class="btn btn-primary" 
+                                        data-toggle="modal" 
+                                        data-lead-id="{{$lead->leadId}}" 
+                                        data-lead-name="{{$lead->companyName}}"
+                                    >Activities</a>
 
                                     @if ($pipeline->isEmpty() && $lead->contactedUserId == auth()->id())
                                     <a href="#" class="btn btn-info" 

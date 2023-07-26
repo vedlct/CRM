@@ -143,13 +143,14 @@ tr, td, th {
                                                         <tr>
                                                             <th>%</th>
                                                             @foreach ($userTargets as $userTarget)
-                                                                <td class="percentage-cell">{{ number_format($totalConversationCalls ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalProgressIds ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalFollowUp ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalTestProgress ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalClosingProgress ? ($totalClosingProgress / $userTarget->closelead* 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalLeadMining ? ($totalLeadMining / $userTarget->targetLeadmine* 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalRevenue ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->conversation !== 0) ? ($totalConversationCalls / $userTarget->conversation * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->targetCall !== 0) ? ($totalProgressIds / $userTarget->targetCall * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->followup !== 0) ? ($totalFollowUp / $userTarget->followup * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->targetTest !== 0) ? ($totalTestProgress / $userTarget->targetTest * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->closelead !== 0) ? ($totalClosingProgress / $userTarget->closelead * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->targetLeadmine !== 0) ? ($totalLeadMining / $userTarget->targetLeadmine * 100) : 0, 1) }}%</td>
+                                                            <td class="percentage-cell">{{ number_format(($userTarget->targetFile !== 0) ? ($totalRevenue / $userTarget->targetFile * 100) : 0, 1) }}%</td>
+
 
                                                             @endforeach                                                        
                                                         </tr>
@@ -203,13 +204,14 @@ tr, td, th {
                                                         <tr>
                                                             <th>%</th>
                                                             @foreach ($userTargetPreviousMonth as $userTargetPM)
-                                                                <td class="percentage-cell">{{ number_format($totalConvoPreviousMonth ? ($totalConvoPreviousMonth / $userTargetPM->conversation * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalCallPreviousMonth ? ($totalCallPreviousMonth / $userTargetPM->targetCall * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalFollowUpPreviousMonth ? ($totalFollowUpPreviousMonth / $userTargetPM->followup * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalTestPreviousMonth ? ($totalTestPreviousMonth / $userTargetPM->targetTest * 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalClosingPreviousMonth ? ($totalClosingPreviousMonth / $userTargetPM->closelead* 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalLeadMiningPreviousMonth ? ($totalLeadMiningPreviousMonth / $userTargetPM->targetLeadmine* 100) : 0, 1) }}%</td>
-                                                                <td class="percentage-cell">{{ number_format($totalRevenuePreviousMonth ? ($totalRevenuePreviousMonth / $userTargetPM->targetFile * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->conversation !== 0) ? ($totalConvoPreviousMonth / $userTargetPM->conversation * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->targetCall !== 0) ? ($totalCallPreviousMonth / $userTargetPM->targetCall * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->followup !== 0) ? ($totalFollowUpPreviousMonth / $userTargetPM->followup * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->targetTest !== 0) ? ($totalTestPreviousMonth / $userTargetPM->targetTest * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->closelead !== 0) ? ($totalClosingPreviousMonth / $userTargetPM->closelead * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->targetLeadmine !== 0) ? ($totalLeadMiningPreviousMonth / $userTargetPM->targetLeadmine * 100) : 0, 1) }}%</td>
+                                                                <td class="percentage-cell">{{ number_format(($userTargetPM->targetFile !== 0) ? ($totalRevenuePreviousMonth / $userTargetPM->targetFile * 100) : 0, 1) }}%</td>
+
 
                                                             @endforeach                                                        
                                                         </tr>

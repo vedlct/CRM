@@ -1,17 +1,15 @@
-
-  <style>
+<style>
   
-  /* Custom top padding for the body */
 body {
-  padding-top: 80px; /* Adjust as needed */
+  padding-top: 80px; 
 }
 
 /* Styling for the navbar */
 .navbar {
-  background-color: #517E8F !important; /* New primary color */
+  background-color: #517E8F !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  height: 70px; /* Set the height for the navbar */
-  padding: 0 20px; /* Add some padding to the left and right */
+  height: 70px; 
+  padding: 0 20px; 
 }
 
 /* Ensure the navbar stays fixed at the top */
@@ -30,32 +28,32 @@ body {
 
 .navbar-brand span {
   font-weight: bold;
-  color: #ffffff; /* Set the color of the text */
-  font-size: 20px; /* Adjust the font size */
+  color: #ffffff; 
+  font-size: 20px; 
 }
 
 /* Styling for the links in the navbar */
 .navbar-nav .nav-item .nav-link {
   color: #ffffff;
-  font-size: 16px; /* Adjust the font size */
+  font-size: 16px; 
 }
 
 .navbar-nav .nav-item .nav-link:hover {
   color: #f8f9fa;
-  background-color: transparent; /* Add a transparent background on hover */
+  background-color: transparent;
 }
 
 /* Styling for the active link in the navbar */
 .navbar-nav .nav-item.active .nav-link {
   color: #f8f9fa;
   font-weight: bold;
-  background-color: transparent; /* Add a transparent background to active link */
+  background-color: transparent; 
 }
 
 /* Styling for dropdown menu items */
 .dropdown-menu .dropdown-item {
   color: #343a40;
-  font-size: 16px; /* Adjust the font size */
+  font-size: 16px; 
 }
 
 .dropdown-menu .dropdown-item:hover {
