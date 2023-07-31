@@ -304,7 +304,20 @@ class AnalysisController extends Controller
                     ->orderBy('workprogress.created_at', 'desc')
                     ->get();
             } else {
-                $analysis = [];
+                $analysis = Lead::select('leads.*', 'users.userId')
+                    ->where('leads.contactedUserId', Auth::user()->id)
+                    ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                    ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                    ->whereIn('leads.categoryId', [1, 4, 5, 6, 63])
+                    ->where('leads.statusId', '!=', 6)
+                    ->where(function ($query) use ($keywords) {
+                        foreach ($keywords as $keyword) {
+                            $query->orWhere('workprogress.comments', 'like', '%' . $keyword . '%');
+                        }
+                    })
+                    ->groupBy('leads.leadId')
+                    ->orderBy('workprogress.created_at', 'desc')
+                    ->get();
             }
         
             $possibilities = Possibility::get();
@@ -445,33 +458,43 @@ class AnalysisController extends Controller
         }
 
 
-        public function reportAllActivities(Request $r)
+        public function allActivities(Request $r)
+        {
+
+            return view('analysis.activities');
+
+        }
+
+        public function getAllActivities(Request $r)
         {
             $User_Type = Session::get('userType');
             if ($User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN') {
                 
                 $activities=Activities::Select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity','activities.created_at')
-                        ->join('users', 'activities.userId','users.id')
+                        ->join('users', 'activities.userId', 'users.id')
+                        ->where('activities.activity', 'NOT LIKE', '%Table%')
                         ->join('leads', 'activities.leadId', 'leads.leadId')
-                        ->join('leadstatus', 'leads.statusId','leadstatus.statusId')
+                        ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
                         // ->where('users.active', 1)
-                        ->orderBy('activityId', 'desc')
-                        ->latest()->paginate(10000);                      
-                        // ->get();
+                        ->orderBy('activities.created_at', 'desc')
+                        // ->latest()->paginate(10000);                      
+                        ->get();
     
-                } else {
+            } else {
 
-                    $activities = Activities::select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity', 'activities.created_at')
+                $activities = Activities::select('activities.activityId', 'users.firstName', 'users.lastName', 'leads.leadId', 'leads.companyName', 'leadstatus.statusName', 'activities.activity', 'activities.created_at')
                     ->join('users', 'activities.userId', 'users.id')
+                    ->where('activities.userId', Auth::user()->id)
+                    ->where('activities.activity', 'NOT LIKE', '%Table%')
                     ->join('leads', 'activities.leadId', 'leads.leadId')
                     ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                    ->where('activities.userId', Auth::user()->id)
                     ->orderBy('activities.created_at', 'DESC')
                     ->paginate(300);
 
                 }
 
-                return view('analysis.activities', compact('activities'));
+                    return DataTables::of($activities)
+                        ->toJson();
         
         }        
 
@@ -531,6 +554,33 @@ class AnalysisController extends Controller
                 }    
     
 
+                public function longTimeNoCall()
+                {
+                    $possibilities = Possibility::get();
+                    $probabilities = Probability::get();
+                    $callReports = Callingreport::get();
+                    $categories = Category::where('type', 1)->get();
+                    $country = Country::get();
+                    $status = Leadstatus::get();
+
+                    $outstatus=Leadstatus::where('statusId','!=',7)
+                    ->where('statusId','!=',1)
+                    ->where('statusId','!=',6)
+                    ->get();
+
+            
+                return view('analysis.longTimeNoCall')
+                    // ->with('leads', $leads)
+                    ->with('callReports', $callReports)
+                    ->with('possibilities', $possibilities)
+                    ->with('probabilities', $probabilities)
+                    ->with('categories', $categories)
+                    ->with('status', $status)
+                    ->with('country', $country)
+                    ->with('outstatus', $outstatus);
+
+
+                }
 
           
                 public function getLongTimeNoCall()
@@ -539,7 +589,8 @@ class AnalysisController extends Controller
                 
                     if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
 
-                        $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
+                        $leads = Lead::with('country','category','status','contact','possibility', 'probability')
+                            ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
                             ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
                                             FROM workprogress
                                             GROUP BY leadId) AS wp'), function ($join) {
@@ -562,7 +613,8 @@ class AnalysisController extends Controller
                             ->get();
 
                     } else {    
-                            $leads = Lead::select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
+                        $leads = Lead::with('country','category','status','contact','possibility', 'probability')
+                            ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
                             ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
                                             FROM workprogress
                                             GROUP BY leadId) AS wp'), function ($join) {
@@ -587,29 +639,16 @@ class AnalysisController extends Controller
 
                     }        
 
-                        $outstatus=Leadstatus::where('statusId','!=',7)
-                            ->where('statusId','!=',1)
-                            ->where('statusId','!=',6)
-                            ->get();
-        
-                        $possibilities = Possibility::get();
-                        $probabilities = Probability::get();
-                        $callReports = Callingreport::get();
-                        $categories = Category::where('type', 1)->get();
-                        $country = Country::get();
-                        $status = Leadstatus::get();
-                
-                    return view('analysis.longTimeNoCall')
-                        ->with('leads', $leads)
-                        ->with('callReports', $callReports)
-                        ->with('possibilities', $possibilities)
-                        ->with('probabilities', $probabilities)
-                        ->with('categories', $categories)
-                        ->with('status', $status)
-                        ->with('country', $country)
-                        ->with('outstatus', $outstatus);
+                            return DataTables::of($leads)
+                            ->addColumn('action', function ($lead) {
+                                return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                    data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                            })
+                            ->toJson();
+    
                 }
                  
+
 
                 public function exportLongTimeNoCall()
                 {

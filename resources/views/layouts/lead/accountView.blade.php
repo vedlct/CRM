@@ -89,12 +89,21 @@
                                 <p>
                                     <b class="text-secondary">Did a test?:</b>
                                     @if ($didTestWithUs->isNotEmpty())
-                                        @foreach ($didTestWithUs as $workprogress)
-                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
-                                        @endforeach
+                                        @if ($didTestWithUs->count() > 1)
+                                            <ul>
+                                                @foreach ($didTestWithUs as $workprogress)
+                                                    <li>
+                                                        <span style="color:green; font-weight: 500;">Yes</span>, {{ $workprogress->userId }} <i>on</i> {{ $workprogress->created_at }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                                <span style="color:green; font-weight: 500;">Yes</span>, {{ $didTestWithUs[0]->userId }} <i>on</i> {{ $didTestWithUs[0]->created_at }}
+                                        @endif
                                     @else
                                         Not Yet
                                     @endif
+
                                 </p>
 
                                 <hr>
@@ -282,7 +291,11 @@
                                         <hr>
                                         <div class="card p-2">
                                             <p class="text-dark mb-3">{{$comment->comments}}</p>
-                                            <footer class="blockquote-footer" style="font-size: 15px;">{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</footer>
+                                            <footer class="blockquote-footer" style="font-size: 15px;">
+                                                <span>{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</span>
+                                                <span style="float:right; color: Olive;">{{$comment->report}} </span>
+
+                                            </footer>
                                         </div>
                                         @endforeach
                                     </div>
@@ -371,7 +384,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <h5 class="card-title text-info">KDM Employee</h5>
+                                                                <h5 class="card-title" style="color:#F39C12;">Key Decision Maker</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
 
@@ -424,7 +437,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <h5 class="card-title text-secondary">Non-KDM Employee</h5>
+                                                                <h5 class="card-title text-secondary">Non-KDM</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
                                                                 <a href="#edit_employee" class="card-link" data-toggle="modal"

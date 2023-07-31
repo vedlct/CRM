@@ -258,7 +258,10 @@ Route::get('/analysisHome', 'AnalysisController@analysisHomePage')->name('analys
 Route::get('/analysisComments', 'AnalysisController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'AnalysisController@analysisComments');
 Route::post('/exportAnalysisComments', 'AnalysisController@exportAnalysisComments')->name('exportAnalysisComments');
-Route::get('/reportAllActivities','AnalysisController@reportAllActivities')->name('reportAllActivities');
+
+Route::get('/allActivities','AnalysisController@allActivities')->name('allActivities');
+Route::post('/allActivities','AnalysisController@getAllActivities')->name('getAllActivities');
+
 Route::get('/duplicateLeadList', 'AnalysisController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
@@ -269,7 +272,9 @@ Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name
 Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
-Route::get('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
+
+Route::get('/longTimeNoCall', 'AnalysisController@longTimeNoCall')->name('longTimeNoCall');
+Route::post('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'AnalysisController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
 
 Route::get('/fredChasingLeads', 'AnalysisController@getFredChasingLeads')->name('getFredChasingLeads');

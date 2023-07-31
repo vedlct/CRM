@@ -50,7 +50,7 @@
 
 
             <footer class="footer">
-                Customer Relationship Management 2.0.02 © 2023 | TECH CLOUD LTD
+                Customer Relationship Management 2.0.03 © 2023 | TECH CLOUD LTD
             </footer>
 
         </div>

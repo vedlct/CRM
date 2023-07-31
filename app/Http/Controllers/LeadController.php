@@ -86,8 +86,10 @@ class LeadController extends Controller
                 ->first();
 
             $didTestWithUs = $lead->workprogress()
-                ->select('progress', 'created_at')
+                ->select('progress', 'workprogress.created_at', 'users.userId')
+                ->Join('users', 'workprogress.userId', 'users.id')
                 ->where('progress', 'LIKE', '%Test%')
+                ->orderBy('workprogress.created_at', 'desc')
                 ->get();
             
             $allComments = $lead->Workprogress()
