@@ -307,6 +307,8 @@ class LeadController extends Controller
             })
             ->make(true);
     }
+
+
     public function add(){
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');
@@ -2232,6 +2234,14 @@ class LeadController extends Controller
                 ->Join('countries','employees.countryId','countries.countryId')
                 ->orderBy('employeeId', 'desc')
                 ->get();
+
+                return DataTables::of($employees)
+                ->addColumn('action', function ($employee) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                })
+                ->toJson();
+
             }else{
                 $employees = Employees::select('employees.*','leads.website', 'leads.companyName','leads.leadId', 'designations.designationName', 'countries.countryName')
                 ->Join('leads','employees.leadId','leads.leadId')
@@ -2239,14 +2249,19 @@ class LeadController extends Controller
                 ->Join('countries','employees.countryId','countries.countryId')
                 ->orderBy('employeeId', 'desc')
                 ->get();
-            }
-        
-            return DataTables::of($employees)
+
+                return DataTables::of($employees)
                 ->addColumn('action', function ($employee) {
                     return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
-                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm remove-employee-btn"
+                        data-employee-id="'.$employee->employeeId.'"><i class="fa fa-close"></i></a>
+                        ';
                 })
                 ->toJson();
+
+            }
+        
         }
 
         
@@ -2330,12 +2345,18 @@ class LeadController extends Controller
             
 
 
-            public function removeEmployees (Request $r) {
+            public function removeEmployees($employeeId) {
 
-            return back();
-
+                $employee = Employees::find($employeeId);
             
-        }        
+                if ($employee) {
+                    $employee->delete();
+                    return response()->json(['message' => 'Employee removed successfully'], 200);
+                } else {
+                    return response()->json(['error' => 'Employee not found'], 404);
+                }
+            }
+                   
 
         // EMPLOYEE SECTION END
 

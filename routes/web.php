@@ -213,7 +213,8 @@ Route::get('/employees', 'LeadController@allEmployees')->name('allEmployees');
 Route::post('/employees', 'LeadController@getAllEmployees')->name('getAllEmployees');
 Route::post('/createEmployees','LeadController@createEmployees')->name('createEmployees');
 Route::post('/updateEmployees','LeadController@updateEmployees')->name('updateEmployees');
-Route::post('/removeEmployees','LeadController@removeEmployees')->name('removeEmployees');
+// Route::post('/removeEmployees/{employeeId}','LeadController@removeEmployees')->name('removeEmployees');
+Route::match(['post', 'delete'], '/removeEmployees/{employeeId}', 'LeadController@removeEmployees')->name('removeEmployees');
 Route::post('/employeeNumberCheck','LeadController@employeeNumberCheck')->name('employeeNumberCheck');
 Route::post('/employeeEmailCheck','LeadController@employeeEmailCheck')->name('employeeEmailCheck');
 

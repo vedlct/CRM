@@ -32,11 +32,16 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label class="control-label" ><b>Website</b></label>
+                            <!-- <label class="control-label" ><b>Website</b></label>
                             <span id="exceedwebsite" style="color:red;display: none"><i>This Website already exist</i></span></label>
                             {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
-                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" >
-
+                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" id="website" > -->
+                            <!-- Form field -->
+                            <label class="control-label"><b>Website</b></label>
+                            <span id="exceedwebsite" style="color:red;display: none"><i>This Website already exists</i></span>
+                            {!! $errors->first('website', '<p class="help-block">:message</p>') !!}
+                            <input type="text" class="form-control websitecheck" name="website" placeholder="Enter url" id="fullWebsite">
+                            <div class="invalid-feedback"></div>
                         </div>
 
                         <div class="form-group col-md-4">
@@ -1104,7 +1109,39 @@
 
 
 
-    </script>
+
+   
+    $(document).ready(function() {
+        $('#fullWebsite').on('blur', function() {
+            validateWebsiteField();
+        });
+    });
+
+    function validateWebsiteField() {
+        var websiteInput = $('#fullWebsite');
+        var websiteValue = websiteInput.val().trim();
+        var websiteRegex = /^(https?:\/\/(www\.)?)?([a-zA-Z0-9_-]+\.)*[a-zA-Z0-9_-]+\.[a-zA-Z]{2,}(\/.*)?$/;
+
+        console.log('Website value:', websiteValue); // Add this log to see the website value
+        console.log('Matches regex:', websiteRegex.test(websiteValue)); // Add this log to check the regex match
+
+        // Check if the website field doesn't match the regex or starts with "http://" or "https://" or "www."
+        if (websiteValue !== '' && (!websiteRegex.test(websiteValue) || !/^(https?:\/\/|www\.)/i.test(websiteValue))) {
+            websiteInput.addClass('is-invalid');
+            websiteInput.next('.invalid-feedback').text('Please enter a valid website URL with http:// or https:// or www.');
+        } else {
+            websiteInput.removeClass('is-invalid');
+            websiteInput.next('.invalid-feedback').text('');
+        }
+    }
+
+
+
+
+
+</script>
+
+
 
 
 @endsection
