@@ -309,6 +309,12 @@
                                             <span class="hide-menu">Rejected Leads</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('changeLogs') }}">
+                                            <i class="fa fa-history" aria-hidden="true"></i>
+                                            <span class="hide-menu">Change Logs</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif
