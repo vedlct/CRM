@@ -22,8 +22,9 @@
 <h2 style="text-align: center; padding: 50px 50px 0 50px;">Target vs Achievement</h2>
 <h5 style="text-align: center; padding: 0 0 50px 0;">Last 12 Month's Data</h5>
 
-@foreach ($data as $row)
-    <div class="col-sm-8 col-xl-12" style="text-align: center; padding: 0 100px;">
+<div class="col-sm-8 col-xl-12" style="text-align: center; padding: 0 100px;">
+
+    @foreach ($data as $row)
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">{{ $row['month'] }}</h4>
@@ -129,11 +130,12 @@
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
 
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
+</div> <br>
 
 
 
@@ -145,6 +147,9 @@
 @section('foot-js')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{{url('js/chart.js')}}"></script>
+    <script src="{{url('js/googlechart.js')}}"></script>
 
     <script>
 
@@ -161,6 +166,77 @@
             });
         });
         
+
+
+        $(function () {
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data = @json($data);
+
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'Month');
+                dataTable.addColumn('number', 'Test Percentage');
+                dataTable.addColumn('number', 'Conversation Percentage');
+                dataTable.addColumn('number', 'Closing Percentage');
+
+                // Select the last 6 elements from the 'data' array
+                var lastSixMonthsData = data;
+
+                // Add data points for the last 6 months to the DataTable
+                for (var i = 0; i < lastSixMonthsData.length; i++) {
+                    var month = lastSixMonthsData[i].month;
+                    var achvTest = lastSixMonthsData[i].achvTest;
+                    var targetTest = lastSixMonthsData[i].targetTest;
+                    // var testPercentage = achvTest * 100 / Math.max(targetTest, 1);
+                    // var testPercentage = achvTest * 100 / Math.max(targetTest, 1);
+                    //     testPercentage = Math.min(testPercentage, 100);
+                    var testPercentage = targetTest !== 0 ? achvTest * 100 / targetTest : 0;
+                        testPercentage = Math.min(testPercentage, 100);
+
+                    var achvConversation = lastSixMonthsData[i].achvConversation;
+                    var targetConversation = lastSixMonthsData[i].targetConversation;
+                    // var conversationPercentage = achvConversation * 100 / Math.max(targetConversation, 1);
+                    // var conversationPercentage = achvConversation * 100 / Math.max(targetConversation, 1);
+                        // conversationPercentage = Math.min(conversationPercentage, 100);
+                    var conversationPercentage = targetConversation !== 0 ? achvConversation * 100 / targetConversation : 0;
+                        conversationPercentage = Math.min(conversationPercentage, 100);
+
+                    var achvClosing = lastSixMonthsData[i].achvClosing;
+                    var targetClosing = lastSixMonthsData[i].targetClosing;
+                    // var closingPercentage = achvClosing * 100 / Math.max(targetClosing, 1);
+                    // var closingPercentage = achvClosing * 100 / Math.max(targetClosing, 1);
+                    //     closingPercentage = Math.min(closingPercentage, 100);
+                    var closingPercentage = targetClosing !== 0 ? achvClosing * 100 / targetClosing : 0;
+                        closingPercentage = Math.min(closingPercentage, 100);
+
+                    dataTable.addRow([month, testPercentage, conversationPercentage, closingPercentage]);
+                }
+
+                var options = {
+                    title: 'Test, Conversation, and Closing Percentages Comparison',
+                    titleTextStyle: {
+                        textAlign: 'center'
+                    },
+                    hAxis: {
+                        title: 'Month'
+                    },
+                    vAxis: {
+                        title: 'Percentage',
+                        minValue: 0,
+                        maxValue: 100,
+                        format: '#\'%\''
+                    },
+                    legend: { position: 'bottom' }
+                };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chartContainer'));
+                chart.draw(dataTable, options);
+            }
+        });
+
+
     </script>
 
 @endsection
