@@ -583,9 +583,9 @@ function selectAll(source) {
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html(' <strong>Leads are added to your My Leads</strong>');
-                        $('#alert').show();
-
+                        // $('#alert').html(' <strong>Leads are added to your My Leads</strong>');
+                        // $('#alert').show();
+infoAlert('Leads are added to your My Leads');
                     }
                 }
             });

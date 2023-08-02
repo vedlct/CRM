@@ -1175,7 +1175,7 @@ class LeadController extends Controller
                 ->where('statusId','!=',1)
                 ->get();
 
-                $users=User::select('id','firstName','lastName')
+            $users=User::select('id','firstName','lastName')
                 // ->orderBy('userId','DESC')
                 ->where('id','!=',Auth::user()->id)
                 ->orwhere('typeId',5)
@@ -1183,7 +1183,7 @@ class LeadController extends Controller
                 ->orWhere('typeId',3)
                 ->get();
 
-                $outstatus=Leadstatus::where('statusId','!=',7)
+            $outstatus=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
                 ->where('statusId','!=',6)
                 ->get();
@@ -1200,7 +1200,8 @@ class LeadController extends Controller
                 ->with('users',$users)
                 ->with('outstatus',$outstatus);
         }
-        return Redirect()->route('home');}
+        return Redirect()->route('home');
+    }
 
 
 
