@@ -51,6 +51,15 @@ h1 {
 
 
         
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.01.00</span> - 2 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Target Vs Achievement of full team for Admin and Managers</li>
+                    <li class="list-group-item">Added a new alert box on Assign Lead pages.</li>
+                </ul>
+            </div>
+        </div>
 
         <div class="card change-log-card">
             <div class="card-body">

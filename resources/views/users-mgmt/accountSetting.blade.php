@@ -1,18 +1,18 @@
 @extends('main')
 <style>
 
-.bg-light-red {
-        background-color: #fa9775; 
+    .bg-light-red {
+            background-color: #fa9775; 
+        }
+
+    table {
+    border-collapse: collapse; 
     }
 
-table {
-  border-collapse: collapse; 
-}
-
-tr, td, th {
-  text-align: center;
-  vertical-align: middle;
-}
+    tr, td, th {
+    text-align: center;
+    vertical-align: middle;
+    }
 
 </style>
 

@@ -270,6 +270,12 @@
                                         <span class="hide-menu"> Others</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('targetVsAchievement') }}">
+                                        <i class="fa fa-houzz"></i>
+                                        <span class="hide-menu"> Target vs Achievement</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endif

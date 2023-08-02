@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url('public/css/custom-style.css') }}">
 
 @endsection
+
 @section('content')
 
     <div class="card" style="padding:10px;">
@@ -521,21 +522,13 @@
 
 
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
-
-    <script src="{{url('js/jconfirm.js')}}"></script>
-
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script src="{{url('js/jconfirm.js')}}"></script>
     <script src="{{ url('public/js/custom-alert.js') }}"></script>
 
 

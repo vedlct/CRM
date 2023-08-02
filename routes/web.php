@@ -255,6 +255,9 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
+Route::get('/targetVsAchievement','ReportController@targetVsAchievement')->name('targetVsAchievement');
+
+
 //Report Analysis
 Route::get('/analysisHome', 'AnalysisController@analysisHomePage')->name('analysisHomePage');
 

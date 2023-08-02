@@ -4,7 +4,10 @@
 
 @section('header')
     <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
-    @endsection
+    <link rel="stylesheet" href="{{ url('public/css/custom-style.css') }}">
+
+@endsection
+
 @section('content')
 
 
@@ -93,99 +96,56 @@
 
 
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
-
     <script src="{{url('js/jconfirm.js')}}"></script>
-
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script src="{{ url('public/js/custom-alert.js') }}"></script>
+
 
     <script>
 
-$(document).ready(function() {
-    $("#makemy").click(function(){
-        var chkArray = [];
-        //var userId=$(this).val();
-        $('.checkboxvar:checked').each(function (i) {
+    $(document).ready(function() {
+        $("#makemy").click(function(){
+            var chkArray = [];
+            //var userId=$(this).val();
+            $('.checkboxvar:checked').each(function (i) {
 
-            chkArray[i] = $(this).val();
-            });
+                chkArray[i] = $(this).val();
+                });
 
-            //alert(chkArray)
+                //alert(chkArray)
 
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            // $("#inp").val(JSON.stringify(chkArray));
-            // $( "#assign-form" ).submit();
-            jQuery('input:checkbox:checked').parents("tr").remove();
-            $(this).prop('selectedIndex',0);
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                // $("#inp").val(JSON.stringify(chkArray));
+                // $( "#assign-form" ).submit();
+                jQuery('input:checkbox:checked').parents("tr").remove();
+                $(this).prop('selectedIndex',0);
 
-            $.ajax({
-                type : 'post' ,
-                url : '{{route('addmyContacted')}}',
-                data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
-                success : function(data){
-                    console.log(data);
-                    if(data == 'true'){
-                        // $('#myTable').load(document.URL +  ' #myTable');
-//                        $.alert({
-//                            title: 'Success!',
-//                            content: 'successfully assigned!',
-//                        });
-                        $('#alert').html('Leads are assigned successfully');
-                        $('#alert').show();
+                $.ajax({
+                    type : 'post' ,
+                    url : '{{route('addmyContacted')}}',
+                    data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
+                    success : function(data){
+                        console.log(data);
+                        if(data == 'true'){
+                            // $('#alert').html('Leads are assigned successfully');
+                            // $('#alert').show();
+                            infoAlert('Leads are assigned successfully');
 
+                        }
                     }
-                }
-            });
-    });
-})
+                });
+        });
+    })
 
 
 
 
-    </script>
-
-
-
-
-
-
-
-
-    <script>
-
-//        var datatable;
-//
-//
-//        $(document).ready(function() {
-//             datatable= $('#myTable').DataTable(
-//                {
-//                    "order": [[ 7, "desc" ]]
-//                }
-//            );
-//
-//        });
-
-
-//<th>Select</th>
-//<th>Company Name</th>
-//<th>Mined By</th>
-//<th>Category</th>
-//<th>Website</th>
-//<th>Email</th>
-//<th>Country</th>
-//<th>Comments</th>
-//<th>Created At</th>
-
+   
         $(function() {
             $('#myTable').DataTable({
                 processing: true,
@@ -266,9 +226,9 @@ $(document).ready(function() {
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html(' <strong>Success!</strong> Assigned');
-                        $('#alert').show();
-
+                        // $('#alert').html(' <strong>Success!</strong> Assigned');
+                        // $('#alert').show();
+                        successAlert('Assigned successfully!');
                     }
                 }
             });
@@ -276,10 +236,6 @@ $(document).ready(function() {
 
 
         });
-
-
-
-
 
 
 
