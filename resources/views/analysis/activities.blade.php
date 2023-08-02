@@ -25,21 +25,7 @@
                     </thead>
                     <tbody>
 
-                    @foreach($activities as $activity)
-                        <tr>
-                            <td width="10%">{{$activity->activityId}}</td>
-                            <td width="10%">{{$activity->firstName}} {{$activity->lastName}}</td>
-                            <td width="10%">{{$activity->leadId}}</td>
-                            <td width="15%">{{$activity->companyName}}</td>
-                            <td width="10%">{{$activity->statusName}}</td>
-                            <td width="30%">{{$activity->activity}}</td>
-                            <td width="15%">{{ Carbon\Carbon::parse($activity->created_at)->format('d M Y, H:i') }}</td>
-                            
-                        </tr>
-
-                    @endforeach
-
-                </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -71,13 +57,29 @@
 
     <script>
 
-        $(document).ready(function() {
+    $(document).ready(function() {
             $('#myTable').DataTable({
-                "processing": true,
+                processing: true,
+                serverSide: true,
                 stateSave: true,
+                ajax: {
+                    url: "{!! route('getAllActivities') !!}",
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    }
+                },
+                columns: [
+                    { data: 'activityId', name: 'activityId' },
+                    { data: 'firstName', name: 'firstName' },
+                    { data: 'leadId', name: 'leadId' },
+                    { data: 'companyName', name: 'companyName' },
+                    { data: 'statusName', name: 'statusName' },
+                    { data: 'activity', name: 'activity' },
+                    { data: 'created_at', name: 'created_at' },
+                ]
             });
-
-        });      
+        });
 
 
     </script>

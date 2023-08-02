@@ -270,6 +270,12 @@
                                         <span class="hide-menu"> Others</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('targetVsAchievement') }}">
+                                        <i class="fa fa-houzz"></i>
+                                        <span class="hide-menu"> Target vs Achievement</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endif
@@ -307,6 +313,12 @@
                                         <a href="{{ route('rejectedLeads') }}">
                                             <i class="fa fa-ban" aria-hidden="true"></i>
                                             <span class="hide-menu">Rejected Leads</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('changeLogs') }}">
+                                            <i class="fa fa-history" aria-hidden="true"></i>
+                                            <span class="hide-menu">Change Logs</span>
                                         </a>
                                     </li>
                                 </ul>

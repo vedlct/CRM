@@ -213,7 +213,8 @@ Route::get('/employees', 'LeadController@allEmployees')->name('allEmployees');
 Route::post('/employees', 'LeadController@getAllEmployees')->name('getAllEmployees');
 Route::post('/createEmployees','LeadController@createEmployees')->name('createEmployees');
 Route::post('/updateEmployees','LeadController@updateEmployees')->name('updateEmployees');
-Route::post('/removeEmployees','LeadController@removeEmployees')->name('removeEmployees');
+// Route::post('/removeEmployees/{employeeId}','LeadController@removeEmployees')->name('removeEmployees');
+Route::match(['post', 'delete'], '/removeEmployees/{employeeId}', 'LeadController@removeEmployees')->name('removeEmployees');
 Route::post('/employeeNumberCheck','LeadController@employeeNumberCheck')->name('employeeNumberCheck');
 Route::post('/employeeEmailCheck','LeadController@employeeEmailCheck')->name('employeeEmailCheck');
 
@@ -240,6 +241,8 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
 
+Route::get('/changeLogs','HomeController@changeLogs')->name('changeLogs');
+
 //Detached Lead From Team Member
 Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
 Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
@@ -252,13 +255,19 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
+Route::get('/targetVsAchievement','ReportController@targetVsAchievement')->name('targetVsAchievement');
+
+
 //Report Analysis
 Route::get('/analysisHome', 'AnalysisController@analysisHomePage')->name('analysisHomePage');
 
 Route::get('/analysisComments', 'AnalysisController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'AnalysisController@analysisComments');
 Route::post('/exportAnalysisComments', 'AnalysisController@exportAnalysisComments')->name('exportAnalysisComments');
-Route::get('/reportAllActivities','AnalysisController@reportAllActivities')->name('reportAllActivities');
+
+Route::get('/allActivities','AnalysisController@allActivities')->name('allActivities');
+Route::post('/allActivities','AnalysisController@getAllActivities')->name('getAllActivities');
+
 Route::get('/duplicateLeadList', 'AnalysisController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
@@ -269,7 +278,9 @@ Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name
 Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
-Route::get('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
+
+Route::get('/longTimeNoCall', 'AnalysisController@longTimeNoCall')->name('longTimeNoCall');
+Route::post('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'AnalysisController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
 
 Route::get('/fredChasingLeads', 'AnalysisController@getFredChasingLeads')->name('getFredChasingLeads');

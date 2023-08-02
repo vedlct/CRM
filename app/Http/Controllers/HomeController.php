@@ -657,4 +657,10 @@ class HomeController extends Controller
 
 
 
+        public function changeLogs (){
+            
+            return view ('changeLogs');
+        }
+
+
 }

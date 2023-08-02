@@ -237,7 +237,7 @@
         
         <div class="col-md-4" style="float: right;">
             <div class="card">
-                <div class="card-header" style="background-color: #0437F2;">
+                <div class="card-header" style="background-color: #009efb;">
                     <h5 class="font-weight-bold text-white">Recent Top Activities</h5>
                     <div class="card-header-right">
                     </div>

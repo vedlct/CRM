@@ -67,7 +67,7 @@
               <h4 class="card-title">Test But Not Closed</h4>
               <p class="card-text">Where do the other 80% of tests go? Join the search party as we unravel the mystery of the disappearing acts in the world of closures</p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('getTestButNotClosedList')}}" target="_blank" class="btn btn-custom">See The List</a>
+              <a href="{{route('testButNotClosedList')}}" target="_blank" class="btn btn-custom">See The List</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -90,7 +90,7 @@
               <h4 class="card-title">Long Time No Call</h4>
               <p class="card-text">Missed follow-ups and untouched leads? Don't worry, we've got your back. Get insights into the neglected opportunities and follow-up fails </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('getLongTimeNoCall')}}" target="_blank" class="btn btn-custom">Get Me There</a>
+              <a href="{{route('longTimeNoCall')}}" target="_blank" class="btn btn-custom">Get Me There</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
@@ -115,7 +115,7 @@
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted">Available for: Admin, Supervisor</div>               
+                <div class="text-muted">Available for: All Users</div>         
             </div>
             </div>
           </div>
@@ -292,7 +292,7 @@
               <h4 class="card-title">All Activities</h4>
               <p class="card-text">Step into the realm of marketers' daily CRM adventures. From mining to updating and everything in between, this is where their magic happens </p>
               <p class="card-text"><small class="text-muted">Caution: takes long time to load</small></p>
-              <a href="{{route('reportAllActivities')}}" target="_blank" class="btn btn-custom">See Activities</a>
+              <a href="{{route('allActivities')}}" target="_blank" class="btn btn-custom">See Activities</a>
             </div>
             <div class="card-footer">
             <div class="d-flex justify-content-between align-items-center">
