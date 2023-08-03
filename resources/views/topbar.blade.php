@@ -21,6 +21,10 @@ body {
    flex-basis: auto !important;
 }
 
+.navbar-arrow{
+   padding-right: 100px !important;
+}
+
 /* Styling for the logo */
 .navbar-brand img {
     width: 40px;
@@ -90,7 +94,7 @@ body {
       <a class="navbar-brand" href="{{route('home')}}" style="padding-left: 30px;">
       <span class="font-weight-bold">CRM </span>
       </a>
-      <div class="navbar-collapse">
+      <div class="navbar-arrow">
          <ul class="navbar-nav mr-auto mt-md-0 ">
             <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
             <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="icon-arrow-left-circle"></i></a> </li>
@@ -113,6 +117,7 @@ body {
             <li class="nav-item">
                <span class="nav-date">Canada: {{ $timeData['Canada']->format('H:i') }}</span>
             </li>
+
          </ul>
          <ul class="navbar-nav ml-auto" >
             <li class="nav-item dropdown">

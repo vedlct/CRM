@@ -476,7 +476,7 @@ class AnalysisController extends Controller
                         ->join('leads', 'activities.leadId', 'leads.leadId')
                         ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
                         // ->where('users.active', 1)
-                        ->orderBy('activities.created_at', 'desc')
+                        ->orderBy('activities.activityId', 'desc')
                         // ->latest()->paginate(10000);                      
                         ->get();
     
@@ -488,8 +488,8 @@ class AnalysisController extends Controller
                     ->where('activities.activity', 'NOT LIKE', '%Table%')
                     ->join('leads', 'activities.leadId', 'leads.leadId')
                     ->join('leadstatus', 'leads.statusId', 'leadstatus.statusId')
-                    ->orderBy('activities.created_at', 'DESC')
-                    ->paginate(300);
+                    ->orderBy('activities.activityId', 'DESC')
+                    ->get();
 
                 }
 

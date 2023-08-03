@@ -71,7 +71,12 @@
                 },
                 columns: [
                     { data: 'activityId', name: 'activityId' },
-                    { data: 'firstName', name: 'firstName' },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return row.firstName + ' ' + row.lastName;
+                        }
+                    },                 
                     { data: 'leadId', name: 'leadId' },
                     { data: 'companyName', name: 'companyName' },
                     { data: 'statusName', name: 'statusName' },
