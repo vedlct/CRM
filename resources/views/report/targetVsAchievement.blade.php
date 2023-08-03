@@ -177,9 +177,9 @@
 
                 var dataTable = new google.visualization.DataTable();
                 dataTable.addColumn('string', 'Month');
-                dataTable.addColumn('number', 'Test Percentage');
-                dataTable.addColumn('number', 'Conversation Percentage');
-                dataTable.addColumn('number', 'Closing Percentage');
+                dataTable.addColumn('number', 'Conversation');
+                dataTable.addColumn('number', 'Test');
+                dataTable.addColumn('number', 'Closing');
 
                 // Select the last 6 elements from the 'data' array
                 var lastSixMonthsData = data;
@@ -188,47 +188,29 @@
                 for (var i = 0; i < lastSixMonthsData.length; i++) {
                     var month = lastSixMonthsData[i].month;
                     var achvTest = lastSixMonthsData[i].achvTest;
-                    var targetTest = lastSixMonthsData[i].targetTest;
-                    // var testPercentage = achvTest * 100 / Math.max(targetTest, 1);
-                    // var testPercentage = achvTest * 100 / Math.max(targetTest, 1);
-                    //     testPercentage = Math.min(testPercentage, 100);
-                    var testPercentage = targetTest !== 0 ? achvTest * 100 / targetTest : 0;
-                        testPercentage = Math.min(testPercentage, 100);
-
                     var achvConversation = lastSixMonthsData[i].achvConversation;
-                    var targetConversation = lastSixMonthsData[i].targetConversation;
-                    // var conversationPercentage = achvConversation * 100 / Math.max(targetConversation, 1);
-                    // var conversationPercentage = achvConversation * 100 / Math.max(targetConversation, 1);
-                        // conversationPercentage = Math.min(conversationPercentage, 100);
-                    var conversationPercentage = targetConversation !== 0 ? achvConversation * 100 / targetConversation : 0;
-                        conversationPercentage = Math.min(conversationPercentage, 100);
-
                     var achvClosing = lastSixMonthsData[i].achvClosing;
-                    var targetClosing = lastSixMonthsData[i].targetClosing;
-                    // var closingPercentage = achvClosing * 100 / Math.max(targetClosing, 1);
-                    // var closingPercentage = achvClosing * 100 / Math.max(targetClosing, 1);
-                    //     closingPercentage = Math.min(closingPercentage, 100);
-                    var closingPercentage = targetClosing !== 0 ? achvClosing * 100 / targetClosing : 0;
-                        closingPercentage = Math.min(closingPercentage, 100);
 
-                    dataTable.addRow([month, testPercentage, conversationPercentage, closingPercentage]);
+                    dataTable.addRow([month, achvConversation, achvTest, achvClosing]);
                 }
 
                 var options = {
-                    title: 'Test, Conversation, and Closing Percentages Comparison',
+                    title: 'Conversation, Test and Closing Comparison',
                     titleTextStyle: {
                         textAlign: 'center'
                     },
-                    hAxis: {
-                        title: 'Month'
-                    },
+                    // hAxis: {
+                    //     title: 'Month'
+                    // },
                     vAxis: {
-                        title: 'Percentage',
-                        minValue: 0,
-                        maxValue: 100,
-                        format: '#\'%\''
+                        title: 'Achievement'
                     },
-                    legend: { position: 'bottom' }
+                    legend: { position: 'top' },
+                    dataLabels: {
+                        enabled: true,
+                        fontSize: 14,
+                        format: '#,##0'
+                    }
                 };
 
                 var chart = new google.visualization.ColumnChart(document.getElementById('chartContainer'));
