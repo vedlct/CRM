@@ -2125,7 +2125,7 @@ class LeadController extends Controller
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->statusId=$r->Status;
-        if($lead->contactedUserId == Auth::user()->id){
+        // if($lead->contactedUserId == Auth::user()->id){
 
             $lead->contactedUserId =null;
             $lead->ippStatus=0;
@@ -2158,7 +2158,7 @@ class LeadController extends Controller
 
 
             return back();
-        }
+        // }
 
         $lead->save();
 

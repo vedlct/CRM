@@ -22,8 +22,9 @@
 <h2 style="text-align: center; padding: 50px 50px 0 50px;">Target vs Achievement</h2>
 <h5 style="text-align: center; padding: 0 0 50px 0;">Last 12 Month's Data</h5>
 
-@foreach ($data as $row)
-    <div class="col-sm-8 col-xl-12" style="text-align: center; padding: 0 100px;">
+<div class="col-sm-8 col-xl-12" style="text-align: center; padding: 0 100px;">
+
+    @foreach ($data as $row)
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">{{ $row['month'] }}</h4>
@@ -129,11 +130,12 @@
                 </div>
             </div>
         </div>
-    </div>
-@endforeach
+    @endforeach
 
 
+    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
 
+</div> <br>
 
 
 
@@ -145,6 +147,9 @@
 @section('foot-js')
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="{{url('js/chart.js')}}"></script>
+    <script src="{{url('js/googlechart.js')}}"></script>
 
     <script>
 
@@ -161,6 +166,59 @@
             });
         });
         
+
+
+        $(function () {
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                var data = @json($data);
+
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'Month');
+                dataTable.addColumn('number', 'Conversation');
+                dataTable.addColumn('number', 'Test');
+                dataTable.addColumn('number', 'Closing');
+
+                // Select the last 6 elements from the 'data' array
+                var lastSixMonthsData = data;
+
+                // Add data points for the last 6 months to the DataTable
+                for (var i = 0; i < lastSixMonthsData.length; i++) {
+                    var month = lastSixMonthsData[i].month;
+                    var achvTest = lastSixMonthsData[i].achvTest;
+                    var achvConversation = lastSixMonthsData[i].achvConversation;
+                    var achvClosing = lastSixMonthsData[i].achvClosing;
+
+                    dataTable.addRow([month, achvConversation, achvTest, achvClosing]);
+                }
+
+                var options = {
+                    title: 'Conversation, Test and Closing Comparison',
+                    titleTextStyle: {
+                        textAlign: 'center'
+                    },
+                    // hAxis: {
+                    //     title: 'Month'
+                    // },
+                    vAxis: {
+                        title: 'Achievement'
+                    },
+                    legend: { position: 'top' },
+                    dataLabels: {
+                        enabled: true,
+                        fontSize: 14,
+                        format: '#,##0'
+                    }
+                };
+
+                var chart = new google.visualization.ColumnChart(document.getElementById('chartContainer'));
+                chart.draw(dataTable, options);
+            }
+        });
+
+
     </script>
 
 @endsection

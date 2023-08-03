@@ -1940,8 +1940,11 @@ class ReportController extends Controller
             ];
         }
     }
+
+        $lastSixMonthsData = array_slice($data, 0);
+
         // Pass the $data array to the view
-        return view('report.targetVsAchievement', compact('data'));
+        return view('report.targetVsAchievement', compact('data', 'lastSixMonthsData'));
     }
 
 

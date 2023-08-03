@@ -50,6 +50,16 @@ h1 {
 
 
 
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.01.01</span> - 3 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Bug fixed - contactedUserId will be Null if supervisors filter the lead </li>
+                    <li class="list-group-item">Top bar css fixed.</li>
+                    <li class="list-group-item">Add a graph in the Target vs Achievement Report</li>
+                </ul>
+            </div>
+        </div>
         
         <div class="card change-log-card">
             <div class="card-body">
