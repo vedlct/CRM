@@ -19,7 +19,7 @@
                         <th>Number</th>
                         <th>Category</th>
                         <th>Country</th>
-                        <!-- <th>Possibility</th> -->
+                        <th>Possibility</th>
                         <th >Volume</th>
                         <th >Process</th>
                         <th >Action</th>
@@ -169,7 +169,7 @@
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
                     { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
-                    // { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
                     { data: 'volume', name: 'volume', defaultContent: ''},
                     { data: 'process', name: 'process', defaultContent: ''},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
