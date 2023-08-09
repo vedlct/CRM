@@ -517,7 +517,7 @@
 
                                 <h5 class="text-decoration-underline font-info pb-2">Links:</h5>
                                 <p>
-                                    <b>Web:</b>
+                                    <b class="text-secondary">Web:</b>
                                     <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
                                 </p>
                                 <!-- <p>
@@ -525,7 +525,7 @@
                                     <a href="#">facebook.com</a>
                                 </p> -->
                                 <p>
-                                    <b>Linkedin:</b>
+                                    <b class="text-secondary">Linkedin:</b>
                                     <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
                                 </p>
                                 <p>

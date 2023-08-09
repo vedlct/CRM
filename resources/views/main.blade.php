@@ -19,16 +19,14 @@
     <link href="{{url('css/style.css')}}" rel="stylesheet">
     <link href="{{url('css/colors/blue.css')}}" id="theme" rel="stylesheet">
     <link rel="stylesheet" href="{{url('date/date-picker.css')}}">
-    <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-    <![endif]-->
 
 </head>
 
@@ -50,7 +48,7 @@
 
 
             <footer class="footer">
-                Customer Relationship Management 2.0 © 2023 | TECH CLOUD LTD
+                Customer Relationship Management 2.02 © 2023 | TECH CLOUD LTD
             </footer>
 
         </div>

@@ -1087,6 +1087,14 @@ class AnalysisController extends Controller
                     ->value('maxTotalLeadMining');
 
             
+                $jsonResponse = $this->chasingCategories(); 
+                $showCategories = json_decode($jsonResponse->getContent(), true);
+
+                $showRandomStatistics = $this->randomStatistics(); 
+                // $showJoiningDate = $showRandomStatistics ['joiningDate'];
+                // $showClientNumber = $showRandomStatistics ['myClients'];
+
+
 
                 return view('analysis.randomReports', [
                     'totalOwnCall' => $dataYearly->totalOwnCall,
@@ -1138,11 +1146,77 @@ class AnalysisController extends Controller
                     'maxTotalContact' => $maxTotalContact,
                     'maxTotalConvo' => $maxTotalConvo,
                     'maxTotalTest' => $maxTotalTest,
-                    'maxTotalLeadMining' => $maxTotalLeadMining
+                    'maxTotalLeadMining' => $maxTotalLeadMining,
+
+                    'showCategories' => $showCategories,
+                    'showRandomStatistics' => $showRandomStatistics
+                    
+
                 ]);
             }
 
             
+          
+
+                public function chasingCategories()
+                {
+                    
+                    $categoryIds = [1, 4, 5, 66, 63, 74];
+                    $categoryNames = ['Agency', 'Online Store', 'Brand', 'Jewelry', 'Boutique', 'Furniture'];
+                    
+                    $chasingCounts = Lead::where('leads.contactedUserId', Auth::user()->id)
+                        ->whereIn('leads.categoryId', $categoryIds)
+                        ->selectRaw('categoryId, COUNT(leadId) as count')
+                        ->groupBy('categoryId')
+                        ->get();
+                
+                    $result = [];
+                
+                    foreach ($chasingCounts as $count) {
+                        $categoryIndex = array_search($count->categoryId, $categoryIds);
+                        if ($categoryIndex !== false) {
+                            $categoryName = $categoryNames[$categoryIndex];
+                            $result[$categoryName] = $count->count;
+                        }
+                    }
+                    
+                    return response()->json($result);
+                }
+
+
+
+                public function randomStatistics(){
+
+                    $joiningDate = User::where('id', Auth::user()->id)
+                        ->value('created_at'); 
+                
+                    $myClients = NewFile::where('userId', Auth::user()->id)
+                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                        ->value('clientCount');
+                
+                    $myTests = Workprogress::where('userId', Auth::user()->id)
+                        ->where('progress', 'LIKE', '%Test%')
+                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                        ->value('clientCount');
+
+                    $joiningDate = Carbon::parse($joiningDate);
+                    $today = Carbon::now();
+                    $timeDifference = $joiningDate->diffForHumans($today);
+
+                    return [
+                        'joiningDate' => $joiningDate,
+                        'myClients' => $myClients,
+                        'myTests' => $myTests,
+                        'timeDifference' => $timeDifference,
+                    ];
+                    
+                }
+
+
+
+
+
+
 
 
             public function randomReportsAll () {
@@ -1154,6 +1228,10 @@ class AnalysisController extends Controller
                     $fromDay = "2023-01-01";
                     $tillToday = Carbon::today()->toDateString();
                     $users = User::get()->where('crmType', '!=', 'local')->where('active', '1');
+
+                    $clientAnalysis = $this->closedDealsAnalysis(); 
+                    $clientCategoryCounts = $clientAnalysis['categoryCounts'];
+                    $totalClinetCounts = $clientAnalysis['totalCount'];
 
                     
                     foreach ($users as $user) {
@@ -1202,7 +1280,10 @@ class AnalysisController extends Controller
                     }
 
                     return view('analysis.randomReportsAll')
-                            ->with('users', $users);
+                            ->with('users', $users)
+                            ->with('clientCategoryCounts', $clientCategoryCounts)
+                            ->with('totalClinetCounts', $totalClinetCounts);
+
 
                 } else {
 
@@ -1214,6 +1295,20 @@ class AnalysisController extends Controller
 
 
 
+            public function closedDealsAnalysis()
+            {
+                $categoryCounts = Lead::with('category')
+                    ->select('categoryId', DB::raw('COUNT(*) as count'))
+                    ->where('statusId', 6)
+                    ->groupBy('categoryId')
+                    ->get();
+
+                $totalCount = $categoryCounts->sum('count');
+
+                return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
+            }
+
+            
 
             public function myHourReport(Request $r)
             {
@@ -1246,9 +1341,10 @@ class AnalysisController extends Controller
                 }
             }
               
+            
 
 
-
+            
 
 
 

@@ -249,7 +249,7 @@
                     <ul class="crm-activity">
                         @foreach ($topActivities as $activity)
                             <li class="media">
-                                <span class="me-3 font-primary"><img src="{{ url('public/img/users/' . $activity->picture) }}" alt="Photo" style="max-height: 50px; border-radius: 50%; padding-right: 10px;"></span>
+                                <span class="me-3 font-primary"><img src="{{ url('public/img/users/' . $activity->picture) }}" alt="User Photo" style="max-height: 50px; border-radius: 50%; padding-right: 10px;"></span>
                                 <div class="align-self-center media-body">
                                     <!-- <h6 class="mt-0">{{ $activity->userId }} just received a {{ $activity->progress }}</h6> -->
                                     @if (strpos($activity->progress, 'Test') !== false)
@@ -269,6 +269,12 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
+
 
 
 
