@@ -1344,7 +1344,44 @@ class AnalysisController extends Controller
             
 
 
-            
+            public function customHourReport()
+            {
+                $users = User::select('id','firstName')->where('active', 1)->where('typeId', 5)->get();
+    
+                $startDate = Carbon::now()->subMonths(2);
+                $endDate = Carbon::now();
+    
+                $activityData = WorkProgress::whereBetween('created_at', [$startDate, $endDate])
+                    ->get();
+    
+                $hourlyActivityData = [];
+    
+                foreach ($activityData as $activity) {
+                    $userId = $activity->userId;
+                    $hour = Carbon::parse($activity->created_at)->hour;
+    
+                    if (!isset($hourlyActivityData[$hour][$userId])) {
+                        $hourlyActivityData[$hour][$userId] = 0;
+                    }
+    
+                    $hourlyActivityData[$hour][$userId]++;
+                }
+    
+    
+                $userMaxValues = [];
+    
+                foreach ($hourlyActivityData as $hour => $userData) {
+                    foreach ($userData as $userId => $activityCount) {
+                        if (!isset($userMaxValues[$userId]) || $activityCount > $userMaxValues[$userId]) {
+                            $userMaxValues[$userId] = $activityCount;
+                        }
+                    }
+                }
+    
+                    
+                return view('analysis.customHourReport', compact('users', 'hourlyActivityData', 'userMaxValues'));
+            }
+       
 
 
 

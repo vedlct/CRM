@@ -46,7 +46,7 @@
                     <thead>
                     <tr>
                         <th width="2%">Select</th>
-                        <!-- <th width="5%">Id</th> -->
+                        <th width="5%">Id</th>
                         <!-- <th width="8%">Company</th> -->
                         <th width="8%">Category</th>
                         <th width="5%">Website</th>
@@ -802,7 +802,7 @@
 
                     {data: 'check', name: 'check', orderable: false, searchable: false},
 
-                    // { data: 'leadId', name: 'leads.leadId'},
+                    { data: 'leadId', name: 'leads.leadId'},
                     // { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},

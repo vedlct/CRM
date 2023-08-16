@@ -291,6 +291,8 @@ Route::get('/randomReportsAll', 'AnalysisController@randomReportsAll')->name('ra
 Route::get('lead/ippList', 'AnalysisController@ippList')->name('ippList');
 
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
+Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
+
 
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
