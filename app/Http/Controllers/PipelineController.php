@@ -159,5 +159,21 @@ class PipelineController extends Controller
 
 
 
+        public function pipelineCounter()
+        {
+            $userType = Session::get('userType');
+        
+            if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                $pipelineData = SalesPipeline::select('users.userId', 'stage', DB::raw('COUNT(*) as stageCount'))
+                    ->leftJoin('users', 'salesPipeline.userId', '=', 'users.id')
+                    ->groupBy('users.userId', 'stage')
+                    ->get();
+                
+                return response()->json($pipelineData);
+            }
+        }
+    
+
+
 
 }

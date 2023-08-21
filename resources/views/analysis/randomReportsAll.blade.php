@@ -124,9 +124,37 @@
 
 
 
+            <div class="col-md-8">
+                <div class="card">
+                <div class="card-header" style="background-color: #6F8FAF;">
+                    <h5 class="font-weight-bold text-white">Closed Deals Analysis</h5>
+                </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                        <div class="table-responsive">
+                            <table id="pipelineTable" class="table table-bordered table-striped table-middle-aligned">
+                                <thead>
+                                    <tr>
+                                        <th>Marketer</th>
+                                        <th>Contact</th>
+                                        <th>Conversation</th>
+                                        <th>Test Possibility</th>
+                                        <th>Test Received</th>
+                                        <th>Closed</th>
+                                        <th>Lost Deal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be populated here using JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             
-
         </div>
 
 
@@ -147,7 +175,7 @@
 <!-- Additional JavaScript code goes here -->
 <script>
  
-  $(document).ready(function() {
+        $(document).ready(function() {
             $('#myTable').DataTable({
                 "processing": true,
                 stateSave: true,
@@ -155,6 +183,46 @@
             });
 
         });
+
+
+
+
+
+        $(document).ready(function() {
+        $.ajax({
+            url: '{{ route('pipelineCounter') }}',
+            method: 'GET',
+            success: function(response) {
+                var tableData = {};
+
+                // Process the response data to populate the tableData object
+                response.forEach(function(row) {
+                    if (!tableData[row.userId]) {
+                        tableData[row.userId] = {};
+                    }
+                    tableData[row.userId][row.stage] = row.stageCount;
+                });
+
+                // Populate the table with the processed data
+                var tbody = $('#pipelineTable tbody');
+                for (var userId in tableData) {
+                    var rowData = tableData[userId];
+                    var rowHtml = '<tr><td>' + userId + '</td>';
+                    for (var stage in rowData) {
+                        rowHtml += '<td>' + rowData[stage] + '</td>';
+                    }
+                    rowHtml += '</tr>';
+                    tbody.append(rowHtml);
+                }
+
+                // Initialize DataTables after populating the table
+                $('#pipelineTable').DataTable({
+                    "processing": true,
+                    stateSave: true,
+                });
+            }
+        });
+    });
 
 </script>
 

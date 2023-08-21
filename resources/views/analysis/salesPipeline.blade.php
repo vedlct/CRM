@@ -48,6 +48,10 @@
 
 @section('content')
 
+
+
+
+
     <div class="row" style="padding: 30px;">
         <div class="col-md-2">
             <div class="card h-100">
@@ -301,6 +305,11 @@
 
 @section('foot-js')
 
+<script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
+<script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
@@ -308,6 +317,7 @@
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 
 
 <script>
@@ -362,11 +372,8 @@
         });
     }
 
-    // $('#change_stage').on('hidden.bs.modal', function() {
-    //     $('.modal-backdrop').remove();
-    //     window.location.reload();
-    // });
-   
+    
+
 
 </script>
 
