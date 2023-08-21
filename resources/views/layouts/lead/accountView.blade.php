@@ -1,5 +1,11 @@
 @extends('main')
 
+<style>
+
+
+</style>
+
+
 @section('content')
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
@@ -485,8 +491,43 @@
                         </div>
                     </div>
 
-                    <!-- other info card -->
+
+
+                    <!-- 3rd Column -->
                     <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
+
+                        <!-- Calling Card -->
+                        <!-- <div class="card">
+                            <div class="card-body">
+                                <h5 class="border-bottom pb-2">Make A Call</h5>
+
+                                {{ csrf_field() }}
+
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="phoneNumber" class="form-label">Enter Phone Number:</label>
+                                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                                    </div>
+                                    <button id="dialButton" class="btn btn-success">Dial</button>
+                                    <button id="endCallButton" class="btn btn-danger" disabled>End Call</button>
+
+                                    <div class="mt-4">
+                                        <div id="callStatus" > </div>
+                                        <div id="callStartTime" > </div>
+                                        <div id="callEndTime" > </div>
+                                        <div id="callDuration" > </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div> -->
+
+
+
+
+                        <!-- other info card -->
+                    <!-- <div class="col-md-6 col-lg-4 col-xxl-3 mb-3"> -->
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="border-bottom pb-2">Other Informations</h5>
@@ -1157,6 +1198,46 @@
 
 
 
+<!--CALLING NUMBERS-->
+    
+<!-- <div class="modal" id="calling" >
+        <div class="modal-dialog" style="max-width: 30%">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Calling</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                
+                {{csrf_field()}}
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Enter Phone Number:</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                        </div>
+                        <button id="dialButton" class="btn btn-success">Dial</button>
+                        <button id="endCallButton" class="btn btn-danger" disabled>End Call</button>
+
+                        <div class="mt-4">
+                            <h5>Conversation</h5>
+                            <div id="callStartTime" class="mb-2"></div>
+                            <div id="callEndTime" class="mb-2"></div>
+                            <div id="callDuration" class="mb-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+
+
+
+
 
 @endsection
 
@@ -1176,6 +1257,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+
+
+   
 
 
 

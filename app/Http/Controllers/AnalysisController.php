@@ -37,6 +37,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
 use App\Exports\LongTimeNoCallExport;
 use App\Exports\fredChasingLeadsExport;
+use App\Exports\IppListExport;
 
 use Goutte\Client;
 use GuzzleHttp\Psr7\Uri;
@@ -82,6 +83,7 @@ class AnalysisController extends Controller
                 ->leftJoin('users','leads.contactedUserId','users.id')
                 // ->where('leads.contactedUserId', Auth::user()->id)
                 ->where('leads.ippStatus', 1)
+                ->where('leads.statusId', '!=', 6)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
                 ->get();
@@ -115,6 +117,51 @@ class AnalysisController extends Controller
                 ->with('status',$status)
                 ->with('country',$country);
               
+        }
+
+
+        public function exportIppList(){
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR'){
+           
+                $leads=Lead::select(
+                    'leads.leadId',
+                    'leads.companyName',
+                    'categories.categoryName as category_name',
+                    'leads.website',
+                    'countries.countryName as country_name',
+                    'leads.contactNumber',
+                    'leads.process',
+                    'leads.volume',
+                    'leads.frequency',
+                    'users.userId',
+                    'workprogress.created_at'
+                    )
+                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                ->where('leads.ippStatus', 1)
+                ->where('leads.statusId', '!=', 6)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+            }else{
+            $leads=[];
+            }
+
+
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+
+
+            $export = new IppListExport($leads, $categories, $country, $status);
+
+            return Excel::download($export, 'IppListExport.csv');
+      
         }
 
 
@@ -224,6 +271,8 @@ class AnalysisController extends Controller
                 $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
                 ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('leads.statusId', '!=', 6)
+                ->where('leads.statusId', '!=', 8)
                 ->where('workprogress.callingReport', 11)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
@@ -235,6 +284,7 @@ class AnalysisController extends Controller
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
                 ->leftJoin('users','leads.contactedUserId','users.id')
                 ->where('users.id', Auth::user()->id)
+                ->where('leads.statusId', '!=', 6)
                 ->where('workprogress.callingReport', 11)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')

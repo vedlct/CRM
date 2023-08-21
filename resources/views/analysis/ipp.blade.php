@@ -4,10 +4,23 @@
 
 @section('content')
 
+@php($userType = Session::get('userType'))
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
         <h2  align="center"><b>IPP List</b></h2>
+
+        <div class="col-md-5" style="float:left;">
+                @if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
+                    <form method="POST" action="{{ route('exportIppList') }}">
+                        {{ csrf_field() }}
+                        <button class="btn btn-primary" type="submit">Export The List</button>
+                    </form>
+                @endif    
+                <br><br>
+            </div>
+
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">

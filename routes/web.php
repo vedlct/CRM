@@ -12,6 +12,11 @@
 */
 
 
+// Route::post('/initiateCall', 'CallingController@initiateCall')->name('calling.initiateCall');
+// Route::post('/endCall', 'CallingController@endCall')->name('calling.endCall');
+
+// Route::post('/calling/handle-gather', 'CallingController@handleGather')->name('calling.handle-gather');
+// Route::get('/getCallLogs', 'CallingController@getCallLogs')->name('calling.getCallLogs');
 
 
 Route::view('/main', 'layouts.index')->name('main');
@@ -289,6 +294,8 @@ Route::post('/exportFredChasingLeads', 'AnalysisController@exportFredChasingLead
 Route::get('/randomReports', 'AnalysisController@randomReports')->name('randomReports');
 Route::get('/randomReportsAll', 'AnalysisController@randomReportsAll')->name('randomReportsAll');
 Route::get('lead/ippList', 'AnalysisController@ippList')->name('ippList');
+Route::post('/exportIppList', 'AnalysisController@exportIppList')->name('exportIppList');
+
 
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
 Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
