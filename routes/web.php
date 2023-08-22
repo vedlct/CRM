@@ -306,7 +306,7 @@ Route::post('/createPipeline', 'PipelineController@createPipeline')->name('creat
 Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
-Route::get('/pipelineCounter', 'PipelineController@pipelineCounter')->name('pipelineCounter');
+Route::get('/pipelineReport', 'PipelineController@pipelineReport')->name('pipelineReport');
 
 
 //FAQ Management

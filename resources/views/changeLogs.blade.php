@@ -49,6 +49,19 @@ h1 {
 
 
 
+
+
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.03.00</span> - 21 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Excel Download button on Ipp List </li>
+                    <li class="list-group-item">Random Reports All - Sales Pipelione Report Table</li>
+                    <li class="list-group-item">Bug fixed - All Conversation </li>
+                </ul>
+            </div>
+        </div>
+
         <div class="card change-log-card">
             <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.02.00</span> - 9 August 2023</h5>
