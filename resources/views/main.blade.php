@@ -19,16 +19,14 @@
     <link href="{{url('css/style.css')}}" rel="stylesheet">
     <link href="{{url('css/colors/blue.css')}}" id="theme" rel="stylesheet">
     <link rel="stylesheet" href="{{url('date/date-picker.css')}}">
-    <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     {{--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-    <![endif]-->
 
 </head>
 
@@ -39,7 +37,7 @@
 
     @include('topbar')
 
-    @include('leftSidebar')
+    <!-- @include('leftSidebar') -->
     
     <div class="page-wrapper">
 
@@ -50,8 +48,20 @@
 
 
             <footer class="footer">
-                Customer Relationship Management 2.0 © 2023 | TECH CLOUD LTD
+                <div class="footer-content" style="display: flex; justify-content: space-between;">
+                    <span class="left-footer" style="margin-right: auto;"> Customer Relationship Management 2.02 © 2023 | TECH CLOUD LTD </span>
+                    <span class="right-footer" style="margin-left: auto;">
+                        <span class="city-time" style="margin-right: 30px; color: black;">Dhaka: <span class="city-time-value" >{{ $timeData['Dhaka']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: blue;">London: <span class="city-time-value" >{{ $timeData['London']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: purple;">Italy: <span class="city-time-value" >{{ $timeData['Italy']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: green;">Australia: <span class="city-time-value" >{{ $timeData['Australia']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: red;">Canada: <span class="city-time-value" >{{ $timeData['Canada']->format('h:i A') }}</span></span>
+                    </span>
+                </div>
             </footer>
+
+
+
 
         </div>
 

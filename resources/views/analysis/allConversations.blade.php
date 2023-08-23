@@ -8,6 +8,7 @@
     <div class="card" style="padding:10px;">
         <div class="card-body">
         <h2  align="center"><b>All Conversations</b></h2>
+        <p  align="center">No Client or Duplicate lead should be here</p>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -23,6 +24,7 @@
                         <th width="7%">Process</th>
                         <th width="7%">Volume</th>
                         <th width="7%">Frequency</th>
+                        <th width="7%">Status</th>
                         <th width="7%">IPP</th>
                         <th width="10%">Convo Date</th>
                         <th width="7%">Marketer</th>
@@ -44,6 +46,7 @@
                             <td >{{$lead->process}}</td>
                             <td >{{$lead->volume}}</td>
                             <td >{{$lead->frequency}}</td>
+                            <td >{{$lead->status->statusName}}</td>
                                 @if($lead->ippStatus == '0') 
                                     <td>No</td>
                                 @else 

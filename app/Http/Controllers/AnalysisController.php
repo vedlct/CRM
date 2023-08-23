@@ -37,6 +37,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SelectedAnalysisCommentsExport;
 use App\Exports\LongTimeNoCallExport;
 use App\Exports\fredChasingLeadsExport;
+use App\Exports\IppListExport;
 
 use Goutte\Client;
 use GuzzleHttp\Psr7\Uri;
@@ -82,6 +83,7 @@ class AnalysisController extends Controller
                 ->leftJoin('users','leads.contactedUserId','users.id')
                 // ->where('leads.contactedUserId', Auth::user()->id)
                 ->where('leads.ippStatus', 1)
+                ->where('leads.statusId', '!=', 6)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
                 ->get();
@@ -115,6 +117,51 @@ class AnalysisController extends Controller
                 ->with('status',$status)
                 ->with('country',$country);
               
+        }
+
+
+        public function exportIppList(){
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR'){
+           
+                $leads=Lead::select(
+                    'leads.leadId',
+                    'leads.companyName',
+                    'categories.categoryName as category_name',
+                    'leads.website',
+                    'countries.countryName as country_name',
+                    'leads.contactNumber',
+                    'leads.process',
+                    'leads.volume',
+                    'leads.frequency',
+                    'users.userId',
+                    'workprogress.created_at'
+                    )
+                ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                ->leftJoin('categories', 'leads.categoryId', 'categories.categoryId')
+                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                ->leftJoin('leadstatus', 'leads.statusId', 'leadstatus.statusId')
+                ->where('leads.ippStatus', 1)
+                ->where('leads.statusId', '!=', 6)
+                ->groupBy('leads.leadId')
+                ->orderBy('workprogress.created_at','desc')
+                ->get();
+            }else{
+            $leads=[];
+            }
+
+
+            $categories=Category::where('type',1)->get();
+            $country=Country::get();
+            $status=Leadstatus::get();
+
+
+            $export = new IppListExport($leads, $categories, $country, $status);
+
+            return Excel::download($export, 'IppListExport.csv');
+      
         }
 
 
@@ -224,6 +271,8 @@ class AnalysisController extends Controller
                 $leads=Lead::select('leads.*','users.firstName','users.lastName', 'workprogress.created_at as workprogress_created_at')
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
                 ->leftJoin('users','leads.contactedUserId','users.id')
+                ->where('leads.statusId', '!=', 6)
+                ->where('leads.statusId', '!=', 8)
                 ->where('workprogress.callingReport', 11)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
@@ -235,6 +284,7 @@ class AnalysisController extends Controller
                 ->leftJoin('workprogress','leads.leadId','workprogress.leadId')
                 ->leftJoin('users','leads.contactedUserId','users.id')
                 ->where('users.id', Auth::user()->id)
+                ->where('leads.statusId', '!=', 6)
                 ->where('workprogress.callingReport', 11)
                 ->groupBy('leads.leadId')
                 ->orderBy('workprogress.created_at','desc')
@@ -1087,6 +1137,14 @@ class AnalysisController extends Controller
                     ->value('maxTotalLeadMining');
 
             
+                $jsonResponse = $this->chasingCategories(); 
+                $showCategories = json_decode($jsonResponse->getContent(), true);
+
+                $showRandomStatistics = $this->randomStatistics(); 
+                // $showJoiningDate = $showRandomStatistics ['joiningDate'];
+                // $showClientNumber = $showRandomStatistics ['myClients'];
+
+
 
                 return view('analysis.randomReports', [
                     'totalOwnCall' => $dataYearly->totalOwnCall,
@@ -1138,11 +1196,77 @@ class AnalysisController extends Controller
                     'maxTotalContact' => $maxTotalContact,
                     'maxTotalConvo' => $maxTotalConvo,
                     'maxTotalTest' => $maxTotalTest,
-                    'maxTotalLeadMining' => $maxTotalLeadMining
+                    'maxTotalLeadMining' => $maxTotalLeadMining,
+
+                    'showCategories' => $showCategories,
+                    'showRandomStatistics' => $showRandomStatistics
+                    
+
                 ]);
             }
 
             
+          
+
+                public function chasingCategories()
+                {
+                    
+                    $categoryIds = [1, 4, 5, 66, 63, 74];
+                    $categoryNames = ['Agency', 'Online Store', 'Brand', 'Jewelry', 'Boutique', 'Furniture'];
+                    
+                    $chasingCounts = Lead::where('leads.contactedUserId', Auth::user()->id)
+                        ->whereIn('leads.categoryId', $categoryIds)
+                        ->selectRaw('categoryId, COUNT(leadId) as count')
+                        ->groupBy('categoryId')
+                        ->get();
+                
+                    $result = [];
+                
+                    foreach ($chasingCounts as $count) {
+                        $categoryIndex = array_search($count->categoryId, $categoryIds);
+                        if ($categoryIndex !== false) {
+                            $categoryName = $categoryNames[$categoryIndex];
+                            $result[$categoryName] = $count->count;
+                        }
+                    }
+                    
+                    return response()->json($result);
+                }
+
+
+
+                public function randomStatistics(){
+
+                    $joiningDate = User::where('id', Auth::user()->id)
+                        ->value('created_at'); 
+                
+                    $myClients = NewFile::where('userId', Auth::user()->id)
+                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                        ->value('clientCount');
+                
+                    $myTests = Workprogress::where('userId', Auth::user()->id)
+                        ->where('progress', 'LIKE', '%Test%')
+                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                        ->value('clientCount');
+
+                    $joiningDate = Carbon::parse($joiningDate);
+                    $today = Carbon::now();
+                    $timeDifference = $joiningDate->diffForHumans($today);
+
+                    return [
+                        'joiningDate' => $joiningDate,
+                        'myClients' => $myClients,
+                        'myTests' => $myTests,
+                        'timeDifference' => $timeDifference,
+                    ];
+                    
+                }
+
+
+
+
+
+
 
 
             public function randomReportsAll () {
@@ -1154,6 +1278,10 @@ class AnalysisController extends Controller
                     $fromDay = "2023-01-01";
                     $tillToday = Carbon::today()->toDateString();
                     $users = User::get()->where('crmType', '!=', 'local')->where('active', '1');
+
+                    $clientAnalysis = $this->closedDealsAnalysis(); 
+                    $clientCategoryCounts = $clientAnalysis['categoryCounts'];
+                    $totalClinetCounts = $clientAnalysis['totalCount'];
 
                     
                     foreach ($users as $user) {
@@ -1202,7 +1330,10 @@ class AnalysisController extends Controller
                     }
 
                     return view('analysis.randomReportsAll')
-                            ->with('users', $users);
+                            ->with('users', $users)
+                            ->with('clientCategoryCounts', $clientCategoryCounts)
+                            ->with('totalClinetCounts', $totalClinetCounts);
+
 
                 } else {
 
@@ -1214,6 +1345,20 @@ class AnalysisController extends Controller
 
 
 
+            public function closedDealsAnalysis()
+            {
+                $categoryCounts = Lead::with('category')
+                    ->select('categoryId', DB::raw('COUNT(*) as count'))
+                    ->where('statusId', 6)
+                    ->groupBy('categoryId')
+                    ->get();
+
+                $totalCount = $categoryCounts->sum('count');
+
+                return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
+            }
+
+            
 
             public function myHourReport(Request $r)
             {
@@ -1246,9 +1391,47 @@ class AnalysisController extends Controller
                 }
             }
               
+            
 
 
-
+            public function customHourReport()
+            {
+                $users = User::select('id','firstName')->where('active', 1)->where('typeId', 5)->get();
+    
+                $startDate = Carbon::now()->subMonths(2);
+                $endDate = Carbon::now();
+    
+                $activityData = WorkProgress::whereBetween('created_at', [$startDate, $endDate])
+                    ->get();
+    
+                $hourlyActivityData = [];
+    
+                foreach ($activityData as $activity) {
+                    $userId = $activity->userId;
+                    $hour = Carbon::parse($activity->created_at)->hour;
+    
+                    if (!isset($hourlyActivityData[$hour][$userId])) {
+                        $hourlyActivityData[$hour][$userId] = 0;
+                    }
+    
+                    $hourlyActivityData[$hour][$userId]++;
+                }
+    
+    
+                $userMaxValues = [];
+    
+                foreach ($hourlyActivityData as $hour => $userData) {
+                    foreach ($userData as $userId => $activityCount) {
+                        if (!isset($userMaxValues[$userId]) || $activityCount > $userMaxValues[$userId]) {
+                            $userMaxValues[$userId] = $activityCount;
+                        }
+                    }
+                }
+    
+                    
+                return view('analysis.customHourReport', compact('users', 'hourlyActivityData', 'userMaxValues'));
+            }
+       
 
 
 

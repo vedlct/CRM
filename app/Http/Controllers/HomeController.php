@@ -24,6 +24,8 @@ use App\Possibility;
 use App\Category;
 use App\Failreport;
 use DB;
+
+
 class HomeController extends Controller
 {
     /**
@@ -274,31 +276,33 @@ class HomeController extends Controller
             ->get();
 
 
+
         return view('dashboard')
-            ->with('target',$target)
-            ->with('lastDayLeadMined',$lastDayLeadMined)
-            ->with('highPosibilities',$highPosibilities)
-            ->with('lastDayCalled',$lastDayCalled)
-            ->with('lastDayContact',$lastDayContact)
+            ->with('target', $target)
+            ->with('lastDayLeadMined', $lastDayLeadMined)
+            ->with('highPosibilities', $highPosibilities)
+            ->with('lastDayCalled', $lastDayCalled)
+            ->with('lastDayContact', $lastDayContact)
             ->with('calledThisWeek', $calledThisWeek)
-            ->with('leadMinedThisWeek',$leadMinedThisWeek)
+            ->with('leadMinedThisWeek', $leadMinedThisWeek)
             ->with('testLead', $testLead)
             ->with('testLeadCount', $testLeadCount)
-            ->with('highPosibilitiesThisWeek',$highPosibilitiesThisWeek)
-            ->with('contactThisWeek',$contactThisWeek)
-            ->with('contactedUsa',$contactedUsa)
-            ->with('contactedUsaCount',$contactedUsaCount)
-            ->with('countWeek',$countWeek)
-            ->with('targetNewFile',$targetNewFile)
-            ->with('fileCount',$fileCount)
-            ->with('contactCall',$contactCall)
-            ->with('conversation',$conversation)
-            ->with('closelead',$closelead)
-            ->with('followup',$followup)
+            ->with('highPosibilitiesThisWeek', $highPosibilitiesThisWeek)
+            ->with('contactThisWeek', $contactThisWeek)
+            ->with('contactedUsa', $contactedUsa)
+            ->with('contactedUsaCount', $contactedUsaCount)
+            ->with('countWeek', $countWeek)
+            ->with('targetNewFile', $targetNewFile)
+            ->with('fileCount', $fileCount)
+            ->with('contactCall', $contactCall)
+            ->with('conversation', $conversation)
+            ->with('closelead', $closelead)
+            ->with('followup', $followup)
             ->with('targetConversation',$targetConversation)
             ->with('targetCloselead',$targetCloselead)
             ->with('targetFollowup',$targetFollowup)
-            ->with('topActivities',$topActivities);
+            ->with('topActivities',$topActivities)
+            ;
     }
 
 
@@ -662,5 +666,8 @@ class HomeController extends Controller
             return view ('changeLogs');
         }
 
+        
 
+
+        
 }

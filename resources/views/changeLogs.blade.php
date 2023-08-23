@@ -52,6 +52,38 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.04.00</span> - 23 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Individual Message to the user via Database </li>
+                    <li class="list-group-item">New Feature - Remove Left Side Bar and add Top Bar. </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.03.00</span> - 21 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Excel Download button on Ipp List </li>
+                    <li class="list-group-item">Random Reports All - Sales Pipelione Report Table</li>
+                    <li class="list-group-item">Bug fixed - All Conversation </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.02.00</span> - 9 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - New Top Bar </li>
+                    <li class="list-group-item">Random Reports - update with chasing categories and random statistics.</li>
+                    <li class="list-group-item">Bug fixed - Account View</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.01.01</span> - 3 August 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Bug fixed - contactedUserId will be Null if supervisors filter the lead </li>

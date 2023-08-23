@@ -46,7 +46,7 @@
                     <thead>
                     <tr>
                         <th width="2%">Select</th>
-                        <!-- <th width="5%">Id</th> -->
+                        <th width="5%">Id</th>
                         <!-- <th width="8%">Company</th> -->
                         <th width="8%">Category</th>
                         <th width="5%">Website</th>
@@ -467,6 +467,35 @@
 
 
 
+    <!-- Display user's individual message -->
+    @if($userMessage)
+        <div class="modal" id="userMessageModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Message From Supervisor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ $userMessage->message }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        
+                            <form action="{{ route('destroyIndividualMessage') }}" method="post">
+                                {{ csrf_field() }}
+                                <button type="submit" class="btn btn-primary">Mark as Read</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+    
+
 @endsection
 
 @section('foot-js')
@@ -492,6 +521,10 @@
 
     <script>
 
+        $(document).ready(function() {
+
+            $('#userMessageModal').modal('show');
+        });
 
 
 
@@ -802,7 +835,7 @@
 
                     {data: 'check', name: 'check', orderable: false, searchable: false},
 
-                    // { data: 'leadId', name: 'leads.leadId'},
+                    { data: 'leadId', name: 'leads.leadId'},
                     // { data: 'companyName', name: 'leads.companyName'},
                     { data: 'category.categoryName', name: 'category.categoryName'},
                     { data: 'website', name: 'leads.website'},

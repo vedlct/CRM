@@ -12,6 +12,11 @@
 */
 
 
+// Route::post('/initiateCall', 'CallingController@initiateCall')->name('calling.initiateCall');
+// Route::post('/endCall', 'CallingController@endCall')->name('calling.endCall');
+
+// Route::post('/calling/handle-gather', 'CallingController@handleGather')->name('calling.handle-gather');
+// Route::get('/getCallLogs', 'CallingController@getCallLogs')->name('calling.getCallLogs');
 
 
 Route::view('/main', 'layouts.index')->name('main');
@@ -56,6 +61,9 @@ Route::get('/files', 'HomeController@newFile')->name('files');
 
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
+
+Route::post('/storeIndividualMessage', 'NoticeController@storeIndividualMessage')->name('storeIndividualMessage');
+Route::post('/destroyIndividualMessage', 'NoticeController@destroyIndividualMessage')->name('destroyIndividualMessage');
 
 
 Route::resource('user-management', 'UserManagementController');
@@ -289,14 +297,19 @@ Route::post('/exportFredChasingLeads', 'AnalysisController@exportFredChasingLead
 Route::get('/randomReports', 'AnalysisController@randomReports')->name('randomReports');
 Route::get('/randomReportsAll', 'AnalysisController@randomReportsAll')->name('randomReportsAll');
 Route::get('lead/ippList', 'AnalysisController@ippList')->name('ippList');
+Route::post('/exportIppList', 'AnalysisController@exportIppList')->name('exportIppList');
+
 
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
+Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
+
 
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
 Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
+Route::get('/pipelineReport', 'PipelineController@pipelineReport')->name('pipelineReport');
 
 
 //FAQ Management
