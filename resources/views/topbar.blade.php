@@ -5,7 +5,7 @@
 
 	/* Styling for the navbar */
 	.navbar {
-		background-color: #517E8F !important;
+		background-color: #f8f9fa !important;
 		font: "Roboto", sans-serif !important;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 		height: 70px;
@@ -37,31 +37,32 @@
 	}
 	.navbar-brand span {
 		font-weight: bold;
-		color: #ffffff;
+		color: rgba(0, 0, 0, 0.8);
 		font-size: 20px;
 	}
 
+
 	/* Styling for the links in the navbar */
-	.navbar-nav {
-		padding-right: 20px;
-	}
-	.navbar-nav li .nav-date {
-		color: rgb(255 255 255 / 80%);
-		margin: 0 20px;
-	}
-	.navbar-nav .nav-item .nav-link {
-		color: #ffffff;
-		font-size: 16px;
-	}
-	.navbar-nav .nav-item .nav-link:hover {
-		color: #f8f9fa;
-		background-color: transparent;
-	}
-	.navbar-nav .nav-item.active .nav-link {
-		color: #f8f9fa;
-		font-weight: bold;
-		background-color: transparent;
-	}
+    .navbar-nav {
+        padding-right: 20px;
+    }
+    .navbar-nav li .nav-date {
+        color: rgba(0, 0, 0, 0.8) !important; /* Dark grey color */
+        margin: 0 20px;
+    }
+    .navbar-nav .nav-item .nav-link,
+    .navbar-nav .nav-item .nav-link:hover,
+    .navbar-nav .nav-item.active .nav-link {
+        color: rgba(0, 0, 0, 0.8) !important; /* Dark grey color */
+    }
+    .navbar-nav .nav-item .nav-link:hover {
+        background-color: transparent;
+    }
+    .navbar-nav .nav-item.active .nav-link {
+        font-weight: bold;
+        background-color: transparent;
+    }
+
 
 	/* Styling for dropdown menu items */
 	.dropdown.fade-in {
@@ -108,30 +109,29 @@
 		max-height: 60px;
 	}
 
-
   </style>
 
 @php($userType = Session::get('userType'))
 
  
 <header class="topbar">
-   <nav class="navbar top-navbar navbar-expand-md navbar-light fixed-top" style="background-color: #2986CC;">
+   <nav class="navbar top-navbar navbar-expand-md fixed-top">
 
    <!-- LOGO AND CRM NAME  -->
-   <!-- <div class="user-profile">
+   <div class="user-profile">
         <a href="{{route('home')}}">
-            <img src="{{ url('public/img/logo/TCL_logo_white.png') }}" alt="homepage" class="dark-logo" style="padding-left: 20px;max-width: 70px;" />
+            <img src="{{ url('public/img/logo/TCL_logo.png') }}" alt="homepage" class="dark-logo" style="padding-left: 20px;max-width: 70px;" />
         </a>
-    </div> -->
-		<a class="navbar-brand" href="{{route('home')}}" style="padding-left: 30px;">
+    </div>
+		<a class="navbar-brand" href="{{route('home')}}" style="padding: 30px;">
 			<span class="font-weight-bold">CRM </span>
 		</a>
-      <div class="navbar-arrow">
+      <!-- <div class="navbar-arrow">
          <ul class="navbar-nav mr-auto mt-md-0 ">
             <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
             <li class="nav-item"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="icon-arrow-left-circle"></i></a> </li>
          </ul>
-      </div>
+      </div> -->
 
 
 	<!-- MAIN MENU HERE  -->
@@ -383,25 +383,6 @@
 		<div class="navbar-user">
          <ul class="navbar-nav ml-auto" >
 
-			<!-- GLBAL TIME MENU  -->
-			<li class="nav-item dropdown treeview">
-				<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-				aria-haspopup="true" aria-expanded="false">
-					Global Time
-					<i class="fa fa-caret-down"></i>
-				</a>
-
-				<div class="dropdown-menu fade-in">
-					
-					<span class="dropdown-item">Dhaka: {{ $timeData['Dhaka']->format('h:i A') }}</span>
-					<span class="dropdown-item">London: {{ $timeData['London']->format('h:i A') }}</span>
-					<span class="dropdown-item">Italy: {{ $timeData['Italy']->format('h:i A') }}</span>
-					<span class="dropdown-item">Australia: {{ $timeData['Australia']->format('h:i A') }}</span>
-					<spanp class="dropdown-item">Canada: {{ $timeData['Canada']->format('h:i A') }}</span>
-
-				</div>    
-			</li>
-
 			<!-- USER MENU  -->
             <li class="nav-item dropdown">
                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
@@ -437,6 +418,7 @@
       
    </nav>
 
-   
 </header>
+
+
 

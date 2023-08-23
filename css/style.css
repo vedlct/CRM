@@ -2019,7 +2019,7 @@ File: scss
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
 
-.right-side-toggle {
+/* .right-side-toggle {
   position: relative; }
 
 .right-side-toggle i {
@@ -2047,9 +2047,9 @@ File: scss
   animation-timing-function: linear;
   position: absolute;
   top: 9px;
-  left: 10px; }
+  left: 10px; } */
 
-.right-sidebar {
+/* .right-sidebar {
   position: fixed;
   right: -240px;
   width: 240px;
@@ -2084,12 +2084,12 @@ File: scss
       padding: 0px; }
       .right-sidebar .r-panel-body ul li {
         list-style: none;
-        padding: 5px 0; }
+        padding: 5px 0; } */
 
-.shw-rside {
+/* .shw-rside {
   right: 0px;
   width: 240px;
-  display: block; }
+  display: block; } */
 
 .chatonline img {
   margin-right: 10px;
@@ -5477,7 +5477,7 @@ File: scss
 /*******************
 Main sidebar
 ******************/
-.left-sidebar {
+/* .left-sidebar {
   position: absolute;
   width: 240px;
   height: 100%;
@@ -5485,10 +5485,10 @@ Main sidebar
   z-index: 20;
   padding-top: 70px;
   background: #fff;
-  /*box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08);*/ }
+  box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.08); }
 
 .fix-sidebar .left-sidebar {
-  position: fixed; }
+  position: fixed; } */
 
 /*******************
 use profile section
@@ -5568,7 +5568,7 @@ use profile section
 /*******************
 sidebar footer
 ******************/
-.sidebar-footer {
+/* .sidebar-footer {
   position: fixed;
   bottom: 0px;
   left: 0px;
@@ -5583,7 +5583,7 @@ sidebar footer
     width: 33.333337%;
     float: left;
     text-align: center;
-    font-size: 18px; }
+    font-size: 18px; } */
 
 /*******************
 sidebar navigation
@@ -5745,8 +5745,8 @@ When click on sidebar toggler and also for tablet
 @media (max-width: 767px) {
   .mini-sidebar .left-sidebar {
     position: fixed; }
-  .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
-    left: -240px; }
+  /* .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+    left: -240px; } */
   .mini-sidebar.show-sidebar .left-sidebar, .mini-sidebar.show-sidebar .sidebar-footer {
     left: 0px; } }
 
@@ -6691,10 +6691,11 @@ File: scss
  Small Desktop & above all (1024px)
  ============================================================== */
 @media (min-width: 1024px) {
-  .page-wrapper {
+  /* .page-wrapper {
     margin-left: 240px; }
   .footer {
-    left: 240px; } }
+    left: 240px; }  */
+  }
 
 @media (max-width: 1023px) {
   .page-wrapper {

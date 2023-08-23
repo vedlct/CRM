@@ -37,7 +37,7 @@
 
     @include('topbar')
 
-    @include('leftSidebar')
+    <!-- @include('leftSidebar') -->
     
     <div class="page-wrapper">
 
@@ -48,8 +48,20 @@
 
 
             <footer class="footer">
-                Customer Relationship Management 2.02 © 2023 | TECH CLOUD LTD
+                <div class="footer-content" style="display: flex; justify-content: space-between;">
+                    <span class="left-footer" style="margin-right: auto;"> Customer Relationship Management 2.02 © 2023 | TECH CLOUD LTD </span>
+                    <span class="right-footer" style="margin-left: auto;">
+                        <span class="city-time" style="margin-right: 30px; color: black;">Dhaka: <span class="city-time-value" >{{ $timeData['Dhaka']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: blue;">London: <span class="city-time-value" >{{ $timeData['London']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: purple;">Italy: <span class="city-time-value" >{{ $timeData['Italy']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: green;">Australia: <span class="city-time-value" >{{ $timeData['Australia']->format('h:i A') }}</span></span>
+                        <span class="city-time" style="margin-right: 30px; color: red;">Canada: <span class="city-time-value" >{{ $timeData['Canada']->format('h:i A') }}</span></span>
+                    </span>
+                </div>
             </footer>
+
+
+
 
         </div>
 
