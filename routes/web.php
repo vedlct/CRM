@@ -62,6 +62,9 @@ Route::get('/files', 'HomeController@newFile')->name('files');
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
+Route::post('/storeIndividualMessage', 'NoticeController@storeIndividualMessage')->name('storeIndividualMessage');
+Route::post('/destroyIndividualMessage', 'NoticeController@destroyIndividualMessage')->name('destroyIndividualMessage');
+
 
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');

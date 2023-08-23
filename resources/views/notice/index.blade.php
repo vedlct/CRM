@@ -2,7 +2,9 @@
 
 
 @section('content')
-	@php($userType = Session::get('userType'))
+
+@php($userType = Session::get('userType'))
+
 	<div class="box-body">
 		<div class="card" style="padding: 2px;">
 			<div class="card-body">
@@ -10,6 +12,11 @@
 
 				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
 					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
+
+				@endif
+
+				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+					<a href="#individual_message" data-toggle="modal" class="btn btn-info">Send Individual Message</a>
 
 				@endif
 
@@ -227,6 +234,46 @@
 			</form>
 		</div>
 	</div>
+
+
+
+
+<!--Create Individual Message-->
+<div class="modal" id="individual_message" style="">
+    <div class="modal-dialog" style="max-width: 30%;">
+		<form class="modal-content" method="post" action="{{ route('storeIndividualMessage') }}">
+            <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Individual Message</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            {{ csrf_field() }}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="user" class="control-label">Marketer</label>
+                    <select name="userId" class="form-control">
+						@foreach ($users as $user)
+	                        <option value="{{$user->id}}">{{$user->userId}}</option>
+						@endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comm" class="control-label">Communication</label>
+                    <textarea name="message" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    Send
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
 
 
 

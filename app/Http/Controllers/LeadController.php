@@ -29,6 +29,7 @@ use App\SalesPipeline;
 use App\Employees;
 use App\Designation;
 use App\ExcludeKeywords;
+use App\DirectMessage;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -1730,6 +1731,8 @@ class LeadController extends Controller
         return back();
     }
 
+
+
     public function contacted(){
         //For user
         $User_Type=Session::get('userType');
@@ -1784,6 +1787,7 @@ class LeadController extends Controller
                 ->OrWhere('typeId',4)
                 ->get();
 
+            $userMessage = DirectMessage::select('message')->where('userId', Auth::user()->id)->latest()->first();
 
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
@@ -1795,7 +1799,9 @@ class LeadController extends Controller
                 ->with('outstatus',$outstatus)
                 ->with('users',$users)
                 ->with('assignto',$assignto)
-                ->with('usersforminded',$usersforminded);
+                ->with('usersforminded',$usersforminded)
+                ->with('userMessage',$userMessage)
+                ;
 
         }
         return Redirect()->route('home');

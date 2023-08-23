@@ -50,6 +50,14 @@ h1 {
 
 
 
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.04.00</span> - 23 August 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Individual Message to the user via Database </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="card change-log-card">
             <div class="card-body">

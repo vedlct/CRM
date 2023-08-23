@@ -467,6 +467,35 @@
 
 
 
+    <!-- Display user's individual message -->
+    @if($userMessage)
+        <div class="modal" id="userMessageModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Message From Supervisor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ $userMessage->message }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        
+                            <form action="{{ route('destroyIndividualMessage') }}" method="post">
+                                {{ csrf_field() }}
+                                <button type="submit" class="btn btn-primary">Mark as Read</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+    
+
 @endsection
 
 @section('foot-js')
@@ -492,6 +521,10 @@
 
     <script>
 
+        $(document).ready(function() {
+
+            $('#userMessageModal').modal('show');
+        });
 
 
 

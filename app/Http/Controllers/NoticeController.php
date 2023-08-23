@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Notice;
-use Auth;
+use App\User;
 use App\Category;
+use App\DirectMessage;
 use Session;
+use Auth;
 
 class NoticeController extends Controller
 {
@@ -47,9 +49,12 @@ class NoticeController extends Controller
 
         $categories = Category::where('type', 2)
             ->get();
+
+        $users = User::where('active', 1)->get();
 		
         return view('notice/index', ['notices' => $notices])
-			->with('categories', $categories);
+			->with('categories', $categories)
+			->with('users', $users);
     }
 
     /**
@@ -213,11 +218,43 @@ class NoticeController extends Controller
     // }
 
 
+    
+    
+    //INDIVIDUAL MESSAGE SECTION
+
+    public function storeIndividualMessage(Request $request)
+    {
+        $userId = $request->input('userId');
+        $message = $request->input('message');
+        
+        
+        DB::table('directmessage')->insert([
+            'userId' => $userId,
+            'message' => $message
+        ]);
+
+        Session::flash('message', 'Message sent successfully');
+        return redirect()->intended('notice');
+    }
+
+    
+    public function destroyIndividualMessage(Request $request)
+    {
+        $userId = Auth::user()->id;
+
+        DirectMessage::where('userId', $userId)->delete();
+    
+        return redirect()->back()->with('success', 'Message marked as read.');
+    
+    }
+
+
+        
+        
 
 
 
-
-
+    //FREQUENTLY ASKED QUESTIONS SECTION
 
 
     public function faqIndex()
