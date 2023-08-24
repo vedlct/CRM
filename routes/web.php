@@ -64,6 +64,7 @@ Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
 Route::post('/storeIndividualMessage', 'NoticeController@storeIndividualMessage')->name('storeIndividualMessage');
 Route::post('/destroyIndividualMessage', 'NoticeController@destroyIndividualMessage')->name('destroyIndividualMessage');
+Route::get('/showAllNonReadMessage', 'NoticeController@showAllNonReadMessage')->name('showAllNonReadMessage');
 
 
 Route::resource('user-management', 'UserManagementController');

@@ -249,7 +249,15 @@ class NoticeController extends Controller
     }
 
 
+    public function showAllNonReadMessage(Request $request)
+    {
+    
+        $showAllNonReadMessages = DirectMessage::select('users.userId as name', 'directmessage.message', 'directmessage.created_at')->leftJoin('users', 'directmessage.userId', 'users.id')->get();
+        return response()->json($showAllNonReadMessages);
         
+    }
+
+
         
 
 
