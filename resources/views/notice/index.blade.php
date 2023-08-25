@@ -9,16 +9,22 @@
 		<div class="card" style="padding: 2px;">
 			<div class="card-body">
 				<h2 align="center"><b>Communication</b></h2>
+				<div>
+					<span style="float: left;">
+					@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+						<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
 
-				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
+					@endif
+					</span>
+					<span style="float: right;">
+						@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+							<a href="#individual_message" data-toggle="modal" class="btn btn-info">Send Individual Message</a>
+							<a href="#unread_message" data-toggle="modal" class="btn btn-secondary">Non Read Message</a>
 
-				@endif
+						@endif
+					</span>
 
-				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-					<a href="#individual_message" data-toggle="modal" class="btn btn-info">Send Individual Message</a>
-
-				@endif
+				<div>
 
 				@if ($errors->has('msg'))
 					<span class="help-block">
@@ -274,6 +280,33 @@
 
 
 
+<!-- The list of Non Read Messages -->
+<div class="modal" id="unread_message" tabindex="-1" role="dialog" aria-labelledby="unreadmessageLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 40%;">>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unreadmessageLabel">Non Read Messages</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messageList">
+                        <!-- Messages will be dynamically added here using JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -344,8 +377,24 @@
         });
 
 
-			// var frmvalidator = new Validator("create_notice_modal");
-			// frmvalidator.addValidation("msg","maxlen=20","Max length for msg is 20");
+
+
+		$('#unread_message').on('show.bs.modal', function() {
+			$.ajax({
+				url: '{{ route('showAllNonReadMessage') }}',
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					$('#messageList').empty();
+					if (response.length > 0) {
+						response.forEach(function(message) {
+							$('#messageList').append('<tr><td>' + message.name + '</td><td>' + message.message + '</td><td>' + message.created_at + '</td></tr>');
+						});
+						$('#unread_message').modal('show');
+					}
+				}
+			});
+		});
 
 
 

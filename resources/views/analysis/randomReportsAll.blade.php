@@ -204,50 +204,96 @@
 
     $(document).ready(function() {
         $.ajax({
-            url: '{{ route('pipelineReport') }}',
-            method: 'GET',
-            success: function(response) {
-                var tableData = response;
-
-                // Populate the table with the processed data
-                var tbody = $('#pipelineTable tbody');
-                for (var i = 0; i < tableData.length; i++) {
-                    var row = tableData[i];
-                    var rowHtml = '<tr><td>' + row.userId + '</td>';
-                    rowHtml += '<td>' + row.Contact + '</td>';
-                    rowHtml += '<td>' + row.Conversation + '</td>';
-                    rowHtml += '<td>' + row.Possibility + '</td>';
-                    rowHtml += '<td>' + row.Test + '</td>';
-                    rowHtml += '<td>' + row.Closed + '</td>';
-                    rowHtml += '<td>' + row.Lost + '</td>';
-                    
-                   // Calculate the total for the user's stages
-                    var totalStages = parseInt(row.Contact) + parseInt(row.Conversation) + parseInt(row.Possibility) + parseInt(row.Test) + parseInt(row.Closed) + parseInt(row.Lost);
-                    rowHtml += '<td>' + totalStages + '</td>'; // Display the total
-                    rowHtml += '</tr>';
-                    tbody.append(rowHtml);
-                }
+            url: "{{ route('pipelineReport') }}",
+            method: "GET",
+            success: function(data) {
+                populateTable(data);
 
                 // Initialize DataTables after populating the table
-                var dataTable = $('#pipelineTable').DataTable({
+                $('#pipelineTable').DataTable({
                     "processing": true,
-                    stateSave: true,
+                    "paging": false,
+                    "ordering": false, // Disable column ordering if needed
+                    "info": false, // Disable information display at the bottom
                 });
-
-                // Calculate and populate totals
-                var footer = $('#pipelineTable tfoot th');
-                footer.each(function(columnIndex) {
-                    if (columnIndex > 0) { // Skip the first "Marketer" column
-                        var total = 0;
-                        dataTable.column(columnIndex).data().each(function(data) {
-                            total += parseInt(data || 0, 10);
-                        });
-                        $(this).text(total);
-                    }
-                });
+            },
+            error: function(error) {
+                console.error("Error fetching pipeline report:", error);
             }
         });
     });
+
+    function populateTable(data) {
+        var tableBody = $("#pipelineTable tbody");
+        var tableFooter = $("#pipelineTable tfoot");
+
+        // Create an object to store stage totals
+        var stageTotals = {
+            contact_count: 0,
+            conversation_count: 0,
+            possibility_count: 0,
+            test_count: 0,
+            closed_count: 0,
+            lost_count: 0
+        };
+
+        // Iterate through the data and populate the table rows
+        data.forEach(function(row) {
+            var rowHtml = '<tr>';
+            var total = 0;
+
+            // Populate the row with user ID and stage counts
+            rowHtml += '<td>' + row.userId + '</td>';
+            rowHtml += '<td>' + row.contact_count + '</td>';
+            rowHtml += '<td>' + row.conversation_count + '</td>';
+            rowHtml += '<td>' + row.possibility_count + '</td>';
+            rowHtml += '<td>' + row.test_count + '</td>';
+            rowHtml += '<td>' + row.closed_count + '</td>';
+            rowHtml += '<td>' + row.lost_count + '</td>';
+
+            // Calculate and populate the total count for the user
+            total = parseInt(row.contact_count) + parseInt(row.conversation_count) + parseInt(row.possibility_count) +
+                    parseInt(row.test_count) + parseInt(row.closed_count) + parseInt(row.lost_count);
+            rowHtml += '<td>' + total + '</td>';
+
+            rowHtml += '</tr>';
+            tableBody.append(rowHtml);
+
+            // Update the stage totals
+            stageTotals.contact_count += parseInt(row.contact_count);
+            stageTotals.conversation_count += parseInt(row.conversation_count);
+            stageTotals.possibility_count += parseInt(row.possibility_count);
+            stageTotals.test_count += parseInt(row.test_count);
+            stageTotals.closed_count += parseInt(row.closed_count);
+            stageTotals.lost_count += parseInt(row.lost_count);
+        });
+
+        // Calculate and append stage totals to table footer
+        var stageTotalHtml = '<tr><th>Stage Total</th>';
+        var grandTotal = 0;
+
+        // Populate stage totals in the footer
+        stageTotalHtml += '<td>' + stageTotals.contact_count + '</td>';
+        stageTotalHtml += '<td>' + stageTotals.conversation_count + '</td>';
+        stageTotalHtml += '<td>' + stageTotals.possibility_count + '</td>';
+        stageTotalHtml += '<td>' + stageTotals.test_count + '</td>';
+        stageTotalHtml += '<td>' + stageTotals.closed_count + '</td>';
+        stageTotalHtml += '<td>' + stageTotals.lost_count + '</td>';
+
+        // Calculate grand total
+        data.forEach(function(row) {
+            grandTotal += parseInt(row.contact_count) + parseInt(row.conversation_count) + parseInt(row.possibility_count) +
+                            parseInt(row.test_count) + parseInt(row.closed_count) + parseInt(row.lost_count);
+        });
+
+        stageTotalHtml += '<td>' + grandTotal + '</td></tr>';
+        tableFooter.html(stageTotalHtml);
+    }
+
+
+
+
+
 
 </script>
 

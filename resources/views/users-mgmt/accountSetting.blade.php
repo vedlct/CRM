@@ -67,10 +67,14 @@
                                     {{$user->phoneNumber}}</p>
                                 <p class="mb-1"><span style="font-weight:400">Gender: </span>
                                     @if ($user->gender == "M") Male @else Female @endif</p>
-                                <p class="mb-1"><span style="font-weight:400">DOB: </span>
-                                    {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
+                                <p class="mb-1"><span style="font-weight:400">Date of Birth: </span>
+                                    {{ Carbon\Carbon::parse($user->dob)->format('d F Y') }}</p>
                                 <p class="mb-1"><span style="font-weight:400">Email: </span>
-                                    {{$user->userEmail}}</p><br>
+                                    {{$user->userEmail}}</p>
+                                <p class="mb-1"><span style="font-weight:400">Joining Date: </span>
+                                    {{ Carbon\Carbon::parse($user->created_at)->format('d F Y') }}</p>
+
+                                <br>
 
                                 <a href="#edit_user_modal" data-toggle="modal" class="btn btn-custom"
                                 data-id="{{$user->id}}"
@@ -86,6 +90,7 @@
                                        data-dob="{{$user->dob}}"
                                        data-gender="{{$user->gender}}"
                                        data-active="{{$user->active}}"
+                                       data-created-at="{{$user->createdAt}}"
                                        data-whitelist="{{$user->whitelist}}">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Update Profile</a>
 
@@ -379,8 +384,13 @@
                                     </div>
 
 
+                                    <div class="form-group col-md-4">
+                                        <label for="createdat">Joining Date:</label>
+                                        <input id="createdat" type="text" class="form-control" name="createdat">
+                                    </div>
 
-                                    <div class="form-group col-md-6">
+
+                                    <div class="form-group col-md-4">
                                         <label for="password">Password (min 6 characters):</label>
                                         <input id="password" type="password" class="form-control" name="password">
                                         @if ($errors->has('password'))
@@ -390,7 +400,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="password-confirm">Repeat Password:</label>
                                         <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                                     </div>
@@ -441,6 +451,14 @@
             });
         });
 
+        $(function() {
+            $('#createdat').datepicker({
+                dateFormat: 'yy-mm-dd', // Format the date as 'yyyy-mm-dd'
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-60:+0" 
+            });
+        });
 
         //for Edit modal
 
@@ -461,6 +479,7 @@
             var active = $(e.relatedTarget).data('active');
             var whitelist = $(e.relatedTarget).data('whitelist');
             var designationId = $(e.relatedTarget).data('designation-id');
+            var createdAt = $(e.relatedTarget).data('created-at');
 
             //alert(userId);
             //populate the textbox
@@ -478,6 +497,7 @@
             $(e.currentTarget).find('#active').val(active);
             $(e.currentTarget).find('#whitelist').val(whitelist);
             $(e.currentTarget).find('#designationId').val(designationId);
+            $(e.currentTarget).find('#createdAt').val(createdAt);
 
         });
 

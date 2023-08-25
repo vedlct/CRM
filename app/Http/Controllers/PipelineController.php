@@ -160,24 +160,21 @@ class PipelineController extends Controller
 
 
     public function pipelineReport()
-    {
-        $userType = Session::get('userType');
-        
-        if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
-            $pipelineData = SalesPipeline::select('users.userId')
-                ->selectRaw("SUM(CASE WHEN stage = 'Contact' THEN 1 ELSE 0 END) as Contact")
-                ->selectRaw("SUM(CASE WHEN stage = 'Conversation' THEN 1 ELSE 0 END) as Conversation")
-                ->selectRaw("SUM(CASE WHEN stage = 'Possibility' THEN 1 ELSE 0 END) as Possibility")
-                ->selectRaw("SUM(CASE WHEN stage = 'Test' THEN 1 ELSE 0 END) as Test")
-                ->selectRaw("SUM(CASE WHEN stage = 'Closed' THEN 1 ELSE 0 END) as Closed")
-                ->selectRaw("SUM(CASE WHEN stage = 'Lost' THEN 1 ELSE 0 END) as Lost")
-                ->leftJoin('users', 'salesPipeline.userId', '=', 'users.id')
-                ->where('salespipeline.workStatus', '1')
-                ->groupBy('users.userId')
-                ->get();
-            
-            return response()->json($pipelineData);
-        }
+    {        
+        $results = SalesPipeline::select('users.firstName as userId')
+            ->where('workStatus', 1)
+            ->selectRaw("SUM(CASE WHEN stage = 'Contact' THEN 1 ELSE 0 END) AS contact_count")
+            ->selectRaw("SUM(CASE WHEN stage = 'Conversation' THEN 1 ELSE 0 END) AS conversation_count")
+            ->selectRaw("SUM(CASE WHEN stage = 'Possibility' THEN 1 ELSE 0 END) AS possibility_count")
+            ->selectRaw("SUM(CASE WHEN stage = 'Test' THEN 1 ELSE 0 END) AS test_count")
+            ->selectRaw("SUM(CASE WHEN stage = 'Closed' THEN 1 ELSE 0 END) AS closed_count")
+            ->selectRaw("SUM(CASE WHEN stage = 'Lost' THEN 1 ELSE 0 END) AS lost_count")
+            ->leftJoin('users', 'salespipeline.userId', 'users.id')
+            ->groupBy('salespipeline.userId')
+            ->get();
+
+        return response()->json($results);
+
     }
     
 

@@ -181,7 +181,7 @@ class UserManagementController extends Controller
         $this->validateInputNew($request);
         // Upload image
         $keys = ['userId', 'typeId', 'userEmail', 'rfID', 'firstName', 'lastName',
-            'phoneNumber', 'dob', 'gender', 'active', 'whitelist', 'designationId'];
+            'phoneNumber', 'dob', 'gender', 'active', 'whitelist', 'designationId', 'created_at'];
         $input = $this->createQueryInput($keys, $request);
 
         if ($request['password'] != null && strlen($request['password']) > 0) {
