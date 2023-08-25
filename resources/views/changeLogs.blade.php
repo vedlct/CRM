@@ -55,6 +55,7 @@ h1 {
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Now supervisors adn admins can see the exitsing Individual Messages that are not read yet by the users. </li>
                     <li class="list-group-item">Bug fixed - Sales pipeline report on Random Report All. </li>
+                    <li class="list-group-item">New Feature - Users can update joining date now </li>
                 </ul>
             </div>
         </div>
