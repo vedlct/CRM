@@ -49,7 +49,7 @@
 
             <footer class="footer">
                 <div class="footer-content" style="display: flex; justify-content: space-between;">
-                    <span class="left-footer" style="margin-right: auto;"> Customer Relationship Management 2.02 © 2023 | TECH CLOUD LTD </span>
+                    <span class="left-footer" style="margin-right: auto;"> Customer Relationship Management 2.0 © 2023 | TECH CLOUD LTD </span>
                     <span class="right-footer" style="margin-left: auto;">
                         <span class="city-time" style="margin-right: 30px; color: black;">Dhaka: <span class="city-time-value" >{{ $timeData['Dhaka']->format('h:i A') }}</span></span>
                         <span class="city-time" style="margin-right: 30px; color: blue;">London: <span class="city-time-value" >{{ $timeData['London']->format('h:i A') }}</span></span>

@@ -58,7 +58,7 @@
                             <td>
                                 <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
                                     data-lead-id="{{$lead->leadId}}"
-                                ><i class="fa fa-eye"></i></a>'
+                                ><i class="fa fa-eye"></i></a>
                             </td>
                         </tr>
                     @endforeach

@@ -104,6 +104,12 @@ Route::resource('system-management/status', 'statusController');
 Route::post('system-management/status/search', 'statusController@search')->name('status.search');
 
 
+Route::get('/leads/parentCompanies', 'LeadController@getParentCompanies')->name('getParentCompanies');
+Route::post('/leads/updateParent', 'LeadController@updateParent')->name('updateParent');
+Route::post('/leads/createParent', 'LeadController@createParent')->name('createParent');
+Route::post('/leads/destroy-parent/{leadId}', 'LeadController@makeParentNull')->name('makeParentNull');
+
+
 Route::resource('showchart', 'HighChartsController');
 Route::post('showchart', 'HighChartsController@search')->name('showchart.search');
 

@@ -2,51 +2,121 @@
 
 @section('content')
 
-    <div class="row">
-        <div class="col-md-6 mb-2">
-        {{--Country Start--}}
+<div class="row">
+    <div class="col-md-4 mb-2">
+        {{-- Country Start --}}
+        <div class="box-body">
+            <div class="card" style="padding: 2px; overflow: hidden; margin-right: 10px;">
+                <div class="card-body">
+                    <h2 style="display: inline-block; margin: 0px 50px;">List of Country</h2>
+                    <a href="#create_country_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i> Add Country</a>
 
-            <div class="box-body">
-                <div class="card" style="padding: 2px; overflow: hidden; display: block; display: inline-block; float:left; margin-right: 10px;">
-                    <div class="card-body">
-                        <h2 style="display: inline-block; margin: 0px 50px;">List of Country</h2>
-                        <a href="#create_country_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i>Add Country</i></a>
-
-                        <div class="table-responsive m-t-40" >
-                            <table id="countryTable" class="table table-striped table-condensed" style="font-size:14px;">
-                                <thead>
+                    <div class="table-responsive m-t-40">
+                        <table id="countryTable" class="table table-striped table-condensed" style="font-size:14px;">
+                            <thead>
                                 <tr>
                                     <th>Country Name</th>
                                     <th>Action</th>
                                 </tr>
-                                </thead>
-                                <tbody>
+                            </thead>
+                            <tbody>
                                 @foreach ($countries as $country)
-                                    <tr>
-                                        <td>{{ $country->countryName }}</td>
-                                        <td>
-                                        {{--<form method="POST" action="{{ route('country.destroy', ['id' => $country->countryId]) }}" onsubmit = "return confirm('Are you sure?')">--}}
-                                        {{--<input type="hidden" name="_method" value="DELETE">--}}
-                                        {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
+                                <tr>
+                                    <td>{{ $country->countryName }}</td>
+                                    <td>
                                         <!-- Trigger the Edit modal with a button -->
-                                            <a href="#edit_country_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                            data-country-id="{{$country->countryId}}"
-                                            data-country-name="{{$country->countryName}}"
-                                            data-country-type="{{$country->type}}"">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
-                                            {{--<button type="submit" class="btn btn-danger btn-sm">--}}
-                                            {{--<i class="fa fa-trash"></i>--}}
-                                            {{--</button>--}}
-                                            </form>
-                                        </td>
-                                    </tr>
+                                        <a href="#edit_country_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                            data-country-id="{{ $country->countryId }}"
+                                            data-country-name="{{ $country->countryName }}"
+                                            data-country-type="{{ $country->type }}">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                                 @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-2">
+        {{-- Status --}}
+        <div class="card" style="padding: 2px; overflow: hidden; margin-left:10px;">
+            <div class="card-body">
+                <h2 style="display: inline-block; margin: 0px 50px;">List of status</h2>
+                <div class="table-responsive m-t-40" >
+                    <table id="status" class="table table-striped table-condensed" style="font-size:14px;">
+                        <thead>
+                            <tr>
+                                <th>Status Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($statuses as $status)
+                            <tr>
+                                <td>{{ $status->statusName }}</td>
+                                <td>
+                                    <!-- Trigger the Edit modal with a button -->
+                                    <a href="#edit_status_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-status-id="{{$status->statusId}}"
+                                    data-status-name="{{$status->statusName}}"
+                                    data-status-type="{{$status->type}}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-2">
+        {{-- Category start --}}
+        <div class="card" style="padding: 2px; overflow: hidden; margin-left:10px;">
+            <div class="card-body">
+                <h2 style="display: inline-block; margin: 0px 50px;">List of category</h2>
+                <a href="#create_category_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i> Add Category</a>
+                <div class="table-responsive m-t-40" >
+                    <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($categories as $category)
+                            <tr>
+                                <td>{{ $category->categoryName }}</td>
+                                <td>@if ($category->type == 1)Lead
+                                    @elseif ($category->type == 2)Notices
+                                    @endif</td>
+                                <td>
+                                    <!-- Trigger the Edit modal with a button -->
+                                    <a href="#edit_category_modal" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-category-id="{{$category->categoryId}}"
+                                    data-category-name="{{$category->categoryName}}"
+                                    data-category-type="{{$category->type}}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
                 <!--Create Country-->
                 <div class="modal" id="create_country_modal">
@@ -132,42 +202,10 @@
                     </div>
                 </div>
 
-            </div><!-- /.box-body -->
-        </div>
-        <div class="col-md-6 mb-2">
-        {{--Status--}}
-
-            <div class="card" style="padding: 2px; overflow: hidden; display: block; display: inline-block; float: left; ">
-
-                <div class="card-body">
-                    <h2 style="display: inline-block; margin: 0px 50px;">List of status</h2>
-                    <div class="table-responsive m-t-40" >
-                        <table id="status" class="table table-striped table-condensed" style="font-size:14px;">
-                            <thead>
-                            <tr>
-                                <th>Status Name</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($statuses as $status)
-                                <tr>
-                                    <td>{{ $status->statusName }}</td>
-                                    <td>
-                                        <!-- Trigger the Edit modal with a button -->
-                                        <a href="#edit_status_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                        data-status-id="{{$status->statusId}}"
-                                        data-status-name="{{$status->statusName}}"
-                                        data-status-type="{{$status->type}}"">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
+        </div>
+
+        
 
             <!--edit status-->
             <div class="modal" id="edit_status_modal" style="">
@@ -213,49 +251,7 @@
             </div>
 
 
-            {{--Category start--}}
-            <div>
-                <div class="card" style="padding: 2px; overflow: hidden; display: block; display: inline-block; margin-left:10px; float: left;">
-                    <div class="card-body">
-                        <h2 style="display: inline-block; margin: 0px 50px;">List of category</h2>
-                        <a href="#create_category_modal" data-toggle="modal" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-plus"></i>Add Category</i></a>
 
-
-                        <div class="table-responsive m-t-40" >
-                            <table id="myTable" class="table table-striped table-condensed" style="font-size:14px;">
-                                <thead>
-                                <tr>
-                                    <th>Category Name</th>
-                                    <th>Type</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($categories as $category)
-                                    <tr>
-                                        <td>{{ $category->categoryName }}</td>
-                                        <td>@if ($category->type == 1)Lead
-                                            @elseif ($category->type == 2)Notices
-                                            @endif</td>
-                                        <td>
-
-                                            <!-- Trigger the Edit modal with a button -->
-                                                <a href="#edit_category_modal" data-toggle="modal" class="btn btn-info btn-sm"
-                                                data-category-id="{{$category->categoryId}}"
-                                                data-category-name="{{$category->categoryName}}"
-                                                data-category-type="{{$category->type}}">
-                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-
-
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
 
                 <!--Create Category-->
                 <div class="modal" id="create_category_modal" style="">
@@ -388,7 +384,6 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div></form>
-                        {{--<button>Leave</button>--}}
                     </div>
                 </div>
             </div><!-- Category End -->
