@@ -94,7 +94,7 @@ class LeadController extends Controller
                 ->get();
             
             $allComments = $lead->Workprogress()
-                ->select('users.firstName','users.lastName','callingreports.report','comments','workprogress.created_at')
+                ->select('users.firstName','users.lastName','callingreports.report','comments','progress', 'workprogress.created_at')
                 ->leftJoin('users','users.id','workprogress.userId')
                 ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                 ->orderby('workprogress.created_at', 'desc')
@@ -132,10 +132,11 @@ class LeadController extends Controller
                 ->where('leads.leadId', $leadId)
                 ->get();  
                 
-            // $employees = Employees::select('employees.*')
-            //     ->join('leads', 'employees.leadId', 'leads.leadId')
-            //     ->where('employees.leadId', $leadId)
-            //     ->get();
+            $parentCompanyName = Lead::find($lead->parent);
+
+            $subBrands = Lead::select('companyName', 'website', 'contactNumber')
+                ->where('parent', $leadId)
+                ->get();
 
             $employees = $lead->employees()->get();                
 
@@ -165,7 +166,8 @@ class LeadController extends Controller
                 ->with('users',$users)
                 ->with('employees',$employees)
                 ->with('designations',$designations)
-
+                ->with('parentCompanyName', $parentCompanyName)
+                ->with('subBrands', $subBrands)
                 ;
 
         }
@@ -2366,6 +2368,76 @@ class LeadController extends Controller
                    
 
         // EMPLOYEE SECTION END
+
+
+
+
+        // PARENT COMPANY SET
+
+        public function getParentCompanies()
+        {
+            $parentCompanies = Lead::whereNotNull('parent')->get();
+            $leads = Lead::all(); // Retrieve all leads
+
+
+            return view('layouts.lead.parentCompany')
+            ->with('leads',$leads)
+            ->with('parentCompanies',$parentCompanies)
+            ;
+
+        }
+
+        public function createParent(Request $request)
+        {
+            $leadId = $request->input('lead_id');
+            $parentId = $request->input('parent_id');
+    
+            $lead = Lead::find($leadId);
+            $lead->parent = $parentId;
+            $lead->save();
+    
+            return redirect()->back()->with('success', 'Parent company created successfully.');
+        }
+    
+    
+        public function updateParent(Request $request, $id)
+        {
+            // Find the lead by ID
+            $lead = Lead::find($id);
+            if (!$lead) {
+                abort(404);
+            }
+        
+            // Update the parent ID
+            $lead->parent = $request->input('parent_id');
+            $lead->save();
+        
+            // Redirect back or to a specific route
+            return redirect()->back()->with('success', 'Parent updated successfully.');
+        }
+
+
+
+        public function makeParentNull($leadId)
+        {
+            // Find the lead by ID
+            $lead = Lead::find($leadId);
+        
+            if ($lead) {
+                // Check if the parent field is not already NULL
+                if (!is_null($lead->parent)) {
+                    // Set the parent field to NULL
+                    $lead->parent = null;
+                    $lead->save(); // Save the changes to the database
+                }
+        
+                // Redirect back or do any other necessary actions
+                return redirect()->back()->with('success', 'Parent field updated successfully.');
+            }
+        
+            // Handle the case where the lead with the given ID doesn't exist
+            return redirect()->back()->with('error', 'Lead not found.');
+        }
 
 
 

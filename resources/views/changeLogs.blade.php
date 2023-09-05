@@ -51,6 +51,18 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.07.00</span> - 4 September 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Managers and Supervsisors can set the Parent company for sub brands </li>
+                    <li class="list-group-item">New Feature - Upon set, users can see if curent lead is a parent company or actually is a sub brands of another company </li>
+                    <li class="list-group-item">New Feature - Follow Up Analysis in Analysis Section. </li>
+                    <li class="list-group-item">Bug Fixing - Supervisor's Followup Report Table </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.05.00</span> - 25 August 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Now supervisors adn admins can see the exitsing Individual Messages that are not read yet by the users. </li>

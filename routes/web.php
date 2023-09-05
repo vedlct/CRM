@@ -104,6 +104,12 @@ Route::resource('system-management/status', 'statusController');
 Route::post('system-management/status/search', 'statusController@search')->name('status.search');
 
 
+Route::get('/leads/parentCompanies', 'LeadController@getParentCompanies')->name('getParentCompanies');
+Route::post('/leads/updateParent', 'LeadController@updateParent')->name('updateParent');
+Route::post('/leads/createParent', 'LeadController@createParent')->name('createParent');
+Route::post('/leads/destroy-parent/{leadId}', 'LeadController@makeParentNull')->name('makeParentNull');
+
+
 Route::resource('showchart', 'HighChartsController');
 Route::post('showchart', 'HighChartsController@search')->name('showchart.search');
 
@@ -303,6 +309,10 @@ Route::post('/exportIppList', 'AnalysisController@exportIppList')->name('exportI
 
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
 Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
+
+Route::get('/followUpAnalysis','AnalysisController@followUpAnalysis')->name('followUpAnalysis');
+Route::post('/getFollowUpAnalysis','AnalysisController@getFollowUpAnalysis')->name('getFollowUpAnalysis');
+Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkStatus')->name('updateFollwoUpWorkStatus');
 
 
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');

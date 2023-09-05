@@ -244,6 +244,11 @@
 						<a class="dropdown-item" href="{{route('allEmployees')}}">
 							<i class="fa fa-users"></i> All Contacts
 						</a>
+						@if($userType == 'SUPERVISOR' || $userType == 'ADMIN' || $userType == 'MANAGER')
+						<a class="dropdown-item" href="{{route('getParentCompanies')}}">
+							<i class="fa fa-child"></i> Set Parent Company
+						</a>
+						@endif
 					</div>
 
                 </li>

@@ -93,6 +93,12 @@
                                    data-lead-possibility="{{$lead->possibilityId}}"
                                    data-lead-probability="{{$lead->probabilityId}}">
                                     <i class="fa fa-tasks" aria-hidden="true"></i></a>
+
+                                    <!-- Trigger the account view -->                                
+                                    <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                    data-lead-id="{{$lead->leadId}}"
+                                ><i class="fa fa-eye"></i></a>
+
                             </td>
 
                         </tr>
@@ -435,6 +441,15 @@
 
 
     <script>
+
+        $(document).on('click', '.lead-view-btn', function(e) {
+            e.preventDefault();
+
+            var leadId = $(this).data('lead-id');
+            var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+            window.open(newWindowUrl, '_blank');
+        });
 
         //for Edit modal
 

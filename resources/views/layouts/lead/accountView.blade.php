@@ -215,35 +215,24 @@
                                 </p>
                                 <p>
                                     <b class="text-secondary">Operated in:</b>
-                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
                                 </p>
-                                <!-- modal -->
-                                <!-- Modal -->
-                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Demo Country
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <p>
                                     <b class="text-secondary">Parent Company:</b>
-
+                                    @if ($parentCompanyName)
+                                        {{$parentCompanyName->companyName}} - {{$parentCompanyName->website}}
+                                    @endif
                                 </p>
+
                                 <p>
                                     <b class="text-secondary">Sub Brands:</b>
-
+                                    @if ($subBrands)
+                                        @foreach ($subBrands as $subBrand)
+                                            <ul> 
+                                                <li>{{$subBrand->companyName}} - {{$subBrand->contactNumber}} - {{$subBrand->website}} </li>
+                                            </ul>
+                                        @endforeach
+                                    @endif
                                 </p>                                
                                 <!-- <p>
                                     <b class="text-secondary">Sub Category:</b>
@@ -298,8 +287,8 @@
                                         <div class="card p-2">
                                             <p class="text-dark mb-3">{{$comment->comments}}</p>
                                             <footer class="blockquote-footer" style="font-size: 15px;">
-                                                <span>{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</span>
-                                                <span style="float:right; color: Olive;">{{$comment->report}} </span>
+                                                <span>{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}} </span>
+                                                <span style="float:right; color: teal;">{{$comment->report}} @if ($comment->progress) ({{$comment->progress}}) @endif</span>
 
                                             </footer>
                                         </div>
@@ -390,7 +379,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <h5 class="card-title" style="color:#F39C12;">Key Decision Maker</h5>
+                                                                <h5 class="card-title" style="color:green;">Key Decision Maker</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
 
