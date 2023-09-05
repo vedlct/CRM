@@ -17,36 +17,40 @@
                 </a>
                 <div class="table-responsive m-t-40">
                     <table id="parentTable" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Lead Id</th>
-                            <th>Lead Name</th>
-                            <th>Lead Website</th>
-                            <th>Lead Contact</th>
-                            <th>Parent Company Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($parentCompanies as $lead)
-                        <tr>
-                            <td>{{ $lead->leadId }}</td>
-                            <td>{{ $lead->companyName }}</td>
-                            <td>{{ $lead->website }}</td>
-                            <td>{{ $lead->contactNumber }}</td>
-                            <td>
-                                @if ($lead->parent)
-                                {{ $leads->where('leadId', $lead->parent)->first()->companyName }}
-                                @endif
-                            </td>
+                        <thead>
+                            <tr>
+                                <th>Lead Id</th>
+                                <th>Lead Name</th>
+                                <th>Lead Website</th>
+                                <th>Lead Contact</th>
+                                <th>Parent Company Name</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($parentCompanies as $lead)
+                            <tr>
+                                <td>{{ $lead->leadId }}</td>
+                                <td>{{ $lead->companyName }}</td>
+                                <td>{{ $lead->website }}</td>
+                                <td>{{ $lead->contactNumber }}</td>
+                                <td>
+                                    @if ($lead->parent)
+                                    {{ $leads->where('leadId', $lead->parent)->first()->companyName }}
+                                    @endif
+                                </td>
 
-                            <td>
-                                <a href="#edit_parent_modal" data-toggle="modal" class="btn btn-primary btn-sm" data-lead-id="{{ $lead->leadId }}">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                                <td>
+                                    <a href="#edit_parent_modal" data-toggle="modal" class="btn btn-danger btn-sm" data-lead-id="{{ $lead->leadId }}">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    </a>
+                                    <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
+                                        data-lead-id="{{$lead->leadId}}"
+                                    ><i class="fa fa-eye"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -69,22 +73,22 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="modal-body">
+            <!-- <div class="modal-body">
                 <div class="form-group">
                     <select name="parent_id" class="form-control">
                         <option value="">Select Parent Company</option>
                         @foreach ($parentCompanies as $parent)
-                            <option value="{{ $parent->leadId }}" {{ ($lead->parent == $parent->leadId) ? 'selected' : '' }}>
+                            <option value="{{ $parent->leadId }}">
                                 {{ $parent->companyName }}
                             </option>
                         @endforeach
                     </select>
                 </div>
-            </div>
+            </div> -->
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger mr-auto" onclick="removeParent()">Remove</button>
-                <button type="submit" class="btn btn-success">Update</button>
+                <!-- <button type="submit" class="btn btn-success">Update</button> -->
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </form>
@@ -142,10 +146,24 @@
 
 
     <script>
-
         $(document).ready(function() {
-            $('#parentTable').DataTable();
+            $('#parentTable').DataTable({
+                "processing": true,
+                stateSave: true,
+            });
+
         });
+
+
+        $(document).on('click', '.lead-view-btn', function(e) {
+                e.preventDefault();
+
+                var leadId = $(this).data('lead-id');
+                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+
+                window.open(newWindowUrl, '_blank');
+            });
+
 
 
 

@@ -310,6 +310,10 @@ Route::post('/exportIppList', 'AnalysisController@exportIppList')->name('exportI
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
 Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
 
+Route::get('/followUpAnalysis','AnalysisController@followUpAnalysis')->name('followUpAnalysis');
+Route::post('/getFollowUpAnalysis','AnalysisController@getFollowUpAnalysis')->name('getFollowUpAnalysis');
+Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkStatus')->name('updateFollwoUpWorkStatus');
+
 
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');

@@ -1434,6 +1434,68 @@ class AnalysisController extends Controller
        
 
 
+            public function followUpAnalysis ()
+            {
+
+                    return view('analysis.followUpAnalysis');
+            }
+
+
+            public function getFollowUpAnalysis(Request $request)
+            {
+
+                $User_Type = Session::get('userType');
+                
+                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
+
+                $followUpData = Followup::select('followup.*', 'leads.companyName', 'leads.website', 'leads.contactNumber', 'users.userId' ) 
+                        ->leftJoin('leads', 'followup.leadId', 'leads.leadId')
+                        ->leftJoin('users', 'followup.userId', 'users.id')
+                        ->where('followup.workStatus', 0)
+                        ->orderBy('followup.followUpDate', 'DESC')             
+                        ->get();
+
+                } else {
+
+                    $followUpData = [];
+                }
+
+                
+                return DataTables::of($followUpData)
+                ->addColumn('action', function ($followUpData) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$followUpData->leadId.'"><i class="fa fa-eye"></i></a>';
+                })
+                ->toJson();
+
+            }
+         
+
+
+            public function updateFollwoUpWorkStatus(Request $request)
+            {
+                try {
+                    $followId = $request->input('followId');
+            
+                    // Assuming you have a Followup model with a 'workStatus' field
+                    $followup = Followup::find($followId);
+            
+                    if (!$followup) {
+                        return response()->json(['success' => false, 'message' => 'Followup not found']);
+                    }
+            
+                    // Update the workStatus to 1
+                    $followup->workStatus = 1;
+                    $followup->save();
+            
+                    return response()->json(['success' => true, 'message' => 'Work status updated successfully']);
+                } catch (\Exception $e) {
+                    return response()->json(['success' => false, 'message' => $e->getMessage()]);
+                }
+            }
+            
+
+
 
 
 

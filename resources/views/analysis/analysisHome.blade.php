@@ -123,6 +123,22 @@
           </a>
         </div>
 
+        <div class="col-md-3">
+        <a href="{{route('followUpAnalysis')}}" target="_blank" class="card-link">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://www.outboundengine.com/wp-content/uploads/shutterstock_533985484-scaled.jpg')}}" alt="Card image cap">
+                <div class="mask rgba-white-slight"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Followup List</h4>
+              <p class="card-text">We'll dive into a thorough examination of the marketers' follow-up activities to determine whether they have been completed or not.</p>
+              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+            </div>
+          </div>
+          </a>
+        </div>
+
 
       </div>
 
