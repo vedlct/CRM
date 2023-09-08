@@ -172,6 +172,103 @@
         </div>
 
 
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header" style="background-color: #6F8FAF;">
+                        <h5 class="font-weight-bold text-white">Marketers Are Chasing:</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-middle-aligned">
+                                <tbody>
+                                    <tr>
+                                        <td>Agencies</td>
+                                        <td>{{ $showCategories['Agency'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Online Stores</td>
+                                        <td>{{ $showCategories['Online Store'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Brands</td>
+                                        <td>{{ $showCategories['Brand'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Boutiques</td>
+                                        <td>{{ $showCategories['Boutique'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Furniture</td>
+                                        <td>{{ $showCategories['Furniture'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jewelry</td>
+                                        <td>{{ $showCategories['Jewelry'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header" style="background-color: #6F8FAF;">
+                        <h5 class="font-weight-bold text-white">Current Year Total</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-middle-aligned">
+                                <thead>
+                                    <tr>
+                                        <th>Statistic</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Total Yearly Calls</td>
+                                        <td>{{ $showYearlyStat['totalYearlyCall'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Yearly Contacts</td>
+                                        <td>{{ $showYearlyStat['totalYearlyContact'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Yearly Conversations</td>
+                                        <td>{{ $showYearlyStat['totalYearlyConvo'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Yearly Tests</td>
+                                        <td>{{ $showYearlyStat['totalYearlyTest'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Yearly Closings</td>
+                                        <td>{{ $showYearlyStat['totalYearlyClosing'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Yearly Lead Mining</td>
+                                        <td>{{ $showYearlyStat['totalYearlyLeadMining'] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
 @endsection
 
 @section('foot-js')

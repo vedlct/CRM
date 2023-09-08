@@ -1208,59 +1208,59 @@ class AnalysisController extends Controller
             
           
 
-                public function chasingCategories()
-                {
-                    
-                    $categoryIds = [1, 4, 5, 66, 63, 74];
-                    $categoryNames = ['Agency', 'Online Store', 'Brand', 'Jewelry', 'Boutique', 'Furniture'];
-                    
-                    $chasingCounts = Lead::where('leads.contactedUserId', Auth::user()->id)
-                        ->whereIn('leads.categoryId', $categoryIds)
-                        ->selectRaw('categoryId, COUNT(leadId) as count')
-                        ->groupBy('categoryId')
-                        ->get();
-                
-                    $result = [];
-                
-                    foreach ($chasingCounts as $count) {
-                        $categoryIndex = array_search($count->categoryId, $categoryIds);
-                        if ($categoryIndex !== false) {
-                            $categoryName = $categoryNames[$categoryIndex];
-                            $result[$categoryName] = $count->count;
+                        public function chasingCategories()
+                        {
+                            
+                            $categoryIds = [1, 4, 5, 66, 63, 74];
+                            $categoryNames = ['Agency', 'Online Store', 'Brand', 'Jewelry', 'Boutique', 'Furniture'];
+                            
+                            $chasingCounts = Lead::where('leads.contactedUserId', Auth::user()->id)
+                                ->whereIn('leads.categoryId', $categoryIds)
+                                ->selectRaw('categoryId, COUNT(leadId) as count')
+                                ->groupBy('categoryId')
+                                ->get();
+                        
+                            $result = [];
+                        
+                            foreach ($chasingCounts as $count) {
+                                $categoryIndex = array_search($count->categoryId, $categoryIds);
+                                if ($categoryIndex !== false) {
+                                    $categoryName = $categoryNames[$categoryIndex];
+                                    $result[$categoryName] = $count->count;
+                                }
+                            }
+                            
+                            return response()->json($result);
                         }
-                    }
-                    
-                    return response()->json($result);
-                }
 
 
 
-                public function randomStatistics(){
+                        public function randomStatistics(){
 
-                    $joiningDate = User::where('id', Auth::user()->id)
-                        ->value('created_at'); 
-                
-                    $myClients = NewFile::where('userId', Auth::user()->id)
-                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
-                        ->value('clientCount');
-                
-                    $myTests = Workprogress::where('userId', Auth::user()->id)
-                        ->where('progress', 'LIKE', '%Test%')
-                        ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
-                        ->value('clientCount');
+                            $joiningDate = User::where('id', Auth::user()->id)
+                                ->value('created_at'); 
+                        
+                            $myClients = NewFile::where('userId', Auth::user()->id)
+                                ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                                ->value('clientCount');
+                        
+                            $myTests = Workprogress::where('userId', Auth::user()->id)
+                                ->where('progress', 'LIKE', '%Test%')
+                                ->selectRaw('COUNT(DISTINCT leadId) as clientCount')
+                                ->value('clientCount');
 
-                    $joiningDate = Carbon::parse($joiningDate);
-                    $today = Carbon::now();
-                    $timeDifference = $joiningDate->diffForHumans($today);
+                            $joiningDate = Carbon::parse($joiningDate);
+                            $today = Carbon::now();
+                            $timeDifference = $joiningDate->diffForHumans($today);
 
-                    return [
-                        'joiningDate' => $joiningDate,
-                        'myClients' => $myClients,
-                        'myTests' => $myTests,
-                        'timeDifference' => $timeDifference,
-                    ];
-                    
-                }
+                            return [
+                                'joiningDate' => $joiningDate,
+                                'myClients' => $myClients,
+                                'myTests' => $myTests,
+                                'timeDifference' => $timeDifference,
+                            ];
+                            
+                        }
 
 
 
@@ -1275,7 +1275,7 @@ class AnalysisController extends Controller
                             
                 if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
 
-                    $fromDay = "2023-01-01";
+                    $fromDay = Carbon::now()->startOfYear();
                     $tillToday = Carbon::today()->toDateString();
                     $users = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
@@ -1329,10 +1329,50 @@ class AnalysisController extends Controller
                         }
                     }
 
+
+                    $totalCallYearly= Workprogress::Select(DB::raw('COUNT(progressId) as totalYearlyCall'))
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->value('totalYearlyCall');
+
+                    $totalContactYearly= Workprogress::Select(DB::raw('COUNT(progressId) as totalYearlyContact'))
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->where('callingReport', '=', 5)
+                        ->value('totalYearlyContact');
+
+                    $totalConvoYearly= Workprogress::Select(DB::raw('COUNT(progressId) as totalYearlyConvo'))
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->where('callingReport', '=', 11)
+                        ->value('totalYearlyConvo');
+
+                    $totalTestYearly =  Workprogress::Select(DB::raw('COUNT(progress) as totalYearlyTest'))
+                        ->where('progress', 'like', '%Test%')
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->value('totalYearlyTest');
+
+                    $totalClosingYearly = Workprogress::Select(DB::raw('COUNT(progress) as totalYearlyClosing'))
+                        ->where('progress', 'like', '%Closing%')
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->value('totalYearlyClosing');
+
+                    $totalLeadMiningYearly = Lead::Select(DB::raw('COUNT(leadId) as totalYearlyLeadMining'))
+                        ->whereBetween('created_at', [$fromDay, $tillToday])
+                        ->value('totalYearlyLeadMining');
+
+
+                    $jsonResponse = $this->chasingCategoriesAll(); 
+                    $showCategories = json_decode($jsonResponse->getContent(), true);
+    
+                    $jsonResponseYearlyStat = $this->getYearlyStats(); 
+                    $showYearlyStat = json_decode($jsonResponseYearlyStat->getContent(), true);
+
+
                     return view('analysis.randomReportsAll')
                             ->with('users', $users)
                             ->with('clientCategoryCounts', $clientCategoryCounts)
-                            ->with('totalClinetCounts', $totalClinetCounts);
+                            ->with('totalClinetCounts', $totalClinetCounts)
+                            ->with('showCategories', $showCategories)
+                            ->with('showYearlyStat', $showYearlyStat)
+                            ;
 
 
                 } else {
@@ -1344,21 +1384,81 @@ class AnalysisController extends Controller
             }
 
 
+                    public function chasingCategoriesAll()
+                    {
+                        
+                        $categoryIds = [1, 4, 5, 66, 63, 74];
+                        $categoryNames = ['Agency', 'Online Store', 'Brand', 'Jewelry', 'Boutique', 'Furniture'];
+                        
+                        $chasingCounts = Lead::where('leads.contactedUserId', '!=' , Null)
+                            ->whereIn('leads.categoryId', $categoryIds)
+                            ->selectRaw('categoryId, COUNT(leadId) as count')
+                            ->groupBy('categoryId')
+                            ->get();
+                    
+                        $result = [];
+                    
+                        foreach ($chasingCounts as $count) {
+                            $categoryIndex = array_search($count->categoryId, $categoryIds);
+                            if ($categoryIndex !== false) {
+                                $categoryName = $categoryNames[$categoryIndex];
+                                $result[$categoryName] = $count->count;
+                            }
+                        }
+                        
+                        return response()->json($result);
+                    }
 
-            public function closedDealsAnalysis()
-            {
-                $categoryCounts = Lead::with('category')
-                    ->select('categoryId', DB::raw('COUNT(*) as count'))
-                    ->where('statusId', 6)
-                    ->groupBy('categoryId')
-                    ->get();
 
-                $totalCount = $categoryCounts->sum('count');
+                    public function getYearlyStats()
+                    {
+                        $fromDay = Carbon::now()->startOfYear();
+                        $tillToday = Carbon::today()->toDateString();
+                    
+                        $totalCallYearly = Workprogress::whereBetween('created_at', [$fromDay, $tillToday])->count();
+                        $totalContactYearly = Workprogress::whereBetween('created_at', [$fromDay, $tillToday])
+                            ->where('callingReport', '=', 5)
+                            ->count();
+                        $totalConvoYearly = Workprogress::whereBetween('created_at', [$fromDay, $tillToday])
+                            ->where('callingReport', '=', 11)
+                            ->count();
+                        $totalTestYearly = Workprogress::where('progress', 'like', '%Test%')
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->count();
+                        $totalClosingYearly = Workprogress::where('progress', 'like', '%Closing%')
+                            ->whereBetween('created_at', [$fromDay, $tillToday])
+                            ->count();
+                        $totalLeadMiningYearly = Lead::whereBetween('created_at', [$fromDay, $tillToday])->count();
+                    
+                        $result = [
+                            'totalYearlyCall' => $totalCallYearly,
+                            'totalYearlyContact' => $totalContactYearly,
+                            'totalYearlyConvo' => $totalConvoYearly,
+                            'totalYearlyTest' => $totalTestYearly,
+                            'totalYearlyClosing' => $totalClosingYearly,
+                            'totalYearlyLeadMining' => $totalLeadMiningYearly,
+                        ];
+                    
+                        return response()->json($result);
+                    }
 
-                return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
-            }
+
+                    public function closedDealsAnalysis()
+                    {
+                        $categoryCounts = Lead::with('category')
+                            ->select('categoryId', DB::raw('COUNT(*) as count'))
+                            ->where('statusId', 6)
+                            ->groupBy('categoryId')
+                            ->get();
+
+                        $totalCount = $categoryCounts->sum('count');
+
+                        return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
+                    }
 
             
+
+
 
             public function myHourReport(Request $r)
             {
@@ -1448,7 +1548,7 @@ class AnalysisController extends Controller
                 
                 if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
 
-                $followUpData = Followup::select('followup.*', 'leads.companyName', 'leads.website', 'leads.contactNumber', 'users.userId' ) 
+                $followUpData = Followup::select('followup.*', 'leads.companyName', 'leads.website', 'leads.contactNumber', 'leads.contactedUserId', 'users.firstName', 'users.lastName', 'users.id' ) 
                         ->leftJoin('leads', 'followup.leadId', 'leads.leadId')
                         ->leftJoin('users', 'followup.userId', 'users.id')
                         ->where('followup.workStatus', 0)

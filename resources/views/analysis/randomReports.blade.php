@@ -97,23 +97,23 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr>
-                                                <td>Total Calls</td>
+                                                <td>Max Calls</td>
                                                 <td>{{$maxThisWeekCall  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Contacts</td>
+                                                <td>Max Contacts</td>
                                                 <td>{{$maxThisWeekContact  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Conversation</td>
+                                                <td>Max Conversation</td>
                                                 <td>{{$maxThisWeekConvo  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Free Trial</td>
+                                                <td>Max Free Trial</td>
                                                 <td>{{$maxThisWeekTest  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Lead Mining</td>
+                                                <td>Max Lead Mining</td>
                                                 <td>{{$maxThisWeekLeadMining  ?? 0 }}</td>
                                             </tr>
                                         </tbody>
@@ -134,23 +134,23 @@
                                         <tbody>
                                         <tr>
                                         <tr>
-                                            <td>Total Calls</td>
+                                            <td>Max Calls</td>
                                             <td>{{ $maxThisMonthCall ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Contacts</td>
+                                            <td>Max Contacts</td>
                                             <td>{{ $maxThisMonthContact ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Conversation</td>
+                                            <td>Max Conversation</td>
                                             <td>{{ $maxThisMonthConvo ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Free Trial</td>
+                                            <td>Max Free Trial</td>
                                             <td>{{ $maxThisMonthTest ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Lead Mining</td>
+                                            <td>Max Lead Mining</td>
                                             <td>{{ $maxThisMonthLeadMining ?? 0 }}</td>
                                         </tr>
 
@@ -171,23 +171,23 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr>
-                                                <td>Total Calls</td>
+                                                <td>Max Calls</td>
                                                 <td>{{$maxTotalCall ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Contact</td>
+                                                <td>Max Contact</td>
                                                 <td>{{$maxTotalContact ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Conversation</td>
+                                                <td>Max Conversation</td>
                                                 <td>{{$maxTotalConvo ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Free Trial</td>
+                                                <td>Max Free Trial</td>
                                                 <td>{{$maxTotalTest ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Lead Mining</td>
+                                                <td>Max Lead Mining</td>
                                                 <td>{{$maxTotalLeadMining ?? 0 }}</td>
                                             </tr>
                                         </tbody>
