@@ -1597,6 +1597,94 @@ class AnalysisController extends Controller
 
 
 
+            public function graphicalPresentation()
+            {
+                $userType = Session::get('userType');
+            
+                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                    $users = User::where('active', 1)->get();
+            
+                    $userId = ''; 
+                    $progressParam = ''; 
+                    $fromDate = ''; 
+                    $toDate = ''; 
+            
+                    // Create a new Request object with the required parameters
+                    $request = new Request([
+                        'marketer' => $userId,
+                        'progress' => $progressParam,
+                        'fromDate' => $fromDate,
+                        'toDate' => $toDate,
+                    ]);
+            
+                    // Call the getUserDataPeriod function with the Request object
+                    $progressData = $this->getUserDataPeriod($request);
+            
+                    return view('analysis.graphs')
+                        ->with('users', $users)
+                        ->with('progressData', $progressData);
+                }
+            }
+            
+            
+            public function getUserDataPeriod(Request $request)
+            {
+                $userId = $request->input('marketer');
+                $progressParam = $request->input('progress');
+                $fromDate = $request->input('fromDate');
+                $toDate = $request->input('toDate');
+            
+                $fromDate = Carbon::parse($fromDate);
+                $toDate = Carbon::parse($toDate);
+            
+                // Initialize an array to store day-wise progress data
+                $progressData = [];
+            
+                // Loop through each day within the selected range
+                while ($fromDate->lte($toDate)) {
+                    // Query the database to count progress records for the specific user and parameter for the current day
+                    $dailyProgressCount = DB::table('workprogress')
+                        ->where('userId', $userId)
+                        ->whereDate('created_at', '=', $fromDate->format('Y-m-d'));
+            
+                    $dailyFollowupCount = DB::table('Followup')
+                        ->where('userId', $userId)
+                        ->whereDate('created_at', '=', $fromDate->format('Y-m-d'));
+
+
+                        // Add additional conditions based on the selected parameter
+                    if ($progressParam === 'totalcall') {
+                        // Logic for total call
+                    } elseif ($progressParam === 'contact') {
+                        $dailyProgressCount->where('callingReport', '5'); 
+                    } elseif ($progressParam === 'conversation') {
+                        $dailyProgressCount->where('callingReport', '11'); 
+                    } elseif ($progressParam === 'test') {
+                        $dailyProgressCount->where('progress', 'LIKE', '%Test%'); 
+                    } elseif ($progressParam === 'closing') {
+                        $dailyProgressCount->where('progress', 'LIKE', '%Closing%'); 
+                    } elseif ($progressParam === 'followup') {
+                        $dailyProgressCount = $dailyFollowupCount; 
+                    }
+            
+                    // Count the progress records for the current day
+                    $dailyCount = $dailyProgressCount->count();
+            
+                    // Add the count to the progressData array along with the formatted date
+                    $progressData[] = [
+                        'date' => $fromDate->format('d M y'), // Format the date as '12 Sep 23'
+                        'count' => $dailyCount,
+                    ];
+            
+                    // Move to the next day
+                    $fromDate->addDay();
+                }
+            
+                return $progressData;
+
+            }
+            
+
 
 
 
@@ -1612,6 +1700,7 @@ class AnalysisController extends Controller
                 // Store the engine key and API key in the session
                 $engineKey = $request->input('engineKey');
                 $apiKey = $request->input('apiKey');
+
                 Session::put('engineKey', $engineKey);
                 Session::put('apiKey', $apiKey);
             

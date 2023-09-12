@@ -51,9 +51,10 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info">2.07.00</span> - 9 September 2023</h5>
+            <h5 class="card-title"><span class="badge badge-info">2.07.00</span> - 12 September 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Add more random reports </li>
+                    <li class="list-group-item">New Feature - Graphical Presentations in Analysis </li>
                     <li class="list-group-item">Bug Fixing - Follow up Analysis </li>
                 </ul>
             </div>

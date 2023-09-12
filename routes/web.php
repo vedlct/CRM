@@ -314,13 +314,23 @@ Route::get('/followUpAnalysis','AnalysisController@followUpAnalysis')->name('fol
 Route::post('/getFollowUpAnalysis','AnalysisController@getFollowUpAnalysis')->name('getFollowUpAnalysis');
 Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkStatus')->name('updateFollwoUpWorkStatus');
 
+Route::get('/analysis/graph','AnalysisController@graphicalPresentation')->name('analysis.graph');
+Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('analysis.getUserDataPeriod');
 
+
+
+
+
+
+//Pipeline COntroller
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
 Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
 Route::get('/pipelineReport', 'PipelineController@pipelineReport')->name('pipelineReport');
+
+
 
 
 //FAQ Management

@@ -1228,25 +1228,25 @@
 
 @if($userType == 'SUPERVISOR')
 
-<a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
-                                        data-lead-id="{{$lead->leadId}}" 
-                                        data-lead-name="{{$lead->companyName}}"
-                                        data-lead-email="{{$lead->email}}"
-                                        data-lead-number="{{$lead->contactNumber}}"
-                                        data-lead-website="{{$lead->website}}"
-                                        data-lead-category="{{$lead->category->categoryId}}"
-                                        data-lead-country="{{$lead->countryId}}"
-                                        data-lead-linkedin="{{$lead->linkedin}}"
-                                        data-lead-founded="{{$lead->founded}}"
-                                        data-lead-process="{{$lead->process}}"
-                                        data-lead-volume="{{$lead->volume}}"
-                                        data-lead-frequency="{{$lead->frequency}}"
-                                        data-lead-employee="{{$lead->employee}}"
-                                        data-lead-ipp="{{$lead->ippStatus}}"
-                                        data-lead-comments="{{$lead->comments}}"
-                                        data-lead-possibility="{{$lead->possibilityId}}" 
-                                        data-lead-probability="{{$lead->probabilityId}}"
-                                    >Edit This Lead</a>
+    <a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
+        data-lead-id="{{$lead->leadId}}" 
+        data-lead-name="{{$lead->companyName}}"
+        data-lead-email="{{$lead->email}}"
+        data-lead-number="{{$lead->contactNumber}}"
+        data-lead-website="{{$lead->website}}"
+        data-lead-category="{{$lead->category->categoryId}}"
+        data-lead-country="{{$lead->countryId}}"
+        data-lead-linkedin="{{$lead->linkedin}}"
+        data-lead-founded="{{$lead->founded}}"
+        data-lead-process="{{$lead->process}}"
+        data-lead-volume="{{$lead->volume}}"
+        data-lead-frequency="{{$lead->frequency}}"
+        data-lead-employee="{{$lead->employee}}"
+        data-lead-ipp="{{$lead->ippStatus}}"
+        data-lead-comments="{{$lead->comments}}"
+        data-lead-possibility="{{$lead->possibilityId}}" 
+        data-lead-probability="{{$lead->probabilityId}}"
+    >Edit This Lead</a>
 
 @endif
 
