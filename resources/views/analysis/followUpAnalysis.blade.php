@@ -18,7 +18,8 @@
                             <th>Time</th>
                             <th>Work Status</th>
                             <th>Followup Created</th>
-                            <th>Marketer</th>
+                            <th>Followup User</th>
+                            <th>Current Marketer</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -64,7 +65,13 @@
                         }
                     },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'userId', name: 'userId' },
+                    {
+                        data: function (row) {
+                            return row.firstName + ' ' + row.lastName + ' (' + row.id + ')';
+                        },
+                        name: 'fullNameWithId' 
+                    },
+                    { data: 'contactedUserId', name: 'contactedUserId' },
                     {
                         data: 'action',
                         name: 'action',

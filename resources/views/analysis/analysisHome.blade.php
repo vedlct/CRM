@@ -139,6 +139,22 @@
           </a>
         </div>
 
+        <div class="col-md-3">
+        <a href="{{route('analysis.graph')}}" target="_blank" class="card-link">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://img.freepik.com/free-vector/isometric-infographic-element-collection_52683-64329.jpg')}}" alt="Card image cap">
+                <div class="mask rgba-white-slight"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Graphical Presentation</h4>
+              <p class="card-text">We will see the graphical presentations of the marketers' calls and other parameters to get a clear idea.</p>
+              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+            </div>
+          </div>
+          </a>
+        </div>
+
 
       </div>
 
