@@ -54,6 +54,7 @@
                 <option value="followup">Followup</option>
                 <option value="test">Test</option>
                 <option value="closing">Closing</option>
+                <option value="leadmining">Lead Mining</option>
             </select>
         </div>
 

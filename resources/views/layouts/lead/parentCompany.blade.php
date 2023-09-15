@@ -23,33 +23,13 @@
                                 <th>Lead Name</th>
                                 <th>Lead Website</th>
                                 <th>Lead Contact</th>
+                                <th>Parent Lead Id</th>
                                 <th>Parent Company Name</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($parentCompanies as $lead)
-                            <tr>
-                                <td>{{ $lead->leadId }}</td>
-                                <td>{{ $lead->companyName }}</td>
-                                <td>{{ $lead->website }}</td>
-                                <td>{{ $lead->contactNumber }}</td>
-                                <td>
-                                    @if ($lead->parent)
-                                    {{ $leads->where('leadId', $lead->parent)->first()->companyName }}
-                                    @endif
-                                </td>
-
-                                <td>
-                                    <a href="#edit_parent_modal" data-toggle="modal" class="btn btn-danger btn-sm" data-lead-id="{{ $lead->leadId }}">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    </a>
-                                    <a href="." class="btn btn btn-primary btn-sm lead-view-btn"
-                                        data-lead-id="{{$lead->leadId}}"
-                                    ><i class="fa fa-eye"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
+                                <!-- Table data will be populated here -->
                         </tbody>
                     </table>
                 </div>
@@ -60,49 +40,12 @@
 
 
 
-<!-- Edit Parent Modal -->
-<div class="modal" id="edit_parent_modal">
-    <div class="modal-dialog">
-        <form class="modal-content" method="post" action="{{ route('updateParent', ['id' => 1]) }}">
-            <input type="hidden" name="_method" value="PUT">
-            {{ csrf_field() }}
-            <input id="leadId" type="hidden" class="form-control" name="leadId" required autofocus>
-
-            <div class="modal-header">
-                <h4 class="modal-title">Edit Parent</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- <div class="modal-body">
-                <div class="form-group">
-                    <select name="parent_id" class="form-control">
-                        <option value="">Select Parent Company</option>
-                        @foreach ($parentCompanies as $parent)
-                            <option value="{{ $parent->leadId }}">
-                                {{ $parent->companyName }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div> -->
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger mr-auto" onclick="removeParent()">Remove</button>
-                <!-- <button type="submit" class="btn btn-success">Update</button> -->
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
 
 
 <!-- Modal for Creating parent company -->
 <div class="modal" id="create_parent_modal">
     <div class="modal-dialog">
-        <form class="modal-content" method="post" action="{{ route('createParent') }}">
+        <form class="modal-content" method="post" action="{{ route('parent.create') }}">
             <div class="modal-header">
                 <h4 class="modal-title">Create Parent Company</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -145,14 +88,68 @@
 
 
 
+
     <script>
         $(document).ready(function() {
-            $('#parentTable').DataTable({
+            // Initialize the DataTable
+            var parentTable = $('#parentTable').DataTable({
                 "processing": true,
-                stateSave: true,
+                "stateSave": true,
+                "serverSide": true, // Enable server-side processing
+                "ajax": {
+                    "url": "{!! route('parent.list') !!}",
+                    "type": "POST",
+                    "data": {
+                        "_token": "{{ csrf_token() }}"
+                    }
+                },
+                "columns": [
+                    { data: "leadId", name: "leadId" },
+                    { data: "companyName", name: "companyName" },
+                    { data: "website", name: "website" },
+                    { data: "contactNumber", name: "contactNumber" },
+                    { data: "parent", name: "parent" }, 
+                    {
+                        data: "parentCompany",
+                        "render": function(data, type, full, meta) {
+                            return data ? data : '';
+                        }
+                    },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
+
+                ]
             });
 
+
+            $('#parentTable tbody').on('click', 'a.remove-parent-btn', function() {
+                // Handle remove parent button click
+                var leadId = $(this).data('lead-id');
+                // Perform the action you want here
+                if (!confirm("Are you sure you want to remove the parent?")) {
+                    return;
+                }
+
+                // Make an Ajax request to update the parent field
+                $.ajax({
+                    url: "{{ route('parent.delete', ['leadId' => '__leadId__']) }}".replace('__leadId__', leadId),
+                    type: "POST",
+                    data: {
+                        _method: 'POST', // Use POST method
+                        _token: "{{ csrf_token() }}" // Add CSRF token
+                    },
+                    success: function(response) {
+                        console.log(response); // You can do something here, like showing a success message
+
+                        // Reload the page
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText); // You can display an error message or handle the error as needed
+                    }
+                });
+            });
         });
+
 
 
         $(document).on('click', '.lead-view-btn', function(e) {
@@ -187,34 +184,7 @@
 
 
 
-    function removeParent() {
-        var leadId = $('#leadId').val();
 
-        if (!confirm("Are you sure you want to remove the parent?")) {
-            return;
-        }
-
-        // Make an Ajax request to update the parent field
-        $.ajax({
-            url: "{{ route('makeParentNull', ['leadId' => '__leadId__']) }}".replace('__leadId__', leadId),
-            type: "POST",
-            data: {
-                _method: 'POST', // Use POST method
-                _token: "{{ csrf_token() }}" // Add CSRF token
-            },
-            success: function(response) {
-                console.log(response); // You can do something here, like showing a success message
-
-                // Hide the modal
-                // $('#edit_parent_modal').modal('hide');
-
-                window.location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText); // You can display an error message or handle the error as needed
-            }
-        });
-    }
 
 
 
