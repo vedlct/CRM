@@ -155,6 +155,22 @@
           </a>
         </div>
 
+        <div class="col-md-3">
+        <a href="{{route('analysis.personalAnalysis')}}" target="_blank" class="card-link">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://pestleanalysis.com/wp-content/uploads/2015/03/swot-analysis-in-personal-development.jpg')}}" alt="Card image cap">
+                <div class="mask rgba-white-slight"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Personal Analysis</h4>
+              <p class="card-text">Dive into user's personal analysis. What he did in a certain time. </p>
+              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+            </div>
+          </div>
+          </a>
+        </div>
+
 
       </div>
 
