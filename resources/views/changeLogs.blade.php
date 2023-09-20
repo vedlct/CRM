@@ -51,6 +51,16 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.07.01</span> - 15 September 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Bug Fixing - Parent Company. Made the page loading faster. </li>
+                    <li class="list-group-item">Bug Fixing - followup analysis. </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.07.00</span> - 12 September 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Add more random reports </li>

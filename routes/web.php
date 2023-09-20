@@ -69,6 +69,7 @@ Route::get('/showAllNonReadMessage', 'NoticeController@showAllNonReadMessage')->
 
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+Route::get('/user/{id}', 'UserManagementController@userProfile')->name('user-management.userProfile');
 
 
 //Set Target
@@ -104,10 +105,11 @@ Route::resource('system-management/status', 'statusController');
 Route::post('system-management/status/search', 'statusController@search')->name('status.search');
 
 
-Route::get('/leads/parentCompanies', 'LeadController@getParentCompanies')->name('getParentCompanies');
-Route::post('/leads/updateParent', 'LeadController@updateParent')->name('updateParent');
-Route::post('/leads/createParent', 'LeadController@createParent')->name('createParent');
-Route::post('/leads/destroy-parent/{leadId}', 'LeadController@makeParentNull')->name('makeParentNull');
+Route::get('/leads/parentCompanies', 'LeadController@parentCompanyPage')->name('parent.page');
+Route::post('/leads/parentCompanies', 'LeadController@getParentCompanies')->name('parent.list');
+// Route::post('/leads/updateParent', 'LeadController@updateParent')->name('parent.update');
+Route::post('/leads/createParent', 'LeadController@createParent')->name('parent.create');
+Route::post('/leads/destroy-parent/{leadId}', 'LeadController@makeParentNull')->name('parent.delete');
 
 
 Route::resource('showchart', 'HighChartsController');
@@ -317,7 +319,8 @@ Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkSt
 Route::get('/analysis/graph','AnalysisController@graphicalPresentation')->name('analysis.graph');
 Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('analysis.getUserDataPeriod');
 
-
+Route::get('/analysis/personalAnalysis','AnalysisController@personalAnalysis')->name('analysis.personalAnalysis');
+Route::post('/analysis/personalAnalysis','AnalysisController@getPersonalAnalysis')->name('analysis.getPersonalAnalysis');
 
 
 

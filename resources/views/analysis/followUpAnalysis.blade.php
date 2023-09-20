@@ -65,13 +65,14 @@
                         }
                     },
                     { data: 'created_at', name: 'created_at' },
+                    { data: 'firstName', name: 'firstName' },
+                    // { data: 'contactedUserId', name: 'contactedUserId' },
                     {
-                        data: function (row) {
-                            return row.firstName + ' ' + row.lastName + ' (' + row.id + ')';
-                        },
-                        name: 'fullNameWithId' 
+                        data: "currentMarketer",
+                        "render": function(data, type, full, meta) {
+                            return data ? data : '';
+                        }
                     },
-                    { data: 'contactedUserId', name: 'contactedUserId' },
                     {
                         data: 'action',
                         name: 'action',

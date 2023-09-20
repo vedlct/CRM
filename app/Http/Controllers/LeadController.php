@@ -147,7 +147,6 @@ class LeadController extends Controller
             $country = Country::get();
             $status = Leadstatus::get();
             $designations = Designation::get();
-            
 
             return view('layouts.lead.accountView')
                 ->with('lead', $lead)
@@ -2374,18 +2373,43 @@ class LeadController extends Controller
 
         // PARENT COMPANY SET
 
-        public function getParentCompanies()
+        public function parentCompanyPage()
         {
-            $parentCompanies = Lead::whereNotNull('parent')->get();
-            $leads = Lead::all(); // Retrieve all leads
+            
+            $leads = Lead::select('leadId', 'companyName', 'website', 'contactNumber', 'parent')
+                ->whereNotNull('parent')
+                ->get();
 
-
-            return view('layouts.lead.parentCompany')
-            ->with('leads',$leads)
-            ->with('parentCompanies',$parentCompanies)
-            ;
+            return view('layouts.lead.parentCompany', compact('leads'));
+            
 
         }
+
+        public function getParentCompanies()
+        {
+            $leads = Lead::select('leadId', 'companyName', 'website', 'contactNumber', 'parent')
+                ->whereNotNull('parent')
+                ->get();
+
+            return DataTables::of($leads)
+                ->addColumn('parentCompany', function ($lead) {
+                    if ($lead->parent) {
+                        $parentLead = Lead::find($lead->parent);
+                        return $parentLead ? $parentLead->companyName : '';
+                    }
+                    return '';
+                })
+                ->addColumn('action', function ($lead) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="' . $lead->leadId . '"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm remove-parent-btn"
+                        data-lead-id="' . $lead->leadId . '"><i class="fa fa-close"></i></a>';
+                })
+                ->toJson();
+        }
+
+
+
 
         public function createParent(Request $request)
         {

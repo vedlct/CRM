@@ -615,4 +615,128 @@ class UserManagementController extends Controller
 
 
 
+
+        public function userProfile(Request $request)
+    {
+        $user_id = $request->id;
+        $userType = Session::get('userType');
+        $fromDay = Carbon::now()->startOfYear();
+        $tillToday = Carbon::today()->toDateString();
+
+
+        if ($userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'MANAGER') {
+
+            $profile = User::where('id', $user_id)->first(); 
+
+
+
+            $totalCallTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('targetCall');
+
+            $totalCallAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->count();
+
+
+            $totalContactTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('targetContact');
+
+            $totalContactAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 5)
+                ->where('userId', $user_id)
+                ->count();
+
+
+            $totalConvoTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('conversation');
+
+            $totalConvoAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 11)
+                ->where('userId', $user_id)
+                ->count();
+
+
+            $totalFollowupTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('followup');
+
+            $totalFollowupAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 4)
+                ->where('userId', $user_id)
+                ->count();
+
+
+
+            $totalTestTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('targetTest');
+
+            $totalTestAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->where('progress', 'LIKE', '%Test%')
+                ->count();
+
+
+            $totalClosingTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('closelead');
+
+            $totalClosingAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->where('progress', 'LIKE', '%Closing%')
+                ->count();
+
+
+            $totalRevenueTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('targetFile');
+
+            $totalRevenueAchievedYear = NewFile::whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->sum('fileCount');
+
+
+            $totalLeadMineTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->sum('targetLeadmine');
+
+            $totalLeadMineAchievedYear = Lead::select('leadId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('minedBy', $user_id)
+                ->count();
+
+
+
+
+
+                return view('users-mgmt.userProfile')
+                ->with('profile', $profile)
+                ->with('totalCallTargetYear', $totalCallTargetYear)
+                ->with('totalCallAchievedYear', $totalCallAchievedYear)
+                ->with('totalContactTargetYear', $totalContactTargetYear)
+                ->with('totalContactAchievedYear', $totalContactAchievedYear)
+                ->with('totalConvoTargetYear', $totalConvoTargetYear)
+                ->with('totalConvoAchievedYear', $totalConvoAchievedYear)
+                ->with('totalFollowupTargetYear', $totalFollowupTargetYear)
+                ->with('totalFollowupAchievedYear', $totalFollowupAchievedYear)
+                ->with('totalTestTargetYear', $totalTestTargetYear)
+                ->with('totalTestAchievedYear', $totalTestAchievedYear)
+                ->with('totalClosingTargetYear', $totalClosingTargetYear)
+                ->with('totalClosingAchievedYear', $totalClosingAchievedYear)
+                ->with('totalRevenueTargetYear', $totalRevenueTargetYear)
+                ->with('totalRevenueAchievedYear', $totalRevenueAchievedYear)
+                ->with('totalLeadMineTargetYear', $totalLeadMineTargetYear)
+                ->with('totalLeadMineAchievedYear', $totalLeadMineAchievedYear)
+                ;
+        } else {
+
+            return back();
+
+        }
+    }
+
+
+
+
 }

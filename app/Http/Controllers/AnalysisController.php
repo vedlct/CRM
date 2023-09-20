@@ -1562,6 +1562,13 @@ class AnalysisController extends Controller
 
                 
                 return DataTables::of($followUpData)
+                ->addColumn('currentMarketer', function ($followUpData) {
+                    if ($followUpData->contactedUserId) {
+                        $currentMarketer = User::find($followUpData->contactedUserId);
+                        return $currentMarketer ? $currentMarketer->firstName : '';
+                    }
+                    return '';
+                })
                 ->addColumn('action', function ($followUpData) {
                     return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
                         data-lead-id="'.$followUpData->leadId.'"><i class="fa fa-eye"></i></a>';
@@ -1602,27 +1609,10 @@ class AnalysisController extends Controller
                 $userType = Session::get('userType');
             
                 if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
-                    $users = User::where('active', 1)->get();
-            
-                    $userId = ''; 
-                    $progressParam = ''; 
-                    $fromDate = ''; 
-                    $toDate = ''; 
-            
-                    // Create a new Request object with the required parameters
-                    $request = new Request([
-                        'marketer' => $userId,
-                        'progress' => $progressParam,
-                        'fromDate' => $fromDate,
-                        'toDate' => $toDate,
-                    ]);
-            
-                    // Call the getUserDataPeriod function with the Request object
-                    $progressData = $this->getUserDataPeriod($request);
+                    $users = User::orderby('firstName', 'asc')->get();
             
                     return view('analysis.graphs')
-                        ->with('users', $users)
-                        ->with('progressData', $progressData);
+                        ->with('users', $users);
                 }
             }
             
@@ -1643,12 +1633,15 @@ class AnalysisController extends Controller
                 // Loop through each day within the selected range
                 while ($fromDate->lte($toDate)) {
                     // Query the database to count progress records for the specific user and parameter for the current day
-                    $dailyProgressCount = DB::table('workprogress')
+                    $progressCounter = DB::table('workprogress')
                         ->where('userId', $userId)
                         ->whereDate('created_at', '=', $fromDate->format('Y-m-d'));
             
-                    $dailyFollowupCount = DB::table('Followup')
+                    $followupCounter = DB::table('followup')
                         ->where('userId', $userId)
+                        ->whereDate('created_at', '=', $fromDate->format('Y-m-d'));
+
+                    $leadMiningCounter = Lead::where('minedBy', $userId)
                         ->whereDate('created_at', '=', $fromDate->format('Y-m-d'));
 
 
@@ -1656,24 +1649,26 @@ class AnalysisController extends Controller
                     if ($progressParam === 'totalcall') {
                         // Logic for total call
                     } elseif ($progressParam === 'contact') {
-                        $dailyProgressCount->where('callingReport', '5'); 
+                        $progressCounter->where('callingReport', '5'); 
                     } elseif ($progressParam === 'conversation') {
-                        $dailyProgressCount->where('callingReport', '11'); 
+                        $progressCounter->where('callingReport', '11'); 
                     } elseif ($progressParam === 'test') {
-                        $dailyProgressCount->where('progress', 'LIKE', '%Test%'); 
+                        $progressCounter->where('progress', 'LIKE', '%Test%'); 
                     } elseif ($progressParam === 'closing') {
-                        $dailyProgressCount->where('progress', 'LIKE', '%Closing%'); 
+                        $progressCounter->where('progress', 'LIKE', '%Closing%'); 
                     } elseif ($progressParam === 'followup') {
-                        $dailyProgressCount = $dailyFollowupCount; 
+                        $progressCounter = $followupCounter; 
+                    } elseif ($progressParam === 'leadmining') {
+                        $progressCounter = $leadMiningCounter; 
                     }
             
                     // Count the progress records for the current day
-                    $dailyCount = $dailyProgressCount->count();
+                    $progressCount = $progressCounter->count();
             
                     // Add the count to the progressData array along with the formatted date
                     $progressData[] = [
                         'date' => $fromDate->format('d M y'), // Format the date as '12 Sep 23'
-                        'count' => $dailyCount,
+                        'count' => $progressCount,
                     ];
             
                     // Move to the next day
@@ -1685,6 +1680,61 @@ class AnalysisController extends Controller
             }
             
 
+            public function personalAnalysis()
+            {
+                $userType = Session::get('userType');
+
+                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                    $users = User::orderBy('firstName', 'asc')->get();
+
+                    return view('analysis.personalAnalysis', [
+                        'users' => $users,
+                        'fromDate' => '', // Initialize fromDate as empty
+                        'toDate' => '', // Initialize toDate as empty
+                        'totalCall' => '', // Initialize totalCall as empty
+                        'totalTest' => '', // Initialize totalTest as empty
+                    ]);
+                }
+            }
+
+
+
+            public function getPersonalAnalysis(Request $request)
+            {
+                
+                $userId = $request->input('marketer');
+                $fromDate = Carbon::parse($request->input('fromDate'));
+                $toDate = Carbon::parse($request->input('toDate'));
+
+                // Ensure that $fromDate and $toDate are in date format
+                $fromDate->startOfDay();
+                $toDate->endOfDay();
+
+                $totalCall = Workprogress::where('userId', $userId)
+                    ->whereDate('created_at', '=', $fromDate->format('Y-m-d'))
+                    ->count(); // Use count() to get the total count
+
+                $totalTest = Workprogress::where('userId', $userId)
+                    ->where('progress', 'LIKE', '%Test%')
+                    ->whereDate('created_at', '=', $fromDate->format('Y-m-d'))
+                    ->count(); // Use count() to get the total count
+
+
+
+
+
+                    return view('analysis.personalAnalysis', [
+                        'fromDate' => $fromDate->format('Y-m-d'), // Format the date as needed
+                        'toDate' => $toDate->format('Y-m-d'), // Format the date as needed
+                        'totalCall' => $totalCall,
+                        'totalTest' => $totalTest,
+                        // Add other calculated values here
+                    ]);
+
+            }
+
+            
+            
 
 
 
