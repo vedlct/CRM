@@ -1680,61 +1680,6 @@ class AnalysisController extends Controller
             }
             
 
-            public function personalAnalysis()
-            {
-                $userType = Session::get('userType');
-
-                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
-                    $users = User::orderBy('firstName', 'asc')->get();
-
-                    return view('analysis.personalAnalysis', [
-                        'users' => $users,
-                        'fromDate' => '', // Initialize fromDate as empty
-                        'toDate' => '', // Initialize toDate as empty
-                        'totalCall' => '', // Initialize totalCall as empty
-                        'totalTest' => '', // Initialize totalTest as empty
-                    ]);
-                }
-            }
-
-
-
-            public function getPersonalAnalysis(Request $request)
-            {
-                
-                $userId = $request->input('marketer');
-                $fromDate = Carbon::parse($request->input('fromDate'));
-                $toDate = Carbon::parse($request->input('toDate'));
-
-                // Ensure that $fromDate and $toDate are in date format
-                $fromDate->startOfDay();
-                $toDate->endOfDay();
-
-                $totalCall = Workprogress::where('userId', $userId)
-                    ->whereDate('created_at', '=', $fromDate->format('Y-m-d'))
-                    ->count(); // Use count() to get the total count
-
-                $totalTest = Workprogress::where('userId', $userId)
-                    ->where('progress', 'LIKE', '%Test%')
-                    ->whereDate('created_at', '=', $fromDate->format('Y-m-d'))
-                    ->count(); // Use count() to get the total count
-
-
-
-
-
-                    return view('analysis.personalAnalysis', [
-                        'fromDate' => $fromDate->format('Y-m-d'), // Format the date as needed
-                        'toDate' => $toDate->format('Y-m-d'), // Format the date as needed
-                        'totalCall' => $totalCall,
-                        'totalTest' => $totalTest,
-                        // Add other calculated values here
-                    ]);
-
-            }
-
-            
-            
 
 
 

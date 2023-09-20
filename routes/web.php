@@ -319,8 +319,6 @@ Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkSt
 Route::get('/analysis/graph','AnalysisController@graphicalPresentation')->name('analysis.graph');
 Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('analysis.getUserDataPeriod');
 
-Route::get('/analysis/personalAnalysis','AnalysisController@personalAnalysis')->name('analysis.personalAnalysis');
-Route::post('/analysis/personalAnalysis','AnalysisController@getPersonalAnalysis')->name('analysis.getPersonalAnalysis');
 
 
 
