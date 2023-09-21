@@ -1685,6 +1685,15 @@ class AnalysisController extends Controller
 
 
 
+
+
+
+
+
+
+            
+
+
         //THIS FUNCTION BELONGS TO MINING FOLDER. BUT NOT TRANSFERRING DUE TO DEPENDENCIES
             public function googleSearch(Request $request)
             {

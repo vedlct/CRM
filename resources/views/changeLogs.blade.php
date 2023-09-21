@@ -54,6 +54,7 @@ h1 {
             <h5 class="card-title"><span class="badge badge-info">2.08.00</span> - 19 September 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Add User Profile. </li>
+                    <li class="list-group-item">New Feature - Untouched leads - accessed by supervisors. </li>
                 </ul>
             </div>
         </div>

@@ -230,9 +230,12 @@
 					</a>
 
 					<div class="dropdown-menu fade-in">
-					@if($userType == 'SUPERVISOR' || $userType == 'ADMIN' || $userType == 'RA')
+					@if($userType == 'SUPERVISOR' || $userType == 'ADMIN' || $userType == 'MANAGER')
 						<a class="dropdown-item" href="{{route('addLead')}}">
 							<i class="fa fa-plus"></i> All Leads
+						</a>
+						<a class="dropdown-item" href="{{route('unTouchedLead')}}">
+							<i class="fa fa-plus"></i> Untouched Leads
 						</a>
 					@endif
 						<a class="dropdown-item" href="{{route('verifylead')}}">

@@ -457,15 +457,25 @@ class UserManagementController extends Controller
 
     public function targetManagementGet(Request $data){
         $model = UsertargetByMonth::select('usertargetsbymonth.*','users.userId as username')
-        ->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+            ->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+        
         if(!empty($data->month)){
             $model = $model->whereMonth('date', '=', $data->month);
         }
+        
         if(!empty($data->year)){
             $model = $model->whereYear('date', '=', $data->year);
         }
+        
         return (new \Yajra\DataTables\DataTables)->eloquent($model)->orderColumn('targetId', '-targetId $1')->toJson();
     }
+
+
+    public function updateUserTarget(Request $data){
+
+    }
+
+    
 
     public function changePass(Request $r){
 
