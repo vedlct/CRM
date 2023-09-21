@@ -20,9 +20,11 @@
 							<div class="card-body">
 								<h4 class="card-title">Short Analysis</h4>
 								<p>
-									{{$profile->firstName}} has been with the company since {{$profile->created_at}}. His/her designation is @if (isset($profile->designation)){{$profile->designation->designationName}}@endif. S/he attended {{ $workingDays }} days and dialled <span style="font-weight:bold;">{{ $totalCallAchievedYear }}</span> during this time. On average s/he dialled <span style="font-weight:bold;">{{ $avergareDailyCall }}</span> which is 
+									{{$profile->firstName}} has been with the company since {{$profile->created_at}}. His/her designation is @if (isset($profile->designation)){{$profile->designation->designationName}}@endif. S/he attended @if ($workingDays != 0) {{ $workingDays }} @endif days and dialled <span style="font-weight:bold;">{{ $totalCallAchievedYear }}</span> during this time. On average s/he dialled 
+                                    <span style="font-weight:bold;"> 
+                                    @if ($avergareDailyCall != 0) {{ $avergareDailyCall }} </span> 
+                                        which is 
 
-									@if (isset($avergareDailyCall))
 										@if ($avergareDailyCall < 34)
 											<span style="color:red; font-weight:bold;">Poor </span>
 										@elseif ($avergareDailyCall < 44)
@@ -171,41 +173,73 @@
                             </div> 
                         </div>
 
-                            @php
-								// Calculate individual percentages
-								$callPercentage = ($totalCallAchievedYear / $totalCallTargetYear) * 100;
-								$contactPercentage = ($totalContactAchievedYear / $totalContactTargetYear) * 100;
-								$conversationPercentage = ($totalConvoAchievedYear / $totalConvoTargetYear) * 100;
-								$followupPercentage = ($totalFollowupAchievedYear / $totalFollowupTargetYear) * 100;
-								$testPercentage = ($totalTestAchievedYear / $totalTestTargetYear) * 100;
-								$closingPercentage = ($totalClosingAchievedYear / $totalClosingTargetYear) * 100;
-								$leadMinePercentage = ($totalLeadMineAchievedYear / $totalLeadMineTargetYear) * 100;
+                        <?php
+                            if ($totalCallTargetYear != 0) {
+                                $callPercentage = ($totalCallAchievedYear / $totalCallTargetYear) * 100;
+                            } else {
+                                $callPercentage = 0;
+                            }
 
-								// Define the weights
-								$weights = [
-									'Call' => 5,
-									'Contact' => 5,
-									'Conversation' => 20,
-									'Followup' => 5,
-									'Test' => 40,
-									'Closing' => 20,
-									'LeadMine' => 5,
-								];
+                            if ($totalContactTargetYear != 0) {
+                                $contactPercentage = ($totalContactAchievedYear / $totalContactTargetYear) * 100;
+                            } else {
+                                $contactPercentage = 0;
+                            }
 
-								// Calculate the weighted percentage
-                                $weightedPercentage = (
-                                    min(100, $callPercentage) * $weights['Call'] +
-                                    min(100, $contactPercentage) * $weights['Contact'] +
-                                    min(100, $conversationPercentage) * $weights['Conversation'] +
-                                    min(100, $followupPercentage) * $weights['Followup'] +
-                                    min(100, $testPercentage) * $weights['Test'] +
-                                    min(100, $closingPercentage) * $weights['Closing'] +
-                                    min(100, $leadMinePercentage) * $weights['LeadMine']
-                                ) / array_sum($weights); // Normalize to 100%
+                            if ($totalConvoTargetYear != 0) {
+                                $conversationPercentage = ($totalConvoAchievedYear / $totalConvoTargetYear) * 100;
+                            } else {
+                                $conversationPercentage = 0;
+                            }
 
+                            if ($totalFollowupTargetYear != 0) {
+                                $followupPercentage = ($totalFollowupAchievedYear / $totalFollowupTargetYear) * 100;
+                            } else {
+                                $followupPercentage = 0;
+                            }
 
-							@endphp
+                            if ($totalTestTargetYear != 0) {
+                                $testPercentage = ($totalTestAchievedYear / $totalTestTargetYear) * 100;
+                            } else {
+                                $testPercentage = 0;
+                            }
 
+                            if ($totalClosingTargetYear != 0) {
+                                $closingPercentage = ($totalClosingAchievedYear / $totalClosingTargetYear) * 100;
+                            } else {
+                                $closingPercentage = 0;
+                            }
+
+                            if ($totalLeadMineTargetYear != 0) {
+                                $leadMinePercentage = ($totalLeadMineAchievedYear / $totalLeadMineTargetYear) * 100;
+                            } else {
+                                $leadMinePercentage = 0;
+                            }
+								
+
+                            // Define the weights
+                            $weights = [
+                                'Call' => 5,
+                                'Contact' => 5,
+                                'Conversation' => 20,
+                                'Followup' => 5,
+                                'Test' => 40,
+                                'Closing' => 20,
+                                'LeadMine' => 5,
+                            ];
+
+                            // Calculate the weighted percentage
+                            $weightedPercentage = (
+                                min(100, $callPercentage) * $weights['Call'] +
+                                min(100, $contactPercentage) * $weights['Contact'] +
+                                min(100, $conversationPercentage) * $weights['Conversation'] +
+                                min(100, $followupPercentage) * $weights['Followup'] +
+                                min(100, $testPercentage) * $weights['Test'] +
+                                min(100, $closingPercentage) * $weights['Closing'] +
+                                min(100, $leadMinePercentage) * $weights['LeadMine']
+                            ) / array_sum($weights); // Normalize to 100%
+
+                        ?>
 
                         <div class="col-sm-6 col-xl-3">
                             <div class="card">
@@ -324,9 +358,21 @@
                                                 </td>
                                                 <td class="percentage-cell">
                                                     
-
+                                                <?php
+                                                    // Calculate the total percentage based on the given percentages in the table headers
+                                                    $callPercentageQ = ($quarterData['totalCallTarget'] != 0) ? ($quarterData['totalCallAchieved'] / $quarterData['totalCallTarget']) * 100 * 0.05 : 0;
+                                                    $contactPercentageQ = ($quarterData['totalContactTarget'] != 0) ? ($quarterData['totalContactAchieved'] / $quarterData['totalContactTarget']) * 100 * 0.05 : 0;
+                                                    $conversationPercentageQ = ($quarterData['totalConvoTarget'] != 0) ? ($quarterData['totalConvoAchieved'] / $quarterData['totalConvoTarget']) * 100 * 0.20 : 0;
+                                                    $followupPercentageQ = ($quarterData['totalFollowupTarget'] != 0) ? ($quarterData['totalFollowupAchieved'] / $quarterData['totalFollowupTarget']) * 100 * 0.05 : 0;
+                                                    $testPercentageQ = ($quarterData['totalTestTarget'] != 0) ? ($quarterData['totalTestAchieved'] / $quarterData['totalTestTarget']) * 100 * 0.40 : 0;
+                                                    $closingPercentageQ = ($quarterData['totalClosingTarget'] != 0) ? ($quarterData['totalClosingAchieved'] / $quarterData['totalClosingTarget']) * 100 * 0.20 : 0;
+                                                    $leadMinePercentageQ = ($quarterData['totalLeadMineTarget'] != 0) ? ($quarterData['totalLeadMineAchieved'] / $quarterData['totalLeadMineTarget']) * 100 * 0.05 : 0;
                                                     
+                                                    $totalPercentage = $callPercentageQ + $contactPercentageQ + $conversationPercentageQ + $followupPercentageQ + $testPercentageQ + $closingPercentageQ + $leadMinePercentageQ; 
 
+                                                    echo number_format($totalPercentage, 0) . '%';
+                                                ?>
+                                                    
                                                 </td>
                                             </tr>
                                         </tbody>

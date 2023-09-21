@@ -684,8 +684,13 @@ class UserManagementController extends Controller
                 ->where('userId', $user_id)
                 ->count();
 
-
-            $avergareDailyCall = number_format(($totalCallAchievedYear / $workingDays), 0);
+                if ($workingDays != 0) {
+                    $avergareDailyCall = number_format(($totalCallAchievedYear / $workingDays), 0);
+                } else {
+                    $avergareDailyCall = 0;
+                }
+                
+            // $avergareDailyCall = number_format(($totalCallAchievedYear / $workingDays), 0);
 
 
             $totalContactTargetYear = UserTargetByMonth::where('userId',$user_id)
@@ -845,91 +850,6 @@ class UserManagementController extends Controller
             
             
 
-
-            // // Quarter Data
-            // $totalCallTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('targetCall');
-
-
-            // $totalCallAchievedFirstQ = Workprogress::select('progessId')
-            //         ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //         ->where('userId', $user_id)
-            //         ->count();
-
-
-            // $totalContactTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //         ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //         ->sum('targetContact');
-
-            // $totalContactAchievedFirstQ = Workprogress::select('progressId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('callingReport', 5)
-            //     ->where('userId', $user_id)
-            //     ->count();
-
-
-            // $totalConvoTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('conversation');
-
-            // $totalConvoAchievedFirstQ = Workprogress::select('progressId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('callingReport', 11)
-            //     ->where('userId', $user_id)
-            //     ->count();
-
-
-            // $totalFollowupTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('followup');
-
-            // $totalFollowupAchievedFirstQ = Workprogress::select('progressId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('callingReport', 4)
-            //     ->where('userId', $user_id)
-            //     ->count();
-
-
-            // $totalTestTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('targetTest');
-
-            // $totalTestAchievedFirstQ = Workprogress::select('progressId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('userId', $user_id)
-            //     ->where('progress', 'LIKE', '%Test%')
-            //     ->count();
-
-
-            // $totalClosingTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('closelead');
-
-            // $totalClosingAchievedFirstQ = Workprogress::select('progressId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('userId', $user_id)
-            //     ->where('progress', 'LIKE', '%Closing%')
-            //     ->count();
-
-
-            // $totalRevenueTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('targetFile');
-
-            // $totalRevenueAchievedFirstQ = NewFile::whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('userId', $user_id)
-            //     ->sum('fileCount');
-
-
-            // $totalLeadMineTargetFirstQ = UserTargetByMonth::where('userId',$user_id)
-            //     ->whereBetween('date', [$firstQStart, $firstQEnd])
-            //     ->sum('targetLeadmine');
-
-            // $totalLeadMineAchievedFirstQ = Lead::select('leadId')
-            //     ->whereBetween('created_at', [$firstQStart, $firstQEnd])
-            //     ->where('minedBy', $user_id)
-            //     ->count();
 
 
                 return view('users-mgmt.userProfile')
