@@ -97,6 +97,24 @@ class Lead extends Model
         return $leads;
     }
 
+
+    public function showFreshLeads()
+    {
+    
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'contact', 'status')
+            ->Select('leads.leadId', 'leads.website', 'leads.contactNumber', 'leads.contactedUserId', 'leads.categoryId', 'leads.countryId', 'leads.possibilityId','leads.statusId')
+            ->where('leadAssignStatus', 0)
+            ->where('statusId', 2)
+            ->where('contactedUserId', Null)
+            ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+            ->whereNull('workprogress.leadId')
+            ->orderBy('leads.leadId', 'DESC');
+    
+        return $leads;
+    }
+
+
+
     public function employees()
     {
         return $this->hasMany(Employees::class, 'leadId', 'leadId');

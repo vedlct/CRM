@@ -3,10 +3,10 @@
 @section('content')
     <div class="box-body">
         <div class="card" style="padding: 2px;">
-            <div class="card-header">
-            <h3 class="font-weight-bold text-white">Users Target</h3>
-            </div>
+            <!-- <div class="card-header" style="background-color: #6F8FAF;"> -->
+            <!-- </div> -->
             <div class="card-body">
+                <h3 class="font-weight-bold" align="center">Monthly Target of The Marketera</h3>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -57,6 +57,96 @@
             </div>
         </div>
     </div>
+
+
+<!-- Edit Modal -->
+<div class="modal" id="edit_target_modal" style="">
+    <div class="modal-dialog" style="max-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" name="modal-title">Edit Target</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{{ route('updateUserTarget', ['id' => 1]) }}">
+                    {{ csrf_field() }}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <input type="hidden" name="targetId">
+                            <label><b>User ID:</b></label>
+                            <input type="text" class="form-control" name="userId" value="">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Date:</b></label>
+                            <input type="text" class="form-control" name="date" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Calls:</b></label>
+                            <input type="text" class="form-control" name="targetCall" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Contacts:</b></label>
+                            <input type="text" class="form-control" name="targetContact" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for High Possibility Actions:</b></label>
+                            <input type="text" class="form-control" name="targetHighPossibility" value="">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Target for Lead Mining:</b></label>
+                            <input type="text" class="form-control" name="targetLeadmine" value="">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Target for USA-related Actions:</b></label>
+                            <input type="text" class="form-control" name="targetUsa" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Testing:</b></label>
+                            <input type="text" class="form-control" name="targetTest" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for File-related Actions:</b></label>
+                            <input type="text" class="form-control" name="targetFile" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Conversations:</b></label>
+                            <input type="text" class="form-control" name="conversation" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Closed Leads:</b></label>
+                            <input type="text" class="form-control" name="closelead" value="">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label><b>Target for Follow-up Actions:</b></label>
+                            <input type="text" class="form-control" name="followup" value="">
+                        </div>
+
+                        <div class="col-md-6">
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 @endsection
 
 @section('foot-js')
@@ -97,6 +187,7 @@
                     },
                 },
                 columns: [
+                    { title:'Target Id', data: 'targetId', name: 'users.targetId',"orderable": false, "searchable":true },
                     { title:'User Name', data: 'username', name: 'users.userId',"orderable": false, "searchable":true },
                     { title:'Conversation', data: 'conversation', name: 'conversation', "orderable": true, "searchable":true },
                     { title:'Total Call', data: 'targetCall', name: 'targetCall', "orderable": true, "searchable":true },
@@ -104,7 +195,18 @@
                     { title:'Test', data: 'targetTest', name: 'targetTest', "orderable": true, "searchable":true },
                     { title:'Deals CLosed', data: 'closelead', name: 'closelead', "orderable": true, "searchable":true },
                     { title:'Lead Mine', data: 'targetLeadmine', name: 'targetLeadmine', "orderable": true, "searchable":true },
-                    { title:'File', data: 'targetFile', name: 'targetFile',"orderable": true, "searchable":true }
+                    { title:'File', data: 'targetFile', name: 'targetFile',"orderable": true, "searchable":true },
+                    // { title: 'Actions', data: 'action', name: 'action', orderable: false, searchable: false }
+                    {
+                        title: 'Actions',
+                        data: 'targetId',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, full, meta) {
+                            return '<button class="btn btn-primary edit-button" data-id="' + data + '">Edit</button>';
+                        }
+                    }
                 ]
             });
         });
@@ -126,6 +228,13 @@
                 $('#year').css("background-color", "#FFF").css('color', 'black');
             }
         });
+
+
+        $('#edit_target_modal').on('show.bs.modal', function(e) {
+            var targetId = $(this).data('id');
+        });
+
+
 
     </script>
 

@@ -2467,43 +2467,53 @@ class LeadController extends Controller
 
 
 
+        public function unTouchedLead (){
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER'|| $User_Type == 'ADMIN'){
+    
+                $categories=Category::where('type',1)
+                    ->get();
+                $country=Country::get();
+                $users = User::get();
+        
+                return view('layouts.lead.unTouchedLead')
+                    ->with('categories',$categories)
+                    ->with('country',$country)
+                    ->with('users',$users)
+                ;
+            }
+
+        }                        
+        
+        public function getUnTouchedLead (Request $request){
+
+            $leads=(new Lead())->showFreshLeads();
 
 
-                        public function forupdate(){
+            return DataTables::eloquent($leads)
+                ->addColumn('check', function ($lead) {
+                    return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+                })->addColumn('action', function ($lead) {
+                        return '<a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                        data-lead-id="'.$lead->leadId.'"
+                                        data-lead-name="'.$lead->companyName.'"
+                                    ><i class="fa fa-comments"></i></a>
+                                    <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                    data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                    
+                                    })
+                ->rawColumns(['action','check'])
+                ->make(true);
+
+        }
 
 
-                            $filePath = storage_path('app/Last_Contacted_19_6_23.csv');
-                            $file = fopen($filePath, 'r');
-                
-                            $header = fgetcsv($file);
-                
-                            $leads = [];
-                            while ($row = fgetcsv($file)) {
-                                $leads[] = array_combine($header, $row);
-                            }
-                            foreach ($leads as $lead){
-                                $leadid = $lead['Lead Id'];
-                                $leadsTable = Lead::findOrfail($leadid);
-                                $leadsTable->statusId = 2;
-                                $leadsTable->contactedUserId = NULL;
-                                $leadsTable->leadAssignStatus = 0;
-                                $leadsTable->save();
-                
-                
-                                $leadassigTable = Leadassigned::where('leadId',$leadid )->where('leaveDate', Null)->first();
-                                if(!empty($leadassigTable)) {
-                                    $leadassigTable->workstatus = 1;
-                                    $leadassigTable->leaveDate = "2023-06-19";
-                                    $leadassigTable->save();
-                                }
-                            }
-                
-                            fclose($file);
-                            return ;
-                
-                        }
-                
+
+
+
+
+
 
 
 }
-
