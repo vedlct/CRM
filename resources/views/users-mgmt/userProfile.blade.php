@@ -2,411 +2,400 @@
 
 
 @section('content')
-    <!-- ============================================================== -->
-    <!-- Start Page Content here -->
-    <!-- ============================================================== -->
     
-    @php($user_Type = Session::get('userType'))
-
-
     <div class="content-page">
         <div class="content">
-            <!-- Start Content-->
             <div class="container-fluid">
-                <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box">
-                            <!-- <h4 class="page-title">User details</h4> -->
+                            <h4 class="page-title" align="center" style="font-weight: bold; padding:50px;">{{$profile->firstName}} {{$profile->lastName}}</h4>
                         </div>
                     </div>
                 </div>
-                <!-- end page title -->
 
-                <!-- table start -->
                 <div class="row">
-                    <!-- user details -->
-                    <div class="col-sm-4 col-xl-2">
-                        <div class="card">
-                            <div class="card-body">
+					<div class="col-sm-12 col-xl-4">
+						<div class="card">
+							<div class="card-body">
+								<h4 class="card-title">Short Analysis</h4>
+								<p>
+									{{$profile->firstName}} has been with the company since {{$profile->created_at}}. His/her designation is @if (isset($profile->designation)){{$profile->designation->designationName}}@endif. S/he attended @if ($workingDays != 0) {{ $workingDays }} @endif days in current year and dialled <span style="font-weight:bold;">{{ $totalCallAchievedYear }}</span> during this time. On average s/he dialled 
+                                    <span style="font-weight:bold;"> 
+                                    @if ($avergareDailyCall != 0) {{ $avergareDailyCall }} </span> 
+                                        which is 
 
-
-                                <p class="text-center">
-                                    @if ($user->picture)
-                                        <img src="{{ asset('public/img/users/' . $user->picture) }}" alt="User Picture" class="img-fluid">
-                                    @else
-                                        <img src="{{ asset('public/img/users/default.jpg') }}" alt="User Picture" class="img-fluid">
-                                    @endif
+										@if ($avergareDailyCall < 34)
+											<span style="color:red; font-weight:bold;">Poor </span>
+										@elseif ($avergareDailyCall < 44)
+											<span style="color:orange; font-weight:bold;">Average </span>
+										@elseif ($avergareDailyCall < 54)
+											<span style="color:green; font-weight:bold;">Good </span>
+										@else
+											<span style="color:purple; font-weight:bold;">Extraordinary </span>
+										@endif
+									@else
+										'N/A'
+									@endif
                                 </p>
-                                <p class="">Status: @if ($user->active == 1) <span style="color: green;">Active</span> @else <span style="color: red;">Active</span>Inactive @endif</p>
-                                <p class="mb-1">Username: {{$user->userId}}</p>
-                                <p class="mb-1">First Name: {{$user->firstName}}</p>
-                                <p class="mb-1">Last Name: {{$user->lastName}}</p>
-                                <p class="mb-1">Designation: @if ($user->designation) {{$user->designation->designationName}} @endif</p>
-                                <p class="mb-1">Phone: {{$user->phoneNumber}}</p>
-                                <p class="mb-1">Gender: @if ($user->gender == "M") Male @else Female @endif</p>
-                                <p class="mb-1">DOB: {{ Carbon\Carbon::parse($user->dob)->format('F d, Y') }}</p>
-                                <p class="mb-1">Email: {{$user->userEmail}}</p><br>
-
-                                <a href="#edit_user_modal" data-toggle="modal" class="btn btn-info"
-                                data-id="{{$user->id}}"
-                                       data-user-id="{{$user->userId}}"
-                                       data-type-id="{{$user->typeId}}"
-                                       data-rf-id="{{$user->rfID}}"
-                                       data-user-email="{{$user->userEmail}}"
-                                       data-password="{{$user->password}}"
-                                       data-first-name="{{$user->firstName}}"
-                                       data-last-name="{{$user->lastName}}"
-                                       data-designation-id="{{$user->designationId}}"
-                                       data-phone-number="{{$user->phoneNumber}}"
-                                       data-dob="{{$user->dob}}"
-                                       data-gender="{{$user->gender}}"
-                                       data-active="{{$user->active}}"
-                                       data-whitelist="{{$user->whitelist}}">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>  Edit Profile</a>
-
-
+								<p style="font-style: italic;">
+                                    If anyone makes less than 35 calls per day, it's poor. If it's less than 45, we can call it average. If it's in between 45 to 55, it's a good number. More than 55 per day? It's extraordinary.
+                                </p> 
+								<p>
+									{{$profile->firstName}} has achieved <span style="font-weight:bold;">USD {{$totalRevenueAchievedYear}}</span> in this year. As his/her target was <span style="font-weight:bold;">USD {{ $totalRevenueTargetYear }}</span>, his/her achievement is <span style="font-weight:bold;">
+									@if ($totalRevenueAchievedYear != 0)
+										{{ number_format(($totalRevenueAchievedYear  / $totalRevenueTargetYear) * 100, 0) }} %
+									@else
+										N/A
+									@endif </span>
+								</p>
                             </div>
-                        </div>
+                        </div> 
                     </div>
 
-                    <!-- user report and others -->
-                    <div class="col-sm-8 col-xl-10">
-                        <div class="card">
-                            <div class="card-body">
-                                <ul class="nav nav-tabs border-tab mb-0" id="top-tab" role="tablist">
-                                    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#report" id="report-tab" role="tab" aria-selected="false">Reports</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#comment" id="comment-tab"  role="tab" aria-selected="false">Comments</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#ippList" id="ippList-tab" role="tab" aria-selected="true">IPP List</a>
-                                        <div class="material-border"></div>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="top-tabContent">
-                                    <div class="tab-pane fade active show" id="report" role="tabpanel">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-success rounded">
-                                                                    <i class="fe-phone avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">1</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Total Call
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-blue rounded">
-                                                                    <i class="fe-users avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">2/4</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">Contact</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-danger rounded">
-                                                                    <i class="fe-phone avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">6</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Lead Mined
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-warning rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Test
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-primary rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Followup
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-danger rounded">
-                                                                    <i class="fe-delete avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Test
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-sm-6 col-lg-3">
-                                                <div class="card bg-light">
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <div class="col-6">
-                                                                <div class="avatar-md bg-primary rounded">
-                                                                    <i class="fe-user avatar-title font-22 text-white"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <div class="text-end">
-                                                                    <h3 class="text-dark my-1">
-                                                                        <span data-plugin="counterup">3</span>
-                                                                    </h3>
-                                                                    <p class="text-muted mb-0 text-truncate">
-                                                                        Client
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- end card-->
-                                            </div>
-                                            <div class="col-12">
-                                                <h4 class="header-title mb-3">December, 2022</h4>
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead class="table-primary">
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Total call</th>
-                                                            <th>Contact</th>
-                                                            <th>Lead</th>
-                                                            <th>Followup</th>
-                                                            <th>Test</th>
-                                                        </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        <tr>
-                                                            <th>Target</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Achievement</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>%</th>
-                                                            <td>56%</td>
-                                                            <td>33%</td>
-                                                            <td>86%</td>
-                                                            <td>42%</td>
-                                                            <td>89%</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <h4 class="header-title mb-3">January, 2022</h4>
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead class="table-primary">
-                                                        <tr>
-                                                            <th></th>
-                                                            <th>Total call</th>
-                                                            <th>Contact</th>
-                                                            <th>Lead</th>
-                                                            <th>Followup</th>
-                                                            <th>Test</th>
-                                                        </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        <tr>
-                                                            <th>Target</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Achievement</th>
-                                                            <td>434</td>
-                                                            <td>77</td>
-                                                            <td>566</td>
-                                                            <td>34</td>
-                                                            <td>43</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>%</th>
-                                                            <td>56%</td>
-                                                            <td>33%</td>
-                                                            <td>86%</td>
-                                                            <td>42%</td>
-                                                            <td>89%</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- notes tab -->
-                                    <div class="tab-pane fade" id="comment" role="tabpanel">
-                                        <div class="alert alert-primary p-2">
-                                            <h4>By Riz</h4>
-                                            <p class="text-dark mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1">6 July 2022 3:50 PM | Tech cloud ltd. | Calling report</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-primary p-2">
-                                            <h4>By Riz</h4>
-                                            <p class="text-dark mb-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                                            <div class="media mb-0">
-                                                <div class="media-body">
-                                                    <p class="mb-1">6 July 2022 3:50 PM | Tech cloud ltd. | Calling report</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <!-- contacts tab -->
-                                    <div class="tab-pane fade" id="ippList" role="tabpanel">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead class="table-primary">
-                                                <tr>
-                                                    <th>Company</th>
-                                                    <th>Category</th>
-                                                    <th>Country</th>
-                                                    <th>Last update</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                                </thead>
-
-                                                <tbody>
-                                                <tr>
-                                                    <td>Foodpeon</td>
-                                                    <td>Food delivery</td>
-                                                    <td>BD</td>
-                                                    <td>1 Dec 2022</td>
-                                                    <td><a href="#"><i class="fa fa-eye"></i></a></td>
-                                                </tr>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+					<div class="col-sm-12 col-xl-8">
+						<div class="row">
+							<div class="col-sm-6 col-xl-3">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">Total Call in this year</h4>
+										<p>Target:  {{ $totalCallTargetYear }}</p>
+										<p>Achievement: {{ $totalCallAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalCallTargetYear != 0)
+                                            {{ number_format(($totalCallAchievedYear / $totalCallTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                        </p>
+									</div>
+								</div> 
+							</div>
+							<div class="col-sm-6 col-xl-3">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">Total Contact in this year</h4>
+										<p>Target:  {{ $totalContactTargetYear }}</p>
+										<p>Achievement: {{ $totalContactAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalContactTargetYear != 0)
+                                            {{ number_format(($totalContactAchievedYear / $totalContactTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                        </p>
+									</div>
+								</div> 
+							</div>
+							<div class="col-sm-6 col-xl-3">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">Total Conversation in this year</h4>
+										<p>Target:  {{ $totalConvoTargetYear }}</p>
+										<p>Achievement: {{ $totalConvoAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalConvoTargetYear != 0)
+                                            {{ number_format(($totalConvoAchievedYear / $totalConvoTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                        </p>
+									</div>
+								</div> 
+							</div>
+							<div class="col-sm-6 col-xl-3">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">Total Followup in this year</h4>
+										<p>Target:  {{ $totalFollowupTargetYear }}</p>
+										<p>Achievement: {{ $totalFollowupAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalFollowupTargetYear != 0)
+                                            {{ number_format(($totalFollowupAchievedYear / $totalFollowupTargetYear ) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                        </p>
+									</div>
+								</div> 
+							</div>
+						</div>    
+                    				
+						<div class="row">
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Total Test in this year</h4>
+                                    <p>Target:  {{ $totalTestTargetYear }}</p>
+										<p>Achievement: {{ $totalTestAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalTestTargetYear != 0)
+                                            {{ number_format(($totalTestAchievedYear / $totalTestTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                    </p>
                                 </div>
+                            </div> 
+                        </div>
 
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Total Closing in this year</h4>
+                                    <p>Target:  {{ $totalClosingTargetYear }}</p>
+										<p>Achievement: {{ $totalClosingAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalClosingTargetYear != 0)
+                                            {{ number_format(($totalClosingAchievedYear / $totalClosingTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                    </p>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Total Lead Mine in this year</h4>
+                                    <p>Target:  {{ $totalLeadMineTargetYear }}</p>
+										<p>Achievement: {{ $totalLeadMineAchievedYear }}</p>
+										<p>Percentage: 
+                                        @if ($totalLeadMineTargetYear != 0)
+                                            {{ number_format(($totalLeadMineAchievedYear / $totalLeadMineTargetYear) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                    </p>
+                                </div>
+                            </div> 
+                        </div>
+
+                        <?php
+                            if ($totalCallTargetYear != 0) {
+                                $callPercentage = ($totalCallAchievedYear / $totalCallTargetYear) * 100;
+                            } else {
+                                $callPercentage = 0;
+                            }
+
+                            if ($totalContactTargetYear != 0) {
+                                $contactPercentage = ($totalContactAchievedYear / $totalContactTargetYear) * 100;
+                            } else {
+                                $contactPercentage = 0;
+                            }
+
+                            if ($totalConvoTargetYear != 0) {
+                                $conversationPercentage = ($totalConvoAchievedYear / $totalConvoTargetYear) * 100;
+                            } else {
+                                $conversationPercentage = 0;
+                            }
+
+                            if ($totalFollowupTargetYear != 0) {
+                                $followupPercentage = ($totalFollowupAchievedYear / $totalFollowupTargetYear) * 100;
+                            } else {
+                                $followupPercentage = 0;
+                            }
+
+                            if ($totalTestTargetYear != 0) {
+                                $testPercentage = ($totalTestAchievedYear / $totalTestTargetYear) * 100;
+                            } else {
+                                $testPercentage = 0;
+                            }
+
+                            if ($totalClosingTargetYear != 0) {
+                                $closingPercentage = ($totalClosingAchievedYear / $totalClosingTargetYear) * 100;
+                            } else {
+                                $closingPercentage = 0;
+                            }
+
+                            if ($totalLeadMineTargetYear != 0) {
+                                $leadMinePercentage = ($totalLeadMineAchievedYear / $totalLeadMineTargetYear) * 100;
+                            } else {
+                                $leadMinePercentage = 0;
+                            }
+								
+
+                            // Define the weights
+                            $weights = [
+                                'Call' => 5,
+                                'Contact' => 5,
+                                'Conversation' => 20,
+                                'Followup' => 5,
+                                'Test' => 40,
+                                'Closing' => 20,
+                                'LeadMine' => 5,
+                            ];
+
+                            // Calculate the weighted percentage
+                            $weightedPercentage = (
+                                min(100, $callPercentage) * $weights['Call'] +
+                                min(100, $contactPercentage) * $weights['Contact'] +
+                                min(100, $conversationPercentage) * $weights['Conversation'] +
+                                min(100, $followupPercentage) * $weights['Followup'] +
+                                min(100, $testPercentage) * $weights['Test'] +
+                                min(100, $closingPercentage) * $weights['Closing'] +
+                                min(100, $leadMinePercentage) * $weights['LeadMine']
+                            ) / array_sum($weights); // Normalize to 100%
+
+                        ?>
+
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Achievement in Percentage</h4>
+                                    <h3> 
+                                        @if ($weightedPercentage != 0)
+                                            {{ number_format($weightedPercentage, 2) }}%
+                                        @endif
+                                    </h3>
+                                    <p>This is based on marketer's target and achievement of current year.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- end col -->
-                </div>
-                <!-- end table -->
-            </div>
-            <!-- container -->
-        </div>
-        <!-- content -->
+
+				</div>    
+			</div>
+
+
+            <div class="row">
+			    <div class="col-sm-12 col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Quarterly Achievement</h4>
+
+                            <div class="table-responsive">
+                                @foreach ($quarterlyData as $quarterData)
+                                    <table class="table table-bordered">
+                                        <thead class="table-primary">
+                                            
+                                            <tr>
+                                                <th style="background-color:#0000FF; color: white;">{{ $quarterData['quarterName'] }}</th>
+                                                <th>Total Call (5%)</th>
+                                                <th>Contact (5%)</th>
+                                                <th>Conversation (20%)</th>
+                                                <th>Followup (5%)</th>
+                                                <th>Test (40%)</th>
+                                                <th>Closing (20%)</th>
+                                                <th>Lead Mine (5%)</th>
+                                                <th>Total (100%)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>Target</th>
+                                                <td>{{ $quarterData['totalCallTarget'] }}</td>
+                                                <td>{{ $quarterData['totalContactTarget'] }}</td>
+                                                <td>{{ $quarterData['totalConvoTarget'] }}</td>
+                                                <td>{{ $quarterData['totalFollowupTarget'] }}</td>
+                                                <td>{{ $quarterData['totalTestTarget'] }}</td>
+                                                <td>{{ $quarterData['totalClosingTarget'] }}</td>
+                                                <td>{{ $quarterData['totalLeadMineTarget'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Achievement</th>
+                                                <td>{{ $quarterData['totalCallAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalContactAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalConvoAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalFollowupAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalTestAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalClosingAchieved'] ?? '' }}</td>
+                                                <td>{{ $quarterData['totalLeadMineAchieved'] ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>%</th>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalCallTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalCallAchieved'] / $quarterData['totalCallTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalContactTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalContactAchieved'] / $quarterData['totalContactTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalConvoTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalConvoAchieved'] / $quarterData['totalConvoTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalFollowupTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalFollowupAchieved'] / $quarterData['totalFollowupTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalTestTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalTestAchieved'] / $quarterData['totalTestTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalClosingTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalClosingAchieved'] / $quarterData['totalClosingTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                <td class="percentage-cell">
+                                                    @if ($quarterData['totalLeadMineTarget'] != 0)
+                                                        {{ number_format(($quarterData['totalLeadMineAchieved'] / $quarterData['totalLeadMineTarget']) * 100, 0) }}%
+                                                    @else
+                                                        0%
+                                                    @endif
+                                                </td>
+                                                
+                                                <td class="percentage-cell" style="text-align: center; font-weight: 500;">
+                                                    
+                                                <?php
+                                                    // Calculate the total percentage based on the given percentages in the table headers
+                                                    $categories = [
+                                                        'Call' => ['totalCallAchieved', 'totalCallTarget', 0.05],
+                                                        'Contact' => ['totalContactAchieved', 'totalContactTarget', 0.05],
+                                                        'Conversation' => ['totalConvoAchieved', 'totalConvoTarget', 0.20],
+                                                        'Followup' => ['totalFollowupAchieved', 'totalFollowupTarget', 0.05],
+                                                        'Test' => ['totalTestAchieved', 'totalTestTarget', 0.40],
+                                                        'Closing' => ['totalClosingAchieved', 'totalClosingTarget', 0.20],
+                                                        'LeadMine' => ['totalLeadMineAchieved', 'totalLeadMineTarget', 0.05],
+                                                    ];
+                                                    
+                                                    $totalPercentage = 0;
+                                                    
+                                                    foreach ($categories as $category => $data) {
+                                                        list($achieved, $target, $weight) = $data;
+                                                        $percentage = ($quarterData[$target] != 0) ? ($quarterData[$achieved] / $quarterData[$target]) * 100 : 0;
+                                                        $percentage = min($percentage, 100); // Cap the percentage at 100%
+                                                        $totalPercentage += $percentage * $weight;
+                                                    }
+                                                    
+                                                    echo number_format($totalPercentage, 0) . '%';
+                                                    
+                                                ?>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                @endforeach
+                                </div>
+							</div> 
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
 
 
 
@@ -416,239 +405,6 @@
         
 
             
-            <!-- Edit Modal -->
-            <div class="modal" id="edit_user_modal" >
-                <div class="modal-dialog" style="max-width: 60%;">
-                    <div class="modal-content">
-
-                        <!-- Modal Header -->
-                        <div class="modal-header">
-                            <h4 class="modal-title">Update User's Info</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-
-                        <!-- Modal body -->
-                        <div class="modal-body">
-
-                            <form class="form-horizontal" role="form" method="POST" action="{{ route('user-management.update', ['id' => 1]) }}" enctype="multipart/form-data">
-                                <input type="hidden" name="_method" value="PUT">
-                                {{ csrf_field() }}
-                                <input id="id" type="hidden" class="form-control" name="id"  >
-                                <input id="typeId" type="hidden" class="form-control" name="typeId"  >
-                                <input id="userId" type="hidden" class="form-control" name="userId"  >
-                                <input id="rfID" type="hidden" class="form-control" name="rfID"  >
-                                <input id="active" type="hidden" class="form-control" name="active"  >
-                                <input id="whitelist" type="hidden" class="form-control" name="whitelist"  >
-
-                                <div class="row">
-<!-- 
-                                <div class="form-group col-md-4">
-                                        <label for="typeId">User Type:</label>
-                                        <select id="typeId"  name="typeId" class="form-control form-control-warning">
-
-                                            @foreach ($userTypes as $userType)
-                                                <option value="{{$userType->typeId}}">{{$userType->typeName}}</option>
-                                            @endforeach
-                                        </select>
-
-                                        @if ($errors->has('typeId'))
-                                            <span class="help-block">
-				                				<strong>{{ $errors->first('typeId') }}</strong>
-                							</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="userId">User Id:</label>
-                                        <input id="userId" type="text" class="form-control" name="userId">
-                                        @if ($errors->has('userId'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('userId') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="rfID">RF Id:</label>
-                                        <input id="rfID" type="number" class="form-control" name="rfID">
-
-                                        @if ($errors->has('rfID'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('rfID') }}</strong>
-										</span>
-                                        @endif
-                                    </div> -->
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="firstName">First Name:</label>
-
-                                        <input id="firstName" type="text" class="form-control" name="firstName" required>
-
-                                        @if ($errors->has('firstName'))
-                                            <span class="help-block">
-												<strong>{{ $errors->first('firstName') }}</strong>
-											</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="lastName">Last Name:</label>
-                                        <input id="lastName" type="text" class="form-control" name="lastName" required>
-
-                                        @if ($errors->has('lastName'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('lastName') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="designationId">Designation:</label>
-                                        <select id="designationId" name="designationId" class="form-control form-control-warning">
-                                            <option value="">Select Designation</option>
-                                            <option value="105" {{ old('designationId') == 105 ? 'selected' : '' }}>Managing Director</option>
-                                            <option value="142" {{ old('designationId') == 142 ? 'selected' : '' }}>Senior Manager</option>
-                                            <option value="98" {{ old('designationId') == 98 ? 'selected' : '' }}>HR Manager</option>
-                                            <option value="104" {{ old('designationId') == 105 ? 'selected' : '' }}>Manager</option>
-                                            <option value="18" {{ old('designationId') == 142 ? 'selected' : '' }}>Deputy Manager</option>
-                                            <option value="2" {{ old('designationId') == 98 ? 'selected' : '' }}>Assistant Manager</option>
-                                            <option value="141" {{ old('designationId') == 105 ? 'selected' : '' }}>Senior Executive</option>
-                                            <option value="43" {{ old('designationId') == 142 ? 'selected' : '' }}>Executive</option>
-                                            <option value="103" {{ old('designationId') == 98 ? 'selected' : '' }}>Junior Executive</option>
-                                            <option value="153" {{ old('designationId') == 105 ? 'selected' : '' }}>Trainee Executive</option>
-                                            <option value="100" {{ old('designationId') == 142 ? 'selected' : '' }}>Intern</option>
-                                        </select>
-                                        @if ($errors->has('designationId'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('designationId') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-
-
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="userEmail">Email:</label>
-                                        <input id="userEmail" type="email" class="form-control" name="userEmail" required>
-
-                                        @if ($errors->has('userEmail'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('userEmail') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="phoneNumber">Phone Number:</label>
-                                        <input id="phoneNumber" type="text" class="form-control" name="phoneNumber">
-                                        @if ($errors->has('phoneNumber'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('phoneNumber') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="dob">Date Of Birth:</label>
-                                        <input id="dob" type="text" class="form-control" name="dob">
-                                        @if ($errors->has('dob'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('dob') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="form-group col-md-4">
-                                        <label for="gender">Gender:</label>
-                                        <select id="gender" name="gender" class="form-control form-control-warning">
-
-                                            <option value="M">Male</option>
-                                            <option value="F">Female</option>
-
-                                        </select>
-                                        @if ($errors->has('gender'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('gender') }}</strong>
-										</span>
-                                        @endif
-
-                                    </div>
-
-                                    <div class="form-group col-md-8">
-                                        <label for="picture">Picture:</label>
-                                        <input id="picture" type="file" class="form-control" name="picture">
-                                        @if ($errors->has('picture'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('picture') }}</strong>
-										</span>
-                                        @endif
-
-                                    </div>
-
-
-                                    <!-- <div class="form-group col-md-4">
-                                        <label for="active">Status:</label>
-
-                                        <select id="active" name="active" class="form-control form-control-warning">
-
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group col-md-4">
-                                        <label for="active">Whitelist:</label>
-
-                                        <select id="whitelist" name="whitelist" class="form-control form-control-warning">
-
-                                            <option value="0">Black</option>
-                                            <option value="1">white</option>
-                                        </select>
-
-                                    </div> -->
-
-                                    <div class="form-group col-md-6">
-                                        <label for="password">Password (min 6 characters):</label>
-                                        <input id="password" type="password" class="form-control" name="password">
-                                        @if ($errors->has('password'))
-                                            <span class="help-block">
-											<strong>{{ $errors->first('password') }}</strong>
-										</span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group col-md-6">
-                                        <label for="password-confirm">Repeat Password:</label>
-                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
-                                    </div>
-
-
-
-                                    <div class="form-group col-md-4">
-                                        <button type="submit" class="btn btn-success">
-                                            Update
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </form>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
 
 
@@ -670,58 +426,11 @@
 
         
 
-        $(function() {
-            $('#dob').datepicker({
-                dateFormat: 'yy-mm-dd', // Format the date as 'yyyy-mm-dd'
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "-60:+0" 
-            });
-        });
+
+  
 
 
-        //for Edit modal
-
-        $('#edit_user_modal').on('show.bs.modal', function(e) {
-
-            //get data-id attribute of the clicked element
-            var id = $(e.relatedTarget).data('id');
-            var userId = $(e.relatedTarget).data('user-id');
-            var typeId = $(e.relatedTarget).data('type-id');
-            var rfID = $(e.relatedTarget).data('rf-id');
-            var userEmail = $(e.relatedTarget).data('user-email');
-            //var password = $(e.relatedTarget).data('password');
-            var firstName = $(e.relatedTarget).data('first-name');
-            var lastName = $(e.relatedTarget).data('last-name');
-            var phoneNumber = $(e.relatedTarget).data('phone-number');
-            var dob = $(e.relatedTarget).data('dob');
-            var gender = $(e.relatedTarget).data('gender');
-            var active = $(e.relatedTarget).data('active');
-            var whitelist = $(e.relatedTarget).data('whitelist');
-            var designationId = $(e.relatedTarget).data('designation-id');
-
-            //alert(userId);
-            //populate the textbox
-            $(e.currentTarget).find('#id').val(id);
-            $(e.currentTarget).find('#userId').val(userId);
-            $(e.currentTarget).find('#typeId').val(typeId);
-            $(e.currentTarget).find('#rfID').val(rfID);
-            $(e.currentTarget).find('#userEmail').val(userEmail);
-            //$(e.currentTarget).find('#password').val(password);
-            $(e.currentTarget).find('#firstName').val(firstName);
-            $(e.currentTarget).find('#lastName').val(lastName);
-            $(e.currentTarget).find('#phoneNumber').val(phoneNumber);
-            $(e.currentTarget).find('#dob').val(dob);
-            $(e.currentTarget).find('#gender').val(gender);
-            $(e.currentTarget).find('#active').val(active);
-            $(e.currentTarget).find('#whitelist').val(whitelist);
-            $(e.currentTarget).find('#designationId').val(designationId);
-
-        });
-
-
-
-</script>
+	</script>
 
 
 @endsection

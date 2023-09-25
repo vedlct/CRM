@@ -457,15 +457,69 @@ class UserManagementController extends Controller
 
     public function targetManagementGet(Request $data){
         $model = UsertargetByMonth::select('usertargetsbymonth.*','users.userId as username')
-        ->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+            ->leftJoin('users', 'users.id', '=', 'usertargetsbymonth.userId');
+        
         if(!empty($data->month)){
             $model = $model->whereMonth('date', '=', $data->month);
         }
+        
         if(!empty($data->year)){
             $model = $model->whereYear('date', '=', $data->year);
         }
+        
         return (new \Yajra\DataTables\DataTables)->eloquent($model)->orderColumn('targetId', '-targetId $1')->toJson();
     }
+
+
+    public function updateUserTarget(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'targetCall' => 'required|numeric',
+            'targetContact' => 'required|numeric',
+            'targetHighPossibility' => 'required|numeric',
+            'targetLeadmine' => 'required|numeric',
+            'targetTest' => 'required|numeric',
+            'targetFile' => 'required|numeric',
+            'conversation' => 'required|numeric',
+            'closelead' => 'required|numeric',
+            'followup' => 'required|numeric',
+        ]);
+    
+        // Retrieve the target ID from the request
+        $targetId = $request->input('targetId');
+    
+        // Retrieve the updated target data from the request
+        $targetCall = $request->input('targetCall');
+        $targetContact = $request->input('targetContact');
+        $conversation = $request->input('conversation');
+        $followup = $request->input('followup');
+        $targetTest = $request->input('targetTest');
+        $targetFile = $request->input('targetFile');
+        $closelead = $request->input('closelead');
+        $targetLeadmine = $request->input('targetLeadmine');
+        $targetHighPossibility = $request->input('targetHighPossibility');
+    
+        // Update the userTarget in the database
+        $userTarget = UsertargetByMonth::findOrFail($targetId);
+        $userTarget->targetCall = $targetCall;
+        $userTarget->targetContact = $targetContact;
+        $userTarget->conversation = $conversation;
+        $userTarget->followup = $followup;
+        $userTarget->targetTest = $targetTest;
+        $userTarget->targetFile = $targetFile;
+        $userTarget->closelead = $closelead;
+        $userTarget->targetLeadmine = $targetLeadmine;
+        $userTarget->targetHighPossibility = $targetHighPossibility;
+        $userTarget->save();
+    
+        Session::flash('success', 'User target updated successfully');
+        return back();
+    }
+    
+
+    
+
 
     public function changePass(Request $r){
 
@@ -610,6 +664,295 @@ class UserManagementController extends Controller
             ->with('totalRevenuePreviousMonth', $totalRevenuePreviousMonth)
             ;
     }
+
+
+
+
+
+
+        public function userProfile(Request $request)
+    {
+        $user_id = $request->id;
+        $userType = Session::get('userType');
+        $fromDay = Carbon::now()->startOfYear();
+        $tillToday = Carbon::today()->toDateString();
+
+        $currentYear = date('Y'); // Get the current year
+
+        // First Quarter
+        $firstQStart = Carbon::createFromDate($currentYear, 1, 1)->toDateString();
+        $firstQEnd = Carbon::createFromDate($currentYear, 3, 31)->toDateString();
+
+        // Second Quarter
+        $secondQStart = Carbon::createFromDate($currentYear, 4, 1)->toDateString();
+        $secondQEnd = Carbon::createFromDate($currentYear, 6, 30)->toDateString();
+
+        // Third Quarter
+        $thirdQStart = Carbon::createFromDate($currentYear, 7, 1)->toDateString();
+        $thirdQEnd = Carbon::createFromDate($currentYear, 9, 30)->toDateString();
+
+        // Fourth Quarter
+        $fourthQStart = Carbon::createFromDate($currentYear, 10, 1)->toDateString();
+        $fourthQEnd = Carbon::createFromDate($currentYear, 12, 31)->toDateString();
+
+
+        // Define quarters and their start/end dates
+        $quarters = [
+            ['start' => Carbon::createFromDate($currentYear, 1, 1)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 3, 31)->toDateString()],
+            ['start' => Carbon::createFromDate($currentYear, 4, 1)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 6, 30)->toDateString()],
+            ['start' => Carbon::createFromDate($currentYear, 7, 1)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 9, 30)->toDateString()],
+            ['start' => Carbon::createFromDate($currentYear, 10, 1)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 12, 31)->toDateString()],
+        ];
+        
+        // Initialize arrays to store results
+        $quarterlyData = [];
+
+
+
+        if ($userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'MANAGER') {
+
+            $profile = User::find($user_id);
+            // $profile = User::where('id', $user_id)->first(); 
+
+
+            $workingDaysCount = DB::table('workprogress')
+                ->select(DB::raw('COUNT(DISTINCT DATE(created_at)) as count'))
+                ->where('userId', $user_id)
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->first();
+
+            $workingDays = $workingDaysCount->count;
+
+            
+            //Full Year Data
+            $totalCallTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('targetCall');
+
+            $totalCallAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->count();
+
+                if ($workingDays != 0) {
+                    $avergareDailyCall = number_format(($totalCallAchievedYear / $workingDays), 0);
+                } else {
+                    $avergareDailyCall = 0;
+                }
+                
+            // $avergareDailyCall = number_format(($totalCallAchievedYear / $workingDays), 0);
+
+
+            $totalContactTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('targetContact');
+
+            $totalContactAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 5)
+                ->where('userId', $user_id)
+                ->count();
+
+
+            $totalConvoTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('conversation');
+
+            $totalConvoAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 11)
+                ->where('userId', $user_id)
+                ->count();
+
+
+            $totalFollowupTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('followup');
+
+            $totalFollowupAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('callingReport', 4)
+                ->where('userId', $user_id)
+                ->count();
+
+
+
+            $totalTestTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('targetTest');
+
+            $totalTestAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->where('progress', 'LIKE', '%Test%')
+                ->count();
+
+
+            $totalClosingTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('closelead');
+
+            $totalClosingAchievedYear = Workprogress::select('progressId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->where('progress', 'LIKE', '%Closing%')
+                ->count();
+
+
+            $totalRevenueTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('targetFile');
+
+            $totalRevenueAchievedYear = NewFile::whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('userId', $user_id)
+                ->sum('fileCount');
+
+
+            $totalLeadMineTargetYear = UserTargetByMonth::where('userId',$user_id)
+                ->whereBetween('date', [$fromDay, $tillToday])
+                ->sum('targetLeadmine');
+
+            $totalLeadMineAchievedYear = Lead::select('leadId')
+                ->whereBetween('created_at', [$fromDay, $tillToday])
+                ->where('minedBy', $user_id)
+                ->count();
+
+
+                
+                
+            // Calculate data for each quarter
+            foreach ($quarters as $quarter) {
+                
+                $quarterlyData[] = [
+                    'quarterName' => 'Quarter ' . (array_search($quarter, $quarters) + 1),
+
+                    'totalCallTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('targetCall'),
+                    'totalCallAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalContactTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('targetContact'),
+
+                    'totalContactAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('callingReport', 5)
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalConvoTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('conversation'),
+                    'totalConvoAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('callingReport', 11)
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalFollowupTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('followup'),
+                    'totalFollowupAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('callingReport', 11)
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalTestTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('targetTest'),
+                    'totalTestAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('progress', 'LIKE', '%Test%')
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalClosingTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('closelead'),
+                    'totalClosingAchieved' => Workprogress::select('progessId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('progress', 'LIKE', '%Closing%')
+                            ->where('userId', $user_id)
+                            ->count(),
+
+                    'totalRevenueTarget' =>UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('targetFile'),
+                    'totalRevenueAchieved' => NewFile::whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('userId', $user_id)
+                            ->sum('fileCount'),
+        
+
+                    'totalLeadMineTarget' => UserTargetByMonth::where('userId', $user_id)
+                            ->whereBetween('date', [$quarter['start'], $quarter['end']])
+                            ->sum('targetLeadmine'),
+                    'totalLeadMineAchieved' => Lead::select('leadId')
+                            ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
+                            ->where('minedBy', $user_id)
+                            ->count(),
+                ];
+            }
+            
+            
+
+
+
+                return view('users-mgmt.userProfile')
+                    ->with('profile', $profile)
+                    ->with('workingDays', $workingDays)
+                    ->with('avergareDailyCall', $avergareDailyCall)
+
+                    ->with('totalCallTargetYear', $totalCallTargetYear)
+                    ->with('totalCallAchievedYear', $totalCallAchievedYear)
+                    ->with('totalContactTargetYear', $totalContactTargetYear)
+                    ->with('totalContactAchievedYear', $totalContactAchievedYear)
+                    ->with('totalConvoTargetYear', $totalConvoTargetYear)
+                    ->with('totalConvoAchievedYear', $totalConvoAchievedYear)
+                    ->with('totalFollowupTargetYear', $totalFollowupTargetYear)
+                    ->with('totalFollowupAchievedYear', $totalFollowupAchievedYear)
+                    ->with('totalTestTargetYear', $totalTestTargetYear)
+                    ->with('totalTestAchievedYear', $totalTestAchievedYear)
+                    ->with('totalClosingTargetYear', $totalClosingTargetYear)
+                    ->with('totalClosingAchievedYear', $totalClosingAchievedYear)
+                    ->with('totalRevenueTargetYear', $totalRevenueTargetYear)
+                    ->with('totalRevenueAchievedYear', $totalRevenueAchievedYear)
+                    ->with('totalLeadMineTargetYear', $totalLeadMineTargetYear)
+                    ->with('totalLeadMineAchievedYear', $totalLeadMineAchievedYear)
+                    ->with('quarterlyData', $quarterlyData)
+                    
+                    // ->with('totalCallTargetFirstQ', $totalCallTargetFirstQ)
+                    // ->with('totalCallAchievedFirstQ', $totalCallAchievedFirstQ)
+                    // ->with('totalContactTargetFirstQ', $totalContactTargetFirstQ)
+                    // ->with('totalContactAchievedFirstQ', $totalContactAchievedFirstQ)
+                    // ->with('totalConvoTargetFirstQ', $totalConvoTargetFirstQ)
+                    // ->with('totalConvoAchievedFirstQ', $totalConvoAchievedFirstQ)
+                    // ->with('totalFollowupTargetFirstQ', $totalFollowupTargetFirstQ)
+                    // ->with('totalFollowupAchievedFirstQ', $totalFollowupAchievedFirstQ)
+                    // ->with('totalTestTargetFirstQ', $totalTestTargetFirstQ)
+                    // ->with('totalTestAchievedFirstQ', $totalTestAchievedFirstQ)
+                    // ->with('totalClosingTargetFirstQ', $totalClosingTargetFirstQ)
+                    // ->with('totalClosingAchievedFirstQ', $totalClosingAchievedFirstQ)
+                    // ->with('totalRevenueTargetFirstQ', $totalRevenueTargetFirstQ)
+                    // ->with('totalRevenueAchievedFirstQ', $totalRevenueAchievedFirstQ)
+                    // ->with('totalLeadMineTargetFirstQ', $totalLeadMineTargetFirstQ)
+                    // ->with('totalLeadMineAchievedFirstQ', $totalLeadMineAchievedFirstQ)
+                    ;
+        } else {
+
+            return back();
+
+        }
+    }
+
 
 
 

@@ -12,6 +12,11 @@
 */
 
 
+// Route::post('/initiateCall', 'CallingController@initiateCall')->name('calling.initiateCall');
+// Route::post('/endCall', 'CallingController@endCall')->name('calling.endCall');
+
+// Route::post('/calling/handle-gather', 'CallingController@handleGather')->name('calling.handle-gather');
+// Route::get('/getCallLogs', 'CallingController@getCallLogs')->name('calling.getCallLogs');
 
 
 Route::view('/main', 'layouts.index')->name('main');
@@ -57,9 +62,16 @@ Route::get('/files', 'HomeController@newFile')->name('files');
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
 
+Route::post('/storeIndividualMessage', 'NoticeController@storeIndividualMessage')->name('storeIndividualMessage');
+Route::post('/destroyIndividualMessage', 'NoticeController@destroyIndividualMessage')->name('destroyIndividualMessage');
+Route::get('/showAllNonReadMessage', 'NoticeController@showAllNonReadMessage')->name('showAllNonReadMessage');
+
 
 Route::resource('user-management', 'UserManagementController');
 Route::post('user-management/search', 'UserManagementController@search')->name('user-management.search');
+Route::get('/user/{id}', 'UserManagementController@userProfile')->name('user-management.userProfile');
+
+
 
 
 //Set Target
@@ -95,17 +107,24 @@ Route::resource('system-management/status', 'statusController');
 Route::post('system-management/status/search', 'statusController@search')->name('status.search');
 
 
+Route::get('/leads/parentCompanies', 'LeadController@parentCompanyPage')->name('parent.page');
+Route::post('/leads/parentCompanies', 'LeadController@getParentCompanies')->name('parent.list');
+// Route::post('/leads/updateParent', 'LeadController@updateParent')->name('parent.update');
+Route::post('/leads/createParent', 'LeadController@createParent')->name('parent.create');
+Route::post('/leads/destroy-parent/{leadId}', 'LeadController@makeParentNull')->name('parent.delete');
+
+
 Route::resource('showchart', 'HighChartsController');
 Route::post('showchart', 'HighChartsController@search')->name('showchart.search');
 
 Route::get('/user-target-management', 'UserManagementController@targetManagement')->name('user-management.target');
 Route::post('/user-target-management', 'UserManagementController@targetManagementGet')->name('user-management.target.Get');
+Route::post('/user-target-management/{id}', 'UserManagementController@updateUserTarget')->name('updateUserTarget');
 
 //Search bettween dates
 
 
 //Lead
-Route::get('/forupdate', 'LeadController@forupdate')->name('forupdate');
 Route::get('/lead/add', 'LeadController@add')->name('addLead');
 Route::get('/lead/addNightShift', 'LeadController@addNightShift')->name('addNightShift');
 Route::post('lead/add', 'LeadController@store')->name('storeLead');
@@ -139,6 +158,10 @@ Route::post('lead/getAllAssignLeadData','LeadController@getAllAssignLeadData')->
 Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
 Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData');
+
+Route::get('lead/unTouched','LeadController@unTouchedLead')->name('unTouchedLead');
+Route::post('lead/unTouched','LeadController@getUnTouchedLead')->name('getUnTouchedLead');
+
 
 Route::get('lead/temp','LeadController@tempLeads')->name('tempLeads');
 
@@ -176,6 +199,7 @@ Route::post('lead/leave','LeadController@leaveLead')->name('leaveLead');
 Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
 Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
 Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
+Route::get('/duplicatelist', 'LeadController@duplicateList')->name('duplicateList');
 
 
 //Star Lead
@@ -213,7 +237,8 @@ Route::get('/employees', 'LeadController@allEmployees')->name('allEmployees');
 Route::post('/employees', 'LeadController@getAllEmployees')->name('getAllEmployees');
 Route::post('/createEmployees','LeadController@createEmployees')->name('createEmployees');
 Route::post('/updateEmployees','LeadController@updateEmployees')->name('updateEmployees');
-Route::post('/removeEmployees','LeadController@removeEmployees')->name('removeEmployees');
+// Route::post('/removeEmployees/{employeeId}','LeadController@removeEmployees')->name('removeEmployees');
+Route::match(['post', 'delete'], '/removeEmployees/{employeeId}', 'LeadController@removeEmployees')->name('removeEmployees');
 Route::post('/employeeNumberCheck','LeadController@employeeNumberCheck')->name('employeeNumberCheck');
 Route::post('/employeeEmailCheck','LeadController@employeeEmailCheck')->name('employeeEmailCheck');
 
@@ -240,6 +265,12 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
 
+// Route::get('/changeLogs','HomeController@changeLogs')->name('changeLogs');
+Route::get('/changeLogs', function () {
+    return view('changeLogs'); 
+});
+
+
 //Detached Lead From Team Member
 Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
 Route::post('/lead/detached','DetachedLeadController@detached')->name('detached.reject');
@@ -252,14 +283,19 @@ Route::post('/searchTableByDate','ReportController@searchTableByDate')->name('se
 Route::get('report/user/{id}','ReportController@individualCall');
 Route::get('/reportTableForUser','ReportController@reportTableForUser')->name('reportTableForUser');
 
+Route::get('/targetVsAchievement','ReportController@targetVsAchievement')->name('targetVsAchievement');
+
+
 //Report Analysis
 Route::get('/analysisHome', 'AnalysisController@analysisHomePage')->name('analysisHomePage');
 
 Route::get('/analysisComments', 'AnalysisController@analysisComments')->name('analysisComments');
 Route::post('/analysisComments', 'AnalysisController@analysisComments');
 Route::post('/exportAnalysisComments', 'AnalysisController@exportAnalysisComments')->name('exportAnalysisComments');
-Route::get('/reportAllActivities','AnalysisController@reportAllActivities')->name('reportAllActivities');
-Route::get('/duplicateLeadList', 'AnalysisController@duplicateLeadList')->name('duplicateLeadList');
+
+Route::get('/allActivities','AnalysisController@allActivities')->name('allActivities');
+Route::post('/allActivities','AnalysisController@getAllActivities')->name('getAllActivities');
+
 Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('/allConversations', 'AnalysisController@getallConversations')->name('getallConversations');
@@ -269,7 +305,9 @@ Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name
 Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
-Route::get('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
+
+Route::get('/longTimeNoCall', 'AnalysisController@longTimeNoCall')->name('longTimeNoCall');
+Route::post('/longTimeNoCall', 'AnalysisController@getLongTimeNoCall')->name('getLongTimeNoCall');
 Route::post('/exportLongTimeNoCall', 'AnalysisController@exportLongTimeNoCall')->name('exportLongTimeNoCall');
 
 Route::get('/fredChasingLeads', 'AnalysisController@getFredChasingLeads')->name('getFredChasingLeads');
@@ -278,14 +316,34 @@ Route::post('/exportFredChasingLeads', 'AnalysisController@exportFredChasingLead
 Route::get('/randomReports', 'AnalysisController@randomReports')->name('randomReports');
 Route::get('/randomReportsAll', 'AnalysisController@randomReportsAll')->name('randomReportsAll');
 Route::get('lead/ippList', 'AnalysisController@ippList')->name('ippList');
+Route::post('/exportIppList', 'AnalysisController@exportIppList')->name('exportIppList');
+
 
 Route::get('hour/myReport', 'AnalysisController@myHourReport')->name('myHourReport');
+Route::get('/customHourReport','AnalysisController@customHourReport')->name('customHourReport');
 
+Route::get('/followUpAnalysis','AnalysisController@followUpAnalysis')->name('followUpAnalysis');
+Route::post('/getFollowUpAnalysis','AnalysisController@getFollowUpAnalysis')->name('getFollowUpAnalysis');
+Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkStatus')->name('updateFollwoUpWorkStatus');
+
+Route::get('/analysis/graph','AnalysisController@graphicalPresentation')->name('analysis.graph');
+Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('analysis.getUserDataPeriod');
+
+Route::get('/analysis/personal-analysis','AnalysisController@personalAnalysis')->name('analysis.personal');
+Route::post('/analysis/personal-analysis','AnalysisController@getPersonalAnalysis')->name('analysis.getPersonalAnalysis');
+
+
+
+
+//Pipeline COntroller
 Route::get('/salesPipeline', 'PipelineController@salesPipeline')->name('salesPipeline');
 Route::post('/createPipeline', 'PipelineController@createPipeline')->name('createPipeline');
 Route::post('/updatePipeline', 'PipelineController@updatePipeline')->name('updatePipeline');
 Route::post('/removePipeline', 'PipelineController@removePipeline')->name('removePipeline');
 Route::get('/getAvailableLeads', 'PipelineController@getAvailableLeads')->name('getAvailableLeads');
+Route::get('/pipelineReport', 'PipelineController@pipelineReport')->name('pipelineReport');
+
+
 
 
 //FAQ Management
@@ -317,6 +375,7 @@ Route::post('/updateKeyword', 'KeywordController@updateKeyword')->name('updateKe
 Route::get('/reportTableCountry','ReportController@reportTableCountry')->name('reportcountryTable');
 Route::post('/searchCountryTableByDate','ReportController@searchCountryTableByDate')->name('searchCountryTableByDate');
 
+Route::get('/report-last-day','ReportController@reportLastWorkingDay')->name('reportLastWorkingDay');
 
 
 //supervisor OR Manager report

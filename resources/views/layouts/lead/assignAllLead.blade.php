@@ -4,12 +4,11 @@
 
 @section('header')
     <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
-    @endsection
+    <link rel="stylesheet" href="{{ url('public/css/custom-style.css') }}">
+
+@endsection
+
 @section('content')
-
-
-
-
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
@@ -78,7 +77,6 @@
 
             <div class="form-group">
 
-                {{--<div class="form-group col-md-5">--}}
                 <label ><b>Assign to:</b></label>
                 <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
                     <option value="">select</option>
@@ -524,23 +522,20 @@
 
 
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
 
-    <script src="{{url('js/jconfirm.js')}}"></script>
-
-
     <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <script>
 
-function selectAll(source) {
+    <script src="{{url('js/jconfirm.js')}}"></script>
+    <script src="{{ url('public/js/custom-alert.js') }}"></script>
+
+
+
+<script>
+
+    function selectAll(source) {
             checkboxes = document.getElementsByName('checkboxvar[]');
             for(var i in checkboxes)
                 checkboxes[i].checked = source.checked;
@@ -548,7 +543,7 @@ function selectAll(source) {
 
 
 
-$(document).ready(function(){
+    $(document).ready(function(){
 
 
     fill_datatable();
@@ -631,8 +626,9 @@ $(document).ready(function(){
 //                            title: 'Success!',
 //                            content: 'successfully assigned!',
 //                        });
-                        $('#alert').html('Leads are assigned successfully');
-                        $('#alert').show();
+                        // $('#alert').html('Leads are assigned successfully');
+                        // $('#alert').show();
+                        successAlert('Leads are assigned successfully');
 
                     }
                 }
@@ -661,7 +657,8 @@ $(document).ready(function(){
         }
         else
         {
-            alert('Select Both filter option');
+            // alert('Select Both filter option');
+            dangerAlert('Select Both filter option');
         }
         });
 

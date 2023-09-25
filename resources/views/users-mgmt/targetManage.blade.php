@@ -3,10 +3,10 @@
 @section('content')
     <div class="box-body">
         <div class="card" style="padding: 2px;">
-            <div class="card-header">
-            <h3 class="font-weight-bold text-white">Users Target</h3>
-            </div>
+            <!-- <div class="card-header" style="background-color: #6F8FAF;"> -->
+            <!-- </div> -->
             <div class="card-body">
+                <h3 class="font-weight-bold" align="center">Monthly Target of The Marketers</h3>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -57,6 +57,126 @@
             </div>
         </div>
     </div>
+
+
+
+
+<!-- Edit Modal -->
+<div class="modal" id="edit_target_modal" style="">
+    <div class="modal-dialog" style="max-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Edit Target</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">                 
+                    <div class="col-md-4">
+                         <label><b>Target Id</b></label>
+                         <input type="text" class="form-control" name="targetId" value="" disabled>
+                     </div>
+
+                     <div class="col-md-4">
+                         <label><b>User Name</b></label>
+                         <input type="text" class="form-control" name="userId" value="" disabled>
+                     </div>
+
+                     <div class="col-md-4">
+                         <label><b>Target Set at</b></label>
+                         <input type="text" class="form-control" name="date" value="" disabled>
+                     </div>
+
+                 </div>
+
+                 <br><hr>
+
+                 <form method="post" action="{{ route('updateUserTarget', ['id' => 1]) }}">
+                    {{ csrf_field() }}
+
+                    <input type="hidden" name="targetId">
+
+                    <div class="row">                        
+
+                        <div class="col-md-4">
+                            <label><b>Total Calls</b></label>
+                            <input type="text" class="form-control" name="targetCall" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Contacts</b></label>
+                            <input type="text" class="form-control" name="targetContact" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Conversations</b></label>
+                            <input type="text" class="form-control" name="conversation" value="">
+                        </div>
+
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="row">                        
+
+                        <div class="col-md-4">
+                            <label><b>Followup</b></label>
+                            <input type="text" class="form-control" name="followup" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Test</b></label>
+                            <input type="text" class="form-control" name="targetTest" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Revenue</b></label>
+                            <input type="text" class="form-control" name="targetFile" value="">
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <div class="row">                        
+
+                        <div class="col-md-4">
+                            <label><b>Closed Deals</b></label>
+                            <input type="text" class="form-control" name="closelead" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>Lead Mining</b></label>
+                            <input type="text" class="form-control" name="targetLeadmine" value="">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label><b>High Possibility</b></label>
+                            <input type="text" class="form-control" name="targetHighPossibility" value="">
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <div class="row">                        
+                        <div class="col-md-12">
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </div>
+
+                    </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 @endsection
 
 @section('foot-js')
@@ -97,14 +217,39 @@
                     },
                 },
                 columns: [
+                    { title:'Target Id', data: 'targetId', name: 'users.targetId',"orderable": false, "searchable":true },
                     { title:'User Name', data: 'username', name: 'users.userId',"orderable": false, "searchable":true },
-                    { title:'Conversation', data: 'conversation', name: 'conversation', "orderable": true, "searchable":true },
                     { title:'Total Call', data: 'targetCall', name: 'targetCall', "orderable": true, "searchable":true },
+                    { title:'New Contact', data: 'targetContact', name: 'targetContact', "orderable": true, "searchable":true },
+                    { title:'Conversation', data: 'conversation', name: 'conversation', "orderable": true, "searchable":true },
                     { title:'Follow Up', data: 'followup', name: 'followup', "orderable": true, "searchable":true },
                     { title:'Test', data: 'targetTest', name: 'targetTest', "orderable": true, "searchable":true },
                     { title:'Deals CLosed', data: 'closelead', name: 'closelead', "orderable": true, "searchable":true },
+                    { title:'Revenue', data: 'targetFile', name: 'targetFile',"orderable": true, "searchable":true },
                     { title:'Lead Mine', data: 'targetLeadmine', name: 'targetLeadmine', "orderable": true, "searchable":true },
-                    { title:'File', data: 'targetFile', name: 'targetFile',"orderable": true, "searchable":true }
+                    { title:'High Possibility', data: 'targetHighPossibility', name: 'targetHighPossibility',"orderable": true, "searchable":true },
+                    {
+                        title: 'Actions',
+                        data: 'targetId',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, full, meta) {
+                            return '<button class="btn btn-danger edit-button" ' +
+                                'data-id="' + data + '" ' +
+                                'data-username="' + full.username + '" ' +
+                                'data-date="' + full.date + '" ' +
+                                'data-target-call="' + full.targetCall + '" ' +
+                                'data-target-contact="' + full.targetContact + '" ' +
+                                'data-conversation="' + full.conversation + '" ' +
+                                'data-followup="' + full.followup + '" ' +
+                                'data-target-test="' + full.targetTest + '" ' +
+                                'data-closelead="' + full.closelead + '" ' +
+                                'data-target-leadmine="' + full.targetLeadmine + '" ' +
+                                'data-target-high-possibility="' + full.targetHighPossibility + '" ' +
+                                'data-target-file="' + full.targetFile + '">Edit</button>';
+                        }
+                    }
                 ]
             });
         });
@@ -126,6 +271,43 @@
                 $('#year').css("background-color", "#FFF").css('color', 'black');
             }
         });
+
+
+        // Add this code after your DataTable initialization
+        $(document).on('click', '.edit-button', function () {
+            var targetId = $(this).data('id');
+            var username = $(this).data('username');
+            var date = $(this).data('date');
+            var targetCall = $(this).data('target-call');
+            var targetContact = $(this).data('target-contact');
+            var conversation = $(this).data('conversation');
+            var followup = $(this).data('followup');
+            var targetTest = $(this).data('target-test');
+            var closelead = $(this).data('closelead');
+            var targetFile = $(this).data('target-file');
+            var targetLeadmine = $(this).data('target-leadmine');
+            var targetHighPossibility = $(this).data('target-high-possibility');
+
+            // Populate the modal fields with data
+            $('#edit_target_modal input[name="targetId"]').val(targetId);
+            $('#edit_target_modal input[name="userId"]').val(username);
+            $('#edit_target_modal input[name="date"]').val(date);
+            $('#edit_target_modal input[name="targetCall"]').val(targetCall);
+            $('#edit_target_modal input[name="targetContact"]').val(targetContact);
+            $('#edit_target_modal input[name="conversation"]').val(conversation);
+            $('#edit_target_modal input[name="followup"]').val(followup);
+            $('#edit_target_modal input[name="targetTest"]').val(targetTest);
+            $('#edit_target_modal input[name="closelead"]').val(closelead);
+            $('#edit_target_modal input[name="targetFile"]').val(targetFile);
+            $('#edit_target_modal input[name="targetLeadmine"]').val(targetLeadmine);
+            $('#edit_target_modal input[name="targetHighPossibility"]').val(targetHighPossibility);
+
+            // Show the modal
+            $('#edit_target_modal').modal('show');
+        });
+
+
+
 
     </script>
 

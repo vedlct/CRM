@@ -1,11 +1,15 @@
 @extends('main')
 
+<style>
+
+
+</style>
+
+
 @section('content')
     <!-- ============================================================== -->
     <!-- Start Page Content here -->
     <!-- ============================================================== -->
-
-
     
     <div class="content-page">
         <div class="content">
@@ -89,12 +93,21 @@
                                 <p>
                                     <b class="text-secondary">Did a test?:</b>
                                     @if ($didTestWithUs->isNotEmpty())
-                                        @foreach ($didTestWithUs as $workprogress)
-                                            <span style="color:green; font-weight: 500;">Yes</span> on {{ $workprogress->created_at }}
-                                        @endforeach
+                                        @if ($didTestWithUs->count() > 1)
+                                            <ul>
+                                                @foreach ($didTestWithUs as $workprogress)
+                                                    <li>
+                                                        <span style="color:green; font-weight: 500;">Yes</span>, {{ $workprogress->userId }} <i>on</i> {{ $workprogress->created_at }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                                <span style="color:green; font-weight: 500;">Yes</span>, {{ $didTestWithUs[0]->userId }} <i>on</i> {{ $didTestWithUs[0]->created_at }}
+                                        @endif
                                     @else
                                         Not Yet
                                     @endif
+
                                 </p>
 
                                 <hr>
@@ -110,16 +123,7 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Calling</a>
-                                @endif    
-
-                                    <a 
-                                        href="#lead_activities" 
-                                        class="btn btn-primary" 
-                                        data-toggle="modal" 
-                                        data-lead-id="{{$lead->leadId}}" 
-                                        data-lead-name="{{$lead->companyName}}"
-                                    >Activities</a>
-                                    
+                                   
                                     <a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
                                         data-lead-id="{{$lead->leadId}}" 
                                         data-lead-name="{{$lead->companyName}}"
@@ -139,6 +143,16 @@
                                         data-lead-possibility="{{$lead->possibilityId}}" 
                                         data-lead-probability="{{$lead->probabilityId}}"
                                     >Edit</a>
+
+                                    @endif    
+                                    
+                                    <a 
+                                        href="#lead_activities" 
+                                        class="btn btn-primary" 
+                                        data-toggle="modal" 
+                                        data-lead-id="{{$lead->leadId}}" 
+                                        data-lead-name="{{$lead->companyName}}"
+                                    >Activities</a>
 
                                     @if ($pipeline->isEmpty() && $lead->contactedUserId == auth()->id())
                                     <a href="#" class="btn btn-info" 
@@ -199,35 +213,24 @@
                                 </p>
                                 <p>
                                     <b class="text-secondary">Operated in:</b>
-                                    <a href="#" role="button" data-bs-toggle="modal" data-bs-target="#operatedIn" class="text-decoration-underline">Country List</a>
                                 </p>
-                                <!-- modal -->
-                                <!-- Modal -->
-                                <div class="modal" id="operatedIn" tabindex="-1" aria-labelledby="operatedIn" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Operated in</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Demo Country
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save changes</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <p>
                                     <b class="text-secondary">Parent Company:</b>
-
+                                    @if ($parentCompanyName)
+                                        {{$parentCompanyName->companyName}} - {{$parentCompanyName->website}}
+                                    @endif
                                 </p>
+
                                 <p>
                                     <b class="text-secondary">Sub Brands:</b>
-
+                                    @if ($subBrands)
+                                        @foreach ($subBrands as $subBrand)
+                                            <ul> 
+                                                <li>{{$subBrand->companyName}} - {{$subBrand->contactNumber}} - {{$subBrand->website}} </li>
+                                            </ul>
+                                        @endforeach
+                                    @endif
                                 </p>                                
                                 <!-- <p>
                                     <b class="text-secondary">Sub Category:</b>
@@ -281,7 +284,11 @@
                                         <hr>
                                         <div class="card p-2">
                                             <p class="text-dark mb-3">{{$comment->comments}}</p>
-                                            <footer class="blockquote-footer" style="font-size: 15px;">{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}}</footer>
+                                            <footer class="blockquote-footer" style="font-size: 15px;">
+                                                <span>{{$comment->firstName}} {{$comment->lastName}}  at {{$comment->created_at}} </span>
+                                                <span style="float:right; color: teal;">{{$comment->report}} @if ($comment->progress) ({{$comment->progress}}) @endif</span>
+
+                                            </footer>
                                         </div>
                                         @endforeach
                                     </div>
@@ -370,7 +377,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <h5 class="card-title text-info">KDM Employee</h5>
+                                                                <h5 class="card-title" style="color:green;">Key Decision Maker</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
 
@@ -423,7 +430,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <h5 class="card-title text-secondary">Non-KDM Employee</h5>
+                                                                <h5 class="card-title text-secondary">Non-KDM</h5>
                                                             </div>
                                                             <div class="col-md-6 text-right">
                                                                 <a href="#edit_employee" class="card-link" data-toggle="modal"
@@ -471,8 +478,43 @@
                         </div>
                     </div>
 
-                    <!-- other info card -->
+
+
+                    <!-- 3rd Column -->
                     <div class="col-md-6 col-lg-4 col-xxl-3 mb-3">
+
+                        <!-- Calling Card -->
+                        <!-- <div class="card">
+                            <div class="card-body">
+                                <h5 class="border-bottom pb-2">Make A Call</h5>
+
+                                {{ csrf_field() }}
+
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="phoneNumber" class="form-label">Enter Phone Number:</label>
+                                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                                    </div>
+                                    <button id="dialButton" class="btn btn-success">Dial</button>
+                                    <button id="endCallButton" class="btn btn-danger" disabled>End Call</button>
+
+                                    <div class="mt-4">
+                                        <div id="callStatus" > </div>
+                                        <div id="callStartTime" > </div>
+                                        <div id="callEndTime" > </div>
+                                        <div id="callDuration" > </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div> -->
+
+
+
+
+                        <!-- other info card -->
+                    <!-- <div class="col-md-6 col-lg-4 col-xxl-3 mb-3"> -->
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="border-bottom pb-2">Other Informations</h5>
@@ -503,7 +545,7 @@
 
                                 <h5 class="text-decoration-underline font-info pb-2">Links:</h5>
                                 <p>
-                                    <b>Web:</b>
+                                    <b class="text-secondary">Web:</b>
                                     <a href="{{$lead->website}}" target="_blank"> {{$lead->website}}</a>
                                 </p>
                                 <!-- <p>
@@ -511,7 +553,7 @@
                                     <a href="#">facebook.com</a>
                                 </p> -->
                                 <p>
-                                    <b>Linkedin:</b>
+                                    <b class="text-secondary">Linkedin:</b>
                                     <a href="{{$lead->linkedin}}" target="_blank"> {{$lead->linkedin}}</a>
                                 </p>
                                 <p>
@@ -1143,6 +1185,82 @@
 
 
 
+<!--CALLING NUMBERS-->
+    
+<!-- <div class="modal" id="calling" >
+        <div class="modal-dialog" style="max-width: 30%">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Calling</h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                
+                {{csrf_field()}}
+
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Enter Phone Number:</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter phone number">
+                        </div>
+                        <button id="dialButton" class="btn btn-success">Dial</button>
+                        <button id="endCallButton" class="btn btn-danger" disabled>End Call</button>
+
+                        <div class="mt-4">
+                            <h5>Conversation</h5>
+                            <div id="callStartTime" class="mb-2"></div>
+                            <div id="callEndTime" class="mb-2"></div>
+                            <div id="callDuration" class="mb-2"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+
+
+    <!-- ADMIN PANEL BAR-->
+
+    @php($userType = Session::get('userType'))
+
+    @if($userType == 'SUPERVISOR')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 col-lg-2 col-xxl-3 mb-3">
+                <div class="mb-3">
+            
+                <a href="#edit_modal" class="btn btn-secondary" data-toggle="modal" 
+                    data-lead-id="{{$lead->leadId}}" 
+                    data-lead-name="{{$lead->companyName}}"
+                    data-lead-email="{{$lead->email}}"
+                    data-lead-number="{{$lead->contactNumber}}"
+                    data-lead-website="{{$lead->website}}"
+                    data-lead-category="{{$lead->category->categoryId}}"
+                    data-lead-country="{{$lead->countryId}}"
+                    data-lead-linkedin="{{$lead->linkedin}}"
+                    data-lead-founded="{{$lead->founded}}"
+                    data-lead-process="{{$lead->process}}"
+                    data-lead-volume="{{$lead->volume}}"
+                    data-lead-frequency="{{$lead->frequency}}"
+                    data-lead-employee="{{$lead->employee}}"
+                    data-lead-ipp="{{$lead->ippStatus}}"
+                    data-lead-comments="{{$lead->comments}}"
+                    data-lead-possibility="{{$lead->possibilityId}}" 
+                    data-lead-probability="{{$lead->probabilityId}}"
+                >Edit This Lead</a>
+    
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+
+
 
 @endsection
 
@@ -1162,6 +1280,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    
+
+
+   
 
 
 
@@ -1287,12 +1410,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 20) {
+						if (data > 30) {
 							$('#exceed').hide();
 							$('#total').hide();
 							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 15 && data < 20) {
+						} else if (data > 25 && data < 20) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();
@@ -1525,6 +1648,9 @@
             });
         });
     });
+
+    
+
 
 
 </script>

@@ -1,13 +1,18 @@
 @extends('main')
 
+@section('header')
+    <link rel="stylesheet" href="{{url('css/jconfirm.css')}}">
+    <link rel="stylesheet" href="{{ url('public/css/custom-style.css') }}">
+
+@endsection
+
 @section('content')
 
-    {{--get user type from session--}}
     @php($userType = strtoupper(Auth::user()->userType->typeName))
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2  align="center"><b>Filtered Lead</b></h2>
+            <h2  align="center"><b>Untocuhed Leads</b></h2>
             <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
 
             <div class="table-responsive m-t-40">
@@ -15,28 +20,39 @@
                     <thead>
                     <tr>
                         <th>Select</th>
+                        <th>Lead Id</th>
                         <th>website</th>
                         <th>Number</th>
                         <th>Category</th>
                         <th>Country</th>
                         <th>Possibility</th>
-                        <th >Volume</th>
-                        <th >Process</th>
-                        <th >Action</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
                 </table>
-
-                <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
-
-                <div class="mt-2">
-                    <input id = "makemy" type="submit" class="btn btn-outline-primary" value="Make My Lead"/>
-
-                </div>
-
             </div>
+
+            <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
+
+            <div class="form-group">
+
+                <label ><b>Assign to:</b></label>
+                <select class="form-control"  name="assignTo" id="otherCatches" style="width: 30%">
+                    <option value="">select</option>
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+
+                    @endforeach
+
+                </select>
+            </div>
+
+
+            <input type="hidden" class="form-control" id="inp" name="leadId">
         </div>
     </div>
 
@@ -93,11 +109,6 @@
 
 
 
-
-
-
-
-
 @endsection
 
 @section('foot-js')
@@ -108,70 +119,33 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script src="{{ url('public/js/custom-alert.js') }}"></script>
 
-    <script>
-
-            $(document).ready(function() {
-                $("#makemy").click(function(){
-                    var chkArray = [];
-                    //var userId=$(this).val();
-                    $('.checkboxvar:checked').each(function (i) {
-
-                        chkArray[i] = $(this).val();
-                        });
-
-                        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                        jQuery('input:checkbox:checked').parents("tr").remove();
-                        $(this).prop('selectedIndex',0);
-
-                        $.ajax({
-                            type : 'post' ,
-                            url : '{{route('addmyContacted')}}',
-                            data : {_token: CSRF_TOKEN,'leadId':chkArray} ,
-                            success : function(data){
-                                console.log(data);
-                                if(data == 'true'){
-                                    $('#alert').html('Leads are assigned successfully');
-                                    $('#alert').show();
-
-                                }
-                            }
-                        });
-                });
-            })
-
-    </script>
-
-
+    
 <script>
 
         $(function() {
             $('#myTable').DataTable({
-                // aLengthMenu: [
-                //     [25, 50, 100],
-                //     [25, 50, 100]
-                // ],
-                // "iDisplayLength": 25,
                 processing: true,
                 serverSide: true,
                 Filter: true,
                 stateSave: true,
                 type:"POST",
                 "ajax":{
-                    "url": "{!! route('filterLeadData') !!}",
+                    "url": "{!! route('getUnTouchedLead') !!}",
                     "type": "POST",
                     "data":{ _token: "{{csrf_token()}}"}
                 },
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
 
+                    { data: 'leadId', name: 'leads.leadId'},
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
                     { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
-                    { data: 'volume', name: 'volume', defaultContent: ''},
-                    { data: 'process', name: 'process', defaultContent: ''},
+                    { data: 'status.statusName', name: 'status.statusName', defaultContent: ''},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
@@ -229,6 +203,44 @@
 
 
         });
+
+
+
+
+
+
+        $("#otherCatches").change(function() {
+
+            var chkArray = [];
+            var userId=$(this).val();
+            $('.checkboxvar:checked').each(function (i) {
+
+                chkArray[i] = $(this).val();
+            });
+            //alert(chkArray)
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('assignStore')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        successAlert('Leads are assigned successfully');
+
+                    }
+                }
+            });
+
+
+
+            });
+
 
 
     </script>

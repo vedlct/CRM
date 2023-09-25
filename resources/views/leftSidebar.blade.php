@@ -114,6 +114,8 @@
                     </ul>
                 </li>
 
+
+                
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -268,6 +270,12 @@
                                     <a href="{{ route('report.tab') }}">
                                         <i class="fa fa-houzz"></i>
                                         <span class="hide-menu"> Others</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('targetVsAchievement') }}">
+                                        <i class="fa fa-houzz"></i>
+                                        <span class="hide-menu"> Target vs Achievement</span>
                                     </a>
                                 </li>
                             </ul>

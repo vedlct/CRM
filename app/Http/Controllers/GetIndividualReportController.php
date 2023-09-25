@@ -1041,6 +1041,43 @@ GetIndividualReportController extends Controller
         return Response($table);
     }
 
+    // public function getNotDoneFollowup(Request $r){
+    //     $userId = $r->userId;
+
+    //     if($r->fromdate && $r->todate){
+    //         $fromdate = $r->fromdate;
+    //         $todate = $r->todate;
+
+    //         $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) BETWEEN '".$fromdate."' AND '".$todate."') AND fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND fl.userId = '".$userId."' group by fl.followId")));
+    //     }
+
+    //     else{
+    //         $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) = '2020-09-10') AND fl.followUpDate = '2020-09-10' AND fl.userId = '".$userId."' group by fl.followId")));
+    //     }
+
+    //     $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+    //              <th>Lead ID</th>
+    //              <th>Company Name</th>
+    //              <th>Possibility</th>
+    //              <th>Category</th>
+    //              <th>Follow-Up Date</th>
+    //   </tr></thead>
+    // <tbody>';
+    //     foreach ($followupDetails as $lead){
+    //         $table.='<tr>
+    //                 <td>'.$lead->leadId.'</td>
+    //                 <td>'.$lead->companyName.'</td>
+    //                 <td>'.$lead->possibilityName.'</td>
+    //                 <td>'.$lead->categoryName.'</td>
+    //                 <td>'.$lead->followUpDate.'</td>
+    //                 </tr>';
+    //     }
+    //     $table.='</tbody></table>';
+    //     return Response($table);
+    // }
+
+
+
     public function getNotDoneFollowup(Request $r){
         $userId = $r->userId;
 
@@ -1048,11 +1085,41 @@ GetIndividualReportController extends Controller
             $fromdate = $r->fromdate;
             $todate = $r->todate;
 
-            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) BETWEEN '".$fromdate."' AND '".$todate."') AND fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND fl.userId = '".$userId."' group by fl.followId")));
+            $followupDetails = DB::table('followup as fl')
+                ->select('fl.leadId', 'fl.followUpDate', 'leads.companyName', 'possibilities.possibilityName', 'categories.categoryName', 'fl.workStatus')
+                ->leftJoin('leads', 'leads.leadId', '=', 'fl.leadId')
+                ->leftJoin('possibilities', 'possibilities.possibilityId', '=', 'leads.possibilityId')
+                ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+                ->where('fl.userId', $userId)
+                ->where('fl.workStatus', 0)
+                ->where('leads.contactedUserId', $userId)
+                ->whereNotIn('fl.leadId', function ($query) use ($fromdate, $todate) {
+                    $query->select(DB::raw('DISTINCT(leadId)'))
+                        ->from('workprogress')
+                        ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromdate, $todate]);
+                })
+                ->whereBetween('fl.followUpDate', [$fromdate, $todate])
+                ->groupBy('fl.followId')
+                ->get();
         }
 
         else{
-            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) = '2020-09-10') AND fl.followUpDate = '2020-09-10' AND fl.userId = '".$userId."' group by fl.followId")));
+            $followupDetails = DB::table('followup as fl')
+                ->select('fl.leadId', 'fl.followUpDate', 'leads.companyName', 'possibilities.possibilityName', 'categories.categoryName', 'fl.workStatus')
+                ->leftJoin('leads', 'leads.leadId', '=', 'fl.leadId')
+                ->leftJoin('possibilities', 'possibilities.possibilityId', '=', 'leads.possibilityId')
+                ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+                ->where('fl.userId', $userId)
+                ->where('fl.workStatus', 0)
+                ->where('leads.contactedUserId', $userId)
+                ->whereNotIn('fl.leadId', function ($query) use ($userId, $fromdate, $todate) {
+                    $query->select(DB::raw('DISTINCT(leadId)'))
+                        ->from('workprogress')
+                        ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$fromdate, $todate]);
+                })
+                ->where('fl.followUpDate', '2020-09-10')
+                ->groupBy('fl.followId')
+                ->get();
         }
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
@@ -1075,6 +1142,44 @@ GetIndividualReportController extends Controller
         $table.='</tbody></table>';
         return Response($table);
     }
+
+
+    // public function getAllFollowup(Request $r){
+    //     $userId = $r->userId;
+
+    //     if($r->fromdate && $r->todate){
+    //         $fromdate = $r->fromdate;
+    //         $todate = $r->todate;
+
+    //         $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND userId = '".$userId."' group by fl.followId")));
+    //     }
+
+    //     else{
+    //         $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate = '2020-09-10' AND userId = '".$userId."' group by fl.followId")));
+    //     }
+
+    //     $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
+    //              <th>Lead ID</th>
+    //              <th>Company Name</th>
+    //              <th>Possibility</th>
+    //              <th>Category</th>
+    //              <th>Follow-Up Date</th>
+    //   </tr></thead>
+    // <tbody>';
+    //     foreach ($followupDetails as $lead){
+    //         $table.='<tr>
+    //                 <td>'.$lead->leadId.'</td>
+    //                 <td>'.$lead->companyName.'</td>
+    //                 <td>'.$lead->possibilityName.'</td>
+    //                 <td>'.$lead->categoryName.'</td>
+    //                 <td>'.$lead->followUpDate.'</td>
+    //                 </tr>';
+    //     }
+    //     $table.='</tbody></table>';
+    //     return Response($table);
+    // }
+
+
 
     public function getAllFollowup(Request $r){
         $userId = $r->userId;
@@ -1083,11 +1188,27 @@ GetIndividualReportController extends Controller
             $fromdate = $r->fromdate;
             $todate = $r->todate;
 
-            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate BETWEEN '".$fromdate."' AND '".$todate."' AND userId = '".$userId."' group by fl.followId")));
+            $followupDetails = DB::table('followup as fl')
+                ->select('fl.leadId', 'fl.followUpDate', 'leads.companyName', 'possibilities.possibilityName', 'categories.categoryName', 'fl.userId')
+                ->leftJoin('leads', 'leads.leadId', '=', 'fl.leadId')
+                ->leftJoin('possibilities', 'possibilities.possibilityId', '=', 'leads.possibilityId')
+                ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+                ->whereBetween('fl.followUpDate', [$fromdate, $todate])
+                ->where('fl.userId', $userId)
+                ->groupBy('fl.followId')
+                ->get();
         }
 
         else{
-            $followupDetails = collect(DB::select(DB::raw("SELECT DISTINCT(fl.leadId), fl.followUpDate, leads.companyName, possibilities.possibilityName, categories.categoryName, fl.userId FROM followup fl LEFT JOIN leads ON leads.leadId = fl.leadId LEFT JOIN possibilities ON possibilities.possibilityId = leads.possibilityId left join categories on categories.categoryId = leads.categoryId WHERE fl.followUpDate = '2020-09-10' AND userId = '".$userId."' group by fl.followId")));
+            $followupDetails = DB::table('followup as fl')
+                ->select('fl.leadId', 'fl.followUpDate', 'leads.companyName', 'possibilities.possibilityName', 'categories.categoryName', 'fl.userId')
+                ->leftJoin('leads', 'leads.leadId', '=', 'fl.leadId')
+                ->leftJoin('possibilities', 'possibilities.possibilityId', '=', 'leads.possibilityId')
+                ->leftJoin('categories', 'categories.categoryId', '=', 'leads.categoryId')
+                ->where('fl.followUpDate', '2020-09-10')
+                ->where('fl.userId', $userId)
+                ->groupBy('fl.followId')
+                ->get();
         }
 
         $table='<table id="myTable" class="table table-bordered table-striped"><thead><tr>
@@ -1110,6 +1231,8 @@ GetIndividualReportController extends Controller
         $table.='</tbody></table>';
         return Response($table);
     }
+
+
 
     public function getCountryLead(Request $r){
         $country =  $r->countryid;

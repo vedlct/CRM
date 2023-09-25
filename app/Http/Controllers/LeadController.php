@@ -29,6 +29,7 @@ use App\SalesPipeline;
 use App\Employees;
 use App\Designation;
 use App\ExcludeKeywords;
+use App\DirectMessage;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -74,7 +75,7 @@ class LeadController extends Controller
             }
 
             // Check if the current user is authorized to view the lead
-            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id()) {
+            if ($User_Type !== 'SUPERVISOR' &&  $User_Type !== 'ADMIN' && $lead->contactedUserId !== auth()->id() && $lead->statusId !== 2) {
                 abort(404);
             }
 
@@ -86,12 +87,14 @@ class LeadController extends Controller
                 ->first();
 
             $didTestWithUs = $lead->workprogress()
-                ->select('progress', 'created_at')
+                ->select('progress', 'workprogress.created_at', 'users.userId')
+                ->Join('users', 'workprogress.userId', 'users.id')
                 ->where('progress', 'LIKE', '%Test%')
+                ->orderBy('workprogress.created_at', 'desc')
                 ->get();
             
             $allComments = $lead->Workprogress()
-                ->select('users.firstName','users.lastName','callingreports.report','comments','workprogress.created_at')
+                ->select('users.firstName','users.lastName','callingreports.report','comments','progress', 'workprogress.created_at')
                 ->leftJoin('users','users.id','workprogress.userId')
                 ->leftJoin('callingreports','callingreports.callingReportId','workprogress.callingReport')
                 ->orderby('workprogress.created_at', 'desc')
@@ -129,10 +132,11 @@ class LeadController extends Controller
                 ->where('leads.leadId', $leadId)
                 ->get();  
                 
-            // $employees = Employees::select('employees.*')
-            //     ->join('leads', 'employees.leadId', 'leads.leadId')
-            //     ->where('employees.leadId', $leadId)
-            //     ->get();
+            $parentCompanyName = Lead::find($lead->parent);
+
+            $subBrands = Lead::select('companyName', 'website', 'contactNumber')
+                ->where('parent', $leadId)
+                ->get();
 
             $employees = $lead->employees()->get();                
 
@@ -143,7 +147,6 @@ class LeadController extends Controller
             $country = Country::get();
             $status = Leadstatus::get();
             $designations = Designation::get();
-            
 
             return view('layouts.lead.accountView')
                 ->with('lead', $lead)
@@ -162,7 +165,8 @@ class LeadController extends Controller
                 ->with('users',$users)
                 ->with('employees',$employees)
                 ->with('designations',$designations)
-
+                ->with('parentCompanyName', $parentCompanyName)
+                ->with('subBrands', $subBrands)
                 ;
 
         }
@@ -305,6 +309,8 @@ class LeadController extends Controller
             })
             ->make(true);
     }
+
+
     public function add(){
         if(Auth::user()->crmType =='local'){
             return redirect()->route('home');
@@ -1171,7 +1177,7 @@ class LeadController extends Controller
                 ->where('statusId','!=',1)
                 ->get();
 
-                $users=User::select('id','firstName','lastName')
+            $users=User::select('id','firstName','lastName')
                 // ->orderBy('userId','DESC')
                 ->where('id','!=',Auth::user()->id)
                 ->orwhere('typeId',5)
@@ -1179,7 +1185,7 @@ class LeadController extends Controller
                 ->orWhere('typeId',3)
                 ->get();
 
-                $outstatus=Leadstatus::where('statusId','!=',7)
+            $outstatus=Leadstatus::where('statusId','!=',7)
                 ->where('statusId','!=',1)
                 ->where('statusId','!=',6)
                 ->get();
@@ -1196,7 +1202,8 @@ class LeadController extends Controller
                 ->with('users',$users)
                 ->with('outstatus',$outstatus);
         }
-        return Redirect()->route('home');}
+        return Redirect()->route('home');
+    }
 
 
 
@@ -1651,6 +1658,38 @@ class LeadController extends Controller
         return Redirect()->route('home');
     }
    
+
+    public function duplicateList (Request $r)
+    {   
+        $leads=Lead::select('leads.*','users.firstName','users.lastName')
+        ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
+        ->leftJoin('users','leads.contactedUserId','users.id')
+        ->where('leads.statusId', 8)
+        ->get();
+
+        $possibilities = Possibility::get();
+        $probabilities = Probability::get();
+        $callReports = Callingreport::get();
+        $categories=Category::where('type',1)->get();
+        $country=Country::get();
+        $status=Leadstatus::get();
+        
+
+        return view('layouts.lead.duplicateLeadList')
+        ->with('leads', $leads)
+        ->with('callReports', $callReports)
+        ->with('possibilities', $possibilities)
+        ->with('probabilities', $probabilities)
+        ->with('categories',$categories)
+        ->with('status',$status)
+        ->with('country',$country);
+
+
+    }
+
+
+
+
     public function starLeads(){
         $User_Type=Session::get('userType');
         if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
@@ -1725,6 +1764,8 @@ class LeadController extends Controller
         return back();
     }
 
+
+
     public function contacted(){
         //For user
         $User_Type=Session::get('userType');
@@ -1779,6 +1820,7 @@ class LeadController extends Controller
                 ->OrWhere('typeId',4)
                 ->get();
 
+            $userMessage = DirectMessage::select('message')->where('userId', Auth::user()->id)->latest()->first();
 
             return view('layouts.lead.contact')
                 ->with('callReports',$callReports)
@@ -1790,7 +1832,9 @@ class LeadController extends Controller
                 ->with('outstatus',$outstatus)
                 ->with('users',$users)
                 ->with('assignto',$assignto)
-                ->with('usersforminded',$usersforminded);
+                ->with('usersforminded',$usersforminded)
+                ->with('userMessage',$userMessage)
+                ;
 
         }
         return Redirect()->route('home');
@@ -2120,7 +2164,7 @@ class LeadController extends Controller
 
         $lead=Lead::findOrFail($r->leadId);
         $lead->statusId=$r->Status;
-        if($lead->contactedUserId == Auth::user()->id){
+        // if($lead->contactedUserId == Auth::user()->id){
 
             $lead->contactedUserId =null;
             $lead->ippStatus=0;
@@ -2153,7 +2197,7 @@ class LeadController extends Controller
 
 
             return back();
-        }
+        // }
 
         $lead->save();
 
@@ -2232,6 +2276,14 @@ class LeadController extends Controller
                 ->Join('countries','employees.countryId','countries.countryId')
                 ->orderBy('employeeId', 'desc')
                 ->get();
+
+                return DataTables::of($employees)
+                ->addColumn('action', function ($employee) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                })
+                ->toJson();
+
             }else{
                 $employees = Employees::select('employees.*','leads.website', 'leads.companyName','leads.leadId', 'designations.designationName', 'countries.countryName')
                 ->Join('leads','employees.leadId','leads.leadId')
@@ -2239,14 +2291,19 @@ class LeadController extends Controller
                 ->Join('countries','employees.countryId','countries.countryId')
                 ->orderBy('employeeId', 'desc')
                 ->get();
-            }
-        
-            return DataTables::of($employees)
+
+                return DataTables::of($employees)
                 ->addColumn('action', function ($employee) {
                     return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
-                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>';
+                        data-lead-id="'.$employee->leadId.'"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm remove-employee-btn"
+                        data-employee-id="'.$employee->employeeId.'"><i class="fa fa-close"></i></a>
+                        ';
                 })
                 ->toJson();
+
+            }
+        
         }
 
         
@@ -2330,56 +2387,167 @@ class LeadController extends Controller
             
 
 
-            public function removeEmployees (Request $r) {
+            public function removeEmployees($employeeId) {
 
-            return back();
-
+                $employee = Employees::find($employeeId);
             
-        }        
+                if ($employee) {
+                    $employee->delete();
+                    return response()->json(['message' => 'Employee removed successfully'], 200);
+                } else {
+                    return response()->json(['error' => 'Employee not found'], 404);
+                }
+            }
+                   
 
         // EMPLOYEE SECTION END
 
 
 
 
+        // PARENT COMPANY SET
+
+        public function parentCompanyPage()
+        {
+            
+            $leads = Lead::select('leadId', 'companyName', 'website', 'contactNumber', 'parent')
+                ->whereNotNull('parent')
+                ->get();
+
+            return view('layouts.lead.parentCompany', compact('leads'));
+            
+
+        }
+
+        public function getParentCompanies()
+        {
+            $leads = Lead::select('leadId', 'companyName', 'website', 'contactNumber', 'parent')
+                ->whereNotNull('parent')
+                ->get();
+
+            return DataTables::of($leads)
+                ->addColumn('parentCompany', function ($lead) {
+                    if ($lead->parent) {
+                        $parentLead = Lead::find($lead->parent);
+                        return $parentLead ? $parentLead->companyName : '';
+                    }
+                    return '';
+                })
+                ->addColumn('action', function ($lead) {
+                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="' . $lead->leadId . '"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-danger btn-sm remove-parent-btn"
+                        data-lead-id="' . $lead->leadId . '"><i class="fa fa-close"></i></a>';
+                })
+                ->toJson();
+        }
 
 
 
-                        public function forupdate(){
+
+        public function createParent(Request $request)
+        {
+            $leadId = $request->input('lead_id');
+            $parentId = $request->input('parent_id');
+    
+            $lead = Lead::find($leadId);
+            $lead->parent = $parentId;
+            $lead->save();
+    
+            return redirect()->back()->with('success', 'Parent company created successfully.');
+        }
+    
+    
+        public function updateParent(Request $request, $id)
+        {
+            // Find the lead by ID
+            $lead = Lead::find($id);
+            if (!$lead) {
+                abort(404);
+            }
+        
+            // Update the parent ID
+            $lead->parent = $request->input('parent_id');
+            $lead->save();
+        
+            // Redirect back or to a specific route
+            return redirect()->back()->with('success', 'Parent updated successfully.');
+        }
 
 
-                            $filePath = storage_path('app/Last_Contacted_19_6_23.csv');
-                            $file = fopen($filePath, 'r');
-                
-                            $header = fgetcsv($file);
-                
-                            $leads = [];
-                            while ($row = fgetcsv($file)) {
-                                $leads[] = array_combine($header, $row);
-                            }
-                            foreach ($leads as $lead){
-                                $leadid = $lead['Lead Id'];
-                                $leadsTable = Lead::findOrfail($leadid);
-                                $leadsTable->statusId = 2;
-                                $leadsTable->contactedUserId = NULL;
-                                $leadsTable->leadAssignStatus = 0;
-                                $leadsTable->save();
-                
-                
-                                $leadassigTable = Leadassigned::where('leadId',$leadid )->where('leaveDate', Null)->first();
-                                if(!empty($leadassigTable)) {
-                                    $leadassigTable->workstatus = 1;
-                                    $leadassigTable->leaveDate = "2023-06-19";
-                                    $leadassigTable->save();
-                                }
-                            }
-                
-                            fclose($file);
-                            return ;
-                
-                        }
-                
+
+        public function makeParentNull($leadId)
+        {
+            // Find the lead by ID
+            $lead = Lead::find($leadId);
+        
+            if ($lead) {
+                // Check if the parent field is not already NULL
+                if (!is_null($lead->parent)) {
+                    // Set the parent field to NULL
+                    $lead->parent = null;
+                    $lead->save(); // Save the changes to the database
+                }
+        
+                // Redirect back or do any other necessary actions
+                return redirect()->back()->with('success', 'Parent field updated successfully.');
+            }
+        
+            // Handle the case where the lead with the given ID doesn't exist
+            return redirect()->back()->with('error', 'Lead not found.');
+        }
+
+
+
+
+
+        public function unTouchedLead (){
+
+            $User_Type=Session::get('userType');
+            if($User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER'|| $User_Type == 'ADMIN'){
+    
+                $categories=Category::where('type',1)
+                    ->get();
+                $country=Country::get();
+                $users = User::get();
+        
+                return view('layouts.lead.unTouchedLead')
+                    ->with('categories',$categories)
+                    ->with('country',$country)
+                    ->with('users',$users)
+                ;
+            }
+
+        }                        
+        
+        public function getUnTouchedLead (Request $request){
+
+            $leads=(new Lead())->showFreshLeads();
+
+
+            return DataTables::eloquent($leads)
+                ->addColumn('check', function ($lead) {
+                    return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+                })->addColumn('action', function ($lead) {
+                        return '<a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                        data-lead-id="'.$lead->leadId.'"
+                                        data-lead-name="'.$lead->companyName.'"
+                                    ><i class="fa fa-comments"></i></a>
+                                    <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                    data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                    
+                                    })
+                ->rawColumns(['action','check'])
+                ->make(true);
+
+        }
+
+
+
+
+
+
+
 
 
 }
-

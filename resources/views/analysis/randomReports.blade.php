@@ -1,32 +1,28 @@
 @extends('main')
 
-<style>
-  .card {
-    transition: transform 0.5s ease;
-  }
+    <style>
+        .card {
+            transition: transform 0.5s ease;
+        }
 
-  .card:hover {
-    transform: scale(1.05);
-  }
+        /* .card:hover {
+            transform: scale(1.05);
+        } */
 
-  .mainrow {
-    padding: 0 60px;
-  }
+        .mainrow {
+            padding: 0 60px;
+        }
 
-
-</style>
+    </style>
 
 @section('content')
 
-
-
-    <div class="row mainrow">
-        <div class="col-md-12">
+     <div class="row mainrow">
+       <div class="col-md-12">
             <h1 class="text-center mb-4" style="padding: 30px 0 0 0;">Random Reports </h1>
             <h4 class="text-center mb-4" style="padding: -20px 0 30px 0;">Since January 1st, 2023 | All Data is 6 Hours Old </h4>
 
                 <div class="card"  style="padding: 40px;">
-                <!-- <h3 class="card-title" align="center">My Weekly, Monthly and Yearly Comparison</h3> -->
 
                     <div class="table-responsive m-t-40">
 
@@ -101,23 +97,23 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr>
-                                                <td>Total Calls</td>
+                                                <td>Max Calls</td>
                                                 <td>{{$maxThisWeekCall  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Contacts</td>
+                                                <td>Max Contacts</td>
                                                 <td>{{$maxThisWeekContact  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Conversation</td>
+                                                <td>Max Conversation</td>
                                                 <td>{{$maxThisWeekConvo  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Free Trial</td>
+                                                <td>Max Free Trial</td>
                                                 <td>{{$maxThisWeekTest  ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Lead Mining</td>
+                                                <td>Max Lead Mining</td>
                                                 <td>{{$maxThisWeekLeadMining  ?? 0 }}</td>
                                             </tr>
                                         </tbody>
@@ -138,23 +134,23 @@
                                         <tbody>
                                         <tr>
                                         <tr>
-                                            <td>Total Calls</td>
+                                            <td>Max Calls</td>
                                             <td>{{ $maxThisMonthCall ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Contacts</td>
+                                            <td>Max Contacts</td>
                                             <td>{{ $maxThisMonthContact ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Conversation</td>
+                                            <td>Max Conversation</td>
                                             <td>{{ $maxThisMonthConvo ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Free Trial</td>
+                                            <td>Max Free Trial</td>
                                             <td>{{ $maxThisMonthTest ?? 0 }}</td>
                                         </tr>
                                         <tr>
-                                            <td>Total Lead Mining</td>
+                                            <td>Max Lead Mining</td>
                                             <td>{{ $maxThisMonthLeadMining ?? 0 }}</td>
                                         </tr>
 
@@ -175,23 +171,23 @@
                                     <table class="table table-bordered">
                                         <tbody>
                                             <tr>
-                                                <td>Total Calls</td>
+                                                <td>Max Calls</td>
                                                 <td>{{$maxTotalCall ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Contact</td>
+                                                <td>Max Contact</td>
                                                 <td>{{$maxTotalContact ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Conversation</td>
+                                                <td>Max Conversation</td>
                                                 <td>{{$maxTotalConvo ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Free Trial</td>
+                                                <td>Max Free Trial</td>
                                                 <td>{{$maxTotalTest ?? 0 }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Total Lead Mining</td>
+                                                <td>Max Lead Mining</td>
                                                 <td>{{$maxTotalLeadMining ?? 0 }}</td>
                                             </tr>
                                         </tbody>
@@ -205,9 +201,60 @@
             </div>
 
         </div>
-    </div>
 
 
+            <div class="col-md-3" style="float: left;">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">I am chasing:</h4>
+                        <ul>
+                            @if(isset($showCategories['Agency']))
+                                <li style="list-style-type: none; padding: 5px 0;"><b>{{ $showCategories['Agency'] }}</b> Agencies</li>
+                            @endif
+
+                            @if(isset($showCategories['Online Store']))
+                                <li style="list-style-type: none;padding: 5px 0;"><b>{{ $showCategories['Online Store'] }}</b> Online Stores</li>
+                            @endif
+
+                            @if(isset($showCategories['Brand']))
+                                <li style="list-style-type: none;padding: 5px 0;"><b>{{ $showCategories['Brand'] }}</b> Brands</li>
+                            @endif
+
+                            @if(isset($showCategories['Boutique']))
+                                <li style="list-style-type: none;padding: 5px 0;"><b>{{ $showCategories['Boutique'] }}</b> Boutiques</li>
+                            @endif
+
+                            @if(isset($showCategories['Furniture']))
+                                <li style="list-style-type: none;padding: 5px 0;"><b>{{ $showCategories['Furniture'] }}</b> Furnitures</li>
+                            @endif
+
+                            @if(isset($showCategories['Jewelry']))
+                                <li style="list-style-type: none;padding: 5px 0;"><b>{{ $showCategories['Jewelry'] }}</b> Jewelry</li>
+                            @endif
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                    <h4 class="card-title">Random Statistics</h4>
+                    <p> You joined at {{ $showRandomStatistics['joiningDate'] }} which is like {{ $showRandomStatistics['timeDifference'] }}.</p>
+
+                    <p>So far you have received  {{ $showRandomStatistics['myTests'] }} Tests and have onboarded  {{ $showRandomStatistics['myClients'] }} Clients </p>
+                        
+                    <p>Usually our expectation is to get 5 tests and 2 clients in a month.</p>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
 
 @endsection
 

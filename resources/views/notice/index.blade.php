@@ -2,16 +2,29 @@
 
 
 @section('content')
-	@php($userType = Session::get('userType'))
+
+@php($userType = Session::get('userType'))
+
 	<div class="box-body">
 		<div class="card" style="padding: 2px;">
 			<div class="card-body">
 				<h2 align="center"><b>Communication</b></h2>
+				<div>
+					<span style="float: left;">
+					@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+						<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
 
-				@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
-					<a href="#create_notice_modal" data-toggle="modal" class="btn btn-custom">Add Communiction</a>
+					@endif
+					</span>
+					<span style="float: right;">
+						@if($userType =='ADMIN' || $userType =='MANAGER' || $userType =='SUPERVISOR')
+							<a href="#individual_message" data-toggle="modal" class="btn btn-info">Send Individual Message</a>
+							<a href="#unread_message" data-toggle="modal" class="btn btn-secondary">Non Read Message</a>
 
-				@endif
+						@endif
+					</span>
+
+				<div>
 
 				@if ($errors->has('msg'))
 					<span class="help-block">
@@ -231,6 +244,73 @@
 
 
 
+<!--Create Individual Message-->
+<div class="modal" id="individual_message" style="">
+    <div class="modal-dialog" style="max-width: 30%;">
+		<form class="modal-content" method="post" action="{{ route('storeIndividualMessage') }}">
+            <div class="modal-header">
+                <h4 class="modal-title" name="modal-title">Individual Message</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            {{ csrf_field() }}
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="user" class="control-label">Marketer</label>
+                    <select name="userId" class="form-control">
+						@foreach ($users as $user)
+	                        <option value="{{$user->id}}">{{$user->userId}}</option>
+						@endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comm" class="control-label">Communication</label>
+                    <textarea name="message" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    Send
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+<!-- The list of Non Read Messages -->
+<div class="modal" id="unread_message">
+    <div class="modal-dialog" style="max-width: 40%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unreadmessageLabel">Non Read Messages</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messageList">
+                        <!-- Messages will be dynamically added here using JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- /.box-body -->
 </div>
 @endsection
@@ -297,8 +377,24 @@
         });
 
 
-			// var frmvalidator = new Validator("create_notice_modal");
-			// frmvalidator.addValidation("msg","maxlen=20","Max length for msg is 20");
+
+
+		$('#unread_message').on('show.bs.modal', function() {
+			$.ajax({
+				url: '{{ route('showAllNonReadMessage') }}',
+				type: 'GET',
+				dataType: 'json',
+				success: function(response) {
+					$('#messageList').empty();
+					if (response.length > 0) {
+						response.forEach(function(message) {
+							$('#messageList').append('<tr><td>' + message.name + '</td><td>' + message.message + '</td><td>' + message.created_at + '</td></tr>');
+						});
+						$('#unread_message').modal('show');
+					}
+				}
+			});
+		});
 
 
 

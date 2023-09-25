@@ -23,6 +23,7 @@ use App\Usertarget;
 use App\Possibilitychange;
 use App\Leadassigned;
 use App\Activities;
+use App\UsertargetByMonth;
 use Carbon\Carbon;
 use stdClass;
 
@@ -233,9 +234,42 @@ class ReportController extends Controller
         $from = $r->fromDate;
         $to = $r->toDate;
 
-        $followups = collect(DB::select(DB::raw("SELECT DISTINCT(leadId), count(*) as total, userId FROM followup WHERE followup.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) BETWEEN '".$from."' AND '".$to."') AND followUpDate BETWEEN '".$from."' AND '".$to."' group by followup.userId")));
+        // $followups = collect(DB::select(DB::raw("SELECT DISTINCT(leadId), count(*) as total, userId FROM followup WHERE followup.leadId not in (SELECT DISTINCT(leadId) FROM workprogress WHERE DATE(workprogress.created_at) BETWEEN '".$from."' AND '".$to."') AND followUpDate BETWEEN '".$from."' AND '".$to."' group by followup.userId")));
+        
+        // $followups = DB::table('followup')
+        //     ->select('leadId', DB::raw('COUNT(*) as total'), 'userId', 'workStatus')
+        //     ->whereNotIn('leadId', function ($query) use ($from, $to) {
+        //         $query->select(DB::raw('DISTINCT(leadId)'))
+        //             ->from('workprogress')
+        //             ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$from, $to]);
+        //     })
+        //     ->where('workStatus', 0)
+        //     ->whereBetween('followUpDate', [$from, $to])
+        //     ->groupBy('userId')
+        //     ->get();
 
-        $allFollowups = collect(DB::select(DB::raw("SELECT DISTINCT(leadId), count(*) as total, followUpDate, userId FROM followup WHERE followUpDate BETWEEN '".$from."' AND '".$to."' group by userId")));
+        $followups = DB::table('followup as f')
+            ->select('f.leadId', DB::raw('COUNT(*) as total'), 'f.userId', 'f.workStatus')
+            ->join('leads', 'leads.leadId', '=', 'f.leadId')
+            ->whereNotIn('f.leadId', function ($query) use ($from, $to) {
+                $query->select(DB::raw('DISTINCT(leadId)'))
+                    ->from('workprogress')
+                    ->whereBetween(DB::raw('DATE(workprogress.created_at)'), [$from, $to]);
+            })
+            ->where('f.workStatus', 0)
+            ->whereBetween('f.followUpDate', [$from, $to])
+            ->whereRaw('leads.contactedUserId = f.userId')
+            ->groupBy('f.userId')
+            ->get();
+
+        // $allFollowups = collect(DB::select(DB::raw("SELECT DISTINCT(leadId), count(*) as total, followUpDate, userId FROM followup WHERE followUpDate BETWEEN '".$from."' AND '".$to."' group by userId")));
+        
+        $allFollowups = DB::table('followup')
+            ->select('leadId', DB::raw('COUNT(*) as total'), 'followUpDate', 'userId')
+            ->whereBetween('followUpDate', [$from, $to])
+            ->groupBy('userId')
+            ->get();
+
 
         /*$followups = collect(DB::select(DB::raw("SELECT count(*) as total, wp.callingReport, fu.followId, l.companyName, l.leadId, fu.followUpDate, fu.userId, DATE(wp.created_at) as wpcreatedate FROM leads l LEFT JOIN followup fu ON fu.leadId = l.leadId LEFT JOIN workprogress wp ON wp.leadId = l.leadId WHERE fu.followUpDate BETWEEN '" . $from . "' AND '$to' AND fu.leadId = wp.leadId AND fu.followUpDate = DATE(wp.created_at) GROUP BY fu.userId")));*/
 
@@ -1839,5 +1873,162 @@ class ReportController extends Controller
 
 
 
+    public function targetVsAchievement()
+    {
+        $data = [];
+        $User_Type = Session::get('userType');
+
+        if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+    
+        $targetMonthYears = UsertargetByMonth::select(DB::raw('DISTINCT MONTH(date) as month, YEAR(date) as year'))
+            ->where('date', '>=', Carbon::now()->subMonths(12)->startOfMonth())
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
+    
+        foreach ($targetMonthYears as $monthYear) {
+            $month = Carbon::createFromDate($monthYear->year, $monthYear->month, 1)->format('F Y');
+            
+            // Fetch target data for the specific month and year
+            $target = UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->first();
+
+            // Now you can calculate the sum of the columns for the specific month and year
+            $targetConversation = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('conversation') : 0;
+
+            $targetCall = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('targetCall') : 0;
+
+            $targetTest = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('targetTest') : 0;
+
+            $targetClosing = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('closelead') : 0;
+
+            $targetContact = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('targetContact') : 0;
+
+            $targetFollowUp = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('followup') : 0;
+
+            $targetRevenue = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('targetFile') : 0;
+                
+            $targetLeadMine = $target ? UsertargetByMonth::whereYear('date', $monthYear->year)
+                ->whereMonth('date', $monthYear->month)
+                ->sum('targetLeadmine') : 0;
+
+                
+            // Fetch achievement data for the specific month and year
+            $workprogress = Workprogress::whereYear('created_at', $monthYear->year)
+                ->whereMonth('created_at', $monthYear->month)
+                ->get();
+
+            // Now you can calculate the counts for specific criteria for the specific month and year
+            $achvConversation = $workprogress->where('callingReport', 11)->count('progressId');
+            $achvCall = $workprogress->count('progressId');
+            $achvContact = $workprogress->where('callingReport', 5)->count('progressId');
+            $achvTest = $workprogress->where('progress', '%LIKE%', 'Test Job')->count();
+            $achvClosing = $workprogress->where('progress', '%LIKE%', 'Closing')->count();
+            $achvFollowup = $workprogress->where('callingReport', 4)->count('progressId');
+
+
+            $achvRevenue = NewFile::whereYear('created_at', $monthYear->year)
+                ->whereMonth('created_at', $monthYear->month)
+                ->sum('fileCount');
+
+            $achvLeadMine = Lead::whereYear('created_at', $monthYear->year)
+                ->whereMonth('created_at', $monthYear->month)
+                ->count('leadId');
+
+
+    
+            $data[] = [
+                'month' => $month,
+                'targetConversation' => $targetConversation,
+                'targetCall' => $targetCall,
+                'targetTest' => $targetTest,
+                'targetClosing' => $targetClosing,
+                'targetContact' => $targetContact,
+                'targetFollowUp' => $targetFollowUp,
+                'targetRevenue' => $targetRevenue,
+                'targetLeadMine' => $targetLeadMine,
+                'achvConversation' => $achvConversation,
+                'achvCall' => $achvCall,
+                'achvContact' => $achvContact,
+                'achvTest' => $achvTest,
+                'achvClosing' => $achvClosing,
+                'achvFollowup' => $achvFollowup,
+                'achvRevenue' => $achvRevenue,
+                'achvLeadMine' => $achvLeadMine,
+            ];
+        }
+    }
+
+        $lastSixMonthsData = array_slice($data, 0);
+
+        // Pass the $data array to the view
+        return view('report.targetVsAchievement', compact('data', 'lastSixMonthsData'));
+    }
+
+
+
+
+
+
+    public function reportLastWorkingDay()
+{
+    $activeUserIds = User::where('active', 1)->pluck('id');
+    $lastWorkingDay = Carbon::now()->subWeekdays(1)->toDateString();
+    
+    // Step 1: Calculate the total number of calls for each user on the specified date
+    $totalCalls = Workprogress::select('userId', DB::raw('count(progressId) as totalCall'))
+        ->where('created_at', $lastWorkingDay)
+        ->whereIn('userId', $activeUserIds)
+        ->groupBy('userId')
+        ->get();
+
+    // Step 2: Retrieve all entries for email (callingReport = 3 or 8) on the specified date
+    $emailEntries = Workprogress::select('userId', DB::raw('count(progressId) as emailCount'))
+        ->where('created_at', $lastWorkingDay)
+        ->whereIn('callingReport', [3, 8])
+        ->whereIn('userId', $activeUserIds)
+        ->groupBy('userId')
+        ->get();
+
+    // Step 3: Calculate the percentage of email entries relative to the total number of calls
+    $userEmailPercentages = [];
+    foreach ($totalCalls as $totalCall) {
+        $userId = $totalCall->userId;
+        $totalCallCount = $totalCall->totalCall;
+        
+        // Find the corresponding email count for the user
+        $emailCount = $emailEntries->where('userId', $userId)->first()->emailCount ?? 0;
+
+        // Calculate the percentage
+        $percentage = ($totalCallCount > 0) ? ($emailCount / $totalCallCount) * 100 : 0;
+
+        $userEmailPercentages[] = [
+            'userId' => $userId,
+            'emailPercentage' => $percentage,
+        ];
+    }
+
+    return view('report.reportLastWorkingDay', compact('userEmailPercentages'));
+}
+
+
+
+
+    
 
 }

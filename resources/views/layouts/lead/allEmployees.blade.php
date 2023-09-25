@@ -61,6 +61,7 @@
     <script>
 
         $(document).ready(function() {
+
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -95,17 +96,44 @@
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ]
             });
+
+        });
+
+
+        $(document).on('click', '.remove-employee-btn', function() {
+                var employeeId = $(this).data('employee-id');
+                var confirmation = confirm('Are you sure you want to remove this employee?');
+
+                if (confirmation) {
+                    $.ajax({
+                        url: "{{ route('removeEmployees', ['employeeId' => ':employeeId']) }}".replace(':employeeId', employeeId),
+                        type: "POST", // Change this to POST
+                        data: {
+                            _method: 'DELETE', // Still include this data for Laravel to recognize DELETE method
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            // Reload the page or update the table data
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                            // Handle the error, show a message, etc.
+                        }
+                    });
+                }
         });
 
 
 		$(document).on('click', '.lead-view-btn', function(e) {
-                e.preventDefault();
+            e.preventDefault();
 
-                var leadId = $(this).data('lead-id');
-                var newWindowUrl = '{{ url('/account') }}/' + leadId;
+            var leadId = $(this).data('lead-id');
+            var newWindowUrl = '{{ url('/account') }}/' + leadId;
 
-                window.open(newWindowUrl, '_blank');
-            });
+            window.open(newWindowUrl, '_blank');
+        });
 
 
 

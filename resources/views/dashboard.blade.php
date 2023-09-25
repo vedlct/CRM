@@ -7,11 +7,12 @@
     }
     .card {
         border-radius:  20px !important;
-        box-shadow: 0.1px 0.1px 1px ;
+        box-shadow: 0.1px 0.1px 1px;
     }
 
     .card-header {
         box-shadow: 0.1px 0.1px 2px grey;
+        border-color: #D3D3D3 !important; 
     }
 
 </style>
@@ -206,7 +207,7 @@
 
         <div class="col-md-8" style=" float: left;">
             <div class="card">
-            <div class="card-header bg-secondary">
+            <div class="card-header" style="background-color: #6F8FAF;">
                     <h5 class="font-weight-bold text-white">Latest Communication</h5>
                     <div class="card-header-right">
                     </div>
@@ -222,7 +223,7 @@
             </div>
 
             <div class="card">
-            <div class="card-header bg-secondary">
+            <div class="card-header" style="background-color: #6F8FAF;">
                 <h5 class="font-weight-bold text-white">Personal Monthly Graph</h5>
             </div>
                 <div class="card-body">
@@ -236,7 +237,7 @@
         
         <div class="col-md-4" style="float: right;">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header" style="background-color: #009efb;">
                     <h5 class="font-weight-bold text-white">Recent Top Activities</h5>
                     <div class="card-header-right">
                     </div>
@@ -248,7 +249,7 @@
                     <ul class="crm-activity">
                         @foreach ($topActivities as $activity)
                             <li class="media">
-                                <span class="me-3 font-primary"><img src="{{ url('public/img/users/' . $activity->picture) }}" alt="Photo" style="max-height: 50px; border-radius: 50%; padding-right: 10px;"></span>
+                                <span class="me-3 font-primary"><img src="{{ url('public/img/users/' . $activity->picture) }}" alt="User Photo" style="max-height: 50px; border-radius: 50%; padding-right: 10px;"></span>
                                 <div class="align-self-center media-body">
                                     <!-- <h6 class="mt-0">{{ $activity->userId }} just received a {{ $activity->progress }}</h6> -->
                                     @if (strpos($activity->progress, 'Test') !== false)
@@ -268,6 +269,12 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
+
 
 
 
