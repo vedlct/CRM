@@ -1671,6 +1671,24 @@ class AnalysisController extends Controller
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
+                $lowlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
+                $mediumlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
+                $highlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
 
                 
 
@@ -1682,6 +1700,10 @@ class AnalysisController extends Controller
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
                     'totalCall' => $totalCall,
+                    'lowlead' => $lowlead,
+                    'mediumlead' => $mediumlead,
+                    'highlead' => $highlead,
+
                     // Add other calculated values here
                 ];
 
