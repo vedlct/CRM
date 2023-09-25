@@ -155,6 +155,21 @@
           </a>
         </div>
 
+        <div class="col-md-3">
+        <a href="{{route('analysis.personal')}}" target="_blank" class="card-link">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://chisellabs.com/glossary/wp-content/uploads/2021/06/SWOT-analysis.png')}}" alt="Card image cap">
+                <div class="mask rgba-white-slight"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Personal Analysis</h4>
+              <p class="card-text">We will analyze individual's daily, weekly, monthly or dated performance to check if they are aligned with their target or not .</p>
+              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+            </div>
+          </div>
+          </a>
+        </div>
         
 
 

@@ -72,6 +72,8 @@ Route::post('user-management/search', 'UserManagementController@search')->name('
 Route::get('/user/{id}', 'UserManagementController@userProfile')->name('user-management.userProfile');
 
 
+
+
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
 
@@ -117,7 +119,7 @@ Route::post('showchart', 'HighChartsController@search')->name('showchart.search'
 
 Route::get('/user-target-management', 'UserManagementController@targetManagement')->name('user-management.target');
 Route::post('/user-target-management', 'UserManagementController@targetManagementGet')->name('user-management.target.Get');
-Route::post('/user-target-management/{targetId}', 'UserManagementController@updateUserTarget')->name('updateUserTarget');
+Route::post('/user-target-management/{id}', 'UserManagementController@updateUserTarget')->name('updateUserTarget');
 
 //Search bettween dates
 
@@ -197,6 +199,7 @@ Route::post('lead/leave','LeadController@leaveLead')->name('leaveLead');
 Route::get('/testlist', 'LeadController@testLeads')->name('testlist');
 Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');
 Route::get('/rejectlist', 'LeadController@rejectlist')->name('rejectlist');
+Route::get('/duplicatelist', 'LeadController@duplicateList')->name('duplicateList');
 
 
 //Star Lead
@@ -262,7 +265,11 @@ Route::post('/teammanagement/removeuser','TeamController@removeUser')->name('rem
 Route::get('/settings','UserManagementController@settings')->name('accountSetting');
 Route::post('/settings','UserManagementController@changePass')->name('changePass');
 
-Route::get('/changeLogs','HomeController@changeLogs')->name('changeLogs');
+// Route::get('/changeLogs','HomeController@changeLogs')->name('changeLogs');
+Route::get('/changeLogs', function () {
+    return view('changeLogs'); 
+});
+
 
 //Detached Lead From Team Member
 Route::get('/lead/detached','DetachedLeadController@index')->name('detached');
@@ -289,7 +296,6 @@ Route::post('/exportAnalysisComments', 'AnalysisController@exportAnalysisComment
 Route::get('/allActivities','AnalysisController@allActivities')->name('allActivities');
 Route::post('/allActivities','AnalysisController@getAllActivities')->name('getAllActivities');
 
-Route::get('/duplicateLeadList', 'AnalysisController@duplicateLeadList')->name('duplicateLeadList');
 Route::get('/duplicateLeads', 'AnalysisController@getDuplicateLeads')->name('getDuplicateLeads');
 Route::get('/allAssignedButNotMyleads', 'AnalysisController@allAssignedButNotMyleads')->name('allAssignedButNotMyleads');
 Route::get('/allConversations', 'AnalysisController@getallConversations')->name('getallConversations');
@@ -323,6 +329,8 @@ Route::post('/updateFollwoUpWorkStatus','AnalysisController@updateFollwoUpWorkSt
 Route::get('/analysis/graph','AnalysisController@graphicalPresentation')->name('analysis.graph');
 Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('analysis.getUserDataPeriod');
 
+Route::get('/analysis/personal-analysis','AnalysisController@personalAnalysis')->name('analysis.personal');
+Route::post('/analysis/personal-analysis','AnalysisController@getPersonalAnalysis')->name('analysis.getPersonalAnalysis');
 
 
 
@@ -367,6 +375,7 @@ Route::post('/updateKeyword', 'KeywordController@updateKeyword')->name('updateKe
 Route::get('/reportTableCountry','ReportController@reportTableCountry')->name('reportcountryTable');
 Route::post('/searchCountryTableByDate','ReportController@searchCountryTableByDate')->name('searchCountryTableByDate');
 
+Route::get('/report-last-day','ReportController@reportLastWorkingDay')->name('reportLastWorkingDay');
 
 
 //supervisor OR Manager report

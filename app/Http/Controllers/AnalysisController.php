@@ -222,47 +222,9 @@ class AnalysisController extends Controller
         }
 
 
-        public function duplicateLeadList (Request $r)
-        {
-
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-           
-                $leads=Lead::select('leads.*','users.firstName','users.lastName')
-                ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('leads.statusId', 8)
-                ->get();
-
-   
-
-                $possibilities = Possibility::get();
-                $probabilities = Probability::get();
-                $callReports = Callingreport::get();
-                $categories=Category::where('type',1)->get();
-                $country=Country::get();
-                $status=Leadstatus::get();
-                
-
-                return view('analysis.duplicateLeadList')
-                ->with('leads', $leads)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country);
-
-            } else {
-
-                return view ('analysis.analysisHome');
-            }
-    
-        }
-
   
         
-        
+        //This function finds the leads that have same  phone numbers, websites
         public function getallConversations(){
 
             $User_Type=Session::get('userType');
@@ -1456,8 +1418,7 @@ class AnalysisController extends Controller
                         return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
                     }
 
-            
-
+       
 
 
             public function myHourReport(Request $r)
@@ -1683,8 +1644,50 @@ class AnalysisController extends Controller
 
 
 
+            public function personalAnalysis()
+            {
+                $userType = Session::get('userType');
+            
+                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                    
+                    $users = User::orderby('firstName', 'asc')->get();
+            
+                    return view('analysis.personalAnalysis')
+                        ->with('users', $users);
+                }
+            }
+            
+            
+            public function getPersonalAnalysis(Request $request)
+            {
+                // Retrieve the selected values from the request
+                $marketerId = $request->input('marketer');
+                $fromDate = $request->input('fromDate');
+                $toDate = $request->input('toDate');
+
+                //CALL UPDATE
+                //Total Call
+                $totalCall = Workprogress::where('userId', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                
 
 
+
+
+                // Prepare the data to be returned as JSON
+                $data = [
+                    'fromDate' => $fromDate,
+                    'toDate' => $toDate,
+                    'totalCall' => $totalCall,
+                    // Add other calculated values here
+                ];
+
+                // Return the data as JSON
+                return response()->json($data);
+            }
 
 
 

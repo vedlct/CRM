@@ -471,11 +471,55 @@ class UserManagementController extends Controller
     }
 
 
-    public function updateUserTarget(Request $data){
-
+    public function updateUserTarget(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'targetCall' => 'required|numeric',
+            'targetContact' => 'required|numeric',
+            'targetHighPossibility' => 'required|numeric',
+            'targetLeadmine' => 'required|numeric',
+            'targetTest' => 'required|numeric',
+            'targetFile' => 'required|numeric',
+            'conversation' => 'required|numeric',
+            'closelead' => 'required|numeric',
+            'followup' => 'required|numeric',
+        ]);
+    
+        // Retrieve the target ID from the request
+        $targetId = $request->input('targetId');
+    
+        // Retrieve the updated target data from the request
+        $targetCall = $request->input('targetCall');
+        $targetContact = $request->input('targetContact');
+        $conversation = $request->input('conversation');
+        $followup = $request->input('followup');
+        $targetTest = $request->input('targetTest');
+        $targetFile = $request->input('targetFile');
+        $closelead = $request->input('closelead');
+        $targetLeadmine = $request->input('targetLeadmine');
+        $targetHighPossibility = $request->input('targetHighPossibility');
+    
+        // Update the userTarget in the database
+        $userTarget = UsertargetByMonth::findOrFail($targetId);
+        $userTarget->targetCall = $targetCall;
+        $userTarget->targetContact = $targetContact;
+        $userTarget->conversation = $conversation;
+        $userTarget->followup = $followup;
+        $userTarget->targetTest = $targetTest;
+        $userTarget->targetFile = $targetFile;
+        $userTarget->closelead = $closelead;
+        $userTarget->targetLeadmine = $targetLeadmine;
+        $userTarget->targetHighPossibility = $targetHighPossibility;
+        $userTarget->save();
+    
+        Session::flash('success', 'User target updated successfully');
+        return back();
     }
+    
 
     
+
 
     public function changePass(Request $r){
 

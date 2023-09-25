@@ -67,7 +67,6 @@
         <p id="fromDate">{{ $fromDate ?? '' }}</p>
         <p id="toDate">{{ $toDate ?? '' }}</p>
         <p id="totalCall">{{ $totalCall ?? '' }}</p>
-        <p id="totalTest">{{ $totalTest ?? '' }}</p>
 
 
     </div>
@@ -77,6 +76,9 @@
         <div class="spinner"></div>
         <p>Analysis Loading...</p>
     </div>
+
+
+    <div id="datacontainer" style="width: 100%;"></div>
 
 
 </div>
@@ -90,7 +92,10 @@
 
 
 <script>
-       
+
+
+
+
 
 
 </script>

@@ -1985,7 +1985,49 @@ class ReportController extends Controller
 
 
 
+    public function reportLastWorkingDay()
+{
+    $activeUserIds = User::where('active', 1)->pluck('id');
+    $lastWorkingDay = Carbon::now()->subWeekdays(1)->toDateString();
     
+    // Step 1: Calculate the total number of calls for each user on the specified date
+    $totalCalls = Workprogress::select('userId', DB::raw('count(progressId) as totalCall'))
+        ->where('created_at', $lastWorkingDay)
+        ->whereIn('userId', $activeUserIds)
+        ->groupBy('userId')
+        ->get();
+
+    // Step 2: Retrieve all entries for email (callingReport = 3 or 8) on the specified date
+    $emailEntries = Workprogress::select('userId', DB::raw('count(progressId) as emailCount'))
+        ->where('created_at', $lastWorkingDay)
+        ->whereIn('callingReport', [3, 8])
+        ->whereIn('userId', $activeUserIds)
+        ->groupBy('userId')
+        ->get();
+
+    // Step 3: Calculate the percentage of email entries relative to the total number of calls
+    $userEmailPercentages = [];
+    foreach ($totalCalls as $totalCall) {
+        $userId = $totalCall->userId;
+        $totalCallCount = $totalCall->totalCall;
+        
+        // Find the corresponding email count for the user
+        $emailCount = $emailEntries->where('userId', $userId)->first()->emailCount ?? 0;
+
+        // Calculate the percentage
+        $percentage = ($totalCallCount > 0) ? ($emailCount / $totalCallCount) * 100 : 0;
+
+        $userEmailPercentages[] = [
+            'userId' => $userId,
+            'emailPercentage' => $percentage,
+        ];
+    }
+
+    return view('report.reportLastWorkingDay', compact('userEmailPercentages'));
+}
+
+
+
 
     
 
