@@ -1690,6 +1690,96 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
+                $totalcontact = Workprogress::where('userId', $marketerId)
+                ->where('callingReport', 5)
+                ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                ->select('leadId')
+                ->count();
+
+                $contactcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 5)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalconversation = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 11)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $conversationcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalfollowup = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 4)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $followupcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 4)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalgatekeepers  = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 9)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $gatekeeperscountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 9)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalunavailable  = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $unavailablecountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 2)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
                 
 
 
@@ -1703,6 +1793,16 @@ class AnalysisController extends Controller
                     'lowlead' => $lowlead,
                     'mediumlead' => $mediumlead,
                     'highlead' => $highlead,
+                    'totalcontact' => $totalcontact,
+                    'contactcountry' => $contactcountry[0]->countryName,
+                    'totalconversation' => $totalconversation,
+                    'conversationcountry' => $conversationcountry[0]->countryName,
+                    'totalfollowup' => $totalfollowup,
+                    'followupcountry' => $followupcountry[0]->countryName,
+                    'totalgatekeepers' => $totalgatekeepers,
+                    'gatekeeperscountry' => $gatekeeperscountry[0]->countryName,
+                    'totalunavailable' => $totalunavailable,
+                    'unavailablecountry' => $unavailablecountry[0]->countryName,
 
                     // Add other calculated values here
                 ];
