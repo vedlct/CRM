@@ -1691,10 +1691,10 @@ class AnalysisController extends Controller
                     ->count();
 
                 $totalcontact = Workprogress::where('userId', $marketerId)
-                ->where('callingReport', 5)
-                ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
-                ->select('leadId')
-                ->count();
+                    ->where('callingReport', 5)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
 
                 $contactcountry =DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
