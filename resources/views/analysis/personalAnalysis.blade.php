@@ -62,14 +62,7 @@
 
     <br>
 
-    <div class="card">
-    <div id="variables">
-        <p id="fromDate">{{ $fromDate ?? '' }}</p>
-        <p id="toDate">{{ $toDate ?? '' }}</p>
-        <p id="totalCall">{{ $totalCall ?? '' }}</p>
-
-
-    </div>
+    
 
 
     <div id="loadingIndicator" class="loading-indicator">
@@ -78,8 +71,12 @@
     </div>
 
 
-    <div id="datacontainer" style="width: 100%;"></div>
+    <div>
 
+
+
+
+    </div>
 
 </div>
 
@@ -90,15 +87,6 @@
 @section('foot-js')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-
-<script>
-
-
-
-
-
-
-</script>
 
 
 @endsection

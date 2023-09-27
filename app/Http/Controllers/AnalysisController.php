@@ -1665,8 +1665,18 @@ class AnalysisController extends Controller
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
 
-                //CALL UPDATE
-                //Total Call
+
+                // These variables will be used in multiple places
+                $workingDays = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(DISTINCT DATE(created_at)) as count'))
+                    ->where('userId', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->first();
+
+                $workingDaysCount = $workingDays->count;
+
+
+                // Get all updates regarding CALLs
                 $totalCall = Workprogress::where('userId', $marketerId)
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->select('leadId')
@@ -1780,13 +1790,93 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                $averageCall = 0; 
+
+                $highestCall = 0; //also add the date
+
+                $lowestCall = 0; // also add the date 
+
+                $peakHour = 0; //get the total call divided by hours of each day
+
+
+                $busiestDay = 0; //Day and number of total calls at that day
+
+                $slowestDay = 0 ; //Day and number of total calls at that day
+
+
+
+                //Get all updates regarding CONVERSATIONS
+                $conversationHighLead = 0;
+
+                $conversationMedumLead = 0;
+
+                $conversationLowLead = 0;
+
+                $highestConvoCountry = 0;
+
+                $lowestConvoCountry = 0;
+
+                $missingInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
+
+                $avgAttemptsInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
+
+
+                //Get all updates regarding FOLLOWUPS
+
+
+
+
+
+
+
+
+
+                //Get all updates regarding TESTS
+
+
+
+
+
+
+
+
+
+
+                
+                
+                //Get all updates regarding CLOSINGS
+
+
+
+
+
+
+
+
+
+                //Get all updates regarding LEAD MINING
+
+
+
+
+
+
+
+
+
+                //Get the CURRENT STATUS
                 
 
 
 
 
+
+                
+
+
                 // Prepare the data to be returned as JSON
                 $data = [
+                    'workingDaysCount' => $workingDaysCount,
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
                     'totalCall' => $totalCall,
