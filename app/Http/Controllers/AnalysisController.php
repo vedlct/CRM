@@ -222,47 +222,9 @@ class AnalysisController extends Controller
         }
 
 
-        public function duplicateLeadList (Request $r)
-        {
-
-            $User_Type=Session::get('userType');
-            if($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
-           
-                $leads=Lead::select('leads.*','users.firstName','users.lastName')
-                ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
-                ->leftJoin('users','leads.contactedUserId','users.id')
-                ->where('leads.statusId', 8)
-                ->get();
-
-   
-
-                $possibilities = Possibility::get();
-                $probabilities = Probability::get();
-                $callReports = Callingreport::get();
-                $categories=Category::where('type',1)->get();
-                $country=Country::get();
-                $status=Leadstatus::get();
-                
-
-                return view('analysis.duplicateLeadList')
-                ->with('leads', $leads)
-                ->with('callReports', $callReports)
-                ->with('possibilities', $possibilities)
-                ->with('probabilities', $probabilities)
-                ->with('categories',$categories)
-                ->with('status',$status)
-                ->with('country',$country);
-
-            } else {
-
-                return view ('analysis.analysisHome');
-            }
-    
-        }
-
   
         
-        
+        //This function finds the leads that have same  phone numbers, websites
         public function getallConversations(){
 
             $User_Type=Session::get('userType');
@@ -1456,8 +1418,7 @@ class AnalysisController extends Controller
                         return ['categoryCounts' => $categoryCounts, 'totalCount' => $totalCount];
                     }
 
-            
-
+       
 
 
             public function myHourReport(Request $r)
@@ -1683,8 +1644,262 @@ class AnalysisController extends Controller
 
 
 
+            public function personalAnalysis()
+            {
+                $userType = Session::get('userType');
+            
+                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                    
+                    $users = User::orderby('firstName', 'asc')->get();
+            
+                    return view('analysis.personalAnalysis')
+                        ->with('users', $users);
+                }
+            }
+            
+            
+            public function getPersonalAnalysis(Request $request)
+            {
+                // Retrieve the selected values from the request
+                $marketerId = $request->input('marketer');
+                $fromDate = $request->input('fromDate');
+                $toDate = $request->input('toDate');
 
 
+                // These variables will be used in multiple places
+                $workingDays = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(DISTINCT DATE(created_at)) as count'))
+                    ->where('userId', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->first();
+
+                $workingDaysCount = $workingDays->count;
+
+
+                // Get all updates regarding CALLs
+                $totalCall = Workprogress::where('userId', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+                $lowlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
+                $mediumlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
+                $highlead = Workprogress::where('userId', $marketerId)
+                    ->where('possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
+                    ->select('leadId')
+                    ->count();
+
+                $totalcontact = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 5)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $contactcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 5)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalconversation = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 11)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $conversationcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalfollowup = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 4)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $followupcountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 4)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalgatekeepers  = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 9)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $gatekeeperscountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 9)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $totalunavailable  = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $unavailablecountry =DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 2)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $averageCall = 0; 
+
+                $highestCall = 0; //also add the date
+
+                $lowestCall = 0; // also add the date 
+
+                $peakHour = 0; //get the total call divided by hours of each day
+
+
+                $busiestDay = 0; //Day and number of total calls at that day
+
+                $slowestDay = 0 ; //Day and number of total calls at that day
+
+
+
+                //Get all updates regarding CONVERSATIONS
+                $conversationHighLead = 0;
+
+                $conversationMedumLead = 0;
+
+                $conversationLowLead = 0;
+
+                $highestConvoCountry = 0;
+
+                $lowestConvoCountry = 0;
+
+                $missingInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
+
+                $avgAttemptsInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
+
+
+                //Get all updates regarding FOLLOWUPS
+
+
+
+
+
+
+
+
+
+                //Get all updates regarding TESTS
+
+
+
+
+
+
+
+
+
+
+                
+                
+                //Get all updates regarding CLOSINGS
+
+
+
+
+
+
+
+
+
+                //Get all updates regarding LEAD MINING
+
+
+
+
+
+
+
+
+
+                //Get the CURRENT STATUS
+                
+
+
+
+
+
+                
+
+
+                // Prepare the data to be returned as JSON
+                $data = [
+                    'workingDaysCount' => $workingDaysCount,
+                    'fromDate' => $fromDate,
+                    'toDate' => $toDate,
+                    'totalCall' => $totalCall,
+                    'lowlead' => $lowlead,
+                    'mediumlead' => $mediumlead,
+                    'highlead' => $highlead,
+                    'totalcontact' => $totalcontact,
+                    'contactcountry' => $contactcountry[0]->countryName,
+                    'totalconversation' => $totalconversation,
+                    'conversationcountry' => $conversationcountry[0]->countryName,
+                    'totalfollowup' => $totalfollowup,
+                    'followupcountry' => $followupcountry[0]->countryName,
+                    'totalgatekeepers' => $totalgatekeepers,
+                    'gatekeeperscountry' => $gatekeeperscountry[0]->countryName,
+                    'totalunavailable' => $totalunavailable,
+                    'unavailablecountry' => $unavailablecountry[0]->countryName,
+
+                    // Add other calculated values here
+                ];
+
+                // Return the data as JSON
+                return response()->json($data);
+            }
 
 
 

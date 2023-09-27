@@ -81,12 +81,12 @@
                     { data: 'number', name: 'number' },
                     { data: 'countryName', name: 'countryName' },
                     { data: 'linkedin', name: 'linkedin' },
-                    { 
+                    {
                         data: 'jobstatus',name: 'jobstatus', render: function(data, type, full, meta) {
                             return data == 1 ? 'Active' : 'Left Job';
                         }
                     },
-                    { 
+                    {
                         data: 'iskdm', name: 'iskdm', render: function(data, type, full, meta) {
                             return data == 1 ? 'Yes' : 'No';
                         }

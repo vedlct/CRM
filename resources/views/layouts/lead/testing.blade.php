@@ -15,7 +15,7 @@
 
     <div class="card" style="padding:10px;">
         <div class="card-body">
-            <h2 align="center"><b>Verify Leads</b></h2>
+            <h2 class="card-title" align="center"><b>Verify Leads</b></h2>
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -24,13 +24,22 @@
                         <th>Id</th>
                         <th>website</th>
                         <th>Number</th>
-                        <th>Marketier</th>
-                        <th>Status</th>                   
+{{--                        <th>Marketier</th>--}}
+{{--                        <th>Status</th>--}}
                     </tr>
                     </thead>
                     <tbody>
+                    @foreach($leads as $lead)
+                    <tr>
+                        <th>{{$lead->leadId}}</th>
+                        <th>{{$lead->website}}</th>
+                        <th>{{$lead->contactNumber}}</th>
+{{--                        <th>Marketier</th>--}}
+{{--                        <th>Status</th>--}}
+                    </tr>
+                    @endforeach
 
-                </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -52,43 +61,20 @@
     <script>
 
 
-        $(function() {
-            $('#myTable').dataTable({
-                // aLengthMenu: [
-                //     [25, 50, 100],
-                //     [25, 50, 100]
-                // ],
-                // "iDisplayLength": 25,
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                Filter: true,
+        $(document).ready(function() {
+            new DataTable('#myTable', {
+                data: data,
                 deferRender: true,
-                search: {
-                    return: true
-                },
-                type:"POST",
-                "ajax": {
-                    "url": "{!! route('verifyallLeads') !!}",
-                    "type": "POST",
-                    "data": {
-                        "_token": "{{ csrf_token() }}"
-                    }
-                },
-                columns: [
-                    { data: 'leadId', name: 'leads.leadId' },
-                    { data: 'website', name: 'leads.website' },
-                    { data: 'contactNumber', name: 'leads.contactNumber'},
-                    {data: 'contact.firstName', name: 'contact.firstName', defaultContent: ''},
-                    {data: 'status.statusName', name: 'status.statusName', defaultContent: ''},
-                                
-                ]
+                scrollCollapse: true,
+                scroller: true,
+                scrollY: 200
             });
+
         });
 
 
 
-        
+
 
     </script>
 

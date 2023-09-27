@@ -1658,6 +1658,38 @@ class LeadController extends Controller
         return Redirect()->route('home');
     }
    
+
+    public function duplicateList (Request $r)
+    {   
+        $leads=Lead::select('leads.*','users.firstName','users.lastName')
+        ->leftJoin('leadstatus','leads.statusId','leadstatus.statusId')
+        ->leftJoin('users','leads.contactedUserId','users.id')
+        ->where('leads.statusId', 8)
+        ->get();
+
+        $possibilities = Possibility::get();
+        $probabilities = Probability::get();
+        $callReports = Callingreport::get();
+        $categories=Category::where('type',1)->get();
+        $country=Country::get();
+        $status=Leadstatus::get();
+        
+
+        return view('layouts.lead.duplicateLeadList')
+        ->with('leads', $leads)
+        ->with('callReports', $callReports)
+        ->with('possibilities', $possibilities)
+        ->with('probabilities', $probabilities)
+        ->with('categories',$categories)
+        ->with('status',$status)
+        ->with('country',$country);
+
+
+    }
+
+
+
+
     public function starLeads(){
         $User_Type=Session::get('userType');
         if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
@@ -2197,12 +2229,14 @@ class LeadController extends Controller
         $user = User::get()->where('crmType', '!=', 'local')->where('active', '1');
 
         return view('layouts.lead.verify')
+       // return view('layouts.lead.testing')
             // ->with('categories',$cats)
             // ->with('countries',$countries)
             // ->with('possibilities',$possibilities)
             // ->with('probabilities',$probabilities)
             // ->with('callReports',$callReports)
-            ->with('user',$user);
+            ->with('user',$user)
+            ;
     }
 
 

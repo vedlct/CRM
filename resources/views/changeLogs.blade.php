@@ -51,6 +51,18 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.09.00</span> - 25 September 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Personal Analysis. </li>
+                    <li class="list-group-item">New Feature - Last Workign Day Report. </li>
+                    <li class="list-group-item">Bug Fixing - increase the daily followup number to 30 </li>
+                    <li class="list-group-item">Bug Fixing - can update the user's target for any month </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.08.00</span> - 19 September 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Add User Profile. </li>

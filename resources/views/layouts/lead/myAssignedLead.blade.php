@@ -811,12 +811,12 @@ infoAlert('Leads are added to your My Leads');
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 15) {
+						if (data > 30) {
 							$('#exceed').hide();
 							$('#total').hide();
 							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 10 && data < 15) {
+						} else if (data > 25 && data < 15) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();

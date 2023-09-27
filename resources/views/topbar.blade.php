@@ -153,6 +153,10 @@
 
 				@if($userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'HR' || $userType == 'MANAGER')
 				
+					<a class="dropdown-item" href="{{route('reportLastWorkingDay')}}">
+						<i class="fa fa-linode"></i> Last Working Day
+					</a>
+
 					<a class="dropdown-item" href="{{route('targetVsAchievement')}}">
 						<i class="fa fa-bullseye"></i> Target vs Achievement
 					</a>
@@ -310,8 +314,8 @@
 						<a class="dropdown-item" href="{{route('closelist')}}">
 							<i class="fa fa-list-alt"></i> Close List
 						</a>
-						<a class="dropdown-item" href="{{route('rejectlist')}}">
-							<i class="fa fa-list-alt"></i> Reject List
+						<a class="dropdown-item" href="{{route('duplicateList')}}">
+							<i class="fa fa-list-alt"></i> Duplicate List
 						</a>
 					</div>
 
@@ -364,7 +368,7 @@
 						<a class="dropdown-item" href="{{route('rejectedLeads')}}">
 							<i class="fa fa-ban"></i> Rejected Leads
 						</a>
-						<a class="dropdown-item" href="{{route('changeLogs')}}">
+						<a class="dropdown-item" href="/crm/changeLogs">
 							<i class="fa fa-history"></i> Change Logs
 						</a>
 

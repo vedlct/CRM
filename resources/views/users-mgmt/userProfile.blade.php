@@ -20,7 +20,7 @@
 							<div class="card-body">
 								<h4 class="card-title">Short Analysis</h4>
 								<p>
-									{{$profile->firstName}} has been with the company since {{$profile->created_at}}. His/her designation is @if (isset($profile->designation)){{$profile->designation->designationName}}@endif. S/he attended @if ($workingDays != 0) {{ $workingDays }} @endif days and dialled <span style="font-weight:bold;">{{ $totalCallAchievedYear }}</span> during this time. On average s/he dialled 
+									{{$profile->firstName}} has been with the company since {{$profile->created_at}}. His/her designation is @if (isset($profile->designation)){{$profile->designation->designationName}}@endif. S/he attended @if ($workingDays != 0) {{ $workingDays }} @endif days in current year and dialled <span style="font-weight:bold;">{{ $totalCallAchievedYear }}</span> during this time. On average s/he dialled 
                                     <span style="font-weight:bold;"> 
                                     @if ($avergareDailyCall != 0) {{ $avergareDailyCall }} </span> 
                                         which is 
@@ -270,8 +270,9 @@
                                 @foreach ($quarterlyData as $quarterData)
                                     <table class="table table-bordered">
                                         <thead class="table-primary">
+                                            
                                             <tr>
-                                                <th>{{ $quarterData['quarterName'] }}</th>
+                                                <th style="background-color:#0000FF; color: white;">{{ $quarterData['quarterName'] }}</th>
                                                 <th>Total Call (5%)</th>
                                                 <th>Contact (5%)</th>
                                                 <th>Conversation (20%)</th>
@@ -292,7 +293,6 @@
                                                 <td>{{ $quarterData['totalTestTarget'] }}</td>
                                                 <td>{{ $quarterData['totalClosingTarget'] }}</td>
                                                 <td>{{ $quarterData['totalLeadMineTarget'] }}</td>
-                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <th>Achievement</th>
@@ -303,7 +303,6 @@
                                                 <td>{{ $quarterData['totalTestAchieved'] ?? '' }}</td>
                                                 <td>{{ $quarterData['totalClosingAchieved'] ?? '' }}</td>
                                                 <td>{{ $quarterData['totalLeadMineAchieved'] ?? '' }}</td>
-                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <th>%</th>
@@ -356,21 +355,32 @@
                                                         0%
                                                     @endif
                                                 </td>
-                                                <td class="percentage-cell">
+                                                
+                                                <td class="percentage-cell" style="text-align: center; font-weight: 500;">
                                                     
                                                 <?php
                                                     // Calculate the total percentage based on the given percentages in the table headers
-                                                    $callPercentageQ = ($quarterData['totalCallTarget'] != 0) ? ($quarterData['totalCallAchieved'] / $quarterData['totalCallTarget']) * 100 * 0.05 : 0;
-                                                    $contactPercentageQ = ($quarterData['totalContactTarget'] != 0) ? ($quarterData['totalContactAchieved'] / $quarterData['totalContactTarget']) * 100 * 0.05 : 0;
-                                                    $conversationPercentageQ = ($quarterData['totalConvoTarget'] != 0) ? ($quarterData['totalConvoAchieved'] / $quarterData['totalConvoTarget']) * 100 * 0.20 : 0;
-                                                    $followupPercentageQ = ($quarterData['totalFollowupTarget'] != 0) ? ($quarterData['totalFollowupAchieved'] / $quarterData['totalFollowupTarget']) * 100 * 0.05 : 0;
-                                                    $testPercentageQ = ($quarterData['totalTestTarget'] != 0) ? ($quarterData['totalTestAchieved'] / $quarterData['totalTestTarget']) * 100 * 0.40 : 0;
-                                                    $closingPercentageQ = ($quarterData['totalClosingTarget'] != 0) ? ($quarterData['totalClosingAchieved'] / $quarterData['totalClosingTarget']) * 100 * 0.20 : 0;
-                                                    $leadMinePercentageQ = ($quarterData['totalLeadMineTarget'] != 0) ? ($quarterData['totalLeadMineAchieved'] / $quarterData['totalLeadMineTarget']) * 100 * 0.05 : 0;
+                                                    $categories = [
+                                                        'Call' => ['totalCallAchieved', 'totalCallTarget', 0.05],
+                                                        'Contact' => ['totalContactAchieved', 'totalContactTarget', 0.05],
+                                                        'Conversation' => ['totalConvoAchieved', 'totalConvoTarget', 0.20],
+                                                        'Followup' => ['totalFollowupAchieved', 'totalFollowupTarget', 0.05],
+                                                        'Test' => ['totalTestAchieved', 'totalTestTarget', 0.40],
+                                                        'Closing' => ['totalClosingAchieved', 'totalClosingTarget', 0.20],
+                                                        'LeadMine' => ['totalLeadMineAchieved', 'totalLeadMineTarget', 0.05],
+                                                    ];
                                                     
-                                                    $totalPercentage = $callPercentageQ + $contactPercentageQ + $conversationPercentageQ + $followupPercentageQ + $testPercentageQ + $closingPercentageQ + $leadMinePercentageQ; 
-
+                                                    $totalPercentage = 0;
+                                                    
+                                                    foreach ($categories as $category => $data) {
+                                                        list($achieved, $target, $weight) = $data;
+                                                        $percentage = ($quarterData[$target] != 0) ? ($quarterData[$achieved] / $quarterData[$target]) * 100 : 0;
+                                                        $percentage = min($percentage, 100); // Cap the percentage at 100%
+                                                        $totalPercentage += $percentage * $weight;
+                                                    }
+                                                    
                                                     echo number_format($totalPercentage, 0) . '%';
+                                                    
                                                 ?>
                                                     
                                                 </td>
