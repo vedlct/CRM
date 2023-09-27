@@ -698,11 +698,11 @@ class UserManagementController extends Controller
 
         // Define quarters and their start/end dates
         $quarters = [
-            ['start' => Carbon::createFromDate($currentYear, 1, 1)->toDateString(),
-             'end' => Carbon::createFromDate($currentYear, 3, 31)->toDateString()],
-            ['start' => Carbon::createFromDate($currentYear, 4, 1)->toDateString(),
-             'end' => Carbon::createFromDate($currentYear, 6, 30)->toDateString()],
-            ['start' => Carbon::createFromDate($currentYear, 7, 1)->toDateString(),
+            ['start' => Carbon::createFromDate($currentYear, 01, 01)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 03, 31)->toDateString()],
+            ['start' => Carbon::createFromDate($currentYear, 04, 01)->toDateString(),
+             'end' => Carbon::createFromDate($currentYear, 06, 30)->toDateString()],
+            ['start' => Carbon::createFromDate($currentYear, 07, 01)->toDateString(),
              'end' => Carbon::createFromDate($currentYear, 9, 30)->toDateString()],
             ['start' => Carbon::createFromDate($currentYear, 10, 1)->toDateString(),
              'end' => Carbon::createFromDate($currentYear, 12, 31)->toDateString()],
@@ -833,7 +833,7 @@ class UserManagementController extends Controller
                     'totalCallTarget' => UserTargetByMonth::where('userId', $user_id)
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('targetCall'),
-                    'totalCallAchieved' => Workprogress::select('progessId')
+                    'totalCallAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
                             ->where('userId', $user_id)
                             ->count(),
@@ -842,7 +842,7 @@ class UserManagementController extends Controller
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('targetContact'),
 
-                    'totalContactAchieved' => Workprogress::select('progessId')
+                    'totalContactAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
                             ->where('callingReport', 5)
                             ->where('userId', $user_id)
@@ -851,7 +851,7 @@ class UserManagementController extends Controller
                     'totalConvoTarget' => UserTargetByMonth::where('userId', $user_id)
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('conversation'),
-                    'totalConvoAchieved' => Workprogress::select('progessId')
+                    'totalConvoAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
                             ->where('callingReport', 11)
                             ->where('userId', $user_id)
@@ -860,16 +860,16 @@ class UserManagementController extends Controller
                     'totalFollowupTarget' => UserTargetByMonth::where('userId', $user_id)
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('followup'),
-                    'totalFollowupAchieved' => Workprogress::select('progessId')
+                    'totalFollowupAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
-                            ->where('callingReport', 11)
                             ->where('userId', $user_id)
+                            ->where('callingReport', 4)
                             ->count(),
 
                     'totalTestTarget' => UserTargetByMonth::where('userId', $user_id)
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('targetTest'),
-                    'totalTestAchieved' => Workprogress::select('progessId')
+                    'totalTestAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
                             ->where('progress', 'LIKE', '%Test%')
                             ->where('userId', $user_id)
@@ -878,7 +878,7 @@ class UserManagementController extends Controller
                     'totalClosingTarget' => UserTargetByMonth::where('userId', $user_id)
                             ->whereBetween('date', [$quarter['start'], $quarter['end']])
                             ->sum('closelead'),
-                    'totalClosingAchieved' => Workprogress::select('progessId')
+                    'totalClosingAchieved' => Workprogress::select('progressId')
                             ->whereBetween('created_at', [$quarter['start'], $quarter['end']])
                             ->where('progress', 'LIKE', '%Closing%')
                             ->where('userId', $user_id)

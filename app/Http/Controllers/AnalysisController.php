@@ -1660,6 +1660,7 @@ class AnalysisController extends Controller
             
             public function getPersonalAnalysis(Request $request)
             {
+            
                 // Retrieve the selected values from the request
                 $marketerId = $request->input('marketer');
                 $fromDate = $request->input('fromDate');
@@ -1681,32 +1682,32 @@ class AnalysisController extends Controller
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
-                $lowlead = Workprogress::where('userId', $marketerId)
+                $lowLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 1)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
-                $mediumlead = Workprogress::where('userId', $marketerId)
+                $mediumLeadTotalcall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 2)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
-                $highlead = Workprogress::where('userId', $marketerId)
+                $highLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 3)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
 
-                $totalcontact = Workprogress::where('userId', $marketerId)
+                $totalContact = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 5)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $contactcountry =DB::table('workprogress')
+                $contactCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1718,13 +1719,13 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
-                $totalconversation = Workprogress::where('userId', $marketerId)
+                $totalConversation = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 11)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $conversationcountry =DB::table('workprogress')
+                $highestConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1736,13 +1737,13 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
-                $totalfollowup = Workprogress::where('userId', $marketerId)
+                $totalFollowup = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 4)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $followupcountry =DB::table('workprogress')
+                $highestFollowupCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1754,13 +1755,13 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
-                $totalgatekeepers  = Workprogress::where('userId', $marketerId)
+                $totalGatekeepers  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 9)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $gatekeeperscountry =DB::table('workprogress')
+                $hightestGKcountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1772,13 +1773,13 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
-                $totalunavailable  = Workprogress::where('userId', $marketerId)
+                $totalUnavailable  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 2)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $unavailablecountry =DB::table('workprogress')
+                $highestUnavailableCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1789,17 +1790,22 @@ class AnalysisController extends Controller
                     ->orderBy('totalcontact', 'DESC')
                     ->limit(1)
                     ->get();
+
 
                 $averageCall = 0; 
 
+
                 $highestCall = 0; //also add the date
 
+
                 $lowestCall = 0; // also add the date 
+
 
                 $peakHour = 0; //get the total call divided by hours of each day
 
 
                 $busiestDay = 0; //Day and number of total calls at that day
+
 
                 $slowestDay = 0 ; //Day and number of total calls at that day
 
@@ -1808,99 +1814,241 @@ class AnalysisController extends Controller
                 //Get all updates regarding CONVERSATIONS
                 $conversationHighLead = 0;
 
+
                 $conversationMedumLead = 0;
+
 
                 $conversationLowLead = 0;
 
-                $highestConvoCountry = 0;
 
                 $lowestConvoCountry = 0;
 
-                $missingInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
 
-                $avgAttemptsInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
+                $missingLeadInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
+
+
+                $avgAttemptInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
+
 
 
                 //Get all updates regarding FOLLOWUPS
 
+                $highLeadsFollowup = 0;
 
 
+                $mediumLeadsFollowup = 0;
 
 
+                $lowLeadsFollowup = 0;
 
+
+                $missedFollowup = 0;
+
+
+                $highLeadMissedFollowup = 0;
+
+
+                $mediumLeadMissedFollowup = 0;
 
 
 
                 //Get all updates regarding TESTS
 
+                $highLeadTest = 0;
 
 
 
+                $mediumLeadTest = 0;
 
 
 
-
+                $lowLeadTest = 0;
 
 
                 
+                $testLeads = []; //The leadId  of the Test in an array
+
+                //     foreach ($testLeads as $testLead) {
+                //         //get the company name, possibility and the number of attempts current user took before getting the test
+                        
+                //     }
+
+
+                $testFromOwnLead = 0; //check if there's any lead with test that are minedBy this user
+
+
+                $brandTest = 0; //check if there's any lead with test that has categoryId = 5
                 
-                //Get all updates regarding CLOSINGS
+                
+                //Get all updates regarding ClOSINGS
+
+                
+                $highLeadClosing = 0;
 
 
 
+                $mediumLeadClosing = 0;
 
 
 
+                $lowLeadClosing = 0;
+
+
+                
+                $testToClosingRatio = 0;
+
+
+                $closingLeads = []; //The leadId of the Closing in an array
+
+                    // foreach ($closingLeads as $closingLead) {
+                    //     //get the company name, possibility, the number of attempts current user took before closing the lead and the difference between first call and closing call in days 
+                        
+                    // }
+
+
+                $clientFromOwnLead = 0; //check if there's any closed lead that are minedBy this user
+
+
+                $brandClosing = 0; //check if there's any closed lead that has categoryId = 5
 
 
 
                 //Get all updates regarding LEAD MINING
 
+                $totalLeadMine = 0;
 
 
+                $highLeadMine = 0;
 
 
+                $mediumLeadMine = 0;
 
 
+                $lowLeadMine = 0;
+
+
+                $onlineStoreLeadMine = 0;
+
+
+                $brandLeadMine = 0;
+
+                
+                $agencyLeadMine = 0;
+
+
+                $highestLeadMineCountry = 0;
+
+
+                $lowestLeadMineCountry = 0;
 
 
                 //Get the CURRENT STATUS
                 
+                $chasingTotal = 0;
 
 
+                $onlineStoreChasing = 0;
 
 
+                $brandChasing = 0;
 
-                
+
+                $agencytoreChasing = 0;
+
+
+                $salesPipelineContact = 0;
+
+
+                $salesPipelineConversation = 0;
+
+
+                $salesPipelinePossibility = 0;
+
+
+                $longTimeNoChase = 0;
+
+                $testButNotClosed = 0;
+
+                $ippList = 0;
+
 
 
                 // Prepare the data to be returned as JSON
                 $data = [
-                    'workingDaysCount' => $workingDaysCount,
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
+                    'workingDaysCount' => $workingDaysCount,
                     'totalCall' => $totalCall,
-                    'lowlead' => $lowlead,
-                    'mediumlead' => $mediumlead,
-                    'highlead' => $highlead,
-                    'totalcontact' => $totalcontact,
-                    'contactcountry' => $contactcountry[0]->countryName,
-                    'totalconversation' => $totalconversation,
-                    'conversationcountry' => $conversationcountry[0]->countryName,
-                    'totalfollowup' => $totalfollowup,
-                    'followupcountry' => $followupcountry[0]->countryName,
-                    'totalgatekeepers' => $totalgatekeepers,
-                    'gatekeeperscountry' => $gatekeeperscountry[0]->countryName,
-                    'totalunavailable' => $totalunavailable,
-                    'unavailablecountry' => $unavailablecountry[0]->countryName,
-
-                    // Add other calculated values here
+                    'lowLeadTotalCall' => $lowLeadTotalCall,
+                    'mediumLeadTotalcall' => $mediumLeadTotalcall,
+                    'highLeadTotalCall' => $highLeadTotalCall,
+                    'totalContact' => $totalContact,
+                    'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
+                    'totalConversation' => $totalConversation,
+                    'totalConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
+                    'totalFollowup' => $totalFollowup,
+                    'highestFollowupCountry' => isset($highestFollowupCountry[0]->countryName) ? $highestFollowupCountry[0]->countryName : '',
+                    'totalGatekeepers' => $totalGatekeepers,
+                    'hightestGKcountry' => isset($hightestGKcountry[0]->countryName) ? $hightestGKcountry[0]->countryName : '',
+                    'totalUnavailable' => $totalUnavailable,
+                    'highestUnavailableCountry' => isset($highestUnavailableCountry[0]->countryName) ? $highestUnavailableCountry[0]->countryName : '',
+                    'averageCall' => $averageCall,
+                    'lowestCall' => $lowestCall,
+                    'peakHour' => $peakHour,
+                    'busiestDay' => $busiestDay,
+                    'slowestDay' => $slowestDay,
+                    'conversationHighLead' => $conversationHighLead,
+                    'conversationMedumLead' => $conversationMedumLead,
+                    'conversationLowLead' => $conversationLowLead,
+                    'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
+                    'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
+                    'avgAttemptInConvo' => $avgAttemptInConvo,
+                    'highLeadsFollowup' => $highLeadsFollowup,
+                    'mediumLeadsFollowup' => $mediumLeadsFollowup,
+                    'lowLeadsFollowup' => $lowLeadsFollowup,
+                    'missedFollowup' => $missedFollowup,
+                    'highLeadMissedFollowup' => $highLeadMissedFollowup,
+                    'mediumLeadMissedFollowup' => $mediumLeadMissedFollowup,
+                    'highLeadTest' => $highLeadTest,
+                    'mediumLeadTest' => $mediumLeadTest,
+                    'lowLeadTest' => $lowLeadTest,
+                    'testLeads' => $testLeads,
+                    'testFromOwnLead' => $testFromOwnLead,
+                    'brandTest' => $brandTest,
+                    'highLeadClosing' => $highLeadClosing,
+                    'mediumLeadClosing' => $mediumLeadClosing,
+                    'lowLeadClosing' => $lowLeadClosing,
+                    'testToClosingRatio' => $testToClosingRatio,
+                    'closingLeads' => count($closingLeads) > 0 ? $closingLeads[0]->countryName : '',
+                    'clientFromOwnLead' => $clientFromOwnLead,
+                    'brandClosing' => $brandClosing,
+                    'totalLeadMine' => $totalLeadMine,
+                    'highLeadMine' => $highLeadMine,
+                    'mediumLeadMine' => $mediumLeadMine,
+                    'lowLeadMine' => $lowLeadMine,
+                    'onlineStoreLeadMine' => $onlineStoreLeadMine,
+                    'brandLeadMine' => $brandLeadMine,
+                    'agencyLeadMine' => $agencyLeadMine,
+                    'highestLeadMineCountry' => isset($highestLeadMineCountry[0]->countryName) ? $highestLeadMineCountry[0]->countryName : '',
+                    'lowestLeadMineCountry' => isset($lowestLeadMineCountry[0]->countryName) ? $lowestLeadMineCountry[0]->countryName : '',
+                    'chasingTotal' => $chasingTotal,
+                    'onlineStoreChasing' => $onlineStoreChasing,
+                    'brandChasing' => $brandChasing,
+                    'agencytoreChasing' => $agencytoreChasing,
+                    'salesPipelineContact' => $salesPipelineContact,
+                    'salesPipelineConversation' => $salesPipelineConversation,
+                    'salesPipelinePossibility' => $salesPipelinePossibility,
+                    'longTimeNoChase' => $longTimeNoChase,
+                    'testButNotClosed' => $testButNotClosed,
+                    'ippList' => $ippList,
                 ];
+                
 
                 // Return the data as JSON
                 return response()->json($data);
-            }
+            
 
+            }
 
 
 
