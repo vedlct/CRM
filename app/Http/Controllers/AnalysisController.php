@@ -1651,7 +1651,7 @@ class AnalysisController extends Controller
                 if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
                     
                     $users = User::orderby('firstName', 'asc')->get();
-            
+
                     return view('analysis.personalAnalysis')
                         ->with('users', $users);
                 }
@@ -1791,14 +1791,19 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                $resultDate = Workprogress::select(DB::raw('COUNT(leadId) as tcount'), DB::raw('DATE(created_at) as date'))
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy(DB::raw('DATE(created_at)'))
+                    ->get();
 
-                $averageCall = 0; 
+                $averageCall = round($resultDate->avg('tcount'),2);
 
+                $highestCall = $resultDate->max('tcount'); //also add the date
+                $highestCallDate = $resultDate->where('tcount',$resultDate->max('tcount'))->first()->date; //also add the date
 
-                $highestCall = 0; //also add the date
-
-
-                $lowestCall = 0; // also add the date 
+                $lowestCall = $resultDate->min('tcount'); // also add the date
+                $lowestCallDate = $resultDate->where('tcount',$resultDate->min('tcount'))->first()->date; // also add the date
 
 
                 $peakHour = 0; //get the total call divided by hours of each day
@@ -1992,8 +1997,11 @@ class AnalysisController extends Controller
                     'hightestGKcountry' => isset($hightestGKcountry[0]->countryName) ? $hightestGKcountry[0]->countryName : '',
                     'totalUnavailable' => $totalUnavailable,
                     'highestUnavailableCountry' => isset($highestUnavailableCountry[0]->countryName) ? $highestUnavailableCountry[0]->countryName : '',
+                    'heightsCall' => $highestCall,
+                    'highestCallDate' => $highestCallDate,
                     'averageCall' => $averageCall,
                     'lowestCall' => $lowestCall,
+                    'lowestCallDate' => $lowestCallDate,
                     'peakHour' => $peakHour,
                     'busiestDay' => $busiestDay,
                     'slowestDay' => $slowestDay,
