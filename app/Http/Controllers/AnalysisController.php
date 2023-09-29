@@ -1773,6 +1773,18 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                $totalEmailSent = Workprogress::where('userId', $marketerId)
+                    ->whereIn('callingReport', [3, 8])
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $totalColdEmail = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 8)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
                 $totalUnavailable  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 2)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
@@ -2269,6 +2281,8 @@ class AnalysisController extends Controller
                     'highestFollowupCountry' => isset($highestFollowupCountry[0]->countryName) ? $highestFollowupCountry[0]->countryName : '',
                     'totalGatekeepers' => $totalGatekeepers,
                     'highestGKcountry' => isset($highestGKcountry[0]->countryName) ? $highestGKcountry[0]->countryName : '',
+                    'totalEmailSent' => $totalEmailSent,
+                    'totalColdEmail' => $totalColdEmail,
                     'totalUnavailable' => $totalUnavailable,
                     'highestUnavailableCountry' => isset($highestUnavailableCountry[0]->countryName) ? $highestUnavailableCountry[0]->countryName : '',
                     'heightsCall' => $highestCall,

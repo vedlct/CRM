@@ -61,9 +61,10 @@
                     <tr>
                         <th>Name</th>
                         <th>New Contact</th>
+                        <th>Conversation</th>
                         <th>Follow up</th>
                         <th>Email</th>
-                        <th>Conversation</th>
+                        <th>Cold Email</th>
                         <th>Not Available</th>
                         <th>Gate Keeper</th>
                         <th>Not Interested</th>
@@ -72,7 +73,7 @@
                         <th>High Possibility</th>
                         <th>Test Lead</th>
                         <th>Close Lead</th>
-                        <th>New File</th>
+                        <!-- <th>New File</th> -->
                         <th>Lead Mined</th>
                     </tr>
                     </thead>
@@ -93,6 +94,23 @@
                                            data-user-name="{{$user->userName}}">{{$value=$c->userContacted}}</a>
                                         @php($value1=0)
                                         @break
+                                    @endif
+                                @endforeach
+                                @if($value==0)
+                                    <a href="#" >0</a>
+                                @endif
+                            </td>
+                            <td>
+                                @php($value=0)
+                                @foreach($conversation as $cs)
+                                    @if($cs->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="totalconversation(this)"
+                                           @if(isset($fromDate) && isset($toDate))
+                                           data-date-from="{{$fromDate}}"
+                                           data-date-to="{{$toDate}}"
+                                           @endif
+                                           data-user-id="{{$user->userid}}"
+                                           data-user-name="{{$user->userName}}">{{$value=$cs->conversation}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
@@ -134,40 +152,24 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
+
                             <td>
                                 @php($value=0)
-                                @foreach($conversation as $cs)
-                                    @if($cs->userId == $user->userid)
-                                        <a href="#" class="highpossibility" onclick="totalconversation(this)"
-                                           @if(isset($fromDate) && isset($toDate))
-                                           data-date-from="{{$fromDate}}"
-                                           data-date-to="{{$toDate}}"
-                                           @endif
-                                           data-user-id="{{$user->userid}}"
-                                           data-user-name="{{$user->userName}}">{{$value=$cs->conversation}}</a>
+                                @foreach($coldemailed as $uc)
+                                    @if($uc->userId == $user->userid)
+                                        <a href="#" class="highpossibility" onclick="totalcoldEmail(this)"
+                                        @if(isset($fromDate) && isset($toDate))
+                                        data-date-from="{{$fromDate}}"
+                                        data-date-to="{{$toDate}}"
+                                        @endif
+                                        data-user-id="{{$user->userid}}"
+                                        data-user-name="{{$user->userName}}">{{$value=$uc->usercoldEmailed}}</a>
                                     @endif
                                 @endforeach
                                 @if($value==0)
-                                    <a href="#" >0</a>
+                                    <a href="#">0</a>
                                 @endif
                             </td>
-{{--                            <td>--}}
-{{--                                @php($value=0)--}}
-{{--                                @foreach($coldemailed as $uc)--}}
-{{--                                    @if($uc->userId == $user->userid)--}}
-{{--                                        <a href="#" class="highpossibility" onclick="totalcoldEmail(this)"--}}
-{{--                                           @if(isset($fromDate) && isset($toDate))--}}
-{{--                                           data-date-from="{{$fromDate}}"--}}
-{{--                                           data-date-to="{{$toDate}}"--}}
-{{--                                           @endif--}}
-{{--                                           data-user-id="{{$user->userid}}"--}}
-{{--                                           data-user-name="{{$user->userName}}">{{$value=$uc->usercoldEmailed}}</a>--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
-{{--                                @if($value==0)--}}
-{{--                                    <a href="#" >0</a>--}}
-{{--                                @endif--}}
-{{--                            </td>--}}
                             <td>
                                 @php($value=0)
                                 @foreach($notAvailable as $uc)
@@ -316,7 +318,7 @@
                                     <a href="#" >0</a>
                                 @endif
                             </td>
-                            <td>
+                            <!-- <td>
                                 <a href="#" class="highpossibility" onclick="newFile(this)"
                                    @if(isset($fromDate) && isset($toDate))
                                    data-date-from="{{$fromDate}}"
@@ -324,7 +326,7 @@
                                    @endif
                                    data-user-id="{{$user->userid}}"
                                    data-user-name="{{$user->userName}}">{{$newFiles->where('userId',$user->userid)->sum('fileCount')}}</a>
-                            </td>
+                            </td> -->
 
                             <td>
                                 @php($value=0)
