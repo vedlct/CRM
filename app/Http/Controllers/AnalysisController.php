@@ -1812,10 +1812,10 @@ class AnalysisController extends Controller
                 $averageCall = round($resultDate->avg('tcount'),2);
 
                 $highestCall = $resultDate->max('tcount'); //also add the date
-                $highestCallDate = $resultDate->where('tcount',$resultDate->max('tcount'))->first()->date; //also add the date
+                $highestCallDate = $resultDate->where('tcount',$resultDate->max('tcount'))->first(); //also add the date
 
                 $lowestCall = $resultDate->min('tcount'); // also add the date
-                $lowestCallDate = $resultDate->where('tcount',$resultDate->min('tcount'))->first()->date; // also add the date
+                $lowestCallDate = $resultDate->where('tcount',$resultDate->min('tcount'))->first(); // also add the date
 
 
                 $peakHour = 0; //get the total call divided by hours of each day
@@ -2304,10 +2304,10 @@ class AnalysisController extends Controller
                     'totalUnavailable' => $totalUnavailable,
                     'highestUnavailableCountry' => isset($highestUnavailableCountry[0]->countryName) ? $highestUnavailableCountry[0]->countryName : '',
                     'heightsCall' => $highestCall,
-                    'highestCallDate' => $highestCallDate,
+                    'highestCallDate' => $highestCallDate->date,
                     'averageCall' => $averageCall,
                     'lowestCall' => $lowestCall,
-                    'lowestCallDate' => $lowestCallDate,
+                    'lowestCallDate' => $lowestCallDate->date,
                     'peakHour' => $peakHour,
                     'busiestDay' => $busiestDay,
                     'slowestDay' => $slowestDay,
@@ -2365,8 +2365,9 @@ class AnalysisController extends Controller
                 
 
                 // Return the data as JSON
-                return response()->json($data);
-            
+             //   return response()->json($data);
+                return view('analysis.personalAnalysisData', compact('data'));
+
 
             }
 
