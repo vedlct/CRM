@@ -1829,13 +1829,31 @@ class AnalysisController extends Controller
 
 
                 //Get all updates regarding CONVERSATIONS
-                $conversationHighLead = 0;
+                $conversationHighLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();;
 
 
-                $conversationMedumLead = 0;
+                $conversationMedumLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
 
 
-                $conversationLowLead = 0;
+                $conversationLowLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();;;
 
 
                 $lowestConvoCountry = 0;
@@ -2276,7 +2294,7 @@ class AnalysisController extends Controller
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
                     'totalConversation' => $totalConversation,
-                    'totalConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
+                    'highConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
                     'highestFollowupCountry' => isset($highestFollowupCountry[0]->countryName) ? $highestFollowupCountry[0]->countryName : '',
                     'totalGatekeepers' => $totalGatekeepers,
