@@ -1853,10 +1853,36 @@ class AnalysisController extends Controller
                     ->where('possibilityId', 1)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
-                    ->count();;;
+                    ->count();
 
 
-                $lowestConvoCountry = 0;
+                $heightConvoCountry = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();;
+
+
+
+                $lowestConvoCountry = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'ASC')
+                    ->limit(1)
+                    ->get();;
 
 
                 $missingLeadInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
@@ -2314,6 +2340,7 @@ class AnalysisController extends Controller
                     'conversationHighLead' => $conversationHighLead,
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
+                    'heightConvoCountry' => isset($heightConvoCountry[0]->countryName) ? $heightConvoCountry[0]->countryName : '',
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
