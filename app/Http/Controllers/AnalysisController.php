@@ -1665,9 +1665,10 @@ class AnalysisController extends Controller
                 $marketerId = $request->input('marketer');
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
+                $user = User::select('gender', 'firstName')->where('id', $marketerId)->get();
+                
 
-
-                // These variables will be used in multiple places
+                // Calculate the number of working days between $fromDate and $toDate for the user
                 $workingDays = DB::table('workprogress')
                     ->select(DB::raw('COUNT(DISTINCT DATE(created_at)) as count'))
                     ->where('userId', $marketerId)
@@ -1677,23 +1678,29 @@ class AnalysisController extends Controller
                 $workingDaysCount = $workingDays->count;
 
 
-                // Get all updates regarding CALLs
+                // Get the total number of calls for the user within the specified date range
                 $totalCall = Workprogress::where('userId', $marketerId)
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
+
+                // Get the total number of calls for low-possibility leads within the date range
                 $lowLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 1)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
+                
+                // Get the total number of calls for medium-possibility leads within the date range
                 $mediumLeadTotalcall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 2)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
+
+                // Get the total number of calls for high-possibility leads within the date range
                 $highLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 3)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
@@ -1701,12 +1708,14 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
+                // Get the total number of contacts (callingReport = 5) within the date range
                 $totalContact = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 5)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of contacts within the date range
                 $contactCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1719,12 +1728,14 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of conversations (callingReport = 11) within the date range
                 $totalConversation = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 11)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of conversations within the date range
                 $highestConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1737,12 +1748,14 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of follow-up calls (callingReport = 4) within the date range
                 $totalFollowup = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 4)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of follow-up calls within the date range
                 $highestFollowupCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1755,12 +1768,14 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of gatekeeper calls (callingReport = 9) within the date range
                 $totalGatekeepers  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 9)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of gatekeeper calls (callingReport = 9) within the date range
                 $highestGKcountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1818,15 +1833,6 @@ class AnalysisController extends Controller
                 $lowestCallDate = $resultDate->where('tcount',$resultDate->min('tcount'))->first(); // also add the date
 
 
-                $peakHour = 0; //get the total call divided by hours of each day
-
-
-                $busiestDay = 0; //Day and number of total calls at that day
-
-
-                $slowestDay = 0 ; //Day and number of total calls at that day
-
-
 
                 //Get all updates regarding CONVERSATIONS
                 $conversationHighLead = Workprogress::where('userId', $marketerId)
@@ -1837,7 +1843,7 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();;
 
-
+                // Get the total number of conversations with medium possibility
                 $conversationMedumLead = Workprogress::where('userId', $marketerId)
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->where('callingReport', 11)
@@ -1846,7 +1852,7 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
-
+                // Get the total number of conversations with low possibility
                 $conversationLowLead = Workprogress::where('userId', $marketerId)
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->where('callingReport', 11)
@@ -1855,7 +1861,7 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
-
+                // Get the country with the highest number of conversations with high possibility
                 $heightConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1870,7 +1876,7 @@ class AnalysisController extends Controller
                     ->get();;
 
 
-
+                // Get the country with the lowest number of conversations with high possibility
                 $lowestConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1885,15 +1891,83 @@ class AnalysisController extends Controller
                     ->get();;
 
 
-                $missingLeadInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
+                // Get all leads with missing information in conversation
+                $missingLeadInfoInConvo = Workprogress::select(
+                            'workprogress.callingReport',
+                            'workprogress.leadId',
+                            'workprogress.userId',
+                            'leads.process',
+                            'leads.frequency',
+                            'leads.volume',
+                            'leads.leadId',
+                            'leads.contactedUserId',
+                            'leads.companyName'
+                        )
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.callingReport', 11)
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->distinct('workprogress.leadId')
+                    ->leftJoin('leads', function ($join) use ($marketerId) {
+                        $join->on('workprogress.leadId', 'leads.leadId')
+                             ->where('leads.contactedUserId', $marketerId);
+                    })
+                    ->where(function ($query) {
+                        $query->where(function ($subQuery) {
+                            $subQuery->whereNull('leads.volume')
+                                     ->orWhereNull('leads.frequency');
+                        })
+                        ->orWhere(function ($subQuery) {
+                            $subQuery->whereNull('leads.volume')
+                                     ->orWhereNull('leads.process');
+                        })
+                        ->orWhere(function ($subQuery) {
+                            $subQuery->whereNull('leads.frequency')
+                                     ->orWhereNull('leads.process');
+                        });
+                    })
+                    ->get('leads.leadId', 'leads.companyName', 'leads.process', 'leads.volume', 'leads.frequency');
+                    
 
-
-                $avgAttemptInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
-
+                $getLeadwithConvo = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 11)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->distinct()
+                    ->pluck('leadId');
+                
+                $avgAttempts = 0;
+                $totalLeadsWithConvo = $getLeadwithConvo->count();
+                
+                    foreach ($getLeadwithConvo as $leadId) {
+                        $firstCall = Workprogress::where('userId', $marketerId)
+                            ->where('leadId', $leadId)
+                            ->orderBy('created_at')
+                            ->first();
+                    
+                        $convoCall = Workprogress::where('userId', $marketerId)
+                            ->where('leadId', $leadId)
+                            ->where('callingReport', 11)
+                            ->orderBy('created_at')
+                            ->first();
+                    
+                        if ($firstCall && $convoCall) {
+                            $attempts = Workprogress::where('userId', $marketerId)
+                                ->where('leadId', $leadId)
+                                ->whereBetween('created_at', [$firstCall->created_at, $convoCall->created_at])
+                                ->count();
+                    
+                            $avgAttempts += $attempts;
+                        }
+                    }
+                
+                    if ($totalLeadsWithConvo > 0) {
+                        $avgAttemptInConvo = number_format(($avgAttempts / $totalLeadsWithConvo), 0);
+                    } else {
+                        $avgAttemptInConvo = 0;
+                    }
+                                    
 
 
                 //Get all updates regarding FOLLOWUPS
-
                 $highLeadsFollowup = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 4)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
@@ -2074,8 +2148,6 @@ class AnalysisController extends Controller
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->count();
 
-
-               
                 
                 $closingLeads = Workprogress::where('userId', $marketerId)
                     ->where('progress', 'LIKE', '%Closing%')
@@ -2304,12 +2376,11 @@ class AnalysisController extends Controller
                 $ippList = Lead::where('contactedUserId', $marketerId)->where('ippStatus', 1)->count();
 
 
-                $gender = User::select('gender')->where('id', $marketerId)->get();
 
 
                 // Prepare the data to be returned as JSON
                 $data = [
-                    'gender' => $gender,
+                    'user' => $user,
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
                     'workingDaysCount' => $workingDaysCount,
@@ -2334,9 +2405,6 @@ class AnalysisController extends Controller
                     'averageCall' => $averageCall,
                     'lowestCall' => $lowestCall,
                     'lowestCallDate' => $lowestCallDate->date,
-                    'peakHour' => $peakHour,
-                    'busiestDay' => $busiestDay,
-                    'slowestDay' => $slowestDay,
                     'conversationHighLead' => $conversationHighLead,
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
@@ -2392,7 +2460,7 @@ class AnalysisController extends Controller
                 
 
                 // Return the data as JSON
-             //   return response()->json($data);
+            //    return response()->json($data);
                 return view('analysis.personalAnalysisData', compact('data'));
 
 
