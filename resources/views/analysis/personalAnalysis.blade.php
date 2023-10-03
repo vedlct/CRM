@@ -28,6 +28,48 @@
     100% { transform: rotate(360deg); }
 }
 
+
+.lds-dual-ring.hidden {
+    display: none;
+}
+.lds-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 5% auto;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,.8);
+    z-index: 999;
+    opacity: 1;
+    transition: all 0.5s;
+}
+
 </style>
 @section('content')
 
@@ -35,6 +77,9 @@
     <h2 style="text-align: center; padding: 50px 50px 0 50px;">Personal Analysis</h2>
     <p style="text-align: center; padding: 0 0 50px 0;">Select user name and dates to get an user's analysis. What they did in a certain timeframe.</p>
 
+    <div id="richList"></div>
+
+    <div id="loader" class="lds-dual-ring hidden overlay"></div>
     <form  id="dataForm" >
         {{ csrf_field() }}
 
@@ -116,16 +161,22 @@
                 toDate:toDate,
 
             },
+            beforeSend: function() {
+                $('#loader').removeClass('hidden')
+            },
             success:function(response){
                 $('#showdataDiv').html(response);
 
-                console.log(response);
+              //  console.log(response);
             },
             error: function(response) {
                 // $('#nameErrorMsg').text(response.responseJSON.errors.name);
                 // $('#emailErrorMsg').text(response.responseJSON.errors.email);
                 // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
                 // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+            },
+            complete: function(){
+                $('#loader').addClass('hidden')
             },
         });
     });
