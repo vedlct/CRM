@@ -1665,7 +1665,7 @@ class AnalysisController extends Controller
                 $marketerId = $request->input('marketer');
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
-                $user = User::select('gender', 'firstName')->where('id', $marketerId)->get();
+                $user = User::select('gender', 'firstName')->where('id', $marketerId)->first();
                 
 
                 // Calculate the number of working days between $fromDate and $toDate for the user
@@ -1862,7 +1862,7 @@ class AnalysisController extends Controller
                     ->count();
 
                 // Get the country with the highest number of conversations with high possibility
-                $heightConvoCountry = DB::table('workprogress')
+                $highestConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -2408,7 +2408,7 @@ class AnalysisController extends Controller
                     'conversationHighLead' => $conversationHighLead,
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
-                    'heightConvoCountry' => isset($heightConvoCountry[0]->countryName) ? $heightConvoCountry[0]->countryName : '',
+                    'highestConvoCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
