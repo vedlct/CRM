@@ -1888,11 +1888,11 @@ class LeadController extends Controller
             }else {
                 
                 $leads = $leads->whereHas('lastCallingReport', function ($query) use ($r) {
-                    return $query->where('callingReport', '=', $r->status) 
-                    ->where('workprogress.userId', Auth::user()->id);
-//                    ->orderBy('created_at', 'DESC');
-//                    ->groupBy('workprogress.leadId')
-//                    ->limit(1);
+                    return $query 
+                        ->where('workprogress.userId', Auth::user()->id)
+                        ->where('workprogress.callingReport', '=', $r->status)
+                        ->whereRaw('workprogress.progressId = (SELECT MAX(progressId) FROM workprogress AS wp WHERE wp.leadId = workprogress.leadId)')
+                        ->orderBy('workprogress.created_at', 'DESC');
                 });
             }
 
