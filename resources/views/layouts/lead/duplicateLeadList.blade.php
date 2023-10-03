@@ -292,90 +292,33 @@
 
 
     <!-- Call Modal -->
-    <div class="modal" id="my_modal" style="">
-        <div class="modal-dialog" style="max-width: 60%;">
-
-            <form class="modal-content" action="{{route('storeReport')}}" method="post">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" name="modal-title">Calling Report</h4>
-                </div>
-                <div class="modal-body" >
-                    {{csrf_field()}}
-                    <input type="hidden" name="leadId">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label ><b>Calling Report : </b></label>
-                                <select class="form-control" name="report" required>
-                                    <option value=""><b>(select one)</b></option>
-
-                                    @foreach($callReports as $report)
-                                        <option value="{{$report->callingReportId}}">{{$report->report}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label ><b>Progress : </b></label>
-                                <select class="form-control" name="progress" >
-                                    <option value=""><b>(select one)</b></option>
-                                    <option value="Test Job">Test Job</option>
-                                    <option value="Closing">Closing</option>
-                                </select>
-                                <br>
-                            </div>
-
-                            <div class="form-group">
-                                <label class=""><b>Follow Up Date : </b> <span id="exceed" style="color:red;display: none"><i>Already Exceed the limit 10</i></span></label>
-                                <input class="form-control changedate" id="datepicker"  rows="3" name="followup" placeholder="pick Date">
-                            </div>
-
-
-                            <div class="form-group">
-                                <label class=""><b>Possibility : </b></label>
-                                <select class="form-control"  name="possibility" id="possibility">
-                                    @foreach($possibilities as $p)
-                                        <option value="{{$p->possibilityId}}">{{$p->possibilityName}}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label class=""><b>Comment : </b></label>
-                                <textarea class="form-control" rows="3" name="comment" required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group" style="margin: 10px; "><br>
-                                <div  style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
-
-                                </div>
+        <div class="modal" id="my_modal" style="">
+            <div class="modal-dialog" style="max-width: 40%;">
+                <div class="modal-content"> <!-- Added modal-content -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" name="modal-title">Calling Report</h4>
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <ul class="list-group" style="margin: 10px;">
+                                    <div style="height: 460px; width: 100%; overflow-y: scroll; border: solid black 1px;" id="comment">
+                                    </div>
                             </ul>
                             <ul>
                                 <b>Call Statistics per marketer</b>
                                 <p>Here you will see who reached out to this company for how many times.</p>
                                 <div id="counter"></div>
                             </ul>
-
-                        </div>
-
-                        <div class="col-md-12"><br>
-                            <button class="btn btn-success">Submit</button>
                         </div>
                     </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div> <!-- Added closing modal-content div -->
+            </div>
         </div>
-    </div>
+
 
 
    <!--ALL Activities-->

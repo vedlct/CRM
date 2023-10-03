@@ -791,7 +791,7 @@
 						if (data > 30) {
 							$('#exceed').hide();
 							$('#total').hide();
-							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
+							$('#enoughfortoday').text('Sorry, already 30+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
 						} else if (data > 25 && data < 20) {
 							$('#total').hide();
