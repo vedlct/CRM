@@ -70,8 +70,23 @@
         <p>Analysis Loading...</p>
     </div>
 
+    
+    <div class="row" style="font-size: 24px;">
+        <div class="col-sm-12 col-xl-2">
 
-    <div id="showdataDiv"></div>
+        </div>
+
+        <div class="col-sm-12 col-xl-8">
+            <div id="showdataDiv">
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-xl-2">
+
+        </div>
+    </div>
+
+    
 
 </div>
 
