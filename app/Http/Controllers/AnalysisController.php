@@ -1651,7 +1651,7 @@ class AnalysisController extends Controller
                 if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
                     
                     $users = User::orderby('firstName', 'asc')->get();
-            
+
                     return view('analysis.personalAnalysis')
                         ->with('users', $users);
                 }
@@ -1665,9 +1665,10 @@ class AnalysisController extends Controller
                 $marketerId = $request->input('marketer');
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
+                $user = User::select('gender', 'firstName')->where('id', $marketerId)->get();
+                
 
-
-                // These variables will be used in multiple places
+                // Calculate the number of working days between $fromDate and $toDate for the user
                 $workingDays = DB::table('workprogress')
                     ->select(DB::raw('COUNT(DISTINCT DATE(created_at)) as count'))
                     ->where('userId', $marketerId)
@@ -1677,23 +1678,29 @@ class AnalysisController extends Controller
                 $workingDaysCount = $workingDays->count;
 
 
-                // Get all updates regarding CALLs
+                // Get the total number of calls for the user within the specified date range
                 $totalCall = Workprogress::where('userId', $marketerId)
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
+
+                // Get the total number of calls for low-possibility leads within the date range
                 $lowLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 1)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
+                
+                // Get the total number of calls for medium-possibility leads within the date range
                 $mediumLeadTotalcall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 2)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->leftjoin('leads','leads.leadId', 'workprogress.leadId')
                     ->select('leadId')
                     ->count();
+
+                // Get the total number of calls for high-possibility leads within the date range
                 $highLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 3)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
@@ -1701,12 +1708,14 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
+                // Get the total number of contacts (callingReport = 5) within the date range
                 $totalContact = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 5)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of contacts within the date range
                 $contactCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1719,12 +1728,14 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of conversations (callingReport = 11) within the date range
                 $totalConversation = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 11)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of conversations within the date range
                 $highestConvoCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1737,12 +1748,14 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of follow-up calls (callingReport = 4) within the date range
                 $totalFollowup = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 4)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
+                // Get the country with the highest number of follow-up calls within the date range
                 $highestFollowupCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
@@ -1755,13 +1768,15 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                // Get the total number of gatekeeper calls (callingReport = 9) within the date range
                 $totalGatekeepers  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 9)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->select('leadId')
                     ->count();
 
-                $hightestGKcountry = DB::table('workprogress')
+                // Get the country with the highest number of gatekeeper calls (callingReport = 9) within the date range
+                $highestGKcountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1772,6 +1787,18 @@ class AnalysisController extends Controller
                     ->orderBy('totalcontact', 'DESC')
                     ->limit(1)
                     ->get();
+
+                $totalEmailSent = Workprogress::where('userId', $marketerId)
+                    ->whereIn('callingReport', [3, 8])
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                $totalColdEmail = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 8)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
 
                 $totalUnavailable  = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 2)
@@ -1791,190 +1818,569 @@ class AnalysisController extends Controller
                     ->limit(1)
                     ->get();
 
+                $resultDate = Workprogress::select(DB::raw('COUNT(leadId) as tcount'), DB::raw('DATE(created_at) as date'))
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy(DB::raw('DATE(created_at)'))
+                    ->get();
 
-                $averageCall = 0; 
+                $averageCall = round($resultDate->avg('tcount'),2);
 
+                $highestCall = $resultDate->max('tcount'); //also add the date
+                $highestCallDate = $resultDate->where('tcount',$resultDate->max('tcount'))->first(); //also add the date
 
-                $highestCall = 0; //also add the date
-
-
-                $lowestCall = 0; // also add the date 
-
-
-                $peakHour = 0; //get the total call divided by hours of each day
-
-
-                $busiestDay = 0; //Day and number of total calls at that day
-
-
-                $slowestDay = 0 ; //Day and number of total calls at that day
+                $lowestCall = $resultDate->min('tcount'); // also add the date
+                $lowestCallDate = $resultDate->where('tcount',$resultDate->min('tcount'))->first(); // also add the date
 
 
 
                 //Get all updates regarding CONVERSATIONS
-                $conversationHighLead = 0;
+                $conversationHighLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();;
+
+                // Get the total number of conversations with medium possibility
+                $conversationMedumLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                // Get the total number of conversations with low possibility
+                $conversationLowLead = Workprogress::where('userId', $marketerId)
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select('leadId')
+                    ->count();
+
+                // Get the country with the highest number of conversations with high possibility
+                $heightConvoCountry = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();;
 
 
-                $conversationMedumLead = 0;
+                // Get the country with the lowest number of conversations with high possibility
+                $lowestConvoCountry = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('possibilityId', 1)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'ASC')
+                    ->limit(1)
+                    ->get();;
 
 
-                $conversationLowLead = 0;
+                // Get all leads with missing information in conversation
+                $missingLeadInfoInConvo = Workprogress::select(
+                            'workprogress.callingReport',
+                            'workprogress.leadId',
+                            'workprogress.userId',
+                            'leads.process',
+                            'leads.frequency',
+                            'leads.volume',
+                            'leads.leadId',
+                            'leads.contactedUserId',
+                            'leads.companyName'
+                        )
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.callingReport', 11)
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->distinct('workprogress.leadId')
+                    ->leftJoin('leads', function ($join) use ($marketerId) {
+                        $join->on('workprogress.leadId', 'leads.leadId')
+                             ->where('leads.contactedUserId', $marketerId);
+                    })
+                    ->where(function ($query) {
+                        $query->where(function ($subQuery) {
+                            $subQuery->whereNull('leads.volume')
+                                     ->orWhereNull('leads.frequency');
+                        })
+                        ->orWhere(function ($subQuery) {
+                            $subQuery->whereNull('leads.volume')
+                                     ->orWhereNull('leads.process');
+                        })
+                        ->orWhere(function ($subQuery) {
+                            $subQuery->whereNull('leads.frequency')
+                                     ->orWhereNull('leads.process');
+                        });
+                    })
+                    ->get('leads.leadId', 'leads.companyName', 'leads.process', 'leads.volume', 'leads.frequency');
+                    
 
-
-                $lowestConvoCountry = 0;
-
-
-                $missingLeadInfoInConvo = 0; //need the leads name where either process or frequency or volume is missing
-
-
-                $avgAttemptInConvo = 0; //we will check how many times the user appears in the workprogress table for those leadId that have coversation and get the average(total attempts / total leadId)
-
+                $getLeadwithConvo = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 11)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->distinct()
+                    ->pluck('leadId');
+                
+                $avgAttempts = 0;
+                $totalLeadsWithConvo = $getLeadwithConvo->count();
+                
+                    foreach ($getLeadwithConvo as $leadId) {
+                        $firstCall = Workprogress::where('userId', $marketerId)
+                            ->where('leadId', $leadId)
+                            ->orderBy('created_at')
+                            ->first();
+                    
+                        $convoCall = Workprogress::where('userId', $marketerId)
+                            ->where('leadId', $leadId)
+                            ->where('callingReport', 11)
+                            ->orderBy('created_at')
+                            ->first();
+                    
+                        if ($firstCall && $convoCall) {
+                            $attempts = Workprogress::where('userId', $marketerId)
+                                ->where('leadId', $leadId)
+                                ->whereBetween('created_at', [$firstCall->created_at, $convoCall->created_at])
+                                ->count();
+                    
+                            $avgAttempts += $attempts;
+                        }
+                    }
+                
+                    if ($totalLeadsWithConvo > 0) {
+                        $avgAttemptInConvo = number_format(($avgAttempts / $totalLeadsWithConvo), 0);
+                    } else {
+                        $avgAttemptInConvo = 0;
+                    }
+                                    
 
 
                 //Get all updates regarding FOLLOWUPS
-
-                $highLeadsFollowup = 0;
-
-
-                $mediumLeadsFollowup = 0;
-
-
-                $lowLeadsFollowup = 0;
-
-
-                $missedFollowup = 0;
+                $highLeadsFollowup = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 4)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+                    ->where('leads.possibilityId', 3)
+                    ->select('leads.leadId')
+                    ->count();
 
 
-                $highLeadMissedFollowup = 0;
+                $mediumLeadsFollowup = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 4)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+                    ->where('leads.possibilityId', 2)
+                    ->select('leads.leadId')
+                    ->count();
 
 
-                $mediumLeadMissedFollowup = 0;
+                $lowLeadsFollowup = Workprogress::where('userId', $marketerId)
+                    ->where('callingReport', 4)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->leftJoin('leads', 'workprogress.leadId', 'leads.leadId')
+                    ->where('leads.possibilityId', 1)
+                    ->select('leads.leadId')
+                    ->count();
 
+
+                $missedFollowupLeads = Followup::select('followup.followId', 'leads.leadId') 
+                    ->where('followup.userId', $marketerId)
+                    ->where('followup.workStatus', 0)
+                    ->whereBetween('followup.created_at', [$fromDate, $toDate])
+                    ->join('leads', 'followup.leadId', 'leads.leadId')
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->pluck('leads.leadId');
+                
+                $missedFollowup=$missedFollowupLeads->count();
+                
+                $highLeadMissedFollowup = Lead::whereIn('leadId', $missedFollowupLeads)
+                    ->where('leads.possibilityId', 3)
+                    ->count();
+
+                $mediumLeadMissedFollowup = Lead::whereIn('leadId', $missedFollowupLeads)
+                    ->where('leads.possibilityId', 2)
+                    ->count();
 
 
                 //Get all updates regarding TESTS
 
-                $highLeadTest = 0;
+                $testInPeriod = Workprogress::select('progressId')
+                    ->where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Test%')
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->count();
 
 
+                $highLeadTest = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Test%')
+                    ->where('leads.possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
 
-                $mediumLeadTest = 0;
+                $mediumLeadTest = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Test%')
+                    ->where('leads.possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
 
-
-
-                $lowLeadTest = 0;
+                $lowLeadTest = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Test%')
+                    ->where('leads.possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
 
 
                 
-                $testLeads = []; //The leadId  of the Test in an array
+                $testLeads = Workprogress::select('leadId')
+                    ->where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Test%')
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->pluck('leadId');
 
-                //     foreach ($testLeads as $testLead) {
-                //         //get the company name, possibility and the number of attempts current user took before getting the test
+                $testLeadData = [];
+                
+                    foreach ($testLeads as $testLeadId) {
+                        $leadData = Lead::select('companyName', 'website')
+                            ->where('leadId', $testLeadId)
+                            ->first(); // Retrieve the lead data for a specific lead ID
+                    
+                        if ($leadData) {
+                            $possibilityName = Lead::where('leadId', $testLeadId)
+                                ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')
+                                ->value('possibilityName'); // Retrieve the possibility name
+                    
+                            $country = Lead::where('leadId', $testLeadId)
+                                ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                                ->value('countryName'); // Retrieve the Country name
+                    
+                    
+                            // Calculate the difference between first call and closing call in days
+                            $firstCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
+                                ->where('leadId', $testLeadId)
+                                ->where('userId', $marketerId)
+                                ->orderBy('created_at', 'asc')
+                                ->first();
+    
+                            $testCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
+                                ->where('leadId', $testLeadId)
+                                ->where('progress', 'LIKE', '%Test%')
+                                ->where('userId', $marketerId)
+                                ->orderBy('created_at', 'desc')
+                                ->first();
+    
+                                $differenceInDays = null;
+                                $attempts = 0; // Initialize the attempts count
+                                
+                                if ($firstCall && $testCall) {
+                                    $firstCallDateTime = new \DateTime($firstCall->created_at);
+                                    $testCallDateTime = new \DateTime($testCall->created_at);
+                                    $differenceInDays = $firstCallDateTime->diff($testCallDateTime)->days;
+                                
+                                    // Count the attempts between firstCall and testCall
+                                    $attempts = Workprogress::where('leadId', $testLeadId)
+                                        ->where('userId', $marketerId)
+                                        ->whereBetween('created_at', [$firstCall->created_at, $testCall->created_at])
+                                        ->count();
+                                }
                         
-                //     }
+    
+                            $testLeadData[] = [
+                                'companyName' => $leadData->companyName,
+                                'website' => $leadData->website,
+                                'possibilityName' => $possibilityName,
+                                'country' => $country,
+                                'attempts' => $attempts,
+                                'differenceInDays' => $differenceInDays,
+                            ];
+                        }
+                    }
 
+                $testFromOwnLead = Lead::whereIn('leadId', $testLeads)
+                    ->where('minedBy', $marketerId)
+                    ->count();
 
-                $testFromOwnLead = 0; //check if there's any lead with test that are minedBy this user
-
-
-                $brandTest = 0; //check if there's any lead with test that has categoryId = 5
+                // Count how many of these leads are Brands
+                $brandTest = Lead::whereIn('leadId', $testLeads)
+                    ->where('categoryId', 5)
+                    ->count();
                 
                 
                 //Get all updates regarding ClOSINGS
 
+                $clientsInPeriod = Workprogress::where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Closing%')
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->count();
+
+                $highLeadClosing = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Closing%')
+                    ->where('leads.possibilityId', 3)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
+
+                $mediumLeadClosing = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Closing%')
+                    ->where('leads.possibilityId', 2)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
+
+                $lowLeadClosing = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Closing%')
+                    ->where('leads.possibilityId', 1)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->count();
+
                 
-                $highLeadClosing = 0;
-
-
-
-                $mediumLeadClosing = 0;
-
-
-
-                $lowLeadClosing = 0;
-
-
+                $closingLeads = Workprogress::where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Closing%')
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->pluck('leadId');
                 
-                $testToClosingRatio = 0;
+                $closingLeadData = [];
+                
+                foreach ($closingLeads as $closingLeadId) {
+                    $leadData = Lead::select('companyName', 'website')
+                        ->where('leadId', $closingLeadId)
+                        ->first(); // Retrieve the lead data for a specific lead ID
+                
+                    if ($leadData) {
+                        $possibilityName = Lead::where('leadId', $closingLeadId)
+                            ->leftJoin('possibilities', 'leads.possibilityId', 'possibilities.possibilityId')
+                            ->value('possibilityName'); // Retrieve the possibility name
+                
+                        $country = Lead::where('leadId', $closingLeadId)
+                            ->leftJoin('countries', 'leads.countryId', 'countries.countryId')
+                            ->value('countryName'); // Retrieve the Country name
+                
+                
+                        // Calculate the difference between first call and closing call in days
+                        $firstCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
+                            ->where('leadId', $closingLeadId)
+                            ->where('userId', $marketerId)
+                            ->orderBy('created_at', 'asc')
+                            ->first();
+
+                        $closingCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
+                            ->where('leadId', $closingLeadId)
+                            ->where('progress', 'LIKE', '%Closing%')
+                            ->where('userId', $marketerId)
+                            ->orderBy('created_at', 'desc')
+                            ->first();
+
+                            $differenceInDays = null;
+                            $attempts = 0; // Initialize the attempts count
+                            
+                            if ($firstCall && $closingCall) {
+                                $firstCallDateTime = new \DateTime($firstCall->created_at);
+                                $closingCallDateTime = new \DateTime($closingCall->created_at);
+                                $differenceInDays = $firstCallDateTime->diff($closingCallDateTime)->days;
+                            
+                                // Count the attempts of $closingLeadId between firstCall and closingCall
+                                $attempts = Workprogress::where('leadId', $closingLeadId)
+                                    ->where('userId', $marketerId)
+                                    ->whereBetween('created_at', [$firstCall->created_at, $closingCall->created_at])
+                                    ->count();
+                            }
+                    
+
+                        $closingLeadData[] = [
+                            'companyName' => $leadData->companyName,
+                            'website' => $leadData->website,
+                            'possibilityName' => $possibilityName,
+                            'country' => $country,
+                            'attempts' => $attempts,
+                            'differenceInDays' => $differenceInDays,
+                        ];
+                    }
+                }
+                                
 
 
-                $closingLeads = []; //The leadId of the Closing in an array
+                // Count how many of these leads are mined by the specified user
+                $clientFromOwnLead = Lead::whereIn('leadId', $closingLeads)
+                    ->where('minedBy', $marketerId)
+                    ->count();
 
-                    // foreach ($closingLeads as $closingLead) {
-                    //     //get the company name, possibility, the number of attempts current user took before closing the lead and the difference between first call and closing call in days 
-                        
-                    // }
+                // Count how many of these leads are Brands
+                $brandClosing = Lead::whereIn('leadId', $closingLeads)
+                    ->where('categoryId', 5)
+                    ->count();
 
 
-                $clientFromOwnLead = 0; //check if there's any closed lead that are minedBy this user
-
-
-                $brandClosing = 0; //check if there's any closed lead that has categoryId = 5
-
+                $testToClosingRatio = ($testInPeriod > 0) ? round(($clientsInPeriod / $testInPeriod) * 100) : 0;
 
 
                 //Get all updates regarding LEAD MINING
 
-                $totalLeadMine = 0;
+                $totalLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->count();
 
 
-                $highLeadMine = 0;
+                $highLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('possibilityId', 3)
+                    ->count();
 
 
-                $mediumLeadMine = 0;
+                $mediumLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('possibilityId', 2)
+                    ->count();
 
 
-                $lowLeadMine = 0;
+                $lowLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('possibilityId', 1)
+                    ->count();
 
 
-                $onlineStoreLeadMine = 0;
+                $onlineStoreLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('categoryId', 4)
+                    ->count();
+
+                $brandLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('categoryId', 5)
+                    ->count();
+            
+                $agencyLeadMine = Lead::select('leadId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->where('categoryId', 1)
+                    ->count();
 
 
-                $brandLeadMine = 0;
+                $highestLeadMineCountry = DB::table('leads')
+                    ->select(DB::raw('COUNT(leads.leadId) as maxCountryCount'), 'countries.countryName as countryName', 'leads.countryId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('leads.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('maxCountryCount', 'DESC')
+                    ->limit(1)
+                    ->get();
 
-                
-                $agencyLeadMine = 0;
+                $highestLeadMineCountryCount = $highestLeadMineCountry->isEmpty() ? 0 : $highestLeadMineCountry[0]->maxCountryCount;
+                    
 
+                $lowestLeadMineCountry = DB::table('leads')
+                    ->select(DB::raw('COUNT(leads.leadId) as minCountryCount'), 'countries.countryName as countryName', 'leads.countryId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('minedBy', $marketerId)
+                    ->whereBetween('leads.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('minCountryCount', 'ASC')
+                    ->limit(1)
+                    ->get();
 
-                $highestLeadMineCountry = 0;
+                $lowestLeadMineCountryCount = $lowestLeadMineCountry->isEmpty() ? 0 : $lowestLeadMineCountry[0]->minCountryCount;
 
-
-                $lowestLeadMineCountry = 0;
 
 
                 //Get the CURRENT STATUS
                 
-                $chasingTotal = 0;
+                $chasingTotal = Lead::select('leadId')->where('contactedUserId', $marketerId)->count();
 
 
-                $onlineStoreChasing = 0;
+                $onlineStoreChasing = Lead::select('leadId')
+                    ->where('contactedUserId', $marketerId)
+                    ->where('categoryId', 4)
+                    ->count();
 
 
-                $brandChasing = 0;
+                $brandChasing = Lead::select('leadId')
+                    ->where('contactedUserId', $marketerId)
+                    ->where('categoryId', 5)
+                    ->count();
 
 
-                $agencytoreChasing = 0;
+                $agencyChasing = Lead::select('leadId')
+                    ->where('contactedUserId', $marketerId)
+                    ->where('categoryId', 1)
+                    ->count();
+
+                $photographerChasing = Lead::select('leadId')
+                    ->where('contactedUserId', $marketerId)
+                    ->where('categoryId', 2)
+                    ->count();
 
 
-                $salesPipelineContact = 0;
+                $salesPipelineContact = SalesPipeline::where('stage', 'LIKE', '%Contact%')
+                    ->where('userId', $marketerId)
+                    ->where('workStatus', 1)
+                    ->count();
 
 
-                $salesPipelineConversation = 0;
+                $salesPipelineConversation = SalesPipeline::where('stage', 'LIKE', '%Conversation%')
+                    ->where('userId', $marketerId)
+                    ->where('workStatus', 1)
+                    ->count();
 
 
-                $salesPipelinePossibility = 0;
+                $salesPipelinePossibility = SalesPipeline::where('stage', 'LIKE', '%Possibility%')
+                    ->where('userId', $marketerId)
+                    ->where('workStatus', 1)
+                    ->count();
 
 
-                $longTimeNoChase = 0;
+                $longTimeNoChase = Lead::select('leads.leadId')
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->whereHas('workprogress', function ($query) use ($marketerId) {
+                        $query->where('workprogress.userId', $marketerId)
+                            ->whereDate('workprogress.created_at', '<=', now()->subMonths(6));
+                    })
+                    ->count();
+                
+                
+            
+                $testButNotClosed = WorkProgress::select('workprogress.leadId')
+                    ->distinct()
+                    ->where('workprogress.userId', $marketerId)
+                    ->where('workprogress.progress', 'LIKE', '%Test%')
+                    ->leftJoin('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->whereNotIn('workprogress.leadId', function ($query) use ($marketerId){
+                        $query->select('leadId')
+                            ->from('workprogress')
+                            ->where('userId', $marketerId)
+                            ->where('progress', 'LIKE', '%Closing%');
+                    })
+                    ->count();
 
-                $testButNotClosed = 0;
+                $ippList = Lead::where('contactedUserId', $marketerId)->where('ippStatus', 1)->count();
 
-                $ippList = 0;
 
 
 
                 // Prepare the data to be returned as JSON
                 $data = [
+                    'user' => $user,
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
                     'workingDaysCount' => $workingDaysCount,
@@ -1985,21 +2391,24 @@ class AnalysisController extends Controller
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
                     'totalConversation' => $totalConversation,
-                    'totalConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
+                    'highConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
                     'highestFollowupCountry' => isset($highestFollowupCountry[0]->countryName) ? $highestFollowupCountry[0]->countryName : '',
                     'totalGatekeepers' => $totalGatekeepers,
-                    'hightestGKcountry' => isset($hightestGKcountry[0]->countryName) ? $hightestGKcountry[0]->countryName : '',
+                    'highestGKcountry' => isset($highestGKcountry[0]->countryName) ? $highestGKcountry[0]->countryName : '',
+                    'totalEmailSent' => $totalEmailSent,
+                    'totalColdEmail' => $totalColdEmail,
                     'totalUnavailable' => $totalUnavailable,
                     'highestUnavailableCountry' => isset($highestUnavailableCountry[0]->countryName) ? $highestUnavailableCountry[0]->countryName : '',
+                    'heightsCall' => $highestCall,
+                    'highestCallDate' => $highestCallDate->date,
                     'averageCall' => $averageCall,
                     'lowestCall' => $lowestCall,
-                    'peakHour' => $peakHour,
-                    'busiestDay' => $busiestDay,
-                    'slowestDay' => $slowestDay,
+                    'lowestCallDate' => $lowestCallDate->date,
                     'conversationHighLead' => $conversationHighLead,
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
+                    'heightConvoCountry' => isset($heightConvoCountry[0]->countryName) ? $heightConvoCountry[0]->countryName : '',
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
@@ -2009,17 +2418,20 @@ class AnalysisController extends Controller
                     'missedFollowup' => $missedFollowup,
                     'highLeadMissedFollowup' => $highLeadMissedFollowup,
                     'mediumLeadMissedFollowup' => $mediumLeadMissedFollowup,
+                    'testInPeriod' => $testInPeriod,
                     'highLeadTest' => $highLeadTest,
                     'mediumLeadTest' => $mediumLeadTest,
                     'lowLeadTest' => $lowLeadTest,
                     'testLeads' => $testLeads,
+                    'testLeadData' => $testLeadData,
                     'testFromOwnLead' => $testFromOwnLead,
                     'brandTest' => $brandTest,
+                    'clientsInPeriod' => $clientsInPeriod,
                     'highLeadClosing' => $highLeadClosing,
                     'mediumLeadClosing' => $mediumLeadClosing,
                     'lowLeadClosing' => $lowLeadClosing,
                     'testToClosingRatio' => $testToClosingRatio,
-                    'closingLeads' => count($closingLeads) > 0 ? $closingLeads[0]->countryName : '',
+                    'closingLeadData' => $closingLeadData,
                     'clientFromOwnLead' => $clientFromOwnLead,
                     'brandClosing' => $brandClosing,
                     'totalLeadMine' => $totalLeadMine,
@@ -2029,12 +2441,15 @@ class AnalysisController extends Controller
                     'onlineStoreLeadMine' => $onlineStoreLeadMine,
                     'brandLeadMine' => $brandLeadMine,
                     'agencyLeadMine' => $agencyLeadMine,
+                    'highestLeadMineCountryCount' => $highestLeadMineCountryCount,
                     'highestLeadMineCountry' => isset($highestLeadMineCountry[0]->countryName) ? $highestLeadMineCountry[0]->countryName : '',
-                    'lowestLeadMineCountry' => isset($lowestLeadMineCountry[0]->countryName) ? $lowestLeadMineCountry[0]->countryName : '',
+                    'lowestLeadMineCountryCount' => $lowestLeadMineCountryCount,
+                    'lowestLeadMineCountry' => isset($lowestLeadMineCountry[0]->countryName) ? $lowestLeadMineCountry[0]->countryName : '',                    
                     'chasingTotal' => $chasingTotal,
                     'onlineStoreChasing' => $onlineStoreChasing,
                     'brandChasing' => $brandChasing,
-                    'agencytoreChasing' => $agencytoreChasing,
+                    'agencyChasing' => $agencyChasing,
+                    'photographerChasing' => $photographerChasing,
                     'salesPipelineContact' => $salesPipelineContact,
                     'salesPipelineConversation' => $salesPipelineConversation,
                     'salesPipelinePossibility' => $salesPipelinePossibility,
@@ -2045,8 +2460,9 @@ class AnalysisController extends Controller
                 
 
                 // Return the data as JSON
-                return response()->json($data);
-            
+            //    return response()->json($data);
+                return view('analysis.personalAnalysisData', compact('data'));
+
 
             }
 

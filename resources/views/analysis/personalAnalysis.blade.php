@@ -35,11 +35,11 @@
     <h2 style="text-align: center; padding: 50px 50px 0 50px;">Personal Analysis</h2>
     <p style="text-align: center; padding: 0 0 50px 0;">Select user name and dates to get an user's analysis. What they did in a certain timeframe.</p>
 
-    <form method="POST" id="dataForm" action="{{ route('analysis.getPersonalAnalysis') }}">
+    <form  id="dataForm" >
         {{ csrf_field() }}
 
         <div class="col-md-4" style="float:left;">
-            <select class="form-control" name="marketer">
+            <select class="form-control" id="marketer" name="marketer">
                 <option value="">Select Marketer</option>
                 @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
@@ -48,10 +48,10 @@
         </div>
 
         <div class="col-md-3" style="float: left;">
-            <input type="date" class="form-control" name="fromDate" placeholder="From Date">
+            <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="From Date">
         </div>
         <div class="col-md-3" style="float: left;">
-            <input type="date" class="form-control" name="toDate" placeholder="To Date">
+            <input type="date" class="form-control" id="toDate" name="toDate" placeholder="To Date">
         </div>
         <div class="col-md-2" style="float:right;">
             <div class="input-group-append">
@@ -71,12 +71,7 @@
     </div>
 
 
-    <div>
-
-
-
-
-    </div>
+    <div id="showdataDiv"></div>
 
 </div>
 
@@ -86,7 +81,40 @@
 
 @section('foot-js')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+<script type="text/javascript">
 
+    $('#dataForm').on('submit',function(e){
+        e.preventDefault();
+
+        let marketer = $('#marketer').val();
+        let fromDate = $('#fromDate').val();
+        let toDate = $('#toDate').val();
+        //let message = $('#InputMessage').val();
+
+        $.ajax({
+            url: "{{ route('analysis.getPersonalAnalysis') }}",
+            type:"POST",
+            data:{
+                "_token": "{{ csrf_token() }}",
+                marketer:marketer,
+                fromDate:fromDate,
+                toDate:toDate,
+
+            },
+            success:function(response){
+                $('#showdataDiv').html(response);
+
+                console.log(response);
+            },
+            error: function(response) {
+                // $('#nameErrorMsg').text(response.responseJSON.errors.name);
+                // $('#emailErrorMsg').text(response.responseJSON.errors.email);
+                // $('#mobileErrorMsg').text(response.responseJSON.errors.mobile);
+                // $('#messageErrorMsg').text(response.responseJSON.errors.message);
+            },
+        });
+    });
+</script>
 
 
 @endsection

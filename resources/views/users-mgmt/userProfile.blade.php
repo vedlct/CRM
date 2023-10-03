@@ -49,6 +49,9 @@
 										N/A
 									@endif </span>
 								</p>
+                                <p>
+                                The peak calling hours were between (Time Range), during which s/he made the most calls. (Day Name) were the busiest days for calls, with an average of (Number of Calls) calls (%), while (Day Name) had the lowest average at (Number of calls) calls (%).
+                                </p>
                             </div>
                         </div> 
                     </div>
