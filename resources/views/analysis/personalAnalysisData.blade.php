@@ -16,7 +16,7 @@
 <p>{{$data['user']->firstName}} followed up with {!! $data['totalFollowup'] !!} leads, including {!! $data['highLeadsFollowup'] !!} high leads (24.07%), {!! $data['mediumLeadsFollowup'] !!} medium leads (20.37%), and {!! $data['lowLeadsFollowup'] !!} low leads (55.56%). Unfortunately, {{$data['user']->firstName}} missed 82 follow-ups during this month, with 23 high leads (28.05%) and 16 medium leads (19.51%) among them.</p>
 <p>&nbsp;</p>
 <h4>Test Updates:</h4>
-<p>During this time frame, {{$data['user']->firstName}} received 5 tests. Three of these tests came from the UK (60%), and two from Germany (40%). Among these tests, there were 3 high leads (60%), 1 medium lead (20%), and 1 low lead (20%). The conversion rate from tests to closings was 60%.</p>
+<p>During this time frame, {{$data['user']->firstName}} received {!! $data['testInPeriod'] !!} tests. Three of these tests came from the UK (60%), and two from Germany (40%). Among these tests, there were {!! $data['highLeadTest'] !!} high leads (60%), {!! $data['mediumLeadTest'] !!} medium lead (20%), and {!! $data['lowLeadTest'] !!} low lead (20%). The conversion rate from tests to closings was 60%.</p>
 <p>&nbsp;</p>
 <p> {{$data['user']->firstName}} got a test from the online store “standard-saubere-sachen” (low) based in the UK after trying 6 times.<br>
  Next, {{$data['user']->firstName}} got another test from the online store “philini” (low) based in the UK after trying 8 times.<br>
@@ -35,10 +35,10 @@
 <p>Two of the closings were from leads that {{$data['user']->firstName}} had mined himself (66.67%), and there was one brand involved (33.33%).</p>
 <p>&nbsp;</p>
 <h4>Lead Mine Updates:</h4>
-<p>{{$data['user']->firstName}} mined a total of 102 leads, categorized as follows: 20 High (19.61%), 33 Medium (32.35%), and 49 Low leads (48.04%). Among these leads, there were 41 online stores (40.20%), 39 agencies (38.24%), 15 brands (14.71%), and 7 others (6.86%). The majority of leads (70) were mined from Spain (68.63%), accounting for 68%, while the lowest number of leads (2) were from Germany (1.96%), making up only 2% of the total.</p>
+<p>{{$data['user']->firstName}} mined a total of {!! $data['totalLeadMine'] !!} leads, categorized as follows: {!! $data['highLeadMine'] !!} High (19.61%), {!! $data['mediumLeadMine'] !!} Medium (32.35%), and {!! $data['lowLeadMine'] !!} Low leads (48.04%). Among these leads, there were {!! $data['onlineStoreLeadMine'] !!} online stores (40.20%), {!! $data['agencyLeadMine'] !!} agencies (38.24%), {!! $data['brandLeadMine'] !!} brands (14.71%), and 7 others (6.86%). The majority of leads ({!! $data['highestLeadMineCountryCount'] !!}) were mined from {!! $data['highestLeadMineCountry'] !!} (68.63%), accounting for 68%, while the lowest number of leads ({!! $data['lowestLeadMineCountryCount'] !!}) were from {!! $data['lowestLeadMineCountry'] !!} (1.96%), making up only 2% of the total.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <h4>Current Status</h4>
-<p>{{$data['user']->firstName}} is currently chasing 1000 accounts where {{$data['user']->gender == 'M' ? 'he' : 'she'}} has 200 Online Stores (20%), 300 Brands (30%), 250 Agencies (25%), and 250 Photographers (25%). </p>
+<p>{{$data['user']->firstName}} is currently chasing {!! $data['chasingTotal'] !!} accounts where {{$data['user']->gender == 'M' ? 'he' : 'she'}} has {!! $data['onlineStoreChasing'] !!} Online Stores (20%), {!! $data['brandChasing'] !!} Brands (30%), {!! $data['agencyChasing'] !!}  Agencies (25%), and {!! $data['photographerChasing'] !!} Photographers (25%). </p>
 <p>In {{$data['user']->gender == 'M' ? 'his' : 'her'}} Sales Pipeline, {{$data['user']->firstName}} has 30 in Contact stage, 20 in Conversation stage and 5 in Test Possibility stage. </p>
 <p>Currently, {{$data['user']->firstName}} has 100 leads that {{$data['user']->gender == 'M' ? 'he' : 'she'}} hasn’t been chasing for more than 6 months. {{$data['user']->gender == 'M' ? 'He' : 'She'}} also has 2 leads with tests that are not closed yet, but {{$data['user']->gender == 'M' ? 'he' : 'she'}} is still chasing them. Additionally, {{$data['user']->firstName}} has 130 leads in {{$data['user']->gender == 'M' ? 'his' : 'her'}} IPP List.</p>
