@@ -72,7 +72,6 @@
 
 </style>
 @section('content')
-
 <div class="card">
     <h2 style="text-align: center; padding: 50px 50px 0 50px;">Personal Analysis</h2>
     <p style="text-align: center; padding: 0 0 50px 0;">Select user name and dates to get an user's analysis. What they did in a certain timeframe.</p>
@@ -83,46 +82,42 @@
     <form  id="dataForm" >
         {{ csrf_field() }}
 
-        <div class="col-md-4" style="float:left;">
-            <select class="form-control" id="marketer" name="marketer">
-                <option value="">Select Marketer</option>
-                @foreach($users as $user)
-                <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
-                @endforeach
-            </select>
-        </div>
+        <div class="row" style="font-size: 24px;">
 
-        <div class="col-md-3" style="float: left;">
-            <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="From Date">
-        </div>
-        <div class="col-md-3" style="float: left;">
-            <input type="date" class="form-control" id="toDate" name="toDate" placeholder="To Date">
-        </div>
-        <div class="col-md-2" style="float:right;">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="submit" style="float:right;">Submit</button>
+            <div class="col-md-4" style="float:left;">
+                <select class="form-control" id="marketer" name="marketer">
+                    <option value="">Select Marketer</option>
+                    @foreach($users as $user)
+                    <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-md-3" style="float: left;">
+                <input type="date" class="form-control" id="fromDate" name="fromDate" placeholder="From Date">
+            </div>
+            <div class="col-md-3" style="float: left;">
+                <input type="date" class="form-control" id="toDate" name="toDate" placeholder="To Date">
+            </div>
+            <div class="col-md-2" style="float:right;">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit" style="float:right;">Submit</button>
+                </div>
             </div>
         </div>
     </form>
 
     <br>
 
-    
-
-
-    <div id="loadingIndicator" class="loading-indicator">
-        <div class="spinner"></div>
-        <p>Analysis Loading...</p>
-    </div>
-
-    
+       
     <div class="row" style="font-size: 24px;">
         <div class="col-sm-12 col-xl-2">
 
         </div>
 
-        <div class="col-sm-12 col-xl-8">
+        <div class="col-sm-12 col-xl-8" style="text-align: justify;">
             <div id="showdataDiv">
+                
             </div>
         </div>
 
@@ -131,6 +126,11 @@
         </div>
     </div>
 
+
+    <div id="loadingIndicator" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Analysis Loading...</p>
+    </div>
     
 
 </div>

@@ -1,89 +1,155 @@
-<h4>Call Updates:</h4>
+<?php
+$lowLeadPercentage = ($data['totalCall'] > 0) ? round(($data['lowLeadTotalCall'] / $data['totalCall']) * 100, 2) : 0;
+$mediumLeadPercentage = ($data['totalCall'] > 0) ? round(($data['mediumLeadTotalcall'] / $data['totalCall']) * 100, 2) : 0;
+$highLeadPercentage = ($data['totalCall'] > 0) ? round(($data['highLeadTotalCall'] / $data['totalCall']) * 100, 2) : 0;
 
-<p>During this time period, {{$data['user']->firstName}} made a <strong>total of {!! $data['totalCall'] !!} calls</strong>. These calls were distributed as follows: {!! $data['lowLeadTotalCall'] !!} calls to <strong>Low Leads</strong> (23.67%), {!! $data['mediumLeadTotalcall'] !!} to <strong>Medium Leads</strong> (35.50%), and {!! $data['highLeadTotalCall'] !!} to <strong>High Leads</strong> (40.83%).</p>
+$contactPercentage = ($data['totalCall'] > 0) ? round(($data['totalContact'] / $data['totalCall']) * 100, 2) : 0;
 
-<p>Out of these calls, {{$data['user']->firstName}} successfully made <strong>contact</strong> with {!! $data['totalContact'] !!} leads (9.57% of Total Call), with a majority of them located in <strong>{!! $data['contactCountry'] !!}</strong> (24 contacts).</p>
+$conversationHighLeadPercentage = ($data['totalConversation'] > 0) ? round(($data['conversationHighLead'] / $data['totalConversation']) * 100, 2) : 0;
+$conversationMediumLeadPercentage = ($data['totalConversation'] > 0) ? round(($data['conversationMedumLead'] / $data['totalConversation']) * 100, 2) : 0;
+$conversationLowLeadPercentage = ($data['totalConversation'] > 0) ? round(($data['conversationLowLead'] / $data['totalConversation']) * 100, 2) : 0;
 
-<p> {{$data['user']->firstName}} also engaged in {!! $data['totalConversation'] !!} <strong>conversations</strong>, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong> (7 conversations).</p>
+$highLeadsFollowupPercentage = ($data['totalFollowup'] > 0) ? round(($data['highLeadsFollowup'] / $data['totalFollowup']) * 100, 2) : 0;
+$mediumLeadsFollowupPercentage = ($data['totalFollowup'] > 0) ? round(($data['mediumLeadsFollowup'] / $data['totalFollowup']) * 100, 2) : 0;
+$lowLeadsFollowupPercentage = ($data['totalFollowup'] > 0) ? round(($data['lowLeadsFollowup'] / $data['totalFollowup']) * 100, 2) : 0;
 
-<p>Additionally, {{$data['user']->firstName}} conducted {!! $data['totalFollowup'] !!} <strong>follow-ups</strong>, mainly with leads in <strong>{!! $data['highestFollowupCountry'] !!}</strong> (12 follow-ups).</p>
+$highLeadMissedFollowupPercentage = ($data['missedFollowup'] > 0) ? round(($data['highLeadMissedFollowup'] / $data['missedFollowup']) * 100, 2) : 0;
+$mediumLeadMissedFollowupPercentage = ($data['missedFollowup'] > 0) ? round(($data['mediumLeadMissedFollowup'] / $data['missedFollowup']) * 100, 2) : 0;
 
-<p>{{$data['user']->firstName}} encountered {!! $data['totalGatekeepers'] !!} <strong>Gatekeepers</strong>, with a majority from the {!! $data['highestGKcountry'] !!} (23 GK).</p>
+$testFromOwnLeadPercentage = ($data['testInPeriod'] > 0) ? round(($data['testFromOwnLead'] / $data['testInPeriod']) * 100, 2) : 0;
+$brandTestPercentage = ($data['testInPeriod'] > 0) ? round(($data['brandTest'] / $data['testInPeriod']) * 100, 2) : 0;
 
-<p>Finally, there were {!! $data['totalUnavailable'] !!} <strong>unavailable leads</strong>, of which 102 were from <strong>{!! $data['highestUnavailableCountry'] !!}</strong>.</p>
+$clientFromOwnLeadPercentage = ($data['clientsInPeriod'] > 0) ? round(($data['clientFromOwnLead'] / $data['clientsInPeriod']) * 100, 2) : 0;
+$brandClosingPercentage = ($data['clientsInPeriod'] > 0) ? round(($data['brandClosing'] / $data['clientsInPeriod']) * 100, 2) : 0;
 
-<p>On <strong>average</strong>, {{$data['user']->firstName}} made {!! $data['averageCall'] !!} calls per day, with the <strong>highest number of calls</strong> ({!! $data['heightsCall'] !!}) on {!! $data['highestCallDate'] !!}, and the <strong>lowest</strong> ({!! $data['lowestCall'] !!}) on {!! $data['lowestCallDate'] !!}.</p>
+$highLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['highLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+$mediumLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['mediumLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+$lowLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['lowLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+
+$onlineStoreLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['onlineStoreLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+$agencyLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['agencyLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+$brandLeadMinePercentage = ($data['totalLeadMine'] > 0) ? round(($data['brandLeadMine'] / $data['totalLeadMine']) * 100, 2) : 0;
+
+$onlineStoreChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['onlineStoreChasing'] / $data['chasingTotal']) * 100, 2) : 0;
+$brandChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['brandChasing'] / $data['chasingTotal']) * 100, 2) : 0;
+$agencyChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['agencyChasing'] / $data['chasingTotal']) * 100, 2) : 0;
+$photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['photographerChasing'] / $data['chasingTotal']) * 100, 2) : 0;
+
+?>
+
+<h2 class="page-title" style="text-align:center;">{{$data['profile']->firstName}} {{$data['profile']->lastName}}</h4>
+<h5 class="page-title" style="text-align:center;">Report Dates: ({{$data['fromDate']}} to  {{$data['toDate']}})</h5>
+
+<p>&nbsp;</p>
+<hr>
+<h3>&nbsp;</h3>
+
+
+<h3>Call Updates:</h3>
+
+<p>During this time period, {{$data['profile']->firstName}} made a total of {!! $data['totalCall'] !!} calls. These calls were distributed as follows: {!! $data['lowLeadTotalCall'] !!} calls to Low Leads ({{$lowLeadPercentage}}%), {!! $data['mediumLeadTotalcall'] !!} to Medium Leads ({{$mediumLeadPercentage}}%), and {!! $data['highLeadTotalCall'] !!} to High Leads ({{$highLeadPercentage}}%).</p>
+
+<p>Out of these calls, {{$data['profile']->firstName}} successfully made contact with {!! $data['totalContact'] !!} leads ({{$contactPercentage}}% of Total Call), with a majority of them located in {!! $data['contactCountry'] !!} ({{$data['contactCountryCount'][0]->totalcontact}} contacts).</p>
+
+<p> {{$data['profile']->firstName}} also engaged in {!! $data['totalConversation'] !!} conversations, primarily with leads in the {!! $data['highConversationCountry'] !!}.</p>
+
+<p>Additionally, {{$data['profile']->firstName}} conducted {!! $data['totalFollowup'] !!} follow-ups, mainly with leads in {!! $data['highestFollowupCountry'] !!}.</p>
+
+<p>{{$data['profile']->firstName}} encountered {!! $data['totalGatekeepers'] !!} Gatekeepers, with a majority from the {!! $data['highestGKcountry'] !!}.</p>
+
+<p>Finally, there were {!! $data['totalUnavailable'] !!} unavailable leads, of which majority were from {!! $data['highestUnavailableCountry'] !!}.</p>
+
+<p>On average, {{$data['profile']->firstName}} made {!! $data['averageCall'] !!} calls per day, with the highest number of calls ({!! $data['heightsCall'] !!}) on {!! $data['highestCallDate'] !!}, and the lowest ({!! $data['lowestCall'] !!}) on {!! $data['lowestCallDate'] !!}.</p>
 
 
 
-<h4>&nbsp;</h4>
+<p>&nbsp;</p>
+<hr>
+<h3>&nbsp;</h3>
 
-<h4>Conversation Updates:</h4>
 
-<p>{{$data['user']->firstName}} engaged in {!! $data['totalConversation'] !!} conversations, with {!! $data['conversationHighLead'] !!} high leads (18.75%), {!! $data['conversationMedumLead'] !!} medium leads (12.50%), and {!! $data['conversationLowLead'] !!} low leads (68.75%). 
-The majority of {{$data['user']->firstName}}'s conversations took place in the  {!! $data['highestConvoCountry'] !!} (7 conversations, 43.75%), while {!! $data['lowestConvoCountry'] !!} had the lowest number (2 conversations, 12.50%).</p>
+
+<h3>Conversation Updates:</h3>
+
+<p>{{$data['profile']->firstName}} engaged in {!! $data['totalConversation'] !!} conversations, with {!! $data['conversationHighLead'] !!} high leads ({{$conversationHighLeadPercentage}}%), {!! $data['conversationMedumLead'] !!} medium leads ({{$conversationMediumLeadPercentage}}%), and {!! $data['conversationLowLead'] !!} low leads ({{$conversationLowLeadPercentage}}%).
+
+The majority of {{$data['profile']->firstName}}'s conversations took place in the  {!! $data['highestConvoCountry'] !!} (1000 conversations, 1000%), while {!! $data['lowestConvoCountry'] !!} had the lowest number (1000 conversations, 1000%).</p>
 
 <p>
     @if (count($data['missingLeadInfoInConvo']) == 1)
         One lead is missing information:
     @else
-        {{count($data['missingLeadInfoInConvo'])}} leads are missing information:
+        <strong>{{count($data['missingLeadInfoInConvo'])}} leads are missing information:</strong>
     @endif
 </p>
 
 @foreach ($data['missingLeadInfoInConvo'] as $lead)
     <p>
-        - "{{$lead->companyName}}" (
-        @if (is_null($lead->volume))
-            Volume
-        @endif
+        <ul>
+            {{$lead->leadId}} - {{$lead->companyName}} (
+            @if (is_null($lead->volume))
+                Volume
+            @endif
 
-        @if (is_null($lead->volume) && is_null($lead->frequency))
-            and
-        @endif
+            @if (is_null($lead->volume) && is_null($lead->frequency))
+                and
+            @endif
 
-        @if (is_null($lead->frequency))
-            Frequency
-        @endif
+            @if (is_null($lead->frequency))
+                Frequency,
+            @endif
 
-        @if (is_null($lead->process))
-            Process
-        @endif
-        )
+            @if (is_null($lead->process))
+                Process
+            @endif
+            )
+        </ul>
     </p>
 @endforeach
 
 
-
 <p>On average, it took {!! $data['avgAttemptInConvo'] !!} attempts per lead to initiate a conversation.</p>
 
-<p>&nbsp;</p>
 
-<h4>Follow-up Updates:</h4>
-
-<p>{{$data['user']->firstName}} followed up with {!! $data['totalFollowup'] !!} leads, including {!! $data['highLeadsFollowup'] !!} high leads (24.07%), {!! $data['mediumLeadsFollowup'] !!} medium leads (20.37%), and {!! $data['lowLeadsFollowup'] !!} low leads (55.56%). Unfortunately, {{$data['user']->firstName}} missed {!! $data['missedFollowup'] !!} follow-ups during this month, with {!! $data['highLeadMissedFollowup'] !!} high leads (28.05%) and {!! $data['mediumLeadMissedFollowup'] !!} medium leads (19.51%) among them.</p>
 
 <p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
 
-<h4>Test Updates:</h4>
 
-<p>During this time frame, {{$data['user']->firstName}} received {!! $data['testInPeriod'] !!} tests. 
+
+<h3>Follow-up Updates:</h3>
+
+<p>{{$data['profile']->firstName}} followed up with {!! $data['totalFollowup'] !!} leads, including {!! $data['highLeadsFollowup'] !!} high leads ({{$highLeadsFollowupPercentage}}%), {!! $data['mediumLeadsFollowup'] !!} medium leads ({{$mediumLeadsFollowupPercentage}}%), and {!! $data['lowLeadsFollowup'] !!} low leads ({{$lowLeadsFollowupPercentage}}%). Unfortunately, {{$data['profile']->firstName}} missed {!! $data['missedFollowup'] !!} follow-ups during this month, with {!! $data['highLeadMissedFollowup'] !!} high leads ({{$highLeadMissedFollowupPercentage}}%) and {!! $data['mediumLeadMissedFollowup'] !!} medium leads ({{$mediumLeadMissedFollowupPercentage}}%) among them.</p>
+
+
+
+
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+
+
+
+<h3>Test Updates:</h3>
+
+<p>During this time frame, {{$data['profile']->firstName}} received {!! $data['testInPeriod'] !!} tests. 
     
-    <i>Three of these tests came from the UK (60%), and two from Germany (40%).</i> 
+    <span style="text-decoration: line-through;">Three of these tests came from the UK (1000%), and two from Germany (1000%).</span> 
 
-Among these tests, there were {!! $data['highLeadTest'] !!} high leads (60%), {!! $data['mediumLeadTest'] !!} medium lead (20%), and {!! $data['lowLeadTest'] !!} low lead (20%).</p>
+Among these tests, there were {!! $data['highLeadTest'] !!} high leads, {!! $data['mediumLeadTest'] !!} medium lead, and {!! $data['lowLeadTest'] !!} low lead.</p>
 
 <p>&nbsp;</p>
 
 <p>
-    {{$data['user']->firstName}} has brought Tests from following leads:
+    {{$data['profile']->firstName}} has brought Tests from following leads:
 </p>
 
 @foreach ($data['testLeadData'] as $lead)
     <p>
         <ul>
-            <strong>{{$lead['companyName']}}</strong> - {{$lead['website']}} ({{$lead['possibilityName']}})
-            in {{$lead['country']}} after <strong>{{$lead['attempts']}} attempts</strong>,
+            {{$lead['companyName']}} - {{$lead['website']}} ({{$lead['possibilityName']}})
+            in {{$lead['country']}} after {{$lead['attempts']}} attempts,
             with a {{$lead['differenceInDays']}}-day gap between the first call and free trial day.
         </ul>
     </p>
@@ -92,29 +158,36 @@ Among these tests, there were {!! $data['highLeadTest'] !!} high leads (60%), {!
 
 <p>&nbsp;</p>
 
-<p>Two of the tests were from leads that {{$data['user']->firstName}} had mined himself (40%), and there was one brand involved (20%).</p>
+<p>{!! $data['testFromOwnLead'] !!} of the tests were from leads that {{$data['profile']->firstName}} had mined himself ({{$testFromOwnLeadPercentage}}%), and there was {!! $data['brandTest'] !!} brand involved ({{$brandTestPercentage}}%).</p>
+
+
 
 <p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
 
-<h4>Closing Updates:</h4>
 
-<p>{{$data['user']->firstName}} achieved {!! $data['clientsInPeriod'] !!} closings during this period. 
+
+
+<h3>Closing Updates:</h3>
+
+<p>{{$data['profile']->firstName}} achieved {!! $data['clientsInPeriod'] !!} closings during this period. 
     
-    <i>One closing came from the UK (33.33%), one from Italy (33.33%), and one from Germany (33.33%).</i> 
+    <span style="text-decoration: line-through;">One closing came from the UK (1000%), one from Italy (1000%), and one from Germany (1000%).</span> 
 
-These closings included {!! $data['highLeadClosing'] !!} high lead (33.33%), {!! $data['mediumLeadClosing'] !!} medium lead (33.33%), and {!! $data['lowLeadClosing'] !!} low lead (33.33%). The conversion rate from tests to closings was {!! $data['testToClosingRatio'] !!}%.</p>
+These closings included {!! $data['highLeadClosing'] !!} high lead (1000%), {!! $data['mediumLeadClosing'] !!} medium lead (1000%), and {!! $data['lowLeadClosing'] !!} low lead (1000%). The conversion rate from tests to closings was {!! $data['testToClosingRatio'] !!}%.</p>
 
 <p>&nbsp;</p>
 
 <p>
-    {{$data['user']->firstName}} closed deals with the following leads:
+    {{$data['profile']->firstName}} closed deals with the following leads:
 </p>
 
 @foreach ($data['closingLeadData'] as $lead)
     <p>
         <ul>
-            <strong>{{$lead['companyName']}}</strong> - {{$lead['website']}} ({{$lead['possibilityName']}})
-            in {{$lead['country']}} after <strong>{{$lead['attempts']}} attempts</strong>,
+            {{$lead['companyName']}} - {{$lead['website']}} ({{$lead['possibilityName']}})
+            in {{$lead['country']}} after {{$lead['attempts']}} attempts,
             with a {{$lead['differenceInDays']}} days gap between the test and closing.
         </ul>
     </p>
@@ -123,20 +196,37 @@ These closings included {!! $data['highLeadClosing'] !!} high lead (33.33%), {!!
 
 <p>&nbsp;</p>
 
-<p>{!! $data['clientFromOwnLead'] !!} of the closings were from leads that {{$data['user']->firstName}} had mined himself (66.67%), and there were {!! $data['brandClosing'] !!} brand involved (33.33%).</p>
+<p>{!! $data['clientFromOwnLead'] !!} of the closings were from leads that {{$data['profile']->firstName}} had mined himself ({{$clientFromOwnLeadPercentage}}%), and there were {!! $data['brandClosing'] !!} brand involved ({{$brandClosingPercentage}}%).</p>
+
+
+
+
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+
+
+
+<h3>Lead Mine Updates:</h3>
+
+<p>{{$data['profile']->firstName}} mined a total of {!! $data['totalLeadMine'] !!} leads, categorized as follows: {!! $data['highLeadMine'] !!} High ({{$highLeadMinePercentage}}%), {!! $data['mediumLeadMine'] !!} Medium ({{$mediumLeadMinePercentage}}%), and {!! $data['lowLeadMine'] !!} Low leads ({{$lowLeadMinePercentage}}%). Among these leads, there were {!! $data['onlineStoreLeadMine'] !!} online stores ({{$onlineStoreLeadMinePercentage}}%), {!! $data['agencyLeadMine'] !!} agencies ({{$agencyLeadMinePercentage}}%), and {!! $data['brandLeadMine'] !!} brands ({{$brandLeadMinePercentage}}%). The majority of leads ({!! $data['highestLeadMineCountryCount'] !!}) were mined from {!! $data['highestLeadMineCountry'] !!}, while the lowest number of leads ({!! $data['lowestLeadMineCountryCount'] !!}) were from {!! $data['lowestLeadMineCountry'] !!}.</p>
+
+
+
+
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+
+
+
+<h3>Current Status</h3>
+
+<p>{{$data['profile']->firstName}} is currently chasing {!! $data['chasingTotal'] !!} accounts where {{$data['profile']->gender == 'M' ? 'he' : 'she'}} has {!! $data['onlineStoreChasing'] !!} Online Stores ({{$onlineStoreChasingPercentage}}%), {!! $data['brandChasing'] !!} Brands ({{$brandChasingPercentage}}%), {!! $data['agencyChasing'] !!}  Agencies ({{$agencyChasingPercentage}}%), and {!! $data['photographerChasing'] !!} Photographers ({{$photographerChasingPercentage}}%). </p>
+
+<p>In {{$data['profile']->gender == 'M' ? 'his' : 'her'}} Sales Pipeline, {{$data['profile']->firstName}} has {!! $data['salesPipelineContact'] !!} in Contact stage, {!! $data['salesPipelineConversation'] !!} in Conversation stage and {!! $data['salesPipelinePossibility'] !!} in Test Possibility stage. </p>
+
+<p>Currently, {{$data['profile']->firstName}} has {!! $data['longTimeNoChase'] !!} leads that {{$data['profile']->gender == 'M' ? 'he' : 'she'}} hasn’t been chasing for more than 6 months. {{$data['profile']->gender == 'M' ? 'He' : 'She'}} also has {!! $data['testButNotClosed'] !!} leads with tests that are not closed yet, but {{$data['profile']->gender == 'M' ? 'he' : 'she'}} is still chasing them. Additionally, {{$data['profile']->firstName}} has {!! $data['ippList'] !!} leads in the IPP List.</p>
 
 <p>&nbsp;</p>
 
-<h4>Lead Mine Updates:</h4>
-
-<p>{{$data['user']->firstName}} mined a total of {!! $data['totalLeadMine'] !!} leads, categorized as follows: {!! $data['highLeadMine'] !!} High (19.61%), {!! $data['mediumLeadMine'] !!} Medium (32.35%), and {!! $data['lowLeadMine'] !!} Low leads (48.04%). Among these leads, there were {!! $data['onlineStoreLeadMine'] !!} online stores (40.20%), {!! $data['agencyLeadMine'] !!} agencies (38.24%), and {!! $data['brandLeadMine'] !!} brands (14.71%). The majority of leads ({!! $data['highestLeadMineCountryCount'] !!}) were mined from {!! $data['highestLeadMineCountry'] !!} (68.63%), accounting for 68%, while the lowest number of leads ({!! $data['lowestLeadMineCountryCount'] !!}) were from {!! $data['lowestLeadMineCountry'] !!} (1.96%), making up only 2% of the total.</p>
-
-<p>&nbsp;</p>
-
-<h4>Current Status</h4>
-
-<p>{{$data['user']->firstName}} is currently chasing {!! $data['chasingTotal'] !!} accounts where {{$data['user']->gender == 'M' ? 'he' : 'she'}} has {!! $data['onlineStoreChasing'] !!} Online Stores (20%), {!! $data['brandChasing'] !!} Brands (30%), {!! $data['agencyChasing'] !!}  Agencies (25%), and {!! $data['photographerChasing'] !!} Photographers (25%). </p>
-
-<p>In {{$data['user']->gender == 'M' ? 'his' : 'her'}} Sales Pipeline, {{$data['user']->firstName}} has {!! $data['salesPipelineContact'] !!} in Contact stage, {!! $data['salesPipelineConversation'] !!} in Conversation stage and {!! $data['salesPipelinePossibility'] !!} in Test Possibility stage. </p>
-
-<p>Currently, {{$data['user']->firstName}} has {!! $data['longTimeNoChase'] !!} leads that {{$data['user']->gender == 'M' ? 'he' : 'she'}} hasn’t been chasing for more than 6 months. {{$data['user']->gender == 'M' ? 'He' : 'She'}} also has {!! $data['testButNotClosed'] !!} leads with tests that are not closed yet, but {{$data['user']->gender == 'M' ? 'he' : 'she'}} is still chasing them. Additionally, {{$data['user']->firstName}} has {!! $data['ippList'] !!} leads in the IPP List.</p>

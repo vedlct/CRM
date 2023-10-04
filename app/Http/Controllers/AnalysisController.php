@@ -1665,7 +1665,7 @@ class AnalysisController extends Controller
                 $marketerId = $request->input('marketer');
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
-                $user = User::select('gender', 'firstName')->where('id', $marketerId)->first();
+                $profile = User::where('id', $marketerId)->first();
                 
 
                 // Calculate the number of working days between $fromDate and $toDate for the user
@@ -1727,6 +1727,18 @@ class AnalysisController extends Controller
                     ->orderBy('totalcontact', 'DESC')
                     ->limit(1)
                     ->get();
+
+                $contactCountryCount = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(leads.leadId) as totalcontact'))
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->where('callingReport', 5)
+                    ->groupBy('leads.countryId')
+                    ->orderByDesc('totalcontact')
+                    ->limit(1)
+                    ->get();
+                
 
                 // Get the total number of conversations (callingReport = 11) within the date range
                 $totalConversation = Workprogress::where('userId', $marketerId)
@@ -2380,7 +2392,7 @@ class AnalysisController extends Controller
 
                 // Prepare the data to be returned as JSON
                 $data = [
-                    'user' => $user,
+                    'profile' => $profile,
                     'fromDate' => $fromDate,
                     'toDate' => $toDate,
                     'workingDaysCount' => $workingDaysCount,
@@ -2390,6 +2402,7 @@ class AnalysisController extends Controller
                     'highLeadTotalCall' => $highLeadTotalCall,
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
+                    'contactCountryCount' => $contactCountryCount,
                     'totalConversation' => $totalConversation,
                     'highConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
