@@ -1748,7 +1748,7 @@ class AnalysisController extends Controller
                     ->count();
 
                 // Get the country with the highest number of conversations within the date range
-                $highestConvoCountry = DB::table('workprogress')
+                $highConversationCountry = DB::table('workprogress')
                     ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'), 'countries.countryName as countryName')
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
@@ -1879,14 +1879,25 @@ class AnalysisController extends Controller
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
                     ->where('callingReport', 11)
-                    ->where('possibilityId', 1)
                     ->where('userId', $marketerId)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->groupBy('leads.countryId')
                     ->orderBy('totalcontact', 'DESC')
                     ->limit(1)
-                    ->get();;
-
+                    ->get();
+                
+                $highestConvoCountryCount = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'))
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'DESC')
+                    ->limit(1)
+                    ->get();
+                
 
                 // Get the country with the lowest number of conversations with high possibility
                 $lowestConvoCountry = DB::table('workprogress')
@@ -1894,14 +1905,24 @@ class AnalysisController extends Controller
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
                     ->where('callingReport', 11)
-                    ->where('possibilityId', 1)
                     ->where('userId', $marketerId)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->groupBy('leads.countryId')
                     ->orderBy('totalcontact', 'ASC')
                     ->limit(1)
-                    ->get();;
+                    ->get();
 
+                $lowestConvoCountryCount = DB::table('workprogress')
+                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'))
+                    ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->where('callingReport', 11)
+                    ->where('userId', $marketerId)
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->groupBy('leads.countryId')
+                    ->orderBy('totalcontact', 'ASC')
+                    ->limit(1)
+                    ->get();
 
                 // Get all leads with missing information in conversation
                 $missingLeadInfoInConvo = Workprogress::select(
@@ -2067,7 +2088,7 @@ class AnalysisController extends Controller
                 $testLeadData = [];
                 
                     foreach ($testLeads as $testLeadId) {
-                        $leadData = Lead::select('companyName', 'website')
+                        $leadData = Lead::select('companyName', 'website', 'leadId')
                             ->where('leadId', $testLeadId)
                             ->first(); // Retrieve the lead data for a specific lead ID
                     
@@ -2112,6 +2133,7 @@ class AnalysisController extends Controller
                         
     
                             $testLeadData[] = [
+                                'leadId' => $leadData->leadId,
                                 'companyName' => $leadData->companyName,
                                 'website' => $leadData->website,
                                 'possibilityName' => $possibilityName,
@@ -2169,7 +2191,7 @@ class AnalysisController extends Controller
                 $closingLeadData = [];
                 
                 foreach ($closingLeads as $closingLeadId) {
-                    $leadData = Lead::select('companyName', 'website')
+                    $leadData = Lead::select('companyName', 'website','leadId')
                         ->where('leadId', $closingLeadId)
                         ->first(); // Retrieve the lead data for a specific lead ID
                 
@@ -2184,11 +2206,12 @@ class AnalysisController extends Controller
                 
                 
                         // Calculate the difference between first call and closing call in days
-                        $firstCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
-                            ->where('leadId', $closingLeadId)
-                            ->where('userId', $marketerId)
-                            ->orderBy('created_at', 'asc')
-                            ->first();
+                        $testCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
+                                ->where('leadId', $closingLeadId)
+                                ->where('progress', 'LIKE', '%Test%')
+                                ->where('userId', $marketerId)
+                                ->orderBy('created_at', 'desc')
+                                ->first();
 
                         $closingCall = Workprogress::select(DB::raw('CAST(created_at AS DATETIME) as created_at'))
                             ->where('leadId', $closingLeadId)
@@ -2200,20 +2223,21 @@ class AnalysisController extends Controller
                             $differenceInDays = null;
                             $attempts = 0; // Initialize the attempts count
                             
-                            if ($firstCall && $closingCall) {
-                                $firstCallDateTime = new \DateTime($firstCall->created_at);
+                            if ($testCall && $closingCall) {
+                                $testCallDateTime = new \DateTime($testCall->created_at);
                                 $closingCallDateTime = new \DateTime($closingCall->created_at);
-                                $differenceInDays = $firstCallDateTime->diff($closingCallDateTime)->days;
+                                $differenceInDays = $testCallDateTime->diff($closingCallDateTime)->days;
                             
-                                // Count the attempts of $closingLeadId between firstCall and closingCall
+                                // Count the attempts of $closingLeadId between testCall and closingCall
                                 $attempts = Workprogress::where('leadId', $closingLeadId)
                                     ->where('userId', $marketerId)
-                                    ->whereBetween('created_at', [$firstCall->created_at, $closingCall->created_at])
+                                    ->whereBetween('created_at', [$testCall->created_at, $closingCall->created_at])
                                     ->count();
                             }
                     
 
                         $closingLeadData[] = [
+                            'leadId' => $leadData->leadId,
                             'companyName' => $leadData->companyName,
                             'website' => $leadData->website,
                             'possibilityName' => $possibilityName,
@@ -2315,6 +2339,12 @@ class AnalysisController extends Controller
 
 
 
+                $leadAssigned = Leadassigned::where('assignTo', $marketerId)
+                    ->whereBetween('created_at', [$fromDate, $toDate])
+                    ->count('assignId');
+
+
+
                 //Get the CURRENT STATUS
                 
                 $chasingTotal = Lead::select('leadId')->where('contactedUserId', $marketerId)->count();
@@ -2404,7 +2434,7 @@ class AnalysisController extends Controller
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
                     'contactCountryCount' => $contactCountryCount,
                     'totalConversation' => $totalConversation,
-                    'highConversationCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
+                    'highConversationCountry' => isset($highConversationCountry[0]->countryName) ? $highConversationCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
                     'highestFollowupCountry' => isset($highestFollowupCountry[0]->countryName) ? $highestFollowupCountry[0]->countryName : '',
                     'totalGatekeepers' => $totalGatekeepers,
@@ -2422,7 +2452,9 @@ class AnalysisController extends Controller
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
                     'highestConvoCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
+                    'highestConvoCountryCount' => $highestConvoCountryCount,
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
+                    'lowestConvoCountryCount' => $lowestConvoCountryCount,
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
                     'highLeadsFollowup' => $highLeadsFollowup,
@@ -2458,6 +2490,7 @@ class AnalysisController extends Controller
                     'highestLeadMineCountry' => isset($highestLeadMineCountry[0]->countryName) ? $highestLeadMineCountry[0]->countryName : '',
                     'lowestLeadMineCountryCount' => $lowestLeadMineCountryCount,
                     'lowestLeadMineCountry' => isset($lowestLeadMineCountry[0]->countryName) ? $lowestLeadMineCountry[0]->countryName : '',                    
+                    'leadAssigned' => $leadAssigned,
                     'chasingTotal' => $chasingTotal,
                     'onlineStoreChasing' => $onlineStoreChasing,
                     'brandChasing' => $brandChasing,
