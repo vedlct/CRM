@@ -38,6 +38,22 @@
       <div class="row">
 
       <div class="col-md-3">
+        <a href="{{route('analysis.personal')}}" target="_blank" class="card-link">
+          <div class="card">
+            <div class="view overlay">
+            <img class="card-img-top" src="{{ url('https://chisellabs.com/glossary/wp-content/uploads/2021/06/SWOT-analysis.png')}}" alt="Card image cap">
+                <div class="mask rgba-white-slight"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Personal Analysis</h4>
+              <p class="card-text">We will analyze individual's daily, weekly, monthly or dated performance to check if they are aligned with their target or not . It gives us a thorough report of a time frame.</p>
+              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+            </div>
+          </div>
+          </a>
+        </div>
+
+      <div class="col-md-3">
         <a href="{{route('randomReportsAll')}}" target="_blank" class="card-link">
           <div class="card">
             <div class="view overlay">
@@ -86,26 +102,11 @@
           </a>
         </div>
 
-        <div class="col-md-3">
-        <a href="{{route('getFredChasingLeads')}}" target="_blank" class="card-link">
-          <div class="card">
-            <div class="view overlay">
-            <img class="card-img-top" src="{{ url('public/img/analysisHome/fredchasingleads.jpg')}}" alt="Card image cap">
-                <div class="mask rgba-white-slight"></div>
-            </div>
-            <div class="card-body">
-              <h4 class="card-title">Fred's Leads</h4>
-              <p class="card-text">Fred chased these leads in his tenure with Tech Cloud. Now, some leads are already assigned to the marketers, some are not. </p>
-              <!-- <a href="{{route('getFredChasingLeads')}}" target="_blank" class="btn btn-custom">Get Fred</a> -->
-            </div>
-          </div>
-        </div>
-        </a>
-    </div>
+  <div>
+
 
 
     <div class="row">
-
 
       <div class="col-md-3">
       <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="card-link">
@@ -155,31 +156,31 @@
           </a>
         </div>
 
-        <div class="col-md-3">
-        <a href="{{route('analysis.personal')}}" target="_blank" class="card-link">
+      <div class="col-md-3">
+        <a href="{{route('getFredChasingLeads')}}" target="_blank" class="card-link">
           <div class="card">
             <div class="view overlay">
-            <img class="card-img-top" src="{{ url('https://chisellabs.com/glossary/wp-content/uploads/2021/06/SWOT-analysis.png')}}" alt="Card image cap">
+            <img class="card-img-top" src="{{ url('public/img/analysisHome/fredchasingleads.jpg')}}" alt="Card image cap">
                 <div class="mask rgba-white-slight"></div>
             </div>
             <div class="card-body">
-              <h4 class="card-title">Personal Analysis</h4>
-              <p class="card-text">We will analyze individual's daily, weekly, monthly or dated performance to check if they are aligned with their target or not .</p>
-              <!-- <a href="{{route('allAssignedButNotMyleads')}}" target="_blank" class="btn btn-custom">Browse The List</a> -->
+              <h4 class="card-title">Fred's Leads</h4>
+              <p class="card-text">Fred chased these leads in his tenure with Tech Cloud. Now, some leads are already assigned to the marketers, some are not. </p>
+              <!-- <a href="{{route('getFredChasingLeads')}}" target="_blank" class="btn btn-custom">Get Fred</a> -->
             </div>
           </div>
-          </a>
         </div>
-        
+        </a>
+    </div>
 
-
-      </div>
+  </div>
 
 
 
       @endif
 
 
+      <hr><hr>
 
 
 

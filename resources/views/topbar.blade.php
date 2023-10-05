@@ -153,9 +153,6 @@
 
 				@if($userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'HR' || $userType == 'MANAGER')
 				
-					<a class="dropdown-item" href="{{route('reportLastWorkingDay')}}">
-						<i class="fa fa-linode"></i> Last Working Day
-					</a>
 
 					<a class="dropdown-item" href="{{route('targetVsAchievement')}}">
 						<i class="fa fa-bullseye"></i> Target vs Achievement

@@ -127,11 +127,9 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <h3>Test Updates:</h3>
 
-        <p>During this time frame, {{$data['profile']->firstName}} received <strong>{!! $data['testInPeriod'] !!}</strong> tests. 
+        <p>During this time frame, {{$data['profile']->firstName}} received <strong>{!! $data['testInPeriod'] !!}</strong> tests where {!! $data['highestTestCountryCount'] !!} of the tests came from the {!! $data['highestTestCountry'] !!}.</p> 
 
-        <span style="text-decoration: line-through;">Three of these tests came from the UK (1000%), and two from Germany (1000%).</span> 
-
-        Among these tests, there were <strong>{!! $data['highLeadTest'] !!}</strong> high leads, <strong>{!! $data['mediumLeadTest'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadTest'] !!}</strong> low lead.</p>
+        <p>Among these tests, there were <strong>{!! $data['highLeadTest'] !!}</strong> high leads, <strong>{!! $data['mediumLeadTest'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadTest'] !!}</strong> low lead.</p>
 
         <br>
         
@@ -153,7 +151,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>&nbsp;</p>
 
-        <p><strong>{!! $data['testFromOwnLead'] !!}</strong> of the tests were from leads that {{$data['profile']->firstName}} had mined himself ({{$testFromOwnLeadPercentage}}%), and there was <strong>{!! $data['brandTest'] !!}</strong> brand involved ({{$brandTestPercentage}}%).</p>
+        <p><strong>{!! $data['testFromOwnLead'] !!}</strong> of the tests were from leads that {{$data['profile']->firstName}} had mined {{$data['profile']->gender == 'M' ? 'himself' : 'herself'}} ({{$testFromOwnLeadPercentage}}% of total tests), and there was <strong>{!! $data['brandTest'] !!}</strong> brand involved ({{$brandTestPercentage}}% of total tests).</p>
 
         
         
@@ -162,11 +160,9 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <h3>Closing Updates:</h3>
 
-        <p>{{$data['profile']->firstName}} achieved <strong>{!! $data['clientsInPeriod'] !!}</strong> closings during this period. 
+        <p>{{$data['profile']->firstName}} achieved <strong>{!! $data['clientsInPeriod'] !!}</strong> closings during this periodwhere {!! $data['highestClosingCountryCount'] !!} of the clients came from the {!! $data['highestClosingCountry'] !!}.</p>
 
-        <span style="text-decoration: line-through;">One closing came from the UK (1000%), one from Italy (1000%), and one from Germany (1000%).</span> 
-
-        These closings included <strong>{!! $data['highLeadClosing'] !!}</strong> high lead, <strong>{!! $data['mediumLeadClosing'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadClosing'] !!}</strong> low lead. The conversion rate from tests to closings was <strong>{!! $data['testToClosingRatio'] !!}</strong>%.</p>
+        <p>These closings included <strong>{!! $data['highLeadClosing'] !!}</strong> high lead, <strong>{!! $data['mediumLeadClosing'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadClosing'] !!}</strong> low lead. The conversion rate from tests to closings was <strong>{!! $data['testToClosingRatio'] !!}</strong>%.</p>
         
         <br>
 
@@ -188,7 +184,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <br>
 
-        <p><strong>{!! $data['clientFromOwnLead'] !!}</strong> of the closings were from leads that {{$data['profile']->firstName}} had mined himself ({{$clientFromOwnLeadPercentage}}%), and there were <strong>{!! $data['brandClosing'] !!}</strong> brand involved ({{$brandClosingPercentage}}%).</p>
+        <p><strong>{!! $data['clientFromOwnLead'] !!}</strong> of the closings were from leads that {{$data['profile']->firstName}} had mined {{$data['profile']->gender == 'M' ? 'himself' : 'herself'}} ({{$clientFromOwnLeadPercentage}}% of total clients), and there were <strong>{!! $data['brandClosing'] !!}</strong> brand involved ({{$brandClosingPercentage}}% of total clients).</p>
 
 
 

@@ -372,7 +372,7 @@ Route::post('/updateKeyword', 'KeywordController@updateKeyword')->name('updateKe
 Route::get('/reportTableCountry','ReportController@reportTableCountry')->name('reportcountryTable');
 Route::post('/searchCountryTableByDate','ReportController@searchCountryTableByDate')->name('searchCountryTableByDate');
 
-Route::get('/report-last-day','ReportController@reportLastWorkingDay')->name('reportLastWorkingDay');
+// Route::get('/report-last-day','ReportController@reportLastWorkingDay')->name('reportLastWorkingDay');
 
 
 //supervisor OR Manager report

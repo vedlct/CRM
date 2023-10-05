@@ -1846,7 +1846,7 @@ class AnalysisController extends Controller
 
 
 
-                //Get all updates regarding CONVERSATIONS
+                //GET ALL UPDATES OF CONVERSATIONS
                 $conversationHighLead = Workprogress::where('userId', $marketerId)
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->where('callingReport', 11)
@@ -2000,7 +2000,7 @@ class AnalysisController extends Controller
                                     
 
 
-                //Get all updates regarding FOLLOWUPS
+                //GET ALL UPDATES OF FOLLOWUPS
                 $highLeadsFollowup = Workprogress::where('userId', $marketerId)
                     ->where('callingReport', 4)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
@@ -2047,13 +2047,27 @@ class AnalysisController extends Controller
                     ->count();
 
 
-                //Get all updates regarding TESTS
+                //GET ALL UPDATES OF TESTS
 
                 $testInPeriod = Workprogress::select('progressId')
                     ->where('userId', $marketerId)
                     ->where('progress', 'LIKE', '%Test%')
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->count();
+
+                $highestTestCountry = DB::table('workprogress')
+                    ->where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Test%')
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select(DB::raw('COUNT(leads.leadId) as maxCountryCount'), 'countries.countryName as countryName', 'leads.countryId', 'workprogress.*')
+                    ->leftJoin('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->groupBy('leads.countryId')
+                    ->orderBy('maxCountryCount', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $highestTestCountryCount = $highestTestCountry->isEmpty() ? 0 : $highestTestCountry[0]->maxCountryCount;
 
 
                 $highLeadTest = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
@@ -2076,7 +2090,6 @@ class AnalysisController extends Controller
                     ->where('leads.possibilityId', 1)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->count();
-
 
                 
                 $testLeads = Workprogress::select('leadId')
@@ -2154,12 +2167,29 @@ class AnalysisController extends Controller
                     ->count();
                 
                 
-                //Get all updates regarding ClOSINGS
+
+
+
+                //GET ALL UPDATES OF ClOSINGS
 
                 $clientsInPeriod = Workprogress::where('userId', $marketerId)
                     ->where('progress', 'LIKE', '%Closing%')
                     ->whereBetween('created_at', [$fromDate, $toDate])
                     ->count();
+                    
+                $highestClosingCountry = DB::table('workprogress')
+                    ->where('userId', $marketerId)
+                    ->where('progress', 'LIKE', '%Closing%')
+                    ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
+                    ->select(DB::raw('COUNT(leads.leadId) as maxCountryCount'), 'countries.countryName as countryName', 'leads.countryId', 'workprogress.*')
+                    ->leftJoin('leads', 'workprogress.leadId', '=', 'leads.leadId')
+                    ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
+                    ->groupBy('leads.countryId')
+                    ->orderBy('maxCountryCount', 'DESC')
+                    ->limit(1)
+                    ->get();
+
+                $highestClosingCountryCount = $highestClosingCountry->isEmpty() ? 0 : $highestClosingCountry[0]->maxCountryCount;
 
                 $highLeadClosing = Workprogress::join('leads', 'workprogress.leadId', '=', 'leads.leadId')
                     ->where('workprogress.userId', $marketerId)
@@ -2264,7 +2294,9 @@ class AnalysisController extends Controller
                 $testToClosingRatio = ($testInPeriod > 0) ? round(($clientsInPeriod / $testInPeriod) * 100) : 0;
 
 
-                //Get all updates regarding LEAD MINING
+
+                
+                //GET ALL UPDATES OF LEAD MINING
 
                 $totalLeadMine = Lead::select('leadId')
                     ->where('minedBy', $marketerId)
@@ -2345,7 +2377,8 @@ class AnalysisController extends Controller
 
 
 
-                //Get the CURRENT STATUS
+
+                //GET CURRENT STATUS
                 
                 $chasingTotal = Lead::select('leadId')->where('contactedUserId', $marketerId)->count();
 
@@ -2464,6 +2497,8 @@ class AnalysisController extends Controller
                     'highLeadMissedFollowup' => $highLeadMissedFollowup,
                     'mediumLeadMissedFollowup' => $mediumLeadMissedFollowup,
                     'testInPeriod' => $testInPeriod,
+                    'highestTestCountry' => isset($highestTestCountry[0]->countryName) ? $highestTestCountry[0]->countryName : '',
+                    'highestTestCountryCount' => $highestTestCountryCount,
                     'highLeadTest' => $highLeadTest,
                     'mediumLeadTest' => $mediumLeadTest,
                     'lowLeadTest' => $lowLeadTest,
@@ -2472,6 +2507,8 @@ class AnalysisController extends Controller
                     'testFromOwnLead' => $testFromOwnLead,
                     'brandTest' => $brandTest,
                     'clientsInPeriod' => $clientsInPeriod,
+                    'highestClosingCountry' => isset($highestClosingCountry[0]->countryName) ? $highestClosingCountry[0]->countryName : '',
+                    'highestClosingCountryCount' => $highestClosingCountryCount,
                     'highLeadClosing' => $highLeadClosing,
                     'mediumLeadClosing' => $mediumLeadClosing,
                     'lowLeadClosing' => $lowLeadClosing,
