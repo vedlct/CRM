@@ -2031,7 +2031,7 @@ class AnalysisController extends Controller
                 $missedFollowupLeads = Followup::select('followup.followId', 'leads.leadId') 
                     ->where('followup.userId', $marketerId)
                     ->where('followup.workStatus', 0)
-                    ->whereBetween('followup.created_at', [$fromDate, $toDate])
+                    ->whereBetween('followup.followUpDate', [$fromDate, $toDate])
                     ->join('leads', 'followup.leadId', 'leads.leadId')
                     ->where('leads.contactedUserId', $marketerId)
                     ->pluck('leads.leadId');
@@ -2045,6 +2045,7 @@ class AnalysisController extends Controller
                 $mediumLeadMissedFollowup = Lead::whereIn('leadId', $missedFollowupLeads)
                     ->where('leads.possibilityId', 2)
                     ->count();
+
 
 
                 //GET ALL UPDATES OF TESTS

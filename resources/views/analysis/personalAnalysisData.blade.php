@@ -117,7 +117,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <h3>Follow-up Updates:</h3>
 
-        <p>{{$data['profile']->firstName}} followed up with <strong>{!! $data['totalFollowup'] !!}</strong> leads, including <strong>{!! $data['highLeadsFollowup'] !!}</strong> high leads ({{$highLeadsFollowupPercentage}}%), <strong>{!! $data['mediumLeadsFollowup'] !!}</strong> medium leads ({{$mediumLeadsFollowupPercentage}}%), and <strong>{!! $data['lowLeadsFollowup'] !!}</strong> low leads ({{$lowLeadsFollowupPercentage}}%). Unfortunately, {{$data['profile']->firstName}} missed <strong>{!! $data['missedFollowup'] !!}</strong> follow-ups during this month, with <strong>{!! $data['highLeadMissedFollowup'] !!}</strong> high leads ({{$highLeadMissedFollowupPercentage}}%) and <strong>{!! $data['mediumLeadMissedFollowup'] !!}</strong> medium leads ({{$mediumLeadMissedFollowupPercentage}}%) among them.</p>
+        <p>{{$data['profile']->firstName}} followed up with <strong>{!! $data['totalFollowup'] !!}</strong> leads, including <strong>{!! $data['highLeadsFollowup'] !!}</strong> high leads ({{$highLeadsFollowupPercentage}}%), <strong>{!! $data['mediumLeadsFollowup'] !!}</strong> medium leads ({{$mediumLeadsFollowupPercentage}}%), and <strong>{!! $data['lowLeadsFollowup'] !!}</strong> low leads ({{$lowLeadsFollowupPercentage}}%). Unfortunately, {{$data['profile']->firstName}} missed <strong>{!! $data['missedFollowup'] !!}</strong> follow-ups during this period, with <strong>{!! $data['highLeadMissedFollowup'] !!}</strong> high leads ({{$highLeadMissedFollowupPercentage}}%) and <strong>{!! $data['mediumLeadMissedFollowup'] !!}</strong> medium leads ({{$mediumLeadMissedFollowupPercentage}}%) among them.</p>
 
         
         

@@ -2510,7 +2510,8 @@ class LeadController extends Controller
                     ->get();
                 $country=Country::get();
                 $users = User::get();
-        
+
+                
                 return view('layouts.lead.unTouchedLead')
                     ->with('categories',$categories)
                     ->with('country',$country)
