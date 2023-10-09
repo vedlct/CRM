@@ -1700,6 +1700,7 @@ class AnalysisController extends Controller
                     ->select('leadId')
                     ->count();
 
+
                 // Get the total number of calls for high-possibility leads within the date range
                 $highLeadTotalCall = Workprogress::where('userId', $marketerId)
                     ->where('possibilityId', 3)
@@ -1836,7 +1837,7 @@ class AnalysisController extends Controller
                     ->groupBy(DB::raw('DATE(created_at)'))
                     ->get();
 
-                $averageCall = round($resultDate->avg('tcount'),2);
+                $averageCall = round($resultDate->avg('tcount'), 2);
 
                 $highestCall = $resultDate->max('tcount'); //also add the date
                 $highestCallDate = $resultDate->where('tcount',$resultDate->max('tcount'))->first(); //also add the date

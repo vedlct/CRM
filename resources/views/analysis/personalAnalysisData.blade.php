@@ -58,6 +58,9 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>{{$data['profile']->firstName}} encountered <strong>{!! $data['totalGatekeepers'] !!}</strong> Gatekeepers, with a majority from the <strong>{!! $data['highestGKcountry'] !!}</strong>.</p>
 
+        <p>{{$data['profile']->firstName}} sent <strong>{!! $data['totalEmailSent'] !!}</strong> emails, where the number of Cold Email is <strong>{!! $data['totalColdEmail'] !!}</strong>.</p>
+        
+
         <p>Finally, there were <strong>{!! $data['totalUnavailable'] !!}</strong> unavailable leads, of which the majority were from <strong>{!! $data['highestUnavailableCountry'] !!}</strong>.</p>
 
         <p>On average, {{$data['profile']->firstName}} made <strong>{!! $data['averageCall'] !!}</strong> calls per day, with the highest number of calls (<strong>{!! $data['heightsCall'] !!}</strong>) on <strong>{!! $data['highestCallDate'] !!}</strong>, and the lowest (<strong>{!! $data['lowestCall'] !!}</strong>) on <strong>{!! $data['lowestCallDate'] !!}</strong>.</p>
@@ -211,7 +214,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>In {{$data['profile']->gender == 'M' ? 'his' : 'her'}} Sales Pipeline, {{$data['profile']->firstName}} has <strong>{!! $data['salesPipelineContact'] !!}</strong> in Contact stage, <strong>{!! $data['salesPipelineConversation'] !!}</strong> in Conversation stage and <strong>{!! $data['salesPipelinePossibility'] !!}</strong> in Test Possibility stage.</p>
 
-        <p>Currently, {{$data['profile']->firstName}} has <strong>{!! $data['longTimeNoChase'] !!}</strong> leads that {{$data['profile']->gender == 'M' ? 'he' : 'she'}} hasn’t been chasing for more than 6 months. {{$data['profile']->gender == 'M' ? 'He' : 'She'}} also has <strong>{!! $data['testButNotClosed'] !!}</strong> leads with tests that are not closed yet, but {{$data['profile']->gender == 'M' ? 'he' : 'she'}} is still chasing them. Additionally, {{$data['profile']->firstName}} has <strong>{!! $data['ippList'] !!}</strong> leads in the IPP List.</p>
+        <p>Currently, {{$data['profile']->firstName}} has <strong>{!! $data['longTimeNoChase'] !!}</strong> leads that {{$data['profile']->gender == 'M' ? 'he' : 'she'}} has not been chasing for more than 6 months. {{$data['profile']->gender == 'M' ? 'He' : 'She'}} also has <strong>{!! $data['testButNotClosed'] !!}</strong> leads with tests that are not closed yet, but {{$data['profile']->gender == 'M' ? 'he' : 'she'}} is still chasing them. Additionally, {{$data['profile']->firstName}} has <strong>{!! $data['ippList'] !!}</strong> leads in the IPP List.</p>
 
         <br><br>
 

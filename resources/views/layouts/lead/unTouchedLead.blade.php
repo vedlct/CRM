@@ -27,6 +27,7 @@
                         <th>Country</th>
                         <th>Possibility</th>
                         <th>Status</th>
+                        <th>Mined By</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -36,7 +37,6 @@
             </div>
 
             <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
-
 
             <div class="form-group">
 
@@ -146,6 +146,7 @@
                     { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
                     { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
                     { data: 'status.statusName', name: 'status.statusName', defaultContent: ''},
+                    { data: 'minedBy', name: 'minedBy', defaultContent: ''},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
