@@ -50,7 +50,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>During this time period, {!!$data['profile']->firstName!!} made a total of <strong>{!! $data['totalCall'] !!}</strong> calls. These calls were distributed as follows: <strong>{!! $data['lowLeadTotalCall'] !!}</strong> calls to Low Leads ({!!$lowLeadPercentage!!}%), <strong>{!! $data['mediumLeadTotalcall'] !!}</strong> to Medium Leads ({!!$mediumLeadPercentage!!}%), and <strong>{!! $data['highLeadTotalCall'] !!}</strong> to High Leads ({!!$highLeadPercentage!!}%).</p>
 
-        <p>Out of these calls, {!!$data['profile']->firstName!!} successfully made contact with <strong>{!! $data['totalContact'] !!}</strong> leads ({{$contactPercentage}}% of Total Call), with a majority of them located in <strong>{!! $data['contactCountry'] !!}</strong> ({!!$data['contactCountryCount'][0]->totalcontact!!} contacts).</p>
+        <p>Out of these calls, {!!$data['profile']->firstName!!} successfully made contact with <strong>{!! $data['totalContact'] !!}</strong> leads ({{$contactPercentage}}% of Total Call), with a majority of them located in <strong>{!! $data['contactCountry'] !!}</strong> ({!!$data['contactCountryCount']!!} contacts).</p>
 
         <p> {!!$data['profile']->firstName!!} also engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong>.</p>
 
@@ -59,14 +59,14 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         <p>{!!$data['profile']->firstName!!} encountered <strong>{!! $data['totalGatekeepers'] !!}</strong> Gatekeepers, with a majority from the <strong>{!! $data['highestGKcountry'] !!}</strong>.</p>
 
         <p>{!!$data['profile']->firstName!!} sent <strong>{!! $data['totalEmailSent'] !!}</strong> emails, where the number of Cold Email is <strong>{!! $data['totalColdEmail'] !!}</strong>.</p>
-        
+
 
         <p>Finally, there were <strong>{!! $data['totalUnavailable'] !!}</strong> unavailable leads, of which the majority were from <strong>{!! $data['highestUnavailableCountry'] !!}</strong>.</p>
 
         <p>On average, {!!$data['profile']->firstName!!} made <strong>{!! $data['averageCall'] !!}</strong> calls per day, with the highest number of calls (<strong>{!! $data['heightsCall'] !!}</strong>) on <strong>{!! $data['highestCallDate'] !!}</strong>, and the lowest (<strong>{!! $data['lowestCall'] !!}</strong>) on <strong>{!! $data['lowestCallDate'] !!}</strong>.</p>
 
-        
-        
+
+
         <br><hr><br>
 
 
@@ -75,7 +75,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>{!!$data['profile']->firstName!!} engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, with <strong>{!! $data['conversationHighLead'] !!}</strong> high leads ({!!$conversationHighLeadPercentage!!}}%), <strong>{!! $data['conversationMedumLead'] !!}</strong> medium leads ({!!$conversationMediumLeadPercentage!!}%), and <strong>{!! $data['conversationLowLead'] !!}</strong> low leads ({!!$conversationLowLeadPercentage!!}%).</p>
 
-        <p>The majority of {!!$data['profile']->firstName!!}'s conversations took place in the  <strong>{!! $data['highestConvoCountry'] !!}</strong> ({!!$data['highestConvoCountryCount'][0]->totalcontact!!} conversations), while <strong>{!! $data['lowestConvoCountry'] !!}</strong> had the lowest number ({!!$data['lowestConvoCountryCount'][0]->totalcontact!!} conversations).</p>
+        <p>The majority of {!!$data['profile']->firstName!!}'s conversations took place in the  <strong>{!! $data['highestConvoCountry'] !!}</strong> ({!!$data['highestConvoCountryCount']!!} conversations), while <strong>{!! $data['lowestConvoCountry'] !!}</strong> had the lowest number ({!!$data['lowestConvoCountryCount']!!} conversations).</p>
 
         <p>
             @if (count($data['missingLeadInfoInConvo']) == 1)
@@ -111,7 +111,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <br>
         <p>On average, it took <strong>{!! $data['avgAttemptInConvo'] !!}</strong> attempts per lead to initiate a conversation.</p>
-    
+
 
 
         <br><hr><br>
@@ -122,8 +122,8 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>{!!$data['profile']->firstName!!} followed up with <strong>{!! $data['totalFollowup'] !!}</strong> leads, including <strong>{!! $data['highLeadsFollowup'] !!}</strong> high leads ({!!$highLeadsFollowupPercentage!!}%), <strong>{!! $data['mediumLeadsFollowup'] !!}</strong> medium leads ({!!$mediumLeadsFollowupPercentage!!}%), and <strong>{!! $data['lowLeadsFollowup'] !!}</strong> low leads ({!!$lowLeadsFollowupPercentage!!}%). Unfortunately, {!!$data['profile']->firstName!!} missed <strong>{!! $data['missedFollowup'] !!}</strong> follow-ups during this period, with <strong>{!! $data['highLeadMissedFollowup'] !!}</strong> high leads ({!!$highLeadMissedFollowupPercentage!!}%) and <strong>{!! $data['mediumLeadMissedFollowup'] !!}</strong> medium leads ({!!$mediumLeadMissedFollowupPercentage!!}%) among them.</p>
 
-        
-        
+
+
         <br><hr><br>
 
 
@@ -135,7 +135,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         <p>Among these tests, there were <strong>{!! $data['highLeadTest'] !!}</strong> high leads, <strong>{!! $data['mediumLeadTest'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadTest'] !!}</strong> low lead.</p>
 
         <br>
-        
+
         <p>
             {!!$data['profile']->firstName!!} has brought Tests from following leads:
         </p>
@@ -156,8 +156,8 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p><strong>{!! $data['testFromOwnLead'] !!}</strong> of the tests were from leads that {!!$data['profile']->firstName!!} had mined {!!$data['profile']->gender == 'M' ? 'himself' : 'herself'!!} ({!!$testFromOwnLeadPercentage!!}% of total tests), and there was <strong>{!! $data['brandTest'] !!}</strong> brand involved ({!!$brandTestPercentage!!}% of total tests).</p>
 
-        
-        
+
+
         <br><hr><br>
 
 
@@ -166,7 +166,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         <p>{{$data['profile']->firstName}} achieved <strong>{!! $data['clientsInPeriod'] !!}</strong> closings during this periodwhere {!! $data['highestClosingCountryCount'] !!} of the clients came from the {!! $data['highestClosingCountry'] !!}.</p>
 
         <p>These closings included <strong>{!! $data['highLeadClosing'] !!}</strong> high lead, <strong>{!! $data['mediumLeadClosing'] !!}</strong> medium lead, and <strong>{!! $data['lowLeadClosing'] !!}</strong> low lead. The conversion rate from tests to closings was <strong>{!! $data['testToClosingRatio'] !!}</strong>%.</p>
-        
+
         <br>
 
         <p>
@@ -202,8 +202,8 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>During this period, {!!$data['profile']->firstName!!} received <strong>{!! $data['leadAssigned'] !!}</strong> leads from the supervisors.</p>
 
-        
-        
+
+
         <br><hr><br>
 
 
