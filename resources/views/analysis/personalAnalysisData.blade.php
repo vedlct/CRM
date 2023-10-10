@@ -52,13 +52,9 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>Out of these calls, {!!$data['profile']->firstName!!} successfully made contact with <strong>{!! $data['totalContact'] !!}</strong> leads ({{$contactPercentage}}% of Total Call), with a majority of them located in <strong>{!! $data['contactCountry'] !!}</strong> ({!!$data['contactCountryCount']!!} contacts).</p>
 
-        <p> {!!$data['profile']->firstName!!} also engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong>.</p>
+        <p> {!!$data['profile']->firstName!!} also engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong>.Additionally, {!!$data['profile']->firstName!!} conducted <strong>{!! $data['totalFollowup'] !!}</strong> follow-ups, mainly with leads in <strong>{!! $data['highestFollowupCountry'] !!}</strong>.</p>
 
-        <p>Additionally, {!!$data['profile']->firstName!!} conducted <strong>{!! $data['totalFollowup'] !!}</strong> follow-ups, mainly with leads in <strong>{!! $data['highestFollowupCountry'] !!}</strong>.</p>
-
-        <p>{!!$data['profile']->firstName!!} encountered <strong>{!! $data['totalGatekeepers'] !!}</strong> Gatekeepers, with a majority from the <strong>{!! $data['highestGKcountry'] !!}</strong>.</p>
-
-        <p>{!!$data['profile']->firstName!!} sent <strong>{!! $data['totalEmailSent'] !!}</strong> emails, where the number of Cold Email is <strong>{!! $data['totalColdEmail'] !!}</strong>.</p>
+        <p>{!!$data['profile']->firstName!!} encountered <strong>{!! $data['totalGatekeepers'] !!}</strong> Gatekeepers, with a majority from the <strong>{!! $data['highestGKcountry'] !!}</strong>. Besides, {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!}  sent <strong>{!! $data['totalEmailSent'] !!}</strong> emails, where the number of Cold Email is <strong>{!! $data['totalColdEmail'] !!}</strong>.</p>
 
 
         <p>Finally, there were <strong>{!! $data['totalUnavailable'] !!}</strong> unavailable leads, of which the majority were from <strong>{!! $data['highestUnavailableCountry'] !!}</strong>.</p>
@@ -88,7 +84,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         @foreach ($data['missingLeadInfoInConvo'] as $lead)
             <p>
                 <ul>
-                    {{$lead->leadId}} - {{$lead->companyName}}
+                    {{$lead->leadId}} - {{$lead->companyName}}(
                     @if (is_null($lead->volume))
                         Volume
                     @endif
@@ -104,7 +100,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
                     @if (is_null($lead->process))
                         Process
                     @endif
-
+                    )
                 </ul>
             </p>
         @endforeach
@@ -214,7 +210,13 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>In {!!$data['profile']->gender == 'M' ? 'his' : 'her'!!} Sales Pipeline, {!!$data['profile']->firstName!!} has <strong>{!! $data['salesPipelineContact'] !!}</strong> in Contact stage, <strong>{!! $data['salesPipelineConversation'] !!}</strong> in Conversation stage and <strong>{!! $data['salesPipelinePossibility'] !!}</strong> in Test Possibility stage.</p>
 
-        <p>Currently, {!!$data['profile']->firstName!!} has <strong>{!! $data['longTimeNoChase'] !!}</strong> leads that {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has not been chasing for more than 6 months. {!!$data['profile']->gender == 'M' ? 'He' : 'She'!!} also has <strong>{!! $data['testButNotClosed'] !!}</strong> leads with tests that are not closed yet, but {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} is still chasing them. Additionally, {!!$data['profile']->firstName!!} has <strong>{!! $data['ippList'] !!}</strong> leads in the IPP List.</p>
+        <p>Currently, {!!$data['profile']->firstName!!} has <strong>{!! count($data['longTimeNoChase']) !!}</strong> leads that {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has not been chasing for more than 6 months. {!!$data['profile']->gender == 'M' ? 'He' : 'She'!!} also has <strong>{!! $data['testButNotClosed'] !!}</strong> leads with tests that are not closed yet, but {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} is still chasing them. Additionally, {!!$data['profile']->firstName!!} has <strong>{!! $data['ippList'] !!}</strong> leads in the IPP List.</p>
 
         <br><br>
+
+        <h5>Long Time No Chase Lead Id</h5>
+        <hr>
+            @foreach ($data['longTimeNoChase'] as $lead)
+                <p>{{ $lead->leadId }} - {{ $lead->website }}</p>
+            @endforeach
 

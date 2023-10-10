@@ -2426,13 +2426,26 @@ class AnalysisController extends Controller
                     ->count();
 
 
-                $longTimeNoChase = Lead::select('leads.leadId')
-                    ->where('leads.contactedUserId', $marketerId)
-                    ->whereHas('workprogress', function ($query) use ($marketerId) {
-                        $query->where('workprogress.userId', $marketerId)
-                            ->whereDate('workprogress.created_at', '<=', now()->subMonths(6));
+                $longTimeNoChase = Lead::select('leads.leadId', 'leads.website' , 'workprogress.created_at as workprogress_created_at')
+                    ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
+                                    FROM workprogress
+                                    GROUP BY leadId) AS wp'), function ($join) {
+                        $join->on('leads.leadId', '=', 'wp.leadId');
                     })
-                    ->count();
+                    ->leftJoin('workprogress', function ($join) {
+                        $join->on('wp.leadId', '=', 'workprogress.leadId')
+                            ->on('wp.latest_created_at', '=', 'workprogress.created_at');
+                    })
+                    ->leftJoin('users', function ($join) {
+                        $join->on('workprogress.userId', '=', 'users.id')
+                            ->whereColumn('leads.contactedUserId', '=', 'users.id');
+                    })
+                    ->where('users.id', $marketerId)
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->where('leads.statusId', 7)
+                    ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
+                    ->groupBy('workprogress.leadId')
+                    ->get();
                 
                 
             
