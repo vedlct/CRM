@@ -1666,7 +1666,8 @@ class AnalysisController extends Controller
                 $fromDate = $request->input('fromDate');
                 $toDate = $request->input('toDate');
                 $profile = User::where('id', $marketerId)->first();
-                
+                $today = date('Y-m-d'); // Get today's date
+
 
                 // Calculate the number of working days between $fromDate and $toDate for the user
                 $workingDays = DB::table('workprogress')
@@ -2465,7 +2466,22 @@ class AnalysisController extends Controller
 
                 $ippList = Lead::where('contactedUserId', $marketerId)->where('ippStatus', 1)->count();
 
-
+                $followupNotSet = DB::table('leads')
+                    ->where('leads.contactedUserId', $marketerId)
+                    ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                    ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                    ->whereIn('leads.leadId', function ($query) {
+                        $query->select('leadId')
+                            ->from('Workprogress')
+                            ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                    })
+                    ->whereNotIn('leads.leadId', function ($query) use ($today) {
+                        $query->select('leadId')
+                            ->from('followup')
+                            ->whereDate('followUpDate', '>', $today);
+                    })
+                    ->groupBy('leads.leadId')
+                    ->count();
 
 
                 // Prepare the data to be returned as JSON
@@ -2480,7 +2496,7 @@ class AnalysisController extends Controller
                     'highLeadTotalCall' => $highLeadTotalCall,
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
-                    'contactCountryCount' => $contactCountryCount,
+                    'contactCountryCount' => $contactCountryCount[0]->totalcontact,
                     'totalConversation' => $totalConversation,
                     'highConversationCountry' => isset($highConversationCountry[0]->countryName) ? $highConversationCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
@@ -2500,9 +2516,9 @@ class AnalysisController extends Controller
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
                     'highestConvoCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
-                    'highestConvoCountryCount' => $highestConvoCountryCount,
+                    'highestConvoCountryCount' => $highestConvoCountryCount[0]->totalcontact,
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
-                    'lowestConvoCountryCount' => $lowestConvoCountryCount,
+                    'lowestConvoCountryCount' => $lowestConvoCountryCount[0]->totalcontact,
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
                     'highLeadsFollowup' => $highLeadsFollowup,
@@ -2554,6 +2570,7 @@ class AnalysisController extends Controller
                     'longTimeNoChase' => $longTimeNoChase,
                     'testButNotClosed' => $testButNotClosed,
                     'ippList' => $ippList,
+                    'followupNotSet' => $followupNotSet,
                 ];
                 
 
@@ -2561,14 +2578,115 @@ class AnalysisController extends Controller
             //    return response()->json($data);
                 return view('analysis.personalAnalysisData', compact('data'));
 
-
             }
 
 
 
+            public function followupNotSet (){
 
+                $users = User::orderby('firstName', 'asc')->get();
 
+                return view ('analysis.followupNotSet', compact('users'));
+            }
+                
             
+            public function getFollowupNotSet (){
+
+                $User_Type = Session::get('userType');
+                $today = date('Y-m-d'); // Get today's date
+
+                if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
+                    
+                    $followupNotSet = DB::table('leads')
+                        ->select(
+                            'leads.leadId',
+                            'leads.companyName',
+                            'leads.website',
+                            'leads.contactNumber',
+                            'leads.contactedUserId',
+                            'followup.followUpDate',
+                            'users.firstName',
+                            'users.lastName',
+                            DB::raw('CONCAT(users.firstName, " ", users.lastName) AS fullName'),
+                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate')
+                        )
+                        ->whereNotNull('leads.contactedUserId')
+                        ->leftJoin('users', 'leads.contactedUserId', '=', 'users.id')
+                        ->where('users.active', 1)
+                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                        ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                        ->whereIn('leads.leadId', function ($query) {
+                            $query->select('leadId')
+                                ->from('Workprogress')
+                                ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                        })
+                        ->whereNotIn('leads.leadId', function ($query) use ($today) {
+                            $query->select('leadId')
+                                ->from('followup')
+                                ->whereDate('followUpDate', '>', $today);
+                        })
+                        ->groupBy('leads.leadId')
+                        ->get();
+            
+                    } else {
+
+                        $followupNotSet = DB::table('leads')
+                        ->select(
+                            'leads.leadId',
+                            'leads.companyName',
+                            'leads.website',
+                            'leads.contactNumber',
+                            'leads.contactedUserId',
+                            'followup.followUpDate',
+                            'users.firstName',
+                            'users.lastName',
+                            DB::raw('CONCAT(users.firstName, " ", users.lastName) AS fullName'),
+                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate')
+                        )
+                        ->where('leads.contactedUserId', Auth::user()->id)
+                        ->leftJoin('users', 'leads.contactedUserId', '=', 'users.id')
+                        ->where('users.active', 1)
+                        ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                        ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                        ->whereIn('leads.leadId', function ($query) {
+                            $query->select('leadId')
+                                ->from('Workprogress')
+                                ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                        })
+                        ->whereNotIn('leads.leadId', function ($query) use ($today) {
+                            $query->select('leadId')
+                                ->from('followup')
+                                ->whereDate('followUpDate', '>', $today);
+                        })
+                        ->groupBy('leads.leadId')
+                        ->get();
+                        
+                    }
+    
+                    
+                    return DataTables::of($followupNotSet)
+                        ->addColumn('check', function ($followupNotSet) {
+                            return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$followupNotSet->leadId.'">';
+                        })
+                        ->addColumn('action', function ($followupNotSet) {
+                            return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                data-lead-id="'.$followupNotSet->leadId.'"><i class="fa fa-eye"></i></a>';
+                        })
+                        ->toJson();
+
+            }
+            
+
+
+
+
+
+
+
+
+
+
+
 
 
         //THIS FUNCTION BELONGS TO MINING FOLDER. BUT NOT TRANSFERRING DUE TO DEPENDENCIES

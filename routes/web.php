@@ -329,6 +329,8 @@ Route::post('/analysis/graph','AnalysisController@getUserDataPeriod')->name('ana
 Route::get('/analysis/personal-analysis','AnalysisController@personalAnalysis')->name('analysis.personal');
 Route::post('/analysis/personal-analysis','AnalysisController@getPersonalAnalysis')->name('analysis.getPersonalAnalysis');
 
+Route::get('/followupNotSet','AnalysisController@followupNotSet')->name('followupNotSet');
+Route::post('/followupNotSet','AnalysisController@getFollowupNotSet')->name('getFollowupNotSet');
 
 
 

@@ -364,11 +364,27 @@
       </div>
       <div class="card-body">
         <h4 class="card-title">Individual Hourly Report</h4>
-        <p class="card-text">How many calls have you made in every hour? Is there any large gap between calls? Are you making too many calls within a short time? Check yourself!</p>
+        <p class="card-text">How many calls have you made in every hour? Is there any large gap between calls? Check yourself!</p>
       </div>
     </div>
   </a>
 </div>
+
+<div class="col-md-3">
+  <a href="{{route('followupNotSet')}}" target="_blank" class="card-link">
+    <div class="card">
+      <div class="view overlay">
+      <img class="card-img-top" src="{{ url('https://www.commbox.io/wp-content/uploads/2019/10/41-1.jpg')}}" alt="Hourly Report">
+        <div class="mask rgba-white-slight"></div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Forgot to Set Followup </h4>
+        <p class="card-text">These are the leads you forgot to set followup. You have worked on these leads but didn't set any followup. If you want to keep these leads, set followups.</p>
+      </div>
+    </div>
+  </a>
+</div>
+
 
 </div>
 
