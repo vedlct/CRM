@@ -46,10 +46,20 @@ h1 {
         <h1 class="text-center mb-4" style="padding: 30px 0;">Change Logs</h1>
 
 
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.10.00</span> - 11 October 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Now we get the leads where we forget to set Followup  </li>
+                    <li class="list-group-item">Bug Fixing -  Update eprsonal analysis to remove totalcontact </li>
+                </ul>
+            </div>
+        </div>
+
 
         <div class="card change-log-card">
             <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info">2.09.02</span> - 03 October 2023</h5>
+            <h5 class="card-title"><span class="badge badge-info">2.09.02</span> - 09 October 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Bug Fixing - Personal Analysis Long Time No Chase </li>
                 </ul>
