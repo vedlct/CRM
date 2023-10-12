@@ -618,13 +618,14 @@ class AnalysisController extends Controller
                                     ->whereColumn('leads.contactedUserId', '=', 'users.id');
                             })
                             ->where('leads.contactedUserId', '!=', null)
-                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
+                            // ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
                             ->where('leads.statusId', 7)
                             ->whereDate('workprogress.created_at', '<=', now()->subDays(180))
                             ->orderBy('workprogress.created_at', 'desc')
                             ->get();
 
                     } else {    
+                        
                         $leads = Lead::with('country','category','status','contact','possibility', 'probability')
                             ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
                             ->leftJoin(DB::raw('(SELECT leadId, MAX(created_at) as latest_created_at
@@ -643,7 +644,7 @@ class AnalysisController extends Controller
                             })
                             ->where('users.id', Auth::user()->id)
                             ->where('leads.contactedUserId', '!=', null)
-                            ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
+                            // ->whereNotIn('leads.countryId', ['8', '49', '50', '51', '52'])
                             ->where('leads.statusId', 7)
                             ->whereDate('workprogress.created_at', '<=', now()->subDays(90))
                             ->orderBy('workprogress.created_at', 'desc')
@@ -2496,7 +2497,7 @@ class AnalysisController extends Controller
                     'highLeadTotalCall' => $highLeadTotalCall,
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
-                    'contactCountryCount' => $contactCountryCount[0]->totalcontact,
+                    'contactCountryCount' => $contactCountryCount,
                     'totalConversation' => $totalConversation,
                     'highConversationCountry' => isset($highConversationCountry[0]->countryName) ? $highConversationCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
@@ -2516,9 +2517,9 @@ class AnalysisController extends Controller
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
                     'highestConvoCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
-                    'highestConvoCountryCount' => $highestConvoCountryCount[0]->totalcontact,
+                    'highestConvoCountryCount' => $highestConvoCountryCount,
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
-                    'lowestConvoCountryCount' => $lowestConvoCountryCount[0]->totalcontact,
+                    'lowestConvoCountryCount' => $lowestConvoCountryCount,
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
                     'highLeadsFollowup' => $highLeadsFollowup,

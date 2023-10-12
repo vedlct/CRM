@@ -210,13 +210,18 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>In {!!$data['profile']->gender == 'M' ? 'his' : 'her'!!} Sales Pipeline, {!!$data['profile']->firstName!!} has <strong>{!! $data['salesPipelineContact'] !!}</strong> in Contact stage, <strong>{!! $data['salesPipelineConversation'] !!}</strong> in Conversation stage and <strong>{!! $data['salesPipelinePossibility'] !!}</strong> in Test Possibility stage.</p>
 
-        <p>Currently, {!!$data['profile']->firstName!!} has <strong>{!! count($data['longTimeNoChase']) !!}</strong> leads that {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has not been chasing for more than 6 months. {!!$data['profile']->gender == 'M' ? 'He' : 'She'!!} also has <strong>{!! $data['testButNotClosed'] !!}</strong> leads with tests that are not closed yet, but {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} is still chasing them. Additionally, {!!$data['profile']->firstName!!} has <strong>{!! $data['ippList'] !!}</strong> leads in the IPP List. Besides, {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has <strong>{!! $data['followupNotSet'] !!}</strong> leads which do not have any followup dates.</p>
+        <p>Currently, {!!$data['profile']->firstName!!} has 
+            <strong><a href="{{route('longTimeNoCall')}}" target="_blank" class="card-link">{!! count($data['longTimeNoChase']) !!}</a></strong> leads that 
+            {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has not been chasing for more than 6 months. 
+            {!!$data['profile']->gender == 'M' ? 'He' : 'She'!!} also has 
+            <strong><a href="{{route('testButNotClosedList')}}" target="_blank" class="card-link">{!! $data['testButNotClosed'] !!}</a></strong> 
+            leads with tests that are not closed yet, but 
+            {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} is still chasing them. 
+            Additionally, {!!$data['profile']->firstName!!} has 
+            <strong><a href="{{route('ippList')}}" target="_blank" class="card-link">{!! $data['ippList'] !!}</a></strong> 
+            leads in the IPP List. 
+            Besides, {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!} has 
+            <strong><a href="{{route('followupNotSet')}}" target="_blank" class="card-link">{!! $data['followupNotSet'] !!}</a></strong> leads which do not have any followup dates.</p>
 
         <br><br>
-
-        <h5>Long Time No Chase Lead Id</h5>
-        <hr>
-            @foreach ($data['longTimeNoChase'] as $lead)
-                <p>{{ $lead->leadId }} - {{ $lead->website }}</p>
-            @endforeach
 
