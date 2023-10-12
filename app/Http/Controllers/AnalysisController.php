@@ -2473,8 +2473,8 @@ class AnalysisController extends Controller
                     ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
                     ->whereIn('leads.leadId', function ($query) {
                         $query->select('leadId')
-                            ->from('Workprogress')
-                            ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                            ->from('workprogress')
+                            ->whereColumn('workprogress.userId', 'leads.contactedUserId');
                     })
                     ->whereNotIn('leads.leadId', function ($query) use ($today) {
                         $query->select('leadId')
@@ -2618,8 +2618,8 @@ class AnalysisController extends Controller
                         ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
                         ->whereIn('leads.leadId', function ($query) {
                             $query->select('leadId')
-                                ->from('Workprogress')
-                                ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                                ->from('workprogress')
+                                ->whereColumn('workprogress.userId', 'leads.contactedUserId');
                         })
                         ->whereNotIn('leads.leadId', function ($query) use ($today) {
                             $query->select('leadId')
@@ -2651,8 +2651,8 @@ class AnalysisController extends Controller
                         ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
                         ->whereIn('leads.leadId', function ($query) {
                             $query->select('leadId')
-                                ->from('Workprogress')
-                                ->whereColumn('Workprogress.userId', 'leads.contactedUserId');
+                                ->from('workprogress')
+                                ->whereColumn('workprogress.userId', 'leads.contactedUserId');
                         })
                         ->whereNotIn('leads.leadId', function ($query) use ($today) {
                             $query->select('leadId')
