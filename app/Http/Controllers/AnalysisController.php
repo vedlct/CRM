@@ -1939,7 +1939,8 @@ class AnalysisController extends Controller
                             'leads.volume',
                             'leads.leadId',
                             'leads.contactedUserId',
-                            'leads.companyName'
+                            'leads.companyName',
+                            'leads.website'
                         )
                     ->where('workprogress.userId', $marketerId)
                     ->where('workprogress.callingReport', 11)

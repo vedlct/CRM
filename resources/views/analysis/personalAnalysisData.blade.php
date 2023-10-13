@@ -52,7 +52,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>Out of these calls, {!!$data['profile']->firstName!!} successfully made contact with <strong>{!! $data['totalContact'] !!}</strong> leads ({{$contactPercentage}}% of Total Call), with a majority of them located in <strong>{!! $data['contactCountry'] !!}</strong> ({!!$data['contactCountryCount']!!} contacts).</p>
 
-        <p> {!!$data['profile']->firstName!!} also engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong>.Additionally, {!!$data['profile']->firstName!!} conducted <strong>{!! $data['totalFollowup'] !!}</strong> follow-ups, mainly with leads in <strong>{!! $data['highestFollowupCountry'] !!}</strong>.</p>
+        <p> {!!$data['profile']->firstName!!} also engaged in <strong>{!! $data['totalConversation'] !!}</strong> conversations, primarily with leads in the <strong>{!! $data['highConversationCountry'] !!}</strong>. Additionally, {!!$data['profile']->firstName!!} conducted <strong>{!! $data['totalFollowup'] !!}</strong> follow-ups, mainly with leads in <strong>{!! $data['highestFollowupCountry'] !!}</strong>.</p>
 
         <p>{!!$data['profile']->firstName!!} encountered <strong>{!! $data['totalGatekeepers'] !!}</strong> Gatekeepers, with a majority from the <strong>{!! $data['highestGKcountry'] !!}</strong>. Besides, {!!$data['profile']->gender == 'M' ? 'he' : 'she'!!}  sent <strong>{!! $data['totalEmailSent'] !!}</strong> emails, where the number of Cold Email is <strong>{!! $data['totalColdEmail'] !!}</strong>.</p>
 
@@ -84,7 +84,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         @foreach ($data['missingLeadInfoInConvo'] as $lead)
             <p>
                 <ul>
-                    {{$lead->leadId}} - {{$lead->companyName}}(
+                    {{$lead->leadId}} - {{$lead->companyName}} - {{$lead->website}} - <strong>Missing:</strong> 
                     @if (is_null($lead->volume))
                         Volume
                     @endif
@@ -94,13 +94,12 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
                     @endif
 
                     @if (is_null($lead->frequency))
-                        Frequency,
+                        , Frequency
                     @endif
 
                     @if (is_null($lead->process))
-                        Process
-                    @endif
-                    )
+                        and Process
+                    @endif                    
                 </ul>
             </p>
         @endforeach
@@ -140,7 +139,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
             <p>
                 <ul>
                     <li>
-                        {{$lead['leadId']}} - {{$lead['companyName']}} - {{$lead['website']}} ({{$lead['possibilityName']}})
+                        {{$lead['leadId']}} - {{$lead['companyName']}} - {{$lead['website']}} (<strong>{{$lead['possibilityName']}}</strong>)
                         in {{$lead['country']}} after {{$lead['attempts']}} attempts,
                         with a {{$lead['differenceInDays']}} days gap between the first call and free trial day.
                     </li>
@@ -150,7 +149,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <p>&nbsp;</p>
 
-        <p><strong>{!! $data['testFromOwnLead'] !!}</strong> of the tests were from leads that {!!$data['profile']->firstName!!} had mined {!!$data['profile']->gender == 'M' ? 'himself' : 'herself'!!} ({!!$testFromOwnLeadPercentage!!}% of total tests), and there was <strong>{!! $data['brandTest'] !!}</strong> brand involved ({!!$brandTestPercentage!!}% of total tests).</p>
+        <p><strong>{!! $data['testFromOwnLead'] !!}</strong> of the tests were from leads that {!!$data['profile']->firstName!!} had mined {!!$data['profile']->gender == 'M' ? 'himself' : 'herself'!!} ({!!$testFromOwnLeadPercentage!!}% of total tests), and there was <strong>{!! $data['brandTest'] !!} brand</strong> involved ({!!$brandTestPercentage!!}% of total tests).</p>
 
 
 
@@ -173,7 +172,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
             <p>
                 <ul>
                     <li>
-                        {{$lead['leadId']}} - {{$lead['companyName']}} - {{$lead['website']}} ({{$lead['possibilityName']}})
+                        {{$lead['leadId']}} - {{$lead['companyName']}} - {{$lead['website']}} (<strong>{{$lead['possibilityName']}}</strong>)
                         in {{$lead['country']}} after {{$lead['attempts']}} attempts,
                         with a {{$lead['differenceInDays']}} days gap between the test and closing.
                     </li>
@@ -183,7 +182,7 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
 
         <br>
 
-        <p><strong>{!! $data['clientFromOwnLead'] !!}</strong> of the closings were from leads that {!!$data['profile']->firstName!!} had mined {!!$data['profile']->gender == 'M' ? 'himself' : 'herself'!!} ({!!$clientFromOwnLeadPercentage!!}% of total clients), and there were <strong>{!! $data['brandClosing'] !!}</strong> brand involved ({!!$brandClosingPercentage!!}% of total clients).</p>
+        <p><strong>{!! $data['clientFromOwnLead'] !!}</strong> of the closings were from leads that {!!$data['profile']->firstName!!} had mined {!!$data['profile']->gender == 'M' ? 'himself' : 'herself'!!} ({!!$clientFromOwnLeadPercentage!!}% of total clients), and there were <strong>{!! $data['brandClosing'] !!} brand</strong> involved ({!!$brandClosingPercentage!!}% of total clients).</p>
 
 
 
