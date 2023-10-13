@@ -574,6 +574,7 @@ class AnalysisController extends Controller
                     $categories = Category::where('type', 1)->get();
                     $country = Country::get();
                     $status = Leadstatus::get();
+                    $users = User::orderby('firstName', 'asc')->get();
 
                     $outstatus=Leadstatus::where('statusId','!=',7)
                     ->where('statusId','!=',1)
@@ -589,6 +590,7 @@ class AnalysisController extends Controller
                     ->with('categories', $categories)
                     ->with('status', $status)
                     ->with('country', $country)
+                    ->with('users', $users)
                     ->with('outstatus', $outstatus);
 
 

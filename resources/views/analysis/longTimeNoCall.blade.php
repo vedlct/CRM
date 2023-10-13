@@ -30,6 +30,7 @@
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                     <tr>
+                        <th width="5%">Select</th>
                         <th width="5%">Lead Id</th>
                         <th width="10%">Company Name</th>
                         <th width="8%">Category</th>
@@ -50,11 +51,25 @@
                 </table>
             </div>
 
+            <input type="checkbox" id="selectall" onClick="selectAll(this)" /><b>Select All</b>
+
         </div>
     </div>
 
 
-
+@if ( $userType =='SUPERVISOR' || $userType =='ADMIN')
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label ><b>Assign To:</b></label>
+                <select class="form-control"  name="assignTo" id="otherCatches2" style="width: 40%">
+                    <option value="">select</option>
+                    @foreach($users as $user)
+                        <option value="{{$user->id}}">{{$user->firstName}} {{$user->lastName}}</option>
+                    @endforeach
+                </select>
+        </div>
+    <div>
+@endif
 
 
 
@@ -71,6 +86,7 @@
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script src="{{ url('public/js/custom-alert.js') }}"></script>
 
 
     <script>
@@ -90,6 +106,15 @@
                     }
                 },
                 columns: [
+                    {
+                        data: 'check',
+                        name: 'check',
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="' + row.leadId + '">';
+                        }
+                    },    
                     { data: 'leadId', name: 'leadId' },
                     { data: 'companyName', name: 'companyName' },
                     { data: 'category.categoryName', name: 'category.categoryName' },
@@ -120,6 +145,45 @@
             });
 
 
+        function selectAll(source) {
+            checkboxes = document.getElementsByName('checkboxvar[]');
+            for (var i in checkboxes) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+
+        
+        $("#otherCatches2").change(function() {
+
+            var chkArray = [];
+            var userId=$(this).val();
+            $('.checkboxvar:checked').each(function (i) {
+
+                chkArray[i] = $(this).val();
+            });
+            //alert(chkArray)
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            // $("#inp").val(JSON.stringify(chkArray));
+            // $( "#assign-form" ).submit();
+            jQuery('input:checkbox:checked').parents("tr").remove();
+            $(this).prop('selectedIndex',0);
+
+            $.ajax({
+                type : 'post' ,
+                url : '{{route('assignStore')}}',
+                data : {_token: CSRF_TOKEN,'leadId':chkArray,'userId':userId} ,
+                success : function(data){
+                    console.log(data);
+                    if(data == 'true'){
+                        successAlert('Leads are assigned successfully');
+                        // $('#alert').html(' <strong>Success!</strong> Assigned');
+                        // $('#alert').show();
+
+                    }
+                }
+            });
+
+        });
 
     </script>
 
