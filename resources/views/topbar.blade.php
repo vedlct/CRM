@@ -365,7 +365,7 @@
 						<a class="dropdown-item" href="{{route('rejectedLeads')}}">
 							<i class="fa fa-ban"></i> Rejected Leads
 						</a>
-						<a class="dropdown-item" href="/crm/changeLogs">
+						<a class="dropdown-item" href="{{route('changeLogs')}}">
 							<i class="fa fa-history"></i> Change Logs
 						</a>
 
