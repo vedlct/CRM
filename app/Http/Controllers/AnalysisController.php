@@ -574,6 +574,7 @@ class AnalysisController extends Controller
                     $categories = Category::where('type', 1)->get();
                     $country = Country::get();
                     $status = Leadstatus::get();
+                    $users = User::orderby('firstName', 'asc')->get();
 
                     $outstatus=Leadstatus::where('statusId','!=',7)
                     ->where('statusId','!=',1)
@@ -589,6 +590,7 @@ class AnalysisController extends Controller
                     ->with('categories', $categories)
                     ->with('status', $status)
                     ->with('country', $country)
+                    ->with('users', $users)
                     ->with('outstatus', $outstatus);
 
 
@@ -1732,13 +1734,13 @@ class AnalysisController extends Controller
                     ->get();
 
                 $contactCountryCount = DB::table('workprogress')
-                    ->select(DB::raw('COUNT(leads.leadId) as totalcontact'))
+                    ->select(DB::raw('COUNT(leads.leadId) as contactCountryCount'))
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->where('userId', $marketerId)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->where('callingReport', 5)
                     ->groupBy('leads.countryId')
-                    ->orderByDesc('totalcontact')
+                    ->orderByDesc('contactCountryCount')
                     ->limit(1)
                     ->get();
                 
@@ -1890,14 +1892,14 @@ class AnalysisController extends Controller
                     ->get();
                 
                 $highestConvoCountryCount = DB::table('workprogress')
-                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'))
+                    ->select(DB::raw('COUNT(workprogress.leadId) as highestConvoCountryCount'))
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
                     ->where('callingReport', 11)
                     ->where('userId', $marketerId)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->groupBy('leads.countryId')
-                    ->orderBy('totalcontact', 'DESC')
+                    ->orderBy('highestConvoCountryCount', 'DESC')
                     ->limit(1)
                     ->get();
                 
@@ -1916,14 +1918,14 @@ class AnalysisController extends Controller
                     ->get();
 
                 $lowestConvoCountryCount = DB::table('workprogress')
-                    ->select(DB::raw('COUNT(workprogress.leadId) as totalcontact'))
+                    ->select(DB::raw('COUNT(workprogress.leadId) as lowestConvoCountryCount'))
                     ->leftJoin('leads', 'leads.leadId', '=', 'workprogress.leadId')
                     ->leftJoin('countries', 'countries.countryId', '=', 'leads.countryId')
                     ->where('callingReport', 11)
                     ->where('userId', $marketerId)
                     ->whereBetween('workprogress.created_at', [$fromDate, $toDate])
                     ->groupBy('leads.countryId')
-                    ->orderBy('totalcontact', 'ASC')
+                    ->orderBy('lowestConvoCountryCount', 'ASC')
                     ->limit(1)
                     ->get();
 
@@ -1937,7 +1939,8 @@ class AnalysisController extends Controller
                             'leads.volume',
                             'leads.leadId',
                             'leads.contactedUserId',
-                            'leads.companyName'
+                            'leads.companyName',
+                            'leads.website'
                         )
                     ->where('workprogress.userId', $marketerId)
                     ->where('workprogress.callingReport', 11)
@@ -2497,7 +2500,7 @@ class AnalysisController extends Controller
                     'highLeadTotalCall' => $highLeadTotalCall,
                     'totalContact' => $totalContact,
                     'contactCountry' => isset($contactCountry[0]->countryName) ? $contactCountry[0]->countryName : '',
-                    'contactCountryCount' => $contactCountryCount,
+                    'contactCountryCount' => @$contactCountryCount[0]->contactCountryCount,
                     'totalConversation' => $totalConversation,
                     'highConversationCountry' => isset($highConversationCountry[0]->countryName) ? $highConversationCountry[0]->countryName : '',
                     'totalFollowup' => $totalFollowup,
@@ -2517,9 +2520,9 @@ class AnalysisController extends Controller
                     'conversationMedumLead' => $conversationMedumLead,
                     'conversationLowLead' => $conversationLowLead,
                     'highestConvoCountry' => isset($highestConvoCountry[0]->countryName) ? $highestConvoCountry[0]->countryName : '',
-                    'highestConvoCountryCount' => $highestConvoCountryCount,
+                    'highestConvoCountryCount' => @$highestConvoCountryCount[0]->highestConvoCountryCount,
                     'lowestConvoCountry' => isset($lowestConvoCountry[0]->countryName) ? $lowestConvoCountry[0]->countryName : '',
-                    'lowestConvoCountryCount' => $lowestConvoCountryCount,
+                    'lowestConvoCountryCount' => @$lowestConvoCountryCount[0]->lowestConvoCountryCount,
                     'missingLeadInfoInConvo' => $missingLeadInfoInConvo,
                     'avgAttemptInConvo' => $avgAttemptInConvo,
                     'highLeadsFollowup' => $highLeadsFollowup,

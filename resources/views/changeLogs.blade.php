@@ -41,10 +41,22 @@ h1 {
 
 @section('content')
 
-<div class="row mainrow">
-    <div class="col-md-12">
-        <h1 class="text-center mb-4" style="padding: 30px 0;">Change Logs</h1>
+<h1 class="text-center mb-4" style="padding: 30px 0;">Change Logs</h1>
 
+<div class="row mainrow" id="masonry-container">
+    <!-- <div class="col-md-12"> -->
+
+
+
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-info">2.10.00</span> - 11 October 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Added assign to on Long Tiem No See page for Supervisor  </li>
+                    <li class="list-group-item">Bug Fixing -  Change logs </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="card change-log-card">
             <div class="card-body">
@@ -218,12 +230,21 @@ h1 {
             </div>
         </div>
     </div>
-</div>
+<!-- </div> -->
 
 
 @endsection
 
 @section('foot-js')
 <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+<script src="path/to/masonry.pkgd.min.js"></script>
+<script>
+    var masonryContainer = document.getElementById('masonry-container');
+    var masonry = new Masonry(masonryContainer, {
+        itemSelector: '.change-log-card',
+        columnWidth: '.change-log-card',
+        percentPosition: true
+    });
+</script>
 
 @endsection
