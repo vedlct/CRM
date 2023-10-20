@@ -18,7 +18,8 @@
                             <th>Country</th>
                             <th>Category</th>
                             <th>Current Marketer</th>
-                            <th>Last Follow Up Date</th>
+                            <th>Last Follow Up</th>
+                            <th>Latest Commment Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -99,6 +100,7 @@
                         }
                     },
                     { data: 'lastFollowUpDate', name: 'lastFollowUpDate', searchable: true, orderable: true },
+                    { data: 'workprogress_created_at', name: 'workprogress_created_at', searchable: true, orderable: true },
                     {
                         data: 'action',
                         name: 'action',

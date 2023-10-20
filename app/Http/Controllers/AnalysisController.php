@@ -601,7 +601,7 @@ class AnalysisController extends Controller
                 {
                     $User_Type = Session::get('userType');
                 
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
 
                         $leads = Lead::with('country','category','status','contact','possibility', 'probability')
                             ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
@@ -2627,8 +2627,9 @@ class AnalysisController extends Controller
                             'users.firstName',
                             'users.lastName',
                             DB::raw('CONCAT(users.firstName, " ", users.lastName) AS fullName'),
-                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate')
-                        )
+                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate'),
+                            DB::raw('(SELECT MAX(created_at) FROM workprogress WHERE workprogress.leadId = leads.leadId) AS workprogress_created_at')
+                            )
                         ->whereNotNull('leads.contactedUserId')
                         ->leftJoin('users', 'leads.contactedUserId', '=', 'users.id')
                         ->where('users.active', 1)
@@ -2646,6 +2647,7 @@ class AnalysisController extends Controller
                                 ->from('followup')
                                 ->whereDate('followUpDate', '>', $today);
                         })
+                        ->orderBy('workprogress_created_at', 'DESC')
                         ->groupBy('leads.leadId')
                         ->get();
             
