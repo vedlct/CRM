@@ -15,6 +15,8 @@
                             <th>Company Name</th>
                             <th>Website</th>
                             <th>Contact Number</th>
+                            <th>Country</th>
+                            <th>Category</th>
                             <th>Current Marketer</th>
                             <th>Last Follow Up Date</th>
                             <th>Action</th>
@@ -85,6 +87,8 @@
                     { data: 'companyName', name: 'companyName', searchable: true, orderable: true },
                     { data: 'website', name: 'website', searchable: true, orderable: true },
                     { data: 'contactNumber', name: 'contactNumber', searchable: true, orderable: true },
+                    { data: 'countryName', name: 'countryName', searchable: true, orderable: true },
+                    { data: 'categoryName', name: 'categoryName', searchable: true, orderable: true },
                     {
                         data: 'fullName',
                         name: 'fullName',
