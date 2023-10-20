@@ -601,7 +601,7 @@ class AnalysisController extends Controller
                 {
                     $User_Type = Session::get('userType');
                 
-                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
+                    if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
 
                         $leads = Lead::with('country','category','status','contact','possibility', 'probability')
                             ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as workprogress_created_at')
@@ -2588,16 +2588,29 @@ class AnalysisController extends Controller
 
             public function followupNotSet (){
 
+                $possibilities = Possibility::get();
+                $probabilities = Probability::get();
+                $categories = Category::where('type', 1)->get();
+                $country = Country::get();
+                $status = Leadstatus::get();
+
                 $users = User::orderby('firstName', 'asc')->get();
 
-                return view ('analysis.followupNotSet', compact('users'));
+                return view ('analysis.followupNotSet')
+                    ->with('possibilities', $possibilities)
+                    ->with('probabilities', $probabilities)
+                    ->with('categories', $categories)
+                    ->with('country', $country)
+                    ->with('status', $status)
+                    ->with('users', $users)
+                    ;
             }
                 
             
             public function getFollowupNotSet (){
 
                 $User_Type = Session::get('userType');
-                $today = date('Y-m-d'); // Get today's date
+                $today = date('Y-m-d');
 
                 if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR' || $User_Type == 'MANAGER') {
                     
@@ -2607,18 +2620,23 @@ class AnalysisController extends Controller
                             'leads.companyName',
                             'leads.website',
                             'leads.contactNumber',
+                            'countryName',
+                            'categoryName',
                             'leads.contactedUserId',
                             'followup.followUpDate',
                             'users.firstName',
                             'users.lastName',
                             DB::raw('CONCAT(users.firstName, " ", users.lastName) AS fullName'),
-                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate')
-                        )
+                            DB::raw('(SELECT MAX(followUpDate) FROM followup WHERE followup.leadId = leads.leadId) AS lastFollowUpDate'),
+                            DB::raw('(SELECT MAX(created_at) FROM workprogress WHERE workprogress.leadId = leads.leadId) AS workprogress_created_at')
+                            )
                         ->whereNotNull('leads.contactedUserId')
                         ->leftJoin('users', 'leads.contactedUserId', '=', 'users.id')
                         ->where('users.active', 1)
                         ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
                         ->leftJoin('followup', 'leads.leadId', '=', 'followup.leadId')
+                        ->leftJoin('categories', 'leads.categoryId', '=', 'categories.categoryId')
+                        ->leftJoin('countries', 'leads.countryId', '=', 'countries.countryId')
                         ->whereIn('leads.leadId', function ($query) {
                             $query->select('leadId')
                                 ->from('workprogress')
@@ -2629,6 +2647,7 @@ class AnalysisController extends Controller
                                 ->from('followup')
                                 ->whereDate('followUpDate', '>', $today);
                         })
+                        ->orderBy('workprogress_created_at', 'DESC')
                         ->groupBy('leads.leadId')
                         ->get();
             
