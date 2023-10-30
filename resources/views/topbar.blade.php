@@ -170,13 +170,14 @@
 						<i class="fa fa-list-alt"></i> Others
 					</a>
 				@endif
-				
+
 				</div>
 
 			</li>
 
 
 			<!-- ANALYSIS MENU  -->
+			@if($userType == 'SUPERVISOR' || $userType == 'USER' || $userType == 'MANAGER' || $userType == 'ADMIN' || $userType == 'HR')
 			<li class="nav-item dropdown treeview">
 				<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
 				aria-haspopup="true" aria-expanded="false">
@@ -187,10 +188,13 @@
 					<a class="dropdown-item" href="{{ route('analysisHomePage') }}">
 						<i class="fa fa-superpowers"></i> Analysis Home
 					</a>
+					<hr>
+					<a class="dropdown-item" href="{{ route('analysis.personal') }}">
+						<i class="fa fa-envelope"></i> Personal Analysis
+					</a>
 				</div>
-
 			</li>
-
+			@endif
 			
 
 			<!-- MY LEAD MENU  -->

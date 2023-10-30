@@ -1651,13 +1651,15 @@ class AnalysisController extends Controller
             {
                 $userType = Session::get('userType');
             
-                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR') {
+                if ($userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'HR') {
                     
                     $users = User::orderby('firstName', 'asc')->get();
-
-                    return view('analysis.personalAnalysis')
-                        ->with('users', $users);
+                } else {    
+                    $users = User::where('id', Auth::user()->id)->orderby('firstName', 'asc')->get();
                 }
+
+                return view('analysis.personalAnalysis')
+                        ->with('users', $users);
             }
             
             

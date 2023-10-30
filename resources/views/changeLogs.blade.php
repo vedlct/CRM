@@ -50,6 +50,15 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-success">2.11.00</span> - 30 October 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Update -  personal analysis for all users </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-info">2.10.00</span> - 11 October 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature - Added assign to on Long Tiem No See page for Supervisor  </li>
@@ -71,7 +80,7 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info">2.09.02</span> - 09 October 2023</h5>
+            <h5 class="card-title"><span class="badge badge-warning">2.09.02</span> - 09 October 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Bug Fixing - Personal Analysis Long Time No Chase </li>
                 </ul>
@@ -81,7 +90,7 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info">2.09.01</span> - 03 October 2023</h5>
+            <h5 class="card-title"><span class="badge badge-warning">2.09.01</span> - 03 October 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Bug Fixing - Lead Status on My Lead </li>
                     <li class="list-group-item">Bug Fixing - Set 20+ follow up on Followup page </li>
@@ -113,7 +122,7 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info">2.07.01</span> - 15 September 2023</h5>
+            <h5 class="card-title"><span class="badge badge-warning">2.07.01</span> - 15 September 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Bug Fixing - Parent Company. Made the page loading faster. </li>
                     <li class="list-group-item">Bug Fixing - followup analysis. </li>
