@@ -73,9 +73,9 @@ Route::get('/user/{id}', 'UserManagementController@userProfile')->name('user-man
 
 
 
-
 //Set Target
 Route::post('user-management/setTarget','UserManagementController@setTarget')->name('setTarget');
+
 
 
 //Route::post('lead/changepossibility','LeadController@changePossibility')->name('changePossibility');
