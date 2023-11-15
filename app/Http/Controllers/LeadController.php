@@ -1163,6 +1163,50 @@ class LeadController extends Controller
     }
 
 
+
+
+    public function filterNew(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
+
+        $categories=Category::where('type',1)
+            ->get();
+        $country=Country::get();
+
+        return view('layouts.lead.filterLeadNew')
+            ->with('categories',$categories)
+            ->with('country',$country);
+    }
+
+
+
+    public function getFilterLeadsNew(Request $request){
+
+        $leads=(new Lead())->showFilterLeadNew();
+        return DataTables::eloquent($leads)
+            ->addColumn('check', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })->addColumn('action', function ($lead) {
+                    return '<form method="post" action="'.route('addContacted').'">
+                                <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                                <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                                <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                        
+                                <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                    data-lead-id="'.$lead->leadId.'"
+                                    data-lead-name="'.$lead->companyName.'"
+                                ><i class="fa fa-comments"></i></a>
+                            </form>
+                                <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                
+                                })
+            ->rawColumns(['action','check'])
+            ->make(true);
+    }
+
+
     public function assignedLeads(){
         //will return the leads assigned to you
         //for user

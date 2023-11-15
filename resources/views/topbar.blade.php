@@ -249,6 +249,9 @@
 						<a class="dropdown-item" href="{{route('filterLeads')}}">
 							<i class="fa fa-filter"></i> Filtered Leads
 						</a>
+						<a class="dropdown-item" href="{{route('filterLeadsNew')}}">
+							<i class="fa fa-filter"></i> Filtered Leads New
+						</a>
 						<a class="dropdown-item" href="{{route('allEmployees')}}">
 							<i class="fa fa-users"></i> All Contacts
 						</a>
