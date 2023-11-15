@@ -50,6 +50,15 @@ h1 {
 
         <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-success">2.12.00</span> - 15 November 2023</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature -  added new Filter Leads option where users can see the date of last comment of filetred leads. </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-success">2.11.00</span> - 30 October 2023</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Update -  personal analysis for all users </li>

@@ -159,6 +159,9 @@ Route::delete('lead/{id}','LeadController@destroy')->name('deleteLead');
 Route::get('lead/filter','LeadController@filter')->name('filterLeads');
 Route::post('lead/filter','LeadController@getFilterLeads')->name('filterLeadData');
 
+Route::get('lead/filterNew','LeadController@filterNew')->name('filterLeadsNew');
+Route::post('lead/filterNew','LeadController@getFilterLeadsNew')->name('filterLeadDataNew');
+
 Route::get('lead/unTouched','LeadController@unTouchedLead')->name('unTouchedLead');
 Route::post('lead/unTouched','LeadController@getUnTouchedLead')->name('getUnTouchedLead');
 
