@@ -79,16 +79,16 @@ class Lead extends Model
     
 
 
-        public function showFilterLeadNew()
+    public function showFilterLeadNew()
     {
         $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
-            ->select('leads.*', \DB::raw('IFNULL(MAX(workprogress.created_at), "") as last_workprogress_created_at'))
+            ->select('leads.*',DB::raw('MAX(workprogress.created_at) as last_workprogress_created_at'))
             ->where('statusId', 2)
             ->where('contactedUserId', NULL)
             ->where('leadAssignStatus', 0)
             ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
             ->groupBy('leads.leadId')
-            ->orderBy('leads.leadId', 'DESC');
+            ->orderBy('leads.leadId', 'ASC');
 
         return $leads;
     }

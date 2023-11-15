@@ -166,15 +166,16 @@
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
 
-                    { data: 'website', name: 'leads.website', orderable: true, searchable: true},
-                    { data: 'contactNumber', name: 'leads.contactNumber', orderable: true, searchable: true},
-                    { data: 'category.categoryName', name: 'category.categoryName', defaultContent: '', orderable: true, searchable: true},
-                    { data: 'country.countryName', name: 'country.countryName', defaultContent: '', orderable: true, searchable: true},
-                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: '', orderable: true, searchable: true},
-                    { data: 'volume', name: 'volume', defaultContent: '', orderable: true, searchable: true},
-                    { data: 'process', name: 'process', defaultContent: '', orderable: true, searchable: true},
-                    { data: 'last_workprogress_created_at', name: 'last_workprogress_created_at', defaultContent: '', orderable: true, searchable: true},
+                    { data: 'website', name: 'leads.website'},
+                    { data: 'contactNumber', name: 'leads.contactNumber'},
+                    { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
+                    { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
+                    { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
+                    { data: 'volume', name: 'volume', defaultContent: ''},
+                    { data: 'process', name: 'process', defaultContent: ''},
+                    { data: 'last_workprogress_created_at', name: 'workprogress.created_at', defaultContent: ''},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
+
 
                 ]
             });
