@@ -1183,7 +1183,16 @@ class LeadController extends Controller
 
     public function getFilterLeadsNew(Request $request){
 
-        $leads=(new Lead())->showFilterLeadNew();
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
+        ->select('leads.*', DB::raw('MAX(workprogress.created_at) as last_workprogress_created_at'))
+        ->where('statusId', 2)
+        ->where('contactedUserId', NULL)
+        ->where('leadAssignStatus', 0)
+        ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+        ->orderby('workprogress.created_at', 'DESC')
+        ->groupBy('workprogress.leadId');
+        // ->orderBy('leads.leadId', 'DESC');
+        
         return DataTables::eloquent($leads)
             ->addColumn('check', function ($lead) {
                 return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
