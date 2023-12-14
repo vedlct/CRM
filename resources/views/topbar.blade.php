@@ -169,6 +169,9 @@
 					<a class="dropdown-item" href="{{route('report.tab')}}">
 						<i class="fa fa-list-alt"></i> Others
 					</a>
+					<a class="dropdown-item" href="{{route('revenue')}}">
+						<i class="fa fa-list-alt"></i> Revenue
+					</a>
 				@endif
 
 				</div>

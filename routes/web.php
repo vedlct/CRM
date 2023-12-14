@@ -58,6 +58,8 @@ Route::get('/contact','HomeController@contact')->name('contact');
 Route::get('/contactUsa','HomeController@contactUsa')->name('contactUsa');
 Route::get('/mine', 'HomeController@mine')->name('mine');
 Route::get('/files', 'HomeController@newFile')->name('files');
+Route::get('/revenue', 'HomeController@revenue')->name('revenue');
+Route::post('/revenue-list', 'HomeController@revenueList')->name('revenueList');
 
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');

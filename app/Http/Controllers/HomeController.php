@@ -6,24 +6,23 @@ use App\LocalSales;
 use App\LocalUserTarget;
 use App\NewCall;
 use App\NewFile;
-use http\Env\Response;
+use App\User;
+use Exception;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Carbon\Carbon;
-use Auth;
-use Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use App\Workprogress;
-use App\Followup;
 use App\Lead;
-use App\User;
 use App\Possibilitychange;
 use App\Usertarget;
 use App\Callingreport;
 use App\Possibility;
 use App\Category;
 use App\Failreport;
-use DB;
 
 
 class HomeController extends Controller
@@ -659,6 +658,56 @@ class HomeController extends Controller
 
  }
 
+    public function revenue() {
+        $marketers = User::query()->where('typeId', 5)->orWhere('typeId', 2)->get();
+        return view('report.revenue', compact('marketers'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function revenueList(Request $request) {
+        $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, workprogress.progress, workprogress.created_at as closing_date, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId LEFT JOIN (SELECT * FROM workprogress WHERE workprogress.progress = "Closing") as workprogress ON workprogress.leadId = new_file.leadId';
+        $marketer = $request->get('marketer');
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+        if ($marketer !== '' && $marketer !== null) {
+            $query .= 'WHERE users.id = '.$request->get('marketer');
+        }
+        if ($dateFrom !== '' && $dateFrom !== null) {
+            $query .= $marketer !== '' && $marketer !== null ? 'AND' : 'WHERE' . ' workprogress.created_at > '.$request->get('dateFrom');
+        }
+        if ($dateTo !== '' && $dateTo !== null) {
+            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? 'AND' : 'WHERE' . ' workprogress.created_at < '.$request->get('dateTo');
+        }
+//        dd($query);
+        $newFiles = DB::select(DB::raw($query));
+//        dd($newFiles);
+        return datatables($newFiles)
+//            ->addColumn('website', function (NewFile $newFile) {
+//                return @$newFile->lead->website;
+//            })
+//            ->addColumn('contactNumber', function (NewFile $newFile) {
+//                return @$newFile->lead->contactNumber;
+//            })
+//            ->addColumn('progress', function (NewFile $newFile) {
+//                if (isset($newFile->lead->workprogress) && $newFile->lead->workprogress->first() !== null) {
+//                    return $newFile->lead->workprogress->first()->progress;
+//                }
+//                return '';
+//            })
+//            ->addColumn('created_at', function (NewFile $newFile) {
+//                if (isset($newFile->lead->workprogress) && $newFile->lead->workprogress->first() !== null) {
+//                    return $newFile->lead->workprogress->first()->created_at;
+//                }
+//                return '';
+//            })
+            ->addColumn('marketerName', function ($newFile) {
+                return @$newFile->firstName .' '. @$newFile->lastName;
+            })
+            ->make(true);
+    }
 
     public function changeLogs (){
         
