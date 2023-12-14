@@ -667,7 +667,8 @@ class HomeController extends Controller
      * @throws Exception
      */
     public function revenueList(Request $request) {
-        $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, workprogress.progress, workprogress.created_at as closing_date, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId LEFT JOIN (SELECT * FROM workprogress WHERE workprogress.progress = "Closing") as workprogress ON workprogress.leadId = new_file.leadId';
+      //  $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, workprogress.progress, workprogress.created_at as closing_date, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId LEFT JOIN (SELECT * FROM workprogress WHERE workprogress.progress = "Closing") as workprogress ON workprogress.leadId = new_file.leadId';
+        $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, users.firstName, users.lastName, new_file.created_at as closing_date FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo');
@@ -676,10 +677,10 @@ class HomeController extends Controller
             $query .= 'WHERE users.id = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
-            $query .= $marketer !== '' && $marketer !== null ? 'AND' : 'WHERE' . ' workprogress.created_at > '.$request->get('dateFrom');
+            $query .= $marketer !== '' && $marketer !== null ? 'AND' : 'WHERE' . ' new_file.created_at > '.$request->get('dateFrom');
         }
         if ($dateTo !== '' && $dateTo !== null) {
-            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? 'AND' : 'WHERE' . ' workprogress.created_at < '.$request->get('dateTo');
+            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? 'AND' : 'WHERE' . ' new_file.created_at < '.$request->get('dateTo');
         }
 //        dd($query);
         $newFiles = DB::select(DB::raw($query));

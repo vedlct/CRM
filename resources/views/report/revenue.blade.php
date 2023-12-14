@@ -79,7 +79,6 @@
                     {title: 'Lead Id', data: 'leadId', name: 'leadId', className: "text-center", orderable: true, searchable: true},
                     {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: false},
                     {title: 'Phone Number', data: 'contactNumber', name: 'contactNumber', className: "text-center", orderable: true, searchable: true},
-                    {title: 'Progress', data: 'progress', name: 'progress', className: "text-center", orderable: true, searchable: true},
                     {title: 'Closing Date', data: 'closing_date', name: 'closing_date', className: "text-center", orderable: true, searchable: true},
                     {title: 'Marketer', data: 'marketerName', name: 'marketerName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
