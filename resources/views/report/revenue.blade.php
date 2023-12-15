@@ -36,7 +36,7 @@
                     <div class="card bg-info">
                         <div class="card-body">
                             <h4>Revenue Summary</h4>
-                            <h5>Date Range: <span id="dateRange"></span></h5>
+{{--                            <h5>Date Range: <span id="dateRange"></span></h5>--}}
                             <h5>Total Clients: <span id="totalClient"></span></h5>
                             <h5>Revenue (USD): <span id="totalRevenue"></span></h5>
                         </div>
@@ -163,18 +163,18 @@
                         }, orderable: false, searchable: false
                     }
                 ],
-                // "initComplete": function( settings, json ) {
-                //     $('#totalClient').text(json.recordsTotal)
-                // }
+                "initComplete": function( settings, json ) {
+                    $('#totalClient').text(json.recordsTotal)
+                }
             });
         });
 
         function filterRevenue() {
             table.ajax.reload(function ( json ) {
                 $('#totalClient').text(json.recordsTotal)
-                if (json.input.dateFrom !== null || json.input.dateTo !== null) {
-                    $('#dateRange').text(json.input.dateFrom ?? '' + ' - ' + json.input.dateTo ?? '')
-                }
+                // if (json.input.dateFrom !== null || json.input.dateTo !== null) {
+                //     $('#dateRange').text(json.input.dateFrom ?? '' + ' - ' + json.input.dateTo ?? '')
+                // }
             })
         }
 
