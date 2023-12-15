@@ -6,24 +6,24 @@ use App\LocalSales;
 use App\LocalUserTarget;
 use App\NewCall;
 use App\NewFile;
-use http\Env\Response;
+use App\User;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Carbon\Carbon;
-use Auth;
-use Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use App\Workprogress;
-use App\Followup;
 use App\Lead;
-use App\User;
 use App\Possibilitychange;
 use App\Usertarget;
 use App\Callingreport;
 use App\Possibility;
 use App\Category;
 use App\Failreport;
-use DB;
 
 
 class HomeController extends Controller
@@ -659,6 +659,71 @@ class HomeController extends Controller
 
  }
 
+    public function revenue() {
+        $marketers = User::query()->where('typeId', 5)->orWhere('typeId', 2)->get();
+//        $revengeSummary =
+        return view('report.revenue', compact('marketers'));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function revenueList(Request $request) {
+        $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, users.firstName, users.lastName, new_file.created_at as closing_date FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
+        $query2 = 'SELECT *, SUM(new_file.revenue) as totalRevenue FROM new_file';
+        $marketer = $request->get('marketer');
+        $dateFrom = $request->get('dateFrom');
+        $dateTo = $request->get('dateTo');
+
+        if ($marketer !== '' && $marketer !== null) {
+            $query .= ' WHERE users.id = '.$request->get('marketer');
+            $query2 .= ' WHERE new_file.userId = '.$request->get('marketer');
+        }
+        if ($dateFrom !== '' && $dateFrom !== null) {
+            $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
+            $query2 .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
+        }
+        if ($dateTo !== '' && $dateTo !== null) {
+            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
+            $query2 .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
+        }
+
+        $newFiles = DB::select(DB::raw($query));
+
+        $totalRevenue = DB::select(DB::raw($query2));
+
+        return datatables($newFiles)
+            ->addColumn('marketerName', function ($newFile) {
+                return @$newFile->firstName .' '. @$newFile->lastName;
+            })
+            ->with('totalRevenue', $totalRevenue[0]->totalRevenue)
+            ->make(true);
+    }
+
+    public function addRevenue(Request $request): JsonResponse
+    {
+        $validated = $this->validate($request, [
+            'fileCount' => 'required|string|max:10',
+            'rate' => 'required|string|max:10',
+        ]);
+
+        $newFile = NewFile::where('new_fileId', $request->get('new_fileId'))->first();
+        $newFile->fileCount = $validated['fileCount'];
+        $newFile->rate = number_format((float) $validated['rate'], 2, '');
+        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '');
+        $newFile->save();
+
+        return response()->json(['status' => 200, 'message' => 'Revenue Added Successfully!', 'newFile' => $newFile]);
+    }
+
+    public function getRevenue(Request $request): JsonResponse
+    {
+        $newFile = NewFile::query()->where('new_fileId', $request->get('new_fileId'))->first();
+        if ($newFile) {
+            return response()->json(['status' => 200, 'newFile' => $newFile]);
+        }
+        return response()->json(['status' => 401]);
+    }
 
     public function changeLogs (){
         
