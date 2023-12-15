@@ -8,6 +8,7 @@ use App\NewCall;
 use App\NewFile;
 use App\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -660,6 +661,7 @@ class HomeController extends Controller
 
     public function revenue() {
         $marketers = User::query()->where('typeId', 5)->orWhere('typeId', 2)->get();
+//        $revengeSummary =
         return view('report.revenue', compact('marketers'));
     }
 
@@ -667,47 +669,53 @@ class HomeController extends Controller
      * @throws Exception
      */
     public function revenueList(Request $request) {
-      //  $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, workprogress.progress, workprogress.created_at as closing_date, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId LEFT JOIN (SELECT * FROM workprogress WHERE workprogress.progress = "Closing") as workprogress ON workprogress.leadId = new_file.leadId';
         $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, users.firstName, users.lastName, new_file.created_at as closing_date FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo');
 
         if ($marketer !== '' && $marketer !== null) {
-            $query .= 'WHERE users.id = '.$request->get('marketer');
+            $query .= ' WHERE users.id = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
-            $query .= $marketer !== '' && $marketer !== null ? 'AND' : 'WHERE' . ' new_file.created_at > '.$request->get('dateFrom');
+            $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
         }
         if ($dateTo !== '' && $dateTo !== null) {
-            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? 'AND' : 'WHERE' . ' new_file.created_at < '.$request->get('dateTo');
+            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
         }
-//        dd($query);
+
         $newFiles = DB::select(DB::raw($query));
-//        dd($newFiles);
+
         return datatables($newFiles)
-//            ->addColumn('website', function (NewFile $newFile) {
-//                return @$newFile->lead->website;
-//            })
-//            ->addColumn('contactNumber', function (NewFile $newFile) {
-//                return @$newFile->lead->contactNumber;
-//            })
-//            ->addColumn('progress', function (NewFile $newFile) {
-//                if (isset($newFile->lead->workprogress) && $newFile->lead->workprogress->first() !== null) {
-//                    return $newFile->lead->workprogress->first()->progress;
-//                }
-//                return '';
-//            })
-//            ->addColumn('created_at', function (NewFile $newFile) {
-//                if (isset($newFile->lead->workprogress) && $newFile->lead->workprogress->first() !== null) {
-//                    return $newFile->lead->workprogress->first()->created_at;
-//                }
-//                return '';
-//            })
             ->addColumn('marketerName', function ($newFile) {
                 return @$newFile->firstName .' '. @$newFile->lastName;
             })
             ->make(true);
+    }
+
+    public function addRevenue(Request $request): JsonResponse
+    {
+        $validated = $this->validate($request, [
+            'fileCount' => 'required|string|max:10',
+            'rate' => 'required|string|max:10',
+        ]);
+
+        $newFile = NewFile::where('new_fileId', $request->get('new_fileId'))->first();
+        $newFile->fileCount = $validated['fileCount'];
+        $newFile->rate = number_format((float) $validated['rate'], 2);
+        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2);
+        $newFile->save();
+
+        return response()->json(['status' => 200, 'message' => 'Revenue Added Successfully!', 'newFile' => $newFile]);
+    }
+
+    public function getRevenue(Request $request): JsonResponse
+    {
+        $newFile = NewFile::query()->where('new_fileId', $request->get('new_fileId'))->first();
+        if ($newFile) {
+            return response()->json(['status' => 200, 'newFile' => $newFile]);
+        }
+        return response()->json(['status' => 401]);
     }
 
     public function changeLogs (){
