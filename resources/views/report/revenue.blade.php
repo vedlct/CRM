@@ -36,9 +36,9 @@
                     <div class="card bg-info">
                         <div class="card-body">
                             <h4>Revenue Summary</h4>
-                            <h5 id="dateRange">Date Range: </h5>
-                            <h5 id="totalClient">Total Clients: </h5>
-                            <h5 id="totalRevenue">Revenue (USD): </h5>
+                            <h5>Date Range: <span id="dateRange"></span></h5>
+                            <h5>Total Clients: <span id="totalClient"></span></h5>
+                            <h5>Revenue (USD): <span id="totalRevenue"></span></h5>
                         </div>
                     </div>
                 </div>
@@ -131,10 +131,11 @@
     </style>
 
     <script>
+        let table;
         $(document).ready(function() {
             $('.select2').select2()
 
-            $('#revenueTable').DataTable({
+            table = $('#revenueTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -147,6 +148,9 @@
                         d.dateTo = $('#dateTo').val();
                     },
                 },
+                fnDrawCallback: function(data) {
+                    $('#totalRevenue').text(data.json.totalRevenue.toFixed(2));
+                },
                 columns: [
                     {title: 'Lead Id', data: 'leadId', name: 'leadId', className: "text-center", orderable: true, searchable: true},
                     {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: false},
@@ -158,12 +162,20 @@
                             + ' <button type="button" title="View" class="btn btn-blue btn-sm" data-toggle="modal" data-target="#viewRevenueModal" data-panel-id="' + data.new_fileId + '" onclick="viewRevenue(this)"><i class="fa fa-eye"></i></button>'
                         }, orderable: false, searchable: false
                     }
-                ]
+                ],
+                // "initComplete": function( settings, json ) {
+                //     $('#totalClient').text(json.recordsTotal)
+                // }
             });
         });
 
         function filterRevenue() {
-            $('#revenueTable').DataTable().ajax.reload()
+            table.ajax.reload(function ( json ) {
+                $('#totalClient').text(json.recordsTotal)
+                if (json.input.dateFrom !== null || json.input.dateTo !== null) {
+                    $('#dateRange').text(json.input.dateFrom ?? '' + ' - ' + json.input.dateTo ?? '')
+                }
+            })
         }
 
         $('#addRevenueForm').on('submit', function (e) {
@@ -190,8 +202,7 @@
             $('#new_fileId').val("0")
         });
 
-        function addRevenue(x)
-        {
+        function addRevenue(x) {
             let newFileId = $(x).data('panel-id')
             $('#new_fileId').val(newFileId)
 
@@ -210,8 +221,7 @@
             });
         }
 
-        function viewRevenue(x)
-        {
+        function viewRevenue(x) {
             $('#viewFileCount').text("0")
             $('#viewRate').text("0.00")
             $('#viewRevenue').text("0.00")

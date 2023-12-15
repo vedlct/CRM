@@ -670,26 +670,33 @@ class HomeController extends Controller
      */
     public function revenueList(Request $request) {
         $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, users.firstName, users.lastName, new_file.created_at as closing_date FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
+        $query2 = 'SELECT *, SUM(new_file.revenue) as totalRevenue FROM new_file';
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo');
 
         if ($marketer !== '' && $marketer !== null) {
             $query .= ' WHERE users.id = '.$request->get('marketer');
+            $query2 .= ' WHERE new_file.userId = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
             $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
+            $query2 .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
         }
         if ($dateTo !== '' && $dateTo !== null) {
             $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
+            $query2 .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
         }
 
         $newFiles = DB::select(DB::raw($query));
+
+        $totalRevenue = DB::select(DB::raw($query2));
 
         return datatables($newFiles)
             ->addColumn('marketerName', function ($newFile) {
                 return @$newFile->firstName .' '. @$newFile->lastName;
             })
+            ->with('totalRevenue', $totalRevenue[0]->totalRevenue)
             ->make(true);
     }
 
@@ -702,8 +709,8 @@ class HomeController extends Controller
 
         $newFile = NewFile::where('new_fileId', $request->get('new_fileId'))->first();
         $newFile->fileCount = $validated['fileCount'];
-        $newFile->rate = number_format((float) $validated['rate'], 2);
-        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2);
+        $newFile->rate = number_format((float) $validated['rate'], 2, '');
+        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '');
         $newFile->save();
 
         return response()->json(['status' => 200, 'message' => 'Revenue Added Successfully!', 'newFile' => $newFile]);
