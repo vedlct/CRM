@@ -661,7 +661,6 @@ class HomeController extends Controller
 
     public function revenue() {
         $marketers = User::query()->where('typeId', 5)->orWhere('typeId', 2)->get();
-//        $revengeSummary =
         return view('report.revenue', compact('marketers'));
     }
 
@@ -711,6 +710,7 @@ class HomeController extends Controller
         $newFile->fileCount = $validated['fileCount'];
         $newFile->rate = number_format((float) $validated['rate'], 2, '');
         $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '');
+        $newFile->updatedBy = Auth::id();
         $newFile->save();
 
         return response()->json(['status' => 200, 'message' => 'Revenue Added Successfully!', 'newFile' => $newFile]);
