@@ -660,7 +660,8 @@ class HomeController extends Controller
  }
 
     public function revenue() {
-        $marketers = User::query()->where('typeId', 5)->orWhere('typeId', 2)->get();
+        $userTypeIds = [2,3,4,5];
+        $marketers = User::query()->whereIn('typeId', $userTypeIds)->get();
         return view('report.revenue', compact('marketers'));
     }
 
@@ -668,34 +669,33 @@ class HomeController extends Controller
      * @throws Exception
      */
     public function revenueList(Request $request) {
-        $query = 'SELECT new_file.*, leads.leadId, leads.website, leads.contactNumber, users.firstName, users.lastName, new_file.created_at as closing_date FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
-        $query2 = 'SELECT *, SUM(new_file.revenue) as totalRevenue FROM new_file';
+        $query = 'SELECT new_file.new_fileId, new_file.leadId, new_file.userId, new_file.created_at, new_file.revenue, leads.website, leads.contactNumber, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
+
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
         $dateTo = $request->get('dateTo');
 
         if ($marketer !== '' && $marketer !== null) {
-            $query .= ' WHERE users.id = '.$request->get('marketer');
-            $query2 .= ' WHERE new_file.userId = '.$request->get('marketer');
+            $query .= ' WHERE new_file.userId = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
             $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
-            $query2 .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
         }
         if ($dateTo !== '' && $dateTo !== null) {
             $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
-            $query2 .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
         }
 
         $newFiles = DB::select(DB::raw($query));
 
-        $totalRevenue = DB::select(DB::raw($query2));
+        $totalRevenue = array_sum(array_column(DB::select(DB::raw($query)), 'revenue'));
+
+        $totalClients = count(DB::select(DB::raw($query.' GROUP BY new_file.leadId')));
 
         return datatables($newFiles)
             ->addColumn('marketerName', function ($newFile) {
                 return @$newFile->firstName .' '. @$newFile->lastName;
             })
-            ->with('totalRevenue', $totalRevenue[0]->totalRevenue)
+            ->with(['totalRevenue' => $totalRevenue, 'totalClients' => $totalClients])
             ->make(true);
     }
 
@@ -708,8 +708,8 @@ class HomeController extends Controller
 
         $newFile = NewFile::where('new_fileId', $request->get('new_fileId'))->first();
         $newFile->fileCount = $validated['fileCount'];
-        $newFile->rate = number_format((float) $validated['rate'], 2, '');
-        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '');
+        $newFile->rate = number_format((float) $validated['rate'], 2, '.', '');
+        $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '.', '');
         $newFile->updatedBy = Auth::id();
         $newFile->save();
 
