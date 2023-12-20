@@ -679,10 +679,10 @@ class HomeController extends Controller
             $query .= ' WHERE new_file.userId = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
-            $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
+            $query .= ($marketer !== '' && $marketer !== null ? ' AND' : ' WHERE') . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
         }
         if ($dateTo !== '' && $dateTo !== null) {
-            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
+            $query .= (($marketer !== '' && $marketer !== null) || ($dateFrom !== '' && $dateFrom !== null) ? ' AND' : ' WHERE') . ' new_file.created_at <= "'.$request->get('dateTo').'"';
         }
 
         $newFiles = DB::select(DB::raw($query));
