@@ -58,10 +58,11 @@ Route::get('/contact','HomeController@contact')->name('contact');
 Route::get('/contactUsa','HomeController@contactUsa')->name('contactUsa');
 Route::get('/mine', 'HomeController@mine')->name('mine');
 Route::get('/files', 'HomeController@newFile')->name('files');
-Route::get('/revenue', 'HomeController@revenue')->name('revenue');
-Route::post('/revenue-list', 'HomeController@revenueList')->name('revenueList');
-Route::post('/add-revenue', 'HomeController@addRevenue')->name('addRevenue');
-Route::get('/get-revenue', 'HomeController@getRevenue')->name('getRevenue');
+
+Route::get('/revenue', 'HomeController@revenue')->name('revenue')->middleware('check.admin');
+Route::post('/revenue-list', 'HomeController@revenueList')->name('revenueList')->middleware('check.admin');
+Route::post('/add-revenue', 'HomeController@addRevenue')->name('addRevenue')->middleware('check.admin');
+Route::get('/get-revenue', 'HomeController@getRevenue')->name('getRevenue')->middleware('check.admin');
 
 Route::resource('notice', 'NoticeController');
 Route::post('notice/search', 'NoticeController@search')->name('notice.search');
