@@ -16,7 +16,7 @@ class CheckIfAdmin
      */
     public function handle($request, Closure $next)
     {
-        $userType = Auth::user()->userType->typeName;
+        $userType = strtoupper(Auth::user()->userType->typeName);
         if( $userType == 'ADMIN' || $userType == 'SUPERVISOR' || $userType == 'HR' || $userType == 'MANAGER' ) {
             return $next($request);
         }
