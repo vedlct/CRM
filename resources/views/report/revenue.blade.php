@@ -149,13 +149,18 @@
                     },
                 },
                 fnDrawCallback: function(data) {
-                    $('#totalRevenue').text(data.json.totalRevenue.toFixed(2));
+                    $('#totalClient').text(data.json.totalClients)
+                    $('#totalRevenue').text(parseFloat(data.json.totalRevenue).toFixed(2));
+
+                    // if (json.input.dateFrom !== null || json.input.dateTo !== null) {
+                    //     $('#dateRange').text(json.input.dateFrom ?? '' + ' - ' + json.input.dateTo ?? '')
+                    // }
                 },
                 columns: [
                     {title: 'Lead Id', data: 'leadId', name: 'leadId', className: "text-center", orderable: true, searchable: true},
                     {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: false},
                     {title: 'Phone Number', data: 'contactNumber', name: 'contactNumber', className: "text-center", orderable: true, searchable: true},
-                    {title: 'Closing Date', data: 'closing_date', name: 'closing_date', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Closing Date', data: 'created_at', name: 'created_at', className: "text-center", orderable: true, searchable: true},
                     {title: 'Marketer', data: 'marketerName', name: 'marketerName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
                             return '<button type="button" title="Entry" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addRevenueModal" data-panel-id="' + data.new_fileId + '" onclick="addRevenue(this)"><i class="fa fa-edit"></i></button>'
@@ -163,19 +168,11 @@
                         }, orderable: false, searchable: false
                     }
                 ],
-                "initComplete": function( settings, json ) {
-                    $('#totalClient').text(json.recordsTotal)
-                }
             });
         });
 
         function filterRevenue() {
-            table.ajax.reload(function ( json ) {
-                $('#totalClient').text(json.recordsTotal)
-                // if (json.input.dateFrom !== null || json.input.dateTo !== null) {
-                //     $('#dateRange').text(json.input.dateFrom ?? '' + ' - ' + json.input.dateTo ?? '')
-                // }
-            })
+            table.ajax.reload()
         }
 
         $('#addRevenueForm').on('submit', function (e) {
@@ -193,6 +190,7 @@
                     if (response.status === 200) {
                         $('#addRevenueForm').trigger('reset')
                         $('#addRevenueModal').modal('toggle');
+                        filterRevenue()
                     }
                 },
             });
