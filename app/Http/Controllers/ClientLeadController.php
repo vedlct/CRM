@@ -16,7 +16,7 @@ class ClientLeadController extends Controller
 //
 //        $leads=Lead::whereIn('leadId',$newFiles)->get();
 
-        $leadsWithFiles=Lead::select('leads.leadId','leads.companyName',DB::raw('sum(new_file.fileCount) as total'))
+        $leadsWithFiles=Lead::select('leads.leadId','leads.companyName',DB::raw('sum(new_file.revenue) as total'))
             ->leftJoin('new_file','new_file.leadId','leads.leadId')
             ->where('new_file.userId',Auth::user()->id)
             ->groupBy('leads.leadId')
