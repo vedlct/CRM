@@ -669,7 +669,7 @@ class HomeController extends Controller
      * @throws Exception
      */
     public function revenueList(Request $request) {
-        $query = 'SELECT new_file.new_fileId, new_file.leadId, new_file.userId, new_file.created_at, new_file.revenue, new_file.status, new_file.comment, new_file.updated_at, leads.website, leads.contactNumber, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
+        $query = 'SELECT new_file.new_fileId, new_file.leadId, new_file.userId, new_file.created_at, new_file.revenue, leads.website, leads.contactNumber, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
 
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
@@ -679,10 +679,10 @@ class HomeController extends Controller
             $query .= ' WHERE new_file.userId = '.$request->get('marketer');
         }
         if ($dateFrom !== '' && $dateFrom !== null) {
-            $query .= $marketer !== '' && $marketer !== null ? ' AND' . ' new_file.created_at >= "'.$request->get('dateFrom').'"' : ' WHERE' . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
+            $query .= ($marketer !== '' && $marketer !== null ? ' AND' : ' WHERE') . ' new_file.created_at >= "'.$request->get('dateFrom').'"';
         }
         if ($dateTo !== '' && $dateTo !== null) {
-            $query .= ($marketer !== '' && $marketer !== null) && ($dateFrom !== '' && $dateFrom !== null) ? ' AND' . ' new_file.created_at <= "'.$request->get('dateTo').'"' : ' WHERE' . ' new_file.created_at <= "'.$request->get('dateTo').'"';
+            $query .= (($marketer !== '' && $marketer !== null) || ($dateFrom !== '' && $dateFrom !== null) ? ' AND' : ' WHERE') . ' new_file.created_at <= "'.$request->get('dateTo').'"';
         }
 
         $newFiles = DB::select(DB::raw($query));
