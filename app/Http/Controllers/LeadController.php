@@ -1667,6 +1667,24 @@ class LeadController extends Controller
                 ->with('categories',$categories);}
         return Redirect()->route('home');
     }
+
+    public function testPriceUpdate(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validated = $this->validate($request, [
+            'leadId' => 'required|numeric|min:0',
+            'test_price' => 'required|numeric|min:0',
+        ]);
+
+        $lead = Lead::query()->where('leadId', $validated['leadId'])->first();
+        if ($lead) {
+            $lead->test_price = $validated['test_price'];
+            $lead->test_price_date = date('Y-m-d');
+            $lead->update();
+
+            return response()->json();
+        }
+        return response()->json(['statusText' => 'Lead Not Found!'], 404);
+    }
  
     public function closeLeads(){
         $User_Type=Session::get('userType');
@@ -2602,7 +2620,7 @@ class LeadController extends Controller
 
 
 
-        
+
 
 
 
