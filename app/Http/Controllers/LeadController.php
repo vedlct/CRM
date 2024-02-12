@@ -1646,6 +1646,28 @@ class LeadController extends Controller
     }
 
 
+    public function allTestList()
+    {
+        $User_Type=Session::get('userType');
+        if($User_Type == 'ADMIN' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
+            $leads=Lead::select('leads.*')
+                ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
+                ->where('workprogress.progress','Test Job')
+                ->with('category','country','mined')
+                ->where('workprogress.userId',Auth::user()->id)
+                ->distinct('workprogress.leadId')
+                ->get();
+            $categories=Category::where('type',1)->get();
+            $callReports=Callingreport::get();
+            $possibilities=Possibility::get();
+            return view('layouts.lead.allTestList')
+                ->with('leads',$leads)
+                ->with('callReports',$callReports)
+                ->with('possibilities',$possibilities)
+                ->with('categories',$categories);}
+        return Redirect()->route('home');
+    }
+
     public function testLeads(){
         //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
         $User_Type=Session::get('userType');

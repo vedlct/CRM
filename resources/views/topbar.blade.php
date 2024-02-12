@@ -242,6 +242,9 @@
 						<a class="dropdown-item" href="{{route('addLead')}}">
 							<i class="fa fa-plus"></i> All Leads
 						</a>
+							<a class="dropdown-item" href="{{route('allTestList')}}">
+								<i class="fa fa-plus"></i> All Test List
+							</a>
 						<a class="dropdown-item" href="{{route('unTouchedLead')}}">
 							<i class="fa fa-plus"></i> Untouched Leads
 						</a>
