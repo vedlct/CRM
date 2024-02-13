@@ -1646,6 +1646,34 @@ class LeadController extends Controller
     }
 
 
+    public function allTestLead()
+    {
+        $User_Type = Session::get('userType');
+        if ($User_Type === 'ADMIN' || $User_Type==='MANAGER' || $User_Type==='SUPERVISOR') {
+            $categories = Category::query()->where('type',1)->get();
+            $callReports = Callingreport::all();
+            $possibilities = Possibility::all();
+            return view('layouts.lead.allTestList', compact('categories', 'callReports', 'possibilities'));
+        }
+        return Redirect()->route('home');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function allTestLeadList()
+    {
+        $leads = Lead::select('leads.*')
+            ->leftJoin('workprogress', function($join) {
+                $join->on('workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.progress', 'Test Job')
+                    ->distinct();
+            })
+            ->with('category','country','possibility');
+        return datatables()->of($leads)
+            ->make(true);
+    }
+
     public function testLeads(){
         //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
         $User_Type=Session::get('userType');
@@ -1666,6 +1694,24 @@ class LeadController extends Controller
                 ->with('possibilities',$possibilities)
                 ->with('categories',$categories);}
         return Redirect()->route('home');
+    }
+
+    public function testPriceUpdate(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $validated = $this->validate($request, [
+            'leadId' => 'required|numeric|min:0',
+            'test_price' => 'required|numeric|min:0',
+        ]);
+
+        $lead = Lead::query()->where('leadId', $validated['leadId'])->first();
+        if ($lead) {
+            $lead->test_price = $validated['test_price'];
+            $lead->test_price_date = date('Y-m-d');
+            $lead->update();
+
+            return response()->json();
+        }
+        return response()->json(['statusText' => 'Lead Not Found!'], 404);
     }
  
     public function closeLeads(){
@@ -2602,7 +2648,7 @@ class LeadController extends Controller
 
 
 
-        
+
 
 
 

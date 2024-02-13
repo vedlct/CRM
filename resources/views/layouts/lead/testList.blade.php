@@ -1,26 +1,19 @@
-
-
 @extends('main')
 
-
-
 @section('content')
-
-
     <div class="card" style="padding:10px;">
         <div class="card-body">
             @if(Request::url()==route('testlist'))
             <h2 class="card-title" align="center"><b>Test Lead</b></h2>
             @endif
 
-                @if(Request::url()==route('closelist'))
-                    <h2 class="card-title" align="center"><b>Close Lead</b></h2>
-                @endif
+            @if(Request::url()==route('closelist'))
+                <h2 class="card-title" align="center"><b>Close Lead</b></h2>
+            @endif
 
-                @if(Request::url()==route('starLeads'))
-                    <h2 class="card-title" align="center"><b>Star Lead</b></h2>
-                @endif
-
+            @if(Request::url()==route('starLeads'))
+                <h2 class="card-title" align="center"><b>Star Lead</b></h2>
+            @endif
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
                     <thead>
@@ -31,20 +24,22 @@
                         <th>Country</th>
                         <!-- <th>Contact Person</th> -->
                         <th>Contact Number</th>
-                        {{--<th>Action</th>--}}
-
+                        <th>Test Price</th>
+                        <th>Test Price Date</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-
                     @foreach($leads as $lead)
                         <tr>
-                            <td>{{$lead->companyName}}</td>
-                            <td>{{$lead->category->categoryName}}</td>
-                            <td>{{$lead->possibility->possibilityName}}</td>
-                            <td>{{$lead->country->countryName}}</td>
-                            <!-- <td>{{$lead->personName}}</td> -->
-                            <td>{{$lead->contactNumber}}</td>
+                            <td>{{ $lead->companyName }}</td>
+                            <td>{{ $lead->category->categoryName }}</td>
+                            <td>{{ $lead->possibility->possibilityName }}</td>
+                            <td>{{ $lead->country->countryName }}</td>
+{{--                            <td>{{$lead->personName}}</td>--}}
+                            <td>{{ $lead->contactNumber }}</td>
+                            <td>{{ $lead->test_price ? number_format($lead->test_price, 2, '.', '') : '' }}</td>
+                            <td>{{ $lead->test_price_date ? date('Y-m-d', strtotime($lead->test_price_date)) : '' }}</td>
 
 
                             {{--<td><a href="{{route('report',['id'=>$lead->leadId])}}" class="btn btn-info btn-sm"><i class="fa fa-phone" aria-hidden="true"></i></a></td>--}}
@@ -69,27 +64,51 @@
                                     {{--<i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>--}}
 
                             {{--</td>--}}
+
+                            <td>
+                                <a href="#edit_test_price_modal" data-toggle="modal" class="btn btn-info btn-sm" data-lead-id="{{ $lead->leadId }}" data-test-price="{{ number_format($lead->test_price, 2, '.', '') }}">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            </td>
                         </tr>
-
                     @endforeach
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
+    <!-- Test Price Update Modal -->
+    <div class="modal" id="edit_test_price_modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Edit Test Price</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="testPriceUpdateForm" action="{{ route('testPriceUpdate') }}" method="POST">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="hidden" id="leadId" name="leadId" value="">
+                                <div class="form-group">
+                                    <label>Test Price</label>
+                                    <input type="number" step="0.01" min="0" class="form-control" id="test_price" name="test_price" value="" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Edit Modal -->
     <div class="modal" id="edit_modal" style="">
@@ -171,9 +190,6 @@
             {{--<button>Leave</button>--}}
         </div>
     </div>
-    </div>
-
-
 
     <!-- Call Modal -->
     <div class="modal" id="my_modal" style="">
@@ -255,35 +271,18 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
 @endsection
 
 @section('foot-js')
-
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js')}}"></script>
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js')}}"></script>
-
-
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-
-
     <script>
-
         //for Edit modal
-
         $('#edit_modal').on('show.bs.modal', function(e) {
-
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var leadName = $(e.relatedTarget).data('lead-name');
@@ -293,8 +292,6 @@
             var website = $(e.relatedTarget).data('lead-website');
             var minedBy=$(e.relatedTarget).data('lead-mined');
             var category=$(e.relatedTarget).data('lead-category');
-
-
 
             //populate the textbox
             $('#category').val(category);
@@ -308,36 +305,22 @@
             $(e.currentTarget).find('#leave').attr('href', '/lead/leave/'+leadId);
 
             @if(Auth::user()->typeId == 4 || Auth::user()->typeId == 5 )
-
             $(e.currentTarget).find('input[name="companyName"]').attr('readonly', true);
             $(e.currentTarget).find('input[name="website"]').attr('readonly', true);
-
             @endif
-
         });
 
         $( function() {
             $( "#datepicker" ).datepicker();
         } );
 
-
-
-
-
         //for Call Modal
-
         $('#my_modal').on('show.bs.modal', function(e) {
-
             //get data-id attribute of the clicked element
             var leadId = $(e.relatedTarget).data('lead-id');
             var possibility=$(e.relatedTarget).data('lead-possibility');
-
-
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $(e.currentTarget).find('input[name="leadId"]').val(leadId);
-
-
-
             $('#possibility').val(possibility);
             //$(e.currentTarget).find('input[name="possibility"]').val(possibility);
 
@@ -350,8 +333,6 @@
                     $("#comment").scrollTop($("#comment")[0].scrollHeight);
                 }
             });
-
-
         });
 
 
@@ -359,14 +340,33 @@
             $('#myTable').DataTable({
                 "processing": true
             });
-
         });
 
+        $('#edit_test_price_modal').on('show.bs.modal', function(e) {
+            var leadId = $(e.relatedTarget).data('lead-id');
+            $(e.currentTarget).find('input[name="leadId"]').val(leadId);
 
+            var testPrice = $(e.relatedTarget).data('test-price');
+            $(e.currentTarget).find('input[name="test_price"]').val(testPrice);
+        });
 
+        $('#testPriceUpdateForm').on('submit', function (e) {
+            e.preventDefault()
+            let formData = new FormData($('#testPriceUpdateForm')[0])
 
-
+            $.ajax({
+                type: 'POST',
+                url: "{!! route('testPriceUpdate') !!}",
+                cache: false,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (response, textStatus, jqXHR) {
+                    if (jqXHR.status === 200) {
+                        window.location.reload()
+                    }
+                },
+            });
+        })
     </script>
-
-
 @endsection
