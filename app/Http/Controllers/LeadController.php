@@ -1663,14 +1663,17 @@ class LeadController extends Controller
      */
     public function allTestLeadList()
     {
-        $leads = Lead::select('leads.*')
-            ->leftJoin('workprogress', function($join) {
-                $join->on('workprogress.leadId', '=', 'leads.leadId')
-                    ->where('workprogress.progress', 'Test Job')
-                    ->distinct();
-            })
-            ->with('category','country','possibility');
+//        SELECT * FROM `leads` LEFT JOIN workprogress ON workprogress.leadId = leads.leadId WHERE workprogress.progress = 'Test job' GROUP BY workprogress.leadId
+        $leads = Lead::with('category','country','possibility')->select('leads.*', 'workprogress.*', 'users.firstName', 'users.lastName')
+            ->leftJoin('workprogress', 'workprogress.leadId', '=', 'leads.leadId')
+            ->leftJoin('users', 'users.id', '=', 'workprogress.userId')
+            ->where('workprogress.progress', '=', 'Test job')
+            ->groupBy('workprogress.leadId')
+            ->get();
         return datatables()->of($leads)
+            ->addColumn('testBy', function ($lead) {
+                return @$lead->firstName . ' ' . @$lead->lastName;
+            })
             ->make(true);
     }
 

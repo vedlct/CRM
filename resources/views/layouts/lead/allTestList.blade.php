@@ -93,8 +93,8 @@
                     {title: 'Category', data: 'category.categoryName', name: 'category.categoryName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Possibility', data: 'possibility.possibilityName', name: 'possibility.possibilityName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Country', data: 'country.countryName', name: 'country.countryName', className: "text-center", orderable: true, searchable: true},
-                    {title: 'Contact Person', data: 'personName', name: 'personName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Contact Number', data: 'contactNumber', name: 'contactNumber', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Test By', data: 'testBy', name: 'testBy', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test Price', data: 'test_price', name: 'test_price', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test Price Date', data: 'test_price_date', name: 'test_price_date', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
