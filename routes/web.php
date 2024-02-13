@@ -204,7 +204,9 @@ Route::post('lead/leave','LeadController@leaveLead')->name('leaveLead');
 
 
 //testList
-Route::get('/all-test-list', 'LeadController@allTestList')->name('allTestList');
+Route::get('/all-test-lead', 'LeadController@allTestLead')->name('allTestLead');
+Route::get('/all-test-lead-list', 'LeadController@allTestLeadList')->name('allTestLeadList');
+
 Route::get('/test-list', 'LeadController@testLeads')->name('testlist');
 Route::post('/test-price-update', 'LeadController@testPriceUpdate')->name('testPriceUpdate');
 Route::get('/closelist', 'LeadController@closeLeads')->name('closelist');

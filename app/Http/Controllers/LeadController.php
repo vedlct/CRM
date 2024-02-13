@@ -1646,26 +1646,32 @@ class LeadController extends Controller
     }
 
 
-    public function allTestList()
+    public function allTestLead()
     {
-        $User_Type=Session::get('userType');
-        if($User_Type == 'ADMIN' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){
-            $leads=Lead::select('leads.*')
-                ->leftJoin('workprogress','workprogress.leadId','=','leads.leadId')
-                ->where('workprogress.progress','Test Job')
-                ->with('category','country','mined')
-                ->where('workprogress.userId',Auth::user()->id)
-                ->distinct('workprogress.leadId')
-                ->get();
-            $categories=Category::where('type',1)->get();
-            $callReports=Callingreport::get();
-            $possibilities=Possibility::get();
-            return view('layouts.lead.allTestList')
-                ->with('leads',$leads)
-                ->with('callReports',$callReports)
-                ->with('possibilities',$possibilities)
-                ->with('categories',$categories);}
+        $User_Type = Session::get('userType');
+        if ($User_Type === 'ADMIN' || $User_Type==='MANAGER' || $User_Type==='SUPERVISOR') {
+            $categories = Category::query()->where('type',1)->get();
+            $callReports = Callingreport::all();
+            $possibilities = Possibility::all();
+            return view('layouts.lead.allTestList', compact('categories', 'callReports', 'possibilities'));
+        }
         return Redirect()->route('home');
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function allTestLeadList()
+    {
+        $leads = Lead::select('leads.*')
+            ->leftJoin('workprogress', function($join) {
+                $join->on('workprogress.leadId', '=', 'leads.leadId')
+                    ->where('workprogress.progress', 'Test Job')
+                    ->distinct();
+            })
+            ->with('category','country','possibility');
+        return datatables()->of($leads)
+            ->make(true);
     }
 
     public function testLeads(){
