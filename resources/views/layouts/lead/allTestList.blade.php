@@ -127,7 +127,7 @@
                 data: formData,
                 success: function (response, textStatus, jqXHR) {
                     if (jqXHR.status === 200) {
-                        $('#edit_test_price_modal').toggle()
+                        $('#edit_test_price_modal').modal('toggle')
                         $('#myTable').DataTable().clear().draw();
                     }
                 },

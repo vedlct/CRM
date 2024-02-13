@@ -1674,6 +1674,9 @@ class LeadController extends Controller
             ->addColumn('testBy', function ($lead) {
                 return @$lead->firstName . ' ' . @$lead->lastName;
             })
+            ->addColumn('test_price', function ($lead) {
+                return $lead->test_price ? number_format($lead->test_price, 2, '.', '') : '';
+            })
             ->make(true);
     }
 
