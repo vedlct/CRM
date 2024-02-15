@@ -1661,15 +1661,29 @@ class LeadController extends Controller
     /**
      * @throws \Exception
      */
-    public function allTestLeadList()
+    public function allTestLeadList(Request $request)
     {
-//        SELECT * FROM `leads` LEFT JOIN workprogress ON workprogress.leadId = leads.leadId WHERE workprogress.progress = 'Test job' GROUP BY workprogress.leadId
-        $leads = Lead::with('category','country','possibility')->select('leads.*', 'workprogress.*', 'users.firstName', 'users.lastName')
+        //SELECT leads.*, workprogress.progress, users.firstName, users.lastName FROM `leads`
+        //LEFT JOIN workprogress ON workprogress.leadId = leads.leadId
+        //LEFT JOIN users ON users.userId = workprogress.userId
+        //WHERE workprogress.progress = 'Test job'
+        //GROUP BY leads.leadId
+        //ORDER BY leads.leadId;
+
+        $leads = Lead::with('category','country','possibility')
+            ->select('leads.*', 'workprogress.progress', 'users.firstName', 'users.lastName')
             ->leftJoin('workprogress', 'workprogress.leadId', '=', 'leads.leadId')
             ->leftJoin('users', 'users.id', '=', 'workprogress.userId')
-            ->where('workprogress.progress', '=', 'Test job')
-            ->groupBy('workprogress.leadId')
-            ->get();
+            ->where('workprogress.progress', '=', 'Test job');
+
+        if ($request->get('filterDate') !== null) {
+            $leads = $leads->where('workprogress.created_at', $request->get('filterDate'));
+        }
+
+        $leads = $leads->groupBy('workprogress.leadId')
+            ->orderBy('leads.leadId')
+        ->get();
+
         return datatables()->of($leads)
             ->addColumn('testBy', function ($lead) {
                 return @$lead->firstName . ' ' . @$lead->lastName;
@@ -1680,7 +1694,7 @@ class LeadController extends Controller
             ->make(true);
     }
 
-    public function testLeads(){
+    public function testLeads() {
         //select * from leads where leadId in(select leadId from workprogress where progress ='Test job')
         $User_Type=Session::get('userType');
         if($User_Type == 'USER' || $User_Type=='MANAGER' || $User_Type=='SUPERVISOR'){

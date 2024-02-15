@@ -4,41 +4,14 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title"><b>All Test Lead</b></h2>
+            <div class="form-inline justify-content-center">
+                <div class="form-group">
+                    <label for="filterDate">Filter by Date </label>
+                    <input class="form-control ml-3" type="date" id="filterDate" name="filterDate" onchange="filterDate()">
+                </div>
+            </div>
             <div class="table-responsive m-t-40">
-                <table id="myTable" class="table table-bordered table-striped">
-{{--                    <thead>--}}
-{{--                    <tr>--}}
-{{--                        <th>Company Name</th>--}}
-{{--                        <th>Category</th>--}}
-{{--                        <th>Possibility</th>--}}
-{{--                        <th>Country</th>--}}
-{{--                        <th>Contact Person</th>--}}
-{{--                        <th>Contact Number</th>--}}
-{{--                        <th>Test Price</th>--}}
-{{--                        <th>Test Price Date</th>--}}
-{{--                        <th>Action</th>--}}
-{{--                    </tr>--}}
-{{--                    </thead>--}}
-{{--                    <tbody>--}}
-{{--                    @foreach($leads as $lead)--}}
-{{--                        <tr>--}}
-{{--                            <td>{{ $lead->companyName }}</td>--}}
-{{--                            <td>{{ $lead->category->categoryName }}</td>--}}
-{{--                            <td>{{ $lead->possibility->possibilityName }}</td>--}}
-{{--                            <td>{{ $lead->country->countryName }}</td>--}}
-{{--                            <td>{{ $lead->personName }}</td>--}}
-{{--                            <td>{{ $lead->contactNumber }}</td>--}}
-{{--                            <td>{{ $lead->test_price ? number_format($lead->test_price, 2, '.', '') : '' }}</td>--}}
-{{--                            <td>{{ $lead->test_price_date ? date('Y-m-d', strtotime($lead->test_price_date)) : '' }}</td>--}}
-{{--                            <td>--}}
-{{--                                <a href="#edit_test_price_modal" data-toggle="modal" class="btn btn-info btn-sm" data-lead-id="{{ $lead->leadId }}" data-test-price="{{ number_format($lead->test_price, 2, '.', '') }}">--}}
-{{--                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>--}}
-{{--                                </a>--}}
-{{--                            </td>--}}
-{{--                        </tr>--}}
-{{--                    @endforeach--}}
-{{--                    </tbody>--}}
-                </table>
+                <table id="myTable" class="table table-bordered table-striped"></table>
             </div>
         </div>
     </div>
@@ -80,19 +53,25 @@
     <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
     <script>
+        let table
         $(document).ready(function() {
-            $('#myTable').DataTable({
+             table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
                     "url": "{{ route('allTestLeadList') }}",
                     "type": "GET",
+                    data: function (d) {
+                        d.filterDate = $('#filterDate').val()
+                    },
                 },
                 columns: [
-                    {title: 'Company Name', data: 'companyName', name: 'companyName', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Company Name', data: 'companyName', name: 'companyName', className: "text-center", orderable: false, searchable: true},
                     {title: 'Category', data: 'category.categoryName', name: 'category.categoryName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Possibility', data: 'possibility.possibilityName', name: 'possibility.possibilityName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Country', data: 'country.countryName', name: 'country.countryName', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Email', data: 'email', name: 'email', className: "text-center", orderable: true, searchable: true},
                     {title: 'Contact Number', data: 'contactNumber', name: 'contactNumber', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test By', data: 'testBy', name: 'testBy', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test Price', data: 'test_price', name: 'test_price', className: "text-center", orderable: true, searchable: true},
@@ -105,6 +84,10 @@
                 ]
             });
         });
+
+        function filterDate() {
+            table.ajax.reload()
+        }
 
         $('#edit_test_price_modal').on('show.bs.modal', function(e) {
             let leadId = $(e.relatedTarget).data('lead-id');
