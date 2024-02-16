@@ -6,7 +6,7 @@
             <h2 class="card-title"><b>All Test Lead</b></h2>
             <div class="form-inline justify-content-center">
                 <div class="form-group">
-                    <label for="filterDate">Filter by Date </label>
+                    <label for="filterDate">Filter by Lead Test Date </label>
                     <input class="form-control ml-3" type="date" id="filterDate" name="filterDate" onchange="filterDate()">
                 </div>
             </div>
@@ -68,7 +68,7 @@
                 columns: [
                     {title: 'Company Name', data: 'companyName', name: 'companyName', className: "text-center", orderable: false, searchable: true},
                     {title: 'Category', data: 'category.categoryName', name: 'category.categoryName', className: "text-center", orderable: true, searchable: true},
-                    {title: 'Possibility', data: 'possibility.possibilityName', name: 'possibility.possibilityName', className: "text-center", orderable: true, searchable: true},
+                    // {title: 'Possibility', data: 'possibility.possibilityName', name: 'possibility.possibilityName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Country', data: 'country.countryName', name: 'country.countryName', className: "text-center", orderable: true, searchable: true},
                     {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: true},
                     {title: 'Email', data: 'email', name: 'email', className: "text-center", orderable: true, searchable: true},
@@ -76,6 +76,7 @@
                     {title: 'Test By', data: 'testBy', name: 'testBy', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test Price', data: 'test_price', name: 'test_price', className: "text-center", orderable: true, searchable: true},
                     {title: 'Test Price Date', data: 'test_price_date', name: 'test_price_date', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Created At', data: 'work_created_at', name: 'work_created_at', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
                             // return '<a title="edit" class="btn btn-warning btn-sm" data-panel-id="' + data.leadId + '" onclick="editLead(this)"><i class="fa fa-edit"></i></a>';
                             return '<a href="#edit_test_price_modal" data-toggle="modal" class="btn btn-info btn-sm" data-lead-id="' + data.leadId + '" data-test-price="' + data.test_price + '"><i class="fa fa-pencil-square-o"></i></a>';

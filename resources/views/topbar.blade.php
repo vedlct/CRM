@@ -243,7 +243,7 @@
 							<i class="fa fa-plus"></i> All Leads
 						</a>
 							<a class="dropdown-item" href="{{route('allTestLead')}}">
-								<i class="fa fa-plus"></i> All Test List
+								<i class="fa fa-plus"></i> All Test Lead
 							</a>
 						<a class="dropdown-item" href="{{route('unTouchedLead')}}">
 							<i class="fa fa-plus"></i> Untouched Leads

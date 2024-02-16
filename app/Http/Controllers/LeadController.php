@@ -1663,21 +1663,21 @@ class LeadController extends Controller
      */
     public function allTestLeadList(Request $request)
     {
-        //SELECT leads.*, workprogress.progress, users.firstName, users.lastName FROM `leads`
-        //LEFT JOIN workprogress ON workprogress.leadId = leads.leadId
-        //LEFT JOIN users ON users.userId = workprogress.userId
-        //WHERE workprogress.progress = 'Test job'
-        //GROUP BY leads.leadId
-        //ORDER BY leads.leadId;
+//        SELECT leads.*, workprogress.progress, workprogress.created_at AS work_created_at, users.firstName, users.lastName FROM `leads`
+//        LEFT JOIN workprogress ON workprogress.leadId = leads.leadId
+//        LEFT JOIN users ON users.userId = workprogress.userId
+//        WHERE workprogress.progress = 'Test job' AND CAST(workprogress.created_at as DATE) = '2020-10-14'
+//        GROUP BY leads.leadId
+//        ORDER BY `leads`.`leadId` ASC;
 
         $leads = Lead::with('category','country','possibility')
-            ->select('leads.*', 'workprogress.progress', 'users.firstName', 'users.lastName')
+            ->select('leads.*', 'workprogress.progress', DB::raw('DATE(workprogress.created_at) AS work_created_at'), 'users.firstName', 'users.lastName')
             ->leftJoin('workprogress', 'workprogress.leadId', '=', 'leads.leadId')
             ->leftJoin('users', 'users.id', '=', 'workprogress.userId')
-            ->where('workprogress.progress', '=', 'Test job');
+            ->where('workprogress.progress', 'Test job');
 
         if ($request->get('filterDate') !== null) {
-            $leads = $leads->where('workprogress.created_at', $request->get('filterDate'));
+            $leads = $leads->whereRaw('CAST(workprogress.created_at as DATE) = "' . $request->get('filterDate') . '"');
         }
 
         $leads = $leads->groupBy('workprogress.leadId')
