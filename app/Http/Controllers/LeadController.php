@@ -1649,7 +1649,7 @@ class LeadController extends Controller
     public function allTestLead()
     {
         $User_Type = Session::get('userType');
-        if ($User_Type === 'ADMIN' || $User_Type==='MANAGER' || $User_Type==='SUPERVISOR') {
+        if ($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
             $categories = Category::query()->where('type',1)->get();
             $callReports = Callingreport::all();
             $possibilities = Possibility::all();
