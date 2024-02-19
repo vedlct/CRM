@@ -1649,7 +1649,7 @@ class LeadController extends Controller
     public function allTestLead()
     {
         $User_Type = Session::get('userType');
-        if ($User_Type === 'ADMIN' || $User_Type==='MANAGER' || $User_Type==='SUPERVISOR') {
+        if ($User_Type == 'ADMIN' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR') {
             $categories = Category::query()->where('type',1)->get();
             $callReports = Callingreport::all();
             $possibilities = Possibility::all();
@@ -1663,21 +1663,25 @@ class LeadController extends Controller
      */
     public function allTestLeadList(Request $request)
     {
-        //SELECT leads.*, workprogress.progress, users.firstName, users.lastName FROM `leads`
-        //LEFT JOIN workprogress ON workprogress.leadId = leads.leadId
-        //LEFT JOIN users ON users.userId = workprogress.userId
-        //WHERE workprogress.progress = 'Test job'
-        //GROUP BY leads.leadId
-        //ORDER BY leads.leadId;
+//        SELECT leads.*, workprogress.progress, workprogress.created_at AS work_created_at, users.firstName, users.lastName FROM `leads`
+//        LEFT JOIN workprogress ON workprogress.leadId = leads.leadId
+//        LEFT JOIN users ON users.userId = workprogress.userId
+//        WHERE workprogress.progress = 'Test job' AND leads.statusId != 6 AND CAST(workprogress.created_at as DATE) BETWEEN '2020-10-14' AND '2020-10-20'
+//        GROUP BY leads.leadId
+//        ORDER BY `leads`.`leadId` ASC;
+
+        $startDate = str_before($request->get('filterDate'), ' -');
+        $endDate = str_after($request->get('filterDate'), '- ');
 
         $leads = Lead::with('category','country','possibility')
-            ->select('leads.*', 'workprogress.progress', 'users.firstName', 'users.lastName')
+            ->select('leads.*', 'workprogress.progress', DB::raw('DATE(workprogress.created_at) AS work_created_at'), 'users.firstName', 'users.lastName')
             ->leftJoin('workprogress', 'workprogress.leadId', '=', 'leads.leadId')
             ->leftJoin('users', 'users.id', '=', 'workprogress.userId')
-            ->where('workprogress.progress', '=', 'Test job');
+            ->where('workprogress.progress', 'Test job')
+            ->where('leads.statusId', '!=', 6);
 
-        if ($request->get('filterDate') !== null) {
-            $leads = $leads->where('workprogress.created_at', $request->get('filterDate'));
+        if ($request->get('filterDate') !== null && $request->get('filterDate') !== '') {
+            $leads = $leads->whereRaw('CAST(workprogress.created_at as DATE) BETWEEN "' . $startDate . '" AND "' . $endDate . '"');
         }
 
         $leads = $leads->groupBy('workprogress.leadId')
