@@ -1,5 +1,7 @@
 @extends('main')
-
+@section('header')
+    <link rel="stylesheet" href="{{ url('assets/plugins/bootstrap-daterangepicker/daterangepicker.css') }}">
+@endsection
 @section('content')
     <div class="card">
         <div class="card-body">
@@ -7,7 +9,7 @@
             <div class="form-inline justify-content-center">
                 <div class="form-group">
                     <label for="filterDate">Filter by Lead Test Date </label>
-                    <input class="form-control ml-3" type="date" id="filterDate" name="filterDate" onchange="filterDate()">
+                    <input class="form-control ml-3" type="text" id="filterDate" name="filterDate" value="">
                 </div>
             </div>
             <div class="table-responsive m-t-40">
@@ -50,8 +52,10 @@
 @endsection
 
 @section('foot-js')
-    <script src="{{url('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ url('assets/plugins/moment/min/moment.min.js') }}"></script>
+    <script src="{{ url('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
+    <script src="{{ url('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script>
         let table
         $(document).ready(function() {
@@ -84,11 +88,19 @@
                     }
                 ]
             });
+
+            $('#filterDate').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
         });
 
-        function filterDate() {
+        $('#filterDate').on('apply.daterangepicker change', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             table.ajax.reload()
-        }
+        });
 
         $('#edit_test_price_modal').on('show.bs.modal', function(e) {
             let leadId = $(e.relatedTarget).data('lead-id');
