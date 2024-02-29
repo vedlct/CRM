@@ -591,11 +591,12 @@ class LeadController extends Controller
 
     public function assignShow(){
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' ){
             //getting only first name of users
-            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' || $User_Type == 'MANAGER'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
+                    ->where('active', '1')
                     ->where('typeId',5)
                     ->orWhere('typeId',2)
                     ->orWhere('typeId',3)
