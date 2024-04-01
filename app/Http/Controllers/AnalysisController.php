@@ -31,6 +31,8 @@ use App\Followup;
 use App\Leadstatus;
 use App\NewCall;
 use App\NewFile;
+use App\TrialInfo;
+
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
 use Maatwebsite\Excel\Facades\Excel;
@@ -825,80 +827,180 @@ class AnalysisController extends Controller
             
                         
 
-                    public function testButNotClosedList(Request $r){
-                       
-                        $possibilities = Possibility::get();
-                        $probabilities = Probability::get();
-                        $categories = Category::where('type', 1)->get();
-                        $country = Country::get();
-                        $status = Leadstatus::get();
+                        public function testButNotClosedList(Request $r){
 
-                       
-                        return view('analysis.testButNotClosedList')
-                            // ->with('leads', $leads)
-                            ->with('possibilities', $possibilities)
-                            ->with('probabilities', $probabilities)
-                            ->with('categories', $categories)
-                            ->with('status', $status)
-                            ->with('country', $country)
-                            ;
-                    }    
-
-
-                    public function getTestButNotClosedList()
-                    {
-                        $User_Type = Session::get('userType');
-                    
-                        if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
-    
-                            $leads = Lead::with('country','category','status','contact','possibility', 'probability')
-                                ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                ->where('leads.statusId', '!=', 6)
-                                ->where('workprogress.progress', 'LIKE', '%Test%')
-                                ->whereNotExists(function ($query) {
-                                    $query->select(DB::raw(1))
-                                        ->from('workprogress as wp2')
-                                        ->whereRaw('wp2.leadId = leads.leadId')
-                                        ->where('wp2.progress', 'LIKE', '%Closing%');
-                                })
-                                ->orderBy('workprogress.created_at', 'desc')
-                                ->groupBy('leads.leadId')
-                                ->get();
-                                    
-                        } else {
-
-                            $leads = Lead::with('country','category','status','contact','possibility', 'probability')
-                                ->select('leads.*', 'users.firstName', 'users.lastName', 'workprogress.created_at as wp_created_at', 'workprogress.comments as last_comment')
-                                ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
-                                ->leftJoin('users', 'leads.contactedUserId', 'users.id')
-                                ->where('users.id', Auth::user()->id)
-                                ->where('leads.statusId', '!=', 6)
-                                ->where('workprogress.progress', 'LIKE', '%Test%')
-                                ->whereNotExists(function ($query) {
-                                    $query->select(DB::raw(1))
-                                        ->from('workprogress as wp2')
-                                        ->whereRaw('wp2.leadId = leads.leadId')
-                                        ->where('wp2.progress', 'LIKE', '%Closing%');
-                                })
-                                ->orderBy('workprogress.created_at', 'desc')
-                                ->groupBy('leads.leadId')
-                                ->get();
-                                        
-                        }        
-    
-                        return DataTables::of($leads)
-                        ->addColumn('action', function ($lead) {
-                            return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
-                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
-                        })
-                        ->toJson();
-                    
-
-                    }
+                            return view('analysis.testButNotClosedList');
+                        
+                        }    
                         
 
+                        public function getTestButNotClosedList()
+                        {
+
+                             $User_Type = Session::get('userType');
+                    
+                        if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
+
+                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
+                                ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
+                                ->leftJoin('users', 'trialinfo.userId', 'users.id')
+                                ->where('leads.statusId', '!=', 6)
+                                ;
+                        } else {
+                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
+                                ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
+                                ->leftJoin('users', 'trialinfo.userId', 'users.id')
+                                ->where('leads.statusId', '!=', 6)
+                                ->where('leads.contactedUserId', Auth::user()->id)
+                                ;
+
+
+                        }
+
+                            return DataTables::eloquent($query)
+                                ->addColumn('leadView', function ($trialinfo) {
+                                    return '<a href="#" class="btn btn-primary btn-sm lead-view-btn" data-lead-id="'.$trialinfo->leadId.'"><i class="fa fa-eye"></i></a>';
+                                })
+                                
+                                ->addColumn('updatePrice', function ($trialinfo) {
+                                    return '<a href="#update_trial" data-toggle="modal" class="btn btn-info btn-sm" 
+                                        data-trial-id="'.$trialinfo->trialId.'"
+                                        data-trial-price="'.$trialinfo->trialPrice.'"
+                                        data-currency="'.$trialinfo->currency.'"
+                                        data-trial-comment="'.$trialinfo->trialComment.'"
+                                    
+                                    ><i class="fa fa-arrow-up"></i></a>';
+                                })
+
+                                
+                                // ->addColumn('setRating', function ($trialinfo) {
+                                //     return '<a href="#update_rating" data-toggle="modal" class="btn btn-success btn-sm" 
+                                //         data-trial-id="'.$trialinfo->trialId.'"
+                                //         data-trial-rating="'.$trialinfo->trialRating.'"
+                                    
+                                //     ><i class="fa fa-star"></i></a>';
+                                // })
+
+                                ->addColumn('setRating', function ($trialinfo) {
+                                    $buttonHtml = '<a href="#update_rating" data-toggle="modal" class="btn btn-success btn-sm';
+                                    
+                                    // Check if the user is not an admin or supervisor
+                                    if (!in_array(Session::get('userType'), ['ADMIN', 'SUPERVISOR'])) {
+                                        $buttonHtml .= ' disabled'; // Add 'disabled' attribute to disable the button
+                                    }
+                                    
+                                    $buttonHtml .= '" data-trial-id="'.$trialinfo->trialId.'" data-trial-rating="'.$trialinfo->trialRating.'">';
+                                    $buttonHtml .= '<i class="fa fa-star"></i></a>';
+                                    
+                                    return $buttonHtml;
+                                })
+
+                                
+                                ->rawColumns(['leadView', 'updatePrice', 'setRating'])
+                                ->toJson();
+                        }
+                        
+                    
+                        public function updateTrial(Request $request)
+                        {
+                        
+                            $trialInfo = TrialInfo::findOrFail($request->trialId);
+                        
+                            $trialInfo->trialPrice = $request->trialPrice;
+                            $trialInfo->currency = $request->currency;
+                            $trialInfo->trialComment = $request->trialComment;
+                        
+                            $trialInfo->save();
+                        
+                            return redirect()->back()->with('success', 'Trial information updated successfully');
+                        }
+                        
+                        public function updateRating(Request $request)
+                        {
+                        
+                            $trialInfo = TrialInfo::findOrFail($request->trialId);                       
+                            $trialInfo->trialRating = $request->trialRating;
+                            $trialInfo->save();
+                        
+                            return redirect()->back()->with('success', 'Trial Rating updated successfully');
+                        }
+                        
+                        
+                    // public function testButNotClosedList(Request $r){
+                       
+                    //     $possibilities = Possibility::get();
+                    //     $probabilities = Probability::get();
+                    //     $categories = Category::where('type', 1)->get();
+                    //     $country = Country::get();
+                    //     $status = Leadstatus::get();
+
+
+                       
+                    //     return view('analysis.testButNotClosedList')
+                    //         // ->with('leads', $leads)
+                    //         // ->with('possibilities', $possibilities)
+                    //         // ->with('probabilities', $probabilities)
+                    //         ->with('categories', $categories)
+                    //         // ->with('status', $status)
+                    //         ->with('country', $country)
+                    //         ;
+                    // }    
+
+
+                    // public function getTestButNotClosedList()
+                    // {
+                    //     $User_Type = Session::get('userType');
+                    
+                    //     if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {
+    
+                    //         $leads = Lead::with('country','category','contact')
+                    //             ->select('leads.*', 'users.firstName', 'users.lastName',  'workprogress.comments as last_comment', 'trialinfo.*', 'trialinfo.created_at as price_created_at')
+                    //             ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                    //             ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                    //             ->leftJoin('trialinfo', 'leads.leadId', 'trialinfo.leadId')
+                    //             ->where('leads.statusId', '!=', 6)
+                    //             ->where('workprogress.progress', 'LIKE', '%Test%')
+                    //             ->whereNotExists(function ($query) {
+                    //                 $query->select(DB::raw(1))
+                    //                     ->from('workprogress as wp2')
+                    //                     ->whereRaw('wp2.leadId = leads.leadId')
+                    //                     ->where('wp2.progress', 'LIKE', '%Closing%');
+                    //             })
+                    //             ->orderBy('workprogress.created_at', 'desc')
+                    //             ->groupBy('leads.leadId')
+                    //             ->get();
+                                    
+                    //     } else {
+
+                    //         $leads = Lead::with('country','category','contact')
+                    //             ->select('leads.*', 'users.firstName', 'users.lastName',  'workprogress.comments as last_comment', 'trialinfo.*', 'trialinfo.created_at as price_created_at')
+                    //             ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+                    //             ->leftJoin('users', 'leads.contactedUserId', 'users.id')
+                    //             ->leftJoin('trialinfo', 'leads.leadId', 'trialinfo.leadId')
+                    //             ->where('users.id', Auth::user()->id)
+                    //             ->where('leads.statusId', '!=', 6)
+                    //             ->where('workprogress.progress', 'LIKE', '%Test%')
+                    //             ->whereNotExists(function ($query) {
+                    //                 $query->select(DB::raw(1))
+                    //                     ->from('workprogress as wp2')
+                    //                     ->whereRaw('wp2.leadId = leads.leadId')
+                    //                     ->where('wp2.progress', 'LIKE', '%Closing%');
+                    //             })
+                    //             ->orderBy('workprogress.created_at', 'desc')
+                    //             ->groupBy('leads.leadId')
+                    //             ->get();
+                                        
+                    //     }        
+    
+                    //     return DataTables::of($leads)
+                    //     ->addColumn('action', function ($lead) {
+                    //         return '<a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                    //             data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                    //     })
+                    //     ->toJson();
+                    
+
+                    // }
                             
                         
                     public function getDuplicateLeads()

@@ -30,6 +30,7 @@ use App\Employees;
 use App\Designation;
 use App\ExcludeKeywords;
 use App\DirectMessage;
+use App\TrialInfo;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -1554,6 +1555,7 @@ class LeadController extends Controller
                 $log->save();
             }
         }
+
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
         $progress->leadId=$r->leadId;
@@ -1627,6 +1629,13 @@ class LeadController extends Controller
                 $message = 'Report Updated successfully.';
             }        }
 
+
+            $trialInfo=New TrialInfo;
+            $trialInfo->leadId=$r->leadId;
+            $trialInfo->trialPrice=0;
+            $trialInfo->userId=Auth::user()->id;
+            $trialInfo->save();
+    
 
         Session::flash('message', $message);
         return back();

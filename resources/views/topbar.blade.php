@@ -242,13 +242,13 @@
 						<a class="dropdown-item" href="{{route('addLead')}}">
 							<i class="fa fa-plus"></i> All Leads
 						</a>
-							<a class="dropdown-item" href="{{route('allTestLead')}}">
-								<i class="fa fa-plus"></i> All Test Lead
-							</a>
 						<a class="dropdown-item" href="{{route('unTouchedLead')}}">
 							<i class="fa fa-plus"></i> Untouched Leads
 						</a>
 					@endif
+						<a class="dropdown-item" href="{{route('testButNotClosedList')}}">
+							<i class="fa fa-plus"></i> All Test Lead
+						</a>
 						<a class="dropdown-item" href="{{route('verifylead')}}">
 							<i class="fa fa-check-square-o"></i> Verify Lead
 						</a>
@@ -356,7 +356,6 @@
 
 
 
-			<!-- MY TEAM  -->
             @if($userType == 'SUPERVISOR' || $userType == 'ADMIN')
 				<li class="nav-item dropdown treeview">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"

@@ -312,6 +312,9 @@ Route::get('/frequentlyFiltered', 'AnalysisController@frequentlyFilteredLeads')-
 
 Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name('testButNotClosedList');
 Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
+Route::post('/updateTrial', 'AnalysisController@updateTrial')->name('updateTrial');
+Route::post('/updateRating', 'AnalysisController@updateRating')->name('updateRating');
+
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');
 
