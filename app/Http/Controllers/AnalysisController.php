@@ -841,13 +841,13 @@ class AnalysisController extends Controller
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
 
-                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
+                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.volume', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
                                 ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
                                 ;
                         } else {
-                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
+                            $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.volume', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
                                 ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
@@ -903,12 +903,15 @@ class AnalysisController extends Controller
                     
                         public function updateTrial(Request $request)
                         {
-                        
+                            date_default_timezone_set('Asia/Dhaka');
+                            $currentDateTime = Carbon::now();
+
                             $trialInfo = TrialInfo::findOrFail($request->trialId);
                         
                             $trialInfo->trialPrice = $request->trialPrice;
                             $trialInfo->currency = $request->currency;
                             $trialInfo->trialComment = $request->trialComment;
+                            $trialInfo->created_at =  $currentDateTime;
                         
                             $trialInfo->save();
                         
