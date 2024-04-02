@@ -13,15 +13,17 @@
                 <table id="myTable" class="table table-bordered table-striped" style="text-align: center;">
                     <thead>
                     <tr>
-                        <th width="6%">Id</th>
+                        <th width="8%">Lead Id</th>
                         <th width="10%">Company </th>
                         <!-- <th width="5%">Category</th> -->
-                        <th width="15%">Website</th>
+                        <th width="12%">Website</th>
                         <!-- <th width="5%">Country</th> -->
-                        <th width="10%">Marketer</th>
+                        <th width="8%">Marketer</th>
+                        <th width="10%">Volume</th>
+                        <th width="7%">Test Id</th>
                         <th width="10%">Test Price</th>
-                        <th width="20%">Test Comment</th>
-                        <th width="10%">Rating</th>
+                        <th width="15%">Test/Price Comment</th>
+                        <th width="8%">Rating</th>
                         <th width="10%">Price Date</th>
                         <th width="3%">View</th>
                         <th width="3%">Update</th>
@@ -182,6 +184,13 @@
                     // { data: 'contactNumber', name: 'contactNumber' },
                     // { data: 'status.statusName', name: 'status.statusName' },
                     { data: 'firstName', name: 'firstName' },
+                    { data: 'volume', name: 'volume' },
+                    {
+                        data: null, // Assuming there's no specific data property for this column
+                        render: function(data, type, full, meta) {
+                            return '0'; // Return the fixed value '0'
+                        }
+                    },                  
                     {
                         data: null,
                         name: 'trialPriceAndCurrency',
@@ -196,22 +205,41 @@
                         data: 'trialRating',
                         name: 'trialRating',
                         render: function(data, type, full, meta) {
+                            let ratingText = '';
+                            let stars = '';
+
                             switch (data) {
                                 case '1':
-                                    return 'Bad';
+                                    ratingText = 'Bad';
+                                    stars = '★☆☆☆☆'; // One star
+                                    break;
                                 case '2':
-                                    return 'Okay';
+                                    ratingText = 'Okay';
+                                    stars = '★★☆☆☆'; // Two stars
+                                    break;
                                 case '3':
-                                    return 'Good';
+                                    ratingText = 'Good';
+                                    stars = '★★★☆☆'; // Three stars
+                                    break;
                                 case '4':
-                                    return 'Very Good';
+                                    ratingText = 'Very Good';
+                                    stars = '★★★★☆'; // Four stars
+                                    break;
                                 case '5':
-                                    return 'Star Lead';
+                                    ratingText = 'Star Lead';
+                                    stars = '★★★★★'; // Five stars
+                                    break;
                                 default:
-                                    return ''; // Handle other cases if needed
+                                    ratingText = '';
+                                    stars = '';
+                                    break;
                             }
+
+                            return ratingText + ' (' + stars + ')';
                         }
-                    },                    { data: 'price_created_at', name: 'price_created_at' },
+                    },
+                    
+                    { data: 'price_created_at', name: 'price_created_at' },
                     { data: 'leadView', name: 'leadView', orderable: false, searchable: false },
                     { data: 'updatePrice', name: 'updatePrice', orderable: false, searchable: false },
                     { data: 'setRating', name: 'setRating', orderable: false, searchable: false }
