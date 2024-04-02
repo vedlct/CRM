@@ -30,6 +30,7 @@ use App\Employees;
 use App\Designation;
 use App\ExcludeKeywords;
 use App\DirectMessage;
+use App\TrialInfo;
 use DataTables;
 
 use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
@@ -591,11 +592,12 @@ class LeadController extends Controller
 
     public function assignShow(){
         $User_Type=Session::get('userType');
-        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR'){
+        if($User_Type == 'RA' || $User_Type == 'MANAGER' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' ){
             //getting only first name of users
-            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR'){
+            if($User_Type == 'RA' || $User_Type == 'SUPERVISOR' || $User_Type == 'ADMIN' || $User_Type == 'MANAGER'){
                 $users=User::select('id','firstName','lastName')
                     ->where('id','!=',Auth::user()->id)
+                    ->where('active', '1')
                     ->where('typeId',5)
                     ->orWhere('typeId',2)
                     ->orWhere('typeId',3)
@@ -1553,6 +1555,7 @@ class LeadController extends Controller
                 $log->save();
             }
         }
+
         $progress=New Workprogress;
         $progress->callingReport=$r->report;
         $progress->leadId=$r->leadId;
@@ -1626,6 +1629,13 @@ class LeadController extends Controller
                 $message = 'Report Updated successfully.';
             }        }
 
+
+            $trialInfo=New TrialInfo;
+            $trialInfo->leadId=$r->leadId;
+            $trialInfo->trialPrice=0;
+            $trialInfo->userId=Auth::user()->id;
+            $trialInfo->save();
+    
 
         Session::flash('message', $message);
         return back();
