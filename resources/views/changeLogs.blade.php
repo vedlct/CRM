@@ -49,6 +49,15 @@ h1 {
 
     <div class="card change-log-card">
             <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-warning">2.14.01</span> - 03 April 2024</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Bug Fixing - Free Trial Page </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
             <h5 class="card-title"><span class="badge badge-success">2.14.00</span> - 01 April 2024</h5>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">New Feature -  Test Leads have a new look now. Added a table so that user and admin can update the test leads </li>
