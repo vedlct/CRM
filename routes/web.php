@@ -314,6 +314,8 @@ Route::get('/testButNotClosed', 'AnalysisController@testButNotClosedList')->name
 Route::post('/testButNotClosed', 'AnalysisController@getTestButNotClosedList')->name('getTestButNotClosedList');
 Route::post('/updateTrial', 'AnalysisController@updateTrial')->name('updateTrial');
 Route::post('/updateRating', 'AnalysisController@updateRating')->name('updateRating');
+// Route::post('/removeTrial', 'AnalysisController@removeTrial')->name('removeTrial');
+Route::delete('/removeTrial/{trialId}', 'AnalysisController@removeTrial')->name('removeTrial');
 
 
 Route::get('/chasingLeads', 'AnalysisController@getAllChasingLeads')->name('getAllChasingLeads');

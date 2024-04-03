@@ -15,12 +15,9 @@
                     <tr>
                         <th width="8%">Lead Id</th>
                         <th width="10%">Company </th>
-                        <!-- <th width="5%">Category</th> -->
                         <th width="12%">Website</th>
-                        <!-- <th width="5%">Country</th> -->
-                        <th width="8%">Marketer</th>
+                        <th width="8%">Test With</th>
                         <th width="10%">Volume</th>
-                        <th width="7%">Test Id</th>
                         <th width="10%">Test Price</th>
                         <th width="15%">Test/Price Comment</th>
                         <th width="8%">Rating</th>
@@ -28,6 +25,7 @@
                         <th width="3%">View</th>
                         <th width="3%">Update</th>
                         <th width="3%">Rating</th>
+                        <th width="2%">Del</th>
 
                     </tr>
                     </thead>
@@ -163,89 +161,79 @@
 
     <script>
 
-        $(document).ready(function() {
-            $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                stateSave: true,
-                ajax: {
-                    url: "{!! route('getTestButNotClosedList') !!}",
-                    type: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}"
-                    }
-                },
-                columns: [
-                    { data: 'leadId', name: 'leadId' },
-                    { data: 'companyName', name: 'companyName' },
-                    // { data: 'category.categoryName', name: 'category.categoryName' },
-                    { data: 'website', name: 'website' },
-                    // { data: 'country.countryName', name: 'country.countryName' },
-                    // { data: 'contactNumber', name: 'contactNumber' },
-                    // { data: 'status.statusName', name: 'status.statusName' },
-                    { data: 'firstName', name: 'firstName' },
-                    { data: 'volume', name: 'volume' },
-                    {
-                        data: null, // Assuming there's no specific data property for this column
-                        render: function(data, type, full, meta) {
-                            return '0'; // Return the fixed value '0'
-                        }
-                    },                  
-                    {
-                        data: null,
-                        name: 'trialPriceAndCurrency',
-                        render: function(data, type, full, meta) {
-                            return full.currency + ' ' + full.trialPrice;
+            $(document).ready(function() {
+                $('#myTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    stateSave: true,
+                    searching: false,
+                    ajax: {
+                        url: "{!! route('getTestButNotClosedList') !!}",
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}"
                         }
                     },
-                    // { data: 'trialPrice', name: 'trialPrice' },
-                    { data: 'trialComment', name: 'trialComment' },
-                    // { data: 'trialRating', name: 'trialRating' },
-                    {
-                        data: 'trialRating',
-                        name: 'trialRating',
-                        render: function(data, type, full, meta) {
-                            let ratingText = '';
-                            let stars = '';
-
-                            switch (data) {
-                                case '1':
-                                    ratingText = 'Bad';
-                                    stars = '★☆☆☆☆'; // One star
-                                    break;
-                                case '2':
-                                    ratingText = 'Okay';
-                                    stars = '★★☆☆☆'; // Two stars
-                                    break;
-                                case '3':
-                                    ratingText = 'Good';
-                                    stars = '★★★☆☆'; // Three stars
-                                    break;
-                                case '4':
-                                    ratingText = 'Very Good';
-                                    stars = '★★★★☆'; // Four stars
-                                    break;
-                                case '5':
-                                    ratingText = 'Star Lead';
-                                    stars = '★★★★★'; // Five stars
-                                    break;
-                                default:
-                                    ratingText = '';
-                                    stars = '';
-                                    break;
+                    columns: [
+                        { data: 'leadId', name: 'leadId' },
+                        { data: 'companyName', name: 'companyName' },
+                        { data: 'website', name: 'website' },
+                        { data: 'firstName', name: 'firstName' },
+                        { data: 'volume', name: 'volume' },
+                        {
+                            data: null,
+                            name: 'trialPriceAndCurrency',
+                            render: function(data, type, full, meta) {
+                                return full.currency + ' ' + full.trialPrice;
                             }
+                        },
+                        { data: 'trialComment', name: 'trialComment', orderable: false, searchable: false },
+                        {
+                            data: 'trialRating',
+                            name: 'trialRating',
+                            render: function(data, type, full, meta) {
+                                let ratingText = '';
+                                let stars = '';
 
-                            return ratingText + ' (' + stars + ')';
-                        }
-                    },
-                    
-                    { data: 'price_created_at', name: 'price_created_at' },
-                    { data: 'leadView', name: 'leadView', orderable: false, searchable: false },
-                    { data: 'updatePrice', name: 'updatePrice', orderable: false, searchable: false },
-                    { data: 'setRating', name: 'setRating', orderable: false, searchable: false }
-                ]
-            });
-        });
+                                switch (data) {
+                                    case '1':
+                                        ratingText = 'Bad';
+                                        stars = '★☆☆☆☆'; // One star
+                                        break;
+                                    case '2':
+                                        ratingText = 'Okay';
+                                        stars = '★★☆☆☆'; // Two stars
+                                        break;
+                                    case '3':
+                                        ratingText = 'Good';
+                                        stars = '★★★☆☆'; // Three stars
+                                        break;
+                                    case '4':
+                                        ratingText = 'Very Good';
+                                        stars = '★★★★☆'; // Four stars
+                                        break;
+                                    case '5':
+                                        ratingText = 'Star Lead';
+                                        stars = '★★★★★'; // Five stars
+                                        break;
+                                    default:
+                                        ratingText = '';
+                                        stars = '';
+                                        break;
+                                }
+
+                                return ratingText + ' (' + stars + ')';
+                            }
+                        },
+                        
+                        { data: 'price_created_at', name: 'price_created_at', orderable: true, searchable: false },
+                        { data: 'leadView', name: 'leadView', orderable: false, searchable: false },
+                        { data: 'updatePrice', name: 'updatePrice', orderable: false, searchable: false },
+                        { data: 'setRating', name: 'setRating', orderable: false, searchable: false },
+                        { data: 'trialRemove', name: 'trialRemove', orderable: false, searchable: false }
+                    ]
+             });
+         });
 
 
             $(document).on('click', '.lead-view-btn', function(e) {
@@ -280,6 +268,32 @@
             $(e.currentTarget).find('input[name="trialId"]').val(trialId);
             $(e.currentTarget).find('select[name="trialRating"]').val(trialRating); 
         });
+
+
+
+        $(document).on('click', '.remove-trial-btn', function() {
+            var trialId = $(this).data('trial-id');
+            var confirmation = confirm('Are you sure you want to remove this Trial?');
+
+            if (confirmation) {
+                $.ajax({
+                    url: "{{ url('removeTrial') }}/" + trialId, // Corrected URL construction
+                    type: "POST", 
+                    data: {
+                        _method: 'DELETE', // Send as DELETE request
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
 
 
 

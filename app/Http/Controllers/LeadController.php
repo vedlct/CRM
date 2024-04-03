@@ -1629,13 +1629,14 @@ class LeadController extends Controller
                 $message = 'Report Updated successfully.';
             }        }
 
-
-            $trialInfo=New TrialInfo;
-            $trialInfo->leadId=$r->leadId;
-            $trialInfo->trialPrice=0;
-            $trialInfo->userId=Auth::user()->id;
-            $trialInfo->save();
-    
+            if($r->progress=="Test Job"){
+                $trialInfo=New TrialInfo;
+                $trialInfo->leadId=$r->leadId;
+                $trialInfo->trialPrice=0;
+                $trialInfo->currency="€";
+                $trialInfo->userId=Auth::user()->id;
+                $trialInfo->save();
+            }
 
         Session::flash('message', $message);
         return back();
