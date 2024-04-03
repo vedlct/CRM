@@ -845,13 +845,18 @@ class AnalysisController extends Controller
                                 ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
+                                ->orderBy('price_created_at', 'DESC')
+                                ->groupBy('trialinfo.leadId')
                                 ;
+                                
                         } else {
                             $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.volume', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
                                 ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
                                 ->where('leads.contactedUserId', Auth::user()->id)
+                                ->orderBy('price_created_at', 'DESC')
+                                ->groupBy('trialinfo.leadId')
                                 ;
 
 
@@ -873,14 +878,6 @@ class AnalysisController extends Controller
                                 })
 
                                 
-                                // ->addColumn('setRating', function ($trialinfo) {
-                                //     return '<a href="#update_rating" data-toggle="modal" class="btn btn-success btn-sm" 
-                                //         data-trial-id="'.$trialinfo->trialId.'"
-                                //         data-trial-rating="'.$trialinfo->trialRating.'"
-                                    
-                                //     ><i class="fa fa-star"></i></a>';
-                                // })
-
                                 ->addColumn('setRating', function ($trialinfo) {
                                     $buttonHtml = '<a href="#update_rating" data-toggle="modal" class="btn btn-success btn-sm';
                                     
@@ -895,8 +892,13 @@ class AnalysisController extends Controller
                                     return $buttonHtml;
                                 })
 
+                                ->addColumn('trialRemove', function ($trialinfo) {
+                                    return '<a href="#" class="btn btn-danger btn-sm remove-trial-btn"
+                                    data-trial-id="'.$trialinfo->trialId.'"><i class="fa fa-close"></i></a>';
+                                })
+                            
                                 
-                                ->rawColumns(['leadView', 'updatePrice', 'setRating'])
+                                ->rawColumns(['leadView', 'updatePrice', 'setRating', 'trialRemove'])
                                 ->toJson();
                         }
                         
@@ -918,6 +920,8 @@ class AnalysisController extends Controller
                             return redirect()->back()->with('success', 'Trial information updated successfully');
                         }
                         
+
+
                         public function updateRating(Request $request)
                         {
                         
@@ -928,7 +932,22 @@ class AnalysisController extends Controller
                             return redirect()->back()->with('success', 'Trial Rating updated successfully');
                         }
                         
+
+
+                        public function removeTrial($trialId) {
+
+                            $trialinfo = TrialInfo::find($trialId);
                         
+                            if ($trialinfo) {
+                                $trialinfo->delete();
+                                return response()->json(['message' => 'Trial removed successfully'], 200);
+                            } else {
+                                return response()->json(['error' => 'Trial not found'], 404);
+                            }
+                        }
+
+                        
+
                     // public function testButNotClosedList(Request $r){
                        
                     //     $possibilities = Possibility::get();
