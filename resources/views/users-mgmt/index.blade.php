@@ -25,6 +25,7 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Status</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -38,6 +39,19 @@
                                 <td >
                                     @if ($user->active == 1)Active
                                     @elseif ($user->active == 0)Inactive
+                                    @endif
+                                </td>
+                                <td >
+                                    @if ($user->typeId == 1)Admin
+                                    @elseif ($user->typeId == 2)Manager
+                                    @elseif ($user->typeId == 3)Supervisor
+                                    @elseif ($user->typeId == 4)RA
+                                    @elseif ($user->typeId == 5)User
+                                    @elseif ($user->typeId == 6)Digital Manager
+                                    @elseif ($user->typeId == 7)DigitalSupport
+                                    @elseif ($user->typeId == 8)DigitalExecutive
+                                    @elseif ($user->typeId == 9)DigitalSupervisor
+                                    @elseif ($user->typeId == 10)HR
                                     @endif
                                 </td>
                                 <td>
