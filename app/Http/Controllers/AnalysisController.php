@@ -828,16 +828,18 @@ class AnalysisController extends Controller
                         
 
                         public function testButNotClosedList(Request $r){
-
-                            return view('analysis.testButNotClosedList');
+                            $userTypeIds = [2,3,4,5];
+                            $marketers = User::query()->whereIn('typeId', $userTypeIds)->get();
+                            return view('analysis.testButNotClosedList' , compact('marketers'));
                         
                         }    
                         
 
-                        public function getTestButNotClosedList()
+                        public function getTestButNotClosedList( Request $request)
                         {
 
                              $User_Type = Session::get('userType');
+                             $marketer = $request->get('marketer');
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
 
@@ -846,8 +848,7 @@ class AnalysisController extends Controller
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
                                 ->orderBy('price_created_at', 'DESC')
-                                ->groupBy('trialinfo.leadId')
-                                ;
+                                ->groupBy('trialinfo.leadId');
                                 
                         } else {
                             $query = TrialInfo::select('trialinfo.*', 'leads.companyName', 'leads.volume', 'leads.website', 'users.firstName', 'trialinfo.created_at as price_created_at')
@@ -856,11 +857,14 @@ class AnalysisController extends Controller
                                 ->where('leads.statusId', '!=', 6)
                                 ->where('leads.contactedUserId', Auth::user()->id)
                                 ->orderBy('price_created_at', 'DESC')
-                                ->groupBy('trialinfo.leadId')
-                                ;
-
+                                ->groupBy('trialinfo.leadId');
 
                         }
+
+                            if ($marketer !== '' && $marketer !== null) {
+                               // $query .= 'WHERE trialinfo.userId = '.$request->get('marketer');
+                                $query =  $query->where('trialinfo.userId', $marketer);
+                            }
 
                             return DataTables::eloquent($query)
                                 ->addColumn('leadView', function ($trialinfo) {

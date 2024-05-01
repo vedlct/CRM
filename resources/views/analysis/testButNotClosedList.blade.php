@@ -8,7 +8,20 @@
         <div class="card-body">
         <h2 align="center"><b>Free Trial Details</b></h2>
         <p class="card-subtitle" align="center">Received but not closed yet. Update rating, price, comments. Rating: 5 means star, 1 means very low</p>
-
+            <div class="row mt-5">
+            <div class="col-md-3 form-group">
+                <label for="marketer">Test With</label>
+                <select id="marketer" name="marketer" class="form-control select2">
+                    <option value="">Select Marketer</option>
+                    @foreach( $marketers as $marketer )
+                        <option value="{{ $marketer->id }}">{{ @$marketer->firstName .' '. @$marketer->lastName }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3 form-group align-self-end">
+                <button class="btn btn-success" onclick="filterRevenue()">Submit</button>
+            </div>
+            </div>
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped" style="text-align: center;">
                     <thead>
@@ -156,30 +169,55 @@
 
     <script src="{{url('cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js')}}"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+        .select2-container .select2-selection--single {
+            height: 39px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 38px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 37px;
+        }
 
+        .btn-blue {
+            background: deepskyblue;
+            border: 1px solid deepskyblue;
+        }
+    </style>
 
 
     <script>
 
             $(document).ready(function() {
-                $('#myTable').DataTable({
+                $('.select2').select2()
+
+                table =   $('#myTable').DataTable({
                     processing: true,
                     serverSide: true,
                     stateSave: true,
-                    searching: false,
+                    searching: true,
+                    "columnDefs": [
+                        { "searchable": false, "targets": [5,6,7,8] }
+                    ],
                     ajax: {
                         url: "{!! route('getTestButNotClosedList') !!}",
                         type: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}"
-                        }
+                        data: function (d) {
+                            d._token = "{{ csrf_token() }}";
+                            d.marketer = $('#marketer').val();
+                            // d.dateFrom = $('#dateFrom').val();
+                            // d.dateTo = $('#dateTo').val();
+                        },
                     },
                     columns: [
-                        { data: 'leadId', name: 'leadId' },
-                        { data: 'companyName', name: 'companyName' },
-                        { data: 'website', name: 'website' },
-                        { data: 'firstName', name: 'firstName' },
-                        { data: 'volume', name: 'volume' },
+                        { data: 'leadId', name: 'leads.leadId' },
+                        { data: 'companyName', name: 'leads.companyName' },
+                        { data: 'website', name: 'leads.website' },
+                        { data: 'firstName', name: 'users.firstName' },
+                        { data: 'volume', name: 'leads.volume' },
                         {
                             data: null,
                             name: 'trialPriceAndCurrency',
@@ -190,7 +228,7 @@
                         { data: 'trialComment', name: 'trialComment', orderable: false, searchable: false },
                         {
                             data: 'trialRating',
-                            name: 'trialRating',
+                            name: 'trialinfo.trialRating',
                             render: function(data, type, full, meta) {
                                 let ratingText = '';
                                 let stars = '';
@@ -234,6 +272,10 @@
                     ]
              });
          });
+
+            function filterRevenue() {
+                table.ajax.reload()
+            }
 
 
             $(document).on('click', '.lead-view-btn', function(e) {
