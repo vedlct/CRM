@@ -9,7 +9,7 @@
         <h2 align="center"><b>Free Trial Details</b></h2>
         <p class="card-subtitle" align="center">Received but not closed yet. Update rating, price, comments. Rating: 5 means star, 1 means very low</p>
             <div class="row mt-5">
-            <div class="col-md-3 form-group">
+            <div class="col-md-2 form-group">
                 <label for="marketer">Test With</label>
                 <select id="marketer" name="marketer" class="form-control select2">
                     <option value="">Select Marketer</option>
@@ -18,7 +18,15 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3 form-group align-self-end">
+            <div class="col-md-2 form-group">
+                    <label for="dateFrom">Date From</label>
+                    <input type="date" class="form-control" id="dateFrom" name="dateFrom">
+            </div>
+            <div class="col-md-2 form-group">
+                    <label for="dateTo">Date From</label>
+                    <input type="date" class="form-control" id="dateTo" name="dateTo">
+            </div>
+            <div class="col-md-1 form-group align-self-end">
                 <button class="btn btn-success" onclick="filterRevenue()">Submit</button>
             </div>
             </div>
@@ -208,8 +216,8 @@
                         data: function (d) {
                             d._token = "{{ csrf_token() }}";
                             d.marketer = $('#marketer').val();
-                            // d.dateFrom = $('#dateFrom').val();
-                            // d.dateTo = $('#dateTo').val();
+                            d.dateFrom = $('#dateFrom').val();
+                            d.dateTo = $('#dateTo').val();
                         },
                     },
                     columns: [

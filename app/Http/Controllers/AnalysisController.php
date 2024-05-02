@@ -840,6 +840,9 @@ class AnalysisController extends Controller
 
                              $User_Type = Session::get('userType');
                              $marketer = $request->get('marketer');
+                             $dateFrom = $request->get('dateFrom');
+                             $dateTo = $request->get('dateTo');
+
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
 
@@ -865,6 +868,16 @@ class AnalysisController extends Controller
                                // $query .= 'WHERE trialinfo.userId = '.$request->get('marketer');
                                 $query =  $query->where('trialinfo.userId', $marketer);
                             }
+                            if ($dateTo !== null && $dateFrom !== null) {
+                               $query = $query->whereBetween(DB::raw('DATE(trialinfo.created_at)'), [Carbon::createFromFormat('Y-m-d',$dateFrom), Carbon::createFromFormat('Y-m-d',$dateTo)]);
+                            }
+
+//                            if ($dateFrom !== '' && $dateFrom !== null) {
+//                                $query .= ($marketer !== '' && $marketer !== null ? ' AND' : ' WHERE') . ' trialinfo.created_at >= "'.$request->get('dateFrom').'"';
+//                            }
+//                            if ($dateTo !== '' && $dateTo !== null) {
+//                                $query .= (($marketer !== '' && $marketer !== null) || ($dateFrom !== '' && $dateFrom !== null) ? ' AND' : ' WHERE') . ' trialinfo.created_at <= "'.$request->get('dateTo').'"';
+//                            }
 
                             return DataTables::eloquent($query)
                                 ->addColumn('leadView', function ($trialinfo) {
