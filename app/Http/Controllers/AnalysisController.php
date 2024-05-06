@@ -831,7 +831,8 @@ class AnalysisController extends Controller
                             $userTypeIds = [2,3,4,5];
                             $marketers = User::query()->whereIn('typeId', $userTypeIds)->get();
                             $leadstatus = Leadstatus::get();
-                            return view('analysis.testButNotClosedList' , compact('marketers', 'leadstatus'));
+                            $country = Country::query()->get();
+                            return view('analysis.testButNotClosedList' , compact('marketers', 'leadstatus','country'));
                         
                         }    
                         
@@ -844,6 +845,9 @@ class AnalysisController extends Controller
                              $dateFrom = $request->get('dateFrom');
                              $dateTo = $request->get('dateTo');
                              $leadstatus = $request->get('leadstatus');
+                             $rating = $request->get('rating');
+                             $testdateFrom = $request->get('testdateFrom');
+                             $testdateTo = $request->get('testdateTo');
 
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
@@ -860,9 +864,8 @@ class AnalysisController extends Controller
                                 ->leftJoin('leads', 'trialinfo.leadId', 'leads.leadId')
                                 ->leftJoin('users', 'trialinfo.userId', 'users.id')
                                 ->where('leads.statusId', '!=', 6)
-                                ->where('leads.contactedUserId', Auth::user()->id)
-                                ->orderBy('price_created_at', 'DESC')
-                                ->groupBy('trialinfo.leadId');
+                                ->where('leads.contactedUserId', Auth::user()->id);
+
 
                         }
 
@@ -876,6 +879,15 @@ class AnalysisController extends Controller
                             if ($leadstatus !== '' && $leadstatus !== null) {
                                 $query =  $query->where('leads.statusId', $leadstatus);
                             }
+                            if ($rating !== '' && $rating !== null) {
+                                $query =  $query->where('trialinfo.trialRating', $rating);
+                            }
+                            if ($testdateTo !== null && $testdateFrom !== null) {
+                                $query = $query->leftjoin('workprogress', 'workprogress.leadId', 'leads.leadId')->where('progress','Test Job')->whereBetween(DB::raw('DATE(workprogress.created_at)'), [Carbon::createFromFormat('Y-m-d',$testdateFrom), Carbon::createFromFormat('Y-m-d',$testdateTo)]);
+                            }
+
+                            $query = $query->orderBy('price_created_at', 'DESC')
+                            ->groupBy('trialinfo.leadId');
 
 //                            if ($dateFrom !== '' && $dateFrom !== null) {
 //                                $query .= ($marketer !== '' && $marketer !== null ? ' AND' : ' WHERE') . ' trialinfo.created_at >= "'.$request->get('dateFrom').'"';

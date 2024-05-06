@@ -18,7 +18,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2 form-group">
+            <div class="col-md-1 form-group">
                     <label for="marketer">Lead Status</label>
                     <select id="leadstatus" name="leadstatus" class="form-control">
                         <option value="">Select Lead Status</option>
@@ -27,13 +27,43 @@
                         @endforeach
                     </select>
             </div>
-            <div class="col-md-2 form-group">
-                    <label for="dateFrom">Date From</label>
+            <div class="col-md-1 form-group">
+                    <label for="marketer">Country</label>
+                    <select id="country" name="country" class="form-control">
+                        <option value="">Select Country</option>
+                        @foreach( $country as $country )
+                            <option value="{{ $country->countryId }}">{{ @$country->countryName }}</option>
+                        @endforeach
+                    </select>
+            </div>
+            <div class="col-md-1 form-group">
+                    <label for="dateFrom">Price Date From</label>
                     <input type="date" class="form-control" id="dateFrom" name="dateFrom">
             </div>
-            <div class="col-md-2 form-group">
-                    <label for="dateTo">Date From</label>
+            <div class="col-md-1 form-group">
+                    <label for="dateTo">Price Date From</label>
                     <input type="date" class="form-control" id="dateTo" name="dateTo">
+            </div>
+            <div class="col-md-1 form-group">
+                    <label for="rating">Rating</label>
+                    <select id="rating" name="rating" class="form-control">
+                        <option value="">Select Rating</option>
+
+                            <option value="1">{{ "Very Low" }}</option>
+                            <option value="2">{{ "Okay" }}</option>
+                            <option value="3">{{ "Good" }}</option>
+                            <option value="4">{{ "Very Good" }}</option>
+                            <option value="5">{{ "Star" }}</option>
+
+                    </select>
+            </div>
+            <div class="col-md-2 form-group">
+                    <label for="dateFrom">Test Date From</label>
+                    <input type="date" class="form-control" id="testdateFrom" name="testdateFrom">
+            </div>
+            <div class="col-md-2 form-group">
+                    <label for="dateTo">Test Date From</label>
+                    <input type="date" class="form-control" id="testdateTo" name="testdateTo">
             </div>
             <div class="col-md-1 form-group align-self-end">
                 <button class="btn btn-success" onclick="filterRevenue()">Submit</button>
@@ -228,6 +258,10 @@
                             d.dateFrom = $('#dateFrom').val();
                             d.dateTo = $('#dateTo').val();
                             d.leadstatus = $('#leadstatus').val();
+                            d.rating = $('#rating').val();
+                            d.testdateFrom = $('#testdateFrom').val();
+                            d.testdateTo = $('#testdateTo').val();
+                            d.country = $('#country').val();
                         },
                     },
                     columns: [
