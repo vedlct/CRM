@@ -830,7 +830,8 @@ class AnalysisController extends Controller
                         public function testButNotClosedList(Request $r){
                             $userTypeIds = [2,3,4,5];
                             $marketers = User::query()->whereIn('typeId', $userTypeIds)->get();
-                            return view('analysis.testButNotClosedList' , compact('marketers'));
+                            $leadstatus = Leadstatus::get();
+                            return view('analysis.testButNotClosedList' , compact('marketers', 'leadstatus'));
                         
                         }    
                         
@@ -842,6 +843,7 @@ class AnalysisController extends Controller
                              $marketer = $request->get('marketer');
                              $dateFrom = $request->get('dateFrom');
                              $dateTo = $request->get('dateTo');
+                             $leadstatus = $request->get('leadstatus');
 
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
@@ -870,6 +872,9 @@ class AnalysisController extends Controller
                             }
                             if ($dateTo !== null && $dateFrom !== null) {
                                $query = $query->whereBetween(DB::raw('DATE(trialinfo.created_at)'), [Carbon::createFromFormat('Y-m-d',$dateFrom), Carbon::createFromFormat('Y-m-d',$dateTo)]);
+                            }
+                            if ($leadstatus !== '' && $leadstatus !== null) {
+                                $query =  $query->where('leads.statusId', $leadstatus);
                             }
 
 //                            if ($dateFrom !== '' && $dateFrom !== null) {

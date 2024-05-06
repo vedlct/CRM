@@ -19,6 +19,15 @@
                 </select>
             </div>
             <div class="col-md-2 form-group">
+                    <label for="marketer">Lead Status</label>
+                    <select id="leadstatus" name="leadstatus" class="form-control">
+                        <option value="">Select Lead Status</option>
+                        @foreach( $leadstatus as $leadstatus )
+                            <option value="{{ $leadstatus->statusId }}">{{ @$leadstatus->statusName }}</option>
+                        @endforeach
+                    </select>
+            </div>
+            <div class="col-md-2 form-group">
                     <label for="dateFrom">Date From</label>
                     <input type="date" class="form-control" id="dateFrom" name="dateFrom">
             </div>
@@ -218,6 +227,7 @@
                             d.marketer = $('#marketer').val();
                             d.dateFrom = $('#dateFrom').val();
                             d.dateTo = $('#dateTo').val();
+                            d.leadstatus = $('#leadstatus').val();
                         },
                     },
                     columns: [
