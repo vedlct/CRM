@@ -848,6 +848,7 @@ class AnalysisController extends Controller
                              $rating = $request->get('rating');
                              $testdateFrom = $request->get('testdateFrom');
                              $testdateTo = $request->get('testdateTo');
+                             $country = $request->get('country');
 
                     
                         if ($User_Type == 'ADMIN' || $User_Type == 'SUPERVISOR') {   
@@ -884,6 +885,9 @@ class AnalysisController extends Controller
                             }
                             if ($testdateTo !== null && $testdateFrom !== null) {
                                 $query = $query->leftjoin('workprogress', 'workprogress.leadId', 'leads.leadId')->where('progress','Test Job')->whereBetween(DB::raw('DATE(workprogress.created_at)'), [Carbon::createFromFormat('Y-m-d',$testdateFrom), Carbon::createFromFormat('Y-m-d',$testdateTo)]);
+                            }
+                            if ($country !== '' && $country !== null) {
+                                $query =  $query->where('leads.countryId', $country);
                             }
 
                             $query = $query->orderBy('price_created_at', 'DESC')
