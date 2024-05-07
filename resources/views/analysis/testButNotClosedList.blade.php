@@ -3,12 +3,14 @@
 
 @section('content')
 
-
+    <?php ($userType = Session::get('userType')); ?>
     <div class="card" style="padding:10px;">
         <div class="card-body">
         <h2 align="center"><b>Free Trial Details</b></h2>
         <p class="card-subtitle" align="center">Received but not closed yet. Update rating, price, comments. Rating: 5 means star, 1 means very low</p>
             <div class="row mt-5">
+
+            <?php if($userType == 'SUPERVISOR' || $userType == 'ADMIN'): ?>
             <div class="col-md-2 form-group">
                 <label for="marketer">Test With</label>
                 <select id="marketer" name="marketer" class="form-control select2">
@@ -18,6 +20,7 @@
                     @endforeach
                 </select>
             </div>
+            <?php endif; ?>
             <div class="col-md-1 form-group">
                     <label for="marketer">Lead Status</label>
                     <select id="leadstatus" name="leadstatus" class="form-control">
