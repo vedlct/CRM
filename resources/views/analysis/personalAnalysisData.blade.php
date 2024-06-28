@@ -84,7 +84,9 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
         @foreach ($data['missingLeadInfoInConvo'] as $lead)
             <p>
                 <ul>
+
                     {{$lead->leadId}} - {{$lead->companyName}} - {{$lead->website}} - <strong>Missing:</strong> 
+
                     @if (is_null($lead->volume))
                         Volume
                     @endif
@@ -98,8 +100,10 @@ $photographerChasingPercentage = ($data['chasingTotal'] > 0) ? round(($data['pho
                     @endif
 
                     @if (is_null($lead->process))
+
                         and Process
                     @endif                    
+
                 </ul>
             </p>
         @endforeach
