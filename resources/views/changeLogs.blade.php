@@ -47,6 +47,19 @@ h1 {
     <!-- <div class="col-md-12"> -->
 
 
+
+
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-warning">2.15.00</span> - 28 June 2024</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Updated - Dashboard Target vs Achievement - Removed Followup, Added Contact </li>
+                    <li class="list-group-item">Updated - Dashboard Chart - updated as per new target </li>
+                </ul>
+            </div>
+        </div>
+
+
         <div class="card change-log-card">
             <div class="card-body">
             <h5 class="card-title"><span class="badge badge-warning">2.14.02</span> - 16 April 2024</h5>
