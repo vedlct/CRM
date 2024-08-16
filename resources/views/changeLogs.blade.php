@@ -47,6 +47,15 @@
         <!-- <div class="col-md-12"> -->
 
 
+        <div class="card change-log-card">
+            <div class="card-body">
+            <h5 class="card-title"><span class="badge badge-warning">2.16.00</span> - 16 July 2024</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Updated - Added revnue column in the Revenue page  </li>
+                    <li class="list-group-item">Updated - Added whitelist column in the User page </li>
+                </ul>
+            </div>
+        </div>
 
         <div class="card change-log-card">
             <div class="card-body">

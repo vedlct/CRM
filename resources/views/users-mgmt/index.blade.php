@@ -26,6 +26,7 @@
                             <th>Last Name</th>
                             <th>Status</th>
                             <th>Role</th>
+                            <th>Whitelist</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -54,6 +55,13 @@
                                     @elseif ($user->typeId == 10)HR
                                     @endif
                                 </td>
+
+                                <td >
+                                    @if ($user->whitelist == 1)White
+                                    @elseif ($user->whitelist == 0)Black
+                                    @endif
+                                </td>
+
                                 <td>
                                     <!-- Trigger the Edit modal with a button -->
                                     @if($userType=='ADMIN' || 'SUPERVISOR')

@@ -669,7 +669,7 @@ class HomeController extends Controller
      * @throws Exception
      */
     public function revenueList(Request $request) {
-        $query = 'SELECT new_file.new_fileId, new_file.leadId, new_file.userId, new_file.created_at, new_file.revenue, new_file.fileCount, leads.website, leads.email, leads.contactNumber, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
+        $query = 'SELECT new_file.new_fileId, new_file.leadId, new_file.userId, new_file.remarks, new_file.created_at, new_file.revenue, new_file.fileCount, leads.website, leads.email, leads.contactNumber, users.firstName, users.lastName FROM new_file LEFT JOIN leads ON leads.leadId = new_file.leadId LEFT JOIN users ON users.id = new_file.userId';
 
         $marketer = $request->get('marketer');
         $dateFrom = $request->get('dateFrom');
@@ -710,6 +710,7 @@ class HomeController extends Controller
         $newFile->fileCount = $validated['fileCount'];
         $newFile->rate = number_format((float) $validated['rate'], 2, '.', '');
         $newFile->revenue = number_format((int) $validated['fileCount'] * (float) $validated['rate'], 2, '.', '');
+        $newFile->remarks = $request->remarks;
         $newFile->updatedBy = Auth::id();
         $newFile->save();
 

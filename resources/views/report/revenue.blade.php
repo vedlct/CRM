@@ -33,7 +33,7 @@
                     <table class="table table-striped table-bordered" id="revenueTable"></table>
                 </div>
                 <div class="col-md-2">
-                    <div class="card bg-info">
+                    <div class="card bg-success">
                         <div class="card-body">
                             <h4>Revenue Summary</h4>
 {{--                            <h5>Date Range: <span id="dateRange"></span></h5>--}}
@@ -46,8 +46,8 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal" id="addRevenueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <!-- Add Revenue Modal -->
+    <!-- <div class="modal" id="addRevenueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -74,6 +74,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="remarks">Remarks</label>
+                                    <textarea name="remarks" id="remarks"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -82,7 +92,47 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
+   
+    <div class="modal" id="addRevenueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="addRevenueModalLabel">Add Revenue</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="addRevenueForm">
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                            <input type="hidden" name="new_fileId" id="new_fileId" value="0">
+
+                            <div class="form-group">
+                                <label for="fileCount">File Count</label>
+                                <input type="number" name="fileCount" id="fileCount" class="form-control" maxlength="10" placeholder="Enter file count" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="rate">Rate in USD</label>
+                                <input type="number" name="rate" id="rate" class="form-control" step="0.01" maxlength="10" placeholder="Enter rate in USD" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="remarks">Remarks</label>
+                                <textarea name="remarks" id="remarks" class="form-control" rows="3" placeholder="Enter any remarks"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
     <div class="modal" id="viewRevenueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -97,6 +147,7 @@
                     <h4>File Count : <span id="viewFileCount">0</span></h4>
                     <h4>Rate in USD : <span id="viewRate">0.00</span></h4>
                     <h4>Revenue : <span id="viewRevenue">0.00</span></h4>
+                    <h4>Remarks : <span id="viewRemarks">0.00</span></h4>
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -160,10 +211,12 @@
                     {title: 'Lead Id', data: 'leadId', name: 'leadId', className: "text-center", orderable: true, searchable: true},
                     {title: 'Website', data: 'website', name: 'website', className: "text-center", orderable: true, searchable: true},
                     {title: 'Email', data: 'email', name: 'email', className: "text-center", orderable: true, searchable: true},
-                    {title: 'File Count', data: 'fileCount', name: 'fileCount', className: "text-center", orderable: true, searchable: true},
                     {title: 'Phone Number', data: 'contactNumber', name: 'contactNumber', className: "text-center", orderable: true, searchable: true},
+                    {title: 'File Count', data: 'fileCount', name: 'fileCount', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Revenue', data: 'revenue', name: 'revenue', className: "text-center", orderable: true, searchable: true},
                     {title: 'Closing Date', data: 'created_at', name: 'created_at', className: "text-center", orderable: true, searchable: true},
                     {title: 'Marketer', data: 'marketerName', name: 'marketerName', className: "text-center", orderable: true, searchable: true},
+                    {title: 'Remarks', data: 'remarks', name: 'remarks', className: "text-center", orderable: true, searchable: true},
                     {title: 'Action', className: "text-center", data: function (data) {
                             return '<button type="button" title="Entry" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addRevenueModal" data-panel-id="' + data.new_fileId + '" onclick="addRevenue(this)"><i class="fa fa-edit"></i></button>'
                             + ' <button type="button" title="View" class="btn btn-blue btn-sm" data-toggle="modal" data-target="#viewRevenueModal" data-panel-id="' + data.new_fileId + '" onclick="viewRevenue(this)"><i class="fa fa-eye"></i></button>'
@@ -216,6 +269,7 @@
                     if (response.status === 200) {
                         $('#fileCount').val(response.newFile.fileCount ?? '0')
                         $('#rate').val(response.newFile.rate ?? '0.00')
+                        $('#remarks').val(response.newFile.remarks ?? ''); 
                     }
                 },
             });
@@ -244,6 +298,8 @@
                             $('#viewRevenue').text( (fileCount * rate).toFixed(2) )
                         }
                     }
+                    $('#viewRemarks').text(response.newFile.remarks ?? '')
+
                 },
             });
         }
