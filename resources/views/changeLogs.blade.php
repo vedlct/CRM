@@ -9,16 +9,11 @@
         margin: 20px;
     }
 
-    .changelog {
-        max-width: 900px;
-        margin: 0 auto;
-    }
-
     h1 {
         text-align: center;
         font-size: 2.5rem;
         color: #333;
-        padding: 50px 0 50px;
+        padding: 50px 0;
     }
 
     .card {
@@ -27,6 +22,7 @@
         margin-bottom: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        background-color: #fff;
     }
 
     .card:hover {
@@ -51,9 +47,6 @@
 
     .card-body {
         padding: 20px;
-        background-color: #fff;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
     }
 
     .list-group-item {
@@ -68,7 +61,7 @@
         background-color: #f1f1f1;
     }
 
-    .mainrow {
+    .change-log-container {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
@@ -92,43 +85,36 @@
     }
 </style>
 
-
-
-
 <h1>Change Logs</h1>
 
-<div class="row mainrow" id="masonry-container">
-
-
-
-
-        <div class="card change-log-card">
-            <div class="card-title">
-                <span class="badge badge-success">2.17.00</span> - 20 July 2024
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Updated - Added date function in the Filter Leads</li>
-                </ul>
-            </div>
+<div class="change-log-container">
+    <div class="card change-log-card">
+        <div class="card-title">
+            <span class="badge badge-success">2.17.00</span> - 20 July 2024
         </div>
-
-
-        <div class="card change-log-card">
-            <div class="card-title">
-                <span class="badge badge-warning">2.16.00</span> - 16 July 2024
-            </div>
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Updated - Added revenue column in the Revenue page</li>
-                    <li class="list-group-item">Updated - Added whitelist column in the User page</li>
-                </ul>
-            </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Updated - Added date function in the Filter Leads</li>
+            </ul>
         </div>
+    </div>
+
+    <div class="card change-log-card">
+        <div class="card-title">
+            <span class="badge badge-warning">2.16.00</span> - 16 July 2024
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Updated - Added revenue column in the Revenue page</li>
+                <li class="list-group-item">Updated - Added whitelist column in the User page</li>
+            </ul>
+        </div>
+    </div>
 
 
 
-        <div class="card change-log-card">
+
+    <div class="card change-log-card">
             <div class="card-title">
                 <span class="badge badge-warning">2.15.00</span> - 28 June 2024
             </div>
@@ -331,22 +317,112 @@
             </div>
         </div>
 
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.05.00</span> - 25 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Now supervisors and admins can see the existing Individual Messages that are not read yet by the users.</li>
+                    <li class="list-group-item">Bug Fixed - Sales pipeline report on Random Report All.</li>
+                    <li class="list-group-item">New Feature - Users can update joining date now.</li>
+                </ul>
+            </div>
+        </div>
 
-    </div>
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.04.00</span> - 23 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Individual Message to the user via Database.</li>
+                    <li class="list-group-item">New Feature - Removed Left Side Bar and added Top Bar.</li>
+                </ul>
+            </div>
+        </div>
 
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.03.00</span> - 21 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Excel Download button on Ipp List.</li>
+                    <li class="list-group-item">New Feature - Random Reports All - Sales Pipeline Report Table.</li>
+                    <li class="list-group-item">Bug Fixed - All Conversations.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.02.00</span> - 9 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - New Top Bar.</li>
+                    <li class="list-group-item">Updated - Random Reports with chasing categories and random statistics.</li>
+                    <li class="list-group-item">Bug Fixed - Account View.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.01.01</span> - 3 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Bug Fixed - contactedUserId will be Null if supervisors filter the lead.</li>
+                    <li class="list-group-item">CSS Fixed - Top Bar.</li>
+                    <li class="list-group-item">Added a graph in the Target vs Achievement Report.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.01.00</span> - 2 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">New Feature - Target Vs Achievement of full team for Admin and Managers.</li>
+                    <li class="list-group-item">Added a new alert box on Assign Lead pages.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.0.01</span> - 1 August 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Added Remove Employee button on Employee table.</li>
+                    <li class="list-group-item">Bug Fixed - Account View.</li>
+                    <li class="list-group-item">Converted tables into Server Side.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card change-log-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="badge badge-info">2.0</span> - 26 July 2023
+                </h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Launched new version of CRM with a new look.</li>
+                    <li class="list-group-item">Bug Fixed - User Profile.</li>
+                </ul>
+            </div>
+        </div>
+        
+
+</div>
 
 @endsection
 
-
 @section('foot-js')
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    <script>
-        var masonryContainer = document.getElementById('masonry-container');
-        var masonry = new Masonry(masonryContainer, {
-            itemSelector: '.change-log-card',
-            columnWidth: '.change-log-card',
-            percentPosition: true
-        });
-    </script>
 @endsection
