@@ -5,10 +5,30 @@
     {{--get user type from session--}}
     @php($userType = strtoupper(Auth::user()->userType->typeName))
 
+
+
     <div class="card" style="padding:10px;">
         <div class="card-body">
             <h2  align="center"><b>Filtered Lead</b></h2>
-            <!-- <p class="card-subtitle" align="center"  style="color:red;"><b>Caution:</b> if you click on Red button, it will be rejected and removed from this list.</h2> -->
+
+
+            <!-- Date Filter Section -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label for="">&nbsp;</label><br>
+                    <button id="filter_leads" class="btn btn-primary">Filter Leads</button>
+                </div>
+            </div>
+
+
 
             <div class="table-responsive m-t-40">
                 <table id="myTable" class="table table-bordered table-striped">
@@ -145,26 +165,61 @@
 
 <script>
 
-        $(function() {
-            $('#myTable').DataTable({
-                // aLengthMenu: [
-                //     [25, 50, 100],
-                //     [25, 50, 100]
-                // ],
-                // "iDisplayLength": 25,
+        // $(function() {
+        //     $('#myTable').DataTable({
+        //         // aLengthMenu: [
+        //         //     [25, 50, 100],
+        //         //     [25, 50, 100]
+        //         // ],
+        //         // "iDisplayLength": 25,
+        //         processing: true,
+        //         serverSide: true,
+        //         Filter: true,
+        //         stateSave: true,
+        //         type:"POST",
+        //         "ajax":{
+        //             "url": "{!! route('filterLeadData') !!}",
+        //             "type": "POST",
+        //             "data":{ _token: "{{csrf_token()}}"}
+        //         },
+        //         columns: [
+        //             { data: 'check', name: 'check', orderable: false, searchable: false},
+
+        //             { data: 'website', name: 'leads.website'},
+        //             { data: 'contactNumber', name: 'leads.contactNumber'},
+        //             { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
+        //             { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
+        //             { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
+        //             { data: 'volume', name: 'volume', defaultContent: ''},
+        //             { data: 'process', name: 'process', defaultContent: ''},
+        //             { data: 'action', name: 'action', orderable: false, searchable: false}
+
+        //         ]
+        //     });
+
+        //     // Filter Leads based on date range
+        //     $('#filter_leads').click(function() {
+        //         table.ajax.reload();
+        //     });
+            
+        // });
+
+        $(document).ready(function() {
+            var table = $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                Filter: true,
                 stateSave: true,
-                type:"POST",
-                "ajax":{
-                    "url": "{!! route('filterLeadData') !!}",
-                    "type": "POST",
-                    "data":{ _token: "{{csrf_token()}}"}
+                ajax: {
+                    url: "{!! route('filterLeadData') !!}",
+                    type: "POST",
+                    data: function(d) {
+                        d._token = "{{ csrf_token() }}";
+                        d.start_date = $('#start_date').val();
+                        d.end_date = $('#end_date').val();
+                    }
                 },
                 columns: [
                     { data: 'check', name: 'check', orderable: false, searchable: false},
-
                     { data: 'website', name: 'leads.website'},
                     { data: 'contactNumber', name: 'leads.contactNumber'},
                     { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
@@ -173,10 +228,17 @@
                     { data: 'volume', name: 'volume', defaultContent: ''},
                     { data: 'process', name: 'process', defaultContent: ''},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
-
                 ]
             });
+
+            // Filter Leads based on date range
+            $('#filter_leads').click(function() {
+                table.ajax.reload();
+            });
+
+            
         });
+
 
         
         $(document).on('click', '.lead-view-btn', function(e) {

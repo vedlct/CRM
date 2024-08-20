@@ -1044,20 +1044,7 @@ class LeadController extends Controller
     }
 
 
-    public function filter(){
-        if(Auth::user()->crmType =='local'){
-            return redirect()->route('home');
-        }
-
-        $categories=Category::where('type',1)
-            ->get();
-        $country=Country::get();
-
-        return view('layouts.lead.filterLead')
-            ->with('categories',$categories)
-            ->with('country',$country);
-    }
-
+    
     
 
     public function contactedStatus(Request $r){
@@ -1137,34 +1124,83 @@ class LeadController extends Controller
     }
 
 
+    public function filter(){
+        if(Auth::user()->crmType =='local'){
+            return redirect()->route('home');
+        }
 
+        $categories=Category::where('type',1)
+            ->get();
+        $country=Country::get();
 
-    public function getFilterLeads(Request $request){
-
-        $leads=(new Lead())->showNotAssignedLeads();
-        return DataTables::eloquent($leads)
-            ->addColumn('check', function ($lead) {
-                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
-            })->addColumn('action', function ($lead) {
-                    return '<form method="post" action="'.route('addContacted').'">
-                                <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
-                                <input type="hidden" value="'.$lead->leadId.'" name="leadId">
-                                <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
-                                        
-                                <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
-                                    data-lead-id="'.$lead->leadId.'"
-                                    data-lead-name="'.$lead->companyName.'"
-                                ><i class="fa fa-comments"></i></a>
-                            </form>
-                                <a href="#" class="btn btn-primary btn-sm lead-view-btn"
-                                data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
-                
-                                })
-            ->rawColumns(['action','check'])
-            ->make(true);
+        return view('layouts.lead.filterLead')
+            ->with('categories',$categories)
+            ->with('country',$country);
     }
 
 
+    // public function getFilterLeads(Request $request){
+
+    //     $leads=(new Lead())->showNotAssignedLeads();
+    //     return DataTables::eloquent($leads)
+    //         ->addColumn('check', function ($lead) {
+    //             return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+    //         })->addColumn('action', function ($lead) {
+    //                 return '<form method="post" action="'.route('addContacted').'">
+    //                             <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+    //                             <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+    //                             <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                                        
+    //                             <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+    //                                 data-lead-id="'.$lead->leadId.'"
+    //                                 data-lead-name="'.$lead->companyName.'"
+    //                             ><i class="fa fa-comments"></i></a>
+    //                         </form>
+    //                             <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+    //                             data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+                
+    //                             })
+    //         ->rawColumns(['action','check'])
+    //         ->make(true);
+    // }
+
+    
+    public function getFilterLeads(Request $request)
+    {
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
+    
+        $leads = (new Lead())->showNotAssignedLeads();
+    
+        if ($startDate && $endDate) {
+            // Join with the activities table to filter by date
+            $leads->join('activities', 'leads.leadId', '=', 'activities.leadId')
+                  ->where('activities.activity', 'like', '%filtered%')
+                  ->whereBetween('activities.created_at', [$startDate, $endDate]);
+        }
+    
+        return DataTables::eloquent($leads)
+            ->addColumn('check', function ($lead) {
+                return '<input type="checkbox" class="checkboxvar" name="checkboxvar[]" value="'.$lead->leadId.'">';
+            })
+            ->addColumn('action', function ($lead) {
+                return '<form method="post" action="'.route('addContacted').'">
+                            <input type="hidden" name="_token" id="csrf-token" value="'.csrf_token().'" />
+                            <input type="hidden" value="'.$lead->leadId.'" name="leadId">
+                            <button class="btn btn-info btn-sm"><i class="fa fa-bookmark" aria-hidden="true"></i></button>
+                            
+                            <a href="#lead_comments" data-toggle="modal" class="btn btn-info btn-sm"
+                                data-lead-id="'.$lead->leadId.'"
+                                data-lead-name="'.$lead->companyName.'"
+                            ><i class="fa fa-comments"></i></a>
+                        </form>
+                        <a href="#" class="btn btn-primary btn-sm lead-view-btn"
+                        data-lead-id="'.$lead->leadId.'"><i class="fa fa-eye"></i></a>';
+            })
+            ->rawColumns(['action', 'check'])
+            ->make(true);
+    }
+    
 
 
     public function filterNew(){
