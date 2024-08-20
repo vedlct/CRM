@@ -11,8 +11,11 @@
         <div class="card-body">
             <h2  align="center"><b>Filtered Lead</b></h2>
 
+            <!-- Information Text -->
+            <div class="alert alert-info" role="alert">
+                <b>Please select the date range and filter. You will see the leads that are not filtered in the selected date range.</b>
+            </div>
 
-            <!-- Date Filter Section -->
             <div class="row mb-4">
                 <div class="col-md-4">
                     <label for="start_date">Start Date:</label>
