@@ -359,7 +359,7 @@
   <a href="{{route('myHourReport')}}" target="_blank" class="card-link">
     <div class="card">
       <div class="view overlay">
-      <img class="card-img-top" src="{{ url('public/img/analysisHome/hourly.jpg')}}" alt="Hourly Report">
+      <img class="card-img-top" src="{{ url('public/img/analysisHome/hourly.jpg')}}" >
         <div class="mask rgba-white-slight"></div>
       </div>
       <div class="card-body">
@@ -374,12 +374,27 @@
   <a href="{{route('followupNotSet')}}" target="_blank" class="card-link">
     <div class="card">
       <div class="view overlay">
-      <img class="card-img-top" src="{{ url('https://www.commbox.io/wp-content/uploads/2019/10/41-1.jpg')}}" alt="Hourly Report">
+      <img class="card-img-top" src="{{ url('https://images.squarespace-cdn.com/content/v1/51a615dbe4b0643b1caad822/1563486544043-4AKQ3TJQNLSTNSIB8ZJK/follow+up.jpg')}}">
         <div class="mask rgba-white-slight"></div>
       </div>
       <div class="card-body">
         <h4 class="card-title">Forgot to Set Followup </h4>
         <p class="card-text">These are the leads you forgot to set followup. You have worked on these leads but didn't set any followup. If you want to keep these leads, set followups.</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-3">
+  <a href="{{route('notInterestedLeads')}}" target="_blank" class="card-link">
+    <div class="card">
+      <div class="view overlay">
+      <img class="card-img-top" src="{{ url('https://hily.com/wp-content/uploads/2023/11/how-to-tell-someone-you-are-not-interested.jpg')}}">
+        <div class="mask rgba-white-slight"></div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Not Interested Leads </h4>
+        <p class="card-text">You will find all not interested leads that are filtered. </p>
       </div>
     </div>
   </a>

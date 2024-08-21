@@ -87,6 +87,21 @@
 
 <h1>Change Logs</h1>
 
+
+
+<div class="change-log-container">
+    <div class="card change-log-card">
+        <div class="card-title">
+            <span class="badge badge-info">2.18.00</span> - 21 July 2024
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">New - Added Not Interested Leads in the Analysis Home</li>
+            </ul>
+        </div>
+    </div>
+
+
 <div class="change-log-container">
     <div class="card change-log-card">
         <div class="card-title">

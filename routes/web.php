@@ -349,6 +349,8 @@ Route::post('/analysis/personal-analysis','AnalysisController@getPersonalAnalysi
 Route::get('/followupNotSet','AnalysisController@followupNotSet')->name('followupNotSet');
 Route::post('/followupNotSet','AnalysisController@getFollowupNotSet')->name('getFollowupNotSet');
 
+Route::get('/notInterestedLeads','AnalysisController@notInterestedLeads')->name('notInterestedLeads');
+Route::post('/notInterestedLeads','AnalysisController@getNotInterestedLeads')->name('getNotInterestedLeads');
 
 
 //Pipeline COntroller

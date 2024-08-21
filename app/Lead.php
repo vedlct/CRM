@@ -78,7 +78,37 @@ class Lead extends Model
     }
     
 
+    // public function showNoInterestedLeads()
+    // {
+    //     // $currentUserId = Auth::user()->id;
+    //     // $ninetyDaysAgo = Carbon::now()->subDays(90);
+    
+    //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
+    //         ->Select('leads.*')
+    //         ->where('statusId', 2)
+    //         ->where('contactedUserId', NULL)
+    //         ->where('leadAssignStatus', 0)
+    //         ->leftJoin('workprogress', 'leads.leadId', 'workprogress.leadId')
+    //         ->where('workprogress.callingReport', 10)
+    //         ->orderBy('workprogress.created_at', 'DESC');
+    
+    //     return $leads;
+    // }
 
+    public function showNoInterestedLeads()
+    {
+        $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability', 'workprogress')
+            ->select('leads.*', 'workprogress.created_at as ni_date') 
+            ->where('statusId', 2)
+            ->where('contactedUserId', NULL)
+            ->where('leadAssignStatus', 0)
+            ->leftJoin('workprogress', 'leads.leadId', '=', 'workprogress.leadId')
+            ->where('workprogress.callingReport', 10)
+            ->orderBy('workprogress.created_at', 'ASC');
+        
+        return $leads;
+    }
+    
     // public function showFilterLeadNew()
     // {
     //     $leads = Lead::with('mined', 'category', 'country', 'possibility', 'probability')
