@@ -732,12 +732,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 20) {
+						if (data > 50) {
 							$('#exceed').hide();
 							$('#total').hide();
-							$('#enoughfortoday').text('Sorry, already 20+ followups on ' + currentdate).show();
+							$('#enoughfortoday').text('Sorry, already 50+ followups on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 15 && data < 20) {
+						} else if (data > 50 && data < 40) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();

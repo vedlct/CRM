@@ -702,12 +702,12 @@
 						'currentdate': currentdate
 					},
 					success: function(data) {
-						if (data > 30) {
+						if (data > 50) {
 							$('#exceed').hide();
 							$('#total').hide();
 							$('#enoughfortoday').text('Sorry, Followups Overloaded on ' + currentdate).show();
 							$('.changedate').datepicker('setDate', null); // Clear the selected date
-						} else if (data > 10 && data < 25) {
+						} else if (data > 40 && data < 50) {
 							$('#total').hide();
 							$('#enoughfortoday').hide();
 							$('#exceed').text('Warning: on ' + currentdate + ' you already have ' + data + ' followup').show();

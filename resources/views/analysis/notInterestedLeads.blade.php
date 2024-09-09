@@ -165,7 +165,7 @@
                             { data: 'category.categoryName', name: 'category.categoryName', defaultContent: ''},
                             { data: 'country.countryName', name: 'country.countryName', defaultContent: ''},
                             { data: 'possibility.possibilityName', name: 'possibility.possibilityName', defaultContent: ''},
-                            { data: 'ni_date', name: 'ni_date', defaultContent: '', orderable: true},
+                            { data: 'ni_date', name: 'workprogress.created_at', defaultContent: '', orderable: true},
                             { data: 'action', name: 'action', orderable: false, searchable: false}
                         ]
             });

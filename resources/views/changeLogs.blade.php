@@ -92,6 +92,17 @@
 <div class="change-log-container">
     <div class="card change-log-card">
         <div class="card-title">
+            <span class="badge badge-warning">2.19.00</span> - 9 September 2024
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Update - maximum followup increased to 50 </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card change-log-card">
+        <div class="card-title">
             <span class="badge badge-info">2.18.00</span> - 21 July 2024
         </div>
         <div class="card-body">
@@ -100,7 +111,7 @@
             </ul>
         </div>
     </div>
-
+</div>
 
 <div class="change-log-container">
     <div class="card change-log-card">
