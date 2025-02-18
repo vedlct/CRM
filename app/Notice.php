@@ -14,7 +14,7 @@ class Notice extends Model
      */
     public $timestamps = false;
     protected $table = 'notices';
-    protected $primaryKey = 'noticeId';
+    protected $primaryKey = 'id';
 
     
     /**
